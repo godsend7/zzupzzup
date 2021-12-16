@@ -33,8 +33,9 @@ public class Restaurant {
 	public Restaurant() {
 		// TODO Auto-generated constructor stub
 	}
-
-
+	
+	
+	///Method
 	public int getRestaurantNo() {
 		return restaurantNo;
 	}
