@@ -3,6 +3,7 @@ package com.zzupzzup.service.domain;
 import java.sql.Date;
 
 import com.zzupzzup.common.Grade;
+import com.zzupzzup.common.util.CommonUtil;
 
 public class Member {
 	
@@ -69,6 +70,8 @@ public class Member {
 	}
 
 	public String getMemberRole() {
+		
+		
 		return memberRole;
 	}
 
