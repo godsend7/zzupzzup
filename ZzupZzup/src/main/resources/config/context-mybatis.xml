@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation=
+				"http://www.springframework.org/schema/beans 
+				 http://www.springframework.org/schema/beans/spring-beans.xsd">
+				
+	<!-- ㅇ SqlSession 인스턴스를 생성하는 SqlSessionFactory 생성
+	      ㅇ Factory Pattern  적용 :: Spring 의 FactoryBean interface 구현 -->
+	<bean 	id="sqlSessionFactoryBean" 
+					class="org.mybatis.spring.SqlSessionFactoryBean" >
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:sql/mybatis-config.xml"/>
+	</bean>
+	
+	<!--  ㅇ SqlSessionTeampate 인스턴스생성
+		   ㅇ Spring 과 연동시 사용하는 핵심 SqlSession 구현체
+		   ㅇ Spring 에서 제공한는 Transaction 처리에 구조화된 SqlSession 구현체	 -->
+	<bean		id="sqlSessionTemplate"		
+					class="org.mybatis.spring.SqlSessionTemplate" >		
+		<constructor-arg ref="sqlSessionFactoryBean"/>
+	</bean>
+
+</beans>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation=
+				"http://www.springframework.org/schema/beans 
+				 http://www.springframework.org/schema/beans/spring-beans.xsd
+				 http://www.springframework.org/schema/aop 
+				 http://www.springframework.org/schema/aop/spring-aop.xsd">
+				
+		<!--  AOP 적용 : LOG 를 처리사느  Aspect 선언   -->
+	<!-- 1.일반 Bean Definition :: POJO 기반 -->
+	<bean 	id="logAspect"	class="com.zzupzzup.common.aspect.LogAspectJ" />
+	 
+	 <!-- 2. 선언적으로 Point cut / Advice 정의 
+	 			:: TestAspectJ02.java(pointCut+advice 합치기(?)) 의 annotation과 아래를 비교 -->
+	 <aop:config>
+	 	<aop:aspect  ref="logAspect">
+	 		<aop:around 
+					pointcut="execution(* com.zzupzzup.service..*Impl.*(..) )"	method="invoke"/>
+	 	</aop:aspect>
+	 </aop:config>
+
+</beans>
