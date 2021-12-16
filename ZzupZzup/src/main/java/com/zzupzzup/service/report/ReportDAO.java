@@ -1,5 +1,7 @@
 package com.zzupzzup.service.report;
 
-public interface ReportDAO {
+import com.zzupzzup.service.domain.Report;
 
+public interface ReportDAO {
+	public int addReport(Report report) throws Exception;
 }
