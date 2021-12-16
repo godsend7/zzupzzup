@@ -8,8 +8,38 @@ import java.util.Date;
 public class CommonUtil {
 	
 	///Field
+	private static final String AGE_TEN = "10대";
+	private static final String AGE_TWENTY = "20대";
+	private static final String AGE_THIRTY = "30대";
+	private static final String AGE_FOURTY = "40대";
+	private static final String AGE_FIFTY = "50대";
+	private static final String AGE_ELDER = "60대 이상";
+	
+	private static final String GRADE_1 = "쩝린이";
+	private static final String GRADE_2 = "쩝쩝학사";
+	private static final String GRADE_3 = "쩝쩝석사";
+	private static final String GRADE_4 = "쩝쩝박사";
 	
 	///Constructor
+	
+	
+	
+	public static String test(int activityScore) {
+		
+		if (activityScore >= 0 && activityScore <= 100) {
+			return GRADE_1;	
+		} else if (activityScore > 100 && activityScore < 100) {
+			return GRADE_2;	
+		} else if (activityScore > 0 && activityScore < 100) {
+			return GRADE_3;	
+		} else if (activityScore >= 500) {
+			return GRADE_4;	
+		} else {
+			return null;
+		}
+		
+	}
+	
 	
 	///Method
 	public static String null2str(String org, String converted) {
