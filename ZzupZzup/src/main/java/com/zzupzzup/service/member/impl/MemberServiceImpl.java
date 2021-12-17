@@ -11,14 +11,17 @@ import com.zzupzzup.service.member.MemberService;
 @Service("memberServiceImpl")
 public class MemberServiceImpl implements MemberService{
 
+	//*Field
 	@Autowired
 	@Qualifier("memberDaoImpl")
 	private MemberDAO memberDao;
 	
+	//*Constructor
 	public MemberServiceImpl() {
 		// TODO Auto-generated constructor stub
 	}
 
+	//*Method
 	@Override
 	public void addMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
@@ -92,7 +95,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void getUser() throws Exception {
+	public void getMember() throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
@@ -104,31 +107,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void updateUser() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void getOwner() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateOwner() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void listUser() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void listOwner() throws Exception {
+	public void listMember() throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
@@ -168,6 +147,5 @@ public class MemberServiceImpl implements MemberService{
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
+
 }
