@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Notice;
-import com.zzupzzup.service.domain.Reservation;
 
 public interface NoticeDAO {
 
@@ -22,5 +21,9 @@ public interface NoticeDAO {
 
 	// UPDATE
 	public void updateNotice(Notice notice) throws Exception ;
+	
+	// 게시판 Page 처리를 위한 전체Row(totalCount)  return
+	public int getTotalCount(Search search) throws Exception ;
+		
 		
 }
