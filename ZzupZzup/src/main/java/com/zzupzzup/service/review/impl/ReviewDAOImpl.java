@@ -26,7 +26,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 	@Override
 	public int addReview(Review review) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlSession.insert("ReviewMapper.addReview", review);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 	}
 
 	@Override
-	public List<Review> listReview(Search search) throws Exception {
+	public List<Review> listReview(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

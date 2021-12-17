@@ -8,7 +8,7 @@ public class Reservation {
 	//Field
 	private Chat chat;
 	private Restaurant restaurant;
-	private int reservationNo;
+	private String reservationNo;
 	private int payOption;
 	private int payMethod;
 	private String planTime;
@@ -49,11 +49,11 @@ public class Reservation {
 		this.restaurant = restaurant;
 	}
 
-	public int getReservationNo() {
+	public String getReservationNo() {
 		return reservationNo;
 	}
 
-	public void setReservationNo(int reservationNo) {
+	public void setReservationNo(String reservationNo) {
 		this.reservationNo = reservationNo;
 	}
 
