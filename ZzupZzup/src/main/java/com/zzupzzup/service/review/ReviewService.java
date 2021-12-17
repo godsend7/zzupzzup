@@ -16,7 +16,7 @@ public interface ReviewService {
 	
 	public Review getReview(int reviewNo) throws Exception;
 	
-	public Map<String, Object> listReview(Search search) throws Exception;
+	public Map<String, Object> listReview(Search search, int restaurantNo) throws Exception; //restaurantNo가 null이라면 관리자가 전체 리뷰 확인
 
 	public Map<String, Object> listMyReview(Search search, String memberId) throws Exception; //해보기 
 	

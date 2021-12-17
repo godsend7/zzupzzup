@@ -24,10 +24,19 @@
 	<!-- SQL : INSERT -->
 	<insert id="addReview"	parameterType="review">
 	 	INSERT
-		INTO review(member_id, reservation_no, review_detail, review_reg_date, review_show_status, scope_taste, scope_kind, scope_clean, avg_scope) 
-		VALUES ( #{member.memberId}, #{reservation.reservationNo}, #{reviewDtail}, #{reviewRegDate}, #{reviewShowStatus}, #{scopeTaste}, #{scopeKind}, #{scopeClean}, #{avgScope})
+		INTO REVIEW(member_id, reservation_no, review_detail, scope_taste, scope_kind, scope_clean, avg_scope) 
+		VALUES ( #{member.memberId}, #{reservation.reservationNo}, #{reviewDtail}, #{scopeTaste}, #{scopeKind}, #{scopeClean}, #{avgScope})
+		<selectKey keyProperty="no" resultType="Integer">
+   			SELECT LAST_INSERT_ID()
+  		</selectKey>
+  		
+  		INSERT
+  		INTO HASHTAG_LOG(review_no, hashtag_no)
+  		VALUES (  )
 	</insert>
 	
-	
+	<!-- <update id="updateReview">
+		UPDATE SET 
+	</update> -->
 	 
 </mapper>
