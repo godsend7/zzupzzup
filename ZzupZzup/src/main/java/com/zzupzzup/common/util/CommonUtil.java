@@ -21,6 +21,10 @@ public class CommonUtil {
 	private static final String MEMEBER_RANK_3 = "쩝쩝석사";
 	private static final String MEMEBER_RANK_4 = "쩝쩝박사";
 	
+	private static final String DELETE_TYPE_1 = "더 이상 이 서비스를 이용하고 싶지 않아서";
+	private static final String DELETE_TYPE_2 = "기존의 타 사이트를 이용하고 있어서";
+	private static final String DELETE_TYPE_3 = "탈퇴 후 재가입을 위해서";
+	
 	public static String returnAgeRange(String birthday) {
 		
 		String ageRange = null;
@@ -73,6 +77,18 @@ public class CommonUtil {
 			return null;
 		}
 		
+	}
+	
+	public static String returnDeleteData(int deleteType) {
+		if (deleteType == 1) {
+			return DELETE_TYPE_1;
+		} else if (deleteType == 2) {
+			return DELETE_TYPE_2;
+		} else if (deleteType == 3) {
+			return DELETE_TYPE_3;
+		} else {
+			return null;
+		}
 	}
 	
 	///Constructor

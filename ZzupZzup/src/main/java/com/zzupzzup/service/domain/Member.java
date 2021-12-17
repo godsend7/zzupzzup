@@ -37,6 +37,7 @@ public class Member {
 	private int reportCount;			//신고 횟수
 	private String certificatedNum;		//인증번호
 	private int loginType;				//로그인 유형(일반, 카카오, 네이버)
+	private int deleteType;				//탈퇴 유형(서비스 이용 X, 타 사이트 이용, 탈퇴 후 재가입, 기타)
 
 	//*Constructor
 	public Member() {
@@ -166,6 +167,7 @@ public class Member {
 	}
 
 	public String getDeleteReason() {
+		deleteReason = CommonUtil.returnDeleteData(deleteType);
 		return deleteReason;
 	}
 
@@ -284,6 +286,14 @@ public class Member {
 
 	public void setLoginType(int loginType) {
 		this.loginType = loginType;
+	}
+
+	public int getDeleteType() {
+		return deleteType;
+	}
+
+	public void setDeleteType(int deleteType) {
+		this.deleteType = deleteType;
 	}
 	
 }

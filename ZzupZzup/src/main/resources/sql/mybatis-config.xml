@@ -15,6 +15,7 @@
 	<!-- FQCN(Full Qualified Class Name) Alias(별칭관리) -->
 	<typeAliases>
 		<typeAlias alias="member" type="com.zzupzzup.service.domain.Member" />
+		<typeAlias alias="alarm" type="com.zzupzzup.service.domain.Alarm" />
 		<typeAlias alias="review" type="com.zzupzzup.service.domain.Review" />
 		<typeAlias alias="report" type="com.zzupzzup.service.domain.Report" />
 	</typeAliases>
@@ -22,6 +23,7 @@
 	 <!-- SQL Definition :: file include -->
 	<mappers>
 		<mapper resource="sql/MemberMapper.xml"/>
+		<mapper resource="sql/AlarmMapper.xml"/>
 		<mapper resource="sql/ReviewMapper.xml"/>
 		<mapper resource="sql/ReportMapper.xml"/>
 	</mappers>

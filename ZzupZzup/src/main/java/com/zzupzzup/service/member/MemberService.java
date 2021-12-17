@@ -28,19 +28,11 @@ public interface MemberService {
 	
 	public void confirmPwd() throws Exception;
 	
-	public void getUser() throws Exception;
+	public void getMember() throws Exception;
 	
 	public void getOtherUser() throws Exception;
 	
-	public void updateUser() throws Exception;
-	
-	public void getOwner() throws Exception;
-	
-	public void updateOwner() throws Exception;
-	
-	public void listUser() throws Exception;
-	
-	public void listOwner() throws Exception;
+	public void listMember() throws Exception;
 	
 	public void blacklistUser() throws Exception;
 	
