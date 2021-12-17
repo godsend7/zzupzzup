@@ -53,8 +53,7 @@ public class ReviewServiceTest {
 		reviewImage.add("c.jpg");
 		
 		member.setMemberId("hihi@a.com");
-		//reservation.set
-		
+		reservation.setReservationNo("20211217124126_646712560");
 		review.setMember(member);
 		review.setReservation(reservation);
 		review.setReviewDetail("맛있어요~~");
@@ -64,9 +63,11 @@ public class ReviewServiceTest {
 		review.setScopeKind(5);
 		review.setScopeClean(4);
 		review.setAvgScope((4+5+4)/3);	
+		
+		reviewService.addReview(review);
 	}
 	
-	@Test
+	//@Test
 	public void testUpdateReview() throws Exception {
 		Review review = new Review();
 		

@@ -4,7 +4,7 @@
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="MemberMapper">
+<mapper namespace="ReportMapper">
 
 <!-- 	<resultMap id="memberSelectMap" type="member">
 		<result property="userId" 			column="user_id" 			jdbcType="VARCHAR"/>
@@ -19,10 +19,10 @@
 	</resultMap> -->
 	
 	<!-- SQL : INSERT -->
-	<insert 	id="addMember"		parameterType="member" >
+	<!-- <insert 	id="addMember"		parameterType="member" >
 	 	INSERT
 		INTO member( member_id , password , member_name , member_phone) 
 		VALUES ( #{memberId} , #{password} , #{memberName} , #{memberPhone})
-	 </insert>
+	 </insert> -->
 	 
 </mapper>
