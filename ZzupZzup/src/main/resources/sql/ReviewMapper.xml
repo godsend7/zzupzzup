@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReviewMapper">
+
+	<resultMap id="reviewSelectMap" type="review">
+		<result property="member.memberId"   			column="member_id" 				jdbcType="VARCHAR"/>
+		<result property="reservation.reservationNo"	column="reservation_no" 		jdbcType="VARCHAR" />
+		<result property="reviewNo" 					column="review_no" 				jdbcType="INTEGER" />
+		<result property="scopeClean" 					column="scope_taste" 			jdbcType="INTEGER" />
+		<result property="scopeTaste" 					column="scope_kind" 			jdbcType="INTEGER" />
+		<result property="scopeKind" 					column="scope_clean" 			jdbcType="INTEGER" />
+		<result property="reviewImage" 					column="image" 					jdbcType="VARCHAR" />
+		<result property="reviewDtail" 					column="review_dtail" 			jdbcType="VARCHAR"  />
+		<result property="hashTag" 						column="hashtag" 				jdbcType="VARCHAR" />
+		<result property="reviewRegDate" 				column="review_reg_date" 		jdbcType="DATE" />
+		<result property="avgScope" 					column="avg_scope" 				jdbcType="DECIMAL" />
+		<result property="reviewShowStatus" 			column="review_show_status" 	jdbcType="BOOLEAN" />
+	</resultMap>
+	
+	<!-- SQL : INSERT -->
+	<insert id="addReview"	parameterType="review">
+	 	INSERT
+		INTO review(member_id, reservation_no, review_detail, review_reg_date, review_show_status, scope_taste, scope_kind, scope_clean, avg_scope) 
+		VALUES ( #{member.memberId}, #{reservation.reservationNo}, #{reviewDtail}, #{reviewRegDate}, #{reviewShowStatus}, #{scopeTaste}, #{scopeKind}, #{scopeClean}, #{avgScope})
+	</insert>
+	
+	
+	 
+</mapper>
