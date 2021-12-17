@@ -2,14 +2,81 @@ package com.zzupzzup.common.util;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 
 public class CommonUtil {
 	
 	///Field
+	private static final String AGE_TEN = "10대";
+	private static final String AGE_TWENTY = "20대";
+	private static final String AGE_THIRTY = "30대";
+	private static final String AGE_FOURTY = "40대";
+	private static final String AGE_FIFTY = "50대";
+	private static final String AGE_ELDER = "60대 이상";
+	
+	private static final String MEMEBER_RANK_1 = "쩝린이";
+	private static final String MEMEBER_RANK_2 = "쩝쩝학사";
+	private static final String MEMEBER_RANK_3 = "쩝쩝석사";
+	private static final String MEMEBER_RANK_4 = "쩝쩝박사";
+	
+	public static String returnAgeRange(String birthday) {
+		
+		String ageRange = null;
+		
+		int birthYear = Integer.parseInt(birthday.substring(0, 4));
+		int currentYear = LocalDate.now().getYear();
+		
+		switch ((currentYear-birthYear+1)/10) {
+		case 1:
+			ageRange = AGE_TEN;
+			break;
+		case 2:
+			ageRange = AGE_TWENTY;
+			break;
+		case 3:
+			ageRange = AGE_THIRTY;
+			break;
+		case 4:
+			ageRange = AGE_FOURTY;
+			break;
+		case 5:
+			ageRange = AGE_FIFTY;
+			break;
+		case 6:
+		case 7:
+		case 8:
+		case 9:
+		case 10:
+			ageRange = AGE_ELDER;
+			break;
+		default:
+			break;
+		}
+		
+		return ageRange;
+	
+	}
+	
+	public static String returnMemberRank(int activityScore) {
+		
+		if (activityScore <= 100) {
+			return MEMEBER_RANK_1;	
+		} else if (activityScore > 100 && activityScore < 250) {
+			return MEMEBER_RANK_2;	
+		} else if (activityScore >= 250 && activityScore < 500) {
+			return MEMEBER_RANK_3;	
+		} else if (activityScore >= 500) {
+			return MEMEBER_RANK_4;	
+		} else {
+			return null;
+		}
+		
+	}
 	
 	///Constructor
+	
 	
 	///Method
 	public static String null2str(String org, String converted) {
