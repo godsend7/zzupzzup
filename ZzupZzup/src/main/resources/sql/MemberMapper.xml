@@ -23,27 +23,27 @@
 		<result property="password" 		column="PASSWORD" 			jdbcType="VARCHAR" />
 		<result property="memberName" 		column="MEMBER_NAME" 		jdbcType="VARCHAR" />
 		<result property="memberPhone" 		column="MEMBER_PHONE" 		jdbcType="VARCHAR" />
-		<result property="loginType" 		column="LOGIN_TYPE" 		jdbcType="INT" />
-		<result property="regDate" 			column="REG_DATE" 			jdbcType="DATETIME" />
+		<result property="loginType" 		column="LOGIN_TYPE" 		jdbcType="INTEGER" />
+		<result property="regDate" 			column="REG_DATE" 			jdbcType="DATE" />
 		<result property="ageRange" 		column="AGE_RANGE" 			jdbcType="VARCHAR"  />
-		<result property="birth" 			column="BIRTH_YEAR" 		jdbcType="INT" />
+		<result property="birth" 			column="BIRTH_YEAR" 		jdbcType="INTEGER" />
 		<result property="gender" 			column="GENDER" 			jdbcType="VARCHAR" />
 		<result property="profileImage" 	column="PROFILE_IMAGE" 		jdbcType="VARCHAR" />
 		<result property="nickname" 		column="NICKNAME" 			jdbcType="VARCHAR" />
 		<result property="statusMessage" 	column="STATUS_MESSAGE" 	jdbcType="VARCHAR" />
-		<result property="accumulAllScore" 	column="ACTIVITY_SCORE" 	jdbcType="INT" />
-		<result property="mannerAllScore" 	column="MANNER_SCORE" 		jdbcType="INT" />
-		<result property="deleteDate" 		column="DELETE_DATE" 		jdbcType="DATETIME" />
-		<result property="deleteType" 		column="DELETE_TYPE" 		jdbcType="INT" />
+		<result property="accumulAllScore" 	column="ACTIVITY_SCORE" 	jdbcType="INTEGER" />
+		<result property="mannerAllScore" 	column="MANNER_SCORE" 		jdbcType="INTEGER" />
+		<result property="deleteDate" 		column="DELETE_DATE" 		jdbcType="DATE" />
+		<result property="deleteType" 		column="DELETE_TYPE" 		jdbcType="INTEGER" />
 		<result property="deleteReason" 	column="DELETE_DETAIL" 		jdbcType="VARCHAR" />
-		<result property="blacklistDate" 	column="BLACKLIST_REG_DATE" jdbcType="DATETIME" />
+		<result property="blacklistDate" 	column="BLACKLIST_REG_DATE" jdbcType="DATE" />
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
 	<insert 	id="addMember"		parameterType="member" >
-	 	INSERT
-		INTO member( member_id , password , member_name , member_phone) 
-		VALUES ( #{memberId} , #{password} , #{memberName} , #{memberPhone})
+		INSERT INTO
+		zzupzzup_test.MEMBER(MEMBER_ID, MEMBER_ROLE, PASSWORD, MEMBER_NAME, MEMBER_PHONE, LOGIN_TYPE, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE)
+		VALUES(#{memberId}, #{memberRole}, #{password}, #{memberName}, #{memberPhone}, 1, #{profileImage}, #{nickname}, #{statusMessage})
 	 </insert>
 	 
 </mapper>

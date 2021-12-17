@@ -18,7 +18,7 @@ public class Member {
 	private String memberPhone3;		//번호3
 	private String ageRange;			//연령대(10대, 20대, 30대, 40대, 50대, 60대 이상)
 	private String gender;				//성별(여자/남자)
-	private String birthday;			//생일(생년만 추출)
+	private String birth;			//생일(생년만 추출)
 	private String profileImage;		//프로필 이미지
 	private String statusMessage;		//자기소개 및 특이사항(= 상태메세지)
 	private String pushNickname;		//추천인 닉네임
@@ -118,7 +118,7 @@ public class Member {
 	}
 
 	public String getAgeRange() {
-		ageRange = CommonUtil.returnAgeRange(birthday);
+		ageRange = CommonUtil.returnAgeRange(birth);
 		return ageRange;
 	}
 
@@ -134,12 +134,12 @@ public class Member {
 		this.gender = gender;
 	}
 
-	public String getBirthday() {
-		return birthday;
+	public String getBirth() {
+		return birth;
 	}
 
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
+	public void setBirth(String birth) {
+		this.birth = birth;
 	}
 
 	public String getProfileImage() {
