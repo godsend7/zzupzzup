@@ -6,9 +6,40 @@ public class MemberRestController {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	public void login() {
+		
+	}
+	
+	public void selectMemberRole() {
+		
+	}
+	
+	public void kakaoLogin() {
+		
+	}
+	
+	public void naverLogin() {
+		
+	}
+	
+	public void checkIdDuplication() {
+		
+	}
 
+	public void checkNicknameDuplication() {
+		
+	}
+	
+	public void findId() {
+		
+	}
+	
+	public void checkCertificatedNum() {
+		
+	}
+	
+	public void getOtherUser() {
+		
 	}
 
 }
