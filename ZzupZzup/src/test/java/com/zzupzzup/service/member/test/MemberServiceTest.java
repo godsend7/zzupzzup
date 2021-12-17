@@ -26,16 +26,20 @@ public class MemberServiceTest {
 	private MemberService memberService;
 
 	@Test
-	public void testAddUser() throws Exception {
+	public void testAddMember() throws Exception {
 		
 		Member member = new Member();
 		member.setMemberId("test@test.com");
-		member.setMemberName("ddd");
+		member.setMemberRole("user");
 		member.setPassword("testPasswd");
+		member.setMemberName("abc");
 		member.setMemberPhone("111-2222-3333");
+		member.setProfileImage("test.png");
+		member.setNickname("test");
+		member.setStatusMessage("let me go home");
 		
 		memberService.addMember(member);
 
-		//System.out.println(user);
+		//System.out.println(member);
 	}
 }

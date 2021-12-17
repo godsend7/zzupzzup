@@ -25,11 +25,11 @@ public class CommonUtil {
 	private static final String DELETE_TYPE_2 = "기존의 타 사이트를 이용하고 있어서";
 	private static final String DELETE_TYPE_3 = "탈퇴 후 재가입을 위해서";
 	
-	public static String returnAgeRange(String birthday) {
+	public static String returnAgeRange(String birth) {
 		
 		String ageRange = null;
 		
-		int birthYear = Integer.parseInt(birthday.substring(0, 4));
+		int birthYear = Integer.parseInt(birth.substring(0, 4));
 		int currentYear = LocalDate.now().getYear();
 		
 		switch ((currentYear-birthYear+1)/10) {
