@@ -1,8 +1,7 @@
 package com.zzupzzup.service.domain;
 
-import java.sql.Date;
+import java.util.Date;
 
-import com.zzupzzup.common.Grade;
 import com.zzupzzup.common.util.CommonUtil;
 
 public class Member {
@@ -28,7 +27,7 @@ public class Member {
 	private String accumulContents;		//활동점수 적립 내용
 	private int accumulScore;			//활동점수 적립 점수
 	private int mannerScore;			//매너점수
-	private Grade memberRank;			//등급(쩝린이, 쩝쩝학사, 쩝쩝석사, 쩝쩝박사)
+	private String memberRank;			//등급(쩝린이, 쩝쩝학사, 쩝쩝석사, 쩝쩝박사)
 	private int accumulAllScore;		//총 활동점수
 	private int mannerAllScore;			//총 매너점수
 	private Date regDate;				//가입일
@@ -70,8 +69,6 @@ public class Member {
 	}
 
 	public String getMemberRole() {
-		
-		
 		return memberRole;
 	}
 
@@ -120,6 +117,7 @@ public class Member {
 	}
 
 	public String getAgeRange() {
+		ageRange = CommonUtil.returnAgeRange(birthday);
 		return ageRange;
 	}
 
@@ -207,11 +205,12 @@ public class Member {
 		this.mannerScore = mannerScore;
 	}
 
-	public Grade getMemberRank() {
+	public String getMemberRank() {
+		memberRank = CommonUtil.returnMemberRank(accumulAllScore);
 		return memberRank;
 	}
 
-	public void setMemberRank(Grade memberRank) {
+	public void setMemberRank(String memberRank) {
 		this.memberRank = memberRank;
 	}
 

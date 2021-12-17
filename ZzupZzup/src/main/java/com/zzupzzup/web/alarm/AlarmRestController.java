@@ -2,13 +2,20 @@ package com.zzupzzup.web.alarm;
 
 public class AlarmRestController {
 
+	//*Field
+	
+	//*Constructor
 	public AlarmRestController() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	//*Method
+	public void listAlarm() {
+		
+	}
+	
+	public void deleteAlarm() {
+		
 	}
 
 }
