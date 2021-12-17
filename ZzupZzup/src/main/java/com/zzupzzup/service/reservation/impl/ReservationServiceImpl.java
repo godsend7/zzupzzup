@@ -18,10 +18,10 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		
 		///Field
 		@Autowired
-		@Qualifier("reservationDAOImpl")
-		private ReservationDAO reservationDAO;
-		public void setReservationDAO(ReservationDAO reservationDAO) {
-			this.reservationDAO = reservationDAO;
+		@Qualifier("reservationDaoImpl")
+		private ReservationDAO reservationDao;
+		public void setReservationDAO(ReservationDAO reservationDao) {
+			this.reservationDao = reservationDao;
 		}
 		
 		///Constructor
@@ -31,16 +31,16 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 
 		///Method
 		public int addReservation(Reservation reservation) throws Exception {
-			return reservationDAO.addReservation(reservation);
+			return reservationDao.addReservation(reservation);
 		}
 
 		public Reservation getReservation(int reservationNo) throws Exception {
-			return reservationDAO.getReservation(reservationNo);
+			return reservationDao.getReservation(reservationNo);
 		}
 
 		public Map<String , Object > listReservation(Search search) throws Exception {
-			List<Reservation> list= reservationDAO.listReservation(search);
-			int totalCount = reservationDAO.getTotalCount(search);
+			List<Reservation> list= reservationDao.listReservation(search);
+			int totalCount = reservationDao.getTotalCount(search);
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("list", list );
@@ -50,8 +50,8 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		}
 		
 		public Map<String , Object > listMyReservation(Search search, String memberId) throws Exception {
-			List<Reservation> list= reservationDAO.listReservation(search);
-			int totalCount = reservationDAO.getTotalCount(search);
+			List<Reservation> list= reservationDao.listReservation(search);
+			int totalCount = reservationDao.getTotalCount(search);
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("list", list );
@@ -61,7 +61,7 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		}
 
 		public void updateReservation(Reservation reservation) throws Exception {
-			reservationDAO.updateReservation(reservation);
+			reservationDao.updateReservation(reservation);
 		}
 
 }

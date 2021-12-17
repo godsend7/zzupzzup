@@ -18,6 +18,7 @@ public class Reservation {
 	private int memberCount;
 	private boolean reservationStatus;
 	private boolean fixedStatus;
+	private Date reservationDate;
 	private int reservationCancelReason;
 	private int reservationCancelDate;
 	private int totalPrice;
@@ -127,6 +128,14 @@ public class Reservation {
 	public void setFixedStatus(boolean fixedStatus) {
 		this.fixedStatus = fixedStatus;
 	}
+	
+	public Date getReservationDate() {
+		return reservationDate;
+	}
+
+	public void setReservationDate(Date reservationDate) {
+		this.reservationDate = reservationDate;
+	}
 
 	public int getReservationCancelReason() {
 		return reservationCancelReason;
@@ -206,12 +215,13 @@ public class Reservation {
 		return "Reservation [chat=" + chat + ", restaurant=" + restaurant + ", reservationNo=" + reservationNo
 				+ ", payOption=" + payOption + ", payMethod=" + payMethod + ", planTime=" + planTime + ", planDate="
 				+ planDate + ", fixedTime=" + fixedTime + ", fixedDate=" + fixedDate + ", memberCount=" + memberCount
-				+ ", reservationStatus=" + reservationStatus + ", fixedStatus=" + fixedStatus
-				+ ", reservationCancelReason=" + reservationCancelReason + ", reservationCancelDate="
+				+ ", reservationStatus=" + reservationStatus + ", fixedStatus=" + fixedStatus + ", reservationDate="
+				+ reservationDate + ", reservationCancelReason=" + reservationCancelReason + ", reservationCancelDate="
 				+ reservationCancelDate + ", totalPrice=" + totalPrice + ", restaurantNo=" + restaurantNo
 				+ ", reservationMember=" + reservationMember + ", reservationLeader=" + reservationLeader
 				+ ", reservationPhone=" + reservationPhone + ", orderCount=" + orderCount + ", orderTotal=" + orderTotal
 				+ "]";
 	}
+	
 	
 }

@@ -11,7 +11,7 @@ import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Notice;
 import com.zzupzzup.service.notice.NoticeDAO;
 
-	@Repository("noticeDAOImpl")
+	@Repository("noticeDaoImpl")
 	public class NoticeDAOImpl implements NoticeDAO{
 	
 	///Field

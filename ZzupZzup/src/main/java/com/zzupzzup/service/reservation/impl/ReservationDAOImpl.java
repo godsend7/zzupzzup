@@ -1,6 +1,7 @@
 package com.zzupzzup.service.reservation.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.reservation.ReservationDAO;
 
 
-	@Repository("reservationDAOImpl")
+	@Repository("reservationDaoImpl")
 	public class ReservationDAOImpl implements ReservationDAO{
 		
 		///Field

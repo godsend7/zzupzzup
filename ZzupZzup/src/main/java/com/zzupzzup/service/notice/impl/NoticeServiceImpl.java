@@ -18,10 +18,10 @@ import com.zzupzzup.service.notice.NoticeDAO;
 		
 		///Field
 		@Autowired
-		@Qualifier("noticeDAOImpl")
-		private NoticeDAO noticeDAO;
+		@Qualifier("noticeDaoImpl")
+		private NoticeDAO noticeDao;
 		public void setNoticeDAO(NoticeDAO noticeDAO) {
-			this.noticeDAO = noticeDAO;
+			this.noticeDao = noticeDAO;
 		}
 		
 		///Constructor
@@ -31,16 +31,16 @@ import com.zzupzzup.service.notice.NoticeDAO;
 
 		///Method
 		public int addNotice(Notice notice) throws Exception {
-			return noticeDAO.addNotice(notice);
+			return noticeDao.addNotice(notice);
 		}
 
 		public Notice getNotice(int noticeNo) throws Exception {
-			return noticeDAO.getNotice(noticeNo);
+			return noticeDao.getNotice(noticeNo);
 		}
 
 		public Map<String , Object > listNotice(Search search) throws Exception {
-			List<Notice> list= noticeDAO.listNotice(search);
-			int totalCount = noticeDAO.getTotalCount(search);
+			List<Notice> list= noticeDao.listNotice(search);
+			int totalCount = noticeDao.getTotalCount(search);
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("list", list );
@@ -50,11 +50,11 @@ import com.zzupzzup.service.notice.NoticeDAO;
 		}
 		
 		public int deleteNotice(Notice notice) throws Exception {
-			return noticeDAO.deleteNotice(notice);
+			return noticeDao.deleteNotice(notice);
 		}
 		
 		public void updateNotice(Notice notice) throws Exception {
-			noticeDAO.updateNotice(notice);
+			noticeDao.updateNotice(notice);
 		}
 
 }
