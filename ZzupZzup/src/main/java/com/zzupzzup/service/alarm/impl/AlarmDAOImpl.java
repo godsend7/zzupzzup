@@ -1,7 +1,10 @@
 package com.zzupzzup.service.alarm.impl;
 
+import org.springframework.stereotype.Repository;
+
 import com.zzupzzup.service.alarm.AlarmDAO;
 
+@Repository("alarmDaoImpl")
 public class AlarmDAOImpl implements AlarmDAO {
 
 	public AlarmDAOImpl() {
