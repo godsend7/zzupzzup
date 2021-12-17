@@ -12,14 +12,17 @@ import com.zzupzzup.service.member.MemberDAO;
 @Repository("memberDaoImpl")
 public class MemberDAOImpl implements MemberDAO{
 
+	//*Field
 	@Autowired
 	@Qualifier("sqlSessionTemplate")
 	private SqlSession sqlSession;
 	
+	//*Constructor
 	public MemberDAOImpl() {
 		// TODO Auto-generated constructor stub
 	}
 
+	//*Method
 	@Override
 	public void addMember(Member member) throws Exception {
 		// TODO Auto-generated method stub

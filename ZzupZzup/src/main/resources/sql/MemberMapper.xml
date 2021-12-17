@@ -17,6 +17,27 @@
 		<result property="email" 			column="email" 				jdbcType="NUMERIC"  />
 		<result property="regDate" 		column="reg_date" 			jdbcType="DATE" />
 	</resultMap> -->
+	<resultMap id="memberSelectMap" type="member">
+		<result property="memberId" 		column="MEMBER_ID" 			jdbcType="VARCHAR"/>
+		<result property="memberRole"		column="MEMBER_ROLE" 		jdbcType="VARCHAR" />
+		<result property="password" 		column="PASSWORD" 			jdbcType="VARCHAR" />
+		<result property="memberName" 		column="MEMBER_NAME" 		jdbcType="VARCHAR" />
+		<result property="memberPhone" 		column="MEMBER_PHONE" 		jdbcType="VARCHAR" />
+		<result property="loginType" 		column="LOGIN_TYPE" 		jdbcType="INT" />
+		<result property="regDate" 			column="REG_DATE" 			jdbcType="DATETIME" />
+		<result property="ageRange" 		column="AGE_RANGE" 			jdbcType="VARCHAR"  />
+		<result property="birth" 			column="BIRTH_YEAR" 		jdbcType="INT" />
+		<result property="gender" 			column="GENDER" 			jdbcType="VARCHAR" />
+		<result property="profileImage" 	column="PROFILE_IMAGE" 		jdbcType="VARCHAR" />
+		<result property="nickname" 		column="NICKNAME" 			jdbcType="VARCHAR" />
+		<result property="statusMessage" 	column="STATUS_MESSAGE" 	jdbcType="VARCHAR" />
+		<result property="accumulAllScore" 	column="ACTIVITY_SCORE" 	jdbcType="INT" />
+		<result property="mannerAllScore" 	column="MANNER_SCORE" 		jdbcType="INT" />
+		<result property="deleteDate" 		column="DELETE_DATE" 		jdbcType="DATETIME" />
+		<result property="deleteType" 		column="DELETE_TYPE" 		jdbcType="INT" />
+		<result property="deleteReason" 	column="DELETE_DETAIL" 		jdbcType="VARCHAR" />
+		<result property="blacklistDate" 	column="BLACKLIST_REG_DATE" jdbcType="DATETIME" />
+	</resultMap>
 	
 	<!-- SQL : INSERT -->
 	<insert 	id="addMember"		parameterType="member" >

@@ -15,11 +15,13 @@
 	<!-- FQCN(Full Qualified Class Name) Alias(별칭관리) -->
 	<typeAliases>
 		<typeAlias alias="member" type="com.zzupzzup.service.domain.Member" />
+		<typeAlias alias="alarm" type="com.zzupzzup.service.domain.Alarm" />
 	</typeAliases>
 	
 	 <!-- SQL Definition :: file include -->
 	<mappers>
 		<mapper resource="sql/MemberMapper.xml"/>
+		<mapper resource="sql/AlarmMapper.xml"/>
 	</mappers>
 
 </configuration>
