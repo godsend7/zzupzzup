@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AlarmMapper">
+
+<!-- 	<resultMap id="memberSelectMap" type="member">
+		<result property="userId" 			column="user_id" 			jdbcType="VARCHAR"/>
+		<result property="userName"	column="user_name" 		jdbcType="VARCHAR" />
+		<result property="password" 	column="password" 		jdbcType="VARCHAR" />
+		<result property="role" 				column="role" 					jdbcType="VARCHAR" />
+		<result property="ssn" 				column="ssn" 					jdbcType="VARCHAR" />
+		<result property="phone" 			column="cell_phone" 		jdbcType="VARCHAR" />
+		<result property="addr" 				column="addr" 					jdbcType="VARCHAR" />
+		<result property="email" 			column="email" 				jdbcType="NUMERIC"  />
+		<result property="regDate" 		column="reg_date" 			jdbcType="DATE" />
+	</resultMap> -->
+	<resultMap id="alarmSelectMap" type="alarm">
+		<result property="alarmNo" 			column="ALARM_NO" 			jdbcType="INT"/>
+		<result property="memberId"			column="MEMBER_ID" 			jdbcType="VARCHAR" />
+		<result property="alarmType" 		column="ALARM_TYPE" 		jdbcType="INT" />
+		<result property="alarmContents" 	column="ALARM_CONTENTS" 	jdbcType="VARCHAR" />
+		<result property="alarmCheck" 		column="ALARM_CHECK" 		jdbcType="BOOLEAN" />
+		<result property="alarmRegDate" 	column="ALARM_REG_DATE" 	jdbcType="DATETIME" />
+		<result property="postNo" 			column="POST_NO" 			jdbcType="INT" />
+		<result property="chatNo" 			column="CHAT_NO" 			jdbcType="INT"  />
+		<result property="reservationNo" 	column="RESERVATION_NO" 	jdbcType="VARCHAR" />
+		<result property="reviewNo" 		column="REVIEW_NO" 			jdbcType="INT" />
+	</resultMap>
+	
+	<!-- SQL : INSERT -->
+	<insert 	id="addAlarm"		parameterType="alarm" >
+	 	INSERT
+		INTO member( member_id , password , member_name , member_phone) 
+		VALUES ( #{memberId} , #{password} , #{memberName} , #{memberPhone})
+	 </insert>
+	 
+</mapper>

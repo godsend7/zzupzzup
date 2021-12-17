@@ -2,6 +2,7 @@ package com.zzupzzup.common.util;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -15,30 +16,82 @@ public class CommonUtil {
 	private static final String AGE_FIFTY = "50대";
 	private static final String AGE_ELDER = "60대 이상";
 	
-	private static final String GRADE_1 = "쩝린이";
-	private static final String GRADE_2 = "쩝쩝학사";
-	private static final String GRADE_3 = "쩝쩝석사";
-	private static final String GRADE_4 = "쩝쩝박사";
+	private static final String MEMEBER_RANK_1 = "쩝린이";
+	private static final String MEMEBER_RANK_2 = "쩝쩝학사";
+	private static final String MEMEBER_RANK_3 = "쩝쩝석사";
+	private static final String MEMEBER_RANK_4 = "쩝쩝박사";
 	
-	///Constructor
+	private static final String DELETE_TYPE_1 = "더 이상 이 서비스를 이용하고 싶지 않아서";
+	private static final String DELETE_TYPE_2 = "기존의 타 사이트를 이용하고 있어서";
+	private static final String DELETE_TYPE_3 = "탈퇴 후 재가입을 위해서";
 	
-	
-	
-	public static String test(int activityScore) {
+	public static String returnAgeRange(String birth) {
 		
-		if (activityScore >= 0 && activityScore <= 100) {
-			return GRADE_1;	
-		} else if (activityScore > 100 && activityScore < 100) {
-			return GRADE_2;	
-		} else if (activityScore > 0 && activityScore < 100) {
-			return GRADE_3;	
+		String ageRange = null;
+		
+		int birthYear = Integer.parseInt(birth.substring(0, 4));
+		int currentYear = LocalDate.now().getYear();
+		
+		switch ((currentYear-birthYear+1)/10) {
+		case 1:
+			ageRange = AGE_TEN;
+			break;
+		case 2:
+			ageRange = AGE_TWENTY;
+			break;
+		case 3:
+			ageRange = AGE_THIRTY;
+			break;
+		case 4:
+			ageRange = AGE_FOURTY;
+			break;
+		case 5:
+			ageRange = AGE_FIFTY;
+			break;
+		case 6:
+		case 7:
+		case 8:
+		case 9:
+		case 10:
+			ageRange = AGE_ELDER;
+			break;
+		default:
+			break;
+		}
+		
+		return ageRange;
+	
+	}
+	
+	public static String returnMemberRank(int activityScore) {
+		
+		if (activityScore <= 100) {
+			return MEMEBER_RANK_1;	
+		} else if (activityScore > 100 && activityScore < 250) {
+			return MEMEBER_RANK_2;	
+		} else if (activityScore >= 250 && activityScore < 500) {
+			return MEMEBER_RANK_3;	
 		} else if (activityScore >= 500) {
-			return GRADE_4;	
+			return MEMEBER_RANK_4;	
 		} else {
 			return null;
 		}
 		
 	}
+	
+	public static String returnDeleteData(int deleteType) {
+		if (deleteType == 1) {
+			return DELETE_TYPE_1;
+		} else if (deleteType == 2) {
+			return DELETE_TYPE_2;
+		} else if (deleteType == 3) {
+			return DELETE_TYPE_3;
+		} else {
+			return null;
+		}
+	}
+	
+	///Constructor
 	
 	
 	///Method

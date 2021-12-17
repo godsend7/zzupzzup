@@ -1,8 +1,7 @@
 package com.zzupzzup.service.domain;
 
-import java.sql.Date;
+import java.util.Date;
 
-import com.zzupzzup.common.Grade;
 import com.zzupzzup.common.util.CommonUtil;
 
 public class Member {
@@ -19,7 +18,7 @@ public class Member {
 	private String memberPhone3;		//번호3
 	private String ageRange;			//연령대(10대, 20대, 30대, 40대, 50대, 60대 이상)
 	private String gender;				//성별(여자/남자)
-	private String birthday;			//생일(생년만 추출)
+	private String birth;			//생일(생년만 추출)
 	private String profileImage;		//프로필 이미지
 	private String statusMessage;		//자기소개 및 특이사항(= 상태메세지)
 	private String pushNickname;		//추천인 닉네임
@@ -28,7 +27,7 @@ public class Member {
 	private String accumulContents;		//활동점수 적립 내용
 	private int accumulScore;			//활동점수 적립 점수
 	private int mannerScore;			//매너점수
-	private Grade memberRank;			//등급(쩝린이, 쩝쩝학사, 쩝쩝석사, 쩝쩝박사)
+	private String memberRank;			//등급(쩝린이, 쩝쩝학사, 쩝쩝석사, 쩝쩝박사)
 	private int accumulAllScore;		//총 활동점수
 	private int mannerAllScore;			//총 매너점수
 	private Date regDate;				//가입일
@@ -38,6 +37,7 @@ public class Member {
 	private int reportCount;			//신고 횟수
 	private String certificatedNum;		//인증번호
 	private int loginType;				//로그인 유형(일반, 카카오, 네이버)
+	private int deleteType;				//탈퇴 유형(서비스 이용 X, 타 사이트 이용, 탈퇴 후 재가입, 기타)
 
 	//*Constructor
 	public Member() {
@@ -70,8 +70,6 @@ public class Member {
 	}
 
 	public String getMemberRole() {
-		
-		
 		return memberRole;
 	}
 
@@ -120,6 +118,7 @@ public class Member {
 	}
 
 	public String getAgeRange() {
+		ageRange = CommonUtil.returnAgeRange(birth);
 		return ageRange;
 	}
 
@@ -135,12 +134,12 @@ public class Member {
 		this.gender = gender;
 	}
 
-	public String getBirthday() {
-		return birthday;
+	public String getBirth() {
+		return birth;
 	}
 
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
+	public void setBirth(String birth) {
+		this.birth = birth;
 	}
 
 	public String getProfileImage() {
@@ -168,6 +167,7 @@ public class Member {
 	}
 
 	public String getDeleteReason() {
+		deleteReason = CommonUtil.returnDeleteData(deleteType);
 		return deleteReason;
 	}
 
@@ -207,11 +207,12 @@ public class Member {
 		this.mannerScore = mannerScore;
 	}
 
-	public Grade getMemberRank() {
+	public String getMemberRank() {
+		memberRank = CommonUtil.returnMemberRank(accumulAllScore);
 		return memberRank;
 	}
 
-	public void setMemberRank(Grade memberRank) {
+	public void setMemberRank(String memberRank) {
 		this.memberRank = memberRank;
 	}
 
@@ -285,6 +286,14 @@ public class Member {
 
 	public void setLoginType(int loginType) {
 		this.loginType = loginType;
+	}
+
+	public int getDeleteType() {
+		return deleteType;
+	}
+
+	public void setDeleteType(int deleteType) {
+		this.deleteType = deleteType;
 	}
 	
 }
