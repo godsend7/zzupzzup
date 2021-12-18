@@ -1,5 +1,7 @@
 package com.zzupzzup.service.member.impl;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -48,15 +50,17 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 
 	@Override
-	public void getMember() throws Exception {
+	public Member getMember(String memberId) throws Exception {
 		// TODO Auto-generated method stub
+		return sqlSession.selectOne("MemberMapper.getMember", memberId);
+		//sqlSession.select
 		
 	}
 
 	@Override
-	public void listMember(Search search) throws Exception {
+	public List<Member> listMember(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		
+		return sqlSession.selectList("MemberMapper.listMember",search);
 	}
 
 	@Override

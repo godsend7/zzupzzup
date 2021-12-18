@@ -35,6 +35,6 @@
 	 	INSERT
 		INTO member( member_id , password , member_name , member_phone) 
 		VALUES ( #{memberId} , #{password} , #{memberName} , #{memberPhone})
-	 </insert>
+	</insert>
 	 
 </mapper>

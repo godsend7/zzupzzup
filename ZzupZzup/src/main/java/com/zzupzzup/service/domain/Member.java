@@ -118,7 +118,9 @@ public class Member {
 	}
 
 	public String getAgeRange() {
-		ageRange = CommonUtil.returnAgeRange(birth);
+		if(birth != null) {
+			ageRange = CommonUtil.returnAgeRange(birth);
+		}
 		return ageRange;
 	}
 
