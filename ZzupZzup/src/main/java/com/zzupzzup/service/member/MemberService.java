@@ -1,5 +1,8 @@
 package com.zzupzzup.service.member;
 
+import java.util.List;
+
+import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
 
 public interface MemberService {
@@ -28,11 +31,11 @@ public interface MemberService {
 	
 	public void confirmPwd() throws Exception;
 	
-	public void getMember() throws Exception;
+	public Member getMember(String memberId) throws Exception;
 	
 	public void getOtherUser() throws Exception;
 	
-	public void listMember() throws Exception;
+	public List<Member> listMember(Search search) throws Exception;
 	
 	public void blacklistUser() throws Exception;
 	
