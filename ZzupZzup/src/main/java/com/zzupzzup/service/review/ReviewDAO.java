@@ -16,7 +16,7 @@ public interface ReviewDAO {
 	
 	public Review getReview(int reviewNo) throws Exception;
 	
-	public List<Review> listReview(Search search) throws Exception;
+	public List<Review> listReview(Map<String, Object> map) throws Exception;
 
 	public List<Review> listMyReview(Map<String, Object> map) throws Exception; //해보기 
 	

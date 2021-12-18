@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CommunityMapper">
+
+	<resultMap id="communitySelectMap" type="community">
+		<result property="memberId" 		column="MEMBER_ID" 			jdbcType="VARCHAR"/>
+		<result property="postTitle"		column="POST_TITLE" 		jdbcType="VARCHAR"/>
+		<result property="postText" 		column="POST_TEXT" 			jdbcType="VARCHAR"/>
+		<result property="restaurantName" 	column="RESTAURANT_NAME" 	jdbcType="VARCHAR"/>
+		<result property="restaurantTel" 	column="RESTAURANT_TEL" 	jdbcType="VARCHAR"/>
+		<result property="streetAddress" 	column="STREET_ADDRESS" 	jdbcType="VARCHAR"/>
+		<result property="areaAddress" 		column="AREA_ADDRESS" 		jdbcType="VARCHAR"/>
+		<result property="menuType" 		column="MENU_TYPE" 			jdbcType="VARCHAR"/>
+		<result property="mainMenuTitle" 	column="MAIN_MENU_TITLE" 	jdbcType="VARCHAR"/>
+		<result property="mainMenuPrice" 	column="MAIN_MENU_PRICE" 	jdbcType="NUMERIC"/>
+	</resultMap>
+	
+	<!-- SQL : INSERT -->
+	<insert		id="addCommunity"	parameterType="community">
+		INSERT
+		INTO COMMUNITY(MEMBER_ID, POST_TITLE, POST_TEXT, RESTAURANT_NAME, RESTAURANT_TEL,
+		STREET_ADDRESS, AREA_ADDRESS, MENU_TYPE, MAIN_MENU_TITLE, MAIN_MENU_PRICE)
+		VALUES ( #{memberId}, #{postTitle}, #{postText}, #{restaurantName}, #{restaurantTel},
+		#{streetAddress}, #{areaAddress}, #{menuType}, #{mainMenuTitle}, #{mainMenuPrice})
+	</insert>
+	
+</mapper>

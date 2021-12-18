@@ -5,10 +5,10 @@ import com.zzupzzup.service.domain.Member;
 public class ChatMember {
 	
 	///Field
-	private int chatNo;
-	private Member member;
-	private boolean readyCheck;
-	private boolean chatLeaderCheck;
+	private int chatNo; //채팅방no
+	private Member member; //멤버 도메인
+	private boolean readyCheck; //모임확정 체크
+	private boolean chatLeaderCheck; //개설자 체크
 	
 	///Constructor
 	public ChatMember() {

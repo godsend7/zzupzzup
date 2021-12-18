@@ -13,7 +13,7 @@ public class Review {
 	private int scopeKind;
 	private List<String> reviewImage;
 	private String reviewDetail;
-	private List<String> hashTag;
+	private List<Integer> hashTag;
 	private Date reviewRegDate;
 	private int likeCount;
 	private float avgScope;
@@ -90,11 +90,11 @@ public class Review {
 		this.reviewDetail = reviewDetail;
 	}
 
-	public List<String> getHashTag() {
+	public List<Integer> getHashTag() {
 		return hashTag;
 	}
 
-	public void setHashTag(List<String> hashTag) {
+	public void setHashTag(List<Integer> hashTag) {
 		this.hashTag = hashTag;
 	}
 
