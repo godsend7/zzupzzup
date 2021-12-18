@@ -3,9 +3,9 @@ package com.zzupzzup.common;
 public class ChatAge {
 	
 	///Field
-	private int chatNo;
-	private int ageType;
-	private String Age;
+	private int chatNo; //채팅방no
+	private int ageType; //채팅방 연령대 타입
+	private String Age; //연령대
 
 	///Constructor
 	public ChatAge() {
