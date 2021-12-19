@@ -7,7 +7,8 @@
 <mapper namespace="CommunityMapper">
 
 	<resultMap id="communitySelectMap" type="community">
-		<result property="member.memberId" 		column="MEMBER_ID" 			jdbcType="VARCHAR"/>
+		<result property="member.memberId" 	column="MEMBER_ID" 			jdbcType="VARCHAR"/>
+		<result property="postNo" 			column="POST_NO" 			jdbcType="NUMERIC"/>
 		<result property="postTitle"		column="POST_TITLE" 		jdbcType="VARCHAR"/>
 		<result property="postText" 		column="POST_TEXT" 			jdbcType="VARCHAR"/>
 		<result property="restaurantName" 	column="RESTAURANT_NAME" 	jdbcType="VARCHAR"/>
@@ -17,7 +18,13 @@
 		<result property="menuType" 		column="MENU_TYPE" 			jdbcType="VARCHAR"/>
 		<result property="mainMenuTitle" 	column="MAIN_MENU_TITLE" 	jdbcType="VARCHAR"/>
 		<result property="mainMenuPrice" 	column="MAIN_MENU_PRICE" 	jdbcType="NUMERIC"/>
+	
+	<!-- 	<association property="memberId" jdbcType="member">
+			<id property = "memberId" column="member_id" jdbcType="VARCHAR"/>
+		</association> -->
+	
 	</resultMap>
+	
 	
 	<!-- SQL : INSERT -->
 	<insert		id="addCommunity"	parameterType="community">
@@ -27,5 +34,41 @@
 		VALUES ( #{member.memberId}, #{postTitle}, #{postText}, #{restaurantName}, #{restaurantTel},
 		#{streetAddress}, #{areaAddress}, #{menuType}, #{mainMenuTitle}, #{mainMenuPrice})
 	</insert>
+	
+	
+	<!-- SQL : SELECT ONE -->
+	<select 	id="getCommunity"	parameterType="int" resultMap="communitySelectMap">
+		SELECT
+		MEMBER_ID, POST_TITLE, POST_TEXT, RESTAURANT_NAME, RESTAURANT_TEL,
+		STREET_ADDRESS, AREA_ADDRESS, MENU_TYPE, MAIN_MENU_TITLE, MAIN_MENU_PRICE
+		FROM COMMUNITY
+		WHERE POST_NO = #{value}
+	</select>
+	
+	
+	<!-- SQL : UPDATE -->
+	<update 	id="updateCommunity"	parameterType="community">
+		UPDATE COMMUNITY
+		<set>
+			POST_TITLE = #{postTitle},
+			POST_TEXT = #{postText},
+			RESTAURANT_NAME = #{restaurantName},
+			RESTAURANT_TEL = #{restaurantTel},
+			STREET_ADDRESS = #{streetAddress},
+			AREA_ADDRESS = #{areaAddress},
+			MENU_TYPE = #{menuType},
+			MAIN_MENU_TITLE = #{mainMenuTitle},
+			MAIN_MENU_PRICE = #{mainMenuPrice}
+		</set>
+		WHERE POST_NO = #{postNo}
+	</update>
+	
+	
+	<!-- SQL : SELECT LIST -->
+	<select id="listCommunity" parameterType="search" resultMap="communitySelectMap">
+		SELECT
+		FROM ()
+	</select>
+	
 	
 </mapper>
