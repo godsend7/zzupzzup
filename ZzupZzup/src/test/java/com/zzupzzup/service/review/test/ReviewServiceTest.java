@@ -1,6 +1,7 @@
 package com.zzupzzup.service.review.test;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
@@ -57,7 +58,7 @@ public class ReviewServiceTest {
 		review.setMember(member);
 		review.setReservation(reservation);
 		review.setReviewDetail("맛있어요~~");
-		review.setHashTag(hashTag);
+		review.setHashTagNo(hashTag);
 		review.setReviewImage(reviewImage);
 		review.setScopeTaste(4);
 		review.setScopeKind(5);
@@ -69,14 +70,17 @@ public class ReviewServiceTest {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testUpdateReview() throws Exception {
 		
 		List<Integer> hashTag = new ArrayList<Integer>();
 		List<String> reviewImage = new ArrayList<String>();
 		
 		hashTag.add(1);
-		hashTag.add(2);
+		hashTag.add(5);
+		hashTag.add(4);
+		hashTag.add(3);
+		hashTag.add(7);
 		
 		reviewImage.add("d.jpg");
 		reviewImage.add("e.jpg");
@@ -84,9 +88,9 @@ public class ReviewServiceTest {
 		
 		Review review = new Review();
 		
-		review.setReviewNo(1);
+		review.setReviewNo(5);
 		review.setReviewDetail("최고에요~~");
-		review.setHashTag(hashTag);
+		review.setHashTagNo(hashTag);
 		review.setReviewImage(reviewImage);
 		review.setScopeTaste(5);
 		review.setScopeKind(5);
@@ -97,6 +101,34 @@ public class ReviewServiceTest {
 		
 		if(reviewService.updateReview(review) == 1) {
 			System.out.println("review update success");
+		}
+	}
+	
+	//@Test
+	public void testDeleteReview() throws Exception {
+		
+		Review review = new Review();
+		
+		review.setReviewNo(4);
+		
+		if(reviewService.deleteReview(review.getReviewNo()) == 1) {
+			System.out.println("review delete success");
+		}
+	}
+	
+	@Test
+	public void testGetReview() throws Exception {
+		
+		Review review = new Review();
+		
+		review.setReviewNo(5);
+		
+		review = reviewService.getReview(review.getReviewNo());
+		
+		System.out.println("review get success" + review);
+		
+		for (int i = 0; i<review.getHashTagNo().size(); i++) {
+			System.out.println(review.getHashTagNo().get(i) + " : " + review.getHashTag().get(i));
 		}
 	}
 }

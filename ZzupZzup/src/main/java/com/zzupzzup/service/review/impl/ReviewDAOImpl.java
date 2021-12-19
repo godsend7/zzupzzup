@@ -58,13 +58,13 @@ public class ReviewDAOImpl implements ReviewDAO {
 	@Override
 	public int deleteReview(int reviewNo) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlSession.delete("ReviewMapper.deleteReview", reviewNo);
 	}
 
 	@Override
 	public Review getReview(int reviewNo) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return sqlSession.selectOne("ReviewMapper.getReview", reviewNo);
 	}
 
 	@Override

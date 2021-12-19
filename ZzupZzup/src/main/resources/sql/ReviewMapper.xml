@@ -17,6 +17,18 @@
 		<result property="reviewRegDate" 				column="review_reg_date" 		jdbcType="DATE" />
 		<result property="avgScope" 					column="avg_scope" 				jdbcType="DECIMAL" />
 		<result property="reviewShowStatus" 			column="review_show_status" 	jdbcType="BOOLEAN" />
+		
+		<collection property="hashTagNo" ofType="Integer" javaType="list">
+			<result column="hashTag_no"/>
+		</collection>
+		
+		<collection property="hashTag" ofType="String" javaType="list">
+			<result column="hashTag"/>
+		</collection>
+		
+		<collection property="reviewImage" ofType="String" javaType="list">
+			<result column="image"/>
+		</collection>
 	</resultMap>
 	
 	<!-- REVIEW INSERT START -->
@@ -32,13 +44,12 @@
 		INSERT
 		INTO HASHTAG_LOG(review_no, hashtag_no) 
 		VALUES
-		<foreach collection="hashTag" item="item" separator=",">	
+		<foreach collection="hashTagNo" item="item" separator=",">	
 			 (#{reviewNo}, #{item})
   		</foreach>
 	</insert>
 	
 	<insert id="addImage"	parameterType="review">
-	
 		DELETE FROM IMAGE WHERE review_no = #{reviewNo};
 	
 		INSERT
@@ -62,5 +73,22 @@
 	   	</set>
 	   	WHERE review_no = #{reviewNo}
 	</update>
+	
+	<delete id="deleteReview" parameterType="int">
+		DELETE FROM HASHTAG_LOG WHERE review_no = #{reviewNo};
+		DELETE FROM IMAGE WHERE review_no = #{reviewNo};
+		DELETE FROM REVIEW WHERE review_no = #{reviewNo};
+	</delete>
+
+	<select id="getReview" parameterType="int" resultMap="reviewSelectMap">
+		SELECT * 
+		FROM review AS r 
+		INNER JOIN (SELECT REVIEW_NO, image
+            		FROM image) AS i ON (r.REVIEW_NO = i.REVIEW_NO)
+		INNER JOIN (SELECT REVIEW_NO, hl.hashtag_no, h.HASHTAG
+					FROM hashtag_log AS hl, hashtag AS h
+                    where hl.HASHTAG_NO = h.HASHTAG_NO AND REVIEW_NO = #{reviewNo}) AS h ON (r.REVIEW_NO = h.REVIEW_NO)
+		WHERE i.REVIEW_NO = h.REVIEW_NO AND r.REVIEW_NO = i.REVIEW_NO AND h.REVIEW_NO = h.REVIEW_NO AND r.REVIEW_NO = #{reviewNo}
+	</select>
 	
 </mapper>

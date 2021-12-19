@@ -1,7 +1,5 @@
 package com.zzupzzup.service.domain;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +13,8 @@ public class Review {
 	private int scopeKind;
 	private List<String> reviewImage;
 	private String reviewDetail;
-	private List<Integer> hashTag;
+	private List<Integer> hashTagNo;
+	private List<String> hashTag;
 	private Date reviewRegDate;
 	private int likeCount;
 	private double avgScope;
@@ -92,12 +91,20 @@ public class Review {
 		this.reviewDetail = reviewDetail;
 	}
 
-	public List<Integer> getHashTag() {
+	public List<String> getHashTag() {
 		return hashTag;
 	}
 
-	public void setHashTag(List<Integer> hashTag) {
+	public void setHashTag(List<String> hashTag) {
 		this.hashTag = hashTag;
+	}
+
+	public List<Integer> getHashTagNo() {
+		return hashTagNo;
+	}
+
+	public void setHashTagNo(List<Integer> hashTagNo) {
+		this.hashTagNo = hashTagNo;
 	}
 
 	public Date getReviewRegDate() {
@@ -144,8 +151,8 @@ public class Review {
 	public String toString() {
 		return "Review [member=" + member + ", reservation=" + reservation + ", reviewNo=" + reviewNo + ", scopeClean="
 				+ scopeClean + ", scopeTaste=" + scopeTaste + ", scopeKind=" + scopeKind + ", reviewImage="
-				+ reviewImage + ", reviewDetail=" + reviewDetail + ", hashTag=" + hashTag + ", reviewRegDate="
-				+ reviewRegDate + ", likeCount=" + likeCount + ", avgScope=" + avgScope + ", avgTotalScope="
-				+ avgTotalScope + ", reviewShowStatus=" + reviewShowStatus + "]";
+				+ reviewImage + ", reviewDetail=" + reviewDetail + ", hashTagNo=" + hashTagNo + ", hashTag=" + hashTag
+				+ ", reviewRegDate=" + reviewRegDate + ", likeCount=" + likeCount + ", avgScope=" + avgScope
+				+ ", avgTotalScope=" + avgTotalScope + ", reviewShowStatus=" + reviewShowStatus + "]";
 	}
 }
