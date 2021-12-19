@@ -22,11 +22,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 	@Autowired
 	@Qualifier("restaurantDaoImpl")
 	private RestaurantDAO restaurantDAO;
-	
-	/*
-	 * public void setRestaurantDAO(RestaurantDAO restaurantDAO) {
-	 * this.restaurantDAO = restaurantDAO; }
-	 */
+	public void setRestaurantDAO(RestaurantDAO restaurantDAO) {
+		this.restaurantDAO = restaurantDAO;
+	}
 	
 	
 	///Constructor

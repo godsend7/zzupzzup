@@ -1,6 +1,7 @@
 package com.zzupzzup.service.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.zzupzzup.common.util.CommonUtil;
 
@@ -38,6 +39,7 @@ public class Member {
 	private String certificatedNum;		//인증번호
 	private int loginType;				//로그인 유형(일반, 카카오, 네이버)
 	private int deleteType;				//탈퇴 유형(서비스 이용 X, 타 사이트 이용, 탈퇴 후 재가입, 기타)
+	private List<Restaurant> listRegRestaurant;	//업주의 경우에 상세조회에서 표시될 음식점 수
 
 	//*Constructor
 	public Member() {
@@ -296,6 +298,14 @@ public class Member {
 
 	public void setDeleteType(int deleteType) {
 		this.deleteType = deleteType;
+	}
+
+	public List<Restaurant> getListRegRestaurant() {
+		return listRegRestaurant;
+	}
+
+	public void setListRegRestaurant(List<Restaurant> listRegRestaurant) {
+		this.listRegRestaurant = listRegRestaurant;
 	}
 	
 }

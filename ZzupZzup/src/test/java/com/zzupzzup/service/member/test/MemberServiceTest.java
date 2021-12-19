@@ -15,9 +15,9 @@ import com.zzupzzup.service.member.MemberService;
 
 //@ContextConfiguration(locations = { "classpath:config/context-*.xml" })
 @ContextConfiguration	(locations = {	"classpath:config/context-common.xml",
-																	"classpath:config/context-aspect.xml",
-																	"classpath:config/context-mybatis.xml",
-																	"classpath:config/context-transaction.xml" })
+										"classpath:config/context-aspect.xml",
+										"classpath:config/context-mybatis.xml",
+										"classpath:config/context-transaction.xml" })
 //@ContextConfiguration(locations = { "classpath:config/context-common.xml" })
 public class MemberServiceTest {
 
@@ -86,15 +86,23 @@ public class MemberServiceTest {
 		//System.out.println(member);
 	}
 	
-	//@Test
+	@Test
 	public void testGetMember() throws Exception {
 		
 		Member member = memberService.getMember("test@test.com");
+		//Member member = memberService.getMember("testest@test.com");
 		//System.out.println(member);
 	}
 	
-	@Test
-	public void testlistMember() throws Exception {
+	//@Test
+	public void testListMember() throws Exception {
+		
+		//Member member = memberService.listMember(null);
+		//System.out.println(member);
+	}
+	
+	//@Test
+	public void testUpdateMember() throws Exception {
 		
 		//Member member = memberService.listMember(null);
 		//System.out.println(member);

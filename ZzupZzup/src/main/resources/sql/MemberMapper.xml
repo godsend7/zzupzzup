@@ -23,26 +23,26 @@
 		<result property="password" 		column="PASSWORD" 			jdbcType="VARCHAR" />
 		<result property="memberName" 		column="MEMBER_NAME" 		jdbcType="VARCHAR" />
 		<result property="memberPhone" 		column="MEMBER_PHONE" 		jdbcType="VARCHAR" />
-		<result property="loginType" 		column="LOGIN_TYPE" 		jdbcType="INTEGER" />
+		<result property="loginType" 		column="LOGIN_TYPE" 		jdbcType="NUMERIC" />
 		<result property="regDate" 			column="REG_DATE" 			jdbcType="DATE" />
 		<result property="ageRange" 		column="AGE_RANGE" 			jdbcType="VARCHAR"  />
-		<result property="birth" 			column="BIRTH_YEAR" 		jdbcType="INTEGER" />
+		<result property="birth" 			column="BIRTH_YEAR" 		jdbcType="NUMERIC" />
 		<result property="gender" 			column="GENDER" 			jdbcType="VARCHAR" />
 		<result property="profileImage" 	column="PROFILE_IMAGE" 		jdbcType="VARCHAR" />
 		<result property="nickname" 		column="NICKNAME" 			jdbcType="VARCHAR" />
 		<result property="statusMessage" 	column="STATUS_MESSAGE" 	jdbcType="VARCHAR" />
-		<result property="accumulAllScore" 	column="ACTIVITY_SCORE" 	jdbcType="INTEGER" />
-		<result property="mannerAllScore" 	column="MANNER_SCORE" 		jdbcType="INTEGER" />
+		<result property="accumulAllScore" 	column="ACTIVITY_SCORE" 	jdbcType="NUMERIC" />
+		<result property="mannerAllScore" 	column="MANNER_SCORE" 		jdbcType="NUMERIC" />
 		<result property="deleteDate" 		column="DELETE_DATE" 		jdbcType="DATE" />
-		<result property="deleteType" 		column="DELETE_TYPE" 		jdbcType="INTEGER" />
+		<result property="deleteType" 		column="DELETE_TYPE" 		jdbcType="NUMERIC" />
 		<result property="deleteReason" 	column="DELETE_DETAIL" 		jdbcType="VARCHAR" />
 		<result property="blacklistDate" 	column="BLACKLIST_REG_DATE" jdbcType="DATE" />
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
-	<insert 	id="addMember"	parameterType="member" >
+	<insert 	id="addMember"	parameterType="member">
 		INSERT INTO
-		zzupzzup.MEMBER(MEMBER_ID, MEMBER_ROLE, PASSWORD, MEMBER_NAME, MEMBER_PHONE, LOGIN_TYPE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE)
+		zzupzzup_test.MEMBER(MEMBER_ID, MEMBER_ROLE, PASSWORD, MEMBER_NAME, MEMBER_PHONE, LOGIN_TYPE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE)
 		VALUES(#{memberId}, #{memberRole}, #{password}, #{memberName}, #{memberPhone}, #{loginType}, #{ageRange}, #{gender}, #{profileImage}, #{nickname}, #{statusMessage})
 	</insert>
 	
@@ -53,5 +53,17 @@
 		FROM zzupzzup.MEMBER
 		WHERE MEMBER_ID = #{memberId}
 	</select>
+	
+	<!-- <update 	id="updateMember"	parameterType="search">
+		UPDATE zzupzzup_test.MEMBER
+		<set>
+		
+		</set>
+		
+		SELECT
+		MEMBER_ID, MEMBER_NAME, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE
+		FROM zzupzzup.MEMBER
+		WHERE MEMBER_ID = #{memberId}
+	</update> -->
 	 
 </mapper>
