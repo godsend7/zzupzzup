@@ -50,9 +50,17 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 
 	@Override
-	public Member getMember(String memberId) throws Exception {
+	public Member getUser(String memberId) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne("MemberMapper.getMember", memberId);
+		return sqlSession.selectOne("MemberMapper.getUser", memberId);
+		//sqlSession.select
+		
+	}
+	
+	@Override
+	public Member getOwner(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("MemberMapper.getOwner", memberId);
 		//sqlSession.select
 		
 	}
@@ -64,9 +72,15 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 
 	@Override
-	public void updateMember() throws Exception {
+	public void updateUser(Member member) throws Exception {
 		// TODO Auto-generated method stub
-		
+		sqlSession.update("MemberMapper.updateUser", member);
+	}
+	
+	@Override
+	public void updateOwner(Member member) throws Exception {
+		// TODO Auto-generated method stub
+		sqlSession.update("MemberMapper.updateOwner", member);
 	}
 
 }
