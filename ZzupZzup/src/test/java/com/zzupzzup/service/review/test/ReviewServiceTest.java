@@ -35,7 +35,7 @@ public class ReviewServiceTest {
 	@Qualifier("reservationServiceImpl")
 	private ReservationService reservationService;
 
-	@Test
+	//@Test
 	public void testAddReview() throws Exception {
 		Review review = new Review();
 		Member member = new Member();
@@ -53,7 +53,7 @@ public class ReviewServiceTest {
 		reviewImage.add("c.jpg");
 		
 		member.setMemberId("hihi@a.com");
-		reservation.setReservationNo("20211217124126_646712560");
+		reservation.setReservationNo("20211218210535_18645498");
 		review.setMember(member);
 		review.setReservation(reservation);
 		review.setReviewDetail("맛있어요~~");
@@ -62,19 +62,41 @@ public class ReviewServiceTest {
 		review.setScopeTaste(4);
 		review.setScopeKind(5);
 		review.setScopeClean(4);
-		review.setAvgScope((4+5+4)/3);	
+		review.setAvgScope((4+5+4)/3d);	
 		
-		reviewService.addReview(review);
+		if(reviewService.addReview(review) == 1) {
+			System.out.println("review insert success " + review.getAvgScope());
+		}
 	}
 	
 	//@Test
 	public void testUpdateReview() throws Exception {
+		
+		List<Integer> hashTag = new ArrayList<Integer>();
+		List<String> reviewImage = new ArrayList<String>();
+		
+		hashTag.add(1);
+		hashTag.add(2);
+		
+		reviewImage.add("d.jpg");
+		reviewImage.add("e.jpg");
+		reviewImage.add("f.jpg");
+		
 		Review review = new Review();
 		
+		review.setReviewNo(1);
 		review.setReviewDetail("최고에요~~");
+		review.setHashTag(hashTag);
+		review.setReviewImage(reviewImage);
 		review.setScopeTaste(5);
 		review.setScopeKind(5);
 		review.setScopeClean(5);
-		review.setAvgScope((5+5+5)/3);
+		review.setAvgScope((5+5+5)/3d);
+		//reviewShowStatus (관리자만 변경 가능)
+		review.setReviewShowStatus(false);
+		
+		if(reviewService.updateReview(review) == 1) {
+			System.out.println("review update success");
+		}
 	}
 }

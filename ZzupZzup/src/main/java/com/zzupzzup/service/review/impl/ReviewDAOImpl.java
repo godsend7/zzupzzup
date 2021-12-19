@@ -26,13 +26,33 @@ public class ReviewDAOImpl implements ReviewDAO {
 	@Override
 	public int addReview(Review review) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.insert("ReviewMapper.addReview", review);
+		int result = sqlSession.insert("ReviewMapper.addReview", review);
+		
+		//review_no가 생성되었다면(=> review table에 insert되었다면)
+		if (result == 1) {
+			sqlSession.insert("ReviewMapper.addHashTag", review);
+			sqlSession.insert("ReviewMapper.addImage", review);
+			return 1;
+		} else {
+			return 0;
+		}
 	}
-
+	
 	@Override
 	public int updateReview(Review review) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		int result = sqlSession.update("ReviewMapper.updateReview", review);
+		
+		System.out.println("updateReview " + result);
+		
+		//review_no가 생성되었다면(=> review table에 insert되었다면)
+		if (result == 1) {
+			sqlSession.insert("ReviewMapper.addHashTag", review);
+			sqlSession.insert("ReviewMapper.addImage", review);
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
 	@Override
@@ -106,5 +126,4 @@ public class ReviewDAOImpl implements ReviewDAO {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 }
