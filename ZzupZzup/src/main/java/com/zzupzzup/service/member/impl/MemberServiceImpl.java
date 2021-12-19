@@ -86,9 +86,15 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void updateMember() throws Exception {
+	public void updateUser(Member member) throws Exception {
 		// TODO Auto-generated method stub
-		
+		memberDao.updateUser(member);
+	}
+	
+	@Override
+	public void updateOwner(Member member) throws Exception {
+		// TODO Auto-generated method stub
+		memberDao.updateOwner(member);
 	}
 
 	@Override
@@ -98,15 +104,21 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public Member getMember(String memberId) throws Exception {
+	public Member getUser(String memberId) throws Exception {
 		// TODO Auto-generated method stub
-		return memberDao.getMember(memberId);
+		return memberDao.getUser(memberId);
 	}
 
 	@Override
 	public void getOtherUser() throws Exception {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public Member getOwner(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDao.getOwner(memberId);
 	}
 
 	@Override

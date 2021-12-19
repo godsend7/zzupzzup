@@ -23,35 +23,65 @@
 		<result property="password" 		column="PASSWORD" 			jdbcType="VARCHAR" />
 		<result property="memberName" 		column="MEMBER_NAME" 		jdbcType="VARCHAR" />
 		<result property="memberPhone" 		column="MEMBER_PHONE" 		jdbcType="VARCHAR" />
-		<result property="loginType" 		column="LOGIN_TYPE" 		jdbcType="INTEGER" />
+		<result property="loginType" 		column="LOGIN_TYPE" 		jdbcType="NUMERIC" />
 		<result property="regDate" 			column="REG_DATE" 			jdbcType="DATE" />
 		<result property="ageRange" 		column="AGE_RANGE" 			jdbcType="VARCHAR"  />
-		<result property="birth" 			column="BIRTH_YEAR" 		jdbcType="INTEGER" />
+		<result property="birth" 			column="BIRTH_YEAR" 		jdbcType="NUMERIC" />
 		<result property="gender" 			column="GENDER" 			jdbcType="VARCHAR" />
 		<result property="profileImage" 	column="PROFILE_IMAGE" 		jdbcType="VARCHAR" />
 		<result property="nickname" 		column="NICKNAME" 			jdbcType="VARCHAR" />
 		<result property="statusMessage" 	column="STATUS_MESSAGE" 	jdbcType="VARCHAR" />
-		<result property="accumulAllScore" 	column="ACTIVITY_SCORE" 	jdbcType="INTEGER" />
-		<result property="mannerAllScore" 	column="MANNER_SCORE" 		jdbcType="INTEGER" />
+		<result property="accumulAllScore" 	column="ACTIVITY_SCORE" 	jdbcType="NUMERIC" />
+		<result property="mannerAllScore" 	column="MANNER_SCORE" 		jdbcType="NUMERIC" />
 		<result property="deleteDate" 		column="DELETE_DATE" 		jdbcType="DATE" />
-		<result property="deleteType" 		column="DELETE_TYPE" 		jdbcType="INTEGER" />
+		<result property="deleteType" 		column="DELETE_TYPE" 		jdbcType="NUMERIC" />
 		<result property="deleteReason" 	column="DELETE_DETAIL" 		jdbcType="VARCHAR" />
 		<result property="blacklistDate" 	column="BLACKLIST_REG_DATE" jdbcType="DATE" />
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
-	<insert 	id="addMember"	parameterType="member" >
+	<insert 	id="addMember"	parameterType="member">
 		INSERT INTO
 		zzupzzup.MEMBER(MEMBER_ID, MEMBER_ROLE, PASSWORD, MEMBER_NAME, MEMBER_PHONE, LOGIN_TYPE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE)
 		VALUES(#{memberId}, #{memberRole}, #{password}, #{memberName}, #{memberPhone}, #{loginType}, #{ageRange}, #{gender}, #{profileImage}, #{nickname}, #{statusMessage})
 	</insert>
 	
 	<!-- SQL : SELECT -->
-	<select 	id="getMember"	parameterType="string" resultMap="memberSelectMap">
+	<select 	id="getUser"	parameterType="string" resultMap="memberSelectMap">
 		SELECT
-		MEMBER_ID, MEMBER_NAME, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE
+		MEMBER_ID, MEMBER_NAME, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
 		FROM zzupzzup.MEMBER
-		WHERE MEMBER_ID = #{memberId}
+		WHERE MEMBER_ID = #{memberId} AND MEMBER_ROLE = 'user'
 	</select>
+	
+	<select 	id="getOwner"	parameterType="string" resultMap="memberSelectMap">
+		SELECT 
+		zzupzzup_test.MEMBER.MEMBER_ID, zzupzzup_test.MEMBER.MEMBER_NAME, zzupzzup_test.MEMBER.MEMBER_PHONE, zzupzzup_test.MEMBER.PROFILE_IMAGE, zzupzzup_test.MEMBER.NICKNAME, zzupzzup_test.MEMBER.STATUS_MESSAGE, zzupzzup_test.MEMBER.REG_DATE, zzupzzup_test.MEMBER.DELETE_DATE, zzupzzup_test.MEMBER.DELETE_TYPE, zzupzzup_test.MEMBER.BLACKLIST_REG_DATE,
+		zzupzzup_test.RESTAURANT.MEMBER_ID, zzupzzup_test.RESTAURANT.RESTAURANT_NAME, zzupzzup_test.RESTAURANT.JUDGE_STATUS, zzupzzup_test.RESTAURANT.RESTAURANT_REG_DATE, zzupzzup_test.RESTAURANT.REQUEST_DATE, zzupzzup_test.RESTAURANT.JUDGE_DATE
+		FROM zzupzzup_test.RESTAURANT, zzupzzup_test.MEMBER
+		WHERE zzupzzup_test.RESTAURANT.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID AND zzupzzup_test.MEMBER.MEMBER_ROLE = 'owner' AND zzupzzup_test.MEMBER.MEMBER_ID = #{memberId}
+	</select>
+	
+	<!-- SQL : UPDATE -->
+	<update 	id="updateUser"	parameterType="member">
+		UPDATE zzupzzup.MEMBER
+		<set>
+			PASSWORD = #{password},
+			MEMBER_PHONE = #{memberPhone},
+			PROFILE_IMAGE = #{profileImage},
+			STATUS_MESSAGE = #{statusMessage}
+		</set>
+		WHERE MEMBER_ID = #{memberId} AND MEMBER_ROLE = 'user'
+	</update>
+	
+	<update 	id="updateOwner"	parameterType="member">
+		UPDATE zzupzzup_test.MEMBER
+		<set>
+			PASSWORD = #{password},
+			MEMBER_PHONE = #{memberPhone},
+			PROFILE_IMAGE = #{profileImage}
+		</set>
+		WHERE MEMBER_ID = #{memberId} AND MEMBER_ROLE = 'owner'
+	</update>
 	 
 </mapper>
