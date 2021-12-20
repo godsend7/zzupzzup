@@ -3,6 +3,9 @@ package com.zzupzzup.service.domain;
 public class RestaurantTime {
 	
 	///Field
+	private int restaurantTimeNo;
+	private Community postNo;
+	private Restaurant restaurantNo;
 	private String restaurantDay;
 	private int restaurantOpen;
 	private int restaurantClose;
@@ -18,6 +21,30 @@ public class RestaurantTime {
 	
 	
 	///Method
+	public int getRestaurantTimeNo() {
+		return restaurantTimeNo;
+	}
+
+	public void setRestaurantTimeNo(int restaurantTimeNo) {
+		this.restaurantTimeNo = restaurantTimeNo;
+	}
+
+	public Community getPostNo() {
+		return postNo;
+	}
+
+	public void setPostNo(Community postNo) {
+		this.postNo = postNo;
+	}
+
+	public Restaurant getRestaurantNo() {
+		return restaurantNo;
+	}
+
+	public void setRestaurantNo(Restaurant restaurantNo) {
+		this.restaurantNo = restaurantNo;
+	}
+	
 	public String getRestaurantDay() {
 		return restaurantDay;
 	}

@@ -7,16 +7,34 @@
 <mapper namespace="RestaurantMapper">
 
 	<resultMap id="restaurantSelectMap" type="restaurant">
-		<result property="member.memberId" 		column="MEMBER_ID" 			jdbcType="VARCHAR" />
-		<result property="member.memberName"	column="OWNER_NAME" 		jdbcType="VARCHAR" />
-		<result property="ownerImage" 			column="OWNER_IMAGE" 		jdbcType="VARCHAR" />
-		<result property="restaurantName" 		column="RESTAURANT_NAME" 	jdbcType="VARCHAR" />
-		<result property="restaurantText" 		column="RESTAURANT_TEXT" 	jdbcType="VARCHAR" />
-		<result property="restaurantTel" 		column="RESTAURANT_TEL" 	jdbcType="VARCHAR" />
-		<result property="streetAddress" 		column="STREET_ADDRESS" 	jdbcType="VARCHAR" />
-		<result property="areaAddress" 			column="AREA_ADDRESS" 		jdbcType="VARCHAR" />
-		<result property="menuType" 			column="MENU_TYPE" 			jdbcType="NUMERIC" />
+		<result property="member.memberId" 		column="MEMBER_ID" 				jdbcType="VARCHAR" />
+		<result property="member.memberName"	column="OWNER_NAME" 			jdbcType="VARCHAR" />
+		<result property="restaurantNo"			column="RESTAURANT_NO"			jdbcType="NUMERIC" />
+		<result property="ownerImage" 			column="OWNER_IMAGE" 			jdbcType="VARCHAR" />
+		<result property="restaurantName" 		column="RESTAURANT_NAME" 		jdbcType="VARCHAR" />
+		<result property="restaurantText" 		column="RESTAURANT_TEXT" 		jdbcType="VARCHAR" />
+		<result property="restaurantTel" 		column="RESTAURANT_TEL" 		jdbcType="VARCHAR" />
+		<result property="streetAddress" 		column="STREET_ADDRESS" 		jdbcType="VARCHAR" />
+		<result property="areaAddress" 			column="AREA_ADDRESS" 			jdbcType="VARCHAR" />
+		<result property="restAddress" 			column="REST_ADDRESS" 			jdbcType="VARCHAR" />
+		<result property="menuType" 			column="MENU_TYPE" 				jdbcType="NUMERIC" />
+		<result property="reservationStatus" 	column="RESERVATION_STATUS" 	jdbcType="NUMERIC" />
+		<result property="parkable" 			column="PARKABLE" 				jdbcType="BOOLEAN" />
+		<result property="requestDate" 			column="REQUEST_DATE" 			jdbcType="DATE" />
+		<result property="judgeStatus" 			column="JUDGE_STATUS" 			jdbcType="BOOLEAN" />
+		<result property="judgeDate" 			column="JUDGE_DATE" 			jdbcType="DATE" />
+		<result property="restaurantRegDate" 	column="RESTAURANT_REG_DATE"	jdbcType="DATE" />
+		
+		<collection property="restaurantMenu" resultMap="menuSelectMap"></collection>
+		
 	</resultMap>
+	
+	<resultMap type="com.zzupzzup.service.domain.RestaurantMenu" id="menuSelectMap">
+		<result property="menuTitle" column="MENU_TITLE" />
+		<result property="menuPrice" column="MENU_PRICE" />
+		<result property="mainMenuStatus" column="MAIN_MENU_STATUS" />
+	</resultMap>
+	
 	
 	<!-- SQL : INSERT -->
 	<insert 	id="addRestaurant"		parameterType="restaurant" >
@@ -30,9 +48,7 @@
 	
 	<!-- SQL : SELECT ONE -->
 	<select 	id="getRestaurant"		parameterType="int"		resultMap="restaurantSelectMap">
-		SELECT
-		MEMBER_ID, OWNER_NAME, OWNER_IMAGE, RESTAURANT_TEXT, RESTAURANT_NAME,
-		RESTAURANT_TEL, STREET_ADDRESS, AREA_ADDRESS, MENU_TYPE
+		SELECT *
 		FROM RESTAURANT
 		WHERE RESTAURANT_NO = #{value}
 	</select>
@@ -40,18 +56,28 @@
 	
 	<!-- SQL : UPDATE -->
 	<update 	id="updateRestaurant"	parameterType="restaurant">
-		UPDATE COMMUNITY
+		UPDATE RESTAURANT
 		<set>
-			OWNER_NAME = #{member.memberName}
-			OWNER_IMAGE = #{ownerImage}
-			RESTAURANT_TEXT = #{restaurantName}
-			RESTAURANT_NAME = #{restaurantText}
-			RESTAURANT_TEL = #{restaurantTel}
-			STREET_ADDRESS = #{streetAddress}
-			AREA_ADDRESS = #{areaAddress}
+			OWNER_IMAGE = #{ownerImage},
+			RESTAURANT_TEXT = #{restaurantText},
+			RESTAURANT_NAME = #{restaurantName},
+			RESTAURANT_TEL = #{restaurantTel},
+			STREET_ADDRESS = #{streetAddress},
+			AREA_ADDRESS = #{areaAddress},
 			MENU_TYPE = #{menuType}
 		</set>
+		WHERE RESTAURANT_NO = #{restaurantNo}
 	</update>
+	
+	
+	<!-- SQL : SELECT LIST -->
+	<select id="listRestaurant" parameterType="search" resultMap="restaurantSelectMap">
+		SELECT *
+		FROM RESTAURANT
+		LEFT JOIN MENU
+		ON RESTAURANT.RESTAURANT_NO = MENU.RESTAURANT_NO
+		WHERE 
+	</select>
 	
 	
 </mapper>

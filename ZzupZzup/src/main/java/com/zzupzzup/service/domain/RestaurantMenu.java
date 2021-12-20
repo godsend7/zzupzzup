@@ -3,9 +3,11 @@ package com.zzupzzup.service.domain;
 public class RestaurantMenu {
 	
 	///Field
+	private int menuNo;
+	private Restaurant restaurantNo;
 	private String menuTitle;
 	private int menuPrice;
-	private boolean mainMenuStauts;
+	private boolean mainMenuStatus;
 	
 	
 	///Constructor
@@ -15,14 +17,30 @@ public class RestaurantMenu {
 	
 	
 	///Method
-	public boolean isMainMenuStauts() {
-		return mainMenuStauts;
+	public int getMenuNo() {
+		return menuNo;
 	}
 
-	public void setMainMenuStauts(boolean mainMenuStauts) {
-		this.mainMenuStauts = mainMenuStauts;
+	public void setMenuNo(int menuNo) {
+		this.menuNo = menuNo;
+	}
+	
+	public Restaurant getRestaurantNo() {
+		return restaurantNo;
 	}
 
+	public void setRestaurantNo(Restaurant restaurantNo) {
+		this.restaurantNo = restaurantNo;
+	}
+
+	public boolean isMainMenuStatus() {
+		return mainMenuStatus;
+	}
+
+	public void setMainMenuStatus(boolean mainMenuStatus) {
+		this.mainMenuStatus = mainMenuStatus;
+	}
+	
 	public String getMenuTitle() {
 		return menuTitle;
 	}
@@ -41,7 +59,8 @@ public class RestaurantMenu {
 
 	@Override
 	public String toString() {
-		return "RestaurantMenu [menuTitle=" + menuTitle + ", menuPrice=" + menuPrice + "]";
+		return "RestaurantMenu [menuNo=" + menuNo + ", restaurantNo=" + restaurantNo + ", menuTitle=" + menuTitle
+				+ ", menuPrice=" + menuPrice + ", mainMenuStatus=" + mainMenuStatus + "]";
 	}
 	
 	
