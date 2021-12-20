@@ -31,7 +31,7 @@
 		INSERT
 		INTO COMMUNITY(MEMBER_ID, POST_TITLE, POST_TEXT, RESTAURANT_NAME, RESTAURANT_TEL,
 		STREET_ADDRESS, AREA_ADDRESS, MENU_TYPE, MAIN_MENU_TITLE, MAIN_MENU_PRICE)
-		VALUES ( #{memberId}, #{postTitle}, #{postText}, #{restaurantName}, #{restaurantTel},
+		VALUES ( #{member.memberId}, #{postTitle}, #{postText}, #{restaurantName}, #{restaurantTel},
 		#{streetAddress}, #{areaAddress}, #{menuType}, #{mainMenuTitle}, #{mainMenuPrice})
 	</insert>
 	

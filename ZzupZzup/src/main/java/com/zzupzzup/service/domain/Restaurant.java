@@ -6,6 +6,7 @@ import java.util.List;
 public class Restaurant {
 	
 	///Field
+	private Member member;
 	private int restaurantNo;
 	private String restaurantName;
 	private String restaurantTel;
@@ -36,6 +37,14 @@ public class Restaurant {
 	
 	
 	///Method
+	public Member getMember() {
+		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
+	}
+	
 	public int getRestaurantNo() {
 		return restaurantNo;
 	}

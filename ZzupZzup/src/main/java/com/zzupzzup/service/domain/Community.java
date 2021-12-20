@@ -211,4 +211,6 @@ public class Community {
 	public void setPostReportCount(int postReportCount) {
 		this.postReportCount = postReportCount;
 	}
+	
+	
 }
