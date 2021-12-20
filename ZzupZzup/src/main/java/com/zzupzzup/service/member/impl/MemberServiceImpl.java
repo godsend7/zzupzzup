@@ -86,15 +86,9 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void updateUser(Member member) throws Exception {
+	public void updateMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
-		memberDao.updateUser(member);
-	}
-	
-	@Override
-	public void updateOwner(Member member) throws Exception {
-		// TODO Auto-generated method stub
-		memberDao.updateOwner(member);
+		memberDao.updateMember(member);
 	}
 
 	@Override

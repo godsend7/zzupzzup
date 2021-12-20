@@ -27,9 +27,7 @@ public interface MemberService {
 	
 	public void checkCertificatedNum() throws Exception;
 	
-	public void updateUser(Member member) throws Exception;
-	
-	public void updateOwner(Member member) throws Exception;
+	public void updateMember(Member member) throws Exception;
 	
 	public void confirmPwd() throws Exception;
 	

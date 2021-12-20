@@ -72,15 +72,9 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 
 	@Override
-	public void updateUser(Member member) throws Exception {
+	public void updateMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
-		sqlSession.update("MemberMapper.updateUser", member);
-	}
-	
-	@Override
-	public void updateOwner(Member member) throws Exception {
-		// TODO Auto-generated method stub
-		sqlSession.update("MemberMapper.updateOwner", member);
+		sqlSession.update("MemberMapper.updateMember", member);
 	}
 
 }

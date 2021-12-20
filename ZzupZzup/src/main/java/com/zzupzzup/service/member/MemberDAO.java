@@ -21,7 +21,5 @@ public interface MemberDAO {
 	
 	public List<Member> listMember(Search search) throws Exception;
 	
-	public void updateUser(Member member) throws Exception;
-	
-	public void updateOwner(Member member) throws Exception;
+	public void updateMember(Member member) throws Exception;
 }

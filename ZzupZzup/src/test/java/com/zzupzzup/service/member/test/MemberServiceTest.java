@@ -1,5 +1,7 @@
 package com.zzupzzup.service.member.test;
 
+import java.sql.Date;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.member.MemberService;
+import com.zzupzzup.service.restaurant.RestaurantService;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,6 +27,10 @@ public class MemberServiceTest {
 	@Autowired
 	@Qualifier("memberServiceImpl")
 	private MemberService memberService;
+	
+	@Autowired
+	@Qualifier("restaurantServiceImpl")
+	private RestaurantService restaurantService;
 
 	//@Test
 	public void testAddMember() throws Exception {
@@ -102,16 +109,21 @@ public class MemberServiceTest {
 		//System.out.println(member);
 	}
 	
-	@Test
+	//@Test
 	public void testListMember() throws Exception {
 		
 		//Member member = memberService.listMember(null);
 		//System.out.println(member);
 	}
 	
-	//@Test
+	@Test
 	public void testUpdateMember() throws Exception {
-		//Member member = memberService.getUser("test3@test.com");
+		/*
+		Member member = memberService.getUser("y409813@gmail.com");
+		//관리자
+		member.setRegBlacklist(false);
+		memberService.updateUser(member);
+		*/
 		/*
 		//유저(일반)
 		//member.setMemberId("test@test.com");
@@ -155,9 +167,8 @@ public class MemberServiceTest {
 		member.setStatusMessage("no");
 		*/
 		//memberService.updateUser(member);
-		
-		//Member member = memberService.getOwner("testest@test.com");
-		/*
+		///*
+		Member member = memberService.getOwner("testest@test.com");
 		//업주
 		//member.setMemberId("testest@test.com");
 		//member.setMemberRole("owner");
@@ -166,8 +177,9 @@ public class MemberServiceTest {
 		member.setMemberPhone("111-1111-1111");
 		//member.setLoginType(1);
 		member.setProfileImage("testFile.png");
-		*/
-		//memberService.updateOwner(member);
+		
+		memberService.updateMember(member);
+		//*/
 		//System.out.println(member);
 	}
 }
