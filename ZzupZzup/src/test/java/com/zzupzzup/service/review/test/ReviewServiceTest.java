@@ -3,16 +3,22 @@ package com.zzupzzup.service.review.test;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.aspectj.apache.bcel.generic.ReturnaddressType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.zzupzzup.common.Page;
+import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
+import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.reservation.ReservationService;
 import com.zzupzzup.service.review.ReviewService;
@@ -35,12 +41,19 @@ public class ReviewServiceTest {
 	@Autowired
 	@Qualifier("reservationServiceImpl")
 	private ReservationService reservationService;
+	
+	@Value("#{common.properties['pageUnit']?: 3}")
+	int pageUnit;
+	
+	@Value("#{common.properties['pageSize']?: 2}")
+	int pageSize;
 
 	//@Test
 	public void testAddReview() throws Exception {
 		Review review = new Review();
 		Member member = new Member();
 		Reservation reservation = new Reservation();
+		Restaurant restaurant = new Restaurant();
 		
 		List<Integer> hashTag = new ArrayList<Integer>();
 		List<String> reviewImage = new ArrayList<String>();
@@ -53,8 +66,12 @@ public class ReviewServiceTest {
 		reviewImage.add("b.jpg");
 		reviewImage.add("c.jpg");
 		
-		member.setMemberId("hihi@a.com");
-		reservation.setReservationNo("20211218210535_18645498");
+		//reservation = reservationService.getReservation("20211220123934_928193028");
+		restaurant.setRestaurantNo(1);
+		
+		member.setMemberId("user02@zzupzzup.com");
+		//reservation.setReservationNo(20211217124126_646712560);
+		reservation.setRestaurant(restaurant);
 		review.setMember(member);
 		review.setReservation(reservation);
 		review.setReviewDetail("맛있어요~~");
@@ -70,7 +87,7 @@ public class ReviewServiceTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testUpdateReview() throws Exception {
 		
 		List<Integer> hashTag = new ArrayList<Integer>();
@@ -109,14 +126,14 @@ public class ReviewServiceTest {
 		
 		Review review = new Review();
 		
-		review.setReviewNo(4);
+		review.setReviewNo(8);
 		
 		if(reviewService.deleteReview(review.getReviewNo()) == 1) {
 			System.out.println("review delete success");
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testGetReview() throws Exception {
 		
 		Review review = new Review();
@@ -129,6 +146,62 @@ public class ReviewServiceTest {
 		
 		for (int i = 0; i<review.getHashTagNo().size(); i++) {
 			System.out.println(review.getHashTagNo().get(i) + " : " + review.getHashTag().get(i));
+		}
+	}
+	
+	//@Test
+	public void testListReview() throws Exception {
+		Search search = new Search();
+		
+		search.setCurrentPage(1);		
+		search.setPageSize(pageSize);
+		
+		String restaurantNo = null;
+		
+		Map<String, Object> map = reviewService.listReview(search, restaurantNo);
+		
+		List<Review> list = (List<Review>) map.get("list");
+		
+		System.out.println("review list success");
+		
+		for (Review r : list) {
+			System.out.println(r);
+		}
+		
+		 Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+	}
+	
+	//@Test
+	public void testListMyReview() throws Exception {
+		Search search = new Search();
+		
+		String memberId = "hihi";
+		
+		Map<String, Object> map = reviewService.listMyReview(search, memberId);
+		
+		List<Review> list = (List<Review>) map.get("list");
+		
+		System.out.println("review list success");
+		
+		for (Review r : list) {
+			System.out.println(r);
+		}
+	}
+	
+	//@Test
+	public void testListMyLikeReview() throws Exception {
+		Search search = new Search();
+			
+		String memberId = "user";
+			
+		Map<String, Object> map = reviewService.listMyLikeReview(search, memberId);
+			
+		List<Review> list = (List<Review>) map.get("list");
+			
+		System.out.println("review list success");
+			
+		for (Review r : list) {
+			System.out.println(r);
 		}
 	}
 }
