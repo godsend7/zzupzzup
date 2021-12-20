@@ -106,12 +106,6 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public Member getUser(String memberId) throws Exception {
-		// TODO Auto-generated method stub
-		return memberDao.getUser(memberId);
-	}
-
-	@Override
 	public void getOtherUser() throws Exception {
 		// TODO Auto-generated method stub
 		

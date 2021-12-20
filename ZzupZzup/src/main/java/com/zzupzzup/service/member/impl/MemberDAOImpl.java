@@ -54,12 +54,6 @@ public class MemberDAOImpl implements MemberDAO{
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("MemberMapper.getMember", memberId);
 	}
-
-	@Override
-	public Member getUser(String memberId) throws Exception {
-		// TODO Auto-generated method stub
-		return sqlSession.selectOne("MemberMapper.getUser", memberId);
-	}
 	
 	@Override
 	public Member getOwner(String memberId) throws Exception {

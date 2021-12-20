@@ -34,8 +34,6 @@ public interface MemberService {
 	
 	public Member getMember(String memberId) throws Exception;
 	
-	public Member getUser(String memberId) throws Exception;
-	
 	public void getOtherUser() throws Exception;
 	
 	public Member getOwner(String memberId) throws Exception;

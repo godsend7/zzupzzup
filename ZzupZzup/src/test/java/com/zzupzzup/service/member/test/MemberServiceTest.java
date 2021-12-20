@@ -97,11 +97,10 @@ public class MemberServiceTest {
 		//System.out.println(member);
 	}	//complete addMember !
 	
-	@Test
+	//@Test
 	public void testGetMember() throws Exception {
 		
 		Member member = memberService.getMember("test@test.com");
-		//Member member = memberService.getUser("test@test.com");
 		//Member member = memberService.getOwner("testest@test.com");
 		//System.out.println(member);
 	}
@@ -114,10 +113,11 @@ public class MemberServiceTest {
 		Search search = new Search();
 		Map<String, Object> map = memberService.listMember(search);
 		List<Member> list = (List<Member>)map.get("list");
+		/*
 		for(int i = 0; i < list.size(); i++) {
 			
 		}
-		
+		*/
 	}
 	
 	//@Test
