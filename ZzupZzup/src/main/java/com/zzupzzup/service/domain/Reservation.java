@@ -8,6 +8,7 @@ public class Reservation {
 	//Field
 	private Chat chat;
 	private Restaurant restaurant;
+	private Member member;
 	private String reservationNo;
 	private int payOption;
 	private int payMethod;
@@ -20,6 +21,8 @@ public class Reservation {
 	private boolean fixedStatus;
 	private Date reservationDate;
 	private int reservationCancelReason;
+	private String reservationCancelDetail;
+	private boolean refundStatus;
 	private int reservationCancelDate;
 	private int totalPrice;
 	private int restaurantNo;
@@ -47,6 +50,14 @@ public class Reservation {
 
 	public void setRestaurant(Restaurant restaurant) {
 		this.restaurant = restaurant;
+	}
+	
+	public Member getMember() {
+		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
 	}
 
 	public String getReservationNo() {
@@ -144,6 +155,22 @@ public class Reservation {
 	public void setReservationCancelReason(int reservationCancelReason) {
 		this.reservationCancelReason = reservationCancelReason;
 	}
+		
+	public String getReservationCancelDetail() {
+		return reservationCancelDetail;
+	}
+
+	public void setReservationCancelDetail(String reservationCancelDetail) {
+		this.reservationCancelDetail = reservationCancelDetail;
+	}
+	
+	public boolean isRefundStatus() {
+		return refundStatus;
+	}
+
+	public void setRefundStatus(boolean refundStatus) {
+		this.refundStatus = refundStatus;
+	}
 
 	public int getReservationCancelDate() {
 		return reservationCancelDate;
@@ -210,18 +237,19 @@ public class Reservation {
 	}
 	
 	//Method
+	
 	@Override
 	public String toString() {
-		return "Reservation [chat=" + chat + ", restaurant=" + restaurant + ", reservationNo=" + reservationNo
-				+ ", payOption=" + payOption + ", payMethod=" + payMethod + ", planTime=" + planTime + ", planDate="
-				+ planDate + ", fixedTime=" + fixedTime + ", fixedDate=" + fixedDate + ", memberCount=" + memberCount
-				+ ", reservationStatus=" + reservationStatus + ", fixedStatus=" + fixedStatus + ", reservationDate="
-				+ reservationDate + ", reservationCancelReason=" + reservationCancelReason + ", reservationCancelDate="
-				+ reservationCancelDate + ", totalPrice=" + totalPrice + ", restaurantNo=" + restaurantNo
-				+ ", reservationMember=" + reservationMember + ", reservationLeader=" + reservationLeader
+		return "Reservation [chat=" + chat + ", restaurant=" + restaurant + ", member=" + member + ", reservationNo="
+				+ reservationNo + ", payOption=" + payOption + ", payMethod=" + payMethod + ", planTime=" + planTime
+				+ ", planDate=" + planDate + ", fixedTime=" + fixedTime + ", fixedDate=" + fixedDate + ", memberCount="
+				+ memberCount + ", reservationStatus=" + reservationStatus + ", fixedStatus=" + fixedStatus
+				+ ", reservationDate=" + reservationDate + ", reservationCancelReason=" + reservationCancelReason
+				+ ", reservationCancelDetail=" + reservationCancelDetail + ", refundStatus=" + refundStatus
+				+ ", reservationCancelDate=" + reservationCancelDate + ", totalPrice=" + totalPrice + ", restaurantNo="
+				+ restaurantNo + ", reservationMember=" + reservationMember + ", reservationLeader=" + reservationLeader
 				+ ", reservationPhone=" + reservationPhone + ", orderCount=" + orderCount + ", orderTotal=" + orderTotal
 				+ "]";
 	}
-	
-	
+
 }

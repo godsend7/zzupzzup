@@ -2,6 +2,13 @@ package com.zzupzzup.service.reservation.test;
 
 import java.sql.Date;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.RequestDispatcher;
+
+import org.junit.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +38,7 @@ public class ReservationServiceTest {
 	@Qualifier("reservationServiceImpl")
 	private ReservationService reservationService;
 
-	@Test
+	//@Test
 	public void testAddReservation() throws Exception {
 		
 		Reservation reservation = new Reservation();
@@ -42,16 +49,42 @@ public class ReservationServiceTest {
 		restaurant.setRestaurantNo(1); //음식점 예약no
 		chat.setChatNo(1); //채팅 no
 		member.setMemberId("hihi@a.com"); // memberId
-		
-		Date date = new Date(20211213);
-		reservation.setPlanDate(date);	
-		reservation.setFixedDate(date);
-		reservation.setMemberCount(3);
-		reservation.setReservationStatus(false);
-		reservation.setReservationDate(date);
-				
-		
-		
 
+		reservation.setRestaurant(restaurant);
+		reservation.setChat(chat);
+		reservation.setMember(member);
+		
+		reservation.setMemberCount(3); // 예약 인원 수
+		reservation.setReservationStatus(true); // 예약 및 결제 현황
+		reservation.setFixedStatus(false); // 방문 확정 여부
+		reservation.setTotalPrice(10000); // 주문 메뉴 총 가격
+		reservation.setPayOption(2); //결제 방법 (선결제, 방문결제)
+		reservation.setPayMethod(1); // 결제 수단
+		reservation.setReservationCancelReason(2); // 예약 및 결제 취소 유형
+		reservation.setReservationCancelDetail("재고가 없네용~^^^^"); // 예약 및 결제 취소 상세 내용
+		reservation.setRefundStatus(false); // 환불 여부
+		
+		reservationService.addReservation(reservation);
 	}
+	
+//=======================================================================================
+	
+	@Test
+	public void testGetReservation() throws Exception {
+		
+		Reservation reservation = new Reservation();
+		Restaurant restaurant = new Restaurant();
+		Chat chat = new Chat();
+		Member member = new Member();
+		
+		reservation = reservationService.getReservation("20211218171424_756138384");
+		
+		Assert.assertEquals(1, restaurant.getRestaurantNo());
+		Assert.assertEquals(1, chat.getChatNo());
+		Assert.assertEquals("hihi@a.com", member.getMemberId());
+		Assert.assertEquals(false, reservation.isRefundStatus());
+		
+		//reservationService.addReservation(reservation);
+	}
+	
 }

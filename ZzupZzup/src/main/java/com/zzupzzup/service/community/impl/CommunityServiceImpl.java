@@ -18,7 +18,7 @@ public class CommunityServiceImpl implements CommunityService {
 	
 	///Field
 	@Autowired
-	@Qualifier("communityServiceImpl")
+	@Qualifier("communityDaoImpl")
 	private CommunityDAO communityDAO;
 	public void setcommunityDAO(CommunityDAO communityDAO) {
 		this.communityDAO = communityDAO;

@@ -12,7 +12,7 @@ public interface ReservationService {
 	public int addReservation(Reservation reservation) throws Exception ;
 
 	// SELECT ONE
-	public Reservation getReservation(int reservationNo) throws Exception ;
+	public Reservation getReservation(String reservationNo) throws Exception ;
 
 	// SELECT LIST
 	public Map<String, Object> listReservation(Search search) throws Exception ;

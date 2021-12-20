@@ -15,12 +15,12 @@ import com.zzupzzup.service.domain.RestaurantTime;
 import com.zzupzzup.service.restaurant.RestaurantDAO;
 import com.zzupzzup.service.restaurant.RestaurantService;
 
-@Service("restaurantServiceImpl")
+//@Service("restaurantServiceImpl")
 public class RestaurantServiceImpl implements RestaurantService {
 	
 	///Field
-	@Autowired
-	@Qualifier("restaurantDaoImpl")
+	//@Autowired
+	//@Qualifier("restaurantDaoImpl")
 	private RestaurantDAO restaurantDAO;
 	public void setRestaurantDAO(RestaurantDAO restaurantDAO) {
 		this.restaurantDAO = restaurantDAO;
