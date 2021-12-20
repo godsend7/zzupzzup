@@ -20,6 +20,7 @@ public class CommunityServiceImpl implements CommunityService {
 	@Autowired
 	@Qualifier("communityDaoImpl")
 	private CommunityDAO communityDAO;
+	
 	public void setcommunityDAO(CommunityDAO communityDAO) {
 		this.communityDAO = communityDAO;
 	}
