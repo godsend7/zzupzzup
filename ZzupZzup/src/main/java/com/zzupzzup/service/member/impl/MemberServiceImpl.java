@@ -1,9 +1,12 @@
 package com.zzupzzup.service.member.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.member.MemberDAO;
 import com.zzupzzup.service.member.MemberService;
@@ -83,9 +86,15 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void updateMember() throws Exception {
+	public void updateUser(Member member) throws Exception {
 		// TODO Auto-generated method stub
-		
+		memberDao.updateUser(member);
+	}
+	
+	@Override
+	public void updateOwner(Member member) throws Exception {
+		// TODO Auto-generated method stub
+		memberDao.updateOwner(member);
 	}
 
 	@Override
@@ -95,9 +104,9 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void getMember() throws Exception {
+	public Member getUser(String memberId) throws Exception {
 		// TODO Auto-generated method stub
-		
+		return memberDao.getUser(memberId);
 	}
 
 	@Override
@@ -105,11 +114,17 @@ public class MemberServiceImpl implements MemberService{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public Member getOwner(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDao.getOwner(memberId);
+	}
 
 	@Override
-	public void listMember() throws Exception {
+	public List<Member> listMember(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		
+		return memberDao.listMember(search);
 	}
 
 	@Override

@@ -29,7 +29,7 @@
 		<mapper resource="sql/CommunityMapper.xml"/>
 		<mapper resource="sql/AlarmMapper.xml"/>
 		<mapper resource="sql/ReviewMapper.xml"/>
-		<mapper resource="sql/ReportMapper.xml"/>
+		<mapper resource="sql/ReportMapper.xml"/> 
 	</mappers>
 
 </configuration>

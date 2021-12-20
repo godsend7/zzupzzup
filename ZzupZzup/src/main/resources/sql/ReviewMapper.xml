@@ -13,30 +13,54 @@
 		<result property="scopeClean" 					column="scope_taste" 			jdbcType="INTEGER" />
 		<result property="scopeTaste" 					column="scope_kind" 			jdbcType="INTEGER" />
 		<result property="scopeKind" 					column="scope_clean" 			jdbcType="INTEGER" />
-		<!-- <result property="reviewImage" 					column="image" 					jdbcType="VARCHAR" /> -->
 		<result property="reviewDetail" 				column="review_detail" 			jdbcType="VARCHAR"  />
-		<!-- <result property="hashTag" 						column="hashtag" 				jdbcType="VARCHAR" /> -->
 		<result property="reviewRegDate" 				column="review_reg_date" 		jdbcType="DATE" />
 		<result property="avgScope" 					column="avg_scope" 				jdbcType="DECIMAL" />
 		<result property="reviewShowStatus" 			column="review_show_status" 	jdbcType="BOOLEAN" />
 	</resultMap>
 	
-	<!-- SQL : INSERT -->
-	<insert id="addReview"	parameterType="review">
+	<!-- REVIEW INSERT START -->
+	<insert id="addReview"	parameterType="review" useGeneratedKeys="true" keyProperty="reviewNo">
 	 	INSERT
 		INTO REVIEW(member_id, reservation_no, review_detail, scope_taste, scope_kind, scope_clean, avg_scope) 
 		VALUES ( #{member.memberId}, #{reservation.reservationNo}, #{reviewDetail}, #{scopeTaste}, #{scopeKind}, #{scopeClean}, #{avgScope})
-	<!-- 	<selectKey keyProperty="no" resultType="Integer">
-   			SELECT LAST_INSERT_ID()
-  		</selectKey>
-  		
-  		INSERT
-  		INTO HASHTAG_LOG(review_no, hashtag_no)
-  		VALUES (  ) -->
 	</insert>
 	
-	<!-- <update id="updateReview">
-		UPDATE SET 
-	</update> -->
-	 
+	<insert id="addHashTag"	parameterType="review">
+		DELETE FROM HASHTAG_LOG WHERE review_no = #{reviewNo};
+	
+		INSERT
+		INTO HASHTAG_LOG(review_no, hashtag_no) 
+		VALUES
+		<foreach collection="hashTag" item="item" separator=",">	
+			 (#{reviewNo}, #{item})
+  		</foreach>
+	</insert>
+	
+	<insert id="addImage"	parameterType="review">
+	
+		DELETE FROM IMAGE WHERE review_no = #{reviewNo};
+	
+		INSERT
+		INTO IMAGE(review_no, image) 
+		VALUES
+		<foreach collection="reviewImage" item="item" separator=",">	
+			 (#{reviewNo}, #{item})
+  		</foreach>
+	</insert>
+	<!-- REVIEW INSERT END -->
+	
+	<update id="updateReview" parameterType="review">
+		UPDATE REVIEW
+	   	<set>
+	   		review_detail = #{reviewDetail},
+			scope_taste	= #{scopeTaste},
+			scope_kind = #{scopeKind},
+			scope_clean	= #{scopeClean},
+			avg_scope = #{avgScope},
+			review_show_status = #{reviewShowStatus}
+	   	</set>
+	   	WHERE review_no = #{reviewNo}
+	</update>
+	
 </mapper>

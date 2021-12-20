@@ -1,5 +1,7 @@
 package com.zzupzzup.service.domain;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -16,8 +18,8 @@ public class Review {
 	private List<Integer> hashTag;
 	private Date reviewRegDate;
 	private int likeCount;
-	private float avgScope;
-	private float avgTotalScope;
+	private double avgScope;
+	private double avgTotalScope;
 	private boolean reviewShowStatus;
 	
 	public Review() {
@@ -114,19 +116,19 @@ public class Review {
 		this.likeCount = likeCount;
 	}
 
-	public float getAvgScope() {
+	public double getAvgScope() {
 		return avgScope;
 	}
 
-	public void setAvgScope(float avgScope) {
-		this.avgScope = avgScope;
+	public void setAvgScope(double d) {
+		this.avgScope = Double.parseDouble(String.format("%.1f", d));
 	}
 
-	public float getAvgTotalScope() {
+	public double getAvgTotalScope() {
 		return avgTotalScope;
 	}
 
-	public void setAvgTotalScope(float avgTotalScope) {
+	public void setAvgTotalScope(double avgTotalScope) {
 		this.avgTotalScope = avgTotalScope;
 	}
 
