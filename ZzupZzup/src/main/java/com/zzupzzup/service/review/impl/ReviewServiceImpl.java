@@ -49,11 +49,12 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public Map<String, Object> listReview(Search search, int restaurantNo) throws Exception {
+	public Map<String, Object> listReview(Search search, String restaurantNo) throws Exception {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
 		map.put("restaurantNo", restaurantNo);
+		
 		map.put("list", reviewDao.listReview(map));
 		map.put("totalCount", reviewDao.getTotalCount(search));
 		map.put("likeCount", reviewDao.getLikeCount());
@@ -76,11 +77,17 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public Map<String, Object> listMyLikeReview(String memberId) throws Exception {
+	public Map<String, Object> listMyLikeReview(Search search, String memberId) throws Exception {
 		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("memberId", memberId);
 		
+		map.put("list", reviewDao.listMyLikeReview(map));
+		map.put("totalCount", reviewDao.getTotalCount(search));
+		map.put("likeCount", reviewDao.getLikeCount());
 		
-		return null;
+		return map;
 	}
 
 	@Override

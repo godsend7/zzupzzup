@@ -22,9 +22,11 @@ public class RestaurantServiceImpl implements RestaurantService {
 	@Autowired
 	@Qualifier("restaurantDaoImpl")
 	private RestaurantDAO restaurantDAO;
-	public void setRestaurantDAO(RestaurantDAO restaurantDAO) {
-		this.restaurantDAO = restaurantDAO;
-	}
+	
+	/*
+	 * public void setRestaurantDAO(RestaurantDAO restaurantDAO) {
+	 * this.restaurantDAO = restaurantDAO; }
+	 */
 	
 	
 	///Constructor
@@ -41,9 +43,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 	@Override
 	public Restaurant getRestaurant(int restaurantNo) throws Exception {
-		
-		
-		return null;
+		return restaurantDAO.getRestaurant(restaurantNo);
 	}
 
 	@Override

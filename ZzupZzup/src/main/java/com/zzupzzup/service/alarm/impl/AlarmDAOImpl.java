@@ -7,12 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import com.zzupzzup.service.alarm.AlarmDAO;
 
-@Repository("alarmDaoImpl")
+//@Repository("alarmDaoImpl")
 public class AlarmDAOImpl implements AlarmDAO {
 	
 	//*Field
-	@Autowired
-	@Qualifier("sqlSessionTemplate")
+	//@Autowired
+	//@Qualifier("sqlSessionTemplate")
 	private SqlSession sqlSession;
 	
 	//*Constructor
