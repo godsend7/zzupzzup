@@ -43,9 +43,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 	@Override
 	public Restaurant getRestaurant(int restaurantNo) throws Exception {
-		
-		
-		return null;
+		return restaurantDAO.getRestaurant(restaurantNo);
 	}
 
 	@Override

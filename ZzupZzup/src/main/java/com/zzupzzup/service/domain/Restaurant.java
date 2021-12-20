@@ -28,6 +28,7 @@ public class Restaurant {
 	private String streetAddress;
 	private String areaAddress;
 	private String restAddress;
+	private Date restaurantRegDate; 
 	
 	
 	//Constructor
@@ -232,6 +233,27 @@ public class Restaurant {
 
 	public void setRestAddress(String restAddress) {
 		this.restAddress = restAddress;
+	}
+	
+	public Date getRestaurantRegDate() {
+		return restaurantRegDate;
+	}
+
+	public void setRestaurantRegDate(Date restaurantRegDate) {
+		this.restaurantRegDate = restaurantRegDate;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Restaurant [member=" + member + ", restaurantNo=" + restaurantNo + ", restaurantName=" + restaurantName
+				+ ", restaurantTel=" + restaurantTel + ", restaurantTel1=" + restaurantTel1 + ", restaurantTel2="
+				+ restaurantTel2 + ", restaurantTel3=" + restaurantTel3 + ", restaurantImage=" + restaurantImage
+				+ ", menuType=" + menuType + ", mainMenuStatus=" + mainMenuStatus + ", ownerName=" + ownerName
+				+ ", ownerImage=" + ownerImage + ", restaurantText=" + restaurantText + ", reservationStatus="
+				+ reservationStatus + ", parkable=" + parkable + ", requestDate=" + requestDate + ", responseDate="
+				+ responseDate + ", streetAddress=" + streetAddress + ", areaAddress=" + areaAddress + ", restAddress="
+				+ restAddress + ", restaurantRegDate=" + restaurantRegDate + "]";
 	}
 	
 	

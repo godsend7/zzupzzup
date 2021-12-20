@@ -58,31 +58,53 @@ public class ReviewDAOImpl implements ReviewDAO {
 	@Override
 	public int deleteReview(int reviewNo) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlSession.delete("ReviewMapper.deleteReview", reviewNo);
 	}
 
 	@Override
 	public Review getReview(int reviewNo) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		Review review = sqlSession.selectOne("ReviewMapper.getReview", reviewNo);
+		
+		review.setLikeCount(sqlSession.selectOne("ReviewMapper.getLikeCount", review.getReviewNo()));
+				
+		return review;
 	}
 
 	@Override
 	public List<Review> listReview(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		List<Review> list = sqlSession.selectList("ReviewMapper.listReview", map);
+		
+		for (int i = 0; i < list.size(); i++) {
+			list.get(i).setLikeCount(sqlSession.selectOne("ReviewMapper.getLikeCount", list.get(i).getReviewNo()));
+		}
+		
+		return list;
 	}
 
 	@Override
 	public List<Review> listMyReview(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		List<Review> list = sqlSession.selectList("ReviewMapper.listMyReview", map);
+		
+		for (int i = 0; i < list.size(); i++) {
+			list.get(i).setLikeCount(sqlSession.selectOne("ReviewMapper.getLikeCount", list.get(i).getReviewNo()));
+		}
+		
+		return list;
 	}
 
 	@Override
-	public List<Review> listMyLikeReview(String memberId) throws Exception {
+	public List<Review> listMyLikeReview(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		List<Review> list = sqlSession.selectList("ReviewMapper.listMyLikeReview", map);
+		
+		for (int i = 0; i < list.size(); i++) {
+			list.get(i).setLikeCount(sqlSession.selectOne("ReviewMapper.getLikeCount", list.get(i).getReviewNo()));
+		}
+		
+		return list;
 	}
 
 	@Override
