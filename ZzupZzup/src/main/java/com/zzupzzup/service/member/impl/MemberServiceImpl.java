@@ -1,6 +1,8 @@
 package com.zzupzzup.service.member.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -96,6 +98,12 @@ public class MemberServiceImpl implements MemberService{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public Member getMember(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDao.getMember(memberId);
+	}
 
 	@Override
 	public Member getUser(String memberId) throws Exception {
@@ -116,9 +124,18 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public List<Member> listMember(Search search) throws Exception {
+	public Map<String, Object> listMember(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		return memberDao.listMember(search);
+		List<Member> listMember = memberDao.listMember(search);
+		int reportCount = memberDao.getReportCount(search);
+		int regRestaurantCount = memberDao.getRegRestaurantCount(search);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", listMember);
+		map.put("reportCount", reportCount);
+		map.put("regRestaurantCount", regRestaurantCount);
+		
+		return map;
 	}
 
 	@Override

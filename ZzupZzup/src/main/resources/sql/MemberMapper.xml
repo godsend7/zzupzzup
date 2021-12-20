@@ -47,6 +47,13 @@
 	</insert>
 	
 	<!-- SQL : SELECT -->
+	<select 	id="getMember"	parameterType="string" resultMap="memberSelectMap">
+		SELECT
+		MEMBER_ID, MEMBER_NAME, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
+		FROM zzupzzup_test.MEMBER
+		WHERE MEMBER_ID = #{memberId};
+	</select>
+	
 	<select 	id="getUser"	parameterType="string" resultMap="memberSelectMap">
 		SELECT
 		MEMBER_ID, MEMBER_NAME, MEMBER_ROLE, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
@@ -82,15 +89,30 @@
 		</set>
 		WHERE MEMBER_ID = #{memberId}
 	</update>
-	
+
 	<!-- SQL : SELECT LIST -->
 	<select 	id="listMember"	parameterType="search" resultMap="memberSelectMap">
-		SELECT
-		MEMBER_ID, MEMBER_NAME, MEMBER_ROLE, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
-		FROM zzupzzup.MEMBER
-		WHERE MEMBER_ID = #{memberId} AND MEMBER_ROLE = 'user'
+		SELECT @ROWNUM := @ROWNUM + 1 AS NO, MEMBER_LIST.*
+		FROM (
+			SELECT MEMBER_ID, NICKNAME, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+			FROM zzupzzup_test.MEMBER
+		) MEMBER_LIST
+		WHERE (@ROWNUM:=0) = 0
 	</select>
 	
+	<!-- SQL : SELECT reportCount -->
+	<select id="getReportCount" parameterType="search" resultType="int">
+		SELECT COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
+		FROM zzupzzup_test.REPORT, zzupzzup_test.MEMBER
+		WHERE zzupzzup_test.MEMBER.MEMBER_ROLE = 'user' AND zzupzzup_test.REPORT.CHAT_MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID AND zzupzzup_test.MEMBER.MEMBER_ID = 'hihi@b.com'
+	</select>
+	
+	<select id="getRegRestaurantCount" parameterType="search" resultType="int">
+		SELECT COUNT(RESTAURANT_NO) AS COUNT_RESTAURANT
+		FROM zzupzzup_test.RESTAURANT, zzupzzup_test.MEMBER
+		WHERE zzupzzup_test.MEMBER.MEMBER_ROLE = 'owner' AND zzupzzup_test.RESTAURANT.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
+	</select>
+
 	<!-- <update 	id="updateOwner"	parameterType="member">
 		UPDATE zzupzzup_test.MEMBER
 		<set>

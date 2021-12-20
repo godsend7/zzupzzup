@@ -1,6 +1,8 @@
 package com.zzupzzup.service.member.test;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +11,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
+import com.zzupzzup.service.member.MemberDAO;
 import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.restaurant.RestaurantService;
 
@@ -91,21 +95,14 @@ public class MemberServiceTest {
 		memberService.addMember(member);
 
 		//System.out.println(member);
-	}
+	}	//complete addMember !
 	
-	//@Test
-	public void testGetUser() throws Exception {
+	@Test
+	public void testGetMember() throws Exception {
 		
-		Member member = memberService.getUser("test@test.com");
-		//Member member = memberService.getMember("testest@test.com");
-		//System.out.println(member);
-	}
-	
-	//@Test
-	public void testGetOwner() throws Exception {
-		
-		//Member member = memberService.getOwner("test@test.com");
-		Member member = memberService.getOwner("testest@test.com");
+		Member member = memberService.getMember("test@test.com");
+		//Member member = memberService.getUser("test@test.com");
+		//Member member = memberService.getOwner("testest@test.com");
 		//System.out.println(member);
 	}
 	
@@ -114,9 +111,16 @@ public class MemberServiceTest {
 		
 		//Member member = memberService.listMember(null);
 		//System.out.println(member);
+		Search search = new Search();
+		Map<String, Object> map = memberService.listMember(search);
+		List<Member> list = (List<Member>)map.get("list");
+		for(int i = 0; i < list.size(); i++) {
+			
+		}
+		
 	}
 	
-	@Test
+	//@Test
 	public void testUpdateMember() throws Exception {
 		/*
 		Member member = memberService.getUser("y409813@gmail.com");
@@ -181,5 +185,5 @@ public class MemberServiceTest {
 		memberService.updateMember(member);
 		//*/
 		//System.out.println(member);
-	}
+	}	//complete updateMember !
 }

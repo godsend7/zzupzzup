@@ -1,6 +1,7 @@
 package com.zzupzzup.service.member;
 
 import java.util.List;
+import java.util.Map;
 
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
@@ -31,13 +32,15 @@ public interface MemberService {
 	
 	public void confirmPwd() throws Exception;
 	
+	public Member getMember(String memberId) throws Exception;
+	
 	public Member getUser(String memberId) throws Exception;
 	
 	public void getOtherUser() throws Exception;
 	
 	public Member getOwner(String memberId) throws Exception;
 	
-	public List<Member> listMember(Search search) throws Exception;
+	public Map<String, Object> listMember(Search search) throws Exception;
 	
 	public void blacklistUser() throws Exception;
 	
