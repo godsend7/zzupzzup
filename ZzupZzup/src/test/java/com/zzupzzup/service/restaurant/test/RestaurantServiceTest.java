@@ -1,5 +1,6 @@
 package com.zzupzzup.service.restaurant.test;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ import com.zzupzzup.service.restaurant.RestaurantService;
 
 //@ContextConfiguration(locations = { "classpath:config/context-*.xml" })
 @ContextConfiguration	(locations = {	"classpath:config/context-common.xml",
-																	"classpath:config/context-aspect.xml",
-																	"classpath:config/context-mybatis.xml",
-																	"classpath:config/context-transaction.xml" })
+										"classpath:config/context-aspect.xml",
+										"classpath:config/context-mybatis.xml",
+										"classpath:config/context-transaction.xml" })
 //@ContextConfiguration(locations = { "classpath:config/context-common.xml" })
 public class RestaurantServiceTest {
 
@@ -27,7 +28,7 @@ public class RestaurantServiceTest {
 	@Qualifier("restaurantServiceImpl")
 	private RestaurantService restaurantService;
 
-	@Test
+	//@Test
 	public void testAddRestaurant() throws Exception {
 		
 		Restaurant restaurant = new Restaurant();
@@ -50,4 +51,22 @@ public class RestaurantServiceTest {
 		System.out.println("addRestaurant Test : " + restaurant.toString());
 	
 	}
+	
+	
+	@Test
+	public void testGetRestaurant() throws Exception {
+		
+		Restaurant restaurant = restaurantService.getRestaurant(1);
+		
+		Assert.assertEquals("image.jpg", restaurant.getOwnerImage());
+		Assert.assertEquals("거구장", restaurant.getRestaurantName());
+		Assert.assertEquals("짜파게티보다 맛있는 집", restaurant.getRestaurantText());
+		Assert.assertEquals("02-734-2485", restaurant.getRestaurantTel());
+		Assert.assertEquals("서울 종로구 인사동3길 29", restaurant.getStreetAddress());
+		Assert.assertEquals("서울 종로구 인사동 215-1", restaurant.getAreaAddress());
+		Assert.assertEquals(1, restaurant.getMenuType());
+		
+	}
+	
+	
 }
