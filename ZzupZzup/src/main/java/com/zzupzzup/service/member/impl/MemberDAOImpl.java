@@ -65,23 +65,9 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 
 	@Override
-	public List<Member> listUser(Search search) throws Exception {
+	public List<Member> listMember(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
-		List<Member> list = sqlSession.selectList("MemberMapper.listUser",search);
-//		for(int i = 0; i < list.size(); i++) {
-//			list.get(i).setReportCount(sqlSession.selectOne("MemberMapper.getReportCount", search));
-//		}
-		
-		return list;
-	}
-	
-	@Override
-	public List<Member> listOwner(Search search) throws Exception {
-		// TODO Auto-generated method stub
-		List<Member> list = sqlSession.selectList("MemberMapper.listOwner",search);
-//		for(int i = 0; i < list.size(); i++) {
-//			list.get(i).setReportCount(sqlSession.selectOne("MemberMapper.getReportCount", search));
-//		}
+		List<Member> list = sqlSession.selectList("MemberMapper.listMember",map);
 		
 		return list;
 	}

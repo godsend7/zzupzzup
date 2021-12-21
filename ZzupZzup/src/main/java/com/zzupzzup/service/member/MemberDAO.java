@@ -20,9 +20,7 @@ public interface MemberDAO {
 	
 	public Member getOwner(String memberId) throws Exception;
 	
-	public List<Member> listUser(Search search) throws Exception;
-	
-	public List<Member> listOwner(Search search) throws Exception;
+	public List<Member> listMember(Map<String, Object> map) throws Exception;
 	
 	public void updateMember(Member member) throws Exception;
 	

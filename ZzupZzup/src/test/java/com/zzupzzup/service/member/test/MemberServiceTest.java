@@ -117,16 +117,25 @@ public class MemberServiceTest {
 	public void testListMember() throws Exception {
 		
 		Search search = new Search();
-		search.setCurrentPage(2);
-		search.setPageSize(3);
-		System.out.println("start : "+search.getStartRowNum()+", end : "+search.getEndRowNum());
-		List<Member> list = memberService.listUser(search);
+		search.setCurrentPage(1);
+		search.setPageSize(pageSize);
+		
+		Member member = new Member();
+		member.setMemberRole("user");
+		if(member.getMemberRole() != null) {
+			Map<String, Object> map = memberService.listMember(search, member);
+			List<Member> list = (List<Member>)map.get("listMember");
+			
+			for (Member mem : list) {
+				
+				System.out.println(mem);
+			}
+		
+		}
+		
 		//List<Member> list = memberService.listOwner(search);
 
-		for (Member m : list) {
-			
-			System.out.println(m);
-		}
+		
 	}
 	
 	//@Test
