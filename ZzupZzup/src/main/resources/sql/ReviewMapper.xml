@@ -7,23 +7,36 @@
 <mapper namespace="ReviewMapper">
 
 	<resultMap id="reviewSelectMap" type="review">
-		<result property="member.memberId"   			column="member_id" 				jdbcType="VARCHAR"/>
-		<result property="reservation.reservationNo"	column="reservation_no" 		jdbcType="VARCHAR" />
-		<result property="reviewNo" 					column="review_no" 				jdbcType="INTEGER" />
-		<result property="scopeClean" 					column="scope_taste" 			jdbcType="INTEGER" />
-		<result property="scopeTaste" 					column="scope_kind" 			jdbcType="INTEGER" />
-		<result property="scopeKind" 					column="scope_clean" 			jdbcType="INTEGER" />
-		<result property="reviewDetail" 				column="review_detail" 			jdbcType="VARCHAR"  />
-		<result property="reviewRegDate" 				column="review_reg_date" 		jdbcType="DATE" />
-		<result property="avgScope" 					column="avg_scope" 				jdbcType="DECIMAL" />
-		<result property="reviewShowStatus" 			column="review_show_status" 	jdbcType="BOOLEAN" />
+		<result property="member.memberId"   					column="member_id" 				jdbcType="VARCHAR"/>
+		<result property="reservation.reservationNo"			column="reservation_no" 		jdbcType="VARCHAR" />
+		<result property="reservation.restaurant.restaurantNo"	column="restaurant_no" 			jdbcType="INTEGER" />
+		<result property="reviewNo" 							column="review_no" 				jdbcType="INTEGER" />
+		<result property="scopeClean" 							column="scope_taste" 			jdbcType="INTEGER" />
+		<result property="scopeTaste" 							column="scope_kind" 			jdbcType="INTEGER" />
+		<result property="scopeKind" 							column="scope_clean" 			jdbcType="INTEGER" />
+		<result property="reviewDetail" 						column="review_detail" 			jdbcType="VARCHAR"  />
+		<result property="reviewRegDate" 						column="review_reg_date" 		jdbcType="DATE" />
+		<result property="avgScope" 							column="avg_scope" 				jdbcType="DECIMAL" />
+		<result property="reviewShowStatus" 					column="review_show_status" 	jdbcType="BOOLEAN" />
+		
+		<collection property="hashTagNo" ofType="Integer" javaType="list">
+			<result column="hashTag_no"/>
+		</collection>
+		
+		<collection property="hashTag" ofType="String" javaType="list">
+			<result column="hashTag"/>
+		</collection>
+		
+		<collection property="reviewImage" ofType="String" javaType="list">
+			<result column="image"/>
+		</collection>
 	</resultMap>
 	
 	<!-- REVIEW INSERT START -->
 	<insert id="addReview"	parameterType="review" useGeneratedKeys="true" keyProperty="reviewNo">
 	 	INSERT
-		INTO REVIEW(member_id, reservation_no, review_detail, scope_taste, scope_kind, scope_clean, avg_scope) 
-		VALUES ( #{member.memberId}, #{reservation.reservationNo}, #{reviewDetail}, #{scopeTaste}, #{scopeKind}, #{scopeClean}, #{avgScope})
+		INTO REVIEW(member_id, reservation_no, restaurant_no, review_detail, scope_taste, scope_kind, scope_clean, avg_scope) 
+		VALUES ( #{member.memberId}, #{reservation.reservationNo}, #{reservation.restaurant.restaurantNo},#{reviewDetail}, #{scopeTaste}, #{scopeKind}, #{scopeClean}, #{avgScope})
 	</insert>
 	
 	<insert id="addHashTag"	parameterType="review">
@@ -32,13 +45,12 @@
 		INSERT
 		INTO HASHTAG_LOG(review_no, hashtag_no) 
 		VALUES
-		<foreach collection="hashTag" item="item" separator=",">	
+		<foreach collection="hashTagNo" item="item" separator=",">	
 			 (#{reviewNo}, #{item})
   		</foreach>
 	</insert>
 	
 	<insert id="addImage"	parameterType="review">
-	
 		DELETE FROM IMAGE WHERE review_no = #{reviewNo};
 	
 		INSERT
@@ -62,5 +74,83 @@
 	   	</set>
 	   	WHERE review_no = #{reviewNo}
 	</update>
+	
+	<delete id="deleteReview" parameterType="int">
+		DELETE FROM HASHTAG_LOG WHERE review_no = #{reviewNo};
+		DELETE FROM IMAGE WHERE review_no = #{reviewNo};
+		DELETE FROM MARK WHERE review_no = #{reviewNo};
+		DELETE FROM REPORT WHERE review_no = #{reviewNo};
+		DELETE FROM REVIEW WHERE review_no = #{reviewNo};
+	</delete>
+
+	<select id="getReview" parameterType="int" resultMap="reviewSelectMap">
+		SELECT * 
+		FROM REVIEW AS r 
+		INNER JOIN (SELECT review_no, image
+            		FROM image) AS i ON (r.review_no = i.review_no)
+		INNER JOIN (SELECT review_no, hl.hashtag_no, h.hashtag
+					FROM HASHTAG_LOG AS hl, HASHTAG AS h
+                    WHERE hl.hashtag_no = h.hashtag_no AND review_no = #{reviewNo}) AS h ON (r.review_no = h.review_no)
+		WHERE i.review_no = h.review_no AND r.review_no = i.review_no AND h.review_no = h.review_no AND r.review_no = #{reviewNo}
+	</select>
+	
+	<!-- 합치기
+	<select id="listReview" parameterType="map" resultMap="reviewSelectMap">
+		SELECT * 
+		FROM (SELECT * 
+			  FROM review AS r 
+			  <if test="restaurantNo != null">
+			  	WHERE r.restaurant_no = #{restaurantNo}
+			  </if>
+			  ORDER BY r.review_no limit 0,10) AS r
+		INNER JOIN (SELECT image, review_no
+					FROM image) AS i ON (r.review_no = i.review_no)
+		INNER JOIN (SELECT hl.HASHTAG_no, h.hashtag, review_no 
+			FROM HASHTAG_LOG as hl, HASHTAG as h
+            WHERE hl.hashtag_no = h.hashtag_no) as hh on(r.review_no = hh.review_no)
+	</select>
+	
+	<select id="listMyReview" parameterType="map" resultMap="reviewSelectMap">
+		SELECT * 
+		FROM (SELECT * 
+			  FROM review AS r 
+			  <if test="memberId != null">
+				<bind name="id" value="'%'+memberId+'%'"/>
+				WHERE r.member_id LIKE #{id}
+			  </if>	
+			  ORDER BY r.review_no limit 0,10) AS r
+		INNER JOIN (SELECT image, review_no
+					FROM image) AS i ON (r.review_no = i.review_no)
+		INNER JOIN (SELECT hl.HASHTAG_no, h.hashtag, review_no 
+			FROM HASHTAG_LOG as hl, HASHTAG as h
+            WHERE hl.hashtag_no = h.hashtag_no) as hh on(r.review_no = hh.review_no)
+	</select>  
+	 -->
+	 
+	<select id="listMyLikeReview" parameterType="map" resultMap="reviewSelectMap">
+		SELECT * 
+		FROM (SELECT * 
+			  FROM review AS r 
+			  <if test="memberId != null">
+				<bind name="id" value="'%'+memberId+'%'"/>
+				WHERE r.member_id LIKE #{id}
+			  </if>	
+			  ORDER BY r.review_no limit 0,10) AS r
+		Inner Join (select review_no
+					From mark) AS m ON(r.review_no = m.review_no)
+		INNER JOIN (SELECT image, review_no
+					FROM image) AS i ON (r.review_no = i.review_no)
+		INNER JOIN (SELECT hl.HASHTAG_no, h.hashtag, review_no 
+			FROM HASHTAG_LOG as hl, HASHTAG as h
+            WHERE hl.hashtag_no = h.hashtag_no) as hh on(r.review_no = hh.review_no)
+	</select>  
+	
+	<select id="getLikeCount" parameterType="int" resultType="int">
+		SELECT count(review_no)
+		FROM MARK
+		WHERE review_no = #{value};
+	</select>
+	
+	
 	
 </mapper>

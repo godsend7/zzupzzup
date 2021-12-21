@@ -20,6 +20,7 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		@Autowired
 		@Qualifier("reservationDaoImpl")
 		private ReservationDAO reservationDao;
+		
 		public void setReservationDAO(ReservationDAO reservationDao) {
 			this.reservationDao = reservationDao;
 		}
@@ -31,6 +32,7 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 
 		///Method
 		public int addReservation(Reservation reservation) throws Exception {
+			System.out.println("ddddddd");
 			return reservationDao.addReservation(reservation);
 		}
 
@@ -64,4 +66,5 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 			reservationDao.updateReservation(reservation);
 		}
 
+		
 }

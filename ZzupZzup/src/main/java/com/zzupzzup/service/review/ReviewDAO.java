@@ -20,7 +20,7 @@ public interface ReviewDAO {
 
 	public List<Review> listMyReview(Map<String, Object> map) throws Exception; //해보기 
 	
-	public List<Review> listMyLikeReview(String memberId) throws Exception;
+	public List<Review> listMyLikeReview(Map<String, Object> map) throws Exception;
 	
 	public List<String> listHashTag(String search) throws Exception;
 	

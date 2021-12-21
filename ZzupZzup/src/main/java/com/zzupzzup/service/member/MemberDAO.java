@@ -15,13 +15,15 @@ public interface MemberDAO {
 	
 	public void naverLogin() throws Exception;
 	
-	public Member getUser(String memberId) throws Exception;
+	public Member getMember(String memberId) throws Exception;
 	
 	public Member getOwner(String memberId) throws Exception;
 	
 	public List<Member> listMember(Search search) throws Exception;
 	
-	public void updateUser(Member member) throws Exception;
+	public void updateMember(Member member) throws Exception;
 	
-	public void updateOwner(Member member) throws Exception;
+	public int getReportCount(Search search) throws Exception;
+	
+	public int getRegRestaurantCount(Search search) throws Exception;
 }
