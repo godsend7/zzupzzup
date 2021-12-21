@@ -22,9 +22,7 @@ public interface ReviewDAO {
 	
 	public List<Review> listMyLikeReview(Map<String, Object> map) throws Exception;
 	
-	public List<String> listHashTag(String search) throws Exception;
-	
-	public int deleteHashTag(int reviewNo) throws Exception;
+	public List<Map<String, Object>> listHashTag(String search) throws Exception;
 	
 	public int addLike(Map<String, Object> map) throws Exception;
 	
@@ -34,6 +32,6 @@ public interface ReviewDAO {
 	
 	public void getTotalAvg() throws Exception; //필요성 생각해보기 
 	
-	public int getLikeCount() throws Exception; //각각의 리뷰의 count를 어떻게 할 것인지 생각해보기 
+	public int getLikeCount(int reviewNo) throws Exception; //각각의 리뷰의 count를 어떻게 할 것인지 생각해보기 
 
 }

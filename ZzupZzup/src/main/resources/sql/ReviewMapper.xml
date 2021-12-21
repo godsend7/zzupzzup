@@ -32,6 +32,12 @@
 		</collection>
 	</resultMap>
 	
+	<resultMap id="hashTagSelectMap" type="HashMap">
+		<result property="testHashtagNo" column="hashtag_no" jdbcType="INTEGER"/>
+		<result property="testHashtag" column="hashtag" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	
 	<!-- REVIEW INSERT START -->
 	<insert id="addReview"	parameterType="review" useGeneratedKeys="true" keyProperty="reviewNo">
 	 	INSERT
@@ -94,14 +100,20 @@
 		WHERE i.review_no = h.review_no AND r.review_no = i.review_no AND h.review_no = h.review_no AND r.review_no = #{reviewNo}
 	</select>
 	
-	<!-- 합치기
+	
 	<select id="listReview" parameterType="map" resultMap="reviewSelectMap">
 		SELECT * 
 		FROM (SELECT * 
-			  FROM review AS r 
-			  <if test="restaurantNo != null">
-			  	WHERE r.restaurant_no = #{restaurantNo}
-			  </if>
+			  FROM review AS r
+			  <choose>
+		  	  	<when test="restaurantNo != null">
+		  			WHERE r.restaurant_no = #{restaurantNo}
+		  		</when>
+		  		<when test="memberId != null">
+		  			<bind name="id" value="'%'+memberId+'%'"/>
+		  			WHERE r.member_id LIKE #{id}
+		  		</when>
+		  	  </choose>
 			  ORDER BY r.review_no limit 0,10) AS r
 		INNER JOIN (SELECT image, review_no
 					FROM image) AS i ON (r.review_no = i.review_no)
@@ -110,23 +122,6 @@
             WHERE hl.hashtag_no = h.hashtag_no) as hh on(r.review_no = hh.review_no)
 	</select>
 	
-	<select id="listMyReview" parameterType="map" resultMap="reviewSelectMap">
-		SELECT * 
-		FROM (SELECT * 
-			  FROM review AS r 
-			  <if test="memberId != null">
-				<bind name="id" value="'%'+memberId+'%'"/>
-				WHERE r.member_id LIKE #{id}
-			  </if>	
-			  ORDER BY r.review_no limit 0,10) AS r
-		INNER JOIN (SELECT image, review_no
-					FROM image) AS i ON (r.review_no = i.review_no)
-		INNER JOIN (SELECT hl.HASHTAG_no, h.hashtag, review_no 
-			FROM HASHTAG_LOG as hl, HASHTAG as h
-            WHERE hl.hashtag_no = h.hashtag_no) as hh on(r.review_no = hh.review_no)
-	</select>  
-	 -->
-	 
 	<select id="listMyLikeReview" parameterType="map" resultMap="reviewSelectMap">
 		SELECT * 
 		FROM (SELECT * 
@@ -151,6 +146,25 @@
 		WHERE review_no = #{value};
 	</select>
 	
+	<select id="listHashTag" parameterType="String" resultMap="hashTagSelectMap">
+		SELECT *
+		FROM HASHTAG
+		WHERE HASHTAG Like CONCAT('%',#{value},'%')
+	</select>
 	
+	<insert id="addLike" parameterType="map">
+		INSERT 
+		INTO MARK(member_id, review_no) 
+		VALUES(#{memberId}, #{reviewNo});
+	</insert>
 	
+	<delete id="deleteLike" parameterType="map">
+		DELETE FROM MARK 
+		WHERE member_id = #{memberId} AND REVIEW_NO = #{reviewNo};
+	</delete>
+	
+	<select id="getTotalCount" parameterType="search" resultType="int">
+		SELECT count(*)
+		FROM REVIEW
+	</select>
 </mapper>

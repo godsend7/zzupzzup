@@ -13,10 +13,9 @@ import com.zzupzzup.service.domain.RestaurantMenu;
 import com.zzupzzup.service.domain.RestaurantTime;
 import com.zzupzzup.service.restaurant.RestaurantDAO;
 
-@Repository("restaurantDaoImpl")
+//@Repository("restaurantDaoImpl")
 public class RestaurantDAOImpl implements RestaurantDAO {
 	
-	///Field
 	@Autowired
 	@Qualifier("sqlSessionTemplate")
 	private SqlSession sqlSession;
@@ -38,7 +37,7 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 		int result = sqlSession.insert("RestaurantMapper.addRestaurant", restaurant);
 		
 		if(result == 1) {
-			sqlSession.insert("RestaurantMapper.addMenu", restaurant);
+			sqlSession.insert("RestaurantMapper.addRestaurantMenu", restaurant);
 			sqlSession.insert("RestaurantMapper.addRestaurantTime", restaurant);
 			sqlSession.insert("RestaurantMapper.addImage", restaurant);
 			

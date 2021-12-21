@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="RestaurantMapper">
+
+<!-- <resultMap id="restaurantSelectMap" type="restaurant">
+		<result property="memberId" 		column="MEMBER_ID" 			jdbcType="VARCHAR"/>
+		<result property="ownerName"		column="OWNER_NAME" 		jdbcType="VARCHAR" />
+		<result property="ownerImage" 		column="OWNER_IMAGE" 		jdbcType="VARCHAR" />
+		<result property="restaurantText" 	column="RESTAURANT_TEXT" 	jdbcType="VARCHAR" />
+		<result property="restaurantName" 	column="RESTAURANT_NAME" 	jdbcType="VARCHAR" />
+		<result property="restaurantTel" 	column="RESTAURANT_TEL" 	jdbcType="VARCHAR" />
+		<result property="streetAddress" 	column="STREET_ADDRESS" 	jdbcType="VARCHAR" />
+		<result property="areaAddress" 		column="AREA_ADDRESS" 		jdbcType="NUMERIC"  />
+		<result property="menuType" 		column="MENU_TYPE" 			jdbcType="DATE" />
+	</resultMap> -->
+	
+	<!-- SQL : INSERT -->
+	<insert 	id="addRestaurant"		parameterType="restaurant" >
+		INSERT
+		INTO RESTAURANT(MEMBER_ID, OWNER_NAME, OWNER_IMAGE, RESTAURANT_TEXT, RESTAURANT_NAME,
+		RESTAURANT_TEL, STREET_ADDRESS, AREA_ADDRESS, MENU_TYPE)
+		VALUES ( #{memberId}, #{ownerName}, #{ownerImage}, #{restaurantText}, #{restaurantText},
+		#{restaurantTel}, #{streetAddress}, #{areaAddress}, #{menuType})
+	</insert>
+	
+</mapper>

@@ -48,39 +48,47 @@ public class MemberDAOImpl implements MemberDAO{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public Member getUser(String memberId) throws Exception {
+	public Member getMember(String memberId) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne("MemberMapper.getUser", memberId);
-		//sqlSession.select
-		
+		return sqlSession.selectOne("MemberMapper.getMember", memberId);
 	}
 	
 	@Override
 	public Member getOwner(String memberId) throws Exception {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("MemberMapper.getOwner", memberId);
-		//sqlSession.select
 		
 	}
 
 	@Override
 	public List<Member> listMember(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList("MemberMapper.listMember",search);
+		List<Member> list = sqlSession.selectList("MemberMapper.listMember",search);
+		for(int i = 0; i < list.size(); i++) {
+			list.get(i).setReportCount(sqlSession.selectOne("MemberMapper.getReportCount", search));
+		}
+		
+		return list;
 	}
 
 	@Override
-	public void updateUser(Member member) throws Exception {
+	public void updateMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
-		sqlSession.update("MemberMapper.updateUser", member);
+		sqlSession.update("MemberMapper.updateMember", member);
 	}
 	
 	@Override
-	public void updateOwner(Member member) throws Exception {
+	public int getReportCount(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		sqlSession.update("MemberMapper.updateOwner", member);
+		return sqlSession.selectOne("MemberMapper.getReportCount",search);
+	}
+	
+	@Override
+	public int getRegRestaurantCount(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("MemberMapper.getRegRestaurantCount",search);
 	}
 
 }

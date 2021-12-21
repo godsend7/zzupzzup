@@ -49,15 +49,15 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public Map<String, Object> listReview(Search search, String restaurantNo) throws Exception {
+	public Map<String, Object> listReview(Search search, String restaurantNo, String memberId) throws Exception {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
 		map.put("restaurantNo", restaurantNo);
+		map.put("memberId", memberId);
 		
 		map.put("list", reviewDao.listReview(map));
 		map.put("totalCount", reviewDao.getTotalCount(search));
-		map.put("likeCount", reviewDao.getLikeCount());
 		
 		return map;
 	}
@@ -71,7 +71,6 @@ public class ReviewServiceImpl implements ReviewService {
 		
 		map.put("list", reviewDao.listMyReview(map));
 		map.put("totalCount", reviewDao.getTotalCount(search));
-		map.put("likeCount", reviewDao.getLikeCount());
 		
 		return map;
 	}
@@ -85,27 +84,34 @@ public class ReviewServiceImpl implements ReviewService {
 		
 		map.put("list", reviewDao.listMyLikeReview(map));
 		map.put("totalCount", reviewDao.getTotalCount(search));
-		map.put("likeCount", reviewDao.getLikeCount());
 		
 		return map;
 	}
 
 	@Override
-	public List<String> listHashTag(String search) throws Exception {
+	public List<Map<String,Object>> listHashTag(String search) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return reviewDao.listHashTag(search);
 	}
 
 	@Override
 	public int addLike(String memberId, int reviewNo) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("reviewNo", reviewNo);
+		
+		return reviewDao.addLike(map);
 	}
 
 	@Override
-	public int deleteLike(String memeberId, int reviewNo) throws Exception {
+	public int deleteLike(String memberId, int reviewNo) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("reviewNo", reviewNo);
+		
+		return reviewDao.deleteLike(map);
 	}
 
 }

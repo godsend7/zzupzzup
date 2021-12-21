@@ -4,7 +4,7 @@ public class RestaurantMenu {
 	
 	///Field
 	private int menuNo;
-	private Restaurant restaurantNo;
+	private Restaurant restaurant;
 	private String menuTitle;
 	private int menuPrice;
 	private boolean mainMenuStatus;
@@ -25,12 +25,12 @@ public class RestaurantMenu {
 		this.menuNo = menuNo;
 	}
 	
-	public Restaurant getRestaurantNo() {
-		return restaurantNo;
+	public Restaurant getRestaurant() {
+		return restaurant;
 	}
 
-	public void setRestaurantNo(Restaurant restaurantNo) {
-		this.restaurantNo = restaurantNo;
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
 	}
 
 	public boolean isMainMenuStatus() {
@@ -59,7 +59,7 @@ public class RestaurantMenu {
 
 	@Override
 	public String toString() {
-		return "RestaurantMenu [menuNo=" + menuNo + ", restaurantNo=" + restaurantNo + ", menuTitle=" + menuTitle
+		return "RestaurantMenu [menuNo=" + menuNo + ", restaurantNo=" + restaurant + ", menuTitle=" + menuTitle
 				+ ", menuPrice=" + menuPrice + ", mainMenuStatus=" + mainMenuStatus + "]";
 	}
 	

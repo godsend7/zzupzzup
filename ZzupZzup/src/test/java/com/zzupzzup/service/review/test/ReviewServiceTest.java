@@ -42,10 +42,10 @@ public class ReviewServiceTest {
 	@Qualifier("reservationServiceImpl")
 	private ReservationService reservationService;
 	
-	@Value("#{common.properties['pageUnit']?: 3}")
+	@Value("#{commonProperties['pageUnit']?: 3}")
 	int pageUnit;
 	
-	@Value("#{common.properties['pageSize']?: 2}")
+	@Value("#{commonProperties['pageSize']?: 2}")
 	int pageSize;
 
 	//@Test
@@ -149,35 +149,19 @@ public class ReviewServiceTest {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testListReview() throws Exception {
 		Search search = new Search();
 		
 		search.setCurrentPage(1);		
 		search.setPageSize(pageSize);
 		
+		//해당 음식점의 리뷰 출력
 		String restaurantNo = null;
+		//내가 작성한 리뷰 출력 
+		String memberId = null;
 		
-		Map<String, Object> map = reviewService.listReview(search, restaurantNo);
-		
-		List<Review> list = (List<Review>) map.get("list");
-		
-		System.out.println("review list success");
-		
-		for (Review r : list) {
-			System.out.println(r);
-		}
-		
-		 Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
-	}
-	
-	//@Test
-	public void testListMyReview() throws Exception {
-		Search search = new Search();
-		
-		String memberId = "hihi";
-		
-		Map<String, Object> map = reviewService.listMyReview(search, memberId);
+		Map<String, Object> map = reviewService.listReview(search, restaurantNo, memberId);
 		
 		List<Review> list = (List<Review>) map.get("list");
 		
@@ -186,6 +170,8 @@ public class ReviewServiceTest {
 		for (Review r : list) {
 			System.out.println(r);
 		}
+		
+		 //Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 	}
 	
 	//@Test
@@ -202,6 +188,35 @@ public class ReviewServiceTest {
 			
 		for (Review r : list) {
 			System.out.println(r);
+		}
+	}
+	
+	//@Test
+	public void testListHashTag() throws Exception {
+		String search = "#";
+		
+		List<Map<String, Object>> list = reviewService.listHashTag(search);
+			
+		System.out.println("review listHashTag success");
+		
+		for (Map r : list) {
+			//System.out.println(r);
+			System.out.println(r.get("testHashtagNo"));
+			System.out.println(r.get("testHashtag"));
+		}
+	}
+	
+	//@Test
+	public void testAddLike() throws Exception {
+		if(reviewService.addLike("hihi@a.com", 7) == 1) {
+			System.out.println("review insert success");
+		}
+	}
+	
+	//@Test
+	public void testDeleteLike() throws Exception {
+		if(reviewService.deleteLike("hihi@a.com", 5) == 1) {
+			System.out.println("review delete success");
 		}
 	}
 }
