@@ -31,7 +31,17 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 
 		///Method
 		public int addReservation(Reservation reservation) throws Exception {
-			return sqlSession.insert("ReservationMapper.addReservation", reservation);
+			
+			int result = sqlSession.insert("ReservationMapper.addReservation", reservation);
+			
+			System.out.println("addReservation" + result);
+			//reservation_no가 생성되었다면(=> review table에 insert되었다면)
+			if (result == 1) {
+				sqlSession.insert("ReservationMapper.addOrder", reservation);
+				return 1;
+			} else {
+				return 0;
+			}
 		}
 
 		public Reservation getReservation(int reservationNo) throws Exception {
@@ -55,5 +65,6 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		public int getTotalCount(Search search) throws Exception {
 			return sqlSession.selectOne("ReservationMapper.getTotalCount", search);
 		}
+
 
 }
