@@ -1,12 +1,23 @@
 package com.zzupzzup.service.chat.impl;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import com.zzupzzup.common.Search;
-import com.zzupzzup.service.chat.ChatDAO;
 import com.zzupzzup.service.domain.Chat;
+import com.zzupzzup.service.chat.ChatDAO;
 
+@Repository("chatDaoImpl")
 public class ChatDAOImpl implements ChatDAO {
+
+	@Autowired
+	@Qualifier("sqlSessionTemplate")
+	private SqlSession sqlSession;
 
 	public ChatDAOImpl() {
 		// TODO Auto-generated constructor stub

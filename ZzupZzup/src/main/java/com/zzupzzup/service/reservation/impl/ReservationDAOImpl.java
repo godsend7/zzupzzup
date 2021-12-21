@@ -20,6 +20,7 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		@Autowired
 		@Qualifier("sqlSessionTemplate")
 		private SqlSession sqlSession;
+		
 		public void setSqlSession(SqlSession sqlSession) {
 			this.sqlSession = sqlSession;
 		}
@@ -30,6 +31,7 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		}
 
 		///Method
+		@Override
 		public int addReservation(Reservation reservation) throws Exception {
 			
 			int result = sqlSession.insert("ReservationMapper.addReservation", reservation);
@@ -43,9 +45,23 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 				return 0;
 			}
 		}
-
+		
+		@Override
 		public Reservation getReservation(int reservationNo) throws Exception {
-			return sqlSession.selectOne("ReservationMapper.getReservation", reservationNo);
+			
+			System.out.println("ReservationDAOImpl getReservation");
+			
+			System.out.println("reservationNo::::"+reservationNo);
+			
+			
+			Reservation reservation = sqlSession.selectOne("ReservationMapper.getReservation", reservationNo);
+			
+			System.out.println(reservation);
+			
+			//reservation.setRestaurant(sqlSession.selectOne("ReservationMapper.getRestaurant",reservation.getRestaurant()));
+			
+			//reservation.setChat(sqlSession.selectOne("ReservationMapper.getChat",reservation.getChat()));
+			return reservation;
 		}
 		
 		public void updateReservation(Reservation reservation) throws Exception {
