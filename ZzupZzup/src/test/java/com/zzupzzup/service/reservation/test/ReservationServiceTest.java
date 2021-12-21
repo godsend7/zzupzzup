@@ -9,10 +9,12 @@ import javax.servlet.RequestDispatcher;
 
 import org.junit.Assert;
 
+import org.aspectj.apache.bcel.generic.ReturnaddressType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -24,6 +26,7 @@ import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.reservation.ReservationService;
 import com.zzupzzup.service.restaurant.RestaurantService;
+import com.zzupzzup.service.chat.ChatService;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,11 +43,15 @@ public class ReservationServiceTest {
 	@Qualifier("reservationServiceImpl")
 	private ReservationService reservationService;
 	
-	//@Autowired
-	//@Qualifier("restaurantServiceImpl") //restaurant 서비스 타기위해 넣어줌
-	//private RestaurantService restaurantService;
+//	@Autowired
+//	@Qualifier("restaurantServiceImpl") //restaurant 서비스 타기위해 넣어줌
+//	private RestaurantService restaurantService;
+	
+//	@Autowired
+//	@Qualifier("chatServiceImpl") //restaurant 서비스 타기위해 넣어줌
+//	private ChatService chatService;
 
-	@Test
+	//@Test
 	public void testAddReservation() throws Exception {
 		
 		Reservation reservation = new Reservation();
@@ -54,9 +61,10 @@ public class ReservationServiceTest {
 		
 		List<Order> order = new ArrayList<Order>();
 		Order o = new Order();
-		o.setMenuTitle("dd");
-		o.setOrderCount(2);
+		o.setMenuTitle("sersrsfdsd");
+		o.setOrderCount(3);
 		o.setMenuPrice(1000);
+	
 		order.add(o);
 		order.add(o);
 		
@@ -85,24 +93,33 @@ public class ReservationServiceTest {
 	
 //=======================================================================================
 	
-	/*
-	 * //@Test public void testGetReservation() throws Exception {
-	 * 
-	 * Reservation reservation = new Reservation(); Restaurant restaurant = new
-	 * Restaurant(); Chat chat = new Chat(); Member member = new Member();
-	 * 
-	 * reservation = reservationService.getReservation("20211218171424_756138384");
-	 * //restaurant join 안하고 컨트롤러 타는법
-	 * 
-	 * restaurant =
-	 * restaurantService.getRestaurant(reservation.getRestaurant().getRestaurantNo()
-	 * );
-	 * 
-	 * Assert.assertEquals(1, restaurant.getRestaurantNo()); Assert.assertEquals(1,
-	 * chat.getChatNo()); Assert.assertEquals("hihi@a.com", member.getMemberId());
-	 * Assert.assertEquals(false, reservation.isRefundStatus());
-	 * 
-	 * //reservationService.addReservation(reservation); }
-	 */
-	
+		 @Test 
+		 public void testGetReservation() throws Exception {
+		 
+		 Reservation reservation = new Reservation(); 
+		 Restaurant restaurant = new Restaurant(); 
+		 Chat chat = new Chat(); 
+		 Member member = new Member();
+		 
+		 reservation.setReservationNo(17);
+		 System.out.println("rervation get success:::" + reservation.toString());
+		 
+		 reservation = reservationService.getReservation(reservation.getReservationNo());
+		 //restaurant join 안하고 컨트롤러 타는법
+		 System.out.println("rervation get success22222:::" + reservation);
+		 
+		 restaurant.setRestaurantNo(1);
+		 chat.setChatNo(1);
+		 
+		 //restaurant = restaurantService.getRestaurant(reservation.getRestaurant().getRestaurantNo());
+		 
+		 //chat = chatService.getChat(reservation.getChat().getChatNo());
+
+		// reservationService.addReservation(reservation); 
+		 }
+		
+//========================================================================================
+		 
+		 
+		
 }
