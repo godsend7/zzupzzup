@@ -142,7 +142,7 @@ public class CommonUtil {
 					data = "해당 음식점과 일치하는 영수증이 아닙니다.";
 					break;
 			}
-		} else if(reportCategory == 4) {
+		} else if(reportCategory == 5) {
 			switch (reportType) {
 				case 1:
 					data = "일치하지 않는 정보를 제공하고 있습니다.";

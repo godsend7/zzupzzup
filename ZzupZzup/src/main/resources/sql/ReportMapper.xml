@@ -25,25 +25,25 @@
 	 	INSERT INTO 
 	 	REPORT
 	 	<choose>
-	 		<when test="report.reportCategory == 1">
+	 		<when test="reportCategory == 1">
 	 			(member_id, chat_no, report_type, report_detail, report_category) 
-	 			VALUES(#{memberId}, #{report.reportChatNo}, #{report.reportType}, #{report.reportDetail}, #{report.reportCategory});
+	 			VALUES(#{memberId}, #{reportChatNo}, #{reportType}, #{reportDetail}, #{reportCategory});
 	 		</when>
-	 		<when test="report.reportCategory == 2">
+	 		<when test="reportCategory == 2">
 	 			(member_id, chat_member_id, report_type, report_detail, report_category) 
-	 			VALUES(#{memberId}, #{report.reportMemberId}, #{report.reportType}, #{report.reportDetail}, #{report.reportCategory});
+	 			VALUES(#{memberId}, #{reportMemberId}, #{reportType}, #{reportDetail}, #{reportCategory});
 	 		</when>
-	 		<when test="report.reportCategory == 3">
+	 		<when test="reportCategory == 3">
 	 			(member_id, review_no, report_type, report_detail, report_category) 
-	 			VALUES(#{memberId}, #{report.reportReviewNo}, #{report.reportType}, #{report.reportDetail}, #{report.reportCategory});
+	 			VALUES(#{memberId}, #{reportReviewNo}, #{reportType}, #{reportDetail}, #{reportCategory});
 	 		</when>
-	 		<when test="report.reportCategory == 4">
+	 		<when test="reportCategory == 4">
 	 			(member_id, post_no, report_type, report_detail, report_category) 
-	 			VALUES(#{memberId}, #{report.reportPostNo}, #{report.reportType}, #{report.reportDetail}, #{report.reportCategory});
+	 			VALUES(#{memberId}, #{reportPostNo}, #{reportType}, #{reportDetail}, #{reportCategory});
 	 		</when>
-	 		<when test="report.reportCategory == 5">
+	 		<when test="reportCategory == 5">
 	 			(member_id, restaurant_no, report_type, report_detail, report_category) 
-	 			VALUES(#{memberId},  #{report.reportRestaurantNo}, #{report.reportType}, #{report.reportDetail}, #{report.reportCategory});
+	 			VALUES(#{memberId},  #{reportRestaurantNo}, #{reportType}, #{reportDetail}, #{reportCategory});
 	 		</when>
 	 	</choose>
 	</insert>
