@@ -25,19 +25,35 @@
 		<result property="judgeDate" 			column="JUDGE_DATE" 			jdbcType="DATE" />
 		<result property="restaurantRegDate" 	column="RESTAURANT_REG_DATE"	jdbcType="DATE" />
 		
-		<collection property="restaurantMenu" resultMap="menuSelectMap"></collection>
+		<collection property="restaurantMenus" resultMap="menuSelectMap"></collection>
+		<collection property="restaurantTimes" resultMap="timeSelectMap"></collection>
 		
 	</resultMap>
 	
-	<resultMap type="com.zzupzzup.service.domain.RestaurantMenu" id="menuSelectMap">
+	<resultMap id="menuSelectMap" type="com.zzupzzup.service.domain.RestaurantMenu">
+		<result property="menuNo" column="MENU_NO" />
+		<result property="restaurant.restaurantNo" column="RESTAURANT_NO" />
 		<result property="menuTitle" column="MENU_TITLE" />
 		<result property="menuPrice" column="MENU_PRICE" />
 		<result property="mainMenuStatus" column="MAIN_MENU_STATUS" />
 	</resultMap>
 	
+	<resultMap id="timeSelectMap" type="com.zzupzzup.service.domain.RestaurantTime">
+		<result property="restaurantTimeNo" column="RESTAURANT_TIME_NO" />
+		<result property="community.postNo" column="POST_NO" />
+		<result property="restaurant.restaurantNo" column="RESTAURANT_NO" />
+		<result property="restaurantDay" column="RESTAURANT_DAY" />
+		<result property="restaurantOpen" column="RESTAURANT_OPEN" />
+		<result property="restaurantClose" column="RESTAURANT_CLOSE" />
+		<result property="restaurantBreak" column="RESTAURANT_BREAK" />
+		<result property="restaurantLastOrder" column="RESTAURANT_LAST" />
+		<result property="restaurantDayOff" column="RESTAURANT_DAY_OFF" />
+		
+	</resultMap>
+	
 	
 	<!-- SQL : INSERT -->
-	<insert 	id="addRestaurant"		parameterType="restaurant" >
+	<insert 	id="addRestaurant"		parameterType="restaurant" useGeneratedKeys="true" keyProperty="restaurantNo" >
 		INSERT
 		INTO RESTAURANT(MEMBER_ID, OWNER_NAME, OWNER_IMAGE, RESTAURANT_TEXT, RESTAURANT_NAME,
 		RESTAURANT_TEL, STREET_ADDRESS, AREA_ADDRESS, MENU_TYPE)
@@ -45,17 +61,59 @@
 		#{restaurantTel}, #{streetAddress}, #{areaAddress}, #{menuType})
 	</insert>
 	
+	<insert 	id="addRestaurantMenu"	parameterType="restaurant" >
+	
+		DELETE FROM MENU WHERE RESTAURANT_NO = #{restaurantNo};
+	
+		INSERT
+		INTO MENU(RESTAURANT_NO, MENU_TITLE, MENU_PRICE, MAIN_MENU_STATUS)
+		VALUES
+		<foreach collection="restaurantMenus" item="item" separator=",">
+			(#{restaurantNo}, #{item.menuTitle}, #{item.menuPrice}, #{item.mainMenuStatus})
+		</foreach>
+	</insert>
+	
+	<insert 	id="addRestaurantTime"	parameterType="restaurant" >
+	
+		DELETE FROM RESTAURANT_TIME WHERE RESTAURANT_NO = #{restaurantNo};
+	
+		INSERT
+		INTO RESTAURANT_TIME(RESTAURANT_NO, RESTAURANT_DAY, RESTAURANT_OPEN, RESTAURANT_CLOSE,
+		RESTAURANT_BREAK, RESTAURANT_LAST, RESTAURANT_DAY_OFF)
+		VALUES
+		<foreach collection="restaurantTimes" item="item" separator=",">
+			(#{restaurantNo}, #{item.restaurantDay}, #{item.restaurantOpen}, #{item.restaurantClose},
+			#{item.restaurantBreak}, #{item.restaurantLastOrder}, #{item.restaurantDayOff})
+		</foreach>
+	</insert>
+	
+	<insert 	id="addImage"	parameterType="restaurant">
+	
+		DELETE FROM IMAGE WHERE RESTAURANT_NO = #{restaurantNo};
+		
+		INSERT
+		INTO IMAGE(RESTAURANT_NO, IMAGE)
+		VALUES
+		<foreach collection="restaurantImage" item="item" separator=",">
+			(#{restaurantNo}, #{item})
+		</foreach>
+	</insert>
+	
 	
 	<!-- SQL : SELECT ONE -->
 	<select 	id="getRestaurant"		parameterType="int"		resultMap="restaurantSelectMap">
-		SELECT *
-		FROM RESTAURANT
-		WHERE RESTAURANT_NO = #{value}
+        SELECT *
+		FROM RESTAURANT AS r
+		RIGHT OUTER JOIN (Select * from RESTAURANT_TIME) AS t
+		ON (r.RESTAURANT_NO = t.RESTAURANT_NO)
+		RIGHT OUTER JOIN (select * from menu) AS m
+		ON (r.RESTAURANT_NO = m.RESTAURANT_NO)
+		WHERE r.RESTAURANT_NO = #{value};
 	</select>
 	
 	
 	<!-- SQL : UPDATE -->
-	<update 	id="updateRestaurant"	parameterType="restaurant">
+	<update 	id="updateRestaurant"	parameterType="restaurant" useGeneratedKeys="true" keyProperty="restaurantNo">
 		UPDATE RESTAURANT
 		<set>
 			OWNER_IMAGE = #{ownerImage},
@@ -69,13 +127,34 @@
 		WHERE RESTAURANT_NO = #{restaurantNo}
 	</update>
 	
+	<!-- <update id="updateMenu"		parameterType="restaurant">
+		UPDATE MENU
+		<set>
+			MENU_TITLE = #{menuTitle},
+			MENU_PRICE = #{menuPrice},
+			MAIN_MENU_STATUS = #{mainMenuStatus}
+		</set>
+		WHERE RESTAURANT_NO = #{restaurantNo}
+	</update>
+	
+	<update id="updateRestaurantTime" 	parameterType="restaurant">
+		UPDATE RESTAURANT_TIME
+		<set>
+			RESTAURANT_DAY = #{restaurantDay},
+			RESTAURANT_OPEN = #{restaurantOpen},
+			RESTAURANT_CLOSE = #{restaurantClose},
+			RESTAURANT_BREAK = #{restaurantBreak},
+			RESTAURANT_LAST = #{restaurantLastOrder},
+			RESTAURANT_DAY_OFF = #{restaurantDayOff}
+		</set>
+		WHERE RESTAURANT_NO = #{restaurantNo}
+	</update> -->
+	
 	
 	<!-- SQL : SELECT LIST -->
 	<select id="listRestaurant" parameterType="search" resultMap="restaurantSelectMap">
 		SELECT *
 		FROM RESTAURANT
-		LEFT JOIN MENU
-		ON RESTAURANT.RESTAURANT_NO = MENU.RESTAURANT_NO
 		WHERE 
 	</select>
 	

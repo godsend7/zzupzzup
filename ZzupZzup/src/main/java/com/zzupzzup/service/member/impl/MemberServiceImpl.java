@@ -118,18 +118,15 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public Map<String, Object> listMember(Search search) throws Exception {
-		// TODO Auto-generated method stub
-		List<Member> listMember = memberDao.listMember(search);
-		int reportCount = memberDao.getReportCount(search);
-		int regRestaurantCount = memberDao.getRegRestaurantCount(search);
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", listMember);
-		map.put("reportCount", reportCount);
-		map.put("regRestaurantCount", regRestaurantCount);
-		
-		return map;
+	public List<Member> listUser(Search search) throws Exception {
+		// TODO Auto-generated method stub	
+		return memberDao.listUser(search);
+	}
+	
+	@Override
+	public List<Member> listOwner(Search search) throws Exception {
+		// TODO Auto-generated method stub	
+		return memberDao.listOwner(search);
 	}
 
 	@Override
