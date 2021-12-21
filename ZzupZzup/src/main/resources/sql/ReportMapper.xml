@@ -6,23 +6,94 @@
 
 <mapper namespace="ReportMapper">
 
-<!-- 	<resultMap id="memberSelectMap" type="member">
-		<result property="userId" 			column="user_id" 			jdbcType="VARCHAR"/>
-		<result property="userName"	column="user_name" 		jdbcType="VARCHAR" />
-		<result property="password" 	column="password" 		jdbcType="VARCHAR" />
-		<result property="role" 				column="role" 					jdbcType="VARCHAR" />
-		<result property="ssn" 				column="ssn" 					jdbcType="VARCHAR" />
-		<result property="phone" 			column="cell_phone" 		jdbcType="VARCHAR" />
-		<result property="addr" 				column="addr" 					jdbcType="VARCHAR" />
-		<result property="email" 			column="email" 				jdbcType="NUMERIC"  />
-		<result property="regDate" 		column="reg_date" 			jdbcType="DATE" />
-	</resultMap> -->
+	<resultMap id="reportSelectMap" type="report">
+		<result property="reportNo" 			column="report_no" 				jdbcType="INTEGER"/>
+		<result property="reportCategory"		column="report_category" 		jdbcType="INTEGER" />
+		<result property="memberId" 			column="member_id" 				jdbcType="VARCHAR" />
+		<result property="reportChatNo" 		column="report_chat_no" 		jdbcType="INTEGER" />
+		<result property="reportMemberId" 		column="report_member_id" 		jdbcType="VARCHAR" />
+		<result property="reportReviewNo" 		column="report_review_no" 		jdbcType="INTEGER" />
+		<result property="reportPostNo" 		column="report_post_no" 		jdbcType="INTEGER" />
+		<result property="reportRestaurantNo" 	column="report_restaurant_no" 	jdbcType="INTEGER"  />
+		<result property="reportRegDate" 		column="report_reg_date" 		jdbcType="DATE" />
+		<result property="reportType" 			column="report_type" 			jdbcType="INTEGER" />
+		<result property="reportDetail" 		column="report_detail" 			jdbcType="VARCHAR" />
+	</resultMap>
 	
 	<!-- SQL : INSERT -->
-	<!-- <insert 	id="addMember"		parameterType="member" >
-	 	INSERT
-		INTO member( member_id , password , member_name , member_phone) 
-		VALUES ( #{memberId} , #{password} , #{memberName} , #{memberPhone})
-	 </insert> -->
+	<insert id="addReport" parameterType="report">
+	 	INSERT INTO 
+	 	REPORT
+	 	<choose>
+	 		<when test="report.reportCategory == 1">
+	 			(member_id, chat_no, report_type, report_detail, report_category) 
+	 			VALUES(#{memberId}, #{report.reportChatNo}, #{report.reportType}, #{report.reportDetail}, #{report.reportCategory});
+	 		</when>
+	 		<when test="report.reportCategory == 2">
+	 			(member_id, chat_member_id, report_type, report_detail, report_category) 
+	 			VALUES(#{memberId}, #{report.reportMemberId}, #{report.reportType}, #{report.reportDetail}, #{report.reportCategory});
+	 		</when>
+	 		<when test="report.reportCategory == 3">
+	 			(member_id, review_no, report_type, report_detail, report_category) 
+	 			VALUES(#{memberId}, #{report.reportReviewNo}, #{report.reportType}, #{report.reportDetail}, #{report.reportCategory});
+	 		</when>
+	 		<when test="report.reportCategory == 4">
+	 			(member_id, post_no, report_type, report_detail, report_category) 
+	 			VALUES(#{memberId}, #{report.reportPostNo}, #{report.reportType}, #{report.reportDetail}, #{report.reportCategory});
+	 		</when>
+	 		<when test="report.reportCategory == 5">
+	 			(member_id, restaurant_no, report_type, report_detail, report_category) 
+	 			VALUES(#{memberId},  #{report.reportRestaurantNo}, #{report.reportType}, #{report.reportDetail}, #{report.reportCategory});
+	 		</when>
+	 	</choose>
+	</insert>
+	
+	<update id="checkReport" parameterType="int">
+		UPDATE REPORT
+		<set>
+			report_check = 1
+		</set>
+		WHERE report_no = #{value}
+	</update>
 	 
+	 <select id="listReport" parameterType="map" resultMap="reportSelectMap">
+	 	SELECT *
+	 	FROM REPORT
+	 	WHERE report_category = #{category} 
+	 	<if test="memberId != null">
+	 		AND member_id = #{memberId}
+	 	</if>
+	 	ORDER BY report_no LIMIT #{search.startRowNum}, #{search.pageSize}
+	 </select>
+	 
+	 <select id="getTotalCount" parameterType="int" resultType="int">
+	 	SELECT COUNT(*)
+	 	FROM REPORT
+	 	WHERE report_category = #{value}
+	 </select>
+	 
+	 <select id="getReportCount" parameterType="map" resultType="int">
+	 	SELECT COUNT(*)
+	 	FROM REPORT
+	 	WHERE report_category = #{category}
+	 	<choose>
+	 		<when test="category == 1">
+	 			AND chat_no = #{report}
+	 		</when>
+	 		<when test="category == 2">
+	 			AND chat_member_id = #{report}
+	 		</when>
+	 		<when test="category == 3">
+	 			AND review_no = #{report}
+	 		</when>
+	 		<when test="category == 4">
+	 			AND post_no = #{report}
+	 		</when>
+	 		<when test="category == 5">
+	 			AND restaurant_no = #{report}
+	 		</when>
+	 	</choose>
+	
+	 </select>
+	 	 
 </mapper>
