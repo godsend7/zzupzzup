@@ -18,48 +18,50 @@
 		<result property="regDate" 		column="reg_date" 			jdbcType="DATE" />
 	</resultMap> -->
 	<resultMap id="memberSelectMap" type="member">
-		<result property="memberId" 		column="MEMBER_ID" 			jdbcType="VARCHAR"/>
-		<result property="memberRole"		column="MEMBER_ROLE" 		jdbcType="VARCHAR" />
-		<result property="password" 		column="PASSWORD" 			jdbcType="VARCHAR" />
-		<result property="memberName" 		column="MEMBER_NAME" 		jdbcType="VARCHAR" />
-		<result property="memberPhone" 		column="MEMBER_PHONE" 		jdbcType="VARCHAR" />
-		<result property="loginType" 		column="LOGIN_TYPE" 		jdbcType="NUMERIC" />
-		<result property="regDate" 			column="REG_DATE" 			jdbcType="DATE" />
-		<result property="ageRange" 		column="AGE_RANGE" 			jdbcType="VARCHAR"  />
-		<result property="birth" 			column="BIRTH_YEAR" 		jdbcType="NUMERIC" />
-		<result property="gender" 			column="GENDER" 			jdbcType="VARCHAR" />
-		<result property="profileImage" 	column="PROFILE_IMAGE" 		jdbcType="VARCHAR" />
-		<result property="nickname" 		column="NICKNAME" 			jdbcType="VARCHAR" />
-		<result property="statusMessage" 	column="STATUS_MESSAGE" 	jdbcType="VARCHAR" />
-		<result property="accumulAllScore" 	column="ACTIVITY_SCORE" 	jdbcType="NUMERIC" />
-		<result property="mannerAllScore" 	column="MANNER_SCORE" 		jdbcType="NUMERIC" />
-		<result property="deleteDate" 		column="DELETE_DATE" 		jdbcType="DATE" />
-		<result property="deleteType" 		column="DELETE_TYPE" 		jdbcType="NUMERIC" />
-		<result property="deleteReason" 	column="DELETE_DETAIL" 		jdbcType="VARCHAR" />
-		<result property="blacklistDate" 	column="BLACKLIST_REG_DATE" jdbcType="DATE" />
+		<result property="memberId" 			column="MEMBER_ID" 			jdbcType="VARCHAR"/>
+		<result property="memberRole"			column="MEMBER_ROLE" 		jdbcType="VARCHAR" />
+		<result property="password" 			column="PASSWORD" 			jdbcType="VARCHAR" />
+		<result property="memberName" 			column="MEMBER_NAME" 		jdbcType="VARCHAR" />
+		<result property="memberPhone" 			column="MEMBER_PHONE" 		jdbcType="VARCHAR" />
+		<result property="loginType" 			column="LOGIN_TYPE" 		jdbcType="NUMERIC" />
+		<result property="regDate" 				column="REG_DATE" 			jdbcType="DATE" />
+		<result property="ageRange" 			column="AGE_RANGE" 			jdbcType="VARCHAR"  />
+		<result property="birth" 				column="BIRTH_YEAR" 		jdbcType="NUMERIC" />
+		<result property="gender" 				column="GENDER" 			jdbcType="VARCHAR" />
+		<result property="profileImage" 		column="PROFILE_IMAGE" 		jdbcType="VARCHAR" />
+		<result property="nickname" 			column="NICKNAME" 			jdbcType="VARCHAR" />
+		<result property="statusMessage" 		column="STATUS_MESSAGE" 	jdbcType="VARCHAR" />
+		<result property="accumulAllScore" 		column="ACTIVITY_SCORE" 	jdbcType="NUMERIC" />
+		<result property="mannerAllScore" 		column="MANNER_SCORE" 		jdbcType="NUMERIC" />
+		<result property="deleteDate" 			column="DELETE_DATE" 		jdbcType="DATE" />
+		<result property="deleteType" 			column="DELETE_TYPE" 		jdbcType="NUMERIC" />
+		<result property="deleteReason" 		column="DELETE_DETAIL" 		jdbcType="VARCHAR" />
+		<result property="blacklistDate" 		column="BLACKLIST_REG_DATE" jdbcType="DATE" />
+		<result property="reportCount" 			column="COUNT_REPORT" 		jdbcType="INTEGER" />
+		<result property="regRestaurantCount" 	column="COUNT_RESTAURANT" 	jdbcType="INTEGER" />
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
 	<insert 	id="addMember"	parameterType="member">
 		INSERT INTO
-		zzupzzup.MEMBER(MEMBER_ID, MEMBER_ROLE, PASSWORD, MEMBER_NAME, MEMBER_PHONE, LOGIN_TYPE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE)
-		VALUES(#{memberId}, #{memberRole}, #{password}, #{memberName}, #{memberPhone}, #{loginType}, #{ageRange}, #{gender}, #{profileImage}, #{nickname}, #{statusMessage})
+		zzupzzup.MEMBER(MEMBER_ID, MEMBER_ROLE, PASSWORD, MEMBER_NAME, MEMBER_PHONE, LOGIN_TYPE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, REG_DATE)
+		VALUES(#{memberId}, #{memberRole}, #{password}, #{memberName}, #{memberPhone}, #{loginType}, #{ageRange}, #{gender}, #{profileImage}, #{nickname}, #{statusMessage}, NOW())
 	</insert>
 	
 	<!-- SQL : SELECT -->
 	<select 	id="getMember"	parameterType="string" resultMap="memberSelectMap">
 		SELECT
-		MEMBER_ID, MEMBER_NAME, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
+		MEMBER_ID, MEMBER_NAME, MEMBER_ROLE, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
 		FROM zzupzzup_test.MEMBER
 		WHERE MEMBER_ID = #{memberId};
 	</select>
 	
 	<select 	id="getOwner"	parameterType="string" resultMap="memberSelectMap">
 		SELECT 
-		zzupzzup.MEMBER.MEMBER_ID, zzupzzup.MEMBER.MEMBER_NAME, zzupzzup.MEMBER.MEMBER_ROLE, zzupzzup.MEMBER.MEMBER_PHONE, zzupzzup.MEMBER.PROFILE_IMAGE, zzupzzup.MEMBER.NICKNAME, zzupzzup.MEMBER.STATUS_MESSAGE, zzupzzup.MEMBER.REG_DATE, zzupzzup.MEMBER.DELETE_DATE, zzupzzup.MEMBER.DELETE_TYPE, zzupzzup.MEMBER.BLACKLIST_REG_DATE,
-		zzupzzup.RESTAURANT.MEMBER_ID, zzupzzup.RESTAURANT.RESTAURANT_NAME, zzupzzup.RESTAURANT.JUDGE_STATUS, zzupzzup.RESTAURANT.RESTAURANT_REG_DATE, zzupzzup.RESTAURANT.REQUEST_DATE, zzupzzup.RESTAURANT.JUDGE_DATE
-		FROM zzupzzup.RESTAURANT, zzupzzup.MEMBER
-		WHERE zzupzzup.RESTAURANT.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID AND zzupzzup.MEMBER.MEMBER_ROLE = 'owner' AND zzupzzup.MEMBER.MEMBER_ID = #{memberId}
+		zzupzzup_test.RESTAURANT.MEMBER_ID, zzupzzup_test.RESTAURANT.RESTAURANT_NAME, zzupzzup_test.RESTAURANT.JUDGE_STATUS, zzupzzup_test.RESTAURANT.RESTAURANT_REG_DATE, zzupzzup_test.RESTAURANT.REQUEST_DATE, zzupzzup_test.RESTAURANT.JUDGE_DATE
+		FROM zzupzzup_test.RESTAURANT
+		LEFT JOIN zzupzzup_test.MEMBER
+		ON zzupzzup_test.RESTAURANT.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID AND zzupzzup_test.MEMBER.MEMBER_ROLE = 'owner' AND zzupzzup_test.MEMBER.MEMBER_ID = #{memberId}
 	</select>
 	
 	<!-- SQL : UPDATE -->
@@ -84,26 +86,49 @@
 	</update>
 
 	<!-- SQL : SELECT LIST -->
-	<select 	id="listMember"	parameterType="search" resultMap="memberSelectMap">
+	<select 	id="listUser"	parameterType="search" resultMap="memberSelectMap">
 		SELECT @ROWNUM := @ROWNUM + 1 AS NO, MEMBER_LIST.*
 		FROM (
-			SELECT MEMBER_ID, NICKNAME, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+			SELECT MEMBER_ROLE, NICKNAME, COUNT_REP.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+			FROM zzupzzup_test.REPORT, zzupzzup_test.MEMBER
+		    RIGHT JOIN (
+					SELECT zzupzzup_test.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
+					FROM zzupzzup_test.REPORT RIGHT JOIN zzupzzup_test.MEMBER
+					ON zzupzzup_test.REPORT.CHAT_MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
+					GROUP BY zzupzzup_test.MEMBER.MEMBER_ID
+				) COUNT_REP
+			ON COUNT_REP.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
+		) MEMBER_LIST
+		WHERE (@ROWNUM:=0) = 0
+	</select>
+	
+	<select 	id="listOwner"	parameterType="search" resultMap="memberSelectMap">
+		SELECT @ROWNUM := @ROWNUM + 1 AS NO, MEMBER_LIST.*
+		FROM (
+			SELECT MEMBER_ROLE, NICKNAME, COUNT_RES.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
 			FROM zzupzzup_test.MEMBER
+		    RIGHT JOIN (
+					SELECT zzupzzup_test.MEMBER.MEMBER_ID, COUNT(RESTAURANT_NAME) AS COUNT_RESTAURANT
+					FROM zzupzzup_test.RESTAURANT RIGHT JOIN zzupzzup_test.MEMBER
+					ON zzupzzup_test.RESTAURANT.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
+					GROUP BY zzupzzup_test.MEMBER.MEMBER_ID
+				) COUNT_RES
+			ON COUNT_RES.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
 		) MEMBER_LIST
 		WHERE (@ROWNUM:=0) = 0
 	</select>
 	
 	<!-- SQL : SELECT reportCount -->
-	<select id="getReportCount" parameterType="search" resultType="int">
+	<select id="getReportCount" parameterType="string" resultType="int">
 		SELECT COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
 		FROM zzupzzup_test.REPORT, zzupzzup_test.MEMBER
-		WHERE zzupzzup_test.MEMBER.MEMBER_ROLE = 'user' AND zzupzzup_test.REPORT.CHAT_MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID AND zzupzzup_test.MEMBER.MEMBER_ID = 'hihi@b.com'
+		WHERE zzupzzup_test.MEMBER.MEMBER_ROLE = 'user' AND zzupzzup_test.REPORT.CHAT_MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID AND zzupzzup_test.MEMBER.MEMBER_ID = #{memberId}
 	</select>
 	
-	<select id="getRegRestaurantCount" parameterType="search" resultType="int">
+	<select id="getRegRestaurantCount" parameterType="string" resultType="int">
 		SELECT COUNT(RESTAURANT_NO) AS COUNT_RESTAURANT
 		FROM zzupzzup_test.RESTAURANT, zzupzzup_test.MEMBER
-		WHERE zzupzzup_test.MEMBER.MEMBER_ROLE = 'owner' AND zzupzzup_test.RESTAURANT.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
+		WHERE zzupzzup_test.MEMBER.MEMBER_ROLE = 'owner' AND zzupzzup_test.RESTAURANT.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID AND zzupzzup_test.MEMBER.MEMBER_ID = #{memberId}
 	</select>
 
 	<!-- <update 	id="updateOwner"	parameterType="member">
