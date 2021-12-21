@@ -1,12 +1,24 @@
 package com.zzupzzup.service.chat.impl;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import com.zzupzzup.common.Search;
-import com.zzupzzup.service.chat.ChatService;
-import com.zzupzzup.service.domain.Chat;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.Chat;
+import com.zzupzzup.service.chat.ChatDAO;
+import com.zzupzzup.service.chat.ChatService;
+
+@Service("chatServiceImpl")
 public class ChatServiceImpl implements ChatService {
+
+	@Autowired
+	@Qualifier("chatDaoImpl")
+	private ChatDAO chatDao;
 
 	public ChatServiceImpl() {
 		// TODO Auto-generated constructor stub
