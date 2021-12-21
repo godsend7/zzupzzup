@@ -2,15 +2,18 @@ package com.zzupzzup.service.restaurant.test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.RestaurantMenu;
@@ -31,6 +34,12 @@ public class RestaurantServiceTest {
 	@Autowired
 	@Qualifier("restaurantServiceImpl")
 	private RestaurantService restaurantService;
+	
+	@Value("#{common.properties['pageUnit']?: 3}")
+	int pageUnit;
+	
+	@Value("#{common.properties['pageSize']?: 2}")
+	int pageSize;
 
 	//@Test
 	public void testAddRestaurant() throws Exception {
@@ -87,7 +96,7 @@ public class RestaurantServiceTest {
 	}
 	
 	
-	@Test
+	//@Test
 	public void testGetRestaurant() throws Exception {
 		
 		Restaurant restaurant = restaurantService.getRestaurant(17);
@@ -108,7 +117,33 @@ public class RestaurantServiceTest {
 	//@Test
 	public void testUpdateRestaurant() throws Exception {
 		
-		Restaurant restaurant = restaurantService.getRestaurant(3);
+		Restaurant restaurant = restaurantService.getRestaurant(17);
+		
+		RestaurantMenu menu = new RestaurantMenu();
+		menu.setMenuTitle("초콜릿튀김");
+		menu.setMenuPrice(10000);
+		menu.setMainMenuStatus(true);
+		
+		List<RestaurantMenu> list = new ArrayList<RestaurantMenu>();
+		list.add(menu);
+		list.add(menu);
+		
+		RestaurantTime rt = new RestaurantTime();
+		rt.setRestaurantDay(2);
+		rt.setRestaurantOpen("09:30");
+		rt.setRestaurantClose("21:00");
+		rt.setRestaurantBreak("15:30");
+		rt.setRestaurantLastOrder("19:30");
+		rt.setRestaurantDayOff(true);
+		
+		List<RestaurantTime> list2 = new ArrayList<RestaurantTime>();
+		list2.add(rt);
+		list2.add(rt);
+		
+		List<String> rm = new ArrayList<String>();
+		rm.add("image1.jpg");
+		rm.add("image2.jpg");
+		rm.add("image3.jpg");
 		
 		restaurant.setOwnerImage("updateTest.jpg");
 		restaurant.setRestaurantName("거구장 종각점");
@@ -117,10 +152,27 @@ public class RestaurantServiceTest {
 		restaurant.setStreetAddress("서울 종로구 인사동3길 29");
 		restaurant.setAreaAddress("서울 종로구 인사동 215-1");
 		restaurant.setMenuType(2);
+		restaurant.setRestaurantMenus(list);
+		restaurant.setRestaurantTimes(list2);
+		restaurant.setRestaurantImage(rm);
 		
 		//System.out.println(restaurant.toString());
 		
 		restaurantService.updateRestaurant(restaurant);
+		
+	}
+	
+	
+	@Test
+	public void testListRestaurant() throws Exception {
+		
+		Search search = new Search();
+		String restaurantNo = null;
+		
+		search.setCurrentPage(1);
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = restaurantService.listRestaurant(search);
 		
 	}
 	
