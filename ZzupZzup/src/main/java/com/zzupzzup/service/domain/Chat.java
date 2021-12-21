@@ -9,22 +9,22 @@ import com.zzupzzup.common.ChatMember;
 public class Chat {
 	
 	///Field
-	private int chatNo;
-	private String chatTitle;
-	private String chatContents;
-	private Date chatTime;
-	private String chatImage;
-	private String chatText;
-	private Date chatRegDate;
-	private List<ChatAge> chatAge;
-	private int chatGender;
-	private int chatCount;
-	private int chatState;
-	private String chatLeaderId;
-	private boolean chatShowStatus;
-	private Restaurant chatRestaurant;
-	private List<ChatMember> chatMember;
-	private int reportCount;	
+	private int chatNo; //채팅방no
+	private String chatTitle; //채팅방 제목
+	private String chatContents; //채팅방 대화 내용
+	private Date chatTime; //채팅방 대화 시간
+	private String chatImage; //채팅방 대표 이미지
+	private String chatText; //채팅방 소개글
+	private Date chatRegDate; //채팅방 개설일
+	private List<ChatAge> chatAge; //채팅방 참여가능 연령대 리스트
+	private int chatGender; //채팅방 참여가능 성별
+	private int chatMemberCount; //채팅방 참여 인원수
+	private int chatState; //채팅방 모집상태
+	private String chatLeaderId; //채팅방 개설자 아이디
+	private boolean chatShowStatus; //채팅방 노출 여부
+	private Restaurant chatRestaurant; //음식점 도메인
+	private List<ChatMember> chatMember; //채팅방 참여자 리스트
+	private int reportCount; //누적 신고횟수
 
 	///Constructor
 	public Chat() {
@@ -103,12 +103,12 @@ public class Chat {
 		this.chatGender = chatGender;
 	}
 
-	public int getChatCount() {
-		return chatCount;
+	public int getChatMemberCount() {
+		return chatMemberCount;
 	}
 
-	public void setChatCount(int chatCount) {
-		this.chatCount = chatCount;
+	public void setChatMemberCount(int chatCount) {
+		this.chatMemberCount = chatCount;
 	}
 
 	public int getChatState() {
@@ -161,7 +161,7 @@ public class Chat {
 	
 	@Override
 	public String toString() {
-		return "Chat : [chatNo] "+chatNo+" [chatTitle] "+chatTitle+" [chatContents] "+chatContents+" [chatTime] "+ chatTime+" [chatImage] "+chatImage+" [chatText] "+chatText+" [chatRegDate] "+chatRegDate+" [chatAge] "+chatAge+" [chatGender] "+chatGender+" [chatCount] "+chatCount+" [chatState] "+chatState+" [chatLeaderId] "+chatLeaderId+" [chatShowStatus] "+chatShowStatus+" [chatRestaurant] "+chatRestaurant+" [chatMember] "+chatMember+" [reportCount] "+reportCount;
+		return "Chat : [chatNo] "+chatNo+" [chatTitle] "+chatTitle+" [chatContents] "+chatContents+" [chatTime] "+ chatTime+" [chatImage] "+chatImage+" [chatText] "+chatText+" [chatRegDate] "+chatRegDate+" [chatAge] "+chatAge+" [chatGender] "+chatGender+" [chatMemberCount] "+chatMemberCount+" [chatState] "+chatState+" [chatLeaderId] "+chatLeaderId+" [chatShowStatus] "+chatShowStatus+" [chatRestaurant] "+chatRestaurant+" [chatMember] "+chatMember+" [reportCount] "+reportCount;
 	}
 
 }

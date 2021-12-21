@@ -1,5 +1,9 @@
 package com.zzupzzup.service.member;
 
+import java.util.List;
+import java.util.Map;
+
+import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
 
 public interface MemberService {
@@ -24,15 +28,17 @@ public interface MemberService {
 	
 	public void checkCertificatedNum() throws Exception;
 	
-	public void updateMember() throws Exception;
+	public void updateMember(Member member) throws Exception;
 	
 	public void confirmPwd() throws Exception;
 	
-	public void getMember() throws Exception;
+	public Member getMember(String memberId) throws Exception;
 	
 	public void getOtherUser() throws Exception;
 	
-	public void listMember() throws Exception;
+	public Member getOwner(String memberId) throws Exception;
+	
+	public Map<String, Object> listMember(Search search) throws Exception;
 	
 	public void blacklistUser() throws Exception;
 	

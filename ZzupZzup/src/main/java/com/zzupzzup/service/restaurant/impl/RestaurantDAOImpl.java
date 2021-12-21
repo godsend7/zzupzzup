@@ -16,10 +16,10 @@ import com.zzupzzup.service.restaurant.RestaurantDAO;
 //@Repository("restaurantDaoImpl")
 public class RestaurantDAOImpl implements RestaurantDAO {
 	
-	///Field
-	//@Autowired
-	//@Qualifier("sqlSessionTemlate")
+	@Autowired
+	@Qualifier("sqlSessionTemplate")
 	private SqlSession sqlSession;
+	
 	public void setSqlSession(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}
@@ -34,12 +34,24 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	///Method
 	@Override
 	public int addRestaurant(Restaurant restaurant) throws Exception {
-		return sqlSession.insert("RestaurantMapper.addRestaurant", restaurant);
+		int result = sqlSession.insert("RestaurantMapper.addRestaurant", restaurant);
+		
+		if(result == 1) {
+			sqlSession.insert("RestaurantMapper.addMenu", restaurant);
+			sqlSession.insert("RestaurantMapper.addRestaurantTime", restaurant);
+			sqlSession.insert("RestaurantMapper.addImage", restaurant);
+			
+			return 1;
+			
+		} else {
+			return 0;
+		}
+		
 	}
 	
 	@Override
 	public Restaurant getRestaurant(int restaurantNo) throws Exception {
-		return null;
+		return sqlSession.selectOne("RestaurantMapper.getRestaurant", restaurantNo);
 	}
 	
 	@Override
@@ -59,7 +71,7 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 
 	@Override
 	public int updateRestaurant(Restaurant restaurant) throws Exception {
-		return 0;
+		return sqlSession.update("RestaurantMapper.updateRestaurant", restaurant);
 	}
 	
 	@Override

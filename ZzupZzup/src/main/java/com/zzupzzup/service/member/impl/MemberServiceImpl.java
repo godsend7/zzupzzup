@@ -1,9 +1,14 @@
 package com.zzupzzup.service.member.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.member.MemberDAO;
 import com.zzupzzup.service.member.MemberService;
@@ -83,9 +88,9 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void updateMember() throws Exception {
+	public void updateMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
-		
+		memberDao.updateMember(member);
 	}
 
 	@Override
@@ -93,11 +98,11 @@ public class MemberServiceImpl implements MemberService{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public void getMember() throws Exception {
+	public Member getMember(String memberId) throws Exception {
 		// TODO Auto-generated method stub
-		
+		return memberDao.getMember(memberId);
 	}
 
 	@Override
@@ -105,11 +110,26 @@ public class MemberServiceImpl implements MemberService{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public Member getOwner(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		return memberDao.getOwner(memberId);
+	}
 
 	@Override
-	public void listMember() throws Exception {
+	public Map<String, Object> listMember(Search search) throws Exception {
 		// TODO Auto-generated method stub
+		List<Member> listMember = memberDao.listMember(search);
+		int reportCount = memberDao.getReportCount(search);
+		int regRestaurantCount = memberDao.getRegRestaurantCount(search);
 		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", listMember);
+		map.put("reportCount", reportCount);
+		map.put("regRestaurantCount", regRestaurantCount);
+		
+		return map;
 	}
 
 	@Override

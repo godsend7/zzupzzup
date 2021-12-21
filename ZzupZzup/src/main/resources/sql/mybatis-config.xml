@@ -19,14 +19,10 @@
 		<typeAlias alias="community" type="com.zzupzzup.service.domain.Community"/>
 		<typeAlias alias="alarm" type="com.zzupzzup.service.domain.Alarm" />
 		<typeAlias alias="review" type="com.zzupzzup.service.domain.Review" />
-
 		<typeAlias alias="report" type="com.zzupzzup.service.domain.Report" />
 		<typeAlias alias="reservation" type="com.zzupzzup.service.domain.Reservation" />
 		<typeAlias alias="order" type="com.zzupzzup.service.domain.Order" />
-
-		<typeAlias alias="report" type="com.zzupzzup.service.domain.Report" /> 
 		<typeAlias alias="search" type="com.zzupzzup.common.Search"/>
-
 	</typeAliases>
 	
 	 <!-- SQL Definition :: file include -->
@@ -35,16 +31,9 @@
 		<mapper resource="sql/RestaurantMapper.xml"/>
 		<mapper resource="sql/CommunityMapper.xml"/>
 		<mapper resource="sql/AlarmMapper.xml"/>
-
 		<mapper resource="sql/ReviewMapper.xml"/>
 		<mapper resource="sql/ReportMapper.xml"/>
-
 		<mapper resource="sql/ReservationMapper.xml"/>
-
-
-		<mapper resource="sql/ReviewMapper.xml"/> 
-		<mapper resource="sql/ReportMapper.xml"/>
-
 	</mappers>
 
 </configuration>
