@@ -38,7 +38,7 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 		int result = sqlSession.insert("RestaurantMapper.addRestaurant", restaurant);
 		
 		if(result == 1) {
-			sqlSession.insert("RestaurantMapper.addMenu", restaurant);
+			sqlSession.insert("RestaurantMapper.addRestaurantMenu", restaurant);
 			sqlSession.insert("RestaurantMapper.addRestaurantTime", restaurant);
 			sqlSession.insert("RestaurantMapper.addImage", restaurant);
 			

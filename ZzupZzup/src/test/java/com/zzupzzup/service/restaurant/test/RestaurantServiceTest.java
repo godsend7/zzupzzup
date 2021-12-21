@@ -1,5 +1,8 @@
 package com.zzupzzup.service.restaurant.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +13,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
+import com.zzupzzup.service.domain.RestaurantMenu;
+import com.zzupzzup.service.domain.RestaurantTime;
 import com.zzupzzup.service.restaurant.RestaurantService;
 
 
@@ -33,6 +38,33 @@ public class RestaurantServiceTest {
 		Restaurant restaurant = new Restaurant();
 		Member member = new Member();
 		
+		RestaurantMenu menu = new RestaurantMenu();
+		menu.setMenuTitle("a");
+		menu.setMenuPrice(100);
+		menu.setMainMenuStatus(false);
+		
+		List<RestaurantMenu> list = new ArrayList<RestaurantMenu>();
+		list.add(menu);
+		list.add(menu);
+		
+		RestaurantTime rt = new RestaurantTime();
+		rt.setRestaurantDay(1);
+		rt.setRestaurantOpen("09:00");
+		rt.setRestaurantClose("20:00");
+		rt.setRestaurantBreak("15:00");
+		rt.setRestaurantLastOrder("19:00");
+		rt.setRestaurantDayOff(false);
+		
+		List<RestaurantTime> list2 = new ArrayList<RestaurantTime>();
+		list2.add(rt);
+		list2.add(rt);
+		
+		List<String> rm = new ArrayList<String>();
+		rm.add("first.jpg");
+		rm.add("second.jpg");
+		rm.add("third.jpg");
+		
+		
 		member.setMemberId("user01@zzupzzup.com");
 		member.setMemberName("홍진호");
 		restaurant.setMember(member);
@@ -44,6 +76,9 @@ public class RestaurantServiceTest {
 		restaurant.setStreetAddress("서울 종로구 인사동3길 29");
 		restaurant.setAreaAddress("서울 종로구 인사동 215-1");
 		restaurant.setMenuType(1);
+		restaurant.setRestaurantMenus(list);
+		restaurant.setRestaurantTimes(list2);
+		restaurant.setRestaurantImage(rm);
 		
 		restaurantService.addRestaurant(restaurant);
 		
@@ -52,10 +87,10 @@ public class RestaurantServiceTest {
 	}
 	
 	
-	//@Test
+	@Test
 	public void testGetRestaurant() throws Exception {
 		
-		Restaurant restaurant = restaurantService.getRestaurant(3);
+		Restaurant restaurant = restaurantService.getRestaurant(17);
 		
 		System.out.println(restaurant);
 		
@@ -70,7 +105,7 @@ public class RestaurantServiceTest {
 	}
 	
 	
-	@Test
+	//@Test
 	public void testUpdateRestaurant() throws Exception {
 		
 		Restaurant restaurant = restaurantService.getRestaurant(3);
