@@ -1,7 +1,7 @@
 package com.zzupzzup.service.reservation.test;
 
 import java.sql.Date;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,9 +19,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.Member;
+import com.zzupzzup.service.domain.Order;
 import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.reservation.ReservationService;
+import com.zzupzzup.service.restaurant.RestaurantService;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -37,8 +39,12 @@ public class ReservationServiceTest {
 	@Autowired
 	@Qualifier("reservationServiceImpl")
 	private ReservationService reservationService;
+	
+	//@Autowired
+	//@Qualifier("restaurantServiceImpl") //restaurant 서비스 타기위해 넣어줌
+	//private RestaurantService restaurantService;
 
-	//@Test
+	@Test
 	public void testAddReservation() throws Exception {
 		
 		Reservation reservation = new Reservation();
@@ -46,6 +52,16 @@ public class ReservationServiceTest {
 		Chat chat = new Chat();
 		Member member = new Member();
 		
+		List<Order> order = new ArrayList<Order>();
+		Order o = new Order();
+		o.setMenuTitle("dd");
+		o.setOrderCount(2);
+		o.setMenuPrice(1000);
+		order.add(o);
+		order.add(o);
+		
+		reservation.setOrder(order);
+	
 		restaurant.setRestaurantNo(1); //음식점 예약no
 		chat.setChatNo(1); //채팅 no
 		member.setMemberId("hihi@a.com"); // memberId
@@ -69,22 +85,24 @@ public class ReservationServiceTest {
 	
 //=======================================================================================
 	
-	@Test
-	public void testGetReservation() throws Exception {
-		
-		Reservation reservation = new Reservation();
-		Restaurant restaurant = new Restaurant();
-		Chat chat = new Chat();
-		Member member = new Member();
-		
-		reservation = reservationService.getReservation("20211218171424_756138384");
-		
-		Assert.assertEquals(1, restaurant.getRestaurantNo());
-		Assert.assertEquals(1, chat.getChatNo());
-		Assert.assertEquals("hihi@a.com", member.getMemberId());
-		Assert.assertEquals(false, reservation.isRefundStatus());
-		
-		//reservationService.addReservation(reservation);
-	}
+	/*
+	 * //@Test public void testGetReservation() throws Exception {
+	 * 
+	 * Reservation reservation = new Reservation(); Restaurant restaurant = new
+	 * Restaurant(); Chat chat = new Chat(); Member member = new Member();
+	 * 
+	 * reservation = reservationService.getReservation("20211218171424_756138384");
+	 * //restaurant join 안하고 컨트롤러 타는법
+	 * 
+	 * restaurant =
+	 * restaurantService.getRestaurant(reservation.getRestaurant().getRestaurantNo()
+	 * );
+	 * 
+	 * Assert.assertEquals(1, restaurant.getRestaurantNo()); Assert.assertEquals(1,
+	 * chat.getChatNo()); Assert.assertEquals("hihi@a.com", member.getMemberId());
+	 * Assert.assertEquals(false, reservation.isRefundStatus());
+	 * 
+	 * //reservationService.addReservation(reservation); }
+	 */
 	
 }

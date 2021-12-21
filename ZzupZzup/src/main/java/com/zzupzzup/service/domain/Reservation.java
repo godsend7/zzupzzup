@@ -9,7 +9,8 @@ public class Reservation {
 	private Chat chat;
 	private Restaurant restaurant;
 	private Member member;
-	private String reservationNo;
+	private int reservationNo;
+	private String reservationNumber;
 	private int payOption;
 	private int payMethod;
 	private String planTime;
@@ -25,17 +26,18 @@ public class Reservation {
 	private boolean refundStatus;
 	private int reservationCancelDate;
 	private int totalPrice;
-	private int restaurantNo;
-	private List reservationMember;
-	private String reservationLeader;
-	private Member reservationPhone;
+//	private List<Member> reservationMember;
+//	private String reservationLeader;
+//	private String reservationPhone;
 	private int orderCount;
 	private int orderTotal;
+	private List<Order> order;
 	
 	//Constructor
 	public Reservation() {
 	}
 
+	//Method
 	public Chat getChat() {
 		return chat;
 	}
@@ -51,7 +53,7 @@ public class Reservation {
 	public void setRestaurant(Restaurant restaurant) {
 		this.restaurant = restaurant;
 	}
-	
+
 	public Member getMember() {
 		return member;
 	}
@@ -60,12 +62,20 @@ public class Reservation {
 		this.member = member;
 	}
 
-	public String getReservationNo() {
+	public int getReservationNo() {
 		return reservationNo;
 	}
 
-	public void setReservationNo(String reservationNo) {
+	public void setReservationNo(int reservationNo) {
 		this.reservationNo = reservationNo;
+	}
+
+	public String getReservationNumber() {
+		return reservationNumber;
+	}
+
+	public void setReservationNumber(String reservationNumber) {
+		this.reservationNumber = reservationNumber;
 	}
 
 	public int getPayOption() {
@@ -139,7 +149,7 @@ public class Reservation {
 	public void setFixedStatus(boolean fixedStatus) {
 		this.fixedStatus = fixedStatus;
 	}
-	
+
 	public Date getReservationDate() {
 		return reservationDate;
 	}
@@ -155,7 +165,7 @@ public class Reservation {
 	public void setReservationCancelReason(int reservationCancelReason) {
 		this.reservationCancelReason = reservationCancelReason;
 	}
-		
+
 	public String getReservationCancelDetail() {
 		return reservationCancelDetail;
 	}
@@ -163,7 +173,7 @@ public class Reservation {
 	public void setReservationCancelDetail(String reservationCancelDetail) {
 		this.reservationCancelDetail = reservationCancelDetail;
 	}
-	
+
 	public boolean isRefundStatus() {
 		return refundStatus;
 	}
@@ -188,38 +198,6 @@ public class Reservation {
 		this.totalPrice = totalPrice;
 	}
 
-	public int getRestaurantNo() {
-		return restaurantNo;
-	}
-
-	public void setRestaurantNo(int restaurantNo) {
-		this.restaurantNo = restaurantNo;
-	}
-
-	public List getReservationMember() {
-		return reservationMember;
-	}
-
-	public void setReservationMember(List reservationMember) {
-		this.reservationMember = reservationMember;
-	}
-
-	public String getReservationLeader() {
-		return reservationLeader;
-	}
-
-	public void setReservationLeader(String reservationLeader) {
-		this.reservationLeader = reservationLeader;
-	}
-
-	public Member getReservationPhone() {
-		return reservationPhone;
-	}
-
-	public void setReservationPhone(Member reservationPhone) {
-		this.reservationPhone = reservationPhone;
-	}
-
 	public int getOrderCount() {
 		return orderCount;
 	}
@@ -235,21 +213,12 @@ public class Reservation {
 	public void setOrderTotal(int orderTotal) {
 		this.orderTotal = orderTotal;
 	}
-	
-	//Method
-	
-	@Override
-	public String toString() {
-		return "Reservation [chat=" + chat + ", restaurant=" + restaurant + ", member=" + member + ", reservationNo="
-				+ reservationNo + ", payOption=" + payOption + ", payMethod=" + payMethod + ", planTime=" + planTime
-				+ ", planDate=" + planDate + ", fixedTime=" + fixedTime + ", fixedDate=" + fixedDate + ", memberCount="
-				+ memberCount + ", reservationStatus=" + reservationStatus + ", fixedStatus=" + fixedStatus
-				+ ", reservationDate=" + reservationDate + ", reservationCancelReason=" + reservationCancelReason
-				+ ", reservationCancelDetail=" + reservationCancelDetail + ", refundStatus=" + refundStatus
-				+ ", reservationCancelDate=" + reservationCancelDate + ", totalPrice=" + totalPrice + ", restaurantNo="
-				+ restaurantNo + ", reservationMember=" + reservationMember + ", reservationLeader=" + reservationLeader
-				+ ", reservationPhone=" + reservationPhone + ", orderCount=" + orderCount + ", orderTotal=" + orderTotal
-				+ "]";
+
+	public List<Order> getOrder() {
+		return order;
 	}
 
+	public void setOrder(List<Order> order) {
+		this.order = order;
+	}
 }
