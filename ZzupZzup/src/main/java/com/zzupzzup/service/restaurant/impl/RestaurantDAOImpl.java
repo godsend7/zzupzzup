@@ -13,7 +13,7 @@ import com.zzupzzup.service.domain.RestaurantMenu;
 import com.zzupzzup.service.domain.RestaurantTime;
 import com.zzupzzup.service.restaurant.RestaurantDAO;
 
-//@Repository("restaurantDaoImpl")
+@Repository("restaurantDaoImpl")
 public class RestaurantDAOImpl implements RestaurantDAO {
 	
 	@Autowired

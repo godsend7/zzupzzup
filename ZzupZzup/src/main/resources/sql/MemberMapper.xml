@@ -87,19 +87,19 @@
 
 	<!-- SQL : SELECT LIST -->
 	<select 	id="listUser"	parameterType="search" resultMap="memberSelectMap">
-		SELECT @ROWNUM := @ROWNUM + 1 AS NO, MEMBER_LIST.*
+		SELECT MEMBER_LIST.*
 		FROM (
 			SELECT MEMBER_ROLE, NICKNAME, COUNT_REP.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
-			FROM zzupzzup_test.REPORT, zzupzzup_test.MEMBER
+			FROM zzupzzup.MEMBER
 		    RIGHT JOIN (
-					SELECT zzupzzup_test.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
-					FROM zzupzzup_test.REPORT RIGHT JOIN zzupzzup_test.MEMBER
-					ON zzupzzup_test.REPORT.CHAT_MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
-					GROUP BY zzupzzup_test.MEMBER.MEMBER_ID
+					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
+					FROM zzupzzup.REPORT RIGHT JOIN zzupzzup.MEMBER
+					ON zzupzzup.REPORT.CHAT_MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+					GROUP BY zzupzzup.MEMBER.MEMBER_ID
 				) COUNT_REP
-			ON COUNT_REP.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
+			ON COUNT_REP.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
 		) MEMBER_LIST
-		WHERE (@ROWNUM:=0) = 0
+		ORDER BY member_id LIMIT #{startRowNum}, #{pageSize}
 	</select>
 	
 	<select 	id="listOwner"	parameterType="search" resultMap="memberSelectMap">
