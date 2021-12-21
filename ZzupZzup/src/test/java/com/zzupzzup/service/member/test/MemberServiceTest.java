@@ -1,6 +1,7 @@
 package com.zzupzzup.service.member.test;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -97,27 +98,25 @@ public class MemberServiceTest {
 		//System.out.println(member);
 	}	//complete addMember !
 	
-	//@Test
+	@Test
 	public void testGetMember() throws Exception {
 		
 		Member member = memberService.getMember("test@test.com");
-		//Member member = memberService.getOwner("testest@test.com");
+		//Member member = memberService.getOwner("testest@test.com");	//오류 왜 뜨는데?
 		//System.out.println(member);
 	}
 	
 	//@Test
 	public void testListMember() throws Exception {
 		
-		//Member member = memberService.listMember(null);
-		//System.out.println(member);
 		Search search = new Search();
-		Map<String, Object> map = memberService.listMember(search);
-		List<Member> list = (List<Member>)map.get("list");
-		/*
-		for(int i = 0; i < list.size(); i++) {
-			
-		}
-		*/
+		search.setCurrentPage(1);
+		search.setPageSize(5);
+		System.out.println("start : "+search.getStartRowNum()+", end : "+search.getEndRowNum());
+		//List<Member> list = memberService.listUser(search);
+		List<Member> list = memberService.listOwner(search);
+
+		
 	}
 	
 	//@Test

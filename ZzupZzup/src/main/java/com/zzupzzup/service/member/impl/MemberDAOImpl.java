@@ -1,6 +1,8 @@
 package com.zzupzzup.service.member.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,12 +65,23 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 
 	@Override
-	public List<Member> listMember(Search search) throws Exception {
+	public List<Member> listUser(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		List<Member> list = sqlSession.selectList("MemberMapper.listMember",search);
-		for(int i = 0; i < list.size(); i++) {
-			list.get(i).setReportCount(sqlSession.selectOne("MemberMapper.getReportCount", search));
-		}
+		List<Member> list = sqlSession.selectList("MemberMapper.listUser",search);
+//		for(int i = 0; i < list.size(); i++) {
+//			list.get(i).setReportCount(sqlSession.selectOne("MemberMapper.getReportCount", search));
+//		}
+		
+		return list;
+	}
+	
+	@Override
+	public List<Member> listOwner(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		List<Member> list = sqlSession.selectList("MemberMapper.listOwner",search);
+//		for(int i = 0; i < list.size(); i++) {
+//			list.get(i).setReportCount(sqlSession.selectOne("MemberMapper.getReportCount", search));
+//		}
 		
 		return list;
 	}
@@ -79,16 +92,18 @@ public class MemberDAOImpl implements MemberDAO{
 		sqlSession.update("MemberMapper.updateMember", member);
 	}
 	
-	@Override
-	public int getReportCount(Search search) throws Exception {
-		// TODO Auto-generated method stub
-		return sqlSession.selectOne("MemberMapper.getReportCount",search);
-	}
-	
-	@Override
-	public int getRegRestaurantCount(Search search) throws Exception {
-		// TODO Auto-generated method stub
-		return sqlSession.selectOne("MemberMapper.getRegRestaurantCount",search);
-	}
+//	@Override
+//	public int getReportCount(String memberId) throws Exception {
+//		// TODO Auto-generated method stub
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("memberId", memberId);
+//		return sqlSession.selectOne("MemberMapper.getReportCount",map);
+//	}
+//	
+//	@Override
+//	public int getRegRestaurantCount(String memberId) throws Exception {
+//		// TODO Auto-generated method stub
+//		return sqlSession.selectOne("MemberMapper.getRegRestaurantCount",memberId);
+//	}
 
 }
