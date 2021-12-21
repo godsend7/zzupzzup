@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReservationMapper">
+
+	<resultMap id="reservationSelectMap" type="reservation">
+		<result property="reservationNo"   						column="reservation_no" 			jdbcType="INTEGER"/>
+		<result property="reservationNumber"   					column="reservation_number" 		jdbcType="VARCHAR"/>
+		<result property="restaurant.restaurantNo"   			column="restaurant_no" 				jdbcType="INTEGER"/>
+		<result property="chat.chatNo"   						column="chat_no" 					jdbcType="INTEGER"/>
+		<result property="member.memberId"   					column="booker_id" 					jdbcType="VARCHAR"/>
+		<result property="planDate"   							column="plan_date" 					jdbcType="DATE"/>
+		<result property="fixedDate"   							column="fixed_date" 				jdbcType="DATE"/>
+		<result property="memberCount"   						column="member_count" 				jdbcType="INTEGER"/>
+		<result property="reservationStatus"   					column="reservation_status" 		jdbcType="INTEGER"/>
+		<result property="fixedStatus"   						column="fixed_status" 				jdbcType="BOOLEAN"/>
+		<result property="reservationDate"   					column="reservation_date" 			jdbcType="DATE"/>
+		<result property="totalPrice"   						column="total_price" 				jdbcType="INTEGER"/>
+		<result property="payOption"   							column="pay_option" 				jdbcType="INTEGER"/>
+		<result property="payMethod"   							column="pay_method" 				jdbcType="INTEGER"/>
+		<result property="reservationCancelDate"   				column="cancel_date" 				jdbcType="DATE"/>
+		<result property="reservationCancelReason"   			column="reservation_cancel_type" 	jdbcType="INTEGER"/>
+		<result property="reservationCancelDetail"   			column="reservation_cancel_detail" 	jdbcType="VARCHAR"/>
+		<result property="refundStatus"   						column="refund_status" 				jdbcType="BOOLEAN"/>
+		
+		<collection property="order" resultMap="orderSelectMap"/>		
+	</resultMap>
+	
+	<resultMap id="orderSelectMap" type="order">
+		<id property="orderNo"   							column="order_no" 					jdbcType="INTEGER"/>
+		<result property="reservation.reservationNo"   			column="reservation_no" 			jdbcType="INTEGER"/>
+		<result property="menuTitle"   							column="menu_title" 				jdbcType="VARCHAR"/>
+		<result property="orderCount"   						column="order_count" 				jdbcType="INTEGER"/>
+		<result property="menuPrice"   							column="menu_price" 				jdbcType="INTEGER"/>
+		
+	</resultMap>
+	
+	
+	
+	<!-- SQL : INSERT -->
+	<insert id="addReservation"	parameterType="reservation" useGeneratedKeys="true" keyProperty="reservationNo">
+	 	INSERT
+		INTO RESERVATION(reservation_number, restaurant_no, chat_no, booker_id, plan_date, fixed_date, member_count, reservation_status, fixed_status, 
+						reservation_date, total_price, pay_option, pay_method, cancel_date, reservation_cancel_type, 
+						reservation_cancel_detail, refund_status)
+		VALUES (CONCAT(DATE_FORMAT(NOW(), "%Y%m%e%H%i%S"),'_',FLOOR(RAND()*1000000000)), #{restaurant.restaurantNo}, #{chat.chatNo}, 
+				#{member.memberId}, NOW(), NOW(), #{memberCount}, 
+				#{reservationStatus}, #{fixedStatus}, NOW(), #{totalPrice}, #{payOption}, #{payMethod}, NOW(), 
+				#{reservationCancelReason}, #{reservationCancelDetail}, #{refundStatus});
+
+	</insert>
+	
+	<insert id="addOrder"	parameterType="reservation">
+	 	INSERT
+		INTO RESERVATION_ORDER(RESERVATION_NO, MENU_TITLE, ORDER_COUNT, MENU_PRICE)
+		VALUES (#{reservationNo}, #{menuTitle}, #{orderCount}, #{menuPrice});
+
+	</insert>
+	
+	
+	<!-- SQL : SELECT ONE -->
+	 <select 	id="getReservation"	parameterType="String"	resultMap="reservationSelectMap">
+		SELECT
+		reservation_no, restaurant_no, chat_no, booker_id, plan_date, fixed_date, member_count, reservation_status, fixed_status, 
+						reservation_date, total_price, pay_option, pay_method, cancel_date, reservation_cancel_type, 
+						reservation_cancel_detail, refund_status		
+		FROM reservation 
+		WHERE reservation_no = CONCAT(DATE_FORMAT(NOW(), "%Y%m%e%H%i%S"),'_',FLOOR(RAND()*1000000000)
+	 </select>
+	
+	
+</mapper>

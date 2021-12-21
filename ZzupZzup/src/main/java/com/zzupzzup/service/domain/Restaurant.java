@@ -29,6 +29,8 @@ public class Restaurant {
 	private String areaAddress;
 	private String restAddress;
 	private Date restaurantRegDate; 
+	private List<RestaurantMenu> restaurantMenus;
+	private List<RestaurantTime> restaurantTimes;
 	
 	
 	//Constructor
@@ -243,6 +245,25 @@ public class Restaurant {
 		this.restaurantRegDate = restaurantRegDate;
 	}
 
+	public List<RestaurantMenu> getRestaurantMenus() {
+		return restaurantMenus;
+	}
+
+
+	public void setRestaurantMenus(List<RestaurantMenu> restaurantMenus) {
+		this.restaurantMenus = restaurantMenus;
+	}
+
+
+	public List<RestaurantTime> getRestaurantTimes() {
+		return restaurantTimes;
+	}
+
+
+	public void setRestaurantTimes(List<RestaurantTime> restaurantTimes) {
+		this.restaurantTimes = restaurantTimes;
+	}
+
 
 	@Override
 	public String toString() {
@@ -253,7 +274,8 @@ public class Restaurant {
 				+ ", ownerImage=" + ownerImage + ", restaurantText=" + restaurantText + ", reservationStatus="
 				+ reservationStatus + ", parkable=" + parkable + ", requestDate=" + requestDate + ", responseDate="
 				+ responseDate + ", streetAddress=" + streetAddress + ", areaAddress=" + areaAddress + ", restAddress="
-				+ restAddress + ", restaurantRegDate=" + restaurantRegDate + "]";
+				+ restAddress + ", restaurantRegDate=" + restaurantRegDate + ", restaurantMenus=" + restaurantMenus
+				+ ", restaurantTimes=" + restaurantTimes + "]";
 	}
 	
 	
