@@ -137,7 +137,8 @@
 		FROM review r 
         INNER JOIN (SELECT review_no
 							FROM MARK
-                            where member_id = #{memberId} and review_no IS NOT NULL) 
+                            where member_id = #{memberId} and review_no IS NOT NULL
+                            ORDER BY mark_no limit #{search.startRowNum}, #{search.pageSize})
                             as m on (r.review_no = m.review_no)
 		LEFT OUTER JOIN (SELECT image, review_no
 					FROM image) AS i ON (r.review_no = i.review_no)
