@@ -13,7 +13,7 @@ import com.zzupzzup.service.domain.RestaurantMenu;
 import com.zzupzzup.service.domain.RestaurantTime;
 import com.zzupzzup.service.restaurant.RestaurantDAO;
 
-//@Repository("restaurantDaoImpl")
+@Repository("restaurantDaoImpl")
 public class RestaurantDAOImpl implements RestaurantDAO {
 	
 	@Autowired
@@ -66,12 +66,24 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 
 	@Override
 	public List<Restaurant> listRestaurant(Search search) throws Exception {
-		return null;
+		return sqlSession.selectList("RestaurantMapper.listRestaurant", search);
 	}
 
 	@Override
 	public int updateRestaurant(Restaurant restaurant) throws Exception {
-		return sqlSession.update("RestaurantMapper.updateRestaurant", restaurant);
+		int result = sqlSession.update("RestaurantMapper.updateRestaurant", restaurant);
+		
+		if(result == 1) {
+			sqlSession.insert("RestaurantMapper.addRestaurantMenu", restaurant);
+			sqlSession.insert("RestaurantMapper.addRestaurantTime", restaurant);
+			sqlSession.insert("RestaurantMapper.addImage", restaurant);
+			
+			return 1;
+			
+		} else {
+			return 0;
+		}
+		
 	}
 	
 	@Override

@@ -55,7 +55,7 @@ public class Search {
    }
    //==> Select Query 시 ROWNUM 시작 값
    public int getStartRowNum() {
-      return (getCurrentPage()-1)*getPageSize()+1;
+      return (getCurrentPage()-1)*getPageSize();
    }
 
    @Override

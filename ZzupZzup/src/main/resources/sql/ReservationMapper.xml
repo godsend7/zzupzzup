@@ -31,11 +31,9 @@
 	
 	<resultMap id="orderSelectMap" type="order">
 		<id property="orderNo"   							column="order_no" 					jdbcType="INTEGER"/>
-		<result property="reservation.reservationNo"   			column="reservation_no" 			jdbcType="INTEGER"/>
 		<result property="menuTitle"   							column="menu_title" 				jdbcType="VARCHAR"/>
 		<result property="orderCount"   						column="order_count" 				jdbcType="INTEGER"/>
 		<result property="menuPrice"   							column="menu_price" 				jdbcType="INTEGER"/>
-		
 	</resultMap>
 	
 	
@@ -52,23 +50,28 @@
 				#{reservationCancelReason}, #{reservationCancelDetail}, #{refundStatus});
 
 	</insert>
-	
-	<insert id="addOrder"	parameterType="reservation">
+		
+	<insert id="addOrder" parameterType="reservation">
 	 	INSERT
-		INTO RESERVATION_ORDER(RESERVATION_NO, MENU_TITLE, ORDER_COUNT, MENU_PRICE)
-		VALUES (#{reservationNo}, #{menuTitle}, #{orderCount}, #{menuPrice});
+		INTO RESERVATION_ORDER(reservation_no, menu_title, order_count, menu_price)
+		VALUES 
+		<foreach collection="order" item="item" separator=",">
+			(#{reservationNo}, #{item.menuTitle}, #{item.orderCount}, #{item.menuPrice})
+		</foreach>
 
 	</insert>
 	
 	
+	
 	<!-- SQL : SELECT ONE -->
-	 <select 	id="getReservation"	parameterType="String"	resultMap="reservationSelectMap">
-		SELECT
-		reservation_no, restaurant_no, chat_no, booker_id, plan_date, fixed_date, member_count, reservation_status, fixed_status, 
-						reservation_date, total_price, pay_option, pay_method, cancel_date, reservation_cancel_type, 
-						reservation_cancel_detail, refund_status		
-		FROM reservation 
-		WHERE reservation_no = CONCAT(DATE_FORMAT(NOW(), "%Y%m%e%H%i%S"),'_',FLOOR(RAND()*1000000000)
+	<select id="getReservation"	parameterType="int"	resultMap="reservationSelectMap">
+		SELECT * 
+			FROM RESERVATION AS r
+			INNER JOIN (SELECT c.chat_no, cm.chat_member_id
+							 FROM chat c, chat_member cm 
+			                 WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)
+			INNER JOIN reservation_order AS ro ON (r.reservation_no = ro.reservation_no)
+			WHERE r.reservation_no = #{reservationNo}
 	 </select>
 	
 	

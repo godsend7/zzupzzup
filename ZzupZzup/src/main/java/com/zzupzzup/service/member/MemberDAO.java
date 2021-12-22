@@ -1,6 +1,7 @@
 package com.zzupzzup.service.member;
 
 import java.util.List;
+import java.util.Map;
 
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
@@ -19,11 +20,11 @@ public interface MemberDAO {
 	
 	public Member getOwner(String memberId) throws Exception;
 	
-	public List<Member> listMember(Search search) throws Exception;
+	public List<Member> listMember(Map<String, Object> map) throws Exception;
 	
 	public void updateMember(Member member) throws Exception;
 	
-	public int getReportCount(Search search) throws Exception;
+	//public int getReportCount(String memberId) throws Exception;
 	
-	public int getRegRestaurantCount(Search search) throws Exception;
+	//public int getRegRestaurantCount(String memberId) throws Exception;
 }

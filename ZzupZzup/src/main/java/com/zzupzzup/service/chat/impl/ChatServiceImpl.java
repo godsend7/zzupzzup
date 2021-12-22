@@ -15,6 +15,11 @@ import com.zzupzzup.service.chat.ChatService;
 import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.Member;
 
+import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.Chat;
+import com.zzupzzup.service.chat.ChatDAO;
+import com.zzupzzup.service.chat.ChatService;
+
 @Service("chatServiceImpl")
 public class ChatServiceImpl implements ChatService {
 	

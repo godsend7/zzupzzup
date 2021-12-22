@@ -1,6 +1,7 @@
 package com.zzupzzup.service.member.test;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -35,6 +37,12 @@ public class MemberServiceTest {
 	@Autowired
 	@Qualifier("restaurantServiceImpl")
 	private RestaurantService restaurantService;
+	
+	@Value("#{commonProperties['pageUnit']?: 3}")
+	int pageUnit;
+	
+	@Value("#{commonProperties['pageSize']?: 2}")
+	int pageSize;
 
 	//@Test
 	public void testAddMember() throws Exception {
@@ -101,23 +109,33 @@ public class MemberServiceTest {
 	public void testGetMember() throws Exception {
 		
 		Member member = memberService.getMember("test@test.com");
-		//Member member = memberService.getOwner("testest@test.com");
+		//Member member = memberService.getOwner("testest@test.com");	//오류 왜 뜨는데?
 		//System.out.println(member);
 	}
 	
-	//@Test
+	@Test
 	public void testListMember() throws Exception {
 		
-		//Member member = memberService.listMember(null);
-		//System.out.println(member);
 		Search search = new Search();
-		Map<String, Object> map = memberService.listMember(search);
-		List<Member> list = (List<Member>)map.get("list");
-		/*
-		for(int i = 0; i < list.size(); i++) {
+		search.setCurrentPage(1);
+		search.setPageSize(pageSize);
+		
+		Member member = new Member();
+		member.setMemberRole("user");
+		if(member.getMemberRole() != null) {
+			Map<String, Object> map = memberService.listMember(search, member);
+			List<Member> list = (List<Member>)map.get("listMember");
 			
+			for (Member mem : list) {
+				
+				System.out.println(mem);
+			}
+		
 		}
-		*/
+		
+		//List<Member> list = memberService.listOwner(search);
+
+		
 	}
 	
 	//@Test

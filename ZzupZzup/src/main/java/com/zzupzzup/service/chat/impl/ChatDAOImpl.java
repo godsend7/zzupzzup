@@ -1,6 +1,12 @@
 package com.zzupzzup.service.chat.impl;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +15,10 @@ import org.springframework.stereotype.Repository;
 
 import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Search;
-import com.zzupzzup.service.chat.ChatDAO;
 import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.Member;
+import com.zzupzzup.service.chat.ChatDAO;
+
 
 @Repository("chatDAOImpl")
 public class ChatDAOImpl implements ChatDAO {

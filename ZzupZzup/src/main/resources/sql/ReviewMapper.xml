@@ -8,7 +8,7 @@
 
 	<resultMap id="reviewSelectMap" type="review">
 		<result property="member.memberId"   					column="member_id" 				jdbcType="VARCHAR"/>
-		<result property="reservation.reservationNo"			column="reservation_no" 		jdbcType="VARCHAR" />
+		<result property="reservation.reservationNo"			column="reservation_no" 		jdbcType="INTEGER" />
 		<result property="reservation.restaurant.restaurantNo"	column="restaurant_no" 			jdbcType="INTEGER" />
 		<result property="reviewNo" 							column="review_no" 				jdbcType="INTEGER" />
 		<result property="scopeClean" 							column="scope_taste" 			jdbcType="INTEGER" />
@@ -114,7 +114,7 @@
 		  			WHERE r.member_id LIKE #{id}
 		  		</when>
 		  	  </choose>
-			  ORDER BY r.review_no limit 0,10) AS r
+			  ORDER BY r.review_no limit #{search.startRowNum}, #{search.pageSize}) AS r
 		INNER JOIN (SELECT image, review_no
 					FROM image) AS i ON (r.review_no = i.review_no)
 		INNER JOIN (SELECT hl.HASHTAG_no, h.hashtag, review_no 

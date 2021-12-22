@@ -37,6 +37,7 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		}
 
 		public Reservation getReservation(int reservationNo) throws Exception {
+			System.out.println("ReservationServiceImpl reservationNo" + reservationNo);
 			return reservationDao.getReservation(reservationNo);
 		}
 

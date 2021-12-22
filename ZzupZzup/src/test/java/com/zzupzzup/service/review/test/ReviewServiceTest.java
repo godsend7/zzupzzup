@@ -70,7 +70,7 @@ public class ReviewServiceTest {
 		restaurant.setRestaurantNo(1);
 		
 		member.setMemberId("user02@zzupzzup.com");
-		//reservation.setReservationNo(20211217124126_646712560);
+		reservation.setReservationNo(1);
 		reservation.setRestaurant(restaurant);
 		review.setMember(member);
 		review.setReservation(reservation);
@@ -153,7 +153,7 @@ public class ReviewServiceTest {
 	public void testListReview() throws Exception {
 		Search search = new Search();
 		
-		search.setCurrentPage(1);		
+		search.setCurrentPage(3);		
 		search.setPageSize(pageSize);
 		
 		//해당 음식점의 리뷰 출력
@@ -168,10 +168,11 @@ public class ReviewServiceTest {
 		System.out.println("review list success");
 		
 		for (Review r : list) {
-			System.out.println(r);
+			System.out.println(r.getReviewNo());
 		}
 		
-		 //Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		 Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		 System.out.println(resultPage);
 	}
 	
 	//@Test
