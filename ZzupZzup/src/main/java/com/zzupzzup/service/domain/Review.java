@@ -13,8 +13,9 @@ public class Review {
 	private int scopeKind;
 	private List<String> reviewImage;
 	private String reviewDetail;
-	private List<Integer> hashTagNo;
-	private List<String> hashTag;
+	//private List<Integer> hashTagNo;
+	//private List<String> hashTag;
+	private List<HashTag> hashTag;
 	private Date reviewRegDate;
 	private int likeCount;
 	private int reportCount;
@@ -92,24 +93,32 @@ public class Review {
 		this.reviewDetail = reviewDetail;
 	}
 
-	public List<String> getHashTag() {
+//	public List<String> getHashTag() {
+//		return hashTag;
+//	}
+//
+//	public void setHashTag(List<String> hashTag) {
+//		this.hashTag = hashTag;
+//	}
+//
+//	public List<Integer> getHashTagNo() {
+//		return hashTagNo;
+//	}
+//
+//	public void setHashTagNo(List<Integer> hashTagNo) {
+//		this.hashTagNo = hashTagNo;
+//	}
+	
+	public Date getReviewRegDate() {
+		return reviewRegDate;
+	}
+
+	public List<HashTag> getHashTag() {
 		return hashTag;
 	}
 
-	public void setHashTag(List<String> hashTag) {
+	public void setHashTag(List<HashTag> hashTag) {
 		this.hashTag = hashTag;
-	}
-
-	public List<Integer> getHashTagNo() {
-		return hashTagNo;
-	}
-
-	public void setHashTagNo(List<Integer> hashTagNo) {
-		this.hashTagNo = hashTagNo;
-	}
-
-	public Date getReviewRegDate() {
-		return reviewRegDate;
 	}
 
 	public void setReviewRegDate(Date reviewRegDate) {
@@ -160,9 +169,8 @@ public class Review {
 	public String toString() {
 		return "Review [member=" + member + ", reservation=" + reservation + ", reviewNo=" + reviewNo + ", scopeClean="
 				+ scopeClean + ", scopeTaste=" + scopeTaste + ", scopeKind=" + scopeKind + ", reviewImage="
-				+ reviewImage + ", reviewDetail=" + reviewDetail + ", hashTagNo=" + hashTagNo + ", hashTag=" + hashTag
-				+ ", reviewRegDate=" + reviewRegDate + ", likeCount=" + likeCount + ", reportCount=" + reportCount
-				+ ", avgScope=" + avgScope + ", avgTotalScope=" + avgTotalScope + ", reviewShowStatus="
-				+ reviewShowStatus + "]";
+				+ reviewImage + ", reviewDetail=" + reviewDetail + ", hashTag=" + hashTag + ", reviewRegDate="
+				+ reviewRegDate + ", likeCount=" + likeCount + ", reportCount=" + reportCount + ", avgScope=" + avgScope
+				+ ", avgTotalScope=" + avgTotalScope + ", reviewShowStatus=" + reviewShowStatus + "]";
 	}
 }

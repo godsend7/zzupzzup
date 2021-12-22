@@ -20,22 +20,20 @@
 		<result property="reviewShowStatus" 					column="review_show_status" 	jdbcType="BOOLEAN" />
 		<result property="reportCount"							column="report_count"			jdbcType="INTEGER" />
 		
-		<collection property="hashTagNo" ofType="Integer" javaType="list">
-			<result column="hashTag_no"/>
-		</collection>
-		
-		<collection property="hashTag" ofType="String" javaType="list">
+		<!-- <collection property="hashTag" ofType="String" javaType="list">
 			<result column="hashTag"/>
-		</collection>
+		</collection> -->
+		
+		<collection property="hashTag" resultMap="hashTagSelectMap"></collection>
 		
 		<collection property="reviewImage" ofType="String" javaType="list">
 			<result column="image"/>
 		</collection>
 	</resultMap>
 	
-	<resultMap id="hashTagSelectMap" type="HashMap">
-		<result property="testHashtagNo" column="hashtag_no" jdbcType="INTEGER"/>
-		<result property="testHashtag" column="hashtag" jdbcType="VARCHAR"/>
+	<resultMap id="hashTagSelectMap" type="hashtag">
+		<result property="hashTagNo" column="hashtag_no" jdbcType="INTEGER"/>
+		<result property="hashTag" column="hashtag" jdbcType="VARCHAR"/>
 	</resultMap>
 	
 	
@@ -52,8 +50,8 @@
 		INSERT
 		INTO HASHTAG_LOG(review_no, hashtag_no) 
 		VALUES
-		<foreach collection="hashTagNo" item="item" separator=",">	
-			 (#{reviewNo}, #{item})
+		<foreach collection="hashTag" item="item" separator=",">	
+			 (#{reviewNo}, #{item.hashTagNo})
   		</foreach>
 	</insert>
 	
@@ -155,7 +153,7 @@
 	</select>
 	
 	<select id="listHashTag" parameterType="String" resultMap="hashTagSelectMap">
-		SELECT *
+		SELECT hashtag_no, hashtag
 		FROM HASHTAG
 		WHERE HASHTAG Like CONCAT('%',#{value},'%')
 	</select>

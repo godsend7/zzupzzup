@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.HashTag;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.domain.Restaurant;
@@ -60,12 +61,16 @@ public class ReviewServiceTest {
 		Reservation reservation = new Reservation();
 		Restaurant restaurant = new Restaurant();
 		
-		List<Integer> hashTag = new ArrayList<Integer>();
+		List<HashTag> hashTag = new ArrayList<HashTag>();
 		List<String> reviewImage = new ArrayList<String>();
 		
-		hashTag.add(1);
-		hashTag.add(2);
-		hashTag.add(3);
+		HashTag h1 = new HashTag();
+		h1.setHashTagNo(1);
+		HashTag h2 = new HashTag();
+		h2.setHashTagNo(2);
+		
+		hashTag.add(h1);
+		hashTag.add(h2);
 		
 		reviewImage.add("a.jpg");
 		reviewImage.add("b.jpg");
@@ -80,7 +85,7 @@ public class ReviewServiceTest {
 		review.setMember(member);
 		review.setReservation(reservation);
 		review.setReviewDetail("맛있어요~~");
-		review.setHashTagNo(hashTag);
+		review.setHashTag(hashTag);
 		review.setReviewImage(reviewImage);
 		review.setScopeTaste(4);
 		review.setScopeKind(5);
@@ -96,14 +101,22 @@ public class ReviewServiceTest {
 	//@Test
 	public void testUpdateReview() throws Exception {
 		
-		List<Integer> hashTag = new ArrayList<Integer>();
+		List<HashTag> hashTag = new ArrayList<HashTag>();
 		List<String> reviewImage = new ArrayList<String>();
 		
-		hashTag.add(1);
-		hashTag.add(5);
-		hashTag.add(4);
-		hashTag.add(3);
-		hashTag.add(7);
+//		hashTag.add(1);
+//		hashTag.add(5);
+//		hashTag.add(4);
+//		hashTag.add(3);
+//		hashTag.add(7);
+		
+		HashTag h1 = new HashTag();
+		h1.setHashTagNo(5);
+		HashTag h2 = new HashTag();
+		h2.setHashTagNo(3);
+		
+		hashTag.add(h1);
+		hashTag.add(h2);
 		
 		reviewImage.add("d.jpg");
 		reviewImage.add("e.jpg");
@@ -111,9 +124,9 @@ public class ReviewServiceTest {
 		
 		Review review = new Review();
 		
-		review.setReviewNo(3);
+		review.setReviewNo(25);
 		review.setReviewDetail("최고에요~~");
-		review.setHashTagNo(hashTag);
+		review.setHashTag(hashTag);
 		review.setReviewImage(reviewImage);
 		review.setScopeTaste(5);
 		review.setScopeKind(5);
@@ -139,19 +152,19 @@ public class ReviewServiceTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testGetReview() throws Exception {
 		
 		Review review = new Review();
 		
-		review.setReviewNo(5);
+		review.setReviewNo(25);
 		
 		review = reviewService.getReview(review.getReviewNo());
 		
 		System.out.println("review get success" + review);
 		
-		for (int i = 0; i<review.getHashTagNo().size(); i++) {
-			System.out.println(review.getHashTagNo().get(i) + " : " + review.getHashTag().get(i));
+		for (int i = 0; i<review.getHashTag().size(); i++) {
+			System.out.println(review.getHashTag().get(i) + " : " + review.getHashTag().get(i));
 		}
 	}
 	
@@ -206,14 +219,14 @@ public class ReviewServiceTest {
 	public void testListHashTag() throws Exception {
 		String search = "#";
 		
-		List<Map<String, Object>> list = reviewService.listHashTag(search);
+		List<HashTag> list = reviewService.listHashTag(search);
 			
 		System.out.println("review listHashTag success");
 		
-		for (Map r : list) {
+		for (HashTag r : list) {
 			//System.out.println(r);
-			System.out.println(r.get("testHashtagNo"));
-			System.out.println(r.get("testHashtag"));
+			System.out.println(r.getHashTagNo());
+			System.out.println(r.getHashTag());
 		}
 	}
 	
@@ -226,7 +239,7 @@ public class ReviewServiceTest {
 	
 	//@Test
 	public void testDeleteLike() throws Exception {
-		if(reviewService.deleteLike("hihi@a.com", 5) == 1) {
+		if(reviewService.deleteLike("hihi@a.com", 7) == 1) {
 			System.out.println("review delete success");
 		}
 	}

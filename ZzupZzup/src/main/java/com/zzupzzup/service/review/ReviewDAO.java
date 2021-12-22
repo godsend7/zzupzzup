@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.HashTag;
 import com.zzupzzup.service.domain.Review;
 
 public interface ReviewDAO {
@@ -22,7 +23,7 @@ public interface ReviewDAO {
 	
 	public List<Review> listMyLikeReview(Map<String, Object> map) throws Exception;
 	
-	public List<Map<String, Object>> listHashTag(String search) throws Exception;
+	public List<HashTag> listHashTag(String search) throws Exception;
 	
 	public int addLike(Map<String, Object> map) throws Exception;
 	
