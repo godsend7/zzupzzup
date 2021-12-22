@@ -173,9 +173,9 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void calculateActivityScore() throws Exception {
+	public void calculateActivityScore(String memberId) throws Exception {
 		// TODO Auto-generated method stub
-		
+		memberDao.updateActivityAllScore(memberId);
 	}
 
 	@Override

@@ -175,11 +175,19 @@
 		FROM zzupzzup.ACTIVITY_SCORE, zzupzzup.MEMBER
 		WHERE zzupzzup.ACTIVITY_SCORE.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID AND zzupzzup.MEMBER.MEMBER_ID = #{memberId}
 	</select>
-	<!-- 
-	<update 	id="updateMemberScore"	parameterType="member">
-		
+	
+	<update 	id="updateActivityAllScore"	parameterType="string">
+		UPDATE zzupzzup_test.MEMBER AS MEMBER
+		INNER JOIN (
+		SELECT zzupzzup_test.MEMBER.MEMBER_ID, SUM(ACCUMULATE_SCORE) AS SCORE
+		FROM zzupzzup_test.ACTIVITY_SCORE, zzupzzup_test.MEMBER
+		GROUP BY MEMBER.MEMBER_ID
+		) ACCUMULATE_ALL_SCORE
+		ON zzupzzup_test.MEMBER.MEMBER_ID = ACCUMULATE_ALL_SCORE.MEMBER_ID
+		SET MEMBER.ACTIVITY_SCORE = ACCUMULATE_ALL_SCORE.SCORE
+		WHERE zzupzzup_test.MEMBER.MEMBER_ID = #{memberId};
 	</update>
-	 -->
+	
 	 
 	<!-- MANNER_SCORE -->
 	<update id="updateMannerScore" parameterType="map">

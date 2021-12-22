@@ -97,6 +97,12 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 	
 	@Override
+	public void updateActivityAllScore(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		sqlSession.update("MemberMapper.updateActivityAllScore", memberId);
+	}
+	
+	@Override
 	public void updateMannerScore(String memberId, int accumulScore) throws Exception {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<String, Object>();

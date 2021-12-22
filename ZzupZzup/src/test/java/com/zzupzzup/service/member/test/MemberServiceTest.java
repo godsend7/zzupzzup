@@ -251,6 +251,14 @@ public class MemberServiceTest {
 
 	}
 	
+	@Test
+	public void testUpdateActivityAllScore() throws Exception {
+		
+		String memberId = "test@test.com";
+		memberService.calculateActivityScore(memberId);
+		
+	}
+	
 	//@Test
 	public void testUpdateMannerScore() throws Exception {
 		
