@@ -24,7 +24,9 @@ public interface MemberDAO {
 	
 	public void updateMember(Member member) throws Exception;
 	
-	//public int getReportCount(String memberId) throws Exception;
+	public void addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception;
 	
-	//public int getRegRestaurantCount(String memberId) throws Exception;
+	public List<Member> listActivityScore(String memberId) throws Exception;
+	
+	public int getRegRestaurantCount(String memberId) throws Exception;
 }

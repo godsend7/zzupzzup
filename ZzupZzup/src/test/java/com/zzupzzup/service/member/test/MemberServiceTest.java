@@ -210,7 +210,26 @@ public class MemberServiceTest {
 		//System.out.println(member);
 	}	//complete updateMember !
 	
+	//@Test
+	public void testAddActivityScore() throws Exception {
+		
+		String memberId = "hihi@a.com";
+		int accumulType = 1;
+		int accumulScore = 10;
+		
+		memberService.addActivityScore(memberId, accumulType, accumulScore);
+
+	}
+	
 	@Test
+	public void testListActivityScore() throws Exception {
+		
+		String memberId = "test@test.com";
+		memberService.listActivityScore(memberId).get("listMyActivityScore");
+
+	}
+	
+	//@Test
 	public void test() throws Exception {
 		
 		String password = "";
@@ -248,7 +267,6 @@ public class MemberServiceTest {
 		System.out.println("\n==========================\n");
 		
 		//활동점수 추가 및 계산
-		
 		
 	}
 }

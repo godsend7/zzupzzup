@@ -23,22 +23,25 @@
 		<result property="password" 			column="PASSWORD" 			jdbcType="VARCHAR" />
 		<result property="memberName" 			column="MEMBER_NAME" 		jdbcType="VARCHAR" />
 		<result property="memberPhone" 			column="MEMBER_PHONE" 		jdbcType="VARCHAR" />
-		<result property="loginType" 			column="LOGIN_TYPE" 		jdbcType="NUMERIC" />
+		<result property="loginType" 			column="LOGIN_TYPE" 		jdbcType="INTEGER" />
 		<result property="regDate" 				column="REG_DATE" 			jdbcType="DATE" />
 		<result property="ageRange" 			column="AGE_RANGE" 			jdbcType="VARCHAR"  />
-		<result property="birth" 				column="BIRTH_YEAR" 		jdbcType="NUMERIC" />
+		<result property="birth" 				column="BIRTH_YEAR" 		jdbcType="INTEGER" />
 		<result property="gender" 				column="GENDER" 			jdbcType="VARCHAR" />
 		<result property="profileImage" 		column="PROFILE_IMAGE" 		jdbcType="VARCHAR" />
 		<result property="nickname" 			column="NICKNAME" 			jdbcType="VARCHAR" />
 		<result property="statusMessage" 		column="STATUS_MESSAGE" 	jdbcType="VARCHAR" />
-		<result property="accumulAllScore" 		column="ACTIVITY_SCORE" 	jdbcType="NUMERIC" />
-		<result property="mannerAllScore" 		column="MANNER_SCORE" 		jdbcType="NUMERIC" />
+		<result property="accumulAllScore" 		column="ACTIVITY_SCORE" 	jdbcType="INTEGER" />
+		<result property="mannerAllScore" 		column="MANNER_SCORE" 		jdbcType="INTEGER" />
 		<result property="deleteDate" 			column="DELETE_DATE" 		jdbcType="DATE" />
-		<result property="deleteType" 			column="DELETE_TYPE" 		jdbcType="NUMERIC" />
+		<result property="deleteType" 			column="DELETE_TYPE" 		jdbcType="INTEGER" />
 		<result property="deleteReason" 		column="DELETE_DETAIL" 		jdbcType="VARCHAR" />
 		<result property="blacklistDate" 		column="BLACKLIST_REG_DATE" jdbcType="DATE" />
 		<result property="reportCount" 			column="COUNT_REPORT" 		jdbcType="INTEGER" />
 		<result property="regRestaurantCount" 	column="COUNT_RESTAURANT" 	jdbcType="INTEGER" />
+		<result property="accumulType" 			column="ACCUMULATE_TYPE" 	jdbcType="INTEGER" />
+		<result property="accumulScore" 		column="ACCUMULATE_SCORE" 	jdbcType="INTEGER" />
+		<result property="accumulDate" 			column="ACCUMULATE_DATE" 	jdbcType="INTEGER" />
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
@@ -160,5 +163,21 @@
 		</set>
 		WHERE MEMBER_ID = #{memberId} AND MEMBER_ROLE = 'owner'
 	</update> -->
+	
+	<!-- ACTIVITY_SCORE -->
+	<insert id="addActivityScore" parameterType="map">
+		INSERT INTO zzupzzup.ACTIVITY_SCORE(MEMBER_ID, ACCUMULATE_TYPE, ACCUMULATE_SCORE)
+		VALUES(#{memberId}, #{accumulType}, #{accumulScore})
+	</insert>
+	
+	<select id="listActivityScore" parameterType="string" resultMap="memberSelectMap">
+		SELECT ACCUMULATE_TYPE, ACCUMULATE_SCORE, ACCUMULATE_DATE
+		FROM zzupzzup_test.ACTIVITY_SCORE, zzupzzup_test.MEMBER
+		WHERE zzupzzup_test.ACTIVITY_SCORE.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID AND zzupzzup_test.MEMBER.MEMBER_ID = #{memberId}
+	</select>
+	
+	<update 	id="updateMemberScore"	parameterType="member">
+		
+	</update>
 	 
 </mapper>

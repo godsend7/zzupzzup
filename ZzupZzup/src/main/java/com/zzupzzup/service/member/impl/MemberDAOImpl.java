@@ -78,18 +78,28 @@ public class MemberDAOImpl implements MemberDAO{
 		sqlSession.update("MemberMapper.updateMember", member);
 	}
 	
-//	@Override
-//	public int getReportCount(String memberId) throws Exception {
-//		// TODO Auto-generated method stub
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("memberId", memberId);
-//		return sqlSession.selectOne("MemberMapper.getReportCount",map);
-//	}
-//	
-//	@Override
-//	public int getRegRestaurantCount(String memberId) throws Exception {
-//		// TODO Auto-generated method stub
-//		return sqlSession.selectOne("MemberMapper.getRegRestaurantCount",memberId);
-//	}
+	@Override
+	public void addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("accumulType", accumulType);
+		map.put("accumulScore", accumulScore);
+		
+		sqlSession.insert("MemberMapper.addActivityScore",map);
+	}
+	
+	@Override
+	public List<Member> listActivityScore(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		List<Member> list = sqlSession.selectList("MemberMapper.listActivityScore",memberId);
+		return list;
+	}
+	
+	@Override
+	public int getRegRestaurantCount(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("MemberMapper.getRegRestaurantCount",memberId);
+	}
 
 }

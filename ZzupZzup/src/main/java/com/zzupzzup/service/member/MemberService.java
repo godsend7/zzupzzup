@@ -42,7 +42,9 @@ public interface MemberService {
 	
 	//public void blacklistUser() throws Exception;
 	
-	public void addActivityScore() throws Exception;
+	public void addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception;
+	
+	public Map<String, Object> listActivityScore(String memberId) throws Exception;
 	
 	public void calculateActivityScore() throws Exception;
 	

@@ -159,9 +159,17 @@ public class MemberServiceImpl implements MemberService{
 //	}
 
 	@Override
-	public void addActivityScore() throws Exception {
+	public void addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception {
 		// TODO Auto-generated method stub
-		
+		memberDao.addActivityScore(memberId, accumulType, accumulScore);
+	}
+	
+	@Override
+	public Map<String, Object> listActivityScore(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("listMyActivityScore", memberDao.listActivityScore(memberId));
+		return map;
 	}
 
 	@Override
