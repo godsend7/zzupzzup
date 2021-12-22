@@ -113,7 +113,7 @@
 	
 	
 	<!-- SQL : UPDATE -->
-	<update 	id="updateRestaurant"	parameterType="restaurant" useGeneratedKeys="true" keyProperty="restaurantNo">
+	<update 	id="updateRestaurant"	parameterType="restaurant" >
 		UPDATE RESTAURANT
 		<set>
 			OWNER_IMAGE = #{ownerImage},
@@ -154,8 +154,69 @@
 	<!-- SQL : SELECT LIST -->
 	<select id="listRestaurant" parameterType="search" resultMap="restaurantSelectMap">
 		SELECT *
+		FROM (SELECT *
+			  FROM RESTAURANT AS rt
+			  ORDER BY rt.RESTAURANT_NO LIMIT #{startRowNum}, #{pageSize}) AS rt
+		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
+						  FROM IMAGE) AS img
+						  ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
+	</select>
+	
+	
+	<!-- SQL : SELECT LIST -->
+	<select id="listMyRestaurant" parameterType="map" resultMap="restaurantSelectMap">
+		SELECT *
+		FROM (SELECT *
+			  FROM RESTAURANT AS rt
+			  <if test="memberId != null">
+			  	<bind name="id" value="'%'+memberId+'%'"/>
+			  	WHERE rt.MEMBER_ID LIKE #{id}
+			  </if>
+			  ORDER BY rt.RESTAURANT_NO LIMIT #{search.startRowNum}, #{search.pageSize}) AS rt
+		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
+						  FROM IMAGE) AS img
+						  ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
+	</select>
+	
+	
+	<!-- SQL : DELECT -->
+	<delete id="deleteRestaurant" parameterType="restaurant" >
+		DELETE FROM IMAGE WHERE RESTAURANT_NO = #{restaurantNo};
+		
+		DELETE FROM RESTAURANT_TIME WHERE RESTAURANT_NO = #{restaurantNo};
+		
+		DELETE FROM MENU WHERE RESTAURANT_NO = #{restaurantNo};
+		
+		DELETE FROM RESTAURANT WHERE RESTAURANT_NO = #{restaurantNo};
+	</delete>
+	
+	
+	<!-- SQL : INSERT -->
+	<insert id="checkCallDibs" parameterType="restaurant">
+		INSERT
+		INTO MARK(MEMBER_ID, RESTAURANT_NO)
+		VALUES(#{memberId}, #{restaurantNo});
+	</insert>
+	
+	
+	<!-- SQL : DELETE -->
+	<delete id="cancelCallDibs" parameterType="restaurant">
+		DELETE
+		FROM MARK
+		WHERE MEMBER_ID = #{memberId} AND RESTAURANT_NO = #{restaurantNo};
+	</delete>
+	
+	
+	<!-- SQL : SELECT -->
+	<select id="listCallDibs" parameterType="map" resultMap="restaurantSelectMap">
+		
+	</select>
+	
+	
+	<!-- SQL : SELECT -->
+	<select id="getTotalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
 		FROM RESTAURANT
-		WHERE 
 	</select>
 	
 	

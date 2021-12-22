@@ -41,10 +41,17 @@ public class Member {
 	private int deleteType;						//탈퇴 유형(서비스 이용 X, 타 사이트 이용, 탈퇴 후 재가입, 기타)
 	private int regRestaurantCount;				//업주의 경우에 상세조회에서 표시될 음식점 수
 	private boolean regBlacklist;				//블랙리스트 등록 여부 확인
+	private int accumulType;					//활동점수 적립 유형
 
 	//*Constructor
 	public Member() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public Member(String memberId, String nickname) {
+		// TODO Auto-generated constructor stub
+		this.memberId = memberId;
+		this.nickname = nickname;
 	}
 
 	//*Method
@@ -317,12 +324,28 @@ public class Member {
 		this.regBlacklist = regBlacklist;
 	}
 
+	public int getRegRestaurantCount() {
+		return regRestaurantCount;
+	}
+
+	public void setRegRestaurantCount(int regRestaurantCount) {
+		this.regRestaurantCount = regRestaurantCount;
+	}
+
+	public int getAccumulType() {
+		return accumulType;
+	}
+
+	public void setAccumulType(int accumulType) {
+		this.accumulType = accumulType;
+	}
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "Member [ memberId : "+memberId+", password : "+password+", nickname : "+nickname+", memberRole : "+memberRole+", memberName : "+memberName+", memberPhone : "+memberPhone+", ageRange : "+ageRange+", gender : "+gender+", birth : "+birth+", profileImage : "+profileImage+", statusMessage : "+statusMessage+", pushNickname : "+pushNickname
 				+", deleteReason : "+deleteReason+", accumulDate : "+accumulDate+", accumulContents : "+accumulContents+", accumulScore : "+accumulScore+", mannerScore : "+mannerScore+", memberRank : "+memberRank+", accumulAllScore : "+accumulAllScore+", mannerAllScore : "+mannerAllScore+", regDate : "+regDate+", eliminated : "+eliminated+", deleteDate : "+deleteDate
-				+", blacklistDate : "+blacklistDate+", reportCount : "+reportCount+", certificatedNum : "+certificatedNum+", loginType : "+loginType+", deleteType : "+deleteType+", regRestaurantCount : "+regRestaurantCount+", regBlacklist : "+regBlacklist+" ]";
+				+", blacklistDate : "+blacklistDate+", reportCount : "+reportCount+", certificatedNum : "+certificatedNum+", loginType : "+loginType+", deleteType : "+deleteType+", regRestaurantCount : "+regRestaurantCount+", regBlacklist : "+regBlacklist+", accumulType : "+accumulType+" ]";
 	}
 	
 }

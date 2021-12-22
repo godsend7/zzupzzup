@@ -33,11 +33,11 @@ public class MemberDAOImpl implements MemberDAO{
 		sqlSession.insert("MemberMapper.addMember", member);
 	}
 
-	@Override
-	public void login() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void login() throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public void kakaoLogin() throws Exception {
@@ -52,9 +52,9 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 	
 	@Override
-	public Member getMember(String memberId) throws Exception {
+	public Member getMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne("MemberMapper.getMember", memberId);
+		return sqlSession.selectOne("MemberMapper.getMember", member);
 	}
 	
 	@Override
@@ -65,23 +65,9 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 
 	@Override
-	public List<Member> listUser(Search search) throws Exception {
+	public List<Member> listMember(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
-		List<Member> list = sqlSession.selectList("MemberMapper.listUser",search);
-//		for(int i = 0; i < list.size(); i++) {
-//			list.get(i).setReportCount(sqlSession.selectOne("MemberMapper.getReportCount", search));
-//		}
-		
-		return list;
-	}
-	
-	@Override
-	public List<Member> listOwner(Search search) throws Exception {
-		// TODO Auto-generated method stub
-		List<Member> list = sqlSession.selectList("MemberMapper.listOwner",search);
-//		for(int i = 0; i < list.size(); i++) {
-//			list.get(i).setReportCount(sqlSession.selectOne("MemberMapper.getReportCount", search));
-//		}
+		List<Member> list = sqlSession.selectList("MemberMapper.listMember",map);
 		
 		return list;
 	}
@@ -92,18 +78,38 @@ public class MemberDAOImpl implements MemberDAO{
 		sqlSession.update("MemberMapper.updateMember", member);
 	}
 	
-//	@Override
-//	public int getReportCount(String memberId) throws Exception {
-//		// TODO Auto-generated method stub
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("memberId", memberId);
-//		return sqlSession.selectOne("MemberMapper.getReportCount",map);
-//	}
-//	
-//	@Override
-//	public int getRegRestaurantCount(String memberId) throws Exception {
-//		// TODO Auto-generated method stub
-//		return sqlSession.selectOne("MemberMapper.getRegRestaurantCount",memberId);
-//	}
+	@Override
+	public void addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("accumulType", accumulType);
+		map.put("accumulScore", accumulScore);
+		
+		sqlSession.insert("MemberMapper.addActivityScore",map);
+	}
+	
+	@Override
+	public List<Member> listActivityScore(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		List<Member> list = sqlSession.selectList("MemberMapper.listActivityScore",memberId);
+		return list;
+	}
+	
+	@Override
+	public void updateActivityAllScore(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		sqlSession.update("MemberMapper.updateActivityAllScore", memberId);
+	}
+	
+	@Override
+	public void updateMannerScore(String memberId, int accumulScore) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("accumulScore", accumulScore);
+		
+		sqlSession.update("MemberMapper.updateMannerScore", map);
+	}
 
 }

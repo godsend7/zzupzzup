@@ -19,6 +19,7 @@
 		<typeAlias alias="community" type="com.zzupzzup.service.domain.Community"/>
 		<typeAlias alias="alarm" type="com.zzupzzup.service.domain.Alarm" />
 		<typeAlias alias="review" type="com.zzupzzup.service.domain.Review" />
+		<typeAlias alias="hashtag" type="com.zzupzzup.service.domain.HashTag" />
 		<typeAlias alias="report" type="com.zzupzzup.service.domain.Report" />
 		<typeAlias alias="reservation" type="com.zzupzzup.service.domain.Reservation" />
 		<typeAlias alias="order" type="com.zzupzzup.service.domain.Order" />

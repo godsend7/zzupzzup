@@ -51,22 +51,36 @@ public class MemberServiceImpl implements MemberService{
 		
 	}
 
+//	@Override
+//	public void selectMemberRole() throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
+
 	@Override
-	public void selectMemberRole() throws Exception {
+	public boolean checkIdDuplication(String memberId) throws Exception {
 		// TODO Auto-generated method stub
+		boolean checkId = true;
+		Member member = new Member(memberId, null);
+		memberDao.getMember(member);
+		if (member.getMemberId() == memberId) {
+			checkId = false;
+		}
 		
+		return checkId;
 	}
 
 	@Override
-	public void checkIdDuplication() throws Exception {
+	public boolean checkNicknameDuplication(String nickname) throws Exception {
 		// TODO Auto-generated method stub
+		boolean checkNickname = true;
+		Member member = new Member(null, nickname);
+		memberDao.getMember(member);
+		if (member.getNickname() == nickname) {
+			checkNickname = false;
+		}
 		
-	}
-
-	@Override
-	public void checkNicknameDuplication() throws Exception {
-		// TODO Auto-generated method stub
-		
+		return checkNickname;
 	}
 
 	@Override
@@ -76,15 +90,19 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void sendCertificatedNum() throws Exception {
+	public String sendCertificatedNum() throws Exception {
 		// TODO Auto-generated method stub
-		
+		String certificatedNum = null;
+		return certificatedNum;
 	}
 
 	@Override
-	public void checkCertificatedNum() throws Exception {
+	public boolean checkCertificatedNum(String certificatedNum) throws Exception {
 		// TODO Auto-generated method stub
-		
+		if(certificatedNum == sendCertificatedNum()) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -94,15 +112,21 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void confirmPwd() throws Exception {
+	public boolean confirmPwd(String password) throws Exception {
 		// TODO Auto-generated method stub
+		boolean checkPWD = false;
+		String inputPWD = null;
+		if(password == inputPWD) {
+			checkPWD = true;
+		}
 		
+		return checkPWD;
 	}
 	
 	@Override
-	public Member getMember(String memberId) throws Exception {
+	public Member getMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
-		return memberDao.getMember(memberId);
+		return memberDao.getMember(member);
 	}
 
 	@Override
@@ -111,40 +135,47 @@ public class MemberServiceImpl implements MemberService{
 		
 	}
 	
-	@Override
-	public Member getOwner(String memberId) throws Exception {
-		// TODO Auto-generated method stub
-		return memberDao.getOwner(memberId);
-	}
+//	@Override
+//	public Member getOwner(String memberId) throws Exception {
+//		// TODO Auto-generated method stub
+//		return memberDao.getOwner(memberId);
+//	}
 
 	@Override
-	public List<Member> listUser(Search search) throws Exception {
+	public Map<String, Object> listMember(Search search, Member member) throws Exception {
 		// TODO Auto-generated method stub	
-		return memberDao.listUser(search);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("member", member);
+		map.put("listMember", memberDao.listMember(map));
+		
+		return map;
+	}
+	
+//	@Override
+//	public void blacklistUser() throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
+
+	@Override
+	public void addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception {
+		// TODO Auto-generated method stub
+		memberDao.addActivityScore(memberId, accumulType, accumulScore);
 	}
 	
 	@Override
-	public List<Member> listOwner(Search search) throws Exception {
-		// TODO Auto-generated method stub	
-		return memberDao.listOwner(search);
+	public Map<String, Object> listActivityScore(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("listMyActivityScore", memberDao.listActivityScore(memberId));
+		return map;
 	}
 
 	@Override
-	public void blacklistUser() throws Exception {
+	public void calculateActivityScore(String memberId) throws Exception {
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addActivityScore() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void calculateActivityScore() throws Exception {
-		// TODO Auto-generated method stub
-		
+		memberDao.updateActivityAllScore(memberId);
 	}
 
 	@Override
@@ -154,9 +185,9 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void calculateMannerScore() throws Exception {
+	public void calculateMannerScore(String memberId, int accumulScore) throws Exception {
 		// TODO Auto-generated method stub
-		
+		memberDao.updateMannerScore(memberId, accumulScore);
 	}
 
 	@Override

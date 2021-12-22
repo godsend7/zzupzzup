@@ -23,22 +23,25 @@
 		<result property="password" 			column="PASSWORD" 			jdbcType="VARCHAR" />
 		<result property="memberName" 			column="MEMBER_NAME" 		jdbcType="VARCHAR" />
 		<result property="memberPhone" 			column="MEMBER_PHONE" 		jdbcType="VARCHAR" />
-		<result property="loginType" 			column="LOGIN_TYPE" 		jdbcType="NUMERIC" />
+		<result property="loginType" 			column="LOGIN_TYPE" 		jdbcType="INTEGER" />
 		<result property="regDate" 				column="REG_DATE" 			jdbcType="DATE" />
 		<result property="ageRange" 			column="AGE_RANGE" 			jdbcType="VARCHAR"  />
-		<result property="birth" 				column="BIRTH_YEAR" 		jdbcType="NUMERIC" />
+		<result property="birth" 				column="BIRTH_YEAR" 		jdbcType="INTEGER" />
 		<result property="gender" 				column="GENDER" 			jdbcType="VARCHAR" />
 		<result property="profileImage" 		column="PROFILE_IMAGE" 		jdbcType="VARCHAR" />
 		<result property="nickname" 			column="NICKNAME" 			jdbcType="VARCHAR" />
 		<result property="statusMessage" 		column="STATUS_MESSAGE" 	jdbcType="VARCHAR" />
-		<result property="accumulAllScore" 		column="ACTIVITY_SCORE" 	jdbcType="NUMERIC" />
-		<result property="mannerAllScore" 		column="MANNER_SCORE" 		jdbcType="NUMERIC" />
+		<result property="accumulAllScore" 		column="ACTIVITY_SCORE" 	jdbcType="INTEGER" />
+		<result property="mannerAllScore" 		column="MANNER_SCORE" 		jdbcType="INTEGER" />
 		<result property="deleteDate" 			column="DELETE_DATE" 		jdbcType="DATE" />
-		<result property="deleteType" 			column="DELETE_TYPE" 		jdbcType="NUMERIC" />
+		<result property="deleteType" 			column="DELETE_TYPE" 		jdbcType="INTEGER" />
 		<result property="deleteReason" 		column="DELETE_DETAIL" 		jdbcType="VARCHAR" />
 		<result property="blacklistDate" 		column="BLACKLIST_REG_DATE" jdbcType="DATE" />
 		<result property="reportCount" 			column="COUNT_REPORT" 		jdbcType="INTEGER" />
 		<result property="regRestaurantCount" 	column="COUNT_RESTAURANT" 	jdbcType="INTEGER" />
+		<result property="accumulType" 			column="ACCUMULATE_TYPE" 	jdbcType="INTEGER" />
+		<result property="accumulScore" 		column="ACCUMULATE_SCORE" 	jdbcType="INTEGER" />
+		<result property="accumulDate" 			column="ACCUMULATE_DATE" 	jdbcType="INTEGER" />
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
@@ -49,11 +52,11 @@
 	</insert>
 	
 	<!-- SQL : SELECT -->
-	<select 	id="getMember"	parameterType="string" resultMap="memberSelectMap">
+	<select 	id="getMember"	parameterType="member" resultMap="memberSelectMap">
 		SELECT
 		MEMBER_ID, MEMBER_NAME, MEMBER_ROLE, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
 		FROM zzupzzup_test.MEMBER
-		WHERE MEMBER_ID = #{memberId};
+		WHERE MEMBER_ID = #{memberId} OR NICKNAME = #{nickname};
 	</select>
 	
 	<select 	id="getOwner"	parameterType="string" resultMap="memberSelectMap">
@@ -66,11 +69,14 @@
 	
 	<!-- SQL : UPDATE -->
 	<update 	id="updateMember"	parameterType="member">
-		UPDATE zzupzzup_test.MEMBER
+		UPDATE zzupzzup.MEMBER
 		<set>
 			PASSWORD = #{password},
 			MEMBER_PHONE = #{memberPhone},
-			PROFILE_IMAGE = #{profileImage}
+			PROFILE_IMAGE = #{profileImage},
+			DELETE_DATE = #{},
+			DELETE_TYPE = #{deleteType},
+			DELETE_DETAIL = #{deleteReason}
 			<if test="memberRole == 'user'">
 			, STATUS_MESSAGE = #{statusMessage},
 			BLACKLIST_REG_DATE =
@@ -86,10 +92,12 @@
 	</update>
 
 	<!-- SQL : SELECT LIST -->
-	<select 	id="listUser"	parameterType="search" resultMap="memberSelectMap">
+	<select 	id="listMember"	parameterType="map" resultMap="memberSelectMap">
 		SELECT MEMBER_LIST.*
 		FROM (
-			SELECT MEMBER_ROLE, NICKNAME, COUNT_REP.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+		
+			<if test='member.memberRole.equals("user")'>
+				SELECT MEMBER_ROLE, NICKNAME, COUNT_REP.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
 			FROM zzupzzup.MEMBER
 		    RIGHT JOIN (
 					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
@@ -98,12 +106,27 @@
 					GROUP BY zzupzzup.MEMBER.MEMBER_ID
 				) COUNT_REP
 			ON COUNT_REP.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+			</if>
+			
+		
+		<if test='member.memberRole == "owner"'>
+			SELECT MEMBER_ROLE, NICKNAME, COUNT_RES.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+			FROM zzupzzup.MEMBER
+		    RIGHT JOIN (
+					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(RESTAURANT_NAME) AS COUNT_RESTAURANT
+					FROM zzupzzup.RESTAURANT RIGHT JOIN zzupzzup.MEMBER
+					ON zzupzzup.RESTAURANT.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+					GROUP BY zzupzzup.MEMBER.MEMBER_ID
+				) COUNT_RES
+			ON COUNT_RES.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+		</if>
+		
 		) MEMBER_LIST
-		ORDER BY member_id LIMIT #{startRowNum}, #{pageSize}
+		ORDER BY MEMBER_LIST.MEMBER_ID LIMIT #{search.startRowNum}, #{search.pageSize}
 	</select>
 	
 	<select 	id="listOwner"	parameterType="search" resultMap="memberSelectMap">
-		SELECT @ROWNUM := @ROWNUM + 1 AS NO, MEMBER_LIST.*
+		SELECT MEMBER_LIST.*
 		FROM (
 			SELECT MEMBER_ROLE, NICKNAME, COUNT_RES.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
 			FROM zzupzzup_test.MEMBER
@@ -118,7 +141,7 @@
 		WHERE (@ROWNUM:=0) = 0
 	</select>
 	
-	<!-- SQL : SELECT reportCount -->
+	<!-- 
 	<select id="getReportCount" parameterType="string" resultType="int">
 		SELECT COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
 		FROM zzupzzup_test.REPORT, zzupzzup_test.MEMBER
@@ -131,7 +154,7 @@
 		WHERE zzupzzup_test.MEMBER.MEMBER_ROLE = 'owner' AND zzupzzup_test.RESTAURANT.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID AND zzupzzup_test.MEMBER.MEMBER_ID = #{memberId}
 	</select>
 
-	<!-- <update 	id="updateOwner"	parameterType="member">
+	<update 	id="updateOwner"	parameterType="member">
 		UPDATE zzupzzup_test.MEMBER
 		<set>
 			PASSWORD = #{password},
@@ -140,5 +163,35 @@
 		</set>
 		WHERE MEMBER_ID = #{memberId} AND MEMBER_ROLE = 'owner'
 	</update> -->
+	
+	<!-- ACTIVITY_SCORE -->
+	<insert id="addActivityScore" parameterType="map">
+		INSERT INTO zzupzzup.ACTIVITY_SCORE(MEMBER_ID, ACCUMULATE_TYPE, ACCUMULATE_SCORE)
+		VALUES(#{memberId}, #{accumulType}, #{accumulScore})
+	</insert>
+	
+	<select id="listActivityScore" parameterType="string" resultMap="memberSelectMap">
+		SELECT ACCUMULATE_TYPE, ACCUMULATE_SCORE, ACCUMULATE_DATE
+		FROM zzupzzup.ACTIVITY_SCORE, zzupzzup.MEMBER
+		WHERE zzupzzup.ACTIVITY_SCORE.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID AND zzupzzup.MEMBER.MEMBER_ID = #{memberId}
+	</select>
+	
+	<update 	id="updateActivityAllScore"	parameterType="string">
+		UPDATE zzupzzup_test.MEMBER AS MEMBER
+		INNER JOIN (
+		SELECT zzupzzup_test.MEMBER.MEMBER_ID, SUM(ACCUMULATE_SCORE) AS SCORE
+		FROM zzupzzup_test.ACTIVITY_SCORE, zzupzzup_test.MEMBER
+		GROUP BY MEMBER.MEMBER_ID
+		) ACCUMULATE_ALL_SCORE
+		ON zzupzzup_test.MEMBER.MEMBER_ID = ACCUMULATE_ALL_SCORE.MEMBER_ID
+		SET MEMBER.ACTIVITY_SCORE = ACCUMULATE_ALL_SCORE.SCORE
+		WHERE zzupzzup_test.MEMBER.MEMBER_ID = #{memberId};
+	</update>
+	
 	 
+	<!-- MANNER_SCORE -->
+	<update id="updateMannerScore" parameterType="map">
+		UPDATE zzupzzup_test.MEMBER
+		SET MANNER_SCORE = MANNER_SCORE + #{accumulScore} WHERE MEMBER_ID = #{memberId};
+	</update>
 </mapper>

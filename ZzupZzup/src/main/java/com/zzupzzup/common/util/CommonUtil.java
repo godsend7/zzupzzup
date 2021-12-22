@@ -25,6 +25,8 @@ public class CommonUtil {
 	private static final String DELETE_TYPE_2 = "기존의 타 사이트를 이용하고 있어서";
 	private static final String DELETE_TYPE_3 = "탈퇴 후 재가입을 위해서";
 	
+	
+	
 	public static String returnAgeRange(String birth) {
 		
 		String ageRange = null;
@@ -91,8 +93,72 @@ public class CommonUtil {
 		}
 	}
 	
-	///Constructor
+	public static String returnReportData(int reportCategory, int reportType) {
+		
+		String data = "";
+		
+		if (reportCategory == 1) {
+			switch (reportType) {
+				case 1:
+					data = "허위 광고성 채팅방 입니다.";
+					break;
+				case 2:
+					data = "부적절한 언행을 사용하였습니다.";
+					break;
+			}
+		} else if(reportCategory == 2) {
+			switch (reportType) {
+				case 1:
+					data = "돈을 지불하지 않았습니다.";
+					break;
+				case 2:
+					data = "부적절한 언행을 사용하였습니다.";
+					break;
+				case 3:
+					data = "약속에 불참하였습니다.";
+					break;
+			}
+		} else if(reportCategory == 3) {
+			switch (reportType) {
+				case 1:
+					data = "허위 광고성 리뷰입니다.";
+					break;
+				case 2:
+					data = "부적절한 언어를 사용하였습니다.";
+					break;
+				case 3:
+					data = "해당음식점과 일치하지 않는 내용입니다.";
+					break;
+			}
+		} else if(reportCategory == 4) {
+			switch (reportType) {
+				case 1:
+					data = "허위 광고성 게시물입니다.";
+					break;
+				case 2:
+					data = "부적절한 언어를 사용하였습니다.";
+					break;
+				case 3:
+					data = "해당 음식점과 일치하는 영수증이 아닙니다.";
+					break;
+			}
+		} else if(reportCategory == 5) {
+			switch (reportType) {
+				case 1:
+					data = "일치하지 않는 정보를 제공하고 있습니다.";
+					break;
+				case 2:
+					data = "영업시간이 다릅니다.";
+					break;
+				case 3:
+					data = "폐점된 가게입니다.";
+					break;
+			}
+		}
+		return data;
+	}
 	
+	//======================================================================================================================
 	
 	///Method
 	public static String null2str(String org, String converted) {
@@ -142,15 +208,6 @@ public class CommonUtil {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			return sdf.format(new Date(date.getTime()));
 		}
-	}
-
-	public static String toSsnStr(String ssnStr) {
-		if (ssnStr == null)
-			return "";
-		else if (ssnStr.length() != 13)
-			return ssnStr;
-		else
-			return ssnStr.substring(0, 6) + "-" + ssnStr.substring(6, 13);
 	}
 
 	public static String toAmountStr(String amountStr) {
