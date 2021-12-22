@@ -17,6 +17,7 @@ public class Review {
 	private List<String> hashTag;
 	private Date reviewRegDate;
 	private int likeCount;
+	private int reportCount;
 	private double avgScope;
 	private double avgTotalScope;
 	private boolean reviewShowStatus;
@@ -122,6 +123,14 @@ public class Review {
 	public void setLikeCount(int likeCount) {
 		this.likeCount = likeCount;
 	}
+	
+	public int getReportCount() {
+		return reportCount;
+	}
+
+	public void setReportCount(int reportCount) {
+		this.reportCount = reportCount;
+	}
 
 	public double getAvgScope() {
 		return avgScope;
@@ -152,7 +161,8 @@ public class Review {
 		return "Review [member=" + member + ", reservation=" + reservation + ", reviewNo=" + reviewNo + ", scopeClean="
 				+ scopeClean + ", scopeTaste=" + scopeTaste + ", scopeKind=" + scopeKind + ", reviewImage="
 				+ reviewImage + ", reviewDetail=" + reviewDetail + ", hashTagNo=" + hashTagNo + ", hashTag=" + hashTag
-				+ ", reviewRegDate=" + reviewRegDate + ", likeCount=" + likeCount + ", avgScope=" + avgScope
-				+ ", avgTotalScope=" + avgTotalScope + ", reviewShowStatus=" + reviewShowStatus + "]";
+				+ ", reviewRegDate=" + reviewRegDate + ", likeCount=" + likeCount + ", reportCount=" + reportCount
+				+ ", avgScope=" + avgScope + ", avgTotalScope=" + avgTotalScope + ", reviewShowStatus="
+				+ reviewShowStatus + "]";
 	}
 }

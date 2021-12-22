@@ -20,6 +20,7 @@ import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.Review;
+import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.reservation.ReservationService;
 import com.zzupzzup.service.review.ReviewService;
 
@@ -41,6 +42,10 @@ public class ReviewServiceTest {
 	@Autowired
 	@Qualifier("reservationServiceImpl")
 	private ReservationService reservationService;
+	
+	@Autowired
+	@Qualifier("memberServiceImpl")
+	private MemberService memberService;
 	
 	@Value("#{commonProperties['pageUnit']?: 3}")
 	int pageUnit;
@@ -84,6 +89,7 @@ public class ReviewServiceTest {
 		
 		if(reviewService.addReview(review) == 1) {
 			System.out.println("review insert success " + review.getAvgScope());
+			memberService.addActivityScore();
 		}
 	}
 	
@@ -105,7 +111,7 @@ public class ReviewServiceTest {
 		
 		Review review = new Review();
 		
-		review.setReviewNo(5);
+		review.setReviewNo(3);
 		review.setReviewDetail("최고에요~~");
 		review.setHashTagNo(hashTag);
 		review.setReviewImage(reviewImage);
@@ -126,14 +132,14 @@ public class ReviewServiceTest {
 		
 		Review review = new Review();
 		
-		review.setReviewNo(8);
+		review.setReviewNo(5);
 		
 		if(reviewService.deleteReview(review.getReviewNo()) == 1) {
 			System.out.println("review delete success");
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testGetReview() throws Exception {
 		
 		Review review = new Review();
@@ -149,17 +155,17 @@ public class ReviewServiceTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testListReview() throws Exception {
 		Search search = new Search();
 		
-		search.setCurrentPage(3);		
+		search.setCurrentPage(1);		
 		search.setPageSize(pageSize);
 		
 		//해당 음식점의 리뷰 출력
 		String restaurantNo = null;
 		//내가 작성한 리뷰 출력 
-		String memberId = null;
+		String memberId = "hihi@a.com";
 		
 		Map<String, Object> map = reviewService.listReview(search, restaurantNo, memberId);
 		
@@ -169,6 +175,7 @@ public class ReviewServiceTest {
 		
 		for (Review r : list) {
 			System.out.println(r.getReviewNo());
+			System.out.println(r);
 		}
 		
 		 Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
@@ -178,8 +185,11 @@ public class ReviewServiceTest {
 	//@Test
 	public void testListMyLikeReview() throws Exception {
 		Search search = new Search();
-			
-		String memberId = "user";
+		
+		search.setCurrentPage(1);		
+		search.setPageSize(pageSize);
+		
+		String memberId = "user02@zzupzzup.com";
 			
 		Map<String, Object> map = reviewService.listMyLikeReview(search, memberId);
 			
