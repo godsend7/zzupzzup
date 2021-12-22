@@ -13,12 +13,12 @@ import com.zzupzzup.service.domain.Notice;
 import com.zzupzzup.service.notice.NoticeService;
 import com.zzupzzup.service.notice.NoticeDAO;
 
-	@Service("noticeServiceImpl")
+	//@Service("noticeServiceImpl")
 	public class NoticeServiceImpl implements NoticeService{
 		
 		///Field
-		@Autowired
-		@Qualifier("noticeDaoImpl")
+		//@Autowired
+		//@Qualifier("noticeDaoImpl")
 		private NoticeDAO noticeDao;
 		public void setNoticeDAO(NoticeDAO noticeDAO) {
 			this.noticeDao = noticeDAO;

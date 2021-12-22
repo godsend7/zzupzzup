@@ -11,12 +11,12 @@ public class Chat {
 	///Field
 	private int chatNo; //채팅방no
 	private String chatTitle; //채팅방 제목
-	private String chatContents; //채팅방 대화 내용
-	private Date chatTime; //채팅방 대화 시간
+	//private String chatContents; //채팅방 대화 내용
+	//private Date chatTime; //채팅방 대화 시간
 	private String chatImage; //채팅방 대표 이미지
 	private String chatText; //채팅방 소개글
 	private Date chatRegDate; //채팅방 개설일
-	private List<ChatAge> chatAge; //채팅방 참여가능 연령대 리스트
+	private List<Integer> chatAge; //채팅방 참여가능 연령대 리스트
 	private int chatGender; //채팅방 참여가능 성별
 	private int chatMemberCount; //채팅방 참여 인원수
 	private int chatState; //채팅방 모집상태
@@ -47,21 +47,16 @@ public class Chat {
 		this.chatTitle = chatTitle;
 	}
 
-	public String getChatContents() {
-		return chatContents;
-	}
-
-	public void setChatContents(String chatContents) {
-		this.chatContents = chatContents;
-	}
-
-	public Date getChatTime() {
-		return chatTime;
-	}
-
-	public void setChatTime(Date chatTime) {
-		this.chatTime = chatTime;
-	}
+	/*
+	 * public String getChatContents() { return chatContents; }
+	 * 
+	 * public void setChatContents(String chatContents) { this.chatContents =
+	 * chatContents; }
+	 * 
+	 * public Date getChatTime() { return chatTime; }
+	 * 
+	 * public void setChatTime(Date chatTime) { this.chatTime = chatTime; }
+	 */
 
 	public String getChatImage() {
 		return chatImage;
@@ -87,11 +82,11 @@ public class Chat {
 		this.chatRegDate = chatRegDate;
 	}
 
-	public List<ChatAge> getChatAge() {
+	public List<Integer> getChatAge() {
 		return chatAge;
 	}
 
-	public void setChatAge(List<ChatAge> chatAge) {
+	public void setChatAge(List<Integer> chatAge) {
 		this.chatAge = chatAge;
 	}
 
@@ -158,10 +153,16 @@ public class Chat {
 	public void setReportCount(int reportCount) {
 		this.reportCount = reportCount;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Chat : [chatNo] "+chatNo+" [chatTitle] "+chatTitle+" [chatContents] "+chatContents+" [chatTime] "+ chatTime+" [chatImage] "+chatImage+" [chatText] "+chatText+" [chatRegDate] "+chatRegDate+" [chatAge] "+chatAge+" [chatGender] "+chatGender+" [chatMemberCount] "+chatMemberCount+" [chatState] "+chatState+" [chatLeaderId] "+chatLeaderId+" [chatShowStatus] "+chatShowStatus+" [chatRestaurant] "+chatRestaurant+" [chatMember] "+chatMember+" [reportCount] "+reportCount;
+		return "Chat [chatNo=" + chatNo + ", chatTitle=" + chatTitle + ", chatImage=" + chatImage + ", chatText="
+				+ chatText + ", chatRegDate=" + chatRegDate + ", chatAge=" + chatAge + ", chatGender=" + chatGender
+				+ ", chatMemberCount=" + chatMemberCount + ", chatState=" + chatState + ", chatLeaderId=" + chatLeaderId
+				+ ", chatShowStatus=" + chatShowStatus + ", chatRestaurant=" + chatRestaurant + ", chatMember="
+				+ chatMember + ", reportCount=" + reportCount + "]";
 	}
+	
+	
 
 }
