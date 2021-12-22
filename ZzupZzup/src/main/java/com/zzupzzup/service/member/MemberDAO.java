@@ -28,5 +28,7 @@ public interface MemberDAO {
 	
 	public List<Member> listActivityScore(String memberId) throws Exception;
 	
-	public int getRegRestaurantCount(String memberId) throws Exception;
+	public void updateActivityAllScore(String memberId) throws Exception;
+	
+	public void updateMannerScore(String memberId, int accumulScore) throws Exception;
 }

@@ -46,11 +46,11 @@ public interface MemberService {
 	
 	public Map<String, Object> listActivityScore(String memberId) throws Exception;
 	
-	public void calculateActivityScore() throws Exception;
+	public void calculateActivityScore(String memberId) throws Exception;
 	
 	public void addMannerScore() throws Exception;
 	
-	public void calculateMannerScore() throws Exception;
+	public void calculateMannerScore(String memberId, int accumulScore) throws Exception;
 	
 	public void logout() throws Exception;
 
