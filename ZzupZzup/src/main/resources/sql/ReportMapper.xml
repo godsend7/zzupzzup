@@ -72,7 +72,7 @@
 	 	WHERE report_category = #{value}
 	 </select>
 	 
-	 <select id="getReportCount" parameterType="map" resultType="int">
+	<!--  <select id="getReportCount" parameterType="map" resultType="int">
 	 	SELECT COUNT(*)
 	 	FROM REPORT
 	 	WHERE report_category = #{category}
@@ -94,6 +94,6 @@
 	 		</when>
 	 	</choose>
 	
-	 </select>
+	 </select> -->
 	 	 
 </mapper>

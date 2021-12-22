@@ -85,10 +85,10 @@ public class ReportServiceTest {
 	}
 	
 	//@Test
-	public void testReportCount() throws Exception {
-		Report report = new Report();
-		report.setReportNo(3);
-		
-		reportService.checkReport(3);
-	}
+//	public void testReportCount() throws Exception {
+//		Report report = new Report();
+//		report.setReportNo(3);
+//		
+//		reportService.checkReport(3);
+//	}
 }

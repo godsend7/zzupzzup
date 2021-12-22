@@ -49,14 +49,14 @@ public class ReportServiceImpl implements ReportService {
 		return map;
 	}
 
-	@Override
-	public int getReportCount(String report, int category) throws Exception {
-		// TODO Auto-generated method stub
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("report", report);
-		map.put("category", category);
-		
-		return reportDao.getReportCount(map);
-	}
+//	@Override
+//	public int getReportCount(String report, int category) throws Exception {
+//		// TODO Auto-generated method stub
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("report", report);
+//		map.put("category", category);
+//		
+//		return reportDao.getReportCount(map);
+//	}
 
 }

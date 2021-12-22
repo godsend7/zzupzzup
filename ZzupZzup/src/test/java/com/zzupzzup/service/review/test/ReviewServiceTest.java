@@ -54,7 +54,7 @@ public class ReviewServiceTest {
 	@Value("#{commonProperties['pageSize']?: 2}")
 	int pageSize;
 
-	//@Test
+	@Test
 	public void testAddReview() throws Exception {
 		Review review = new Review();
 		Member member = new Member();
@@ -94,7 +94,7 @@ public class ReviewServiceTest {
 		
 		if(reviewService.addReview(review) == 1) {
 			System.out.println("review insert success " + review.getAvgScope());
-			memberService.addActivityScore();
+			memberService.addActivityScore(member.getMemberId(), 2, 5); //리뷰 작성 시 5
 		}
 	}
 	

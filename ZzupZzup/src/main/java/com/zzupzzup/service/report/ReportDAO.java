@@ -16,5 +16,5 @@ public interface ReportDAO {
 		
 	public int getTotalCount(int category) throws Exception;
 	
-	public int getReportCount(Map<String, Object> map) throws Exception; //카테고리별 mylist 출력
+	//public int getReportCount(Map<String, Object> map) throws Exception; //카테고리별 mylist 출력
 }

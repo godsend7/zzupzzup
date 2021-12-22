@@ -48,9 +48,9 @@ public class ReportDAOImpl implements ReportDAO {
 		return sqlSession.selectOne("ReportMapper.getTotalCount", category);
 	}
 
-	@Override
-	public int getReportCount(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		return sqlSession.selectOne("ReportMapper.getReportCount", map);
-	}
+//	@Override
+//	public int getReportCount(Map<String, Object> map) throws Exception {
+//		// TODO Auto-generated method stub
+//		return sqlSession.selectOne("ReportMapper.getReportCount", map);
+//	}
 }
