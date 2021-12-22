@@ -185,9 +185,9 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void calculateMannerScore() throws Exception {
+	public void calculateMannerScore(String memberId, int accumulScore) throws Exception {
 		// TODO Auto-generated method stub
-		
+		memberDao.updateMannerScore(memberId, accumulScore);
 	}
 
 	@Override

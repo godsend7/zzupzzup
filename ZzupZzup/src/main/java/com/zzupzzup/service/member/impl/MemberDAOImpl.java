@@ -97,9 +97,13 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 	
 	@Override
-	public int getRegRestaurantCount(String memberId) throws Exception {
+	public void updateMannerScore(String memberId, int accumulScore) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne("MemberMapper.getRegRestaurantCount",memberId);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("accumulScore", accumulScore);
+		
+		sqlSession.update("MemberMapper.updateMannerScore", map);
 	}
 
 }

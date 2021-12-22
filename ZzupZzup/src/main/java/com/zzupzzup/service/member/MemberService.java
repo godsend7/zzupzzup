@@ -50,7 +50,7 @@ public interface MemberService {
 	
 	public void addMannerScore() throws Exception;
 	
-	public void calculateMannerScore() throws Exception;
+	public void calculateMannerScore(String memberId, int accumulScore) throws Exception;
 	
 	public void logout() throws Exception;
 

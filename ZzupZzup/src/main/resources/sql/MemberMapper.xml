@@ -172,12 +172,18 @@
 	
 	<select id="listActivityScore" parameterType="string" resultMap="memberSelectMap">
 		SELECT ACCUMULATE_TYPE, ACCUMULATE_SCORE, ACCUMULATE_DATE
-		FROM zzupzzup_test.ACTIVITY_SCORE, zzupzzup_test.MEMBER
-		WHERE zzupzzup_test.ACTIVITY_SCORE.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID AND zzupzzup_test.MEMBER.MEMBER_ID = #{memberId}
+		FROM zzupzzup.ACTIVITY_SCORE, zzupzzup.MEMBER
+		WHERE zzupzzup.ACTIVITY_SCORE.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID AND zzupzzup.MEMBER.MEMBER_ID = #{memberId}
 	</select>
-	
+	<!-- 
 	<update 	id="updateMemberScore"	parameterType="member">
 		
 	</update>
+	 -->
 	 
+	<!-- MANNER_SCORE -->
+	<update id="updateMannerScore" parameterType="map">
+		UPDATE zzupzzup_test.MEMBER
+		SET MANNER_SCORE = MANNER_SCORE + #{accumulScore} WHERE MEMBER_ID = #{memberId};
+	</update>
 </mapper>
