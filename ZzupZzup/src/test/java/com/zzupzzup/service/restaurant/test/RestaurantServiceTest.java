@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
@@ -35,10 +36,10 @@ public class RestaurantServiceTest {
 	@Qualifier("restaurantServiceImpl")
 	private RestaurantService restaurantService;
 	
-	@Value("#{common.properties['pageUnit']?: 3}")
+	@Value("#{commonProperties['pageUnit']?: 3}")
 	int pageUnit;
 	
-	@Value("#{common.properties['pageSize']?: 2}")
+	@Value("#{commonProperties['pageSize']?: 2}")
 	int pageSize;
 
 	//@Test
@@ -163,16 +164,81 @@ public class RestaurantServiceTest {
 	}
 	
 	
-	@Test
+	//@Test
 	public void testListRestaurant() throws Exception {
 		
 		Search search = new Search();
-		String restaurantNo = null;
+		//String restaurantNo = null;
 		
 		search.setCurrentPage(1);
-		search.setPageSize(pageSize);
-		
+		search.setPageSize(3);
 		Map<String, Object> map = restaurantService.listRestaurant(search);
+		
+		List<Restaurant> list = (List<Restaurant>) map.get("list");
+				
+		for(Restaurant rt : list) {
+			System.out.println(rt);
+		}
+		
+		 Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		 System.out.println(resultPage);
+		
+	}
+	
+	
+	//@Test
+	public void testListMyRestaurant() throws Exception {
+			
+		Search search = new Search();
+		String memberId = "user01";
+			
+		search.setCurrentPage(1);
+		search.setPageSize(3);
+		
+		Map<String, Object> map = restaurantService.listMyRestaurant(search, memberId);
+		
+		List<Restaurant> list = (List<Restaurant>) map.get("list");
+					
+		for(Restaurant rt : list) {
+			System.out.println("list : " + rt);
+		}
+			
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println("resultPage : " + resultPage);
+		
+	}
+	
+	
+	//@Test
+	public void testDeleteRestaurant() throws Exception {
+		
+		Restaurant restaurant = new Restaurant();
+		
+		restaurant.setRestaurantNo(14);
+		
+		if(restaurantService.deleteRestaurant(restaurant.getRestaurantNo()) == 1) {
+			System.out.println("DELETE COMPLETE");
+		}
+		
+	}
+	
+	
+	//@Test
+	public void testCheckCallDibs() throws Exception {
+			
+		if(restaurantService.checkCallDibs("hihi@a.com", 2) == 1) {
+			System.out.println("CHECKCALLDIBS OK");
+		}
+			
+	}
+	
+	
+	@Test
+	public void testCancelCallDibs() throws Exception {
+		
+		if(restaurantService.cancelCallDibs("hihi@a.com", 2) == 1) {
+			System.out.println("CANCELCALLDIBS OK");
+		}
 		
 	}
 	
