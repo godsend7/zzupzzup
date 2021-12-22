@@ -251,7 +251,7 @@ public class MemberServiceTest {
 
 	}
 	
-	@Test
+	//@Test
 	public void testUpdateActivityAllScore() throws Exception {
 		
 		String memberId = "test@test.com";
