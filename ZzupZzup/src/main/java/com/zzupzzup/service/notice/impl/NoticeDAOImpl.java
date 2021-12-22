@@ -11,12 +11,12 @@ import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Notice;
 import com.zzupzzup.service.notice.NoticeDAO;
 
-	@Repository("noticeDaoImpl")
+	//@Repository("noticeDaoImpl")
 	public class NoticeDAOImpl implements NoticeDAO{
 	
 	///Field
-	@Autowired
-	@Qualifier("sqlSessionTemplate")
+	//@Autowired
+	//@Qualifier("sqlSessionTemplate")
 	private SqlSession sqlSession;
 	public void setSqlSession(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;

@@ -62,6 +62,9 @@
 	</insert>
 	
 	<insert 	id="addRestaurantMenu"	parameterType="restaurant" >
+	
+		DELETE FROM MENU WHERE RESTAURANT_NO = #{restaurantNo};
+	
 		INSERT
 		INTO MENU(RESTAURANT_NO, MENU_TITLE, MENU_PRICE, MAIN_MENU_STATUS)
 		VALUES
@@ -71,6 +74,9 @@
 	</insert>
 	
 	<insert 	id="addRestaurantTime"	parameterType="restaurant" >
+	
+		DELETE FROM RESTAURANT_TIME WHERE RESTAURANT_NO = #{restaurantNo};
+	
 		INSERT
 		INTO RESTAURANT_TIME(RESTAURANT_NO, RESTAURANT_DAY, RESTAURANT_OPEN, RESTAURANT_CLOSE,
 		RESTAURANT_BREAK, RESTAURANT_LAST, RESTAURANT_DAY_OFF)
@@ -82,6 +88,9 @@
 	</insert>
 	
 	<insert 	id="addImage"	parameterType="restaurant">
+	
+		DELETE FROM IMAGE WHERE RESTAURANT_NO = #{restaurantNo};
+		
 		INSERT
 		INTO IMAGE(RESTAURANT_NO, IMAGE)
 		VALUES
@@ -100,12 +109,11 @@
 		RIGHT OUTER JOIN (select * from menu) AS m
 		ON (r.RESTAURANT_NO = m.RESTAURANT_NO)
 		WHERE r.RESTAURANT_NO = #{value};
-        
 	</select>
 	
 	
 	<!-- SQL : UPDATE -->
-	<update 	id="updateRestaurant"	parameterType="restaurant">
+	<update 	id="updateRestaurant"	parameterType="restaurant" >
 		UPDATE RESTAURANT
 		<set>
 			OWNER_IMAGE = #{ownerImage},
@@ -119,14 +127,96 @@
 		WHERE RESTAURANT_NO = #{restaurantNo}
 	</update>
 	
+	<!-- <update id="updateMenu"		parameterType="restaurant">
+		UPDATE MENU
+		<set>
+			MENU_TITLE = #{menuTitle},
+			MENU_PRICE = #{menuPrice},
+			MAIN_MENU_STATUS = #{mainMenuStatus}
+		</set>
+		WHERE RESTAURANT_NO = #{restaurantNo}
+	</update>
+	
+	<update id="updateRestaurantTime" 	parameterType="restaurant">
+		UPDATE RESTAURANT_TIME
+		<set>
+			RESTAURANT_DAY = #{restaurantDay},
+			RESTAURANT_OPEN = #{restaurantOpen},
+			RESTAURANT_CLOSE = #{restaurantClose},
+			RESTAURANT_BREAK = #{restaurantBreak},
+			RESTAURANT_LAST = #{restaurantLastOrder},
+			RESTAURANT_DAY_OFF = #{restaurantDayOff}
+		</set>
+		WHERE RESTAURANT_NO = #{restaurantNo}
+	</update> -->
+	
 	
 	<!-- SQL : SELECT LIST -->
 	<select id="listRestaurant" parameterType="search" resultMap="restaurantSelectMap">
 		SELECT *
+		FROM (SELECT *
+			  FROM RESTAURANT AS rt
+			  ORDER BY rt.RESTAURANT_NO LIMIT #{startRowNum}, #{pageSize}) AS rt
+		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
+						  FROM IMAGE) AS img
+						  ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
+	</select>
+	
+	
+	<!-- SQL : SELECT LIST -->
+	<select id="listMyRestaurant" parameterType="map" resultMap="restaurantSelectMap">
+		SELECT *
+		FROM (SELECT *
+			  FROM RESTAURANT AS rt
+			  <if test="memberId != null">
+			  	<bind name="id" value="'%'+memberId+'%'"/>
+			  	WHERE rt.MEMBER_ID LIKE #{id}
+			  </if>
+			  ORDER BY rt.RESTAURANT_NO LIMIT #{search.startRowNum}, #{search.pageSize}) AS rt
+		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
+						  FROM IMAGE) AS img
+						  ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
+	</select>
+	
+	
+	<!-- SQL : DELECT -->
+	<delete id="deleteRestaurant" parameterType="restaurant" >
+		DELETE FROM IMAGE WHERE RESTAURANT_NO = #{restaurantNo};
+		
+		DELETE FROM RESTAURANT_TIME WHERE RESTAURANT_NO = #{restaurantNo};
+		
+		DELETE FROM MENU WHERE RESTAURANT_NO = #{restaurantNo};
+		
+		DELETE FROM RESTAURANT WHERE RESTAURANT_NO = #{restaurantNo};
+	</delete>
+	
+	
+	<!-- SQL : INSERT -->
+	<insert id="checkCallDibs" parameterType="restaurant">
+		INSERT
+		INTO MARK(MEMBER_ID, RESTAURANT_NO)
+		VALUES(#{memberId}, #{restaurantNo});
+	</insert>
+	
+	
+	<!-- SQL : DELETE -->
+	<delete id="cancelCallDibs" parameterType="restaurant">
+		DELETE
+		FROM MARK
+		WHERE MEMBER_ID = #{memberId} AND RESTAURANT_NO = #{restaurantNo};
+	</delete>
+	
+	
+	<!-- SQL : SELECT -->
+	<select id="listCallDibs" parameterType="map" resultMap="restaurantSelectMap">
+		
+	</select>
+	
+	
+	<!-- SQL : SELECT -->
+	<select id="getTotalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
 		FROM RESTAURANT
-		LEFT JOIN MENU
-		ON RESTAURANT.RESTAURANT_NO = MENU.RESTAURANT_NO
-		WHERE 
 	</select>
 	
 	

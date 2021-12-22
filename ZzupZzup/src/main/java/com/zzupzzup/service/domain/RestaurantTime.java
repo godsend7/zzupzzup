@@ -197,6 +197,21 @@ public class RestaurantTime {
 	public void setRestaurantDayOff(boolean restaurantDayOff) {
 		this.restaurantDayOff = restaurantDayOff;
 	}
+
+
+	@Override
+	public String toString() {
+		return "RestaurantTime [restaurantTimeNo=" + restaurantTimeNo + ", community=" + community + ", restaurant="
+				+ restaurant + ", restaurantDay=" + restaurantDay + ", restaurantOpen=" + restaurantOpen
+				+ ", restaurantOpen1=" + restaurantOpen1 + ", restaurantOpen2=" + restaurantOpen2 + ", restaurantClose="
+				+ restaurantClose + ", restaurantClose1=" + restaurantClose1 + ", restaurantClose2=" + restaurantClose2
+				+ ", restaurantBreak=" + restaurantBreak + ", restaurantBreak1=" + restaurantBreak1
+				+ ", restaurantBreak2=" + restaurantBreak2 + ", restaurantLastOrder=" + restaurantLastOrder
+				+ ", restaurantLastOrder1=" + restaurantLastOrder1 + ", restaurantLastOrder2=" + restaurantLastOrder2
+				+ ", restaurantDayOff=" + restaurantDayOff + "]";
+	}
+	
+	
 	
 	
 }

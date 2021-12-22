@@ -24,7 +24,7 @@ public class Reservation {
 	private int reservationCancelReason;
 	private String reservationCancelDetail;
 	private boolean refundStatus;
-	private int reservationCancelDate;
+	private Date reservationCancelDate;
 	private int totalPrice;
 //	private List<Member> reservationMember;
 //	private String reservationLeader;
@@ -182,11 +182,11 @@ public class Reservation {
 		this.refundStatus = refundStatus;
 	}
 
-	public int getReservationCancelDate() {
+	public Date getReservationCancelDate() {
 		return reservationCancelDate;
 	}
 
-	public void setReservationCancelDate(int reservationCancelDate) {
+	public void setReservationCancelDate(Date reservationCancelDate) {
 		this.reservationCancelDate = reservationCancelDate;
 	}
 
@@ -221,4 +221,19 @@ public class Reservation {
 	public void setOrder(List<Order> order) {
 		this.order = order;
 	}
+
+	@Override
+	public String toString() {
+		return "Reservation [chat=" + chat + ", restaurant=" + restaurant + ", member=" + member + ", reservationNo="
+				+ reservationNo + ", reservationNumber=" + reservationNumber + ", payOption=" + payOption
+				+ ", payMethod=" + payMethod + ", planTime=" + planTime + ", planDate=" + planDate + ", fixedTime="
+				+ fixedTime + ", fixedDate=" + fixedDate + ", memberCount=" + memberCount + ", reservationStatus="
+				+ reservationStatus + ", fixedStatus=" + fixedStatus + ", reservationDate=" + reservationDate
+				+ ", reservationCancelReason=" + reservationCancelReason + ", reservationCancelDetail="
+				+ reservationCancelDetail + ", refundStatus=" + refundStatus + ", reservationCancelDate="
+				+ reservationCancelDate + ", totalPrice=" + totalPrice + ", orderCount=" + orderCount + ", orderTotal="
+				+ orderTotal + ", order=" + order + "]";
+	}
+	
+	
 }

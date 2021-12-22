@@ -1,6 +1,7 @@
 package com.zzupzzup.service.restaurant;
 
 import java.util.List;
+import java.util.Map;
 
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Restaurant;
@@ -19,16 +20,18 @@ public interface RestaurantDAO {
 	
 	public List<Restaurant> listRestaurant(Search search) throws Exception;
 	
+	public List<Restaurant> listMyRestaurant(Map<String, Object> map) throws Exception;
+	
 	public int updateRestaurant(Restaurant restaurant) throws Exception;
 	
-	public int deleteRestaurant(Restaurant restaurant) throws Exception;
+	public int deleteRestaurant(int restaurantNo) throws Exception;
 	
 	public int getTotalCount(Search search) throws Exception;
 	
-	public void listCallDibs() throws Exception;
+	public List<Restaurant> listCallDibs(Map<String, Object> map) throws Exception;
 	
-	public void checkCallDibs() throws Exception;
+	public int checkCallDibs(Map<String, Object> map) throws Exception;
 	
-	public void cancelCallDibs() throws Exception;
+	public int cancelCallDibs(Map<String, Object> map) throws Exception;
 	
 }

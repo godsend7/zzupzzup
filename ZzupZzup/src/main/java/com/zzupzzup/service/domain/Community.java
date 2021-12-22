@@ -1,6 +1,7 @@
 package com.zzupzzup.service.domain;
 
 import java.util.Date;
+import java.util.List;
 
 public class Community {
 	
@@ -27,6 +28,8 @@ public class Community {
 	private String mainMenuTitle;
 	private int mainMenuPrice;
 	private int postReportCount;
+	private List<RestaurantTime> restaurantTimes;
+	private List<String> postImage;
 	
 	
 	///Constructor
@@ -210,6 +213,40 @@ public class Community {
 
 	public void setPostReportCount(int postReportCount) {
 		this.postReportCount = postReportCount;
+	}
+
+
+	public List<RestaurantTime> getRestaurantTimes() {
+		return restaurantTimes;
+	}
+
+
+	public void setRestaurantTimes(List<RestaurantTime> restaurantTimes) {
+		this.restaurantTimes = restaurantTimes;
+	}
+
+
+	public List<String> getPostImage() {
+		return postImage;
+	}
+
+
+	public void setPostImage(List<String> postImage) {
+		this.postImage = postImage;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Community [member=" + member + ", postNo=" + postNo + ", postTitle=" + postTitle + ", postText="
+				+ postText + ", streetAddress=" + streetAddress + ", areaAddress=" + areaAddress + ", restAddress="
+				+ restAddress + ", restaurantName=" + restaurantName + ", restaurantTel=" + restaurantTel
+				+ ", restaurantTel1=" + restaurantTel1 + ", restaurantTel2=" + restaurantTel2 + ", restaurantTel3="
+				+ restaurantTel3 + ", receiptImage=" + receiptImage + ", receiptStatus=" + receiptStatus
+				+ ", postRegDate=" + postRegDate + ", likeCount=" + likeCount + ", postShowStatus=" + postShowStatus
+				+ ", officialStatus=" + officialStatus + ", menuType=" + menuType + ", mainMenuTitle=" + mainMenuTitle
+				+ ", mainMenuPrice=" + mainMenuPrice + ", postReportCount=" + postReportCount + ", restaurantTimes="
+				+ restaurantTimes + ", postImage=" + postImage + "]";
 	}
 	
 	

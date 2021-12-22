@@ -46,6 +46,12 @@ public class Member {
 	public Member() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Member(String memberId, String nickname) {
+		// TODO Auto-generated constructor stub
+		this.memberId = memberId;
+		this.nickname = nickname;
+	}
 
 	//*Method
 	public String getMemberId() {

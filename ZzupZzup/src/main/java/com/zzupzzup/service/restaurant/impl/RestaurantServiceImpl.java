@@ -57,15 +57,27 @@ public class RestaurantServiceImpl implements RestaurantService {
 		
 		return map;
 	}
-
+	
+	@Override
+	public Map<String, Object> listMyRestaurant(Search search, String memberId) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("memberId", memberId);
+		
+		map.put("list", restaurantDAO.listMyRestaurant(map));
+		map.put("totalCount", restaurantDAO.getTotalCount(search));
+		
+		return map;
+	}
+	
 	@Override
 	public int updateRestaurant(Restaurant restaurant) throws Exception {
 		return restaurantDAO.updateRestaurant(restaurant);
 	}
 
 	@Override
-	public int deleteRestaurant(Restaurant restaurant) throws Exception {
-		return restaurantDAO.deleteRestaurant(restaurant);
+	public int deleteRestaurant(int restaurantNo) throws Exception {
+		return restaurantDAO.deleteRestaurant(restaurantNo);
 	}
 
 	@Override
@@ -80,21 +92,37 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 	
 	@Override
-	public void listCallDibs() throws Exception {
-		// TODO Auto-generated method stub
+	public Map<String, Object> listCallDibs(Search search, String memberId) throws Exception {
 		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("memberId", memberId);
+		
+		map.put("list", restaurantDAO.listCallDibs(map));
+		map.put("totalCount", restaurantDAO.getTotalCount(search));
+		
+		return map;
 	}
 
 	@Override
-	public void checkCallDibs() throws Exception {
-		// TODO Auto-generated method stub
+	public int checkCallDibs(String memberId, int restaurantNo) throws Exception {
 		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("restaurantNo", restaurantNo);
+		
+		return restaurantDAO.checkCallDibs(map);
 	}
 
 	@Override
-	public void cancelCallDibs() throws Exception {
-		// TODO Auto-generated method stub
+	public int cancelCallDibs(String memberId, int restaurantNo) throws Exception {
 		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("restaurantNo", restaurantNo);
+		
+		return restaurantDAO.cancelCallDibs(map);
 	}
+
 
 }
