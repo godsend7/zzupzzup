@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.HashTag;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.review.ReviewDAO;
 import com.zzupzzup.service.review.ReviewService;
@@ -89,7 +90,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<Map<String,Object>> listHashTag(String search) throws Exception {
+	public List<HashTag> listHashTag(String search) throws Exception {
 		// TODO Auto-generated method stub
 		return reviewDao.listHashTag(search);
 	}

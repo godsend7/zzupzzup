@@ -1,5 +1,6 @@
 package com.zzupzzup.service.report.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,30 +27,30 @@ public class ReportDAOImpl implements ReportDAO {
 	@Override
 	public int addReport(Report report) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlSession.insert("ReportMapper.addReport", report);	
 	}
 
 	@Override
-	public int checkReport(boolean check) throws Exception {
+	public int checkReport(int reportNo) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlSession.update("ReportMapper.checkReport", reportNo);	
 	}
 
 	@Override
-	public List<Report> listReport(int category) throws Exception {
+	public List<Report> listReport(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return sqlSession.selectList("ReportMapper.listReport", map);
 	}
 
 	@Override
-	public List<Report> listMyReport(Map<String, Object> map) throws Exception {
+	public int getTotalCount(int category) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return sqlSession.selectOne("ReportMapper.getTotalCount", category);
 	}
 
 	@Override
-	public int getTotalCount(Search search) throws Exception {
+	public int getReportCount(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlSession.selectOne("ReportMapper.getReportCount", map);
 	}
 }

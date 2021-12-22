@@ -1,6 +1,8 @@
 package com.zzupzzup.service.report.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,31 +27,36 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public int addReport(Report report) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return reportDao.addReport(report);
 	}
 
 	@Override
-	public int checkReport(boolean check) throws Exception {
+	public int checkReport(int reportNo) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return reportDao.checkReport(reportNo);
 	}
 
 	@Override
-	public List<Report> listReport(int category) throws Exception {
+	public Map<String, Object> listReport(Search search, int category, String memberId) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("category", category);
+		map.put("memberId", memberId);		
+		
+		map.put("list", reportDao.listReport(map));
+		map.put("totalCount", reportDao.getTotalCount(category));
+		return map;
 	}
 
 	@Override
-	public List<Report> listMyReport(int category, String memberId) throws Exception {
+	public int getReportCount(String report, int category) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getTotalCount(Search search) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("report", report);
+		map.put("category", category);
+		
+		return reportDao.getReportCount(map);
 	}
 
 }

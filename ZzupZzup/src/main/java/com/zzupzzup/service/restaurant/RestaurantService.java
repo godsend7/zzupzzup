@@ -19,14 +19,16 @@ public interface RestaurantService {
 	
 	public Map<String, Object> listRestaurant(Search search) throws Exception;
 	
+	public Map<String, Object> listMyRestaurant(Search search, String memberId) throws Exception;
+	
 	public int updateRestaurant(Restaurant restaurant) throws Exception;
 	
-	public int deleteRestaurant(Restaurant restaurant) throws Exception;
+	public int deleteRestaurant(int restaurantNo) throws Exception;
 	
-	public void listCallDibs() throws Exception;
+	public Map<String, Object> listCallDibs(Search search, String memberId) throws Exception;
 	
-	public void checkCallDibs() throws Exception;
+	public int checkCallDibs(String memberId, int restaurantNo) throws Exception;
 	
-	public void cancelCallDibs() throws Exception;
+	public int cancelCallDibs(String memberId, int restaurantNo) throws Exception;
 	
 }
