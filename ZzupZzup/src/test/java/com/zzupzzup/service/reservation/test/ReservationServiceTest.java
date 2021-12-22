@@ -18,12 +18,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Order;
 import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.domain.Restaurant;
+import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.reservation.ReservationService;
 import com.zzupzzup.service.restaurant.RestaurantService;
 import com.zzupzzup.service.chat.ChatService;
@@ -50,6 +52,12 @@ public class ReservationServiceTest {
 //	@Autowired
 //	@Qualifier("chatServiceImpl") //restaurant 서비스 타기위해 넣어줌
 //	private ChatService chatService;
+	
+	@Value("#{commonProperties['pageUnit']?: 3}")
+	int pageUnit;
+	
+	@Value("#{commonProperties['pageSize']?: 2}")
+	int pageSize;
 
 	//@Test
 	public void testAddReservation() throws Exception {
@@ -71,8 +79,8 @@ public class ReservationServiceTest {
 		reservation.setOrder(order);
 	
 		restaurant.setRestaurantNo(1); //음식점 예약no
-		chat.setChatNo(1); //채팅 no
-		member.setMemberId("hihi@a.com"); // memberId
+		chat.setChatNo(2); //채팅 no
+		member.setMemberId("owner01@zzupzzup.com"); // memberId
 
 		reservation.setRestaurant(restaurant);
 		reservation.setChat(chat);
@@ -93,7 +101,7 @@ public class ReservationServiceTest {
 	
 //=======================================================================================
 	
-		 @Test 
+		 //@Test 
 		 public void testGetReservation() throws Exception {
 		 
 		 Reservation reservation = new Reservation(); 
@@ -120,6 +128,69 @@ public class ReservationServiceTest {
 		
 //========================================================================================
 		 
-		 
+		//@Test
+		public void testListReservation() throws Exception {
+			Search search = new Search();
+			
+			search.setCurrentPage(3);		
+			search.setPageSize(pageSize);
+			
+			
+			
+			Map<String, Object> map = reservationService.listReservation(search);
+			
+			List<Reservation> list = (List<Reservation>) map.get("list");
+			
+			System.out.println("reservation list success");
+			
+			for (Reservation r : list) {
+				System.out.println(r.getReservationNo());
+			}
+			
+			 Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+			 System.out.println(resultPage);
+		}
+
+//========================================================================================
+ 
+		//@Test
+		public void testListMyReservation() throws Exception {
+			Search search = new Search();
+			
+			String memberId = "user";
+			String restaurantNo = null;
+				
+			Map<String, Object> map = reservationService.listMyReservation(search, memberId, restaurantNo);
+				
+			List<Reservation> list = (List<Reservation>) map.get("list");
+				
+			System.out.println("reservation mylist success");
+				
+			for (Reservation r : list) {
+				System.out.println(r);
+			}
+		}	
+	
+//========================================================================================
 		
-}
+		@Test
+		public void testUpdateReservation() throws Exception {
+			
+			Reservation reservation = new Reservation();
+			
+			reservation.setReservationNo(15);
+			//reservation.setFixedDate(null); now()여서 없는지 확인
+			reservation.setReservationStatus(false);
+			//reservation.setReservationCancelDate(null);
+			reservation.setFixedStatus(false);
+			reservation.setReservationCancelReason(1);
+			reservation.setReservationCancelDetail("1605는 떠납니다.~~");
+		
+			//reservationService.updateReservation(reservation);
+			
+			if(reservationService.updateReservation(reservation) == 1) {
+				System.out.println("review update success");
+			}
+		
+		}
+}		
