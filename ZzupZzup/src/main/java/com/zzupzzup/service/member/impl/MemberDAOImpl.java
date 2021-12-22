@@ -33,11 +33,11 @@ public class MemberDAOImpl implements MemberDAO{
 		sqlSession.insert("MemberMapper.addMember", member);
 	}
 
-	@Override
-	public void login() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void login() throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public void kakaoLogin() throws Exception {
@@ -52,9 +52,9 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 	
 	@Override
-	public Member getMember(String memberId) throws Exception {
+	public Member getMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne("MemberMapper.getMember", memberId);
+		return sqlSession.selectOne("MemberMapper.getMember", member);
 	}
 	
 	@Override

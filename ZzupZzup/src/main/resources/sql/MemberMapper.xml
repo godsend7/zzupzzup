@@ -49,11 +49,11 @@
 	</insert>
 	
 	<!-- SQL : SELECT -->
-	<select 	id="getMember"	parameterType="string" resultMap="memberSelectMap">
+	<select 	id="getMember"	parameterType="member" resultMap="memberSelectMap">
 		SELECT
 		MEMBER_ID, MEMBER_NAME, MEMBER_ROLE, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
 		FROM zzupzzup_test.MEMBER
-		WHERE MEMBER_ID = #{memberId};
+		WHERE MEMBER_ID = #{memberId} OR NICKNAME = #{nickname};
 	</select>
 	
 	<select 	id="getOwner"	parameterType="string" resultMap="memberSelectMap">
@@ -66,11 +66,14 @@
 	
 	<!-- SQL : UPDATE -->
 	<update 	id="updateMember"	parameterType="member">
-		UPDATE zzupzzup_test.MEMBER
+		UPDATE zzupzzup.MEMBER
 		<set>
 			PASSWORD = #{password},
 			MEMBER_PHONE = #{memberPhone},
-			PROFILE_IMAGE = #{profileImage}
+			PROFILE_IMAGE = #{profileImage},
+			DELETE_DATE = #{},
+			DELETE_TYPE = #{deleteType},
+			DELETE_DETAIL = #{deleteReason}
 			<if test="memberRole == 'user'">
 			, STATUS_MESSAGE = #{statusMessage},
 			BLACKLIST_REG_DATE =
@@ -92,27 +95,27 @@
 		
 			<if test='member.memberRole.equals("user")'>
 				SELECT MEMBER_ROLE, NICKNAME, COUNT_REP.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
-			FROM zzupzzup_test.MEMBER
+			FROM zzupzzup.MEMBER
 		    RIGHT JOIN (
-					SELECT zzupzzup_test.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
-					FROM zzupzzup_test.REPORT RIGHT JOIN zzupzzup_test.MEMBER
-					ON zzupzzup_test.REPORT.CHAT_MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
-					GROUP BY zzupzzup_test.MEMBER.MEMBER_ID
+					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
+					FROM zzupzzup.REPORT RIGHT JOIN zzupzzup.MEMBER
+					ON zzupzzup.REPORT.CHAT_MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+					GROUP BY zzupzzup.MEMBER.MEMBER_ID
 				) COUNT_REP
-			ON COUNT_REP.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
+			ON COUNT_REP.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
 			</if>
 			
 		
 		<if test='member.memberRole == "owner"'>
 			SELECT MEMBER_ROLE, NICKNAME, COUNT_RES.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
-			FROM zzupzzup_test.MEMBER
+			FROM zzupzzup.MEMBER
 		    RIGHT JOIN (
-					SELECT zzupzzup_test.MEMBER.MEMBER_ID, COUNT(RESTAURANT_NAME) AS COUNT_RESTAURANT
-					FROM zzupzzup_test.RESTAURANT RIGHT JOIN zzupzzup_test.MEMBER
-					ON zzupzzup_test.RESTAURANT.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
-					GROUP BY zzupzzup_test.MEMBER.MEMBER_ID
+					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(RESTAURANT_NAME) AS COUNT_RESTAURANT
+					FROM zzupzzup.RESTAURANT RIGHT JOIN zzupzzup.MEMBER
+					ON zzupzzup.RESTAURANT.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+					GROUP BY zzupzzup.MEMBER.MEMBER_ID
 				) COUNT_RES
-			ON COUNT_RES.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
+			ON COUNT_RES.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
 		</if>
 		
 		) MEMBER_LIST
@@ -135,7 +138,7 @@
 		WHERE (@ROWNUM:=0) = 0
 	</select>
 	
-	<!-- SQL : SELECT reportCount -->
+	<!-- 
 	<select id="getReportCount" parameterType="string" resultType="int">
 		SELECT COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
 		FROM zzupzzup_test.REPORT, zzupzzup_test.MEMBER
@@ -148,7 +151,7 @@
 		WHERE zzupzzup_test.MEMBER.MEMBER_ROLE = 'owner' AND zzupzzup_test.RESTAURANT.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID AND zzupzzup_test.MEMBER.MEMBER_ID = #{memberId}
 	</select>
 
-	<!-- <update 	id="updateOwner"	parameterType="member">
+	<update 	id="updateOwner"	parameterType="member">
 		UPDATE zzupzzup_test.MEMBER
 		<set>
 			PASSWORD = #{password},

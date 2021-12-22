@@ -108,12 +108,15 @@ public class MemberServiceTest {
 	//@Test
 	public void testGetMember() throws Exception {
 		
-		Member member = memberService.getMember("test@test.com");
+		Member member = new Member();
+		member.setMemberId("hihi@a.com");
+		member.setNickname("");
+		memberService.getMember(member);
 		//Member member = memberService.getOwner("testest@test.com");	//오류 왜 뜨는데?
 		//System.out.println(member);
 	}
 	
-	@Test
+	//@Test
 	public void testListMember() throws Exception {
 		
 		Search search = new Search();
@@ -190,7 +193,9 @@ public class MemberServiceTest {
 		*/
 		//memberService.updateUser(member);
 		///*
-		Member member = memberService.getOwner("testest@test.com");
+		Member member = new Member();
+		member.setMemberId("testest@test.com");
+		memberService.getMember(member);
 		//업주
 		//member.setMemberId("testest@test.com");
 		//member.setMemberRole("owner");
@@ -204,4 +209,46 @@ public class MemberServiceTest {
 		//*/
 		//System.out.println(member);
 	}	//complete updateMember !
+	
+	@Test
+	public void test() throws Exception {
+		
+		String password = "";
+		String memberId = "hihi@a.com";
+		String nickname = "user1";
+		String certificatedNum = "123456";
+		
+		//비밀번호 일치 여부
+		if(memberService.confirmPwd(password)) {
+			System.out.println("비밀번호가 일치합니다.");
+		} else {
+			System.out.println("비밀번호가 일치하지 않습니다.");
+		}
+		System.out.println("\n==========================\n");
+		
+		//중복확인(아이디)
+		if(! memberService.checkIdDuplication(memberId)) {
+			System.out.println("이미 사용 중인 아이디입니다.");
+		} else {
+			System.out.println("사용 가능한 아이디입니다.");
+		}
+		System.out.println("\n==========================\n");
+		
+		//중복확인(닉네임)
+		if(! memberService.checkNicknameDuplication(nickname)) {
+			System.out.println("이미 사용 중인 닉네임입니다.");
+		} else {
+			System.out.println("사용 가능한 닉네임입니다.");
+		}
+		System.out.println("\n==========================\n");
+		
+		//인증번호 전송, 확인
+		System.out.println("인증번호 :: "+memberService.sendCertificatedNum());
+		System.out.println("인증번호 일치 여부 :: "+memberService.checkCertificatedNum(certificatedNum));
+		System.out.println("\n==========================\n");
+		
+		//활동점수 추가 및 계산
+		
+		
+	}
 }

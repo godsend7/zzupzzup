@@ -14,33 +14,33 @@ public interface MemberService {
 	
 	public void naverLogin(Member member) throws Exception;
 	
-	public void selectMemberRole() throws Exception;
+	//public void selectMemberRole() throws Exception;
 	
 	public void addMember(Member member) throws Exception;
 	
-	public void checkIdDuplication() throws Exception;
+	public boolean checkIdDuplication(String memberId) throws Exception;
 	
-	public void checkNicknameDuplication() throws Exception;
+	public boolean checkNicknameDuplication(String nickname) throws Exception;
 	
 	public void findId() throws Exception;
 	
-	public void sendCertificatedNum() throws Exception;
+	public String sendCertificatedNum() throws Exception;
 	
-	public void checkCertificatedNum() throws Exception;
+	public boolean checkCertificatedNum(String certificatedNum) throws Exception;
 	
 	public void updateMember(Member member) throws Exception;
 	
-	public void confirmPwd() throws Exception;
+	public boolean confirmPwd(String password) throws Exception;
 	
-	public Member getMember(String memberId) throws Exception;
+	public Member getMember(Member member) throws Exception;
 	
 	public void getOtherUser() throws Exception;
 	
-	public Member getOwner(String memberId) throws Exception;
+	//public Member getOwner(String memberId) throws Exception;
 	
 	public Map<String, Object> listMember(Search search, Member member) throws Exception;
 	
-	public void blacklistUser() throws Exception;
+	//public void blacklistUser() throws Exception;
 	
 	public void addActivityScore() throws Exception;
 	
