@@ -1,9 +1,12 @@
 package com.zzupzzup.service.chat;
 
+import java.util.List;
 import java.util.Map;
 
+import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Chat;
+import com.zzupzzup.service.domain.Member;
 
 public interface ChatService {
 	
@@ -18,9 +21,6 @@ public interface ChatService {
 	
 	// Update
 	public void updateChat(Chat chat) throws Exception;
-	
-	// Page Row(totalCount) return
-	public int getTotalCount(Search search) throws Exception;
 	
 	// Select One
 	public Chat getChatEntrance(int chatNo) throws Exception;
@@ -37,12 +37,19 @@ public interface ChatService {
 	// Update
 	public void updateReadyCheck(Chat chat) throws Exception;
 	
+	// Insert
+	public void addChatMember(int chatNo, Member memberId) throws Exception;
+	
+	// Select One
+	public Map<String, Object> getChatMember(int chatNo, Member memberId) throws Exception;
+	
 	// Update
-	public void deleteChatMember(Chat chat) throws Exception;
+	public void deleteChatMember(String memberId, int chatNo) throws Exception;
 	
 	// Select One
 	public Map<String, Object> listChatMember(Search search) throws Exception;
 	
 	// Select One
 	public Map<String, Object> listReadyCheckMember(Search search) throws Exception;
+
 }
