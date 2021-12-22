@@ -2,10 +2,13 @@ package com.zzupzzup.service.chat;
 
 import java.util.List;
 
+import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Chat;
+import com.zzupzzup.service.domain.Member;
 
 public interface ChatDAO {
+	
 	// Insert
 	public void addChat(Chat chat) throws Exception;
 	
@@ -36,8 +39,14 @@ public interface ChatDAO {
 	// Update
 	public void updateReadyCheck(Chat chat) throws Exception;
 	
+	// Insert
+	public void addChatMember(int chatNo, Member memberId) throws Exception;
+	
+	// Select One
+	public List<ChatMember> getChatMember(int chatNo, Member memberId) throws Exception;
+	
 	// Update
-	public void deleteChatMember(Chat chat) throws Exception;
+	public void deleteChatMember(String memberId, int chatNo) throws Exception;
 	
 	// Select One
 	public List<Chat> listChatMember(Search search) throws Exception;
