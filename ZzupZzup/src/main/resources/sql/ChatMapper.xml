@@ -7,7 +7,7 @@
 <mapper namespace="ChatMapper">
 	<resultMap id="chatSelectMap" type="chat">
 		<result property="chatNo" column="chat_no" jdbcType="INTEGER"/>
-		<result property="chatLeaderId" column="chat_leader_id" jdbcType="VARCHAR"/>
+		<result property="chatLeaderId.memberId" column="chat_leader_id" jdbcType="VARCHAR"/>
 		<result property="chatRestaurant.restaurantNo" column="restaurant_no" jdbcType="INTEGER"/>
 		<result property="chatTitle" column="chat_title" jdbcType="VARCHAR"/>
 		<result property="chatImage" column="chat_image" jdbcType="VARCHAR"/>
@@ -18,6 +18,13 @@
 		<result property="chatState" column="chat_state" jdbcType="INTEGER"/>
 		<result property="chatShowStatus" column="chat_show_status" jdbcType="BOOLEAN"/>
 		<result property="chatAge" column="age_type" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap id="chatMemberSelectMap" type="chatMember">
+		<result property="chatNo" column="chat_no" jdbcType="INTEGER"/>
+		<result property="member.memberId" column="chat_member_id" jdbcType="VARCHAR"/>
+		<result property="readyCheck" column="ready_check" jdbcType="BOOLEAN"/>
+		<result property="chatLeaderCheck" column="chat_leader_check" jdbcType="BOOLEAN"/>
 	</resultMap>
 	
 	
@@ -33,14 +40,14 @@
 			age_type
 		)
 		VALUES ( 
-			#{chatLeaderId}, 
+			#{chatLeaderId.memberId}, 
 			#{chatRestaurant.restaurantNo}, 
 			#{chatTitle}, 
 			<if test="chatImage != null">#{chatImage},</if>
 			<if test="chatText != null">#{chatText},</if>
 			#{chatGender}, 
 			#{chatAge} 
-		)		
+		)
 	</insert>
 	
 	<!-- SQL : SELECT ONE -->
@@ -55,13 +62,13 @@
 	<update id="updateChat" parameterType="chat">
 		UPDATE chat
 		<set>
-			restaurant_no = #{chatRestaurant.restaurantNo},
-			chat_title = #{chatTitle},
+			<if test="chatRestaurant.restaurantNo != null">restaurant_no = #{chatRestaurant.restaurantNo},</if>
+			<if test="chatTitle != null">chat_title = #{chatTitle},</if>
 			<if test="chatImage != null">chat_image = #{chatImage},</if>
 			<if test="chatText != null">chat_text = #{chatText},</if>
-			chat_gender = #{chatGender},
-			chat_show_status = #{chatShowStatus},
-			age_type = #{chatAge}
+			<if test="chatGender != null">chat_gender = #{chatGender},</if>
+			<if test="chatAge != null">age_type = #{chatAge},</if>
+			<if test="chatShowStatus != null">chat_show_status = #{chatShowStatus}</if>
 		</set>
 		WHERE chat_no = #{chatNo}		
 	</update>
@@ -73,10 +80,14 @@
 		FROM ( SELECT c.chat_no, c.chat_leader_id, c.chat_title, c.chat_image, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, c.restaurant_no, r.restaurant_name, r.street_address, r.area_address 
 				FROM chat c, restaurant r
 				WHERE c.restaurant_no = r.restaurant_no
-				ORDER BY c.chat_no LIMIT #{startRowNum}, #{endRowNum}) AS c
+				ORDER BY c.chat_no LIMIT #{search.startRowNum}, #{search.endRowNum}) AS c
 	</select>
 	
 	<!-- SQL : SELECT ROW COUNT -->
+	<select id="getTotalCount" parameterType="search" resultType="int">
+		SELECT count(*)
+		FROM CHAT
+	</select>
 	<!-- <select id="getTotalCount" parameterType="search" resultType="int">
 		<bind name="searchKeywords" value="'%' + _parameter.getSearchKeyword() + '%'" />
 		SELECT COUNT(*)
@@ -97,6 +108,64 @@
 			</if> ) countTable
 	</select> -->
 	
+	<!-- SQL : UPDATE -->
+	<update id="deleteChat" parameterType="chat">
+		UPDATE chat
+		<set>
+			chat_show_status = #{chatShowStatus}
+		</set>
+		WHERE chat_no = #{chatNo}		
+	</update>
+	
+	<!-- SQL : UPDATE -->
+	<update id="updateChatState" parameterType="chat">
+		UPDATE chat
+		<set>
+			chat_state = #{chatState}
+		</set>
+		WHERE chat_no = #{chatNo}		
+	</update>
+	
+	<!-- SQL : INSERT -->
+	<insert id="addChatMember" parameterType="chatMember">
+		INSERT IGNORE INTO chat_member (
+			chat_no, 
+			chat_member_id, 
+			<if test="readyCheck != null">ready_check,</if>
+			<if test="chatLeaderCheck != null">chat_leader_check</if>
+		)
+		VALUES ( 
+			#{chatNo}, 
+			#{member.memberId}, 
+			<if test="readyCheck != null">#{readyCheck},</if>
+			<if test="chatLeaderCheck != null">#{chatLeaderCheck}</if>
+		)		
+	</insert>
+	
+	<!-- SQL : SELECT ALL -->
+	<select id="listChatMember" parameterType="map" resultMap="chatMemberSelectMap">
+		<!-- <bind name="searchKeywords" value="'%' + searchKeyword + '%'" /> -->
+		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check 
+			FROM chat_member
+			WHERE chat_no = #{chatNo}
+			ORDER BY chat_member_no
+	</select>
+	
+	<!-- SQL : DELETE -->
+	<delete id="deleteChatMember">
+		DELETE FROM chat_member WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
+	</delete>
+	
+	<!-- SQL : update -->
+	<delete id="updateReadyCheck" parameterType="chatMember">
+		UPDATE chat_member
+		<set>
+			<if test="readyCheck == true">ready_check = TRUE</if>
+			<if test="readyCheck == false">ready_check = FALSE</if>
+		</set>
+		 WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
+	</delete>
+	
 	
 	<!--
 	SELECT c.chat_no, c.chat_leader_id, c.chat_title, c.chat_image, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, c.restaurant_no, r.restaurant_name, r.street_address, r.area_address FROM chat c, restaurant r WHERE c.restaurant_no = r.restaurant_no
@@ -112,6 +181,12 @@
 	-->
 	
 	
+	<!-- SELECT * 
+		FROM ( SELECT c.chat_no, c.chat_leader_id, c.chat_title, c.chat_image, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, c.restaurant_no, r.restaurant_name, r.street_address, r.area_address 
+				FROM chat c, restaurant r
+				LEFT JOIN member m ON c.chat_leader_id = m.member_id 
+				WHERE c.restaurant_no = r.restaurant_no
+				ORDER BY c.chat_no LIMIT #{search.startRowNum}, #{search.endRowNum}) AS c -->
 	
 	
 	

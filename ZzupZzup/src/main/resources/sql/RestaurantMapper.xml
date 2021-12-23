@@ -107,11 +107,11 @@
 	<select 	id="getRestaurant"		parameterType="int"		resultMap="restaurantSelectMap">
         SELECT *
 		FROM RESTAURANT AS r
-		RIGHT OUTER JOIN (Select * FROM RESTAURANT_TIME) AS t
+		LEFT OUTER JOIN (Select * FROM RESTAURANT_TIME) AS t
 		ON (r.RESTAURANT_NO = t.RESTAURANT_NO)
-		RIGHT OUTER JOIN (SELECT * FROM MENU) AS m
+		LEFT OUTER JOIN (SELECT * FROM MENU) AS m
 		ON (r.RESTAURANT_NO = m.RESTAURANT_NO)
-		RIGHT OUTER JOIN (SELECT * FROM IMAGE) AS img
+		LEFT OUTER JOIN (SELECT * FROM IMAGE) AS img
 		ON (r.RESTAURANT_NO = img.RESTAURANT_NO)
 		WHERE r.RESTAURANT_NO = #{value};
 	</select>
@@ -184,7 +184,7 @@
 	</select>
 	
 	
-	<!-- SQL : DELECT -->
+	<!-- SQL : DELETE -->
 	<delete id="deleteRestaurant" parameterType="restaurant" >
 		DELETE FROM IMAGE WHERE RESTAURANT_NO = #{restaurantNo};
 		
@@ -216,7 +216,7 @@
 	<select id="listCallDibs" parameterType="map" resultMap="restaurantSelectMap">
 		SELECT *
 		FROM RESTAURANT AS rt
-		Inner JOIN (SELECT RESTAURANT_NO, MARK_NO
+		INNER JOIN (SELECT RESTAURANT_NO, MARK_NO
 					FROM MARK
 					WHERE MEMBER_ID = #{memberId} AND RESTAURANT_NO IS NOT NULL
 					ORDER BY MARK_NO LIMIT #{search.startRowNum}, #{search.pageSize}) AS mk

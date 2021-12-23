@@ -151,7 +151,8 @@ CREATE TABLE `chat_member` (
     `chat_leader_check` BOOLEAN NOT NULL DEFAULT 0,
     PRIMARY KEY (`chat_member_no`),
     FOREIGN KEY (`chat_member_id`) REFERENCES `member`(`member_id`),
-    FOREIGN KEY (`chat_no`) REFERENCES `chat`(`chat_no`)
+    FOREIGN KEY (`chat_no`) REFERENCES `chat`(`chat_no`),
+    UNIQUE KEY (`chat_no`, `chat_member_id`)
 );
 
 CREATE TABLE `chat_log` (

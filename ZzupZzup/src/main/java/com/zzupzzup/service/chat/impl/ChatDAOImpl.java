@@ -31,32 +31,44 @@ public class ChatDAOImpl implements ChatDAO {
 	
 	///Method
 	@Override
-	public void addChat(Chat chat) throws Exception {
-		sqlSession.insert("ChatMapper.addChat", chat);
+	public int addChat(Chat chat) throws Exception {
+		int result = sqlSession.insert("ChatMapper.addChat", chat);
+		
+		if(result == 1) {
+			return 1;
+		}else {
+			return 0;
+		}
+		
 	}
 
 	@Override
 	public Chat getChat(int chatNo) throws Exception {
 		return sqlSession.selectOne("ChatMapper.getChat", chatNo);
 	}
-
+	
 	@Override
-	public List<Chat> listChat(Search search, String restaurantNo) throws Exception {
-		System.out.println("chatDaoImpl listChat search : " + search);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("searchCondition", search.getSearchCondition() );
-		map.put("searchKeyword",  search.getSearchKeyword() );
-		map.put("endRowNum",  search.getEndRowNum() );
-		map.put("startRowNum",  search.getStartRowNum() );
-		map.put("restaurantNo", restaurantNo);
-		System.out.println("map : " + map);
+	public int updateChat(Chat chat) throws Exception {
+		int result = sqlSession.update("ChatMapper.updateChat", chat);
 		
-		return sqlSession.selectList("ChatMapper.listChat", map);
+		System.out.println("updateChat " + result);
+		
+		if(result == 1) {
+			return 1;
+		}else {
+			return 0;
+		}
 	}
 
 	@Override
-	public void updateChat(Chat chat) throws Exception {
-		sqlSession.update("ChatMapper.updateChat", chat);
+	public List<Chat> listChat(Map<String, Object> map) throws Exception {
+		System.out.println("chatDaoImpl listChat map : " + map);
+		
+		List<Chat> list = sqlSession.selectList("ChatMapper.listChat", map);
+		
+		System.out.println("dfsiofwef : " + list);
+		
+		return list;
 	}
 
 	@Override
@@ -70,28 +82,47 @@ public class ChatDAOImpl implements ChatDAO {
 	}
 
 	@Override
-	public void deleteChat(Chat chat) throws Exception {
-		sqlSession.update("ChatMapper.deleteChat", chat);
+	public int deleteChat(Chat chat) throws Exception {
+		int result = sqlSession.update("ChatMapper.deleteChat", chat);
+		
+		System.out.println("deleteChat " + result);
+		
+		if(result == 1) {
+			return 1;
+		}else {
+			return 0;
+		}
 	}
 
 	@Override
-	public void updateChatState(Chat chat) throws Exception {
-		sqlSession.update("ChatMapper.updateChatState", chat);
+	public int updateChatState(Chat chat) throws Exception {
+		int result = sqlSession.update("ChatMapper.updateChatState", chat);
+		
+		System.out.println("updateChatState" + result);
+		
+		if(result == 1) {
+			return 1;
+		}else {
+			return 0;
+		}
 	}
 
 	@Override
 	public Chat getChatRecord(int chatNo) throws Exception {
 		return sqlSession.selectOne("ChatMapper.getChatRecord", chatNo);
 	}
-
-	@Override
-	public void updateReadyCheck(Chat chat) throws Exception {
-		sqlSession.update("ChatMapper.updateReadyCheck", chat);
-	}
 	
 	@Override
-	public void addChatMember(int chatNo, Member memberId) throws Exception {
-		sqlSession.insert("ChatMapper.addChatMember", chatNo);
+	public int addChatMember(ChatMember chatMember) throws Exception {
+		int result = sqlSession.insert("ChatMapper.addChatMember", chatMember);
+		
+		System.out.println("addChatMember" + result);
+		
+		if(result == 1) {
+			return 1;
+		}else {
+			return 0;
+		}
 	}
 	
 	@Override
@@ -103,14 +134,30 @@ public class ChatDAOImpl implements ChatDAO {
 	public void deleteChatMember(String memberId, int chatNo) throws Exception {
 		sqlSession.update("ChatMapper.deleteChat", memberId);
 	}
-
+	
 	@Override
-	public List<Chat> listChatMember(Search search) throws Exception {
-		return sqlSession.selectList("ChatMapper.listChatMember", search);
+	public int updateReadyCheck(ChatMember chatMember) throws Exception {
+		int result = sqlSession.update("ChatMapper.updateReadyCheck", chatMember);
+		
+		System.out.println("updateReadyCheck" + result);
+		
+		if(result == 1) {
+			return 1;
+		}else {
+			return 0;
+		}
 	}
 
 	@Override
-	public List<Chat> listReadyCheckMember(Search search) throws Exception {
+	public List<ChatMember> listChatMember(Map<String, Object> map) throws Exception {
+		System.out.println("chatDaoImpl listChatMember map : " + map);
+		List<ChatMember> list = sqlSession.selectList("ChatMapper.listChatMember", map);
+		
+		return list;
+	}
+
+	@Override
+	public List<ChatMember> listReadyCheckMember(Search search) throws Exception {
 		return sqlSession.selectList("ChatMapper.listReadyCheckMember", search);
 	}
 

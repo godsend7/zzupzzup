@@ -25,6 +25,7 @@
 		<typeAlias alias="order" type="com.zzupzzup.service.domain.Order" />
 		<typeAlias alias="search" type="com.zzupzzup.common.Search"/>
 		<typeAlias alias="chat" type="com.zzupzzup.service.domain.Chat"/>
+		<typeAlias alias="chatMember" type="com.zzupzzup.common.ChatMember"/>
 	</typeAliases>
 	
 	 <!-- SQL Definition :: file include -->
