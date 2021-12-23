@@ -16,7 +16,7 @@ public interface ChatDAO {
 	public Chat getChat(int chatNo) throws Exception;
 	
 	// Select List
-	public List<Chat> listChat(Search search) throws Exception;
+	public List<Chat> listChat(Search search, String restaurantNo) throws Exception;
 	
 	// Update
 	public void updateChat(Chat chat) throws Exception;

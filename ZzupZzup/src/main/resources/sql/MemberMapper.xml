@@ -55,7 +55,7 @@
 	<select 	id="getMember"	parameterType="member" resultMap="memberSelectMap">
 		SELECT
 		MEMBER_ID, MEMBER_NAME, MEMBER_ROLE, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
-		FROM zzupzzup_test.MEMBER
+		FROM zzupzzup.MEMBER
 		WHERE MEMBER_ID = #{memberId} OR NICKNAME = #{nickname};
 	</select>
 	
