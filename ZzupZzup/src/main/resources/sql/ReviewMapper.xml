@@ -174,4 +174,11 @@
 		SELECT count(*)
 		FROM REVIEW
 	</select>
+	
+	<select id="getTotalAvg" resultType="double">
+		SELECT truncate(avg(avg_scope),1)
+		FROM review
+	</select>
+	
+	
 </mapper>
