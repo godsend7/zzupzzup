@@ -26,9 +26,6 @@ public class Reservation {
 	private boolean refundStatus;
 	private Date reservationCancelDate;
 	private int totalPrice;
-//	private List<Member> reservationMember;
-//	private String reservationLeader;
-//	private String reservationPhone;
 	private int orderCount;
 	private int orderTotal;
 	private List<Order> order;

@@ -18,10 +18,10 @@ public interface NoticeService {
 	public Map<String, Object> listNotice(Search search) throws Exception ;
 	
 	// SELECT DELETE
-	public int deleteNotice(Notice notice) throws Exception ;
+	public int deleteNotice(int postNo) throws Exception ;
 
 	// UPDATE
-	public void updateNotice(Notice notice) throws Exception ;
+	public int updateNotice(Notice notice) throws Exception ;
 			
 
 }
