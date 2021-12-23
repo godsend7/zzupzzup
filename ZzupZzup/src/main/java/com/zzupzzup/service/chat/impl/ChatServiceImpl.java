@@ -29,30 +29,40 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public void addChat(Chat chat) throws Exception {
-		chatDao.addChat(chat);
+	public int addChat(Chat chat) throws Exception {
+		return chatDao.addChat(chat);
 	}
 
 	@Override
 	public Chat getChat(int chatNo) throws Exception {
 		return chatDao.getChat(chatNo);
 	}
-
+	
 	@Override
-	public Map<String, Object> listChat(Search search, String restaurantNo) throws Exception {
-		List<Chat> list = chatDao.listChat(search, restaurantNo);
-		int totalCount = chatDao.getTotalCount(search);
-		
-		Map<String, Object> map = new HashMap<String,Object>();
-		map.put("list", list);
-		map.put("totalCount", new Integer(totalCount));
-		
-		return map;
+	public int updateChat(Chat chat) throws Exception {
+		return chatDao.updateChat(chat);
 	}
 
 	@Override
-	public void updateChat(Chat chat) throws Exception {
-		chatDao.updateChat(chat);
+	public Map<String, Object> listChat(Search search) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		//map.put("searchCondition", search.getSearchCondition() );
+		//map.put("searchKeyword",  search.getSearchKeyword() );
+		//map.put("endRowNum",  search.getEndRowNum() );
+		//map.put("startRowNum",  search.getStartRowNum() );
+		
+		map.put("list", chatDao.listChat(map));
+		map.put("totalCount", chatDao.getTotalCount(search));
+		//List<Chat> list = chatDao.listChat(search, restaurantNo);
+		//int totalCount = chatDao.getTotalCount(search);
+		
+		//Map<String, Object> map = new HashMap<String,Object>();
+		//map.put("list", list);
+		//map.put("totalCount", new Integer(totalCount));
+		
+		return map;
 	}
 
 	@Override
@@ -61,13 +71,13 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public void deleteChat(Chat chat) throws Exception {
-		chatDao.deleteChat(chat);
+	public int deleteChat(Chat chat) throws Exception {
+		return chatDao.deleteChat(chat);
 	}
 
 	@Override
-	public void updateChatState(Chat chat) throws Exception {
-		chatDao.updateChatState(chat);
+	public int updateChatState(Chat chat) throws Exception {
+		return chatDao.updateChatState(chat);
 	}
 
 	@Override
@@ -76,18 +86,18 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public void updateReadyCheck(Chat chat) throws Exception {
-		chatDao.updateReadyCheck(chat);
-	}
-
-	@Override
 	public void deleteChatMember(String memberId, int chatNo) throws Exception {
 		chatDao.deleteChatMember(memberId, chatNo);
 	}
 	
 	@Override
-	public void addChatMember(int chatNo, Member memberId) throws Exception {
-		chatDao.addChatMember(chatNo, memberId);
+	public int updateReadyCheck(ChatMember chatMember) throws Exception {
+		return chatDao.updateReadyCheck(chatMember);
+	}
+	
+	@Override
+	public int addChatMember(ChatMember chatMember) throws Exception {
+		return chatDao.addChatMember(chatMember);
 	}
 	
 	@Override
@@ -101,20 +111,24 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public Map<String, Object> listChatMember(Search search) throws Exception {
-		List<Chat> list = chatDao.listChatMember(search);
-		int totalCount = chatDao.getTotalCount(search);
-		
+	public Map<String, Object> listChatMember(Search search, int chatNo) throws Exception {
 		Map<String, Object> map = new HashMap<String,Object>();
-		map.put("list", list);
-		map.put("totalCount", new Integer(totalCount));
+		map.put("search", search);
+		//map.put("searchCondition", search.getSearchCondition() );
+		//map.put("searchKeyword",  search.getSearchKeyword() );
+		//map.put("endRowNum",  search.getEndRowNum() );
+		//map.put("startRowNum",  search.getStartRowNum() );
+		map.put("chatNo", chatNo);
+		
+		map.put("list", chatDao.listChatMember(map));
+		map.put("totalCount", chatDao.getTotalCount(search));
 		
 		return map;
 	}
 
 	@Override
 	public Map<String, Object> listReadyCheckMember(Search search) throws Exception {
-		List<Chat> list = chatDao.listReadyCheckMember(search);
+		List<ChatMember> list = chatDao.listReadyCheckMember(search);
 		
 		Map<String, Object> map = new HashMap<String,Object>();
 		map.put("list", list);

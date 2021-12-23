@@ -20,7 +20,7 @@ public class Chat {
 	private int chatGender; //채팅방 참여가능 성별
 	private int chatMemberCount; //채팅방 참여 인원수
 	private int chatState; //채팅방 모집상태
-	private String chatLeaderId; //채팅방 개설자 아이디
+	private Member chatLeaderId; //채팅방 개설자 아이디
 	private boolean chatShowStatus; //채팅방 노출 여부
 	private Restaurant chatRestaurant; //음식점 도메인
 	private List<ChatMember> chatMember; //채팅방 참여자 리스트
@@ -114,11 +114,11 @@ public class Chat {
 		this.chatState = chatState;
 	}
 
-	public String getChatLeaderId() {
+	public Member getChatLeaderId() {
 		return chatLeaderId;
 	}
 
-	public void setChatLeaderId(String chatLeaderId) {
+	public void setChatLeaderId(Member chatLeaderId) {
 		this.chatLeaderId = chatLeaderId;
 	}
 
