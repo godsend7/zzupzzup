@@ -54,7 +54,7 @@ public class ReviewServiceTest {
 	@Value("#{commonProperties['pageSize']?: 2}")
 	int pageSize;
 
-	@Test
+	//@Test
 	public void testAddReview() throws Exception {
 		Review review = new Review();
 		Member member = new Member();
@@ -168,7 +168,7 @@ public class ReviewServiceTest {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testListReview() throws Exception {
 		Search search = new Search();
 		
@@ -176,7 +176,7 @@ public class ReviewServiceTest {
 		search.setPageSize(pageSize);
 		
 		//해당 음식점의 리뷰 출력
-		String restaurantNo = null;
+		String restaurantNo = "1";
 		//내가 작성한 리뷰 출력 
 		String memberId = "hihi@a.com";
 		
@@ -193,6 +193,7 @@ public class ReviewServiceTest {
 		
 		 Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		 System.out.println(resultPage);
+		 System.out.println(map.get("avgTotalScope")); 
 	}
 	
 	//@Test

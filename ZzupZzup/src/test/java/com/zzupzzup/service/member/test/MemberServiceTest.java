@@ -2,9 +2,11 @@ package com.zzupzzup.service.member.test;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.member.MemberDAO;
 import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.restaurant.RestaurantService;
+
+import net.nurigo.java_sdk.api.Message;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -112,7 +117,8 @@ public class MemberServiceTest {
 		
 		Member member = new Member();
 		//member.setMemberId("hihi@a.com");
-		member.setMemberId("testest@test.com");
+		member.setMemberId("owner01@zzupzzup.com");
+		member.setNickname(null);
 		Member ownMem = memberService.getMember(member);
 		System.out.println(ownMem.getMemberId()+", "+ownMem.getMemberRole());
 		
@@ -273,25 +279,25 @@ public class MemberServiceTest {
 	public void test() throws Exception {
 		
 		String password = "";
-		String memberId = "hihi@a.com";
-		String nickname = "user1";
+		String memberId = "hi";
+		String nickname = "u";
 		String certificatedNum = "123456";
 		
-		//비밀번호 일치 여부
-		if(memberService.confirmPwd(password)) {
-			System.out.println("비밀번호가 일치합니다.");
-		} else {
-			System.out.println("비밀번호가 일치하지 않습니다.");
-		}
-		System.out.println("\n==========================\n");
+//		//비밀번호 일치 여부
+//		if(memberService.confirmPwd(password)) {
+//			System.out.println("비밀번호가 일치합니다.");
+//		} else {
+//			System.out.println("비밀번호가 일치하지 않습니다.");
+//		}
+//		System.out.println("\n==========================\n");
 		
-		//중복확인(아이디)
-		if(! memberService.checkIdDuplication(memberId)) {
-			System.out.println("이미 사용 중인 아이디입니다.");
-		} else {
-			System.out.println("사용 가능한 아이디입니다.");
-		}
-		System.out.println("\n==========================\n");
+//		//중복확인(아이디)
+//		if(! memberService.checkIdDuplication(memberId)) {
+//			System.out.println("이미 사용 중인 아이디입니다.");
+//		} else {
+//			System.out.println("사용 가능한 아이디입니다.");
+//		}
+//		System.out.println("\n==========================\n");
 		
 		//중복확인(닉네임)
 		if(! memberService.checkNicknameDuplication(nickname)) {
@@ -301,12 +307,13 @@ public class MemberServiceTest {
 		}
 		System.out.println("\n==========================\n");
 		
-		//인증번호 전송, 확인
-		System.out.println("인증번호 :: "+memberService.sendCertificatedNum());
-		System.out.println("인증번호 일치 여부 :: "+memberService.checkCertificatedNum(certificatedNum));
-		System.out.println("\n==========================\n");
+//		//인증번호 전송, 확인
+//		System.out.println("인증번호 :: "+memberService.sendCertificatedNum());
+//		System.out.println("인증번호 일치 여부 :: "+memberService.checkCertificatedNum(certificatedNum));
+//		System.out.println("\n==========================\n");
 		
 		//활동점수 추가 및 계산
 		
 	}
+
 }

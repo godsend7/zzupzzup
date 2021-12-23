@@ -5,15 +5,24 @@ import java.sql.Date;
 public class Notice {
 	
 	//Field
-	private int postNo;
-	private String postTitle;
-	private Date postRegDate;
-	private int postCategory;
-	private String postMemberType;
-	private String postText; 
+	private Member member; //회원
+	private int postNo;		// 게시글 번호
+	private String postTitle;	// 공지사항 게시글 제목
+	private Date postRegDate;	// 공지사항 게시글 게시 날짜
+	private int postCategory;	// 공지사항 이벤트 업데이트
+	private String postMemberType;	//공지사항 게시글을 볼 수 있는 유형
+	private String postText;  // 공지사항 게시글 내용
 	
 	//Constructor
 	public Notice() {
+	}
+
+	public Member getMember() {
+		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
 	}
 
 	public int getPostNo() {
@@ -64,12 +73,14 @@ public class Notice {
 		this.postText = postText;
 	}
 
+
 	//Method
 	@Override
 	public String toString() {
-		return "Notice [postNo=" + postNo + ", postTitle=" + postTitle + ", postRegDate=" + postRegDate
-				+ ", postCategory=" + postCategory + ", postMemberType=" + postMemberType + ", postText=" + postText
-				+ "]";
+		return "Notice [member=" + member + ", postNo=" + postNo + ", postTitle=" + postTitle + ", postRegDate="
+				+ postRegDate + ", postCategory=" + postCategory + ", postMemberType=" + postMemberType + ", postText="
+				+ postText + "]";
 	}
+	
 	
 }

@@ -6,14 +6,15 @@ public class Alarm {
 
 	//*Field
 	private int alarmNo;
+	private Member member;
 	private int alarmType;
 	private Date alarmRegDate;
 	private String alarmContents;
 	private boolean alarmCheck;
-	private int postNo;
-	private int chatNo;
-	private int reservationNo;
-	private int reviewNo;
+	private Community community;
+	private Chat chat;
+	private Reservation reservation;
+	private Review review;
 	
 	//*Constructor
 	public Alarm() {
@@ -61,36 +62,52 @@ public class Alarm {
 		this.alarmCheck = alarmCheck;
 	}
 
-	public int getPostNo() {
-		return postNo;
+	public Member getMember() {
+		return member;
 	}
 
-	public void setPostNo(int postNo) {
-		this.postNo = postNo;
+	public void setMember(Member member) {
+		this.member = member;
 	}
 
-	public int getChatNo() {
-		return chatNo;
+	public Community getCommunity() {
+		return community;
 	}
 
-	public void setChatNo(int chatNo) {
-		this.chatNo = chatNo;
+	public void setCommunity(Community community) {
+		this.community = community;
 	}
 
-	public int getReservationNo() {
-		return reservationNo;
+	public Chat getChat() {
+		return chat;
 	}
 
-	public void setReservationNo(int reservationNo) {
-		this.reservationNo = reservationNo;
+	public void setChat(Chat chat) {
+		this.chat = chat;
 	}
 
-	public int getReviewNo() {
-		return reviewNo;
+	public Reservation getReservation() {
+		return reservation;
 	}
 
-	public void setReviewNo(int reviewNo) {
-		this.reviewNo = reviewNo;
+	public void setReservation(Reservation reservation) {
+		this.reservation = reservation;
 	}
+
+	public Review getReview() {
+		return review;
+	}
+
+	public void setReview(Review review) {
+		this.review = review;
+	}
+
+//	@Override
+//	public String toString() {
+//		// TODO Auto-generated method stub
+//		return "Alarm [ alarmNo : "+alarmNo+", memberId : "+member.getMemberId()+", alarmType : "+alarmType+", alarmRegDate : "+alarmRegDate
+//				+", alarmContents : "+alarmContents+", alarmCheck : "+alarmCheck+", communityNo : "+community.getPostNo()+", chatNo : "+chat.getChatNo()
+//				+", reservationNo : "+reservation.getReservationNo()+", reviewNo : "+review.getReviewNo();
+//	}
 	
 }

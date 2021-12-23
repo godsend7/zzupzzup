@@ -56,7 +56,7 @@
 		SELECT
 		MEMBER_ID, MEMBER_NAME, MEMBER_ROLE, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
 		FROM zzupzzup.MEMBER
-		WHERE MEMBER_ID = #{memberId} OR NICKNAME = #{nickname};
+		WHERE MEMBER_ID LIKE #{memberId}||'%' OR NICKNAME LIKE #{nickname}||'%';
 	</select>
 	
 	<select 	id="getOwner"	parameterType="string" resultMap="memberSelectMap">
@@ -177,21 +177,21 @@
 	</select>
 	
 	<update 	id="updateActivityAllScore"	parameterType="string">
-		UPDATE zzupzzup_test.MEMBER AS MEMBER
+		UPDATE zzupzzup.MEMBER AS MEMBER
 		INNER JOIN (
-		SELECT zzupzzup_test.MEMBER.MEMBER_ID, SUM(ACCUMULATE_SCORE) AS SCORE
-		FROM zzupzzup_test.ACTIVITY_SCORE, zzupzzup_test.MEMBER
+		SELECT zzupzzup.MEMBER.MEMBER_ID, SUM(ACCUMULATE_SCORE) AS SCORE
+		FROM zzupzzup.ACTIVITY_SCORE, zzupzzup.MEMBER
 		GROUP BY MEMBER.MEMBER_ID
 		) ACCUMULATE_ALL_SCORE
-		ON zzupzzup_test.MEMBER.MEMBER_ID = ACCUMULATE_ALL_SCORE.MEMBER_ID
+		ON zzupzzup.MEMBER.MEMBER_ID = ACCUMULATE_ALL_SCORE.MEMBER_ID
 		SET MEMBER.ACTIVITY_SCORE = ACCUMULATE_ALL_SCORE.SCORE
-		WHERE zzupzzup_test.MEMBER.MEMBER_ID = #{memberId};
+		WHERE zzupzzup.MEMBER.MEMBER_ID = #{memberId};
 	</update>
 	
 	 
 	<!-- MANNER_SCORE -->
 	<update id="updateMannerScore" parameterType="map">
-		UPDATE zzupzzup_test.MEMBER
+		UPDATE zzupzzup.MEMBER
 		SET MANNER_SCORE = MANNER_SCORE + #{accumulScore} WHERE MEMBER_ID = #{memberId};
 	</update>
 </mapper>

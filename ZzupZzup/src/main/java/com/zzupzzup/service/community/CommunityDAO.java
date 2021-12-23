@@ -1,6 +1,7 @@
 package com.zzupzzup.service.community;
 
 import java.util.List;
+import java.util.Map;
 
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Community;
@@ -15,19 +16,19 @@ public interface CommunityDAO {
 	
 	public int updateCommunity(Community community) throws Exception;
 	
-	public int deleteCommunity(Community community) throws Exception;
+	public int deleteCommunity(int postNo) throws Exception;
 	
-	public void addLike() throws Exception;
+	public int addLike(Map<String, Object> map) throws Exception;
 	
-	public void deleteLike() throws Exception;
+	public int deleteLike(Map<String, Object> map) throws Exception;
 	
-	public List<Community> listLike(Search search) throws Exception;
+	public List<Community> listLike(Map<String, Object> map) throws Exception;
 	
-	public List<Community> listMyPost(Search search) throws Exception;
+	public List<Community> listMyPost(Map<String, Object> map) throws Exception;
 	
 	public void officialCommunity() throws Exception;
 	
-	public void getLikeCount() throws Exception;
+	public int getLikeCount(int postNo) throws Exception;
 	
 	public int getTotalCount(Search search) throws Exception;
 	

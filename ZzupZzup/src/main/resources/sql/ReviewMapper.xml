@@ -174,4 +174,12 @@
 		SELECT count(*)
 		FROM REVIEW
 	</select>
+	
+	<select id="getTotalAvg" parameterType="String" resultType="double">
+		SELECT truncate(avg(avg_scope),1)
+		FROM review
+		WHERE restaurant_no = #{value}
+	</select>
+	
+	
 </mapper>

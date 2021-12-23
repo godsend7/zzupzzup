@@ -27,6 +27,9 @@
 		
 		<collection property="restaurantMenus" resultMap="menuSelectMap"></collection>
 		<collection property="restaurantTimes" resultMap="timeSelectMap"></collection>
+		<collection property="restaurantImage" ofType="String" javaType="list">
+			<result column="image" />
+		</collection>
 		
 	</resultMap>
 	
@@ -104,10 +107,12 @@
 	<select 	id="getRestaurant"		parameterType="int"		resultMap="restaurantSelectMap">
         SELECT *
 		FROM RESTAURANT AS r
-		RIGHT OUTER JOIN (Select * from RESTAURANT_TIME) AS t
+		LEFT OUTER JOIN (Select * FROM RESTAURANT_TIME) AS t
 		ON (r.RESTAURANT_NO = t.RESTAURANT_NO)
-		RIGHT OUTER JOIN (select * from menu) AS m
+		LEFT OUTER JOIN (SELECT * FROM MENU) AS m
 		ON (r.RESTAURANT_NO = m.RESTAURANT_NO)
+		LEFT OUTER JOIN (SELECT * FROM IMAGE) AS img
+		ON (r.RESTAURANT_NO = img.RESTAURANT_NO)
 		WHERE r.RESTAURANT_NO = #{value};
 	</select>
 	
@@ -158,8 +163,8 @@
 			  FROM RESTAURANT AS rt
 			  ORDER BY rt.RESTAURANT_NO LIMIT #{startRowNum}, #{pageSize}) AS rt
 		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
-						  FROM IMAGE) AS img
-						  ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
+						 FROM IMAGE) AS img
+						 ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
 	</select>
 	
 	
@@ -179,7 +184,7 @@
 	</select>
 	
 	
-	<!-- SQL : DELECT -->
+	<!-- SQL : DELETE -->
 	<delete id="deleteRestaurant" parameterType="restaurant" >
 		DELETE FROM IMAGE WHERE RESTAURANT_NO = #{restaurantNo};
 		
@@ -209,7 +214,16 @@
 	
 	<!-- SQL : SELECT -->
 	<select id="listCallDibs" parameterType="map" resultMap="restaurantSelectMap">
-		
+		SELECT *
+		FROM RESTAURANT AS rt
+		INNER JOIN (SELECT RESTAURANT_NO, MARK_NO
+					FROM MARK
+					WHERE MEMBER_ID = #{memberId} AND RESTAURANT_NO IS NOT NULL
+					ORDER BY MARK_NO LIMIT #{search.startRowNum}, #{search.pageSize}) AS mk
+					ON (rt.RESTAURANT_NO = mk.RESTAURANT_NO)
+		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
+						 FROM IMAGE) AS img
+						 ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
 	</select>
 	
 	

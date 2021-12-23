@@ -11,11 +11,16 @@
 		<result property="postNo" 			column="POST_NO" 			jdbcType="NUMERIC"/>
 		<result property="postTitle"		column="POST_TITLE" 		jdbcType="VARCHAR"/>
 		<result property="postText" 		column="POST_TEXT" 			jdbcType="VARCHAR"/>
+		<result property="streetAddress" 	column="STREET_ADDRESS" 	jdbcType="VARCHAR"/>
+		<result property="restAddress" 		column="REST_ADDRESS" 		jdbcType="VARCHAR"/>
+		<result property="areaAddress" 		column="AREA_ADDRESS" 		jdbcType="VARCHAR"/>
 		<result property="restaurantName" 	column="RESTAURANT_NAME" 	jdbcType="VARCHAR"/>
 		<result property="restaurantTel" 	column="RESTAURANT_TEL" 	jdbcType="VARCHAR"/>
-		<result property="streetAddress" 	column="STREET_ADDRESS" 	jdbcType="VARCHAR"/>
-		<result property="areaAddress" 		column="AREA_ADDRESS" 		jdbcType="VARCHAR"/>
-		<result property="menuType" 		column="MENU_TYPE" 			jdbcType="VARCHAR"/>
+		<result property="receiptImage" 	column="RECEIPT_IMAGE" 		jdbcType="VARCHAR"/>
+		<result property="postRegDate" 		column="POST_REG_DATE" 		jdbcType="DATE"/>
+		<result property="postShowStatus" 	column="POST_SHOW_STATUS" 	jdbcType="BOOLEAN"/>
+		<result property="officialDate" 	column="OFFICAIL_DATE" 		jdbcType="DATE"/>
+		<result property="menuType" 		column="MENU_TYPE" 			jdbcType="NUMERIC"/>
 		<result property="mainMenuTitle" 	column="MAIN_MENU_TITLE" 	jdbcType="VARCHAR"/>
 		<result property="mainMenuPrice" 	column="MAIN_MENU_PRICE" 	jdbcType="NUMERIC"/>
 	
@@ -24,6 +29,9 @@
 		</association> -->
 		
 		<collection property="restaurantTimes" resultMap="timeSelectMap"></collection>
+		<collection property="postImage" ofType="String" javaType="list">
+			<result column="image" />
+		</collection>
 	
 	</resultMap>
 	
@@ -45,9 +53,9 @@
 	<insert		id="addCommunity"	parameterType="community" useGeneratedKeys="true" keyProperty="postNo">
 		INSERT
 		INTO COMMUNITY(MEMBER_ID, POST_TITLE, POST_TEXT, RESTAURANT_NAME, RESTAURANT_TEL,
-		STREET_ADDRESS, AREA_ADDRESS, MENU_TYPE, MAIN_MENU_TITLE, MAIN_MENU_PRICE)
+		STREET_ADDRESS, AREA_ADDRESS, MENU_TYPE, RECEIPT_IMAGE, MAIN_MENU_TITLE, MAIN_MENU_PRICE)
 		VALUES ( #{member.memberId}, #{postTitle}, #{postText}, #{restaurantName}, #{restaurantTel},
-		#{streetAddress}, #{areaAddress}, #{menuType}, #{mainMenuTitle}, #{mainMenuPrice})
+		#{streetAddress}, #{areaAddress}, #{menuType}, #{receiptImage}, #{mainMenuTitle}, #{mainMenuPrice})
 	</insert>
 	
 	<insert 	id="addRestaurantTime"	parameterType="community" >
@@ -72,7 +80,7 @@
 		INTO IMAGE(POST_NO, IMAGE)
 		VALUES
 		<foreach collection="postImage" item="item" separator=",">
-			(#{posttNo}, #{item})
+			(#{postNo}, #{item})
 		</foreach>
 	</insert>
 	
@@ -82,8 +90,10 @@
 		SELECT *
 		FROM COMMUNITY AS cn
 		RIGHT OUTER JOIN (SELECT * FROM RESTAURANT_TIME) AS rt
-		ON (cn.RESTAURANT_NO = rt.RESTAURANT_NO)
-		WHERE POST_NO = #{value};
+		ON (cn.POST_NO = rt.POST_NO)
+		RIGHT OUTER JOIN (SELECT * FROM IMAGE) AS img
+		ON (cn.POST_NO = img.POST_NO)
+		WHERE cn.POST_NO = #{value};
 	</select>
 	
 	
@@ -108,8 +118,70 @@
 	<!-- SQL : SELECT LIST -->
 	<select id="listCommunity" parameterType="search" resultMap="communitySelectMap">
 		SELECT *
+		FROM (SELECT *
+			  FROM COMMUNITY AS cn
+			  ORDER BY cn.POST_NO LIMIT #{startRowNum}, #{pageSize}) AS cn
+		LEFT OUTER JOIN (SELECT IMAGE, POST_NO
+						 FROM IMAGE) AS img
+						 ON (cn.POST_NO = img.POST_NO)
+	</select>
+	
+	
+	<!-- SQL : DELETE -->
+	<delete id="deleteCommunity" parameterType="community" >
+		DELETE FROM REPORT WHERE POST_NO = #{postNo};
+	
+		DELETE FROM IMAGE WHERE POST_NO = #{postNo};
+		
+		DELETE FROM RESTAURANT_TIME WHERE POST_NO = #{postNo};
+		
+		DELETE FROM COMMUNITY WHERE POST_NO = #{postNo};
+	</delete>
+	
+	
+	<!-- SQL : INSERT -->
+	<insert id="addLike" parameterType="community">
+		INSERT
+		INTO MARK(MEMBER_ID, POST_NO)
+		VALUES(#{memberId}, #{postNo});
+	</insert>
+	
+	
+	<!-- SQL : DELETE -->
+	<delete id="deleteLike" parameterType="community">
+		DELETE
+		FROM MARK
+		WHERE MEMBER_ID = #{memberId} AND POST_NO = #{postNo};
+	</delete>
+	
+	
+	<!-- SQL : SELECT LIST -->
+	<select id="listLike" parameterType="map" resultMap="communitySelectMap">
+		SELECT *
+		FROM COMMUNITY AS cn
+		INNER JOIN (SELECT POST_NO, MARK_NO
+					FROM MARK
+					WHERE MEMBER_ID = #{memberId} AND POST_NO IS NOT NULL
+					ORDER BY MARK_NO LIMIT #{search.startRowNum}, #{search.pageSize}) AS mk
+					ON (cn.POST_NO = mk.POST_NO)
+		LEFT OUTER JOIN (SELECT IMAGE, POST_NO
+						 FROM IMAGE) AS img
+						 ON (cn.POST_NO = img.POST_NO)	
+	</select>
+	
+	
+	<!-- SQL : SELECT -->
+	<select id="getTotalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
 		FROM COMMUNITY
-		ORDER BY POST_NO LIMIT #{startRowNum}, #{pageSize}
+	</select>
+	
+	
+	<!-- SQL : SELECT -->
+	<select id="getLikeCount" parameterType="int" resultType="int">
+		SELECT COUNT(POST_NO)
+		FROM MARK
+		WHERE POST_NO = #{value};
 	</select>
 	
 	
