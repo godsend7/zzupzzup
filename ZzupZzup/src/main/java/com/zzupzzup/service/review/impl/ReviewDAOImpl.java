@@ -122,8 +122,8 @@ public class ReviewDAOImpl implements ReviewDAO {
 	}
 
 	@Override
-	public double getTotalAvg() throws Exception {
-		return sqlSession.selectOne("ReviewMapper.getTotalAvg");
+	public double getTotalAvg(String restaurantNo) throws Exception {
+		return sqlSession.selectOne("ReviewMapper.getTotalAvg", restaurantNo);
 		
 	}
 

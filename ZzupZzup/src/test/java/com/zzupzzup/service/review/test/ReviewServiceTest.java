@@ -176,7 +176,7 @@ public class ReviewServiceTest {
 		search.setPageSize(pageSize);
 		
 		//해당 음식점의 리뷰 출력
-		String restaurantNo = null;
+		String restaurantNo = "1";
 		//내가 작성한 리뷰 출력 
 		String memberId = "hihi@a.com";
 		

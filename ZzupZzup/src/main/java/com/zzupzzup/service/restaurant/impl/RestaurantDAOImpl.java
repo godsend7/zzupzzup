@@ -74,11 +74,7 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	public List<Restaurant> listMyRestaurant(Map<String, Object> map) throws Exception {
 		
 		List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listMyRestaurant", map);
-		
-//		for (int i = 0; i < list.size(); i++) {
-//			list.get(i).set
-//		}
-		
+
 		return list;
 	}
 
@@ -114,13 +110,9 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 		
 		List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listCallDibs", map);
 		
-//		for (int i = 0; i < list.size(); i++) {
-//			list.get(i).set
-//		}
-		
 		return list;
 	}
-
+	
 	@Override
 	public int checkCallDibs(Map<String, Object> map) throws Exception {
 		return sqlSession.insert("RestaurantMapper.checkCallDibs", map);

@@ -11,11 +11,16 @@
 		<result property="postNo" 			column="POST_NO" 			jdbcType="NUMERIC"/>
 		<result property="postTitle"		column="POST_TITLE" 		jdbcType="VARCHAR"/>
 		<result property="postText" 		column="POST_TEXT" 			jdbcType="VARCHAR"/>
+		<result property="streetAddress" 	column="STREET_ADDRESS" 	jdbcType="VARCHAR"/>
+		<result property="restAddress" 		column="REST_ADDRESS" 		jdbcType="VARCHAR"/>
+		<result property="areaAddress" 		column="AREA_ADDRESS" 		jdbcType="VARCHAR"/>
 		<result property="restaurantName" 	column="RESTAURANT_NAME" 	jdbcType="VARCHAR"/>
 		<result property="restaurantTel" 	column="RESTAURANT_TEL" 	jdbcType="VARCHAR"/>
-		<result property="streetAddress" 	column="STREET_ADDRESS" 	jdbcType="VARCHAR"/>
-		<result property="areaAddress" 		column="AREA_ADDRESS" 		jdbcType="VARCHAR"/>
-		<result property="menuType" 		column="MENU_TYPE" 			jdbcType="VARCHAR"/>
+		<result property="receiptImage" 	column="RECEIPT_IMAGE" 		jdbcType="VARCHAR"/>
+		<result property="postRegDate" 		column="POST_REG_DATE" 		jdbcType="DATE"/>
+		<result property="postShowStatus" 	column="POST_SHOW_STATUS" 	jdbcType="BOOLEAN"/>
+		<result property="officialDate" 	column="OFFICAIL_DATE" 		jdbcType="DATE"/>
+		<result property="menuType" 		column="MENU_TYPE" 			jdbcType="NUMERIC"/>
 		<result property="mainMenuTitle" 	column="MAIN_MENU_TITLE" 	jdbcType="VARCHAR"/>
 		<result property="mainMenuPrice" 	column="MAIN_MENU_PRICE" 	jdbcType="NUMERIC"/>
 	
@@ -24,6 +29,9 @@
 		</association> -->
 		
 		<collection property="restaurantTimes" resultMap="timeSelectMap"></collection>
+		<collection property="postImage" ofType="String" javaType="list">
+			<result column="image" />
+		</collection>
 	
 	</resultMap>
 	
@@ -45,9 +53,9 @@
 	<insert		id="addCommunity"	parameterType="community" useGeneratedKeys="true" keyProperty="postNo">
 		INSERT
 		INTO COMMUNITY(MEMBER_ID, POST_TITLE, POST_TEXT, RESTAURANT_NAME, RESTAURANT_TEL,
-		STREET_ADDRESS, AREA_ADDRESS, MENU_TYPE, MAIN_MENU_TITLE, MAIN_MENU_PRICE)
+		STREET_ADDRESS, AREA_ADDRESS, MENU_TYPE, RECEIPT_IMAGE, MAIN_MENU_TITLE, MAIN_MENU_PRICE)
 		VALUES ( #{member.memberId}, #{postTitle}, #{postText}, #{restaurantName}, #{restaurantTel},
-		#{streetAddress}, #{areaAddress}, #{menuType}, #{mainMenuTitle}, #{mainMenuPrice})
+		#{streetAddress}, #{areaAddress}, #{menuType}, #{receiptImage}, #{mainMenuTitle}, #{mainMenuPrice})
 	</insert>
 	
 	<insert 	id="addRestaurantTime"	parameterType="community" >
@@ -72,7 +80,7 @@
 		INTO IMAGE(POST_NO, IMAGE)
 		VALUES
 		<foreach collection="postImage" item="item" separator=",">
-			(#{posttNo}, #{item})
+			(#{postNo}, #{item})
 		</foreach>
 	</insert>
 	
@@ -82,8 +90,10 @@
 		SELECT *
 		FROM COMMUNITY AS cn
 		RIGHT OUTER JOIN (SELECT * FROM RESTAURANT_TIME) AS rt
-		ON (cn.RESTAURANT_NO = rt.RESTAURANT_NO)
-		WHERE POST_NO = #{value};
+		ON (cn.POST_NO = rt.POST_NO)
+		RIGHT OUTER JOIN (SELECT * FROM IMAGE) AS img
+		ON (cn.POST_NO = img.POST_NO)
+		WHERE cn.POST_NO = #{value};
 	</select>
 	
 	
