@@ -17,24 +17,53 @@
 		
 
 		<!-- Scripts -->
-		<script src="assets/js/jquery.min.js"></script>
-		<script src="assets/js/browser.min.js"></script>
-		<script src="assets/js/breakpoints.min.js"></script>
-		<script src="assets/js/util.js"></script>
-		<script src="assets/js/main.js"></script>
+		<!-- defer :: HTML이 파싱 완료된 후 script 실행 -->
+		<script defer src="assets/js/jquery.min.js"></script>
+		<script defer src="assets/js/browser.min.js"></script>
+		<script defer src="assets/js/breakpoints.min.js"></script>
+		<script defer src="assets/js/util.js"></script>
+		<script defer src="assets/js/main.js"></script>
 		
-		<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=7gzdb36t5o"></script>
+		<script defer type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=7gzdb36t5o"></script>
 		<!-- <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=7gzdb36t5o&callback=CALLBACK_FUNCTION"></script> -->
-		<script>
-			/* var mapOptions = {
-			    center: new naver.maps.LatLng(37.3595704, 127.105399),
-			    zoom: 10
-			}; 
-			
-			var map = new naver.maps.Map('content', mapOptions);
-			*/
-			
-			var HOME_PATH = window.HOME_PATH || '.';
+		<script defer>
+			window.onload = function() {
+				/* const sidebar = document.getElementById('sidebar');
+				console.log(sidebar.classList.contains);
+				sidebar.classList.add('inactive');
+				const ddd = $("#sidebar");
+				console.log(ddd); */
+		
+				var mapOptions = {
+				    center: new naver.maps.LatLng(37.3595704, 127.105399),
+				    zoom: 10
+				}; 
+				
+				var map = new naver.maps.Map('content', mapOptions);
+				
+				$(function() {
+					$.ajax(
+						{
+							url : "https://openapi.gg.go.kr/PlaceThatDoATasteyFoodSt?KEY=0584ed7e427d4676a15a4bf7f91b1597&Type=json&pIndex=1&pSize=10",
+		    				type : "GET",
+		    				dataType : "json",
+		    				success : function(data) {
+		    					//alert( "JSON.stringify(JSONData) : \n"+JSON.stringify(data) );
+		    					console.log(JSON.stringify(data));
+		    					//alert(data.totalCount);
+		    					//alert(data.list);
+		    				},
+		    				error:function(request,status,error){
+		 				       console.log("실패");
+		 				    }
+						}
+					)
+							
+				});
+			}
+				
+				
+			/* var HOME_PATH = window.HOME_PATH || '.';
 			var cityhall = new naver.maps.LatLng(37.5666805, 126.9784147),
 			    map = new naver.maps.Map('content', {
 			        center: cityhall,
@@ -74,20 +103,8 @@
 			    } else {
 			        infowindow.open(map, marker);
 			    }
-			});
-			
-			
-		</script>
-		<script>
-		
-			const sidebar = document.getElementById('sidebar');
-			console.log(sidebar.classList.contains);
-			sidebar.classList.add('inactive');
-			const ddd = $("#sidebar");
-			console.log(ddd);
-			
-			$
-		
+			}); */
+				
 		</script>
 	</head>
 	<body class="is-preload">
@@ -113,9 +130,7 @@
 
 					<!-- Banner -->
 					<section id="banner">
-						<div class="content" id="content" style="width: 100%; height:400px;">
-							
-						</div>
+						<div class="content" id="content" style="width: 100%; height:400px;"></div>
 					</section>
 
 					<!-- Section -->
@@ -215,7 +230,7 @@
 			</div>
 
 			<!-- Sidebar -->
-			<div id="sidebar" >
+			<div id="sidebar" class="inactive">
 				<div class="inner">
 					<!-- Search -->
 					<section id="search" class="alt">
