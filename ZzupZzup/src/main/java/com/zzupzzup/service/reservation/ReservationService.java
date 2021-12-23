@@ -18,10 +18,10 @@ public interface ReservationService {
 	public Map<String, Object> listReservation(Search search) throws Exception ;
 	
 	// SELECT LIST
-	public Map<String, Object> listMyReservation(Search search, String memberId) throws Exception ;// 일단 질문	
+	public Map<String, Object> listMyReservation(Search search, String memberId, String restaurantNo) throws Exception ;// 일단 질문	
 
 	// UPDATE
-	public void updateReservation(Reservation reservation) throws Exception ;
+	public int updateReservation(Reservation reservation) throws Exception ;
 			
 
 }

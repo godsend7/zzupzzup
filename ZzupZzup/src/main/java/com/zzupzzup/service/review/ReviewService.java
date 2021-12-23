@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.HashTag;
 import com.zzupzzup.service.domain.Review;
 
 public interface ReviewService {
@@ -22,7 +23,7 @@ public interface ReviewService {
 	
 	public Map<String, Object> listMyLikeReview(Search search, String memberId) throws Exception;
 	
-	public List<Map<String, Object>> listHashTag(String search) throws Exception;
+	public List<HashTag> listHashTag(String search) throws Exception;
 	
 	public int addLike(String memberId, int reviewNo) throws Exception;
 	

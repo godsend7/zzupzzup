@@ -21,9 +21,9 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		@Qualifier("reservationDaoImpl")
 		private ReservationDAO reservationDao;
 		
-		public void setReservationDAO(ReservationDAO reservationDao) {
-			this.reservationDao = reservationDao;
-		}
+		//public void setReservationDAO(ReservationDAO reservationDao) {
+		//	this.reservationDao = reservationDao;
+		//} 필요없으면 지우기
 		
 		///Constructor
 		public ReservationServiceImpl() {
@@ -31,40 +31,48 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		}
 
 		///Method
+		@Override
 		public int addReservation(Reservation reservation) throws Exception {
 			System.out.println("ddddddd");
 			return reservationDao.addReservation(reservation);
 		}
-
+		
+		@Override
 		public Reservation getReservation(int reservationNo) throws Exception {
 			System.out.println("ReservationServiceImpl reservationNo" + reservationNo);
 			return reservationDao.getReservation(reservationNo);
 		}
 
+		@Override
 		public Map<String , Object > listReservation(Search search) throws Exception {
-			List<Reservation> list= reservationDao.listReservation(search);
-			int totalCount = reservationDao.getTotalCount(search);
 			
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("list", list );
-			map.put("totalCount", new Integer(totalCount));
+			map.put("search", search);
+			
+			
+			map.put("list", reservationDao.listReservation(map));
+			map.put("totalCount", reservationDao.getTotalCount(search));
 			
 			return map;
 		}
 		
-		public Map<String , Object > listMyReservation(Search search, String memberId) throws Exception {
-			List<Reservation> list= reservationDao.listReservation(search);
-			int totalCount = reservationDao.getTotalCount(search);
+		@Override
+		public Map<String , Object > listMyReservation(Search search, String memberId, String restaurantNo) throws Exception {
 			
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("list", list );
-			map.put("totalCount", new Integer(totalCount));
+			map.put("search", search);
+			map.put("memberId", memberId);
+			map.put("restaurantNo", restaurantNo);
+			
+			map.put("list", reservationDao.listMyReservation(map));
+			map.put("totalCount", reservationDao.getTotalCount(search));
 			
 			return map;
 		}
-
-		public void updateReservation(Reservation reservation) throws Exception {
-			reservationDao.updateReservation(reservation);
+		
+		@Override
+		public int updateReservation(Reservation reservation) throws Exception {
+			return reservationDao.updateReservation(reservation);
 		}
 
 		

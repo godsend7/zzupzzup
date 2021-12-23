@@ -16,10 +16,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.HashTag;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.Review;
+import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.reservation.ReservationService;
 import com.zzupzzup.service.review.ReviewService;
 
@@ -42,25 +44,33 @@ public class ReviewServiceTest {
 	@Qualifier("reservationServiceImpl")
 	private ReservationService reservationService;
 	
+	@Autowired
+	@Qualifier("memberServiceImpl")
+	private MemberService memberService;
+	
 	@Value("#{commonProperties['pageUnit']?: 3}")
 	int pageUnit;
 	
 	@Value("#{commonProperties['pageSize']?: 2}")
 	int pageSize;
 
-	//@Test
+	@Test
 	public void testAddReview() throws Exception {
 		Review review = new Review();
 		Member member = new Member();
 		Reservation reservation = new Reservation();
 		Restaurant restaurant = new Restaurant();
 		
-		List<Integer> hashTag = new ArrayList<Integer>();
+		List<HashTag> hashTag = new ArrayList<HashTag>();
 		List<String> reviewImage = new ArrayList<String>();
 		
-		hashTag.add(1);
-		hashTag.add(2);
-		hashTag.add(3);
+		HashTag h1 = new HashTag();
+		h1.setHashTagNo(1);
+		HashTag h2 = new HashTag();
+		h2.setHashTagNo(2);
+		
+		hashTag.add(h1);
+		hashTag.add(h2);
 		
 		reviewImage.add("a.jpg");
 		reviewImage.add("b.jpg");
@@ -75,7 +85,7 @@ public class ReviewServiceTest {
 		review.setMember(member);
 		review.setReservation(reservation);
 		review.setReviewDetail("맛있어요~~");
-		review.setHashTagNo(hashTag);
+		review.setHashTag(hashTag);
 		review.setReviewImage(reviewImage);
 		review.setScopeTaste(4);
 		review.setScopeKind(5);
@@ -84,20 +94,29 @@ public class ReviewServiceTest {
 		
 		if(reviewService.addReview(review) == 1) {
 			System.out.println("review insert success " + review.getAvgScope());
+			memberService.addActivityScore(member.getMemberId(), 2, 5); //리뷰 작성 시 5
 		}
 	}
 	
 	//@Test
 	public void testUpdateReview() throws Exception {
 		
-		List<Integer> hashTag = new ArrayList<Integer>();
+		List<HashTag> hashTag = new ArrayList<HashTag>();
 		List<String> reviewImage = new ArrayList<String>();
 		
-		hashTag.add(1);
-		hashTag.add(5);
-		hashTag.add(4);
-		hashTag.add(3);
-		hashTag.add(7);
+//		hashTag.add(1);
+//		hashTag.add(5);
+//		hashTag.add(4);
+//		hashTag.add(3);
+//		hashTag.add(7);
+		
+		HashTag h1 = new HashTag();
+		h1.setHashTagNo(5);
+		HashTag h2 = new HashTag();
+		h2.setHashTagNo(3);
+		
+		hashTag.add(h1);
+		hashTag.add(h2);
 		
 		reviewImage.add("d.jpg");
 		reviewImage.add("e.jpg");
@@ -105,9 +124,9 @@ public class ReviewServiceTest {
 		
 		Review review = new Review();
 		
-		review.setReviewNo(5);
+		review.setReviewNo(25);
 		review.setReviewDetail("최고에요~~");
-		review.setHashTagNo(hashTag);
+		review.setHashTag(hashTag);
 		review.setReviewImage(reviewImage);
 		review.setScopeTaste(5);
 		review.setScopeKind(5);
@@ -126,7 +145,7 @@ public class ReviewServiceTest {
 		
 		Review review = new Review();
 		
-		review.setReviewNo(8);
+		review.setReviewNo(5);
 		
 		if(reviewService.deleteReview(review.getReviewNo()) == 1) {
 			System.out.println("review delete success");
@@ -138,28 +157,28 @@ public class ReviewServiceTest {
 		
 		Review review = new Review();
 		
-		review.setReviewNo(5);
+		review.setReviewNo(25);
 		
 		review = reviewService.getReview(review.getReviewNo());
 		
 		System.out.println("review get success" + review);
 		
-		for (int i = 0; i<review.getHashTagNo().size(); i++) {
-			System.out.println(review.getHashTagNo().get(i) + " : " + review.getHashTag().get(i));
+		for (int i = 0; i<review.getHashTag().size(); i++) {
+			System.out.println(review.getHashTag().get(i) + " : " + review.getHashTag().get(i));
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testListReview() throws Exception {
 		Search search = new Search();
 		
-		search.setCurrentPage(3);		
+		search.setCurrentPage(1);		
 		search.setPageSize(pageSize);
 		
 		//해당 음식점의 리뷰 출력
 		String restaurantNo = null;
 		//내가 작성한 리뷰 출력 
-		String memberId = null;
+		String memberId = "hihi@a.com";
 		
 		Map<String, Object> map = reviewService.listReview(search, restaurantNo, memberId);
 		
@@ -169,6 +188,7 @@ public class ReviewServiceTest {
 		
 		for (Review r : list) {
 			System.out.println(r.getReviewNo());
+			System.out.println(r);
 		}
 		
 		 Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
@@ -178,8 +198,11 @@ public class ReviewServiceTest {
 	//@Test
 	public void testListMyLikeReview() throws Exception {
 		Search search = new Search();
-			
-		String memberId = "user";
+		
+		search.setCurrentPage(1);		
+		search.setPageSize(pageSize);
+		
+		String memberId = "user02@zzupzzup.com";
 			
 		Map<String, Object> map = reviewService.listMyLikeReview(search, memberId);
 			
@@ -196,14 +219,14 @@ public class ReviewServiceTest {
 	public void testListHashTag() throws Exception {
 		String search = "#";
 		
-		List<Map<String, Object>> list = reviewService.listHashTag(search);
+		List<HashTag> list = reviewService.listHashTag(search);
 			
 		System.out.println("review listHashTag success");
 		
-		for (Map r : list) {
+		for (HashTag r : list) {
 			//System.out.println(r);
-			System.out.println(r.get("testHashtagNo"));
-			System.out.println(r.get("testHashtag"));
+			System.out.println(r.getHashTagNo());
+			System.out.println(r.getHashTag());
 		}
 	}
 	
@@ -216,7 +239,7 @@ public class ReviewServiceTest {
 	
 	//@Test
 	public void testDeleteLike() throws Exception {
-		if(reviewService.deleteLike("hihi@a.com", 5) == 1) {
+		if(reviewService.deleteLike("hihi@a.com", 7) == 1) {
 			System.out.println("review delete success");
 		}
 	}

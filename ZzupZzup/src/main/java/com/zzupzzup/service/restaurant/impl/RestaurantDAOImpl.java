@@ -1,6 +1,7 @@
 package com.zzupzzup.service.restaurant.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,18 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	public List<Restaurant> listRestaurant(Search search) throws Exception {
 		return sqlSession.selectList("RestaurantMapper.listRestaurant", search);
 	}
+	
+	@Override
+	public List<Restaurant> listMyRestaurant(Map<String, Object> map) throws Exception {
+		
+		List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listMyRestaurant", map);
+		
+//		for (int i = 0; i < list.size(); i++) {
+//			list.get(i).set
+//		}
+		
+		return list;
+	}
 
 	@Override
 	public int updateRestaurant(Restaurant restaurant) throws Exception {
@@ -87,33 +100,36 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	}
 	
 	@Override
-	public int deleteRestaurant(Restaurant restaurant) throws Exception {
-		return 0;
+	public int deleteRestaurant(int restaurantNo) throws Exception {
+		return sqlSession.delete("RestaurantMapper.deleteRestaurant", restaurantNo);
 	}
 	
 	@Override
 	public int getTotalCount(Search search) throws Exception {
-		return 0;
-		// TODO Auto-generated method stub
-		
+		return sqlSession.selectOne("RestaurantMapper.getTotalCount", search);		
 	}
 	
 	@Override
-	public void listCallDibs() throws Exception {
-		// TODO Auto-generated method stub
+	public List<Restaurant> listCallDibs(Map<String, Object> map) throws Exception {
 		
+		List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listCallDibs", map);
+		
+//		for (int i = 0; i < list.size(); i++) {
+//			list.get(i).set
+//		}
+		
+		return list;
 	}
 
 	@Override
-	public void checkCallDibs() throws Exception {
-		// TODO Auto-generated method stub
-		
+	public int checkCallDibs(Map<String, Object> map) throws Exception {
+		return sqlSession.insert("RestaurantMapper.checkCallDibs", map);
 	}
 
 	@Override
-	public void cancelCallDibs() throws Exception {
-		// TODO Auto-generated method stub
-		
+	public int cancelCallDibs(Map<String, Object> map) throws Exception {
+		return sqlSession.delete("RestaurantMapper.cancelCallDibs", map);
 	}
 
+	
 }

@@ -32,9 +32,8 @@
 	
 	<!-- SQL : INSERT -->
 	<insert 	id="addAlarm"		parameterType="alarm" >
-	 	INSERT
-		INTO member( member_id , password , member_name , member_phone) 
-		VALUES ( #{memberId} , #{password} , #{memberName} , #{memberPhone})
+	 	INSERT INTO zzupzzup_test.ALARM(MEMBER_ID, ALARM_TYPE, ALARM_CONTENTS, RESERVATION_NO)
+		VALUES(#{memberId}, #{alarmType}, #{alarmContents}, #{reservationNo})
 	</insert>
 	 
 </mapper>
