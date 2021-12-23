@@ -1,12 +1,8 @@
 package com.zzupzzup.service.chat.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Repository;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +16,12 @@ import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.chat.ChatDAO;
 
 
-@Repository("chatDAOImpl")
+@Repository("chatDaoImpl")
 public class ChatDAOImpl implements ChatDAO {
 
+	///Field
 	@Autowired
 	@Qualifier("sqlSessionTemplate")
-	
-	///Field
 	private SqlSession sqlSession;
 	
 	///Constructor
@@ -46,8 +41,17 @@ public class ChatDAOImpl implements ChatDAO {
 	}
 
 	@Override
-	public List<Chat> listChat(Search search) throws Exception {
-		return sqlSession.selectList("ChatMapper.listChat", search);
+	public List<Chat> listChat(Search search, String restaurantNo) throws Exception {
+		System.out.println("chatDaoImpl listChat search : " + search);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("searchCondition", search.getSearchCondition() );
+		map.put("searchKeyword",  search.getSearchKeyword() );
+		map.put("endRowNum",  search.getEndRowNum() );
+		map.put("startRowNum",  search.getStartRowNum() );
+		map.put("restaurantNo", restaurantNo);
+		System.out.println("map : " + map);
+		
+		return sqlSession.selectList("ChatMapper.listChat", map);
 	}
 
 	@Override
