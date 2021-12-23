@@ -8,7 +8,7 @@ import com.zzupzzup.service.domain.Member;
 
 public interface MemberDAO {
 
-	public void addMember(Member member) throws Exception;
+	public int addMember(Member member) throws Exception;
 	
 	//public void login() throws Exception;
 	
@@ -22,13 +22,13 @@ public interface MemberDAO {
 	
 	public List<Member> listMember(Map<String, Object> map) throws Exception;
 	
-	public void updateMember(Member member) throws Exception;
+	public int updateMember(Member member) throws Exception;
 	
-	public void addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception;
+	public int addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception;
 	
 	public List<Member> listActivityScore(String memberId) throws Exception;
 	
-	public void updateActivityAllScore(String memberId) throws Exception;
+	public int updateActivityAllScore(String memberId) throws Exception;
 	
-	public void updateMannerScore(String memberId, int accumulScore) throws Exception;
+	public int updateMannerScore(String memberId, int accumulScore) throws Exception;
 }
