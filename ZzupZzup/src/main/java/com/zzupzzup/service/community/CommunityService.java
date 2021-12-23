@@ -15,15 +15,15 @@ public interface CommunityService {
 	
 	public Map<String, Object> listCommunity(Search search) throws Exception;
 	
-	public int deleteCommunity(Community community) throws Exception;
+	public int deleteCommunity(int postNo) throws Exception;
 	
-	public void addLike() throws Exception;
+	public int addLike(String memberId, int postNo) throws Exception;
 	
-	public void deleteLike() throws Exception;
+	public int deleteLike(String memberId, int postNo) throws Exception;
 	
-	public Map<String, Object> listLike() throws Exception;
+	public Map<String, Object> listLike(Search search, String memberId) throws Exception;
 	
-	public Map<String, Object> listMyPost() throws Exception;
+	public Map<String, Object> listMyPost(Search search, String memberId) throws Exception;
 	
 	public void officialCommunity() throws Exception;
 

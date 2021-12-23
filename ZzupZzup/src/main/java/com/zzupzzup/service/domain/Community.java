@@ -19,15 +19,14 @@ public class Community {
 	private String restaurantTel2;
 	private String restaurantTel3;
 	private String receiptImage;
-	private boolean receiptStatus;
 	private Date postRegDate;
-	private int likeCount;
+	private int likeCount; // Column 없음
 	private boolean postShowStatus;
-	private boolean officialStatus;
+	private Date officialDate;
 	private int menuType;
 	private String mainMenuTitle;
 	private int mainMenuPrice;
-	private int postReportCount;
+	private int postReportCount; // Column 없음
 	private List<RestaurantTime> restaurantTimes;
 	private List<String> postImage;
 	
@@ -143,14 +142,6 @@ public class Community {
 		this.receiptImage = receiptImage;
 	}
 
-	public boolean isReceiptStatus() {
-		return receiptStatus;
-	}
-
-	public void setReceiptStatus(boolean receiptStatus) {
-		this.receiptStatus = receiptStatus;
-	}
-
 	public Date getPostRegDate() {
 		return postRegDate;
 	}
@@ -175,12 +166,12 @@ public class Community {
 		this.postShowStatus = postShowStatus;
 	}
 
-	public boolean isOfficialStatus() {
-		return officialStatus;
+	public Date getOfficialDate() {
+		return officialDate;
 	}
 
-	public void setOfficialStatus(boolean officialStatus) {
-		this.officialStatus = officialStatus;
+	public void setOfficialDate(Date officialDate) {
+		this.officialDate = officialDate;
 	}
 
 	public int getMenuType() {
@@ -242,11 +233,11 @@ public class Community {
 				+ postText + ", streetAddress=" + streetAddress + ", areaAddress=" + areaAddress + ", restAddress="
 				+ restAddress + ", restaurantName=" + restaurantName + ", restaurantTel=" + restaurantTel
 				+ ", restaurantTel1=" + restaurantTel1 + ", restaurantTel2=" + restaurantTel2 + ", restaurantTel3="
-				+ restaurantTel3 + ", receiptImage=" + receiptImage + ", receiptStatus=" + receiptStatus
-				+ ", postRegDate=" + postRegDate + ", likeCount=" + likeCount + ", postShowStatus=" + postShowStatus
-				+ ", officialStatus=" + officialStatus + ", menuType=" + menuType + ", mainMenuTitle=" + mainMenuTitle
-				+ ", mainMenuPrice=" + mainMenuPrice + ", postReportCount=" + postReportCount + ", restaurantTimes="
-				+ restaurantTimes + ", postImage=" + postImage + "]";
+				+ restaurantTel3 + ", receiptImage=" + receiptImage + ", postRegDate=" + postRegDate + ", likeCount="
+				+ likeCount + ", postShowStatus=" + postShowStatus + ", officialDate=" + officialDate + ", menuType="
+				+ menuType + ", mainMenuTitle=" + mainMenuTitle + ", mainMenuPrice=" + mainMenuPrice
+				+ ", postReportCount=" + postReportCount + ", restaurantTimes=" + restaurantTimes + ", postImage="
+				+ postImage + "]";
 	}
 	
 	

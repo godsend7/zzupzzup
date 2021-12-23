@@ -17,7 +17,7 @@ public interface ChatService {
 	public Chat getChat(int chatNo) throws Exception;
 	
 	// Select List
-	public Map<String, Object> listChat(Search search) throws Exception;
+	public Map<String, Object> listChat(Search search, String restaurantNo) throws Exception;
 	
 	// Update
 	public void updateChat(Chat chat) throws Exception;

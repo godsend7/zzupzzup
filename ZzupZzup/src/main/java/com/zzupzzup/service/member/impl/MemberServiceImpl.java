@@ -28,9 +28,11 @@ public class MemberServiceImpl implements MemberService{
 
 	//*Method
 	@Override
-	public void addMember(Member member) throws Exception {
+	public int addMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
 		memberDao.addMember(member);
+		
+		return 1;
 	}
 
 	@Override
@@ -106,9 +108,11 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void updateMember(Member member) throws Exception {
+	public int updateMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
 		memberDao.updateMember(member);
+		
+		return 1;
 	}
 
 	@Override
@@ -159,9 +163,11 @@ public class MemberServiceImpl implements MemberService{
 //	}
 
 	@Override
-	public void addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception {
+	public int addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception {
 		// TODO Auto-generated method stub
 		memberDao.addActivityScore(memberId, accumulType, accumulScore);
+		
+		return 1;
 	}
 	
 	@Override
@@ -173,21 +179,25 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void calculateActivityScore(String memberId) throws Exception {
+	public int calculateActivityScore(String memberId) throws Exception {
 		// TODO Auto-generated method stub
 		memberDao.updateActivityAllScore(memberId);
-	}
-
-	@Override
-	public void addMannerScore() throws Exception {
-		// TODO Auto-generated method stub
 		
+		return 1;
 	}
 
+//	@Override
+//	public void addMannerScore() throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
+
 	@Override
-	public void calculateMannerScore(String memberId, int accumulScore) throws Exception {
+	public int calculateMannerScore(String memberId, int accumulScore) throws Exception {
 		// TODO Auto-generated method stub
 		memberDao.updateMannerScore(memberId, accumulScore);
+		
+		return 1;
 	}
 
 	@Override

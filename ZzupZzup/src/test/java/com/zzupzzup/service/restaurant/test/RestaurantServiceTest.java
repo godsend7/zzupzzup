@@ -226,19 +226,44 @@ public class RestaurantServiceTest {
 	//@Test
 	public void testCheckCallDibs() throws Exception {
 			
-		if(restaurantService.checkCallDibs("hihi@a.com", 2) == 1) {
+		if(restaurantService.checkCallDibs("hihi@a.com", 17) == 1) {
 			System.out.println("CHECKCALLDIBS OK");
 		}
 			
 	}
 	
 	
-	@Test
+	//@Test
 	public void testCancelCallDibs() throws Exception {
 		
 		if(restaurantService.cancelCallDibs("hihi@a.com", 2) == 1) {
 			System.out.println("CANCELCALLDIBS OK");
 		}
+		
+	}
+	
+	
+	@Test
+	public void testListCallDibs() throws Exception {
+		
+		Search search = new Search();
+		String memberId = "hihi@a.com";
+		
+		search.setCurrentPage(1);
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = restaurantService.listCallDibs(search, memberId);
+		
+		List<Restaurant> list = (List<Restaurant>) map.get("list");
+		
+		System.out.println("HERE YOU ARE");
+		
+		for(Restaurant rt : list) {
+			System.out.println(rt);
+		}
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println(resultPage);
 		
 	}
 	
