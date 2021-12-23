@@ -40,7 +40,7 @@ public class CommunityServiceTest {
 	@Value("#{commonProperties['pageSize']?: 2}")
 	int pageSize;
 
-	@Test
+	//@Test
 	public void testAddCommunity() throws Exception {
 		
 		Community community = new Community();
@@ -82,22 +82,21 @@ public class CommunityServiceTest {
 		
 		member.setMemberId("hihi@a.com");
 		community.setMember(member);
-		//member.setMemberId("hihi@a.com");
-		community.setPostTitle("쌀국수인줄 알았는데 마라탕이였다");
-		community.setPostText("쌀국수안파는마라탕가게");
-		community.setRestaurantName("에머이");
+		community.setPostTitle("쌀국수인줄 알았는데 맑은탕이였다");
+		community.setPostText("쌀국수안파는맑은탕가게");
+		community.setRestaurantName("할무이");
 		community.setRestaurantTel("010-4444-4444");
 		community.setStreetAddress("미국 뉴욕주 브루클린");
 		community.setAreaAddress("미국 뉴욕주 브루클린");
-		//community.setRestAddress("바클레이스 센터");
+		community.setRestAddress("바클레이스 센터");
 		//Date postRegDate = new Date(20211218);
 		//community.setPostRegDate(postRegDate);
 		community.setMenuType(3);
-		community.setMainMenuTitle("너구리순한맛");
-		community.setMainMenuPrice(5000);
+		community.setMainMenuTitle("너구리소금맛");
+		community.setMainMenuPrice(4500);
+		community.setReceiptImage("test.jpg");
 		community.setRestaurantTimes(list);
 		community.setPostImage(pi);
-		//community.setReceiptImage("test.jpg");
 		
 		communityService.addCommunity(community);
 		
@@ -108,12 +107,14 @@ public class CommunityServiceTest {
 	//@Test
 	public void testGetCommunity() throws Exception {
 		
-		Community community = communityService.getCommunity(3);
+		Community community = communityService.getCommunity(7);
+
+		System.out.println("GET_COMMUNITY : " + community);
 		//Member member = new Member();
 		
 		//community = communityService.getCommunity(1);
 		
-		//Assert.assertEquals("hihi@a.com", community.getMember());
+//		Assert.assertEquals("hihi@a.com", community.getMember());
 //		Assert.assertEquals("쌀국수인줄 알았는데 마라탕이였다", community.getPostTitle());
 //		Assert.assertEquals("쌀국수안파는마라탕가게", community.getPostText());
 //		Assert.assertEquals("에머이", community.getRestaurantName());
@@ -127,18 +128,18 @@ public class CommunityServiceTest {
 	}
 	
 	
-	//@Test
+	@Test
 	public void testUpdateCommunity() throws Exception {
 		
-		Community community = communityService.getCommunity(3);
+		Community community = communityService.getCommunity(6);
 		
-		community.setPostTitle("라면인줄 알았는데 파스타였다");
-		community.setPostText("쌀국수안파는파스타가게");
-		community.setRestaurantName("어머이");
-		community.setRestaurantTel("010-5555-5555");
-		community.setStreetAddress("미국 텍사스주 오스틴");
-		community.setAreaAddress("미국 텍사스주 오스틴");
-		//community.setRestAddress("바클레이스 센터");
+		community.setPostTitle("쌀국수인줄 알았는데 콩국수였다");
+		community.setPostText("쌀국수안파는콩국수가게");
+		community.setRestaurantName("아바이");
+		community.setRestaurantTel("010-7777-7777");
+		community.setStreetAddress("미국 텍사스주 휴스턴");
+		community.setAreaAddress("미국 텍사스주 휴스턴");
+		community.setRestAddress("토요타 센터");
 		//Date postRegDate = new Date(20211218);
 		//community.setPostRegDate(postRegDate);
 		community.setMenuType(2);

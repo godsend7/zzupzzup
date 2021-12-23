@@ -33,7 +33,6 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		///Method
 		@Override
 		public int addReservation(Reservation reservation) throws Exception {
-			System.out.println("ddddddd");
 			return reservationDao.addReservation(reservation);
 		}
 		
