@@ -29,7 +29,7 @@ public interface ReviewDAO {
 	
 	public int getTotalCount(Search search) throws Exception; 
 	
-	public double getTotalAvg() throws Exception;
+	public double getTotalAvg(String restaurantNo) throws Exception;
 	
 	public int getLikeCount(int reviewNo) throws Exception;
 
