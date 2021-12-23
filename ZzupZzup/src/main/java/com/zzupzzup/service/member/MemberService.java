@@ -16,7 +16,7 @@ public interface MemberService {
 	
 	//public void selectMemberRole() throws Exception;
 	
-	public void addMember(Member member) throws Exception;
+	public int addMember(Member member) throws Exception;
 	
 	public boolean checkIdDuplication(String memberId) throws Exception;
 	
@@ -28,7 +28,7 @@ public interface MemberService {
 	
 	public boolean checkCertificatedNum(String certificatedNum) throws Exception;
 	
-	public void updateMember(Member member) throws Exception;
+	public int updateMember(Member member) throws Exception;
 	
 	public boolean confirmPwd(String password) throws Exception;
 	
@@ -42,13 +42,15 @@ public interface MemberService {
 	
 	//public void blacklistUser() throws Exception;
 	
-	public void addActivityScore() throws Exception;
+	public int addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception;
 	
-	public void calculateActivityScore() throws Exception;
+	public Map<String, Object> listActivityScore(String memberId) throws Exception;
 	
-	public void addMannerScore() throws Exception;
+	public int calculateActivityScore(String memberId) throws Exception;
 	
-	public void calculateMannerScore() throws Exception;
+//	public int addMannerScore() throws Exception;
+	
+	public int calculateMannerScore(String memberId, int accumulScore) throws Exception;
 	
 	public void logout() throws Exception;
 

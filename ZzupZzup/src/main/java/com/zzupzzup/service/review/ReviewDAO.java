@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.HashTag;
 import com.zzupzzup.service.domain.Review;
 
 public interface ReviewDAO {
@@ -17,12 +18,10 @@ public interface ReviewDAO {
 	public Review getReview(int reviewNo) throws Exception;
 	
 	public List<Review> listReview(Map<String, Object> map) throws Exception;
-
-	public List<Review> listMyReview(Map<String, Object> map) throws Exception; //해보기 
 	
 	public List<Review> listMyLikeReview(Map<String, Object> map) throws Exception;
 	
-	public List<Map<String, Object>> listHashTag(String search) throws Exception;
+	public List<HashTag> listHashTag(String search) throws Exception;
 	
 	public int addLike(Map<String, Object> map) throws Exception;
 	
@@ -30,8 +29,8 @@ public interface ReviewDAO {
 	
 	public int getTotalCount(Search search) throws Exception; 
 	
-	public void getTotalAvg() throws Exception; //필요성 생각해보기 
+	public double getTotalAvg() throws Exception;
 	
-	public int getLikeCount(int reviewNo) throws Exception; //각각의 리뷰의 count를 어떻게 할 것인지 생각해보기 
+	public int getLikeCount(int reviewNo) throws Exception;
 
 }

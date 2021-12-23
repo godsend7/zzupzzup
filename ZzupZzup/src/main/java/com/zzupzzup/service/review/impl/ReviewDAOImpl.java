@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.HashTag;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.review.ReviewDAO;
 
@@ -84,18 +85,6 @@ public class ReviewDAOImpl implements ReviewDAO {
 	}
 
 	@Override
-	public List<Review> listMyReview(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		List<Review> list = sqlSession.selectList("ReviewMapper.listMyReview", map);
-		
-		for (int i = 0; i < list.size(); i++) {
-			list.get(i).setLikeCount(getLikeCount(list.get(i).getReviewNo()));
-		}
-		
-		return list;
-	}
-
-	@Override
 	public List<Review> listMyLikeReview(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
 		List<Review> list = sqlSession.selectList("ReviewMapper.listMyLikeReview", map);
@@ -108,7 +97,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 	}
 
 	@Override
-	public List<Map<String, Object>> listHashTag(String search) throws Exception {
+	public List<HashTag> listHashTag(String search) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println();
 		return sqlSession.selectList("ReviewMapper.listHashTag", search);
@@ -133,8 +122,8 @@ public class ReviewDAOImpl implements ReviewDAO {
 	}
 
 	@Override
-	public void getTotalAvg() throws Exception {
-		// TODO Auto-generated method stub
+	public double getTotalAvg() throws Exception {
+		return sqlSession.selectOne("ReviewMapper.getTotalAvg");
 		
 	}
 

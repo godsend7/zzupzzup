@@ -16,7 +16,7 @@ public class Chat {
 	private String chatImage; //채팅방 대표 이미지
 	private String chatText; //채팅방 소개글
 	private Date chatRegDate; //채팅방 개설일
-	private List<Integer> chatAge; //채팅방 참여가능 연령대 리스트
+	private String chatAge; //채팅방 참여가능 연령대 리스트
 	private int chatGender; //채팅방 참여가능 성별
 	private int chatMemberCount; //채팅방 참여 인원수
 	private int chatState; //채팅방 모집상태
@@ -82,12 +82,12 @@ public class Chat {
 		this.chatRegDate = chatRegDate;
 	}
 
-	public List<Integer> getChatAge() {
+	public String getChatAge() {
 		return chatAge;
 	}
 
-	public void setChatAge(List<Integer> chatAge) {
-		this.chatAge = chatAge;
+	public void setChatAge(String string) {
+		this.chatAge = string;
 	}
 
 	public int getChatGender() {

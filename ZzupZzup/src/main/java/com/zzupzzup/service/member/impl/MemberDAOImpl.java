@@ -28,9 +28,10 @@ public class MemberDAOImpl implements MemberDAO{
 
 	//*Method
 	@Override
-	public void addMember(Member member) throws Exception {
+	public int addMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
 		sqlSession.insert("MemberMapper.addMember", member);
+		return 1;
 	}
 
 //	@Override
@@ -73,23 +74,50 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 
 	@Override
-	public void updateMember(Member member) throws Exception {
+	public int updateMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
 		sqlSession.update("MemberMapper.updateMember", member);
+		return 1;
 	}
 	
-//	@Override
-//	public int getReportCount(String memberId) throws Exception {
-//		// TODO Auto-generated method stub
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("memberId", memberId);
-//		return sqlSession.selectOne("MemberMapper.getReportCount",map);
-//	}
-//	
-//	@Override
-//	public int getRegRestaurantCount(String memberId) throws Exception {
-//		// TODO Auto-generated method stub
-//		return sqlSession.selectOne("MemberMapper.getRegRestaurantCount",memberId);
-//	}
+	@Override
+	public int addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("accumulType", accumulType);
+		map.put("accumulScore", accumulScore);
+		
+		sqlSession.insert("MemberMapper.addActivityScore",map);
+		
+		return 1;
+	}
+	
+	@Override
+	public List<Member> listActivityScore(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		List<Member> list = sqlSession.selectList("MemberMapper.listActivityScore",memberId);
+		return list;
+	}
+	
+	@Override
+	public int updateActivityAllScore(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		sqlSession.update("MemberMapper.updateActivityAllScore", memberId);
+		
+		return 1;
+	}
+	
+	@Override
+	public int updateMannerScore(String memberId, int accumulScore) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("accumulScore", accumulScore);
+		
+		sqlSession.update("MemberMapper.updateMannerScore", map);
+		
+		return 1;
+	}
 
 }

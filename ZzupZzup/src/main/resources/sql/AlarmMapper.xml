@@ -18,23 +18,35 @@
 		<result property="regDate" 		column="reg_date" 			jdbcType="DATE" />
 	</resultMap> -->
 	<resultMap id="alarmSelectMap" type="alarm">
-		<result property="alarmNo" 			column="ALARM_NO" 			jdbcType="INT"/>
-		<result property="memberId"			column="MEMBER_ID" 			jdbcType="VARCHAR" />
-		<result property="alarmType" 		column="ALARM_TYPE" 		jdbcType="INT" />
-		<result property="alarmContents" 	column="ALARM_CONTENTS" 	jdbcType="VARCHAR" />
-		<result property="alarmCheck" 		column="ALARM_CHECK" 		jdbcType="BOOLEAN" />
-		<result property="alarmRegDate" 	column="ALARM_REG_DATE" 	jdbcType="DATETIME" />
-		<result property="postNo" 			column="POST_NO" 			jdbcType="INT" />
-		<result property="chatNo" 			column="CHAT_NO" 			jdbcType="INT"  />
-		<result property="reservationNo" 	column="RESERVATION_NO" 	jdbcType="VARCHAR" />
-		<result property="reviewNo" 		column="REVIEW_NO" 			jdbcType="INT" />
+		<result property="alarmNo" 						column="ALARM_NO" 			jdbcType="INTEGER"/>
+		<result property="member.memberId"				column="MEMBER_ID" 			jdbcType="VARCHAR" />
+		<result property="alarmType" 					column="ALARM_TYPE" 		jdbcType="INTEGER" />
+		<result property="alarmContents" 				column="ALARM_CONTENTS" 	jdbcType="VARCHAR" />
+		<result property="alarmCheck" 					column="ALARM_CHECK" 		jdbcType="BOOLEAN" />
+		<result property="alarmRegDate" 				column="ALARM_REG_DATE" 	jdbcType="DATE" />
+		<result property="community.postNo" 			column="POST_NO" 			jdbcType="INTEGER" />
+		<result property="chat.chatNo" 					column="CHAT_NO" 			jdbcType="INTEGER"  />
+		<result property="reservation.reservationNo" 	column="RESERVATION_NO" 	jdbcType="VARCHAR" />
+		<result property="review.reviewNo" 				column="REVIEW_NO" 			jdbcType="INTEGER" />
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
 	<insert 	id="addAlarm"		parameterType="alarm" >
-	 	INSERT
-		INTO member( member_id , password , member_name , member_phone) 
-		VALUES ( #{memberId} , #{password} , #{memberName} , #{memberPhone})
+	 	INSERT INTO zzupzzup.ALARM(MEMBER_ID, ALARM_TYPE, ALARM_CONTENTS, POST_NO, CHAT_NO, RESERVATION_NO, REVIEW_NO)
+		VALUES(#{member.memberId}, #{alarmType}, #{alarmContents}, #{community.postNo}, #{chat.chatNo}, #{reservation.reservationNo}, #{review.reviewNo})
 	</insert>
+	
+	<!-- SQL : SELECT -->
+	<select id="listAlarm" parameterType="string" resultMap="alarmSelectMap">
+		SELECT zzupzzup.MEMBER.MEMBER_ID, ALARM_NO, ALARM_TYPE, ALARM_CONTENTS, ALARM_CHECK, ALARM_REG_DATE, POST_NO, CHAT_NO, RESERVATION_NO, REVIEW_NO
+		FROM zzupzzup.ALARM, zzupzzup.MEMBER
+		WHERE zzupzzup.MEMBER.MEMBER_ID = zzupzzup.ALARM.MEMBER_ID AND zzupzzup.MEMBER.MEMBER_ID = #{memberId};
+	</select>
+	
+	<update id="updateAlarm" parameterType="map">
+		UPDATE zzupzzup.ALARM
+		SET ALARM_CHECK = 1
+		WHERE zzupzzup.ALARM.MEMBER_ID = #{memberId} AND ALARM_NO = #{alarmNo};
+	</update>
 	 
 </mapper>

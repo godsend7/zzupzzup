@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.HashTag;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.review.ReviewDAO;
 import com.zzupzzup.service.review.ReviewService;
@@ -58,19 +59,7 @@ public class ReviewServiceImpl implements ReviewService {
 		
 		map.put("list", reviewDao.listReview(map));
 		map.put("totalCount", reviewDao.getTotalCount(search));
-		
-		return map;
-	}
-
-	@Override
-	public Map<String, Object> listMyReview(Search search, String memberId) throws Exception { //map으로??? like)
-		// TODO Auto-generated method stub
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("search", search);
-		map.put("memberId", memberId);
-		
-		map.put("list", reviewDao.listMyReview(map));
-		map.put("totalCount", reviewDao.getTotalCount(search));
+		map.put("avgTotalScope", reviewDao.getTotalAvg());
 		
 		return map;
 	}
@@ -89,7 +78,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<Map<String,Object>> listHashTag(String search) throws Exception {
+	public List<HashTag> listHashTag(String search) throws Exception {
 		// TODO Auto-generated method stub
 		return reviewDao.listHashTag(search);
 	}

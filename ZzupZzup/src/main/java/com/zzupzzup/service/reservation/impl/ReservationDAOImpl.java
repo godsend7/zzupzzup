@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.reservation.ReservationDAO;
 
@@ -64,17 +65,25 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 			return reservation;
 		}
 		
-		public void updateReservation(Reservation reservation) throws Exception {
-			sqlSession.update("ReservationMapper.updateReservation", reservation);
-		}
+		@Override
+		public int updateReservation(Reservation reservation) throws Exception {
 
-		public List<Reservation> listReservation(Search search) throws Exception {
-			return sqlSession.selectList("ReservationMapper.listReservation", search);
+			return sqlSession.update("ReservationMapper.updateReservation", reservation);
 		}
-
-		public List<Reservation> listMyReservation(Search search, String memberId) throws Exception {
+		
+		@Override
+		public List<Reservation> listReservation(Map<String, Object> map) throws Exception {
 			
-			return sqlSession.selectList("ReservationMapper.listMyReservation", search);
+			List<Reservation> list = sqlSession.selectList("ReservationMapper.listReservation",map);
+			
+			return list;
+		}
+			
+		@Override
+		public List<Reservation> listMyReservation(Map<String, Object> map) throws Exception {
+			
+			List<Reservation> list = sqlSession.selectList("ReservationMapper.listMyReservation", map);
+			return list;
 		}
 		
 		// 게시판 Page 처리를 위한 전체 Row(totalCount)  return

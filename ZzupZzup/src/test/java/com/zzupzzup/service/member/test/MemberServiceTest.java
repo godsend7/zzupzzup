@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
+import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.member.MemberDAO;
 import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.restaurant.RestaurantService;
@@ -109,9 +111,30 @@ public class MemberServiceTest {
 	public void testGetMember() throws Exception {
 		
 		Member member = new Member();
-		member.setMemberId("hihi@a.com");
-		member.setNickname("");
-		memberService.getMember(member);
+		//member.setMemberId("hihi@a.com");
+		member.setMemberId("owner01@zzupzzup.com");
+		member.setNickname(null);
+		Member ownMem = memberService.getMember(member);
+		System.out.println(ownMem.getMemberId()+", "+ownMem.getMemberRole());
+		
+		//업주
+		//String memberId = "testest@test.com";
+		
+		//if(ownMem.getMemberRole() == "owner") {
+			Search search = new Search();
+			search.setCurrentPage(1);
+			search.setPageSize(pageSize);
+			
+			Map<String, Object> map = restaurantService.listMyRestaurant(search, ownMem.getMemberId());
+			List<Restaurant> list = (List<Restaurant>)map.get("list");
+			
+			for (Restaurant rt : list) {
+				System.out.println("list : "+rt);
+			}
+			
+			Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+			System.out.println("resultPage : " + resultPage);
+		//}
 		//Member member = memberService.getOwner("testest@test.com");	//오류 왜 뜨는데?
 		//System.out.println(member);
 	}
@@ -210,29 +233,66 @@ public class MemberServiceTest {
 		//System.out.println(member);
 	}	//complete updateMember !
 	
-	@Test
+	//@Test
+	public void testAddActivityScore() throws Exception {
+		
+		String memberId = "hihi@a.com";
+		int accumulType = 1;
+		int accumulScore = 10;
+		
+		memberService.addActivityScore(memberId, accumulType, accumulScore);
+		
+	}
+	
+	//@Test
+	public void testListActivityScore() throws Exception {
+		
+		String memberId = "test@test.com";
+		memberService.listActivityScore(memberId).get("listMyActivityScore");
+
+	}
+	
+	//@Test
+	public void testUpdateActivityAllScore() throws Exception {
+		
+		String memberId = "test@test.com";
+		memberService.calculateActivityScore(memberId);
+		
+	}
+	
+	//@Test
+	public void testUpdateMannerScore() throws Exception {
+		
+		String memberId = "hihi@a.com";
+		int accumulScore = 1;
+		
+		memberService.calculateMannerScore(memberId, accumulScore);
+		
+	}
+	
+	//@Test
 	public void test() throws Exception {
 		
 		String password = "";
-		String memberId = "hihi@a.com";
-		String nickname = "user1";
+		String memberId = "hi";
+		String nickname = "u";
 		String certificatedNum = "123456";
 		
-		//비밀번호 일치 여부
-		if(memberService.confirmPwd(password)) {
-			System.out.println("비밀번호가 일치합니다.");
-		} else {
-			System.out.println("비밀번호가 일치하지 않습니다.");
-		}
-		System.out.println("\n==========================\n");
+//		//비밀번호 일치 여부
+//		if(memberService.confirmPwd(password)) {
+//			System.out.println("비밀번호가 일치합니다.");
+//		} else {
+//			System.out.println("비밀번호가 일치하지 않습니다.");
+//		}
+//		System.out.println("\n==========================\n");
 		
-		//중복확인(아이디)
-		if(! memberService.checkIdDuplication(memberId)) {
-			System.out.println("이미 사용 중인 아이디입니다.");
-		} else {
-			System.out.println("사용 가능한 아이디입니다.");
-		}
-		System.out.println("\n==========================\n");
+//		//중복확인(아이디)
+//		if(! memberService.checkIdDuplication(memberId)) {
+//			System.out.println("이미 사용 중인 아이디입니다.");
+//		} else {
+//			System.out.println("사용 가능한 아이디입니다.");
+//		}
+//		System.out.println("\n==========================\n");
 		
 		//중복확인(닉네임)
 		if(! memberService.checkNicknameDuplication(nickname)) {
@@ -242,13 +302,12 @@ public class MemberServiceTest {
 		}
 		System.out.println("\n==========================\n");
 		
-		//인증번호 전송, 확인
-		System.out.println("인증번호 :: "+memberService.sendCertificatedNum());
-		System.out.println("인증번호 일치 여부 :: "+memberService.checkCertificatedNum(certificatedNum));
-		System.out.println("\n==========================\n");
+//		//인증번호 전송, 확인
+//		System.out.println("인증번호 :: "+memberService.sendCertificatedNum());
+//		System.out.println("인증번호 일치 여부 :: "+memberService.checkCertificatedNum(certificatedNum));
+//		System.out.println("\n==========================\n");
 		
 		//활동점수 추가 및 계산
-		
 		
 	}
 }

@@ -15,21 +15,13 @@ import com.zzupzzup.service.chat.ChatService;
 import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.Member;
 
-import com.zzupzzup.common.Search;
-import com.zzupzzup.service.domain.Chat;
-import com.zzupzzup.service.chat.ChatDAO;
-import com.zzupzzup.service.chat.ChatService;
-
 @Service("chatServiceImpl")
 public class ChatServiceImpl implements ChatService {
 	
 	///Field
 	@Autowired
-	@Qualifier("chatDAOImpl")
+	@Qualifier("chatDaoImpl")
 	private ChatDAO chatDao;
-	public void setChatDao(ChatDAO chatDao) {
-		this.chatDao = chatDao;
-	}
 
 	///Constructor
 	public ChatServiceImpl() {
@@ -47,8 +39,8 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public Map<String, Object> listChat(Search search) throws Exception {
-		List<Chat> list = chatDao.listChat(search);
+	public Map<String, Object> listChat(Search search, String restaurantNo) throws Exception {
+		List<Chat> list = chatDao.listChat(search, restaurantNo);
 		int totalCount = chatDao.getTotalCount(search);
 		
 		Map<String, Object> map = new HashMap<String,Object>();

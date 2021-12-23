@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="ChatMapper">
+	<resultMap id="chatSelectMap" type="chat">
+		<result property="chatNo" column="chat_no" jdbcType="INTEGER"/>
+		<result property="chatLeaderId" column="chat_leader_id" jdbcType="VARCHAR"/>
+		<result property="chatRestaurant.restaurantNo" column="restaurant_no" jdbcType="INTEGER"/>
+		<result property="chatTitle" column="chat_title" jdbcType="VARCHAR"/>
+		<result property="chatImage" column="chat_image" jdbcType="VARCHAR"/>
+		<result property="chatText" column="chat_text" jdbcType="VARCHAR"/>
+		<result property="chatRegDate" column="chat_reg_date" jdbcType="DATE"/>
+		<result property="chatGender" column="chat_gender" jdbcType="INTEGER"/>
+		<result property="chatMemberCount" column="chat_member_count" jdbcType="INTEGER"/>
+		<result property="chatState" column="chat_state" jdbcType="INTEGER"/>
+		<result property="chatShowStatus" column="chat_show_status" jdbcType="BOOLEAN"/>
+		<result property="chatAge" column="age_type" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	
+	<!-- SQL : INSERT -->
+	<insert id="addChat" parameterType="chat" useGeneratedKeys="true" keyProperty="chatNo">
+		INSERT INTO chat (
+			chat_leader_id, 
+			restaurant_no, 
+			chat_title,
+			<if test="chatImage != null">chat_image,</if>
+			<if test="chatText != null">chat_text,</if>
+			chat_gender, 
+			age_type
+		)
+		VALUES ( 
+			#{chatLeaderId}, 
+			#{chatRestaurant.restaurantNo}, 
+			#{chatTitle}, 
+			<if test="chatImage != null">#{chatImage},</if>
+			<if test="chatText != null">#{chatText},</if>
+			#{chatGender}, 
+			#{chatAge} 
+		)		
+	</insert>
+	
+	<!-- SQL : SELECT ONE -->
+	<select id="getChat" parameterType="int" resultMap="chatSelectMap">
+		SELECT
+		chat_no, chat_leader_id, restaurant_no, chat_title, chat_image, chat_text, chat_reg_date, chat_gender, chat_member_count, chat_state, chat_show_status, age_type
+		FROM chat
+		WHERE chat_no = #{chatNo}
+	</select>
+	
+	<!-- SQL : UPDATE -->
+	<update id="updateChat" parameterType="chat">
+		UPDATE chat
+		<set>
+			restaurant_no = #{chatRestaurant.restaurantNo},
+			chat_title = #{chatTitle},
+			<if test="chatImage != null">chat_image = #{chatImage},</if>
+			<if test="chatText != null">chat_text = #{chatText},</if>
+			chat_gender = #{chatGender},
+			chat_show_status = #{chatShowStatus},
+			age_type = #{chatAge}
+		</set>
+		WHERE chat_no = #{chatNo}		
+	</update>
+	
+	<!-- SQL : SELECT ALL -->
+	<select id="listChat" parameterType="map" resultMap="chatSelectMap">
+		<!-- <bind name="searchKeywords" value="'%' + searchKeyword + '%'" /> -->
+		SELECT * 
+		FROM ( SELECT c.chat_no, c.chat_leader_id, c.chat_title, c.chat_image, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, c.restaurant_no, r.restaurant_name, r.street_address, r.area_address 
+				FROM chat c, restaurant r
+				WHERE c.restaurant_no = r.restaurant_no
+				ORDER BY c.chat_no LIMIT #{startRowNum}, #{endRowNum}) AS c
+	</select>
+	
+	<!-- SQL : SELECT ROW COUNT -->
+	<!-- <select id="getTotalCount" parameterType="search" resultType="int">
+		<bind name="searchKeywords" value="'%' + _parameter.getSearchKeyword() + '%'" />
+		SELECT COUNT(*)
+		FROM ( SELECT chat_no, chat_title
+			FROM chat
+			<if test="searchCondition != null">
+				<where>
+					<if test="searchCondition == 0 and searchKeyword != '' ">
+						UPPER(chat_no) LIKE UPPER(#{searchKeywords})
+					</if>
+					<if test="searchCondition == 1 and searchKeyword != '' ">
+						UPPER(chat_title) LIKE UPPER(#{searchKeywords})
+					</if>
+					<if test="searchCondition == 2 and searchKeyword != '' ">
+						UPPER(chat_title) LIKE UPPER(#{searchKeywords})
+					</if>
+				</where>
+			</if> ) countTable
+	</select> -->
+	
+	
+	<!--
+	SELECT c.chat_no, c.chat_leader_id, c.chat_title, c.chat_image, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, c.restaurant_no, r.restaurant_name, r.street_address, r.area_address FROM chat c, restaurant r WHERE c.restaurant_no = r.restaurant_no
+	
+	SELECT * FROM (
+		SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM, c.chat_no, c.chat_leader_id, c.chat_title, c.chat_image, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, c.restaurant_no, r.restaurant_name, r.street_address, r.area_address FROM chat c, restaurant r, (SELECT @ROWNUM := 0) rn WHERE c.restaurant_no = r.restaurant_no ORDER BY c.chat_reg_date ASC ) SUB ORDER BY ROWNUM DESC;
+		
+	SELECT *
+	FROM (SELECT c.chat_no, c.chat_leader_id, c.chat_title, c.chat_image, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, c.restaurant_no, r.restaurant_name, r.street_address, r.area_address FROM chat c, restaurant r
+			WHERE c.restaurant_no = r.restaurant_no
+			ORDER BY c.chat_no LIMIT 0, 8 ) AS c
+	
+	-->
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper> 

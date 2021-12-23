@@ -64,15 +64,82 @@
 	
 	
 	<!-- SQL : SELECT ONE -->
+	<!-- ===========상세 목록 조회====== -->
 	<select id="getReservation"	parameterType="int"	resultMap="reservationSelectMap">
 		SELECT * 
 			FROM RESERVATION AS r
-			INNER JOIN (SELECT c.chat_no, cm.chat_member_id
-							 FROM chat c, chat_member cm 
+			LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
+							 FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)
 			                 WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)
-			INNER JOIN reservation_order AS ro ON (r.reservation_no = ro.reservation_no)
+			LEFT OUTER JOIN reservation_order AS ro ON (r.reservation_no = ro.reservation_no)
 			WHERE r.reservation_no = #{reservationNo}
 	 </select>
+	 
+	 
+	 
+	 <!-- =========관리자======== -->
+	
+	<select id="listReservation"	parameterType="map"	resultMap="reservationSelectMap">
+		
+		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname, ch.CHAT_MEMBER_ID
+			FROM RESERVATION AS r
+			LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
+							 FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)
+			                 WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)
+			LEFT OUTER JOIN reservation_order AS ro ON (r.reservation_no = ro.reservation_no)
+			ORDER BY RESERVATION_NO LIMIT #{search.startRowNum}, #{search.pageSize}		
+	 </select>
+	
+	 <!-- =========유저,업주======== -->
+	 <select id="listMyReservation"	parameterType="map"	resultMap="reservationSelectMap">
+		
+		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname
+			FROM RESERVATION AS r
+			LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
+							 FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)
+			                 WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)
+			LEFT OUTER JOIN reservation_order AS ro ON (r.reservation_no = ro.reservation_no)
+			<choose>
+				<when test="member_role = user">
+				WHERE ch.chat_member_id = #{memberId}
+				</when>
+				<when test="member_role = owner">
+				WHERE r.RESTAURANT_NO = #{restaurantNo}
+				</when>
+			</choose>
+			ORDER BY RESERVATION_NO LIMIT #{search.startRowNum}, #{search.pageSize}		
+	 </select>
+	 
+	 
+	 
+	 <update id="updateReservation" parameterType="reservation">
+		UPDATE RESERVATION
+	   	<set>
+	   		FIXED_DATE = NOW(),
+			RESERVATION_STATUS = #{reservationStatus},
+           	CANCEL_DATE = NOW(),
+            FIXED_STATUS = #{fixedStatus},
+            RESERVATION_CANCEL_TYPE = #{reservationCancelReason},
+            RESERVATION_CANCEL_DETAIL = #{reservationCancelDetail}
+	   	</set>
+	   	WHERE reservation_no = #{reservationNo}
+	</update>
+	 
+	 
+	 
+	 
+	 <select id="getTotalCount" parameterType="search" resultType="int">
+		SELECT count(*)
+		FROM Reservation
+	</select>
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	
 	
 </mapper>
