@@ -13,16 +13,16 @@ import com.zzupzzup.service.domain.Notice;
 import com.zzupzzup.service.notice.NoticeService;
 import com.zzupzzup.service.notice.NoticeDAO;
 
-	//@Service("noticeServiceImpl")
+	@Service("noticeServiceImpl")
 	public class NoticeServiceImpl implements NoticeService{
 		
 		///Field
-		//@Autowired
-		//@Qualifier("noticeDaoImpl")
+		@Autowired
+		@Qualifier("noticeDaoImpl")
 		private NoticeDAO noticeDao;
-		public void setNoticeDAO(NoticeDAO noticeDAO) {
-			this.noticeDao = noticeDAO;
-		}
+		//public void setNoticeDAO(NoticeDAO noticeDAO) {
+		//	this.noticeDao = noticeDAO;
+		//}
 		
 		///Constructor
 		public NoticeServiceImpl() {
@@ -30,31 +30,37 @@ import com.zzupzzup.service.notice.NoticeDAO;
 		}
 
 		///Method
+		@Override
 		public int addNotice(Notice notice) throws Exception {
 			return noticeDao.addNotice(notice);
 		}
-
+		
+		@Override
 		public Notice getNotice(int noticeNo) throws Exception {
 			return noticeDao.getNotice(noticeNo);
 		}
-
+		
+		@Override
 		public Map<String , Object > listNotice(Search search) throws Exception {
-			List<Notice> list= noticeDao.listNotice(search);
-			int totalCount = noticeDao.getTotalCount(search);
-			
+
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("list", list );
-			map.put("totalCount", new Integer(totalCount));
+			map.put("search", search);
+			
+			
+			map.put("list", noticeDao.listNotice(map));
+			map.put("totalCount", noticeDao.getTotalCount(search));
 			
 			return map;
 		}
 		
-		public int deleteNotice(Notice notice) throws Exception {
-			return noticeDao.deleteNotice(notice);
+		@Override
+		public int deleteNotice(int postNo) throws Exception {
+			return noticeDao.deleteNotice(postNo);
 		}
 		
-		public void updateNotice(Notice notice) throws Exception {
-			noticeDao.updateNotice(notice);
+		@Override
+		public int updateNotice(Notice notice) throws Exception {
+			return noticeDao.updateNotice(notice);
 		}
 
 }

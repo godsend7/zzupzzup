@@ -2,9 +2,11 @@ package com.zzupzzup.service.member.test;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.member.MemberDAO;
 import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.restaurant.RestaurantService;
+
+import net.nurigo.java_sdk.api.Message;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -310,4 +315,5 @@ public class MemberServiceTest {
 		//활동점수 추가 및 계산
 		
 	}
+
 }

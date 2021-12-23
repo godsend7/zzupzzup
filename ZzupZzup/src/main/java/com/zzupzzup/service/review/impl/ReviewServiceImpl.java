@@ -59,8 +59,11 @@ public class ReviewServiceImpl implements ReviewService {
 		
 		map.put("list", reviewDao.listReview(map));
 		map.put("totalCount", reviewDao.getTotalCount(search));
-		map.put("avgTotalScope", reviewDao.getTotalAvg());
 		
+		if (restaurantNo != null) {
+			map.put("avgTotalScope", reviewDao.getTotalAvg(restaurantNo));
+		}
+
 		return map;
 	}
 

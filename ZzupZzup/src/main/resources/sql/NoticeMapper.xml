@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="NoticeMapper">
+
+	<resultMap id="noticeSelectMap" type="notice">
+		<result property="postNo"   				column="POST_NO" 			jdbcType="INTEGER"/>
+		<result property="member.memberId"   		column="MEMBER_ID" 			jdbcType="VARCHAR"/>
+		<result property="postTitle"   				column="POST_TITLE" 		jdbcType="VARCHAR"/>
+		<result property="postText"   				column="POST_TEXT" 			jdbcType="VARCHAR"/>
+		<result property="postRegDate"   			column="POST_REG_DATE" 		jdbcType="DATE"/>
+		<result property="postCategory"   			column="POST_CATEGORY" 		jdbcType="INTEGER"/>
+		<result property="postMemberType"   		column="POST_MEMBER_ROLE" 	jdbcType="VARCHAR"/>
+		
+	</resultMap>
+	
+	
+	
+	<!-- SQL : INSERT -->
+	<insert id="addNotice"	parameterType="notice">
+	 	INSERT
+		INTO notice(MEMBER_ID, POST_TITLE, POST_TEXT,POST_REG_DATE, POST_CATEGORY, POST_MEMBER_ROLE)
+		VALUES (#{member.memberId}, #{postTitle}, #{postText}, NOW(), #{postCategory}, #{postMemberType});
+
+	</insert>
+		
+	
+	<!-- SQL : SELECT ONE -->
+	<!-- ===========상세  조회====== -->
+	<select id="getNotice"	parameterType="int"	resultMap="noticeSelectMap">
+		SELECT POST_NO, MEMBER_ID, POST_TITLE, POST_TEXT,POST_REG_DATE, POST_CATEGORY, POST_MEMBER_ROLE
+			FROM notice
+			WHERE post_no = #{postNo}
+	 </select>
+	 
+	 
+	<!-- =========목록 조회======== -->
+	
+	<select id="listNotice"	parameterType="map"	resultMap="noticeSelectMap">
+		
+		SELECT POST_NO, MEMBER_ID, POST_TITLE, POST_REG_DATE, POST_CATEGORY, POST_MEMBER_ROLE
+			FROM notice
+			ORDER BY #{postRegDate} DESC LIMIT #{search.startRowNum}, #{search.pageSize}  	
+	 </select> 
+	 
+	 
+	 <!-- =========수정======== -->
+	  <update id="updateNotice" parameterType="notice">
+		UPDATE notice
+	   	<set>
+	   		POST_MEMBER_ROLE = #{postMemberType},
+			POST_TITLE = #{postTitle},
+			POST_TEXT = #{postText},
+   		 	POST_CATEGORY = #{postCategory},
+   		 	POST_REG_DATE = now()
+ 
+	   	</set>
+	   		WHERE POST_NO = #{postNo}
+	</update>
+	 
+	 <!-- =========삭제======== -->
+	 <delete id="deleteNotice" parameterType="int">
+		DELETE FROM NOTICE
+		WHERE  POST_NO = #{postNo}
+	</delete>
+	 
+	 
+	  <select id="getTotalCount" parameterType="search" resultType="int">
+		SELECT count(*)
+		FROM Reservation
+	</select>
+	
+	
+</mapper>

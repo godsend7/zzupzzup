@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.member.MemberDAO;
 import com.zzupzzup.service.member.MemberService;
+
+import net.nurigo.java_sdk.api.Message;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
 @Service("memberServiceImpl")
 public class MemberServiceImpl implements MemberService{
@@ -92,18 +96,38 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public String sendCertificatedNum() throws Exception {
+	public void sendCertificatedNum(String certificatedNum, String phoneNum) throws Exception {
 		// TODO Auto-generated method stub
-		String certificatedNum = null;
-		return certificatedNum;
+		String api_key = "NCSLYO2SLAESQXGO";
+        String api_secret = "NMOLMFQKWYPLSVUECGKKZP7FUATZWNHU";
+        Message coolsms = new Message(api_key, api_secret);
+
+        // 4 params(to, from, type, text) are mandatory. must be filled
+        HashMap<String, String> params = new HashMap<String, String>();
+	    params.put("to", phoneNum);
+	    params.put("from", "01048290865");
+	    params.put("type", "SMS");
+	    params.put("text", "인증번호 ["+certificatedNum+"]를 입력해주세요.");
+	    params.put("app_version", "test app 1.2"); // application name and version
+
+        try {
+            JSONObject obj = (JSONObject) coolsms.send(params);
+            System.out.println(obj.toString());
+        } catch (CoolsmsException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCode());
+        }
 	}
 
 	@Override
 	public boolean checkCertificatedNum(String certificatedNum) throws Exception {
 		// TODO Auto-generated method stub
-		if(certificatedNum == sendCertificatedNum()) {
-			return true;
-		}
+		String inputCertificatedNum = null;
+
+//		if(inputCertificatedNum == sendCertificatedNum(certificatedNum)) {
+//			return true;
+//		}
+
 		return false;
 	}
 
