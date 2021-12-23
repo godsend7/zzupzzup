@@ -24,7 +24,7 @@ public interface MemberService {
 	
 	public void findId() throws Exception;
 	
-	public String sendCertificatedNum() throws Exception;
+	public void sendCertificatedNum(String certificatedNum, String phoneNum) throws Exception;
 	
 	public boolean checkCertificatedNum(String certificatedNum) throws Exception;
 	
@@ -48,7 +48,7 @@ public interface MemberService {
 	
 	public int calculateActivityScore(String memberId) throws Exception;
 	
-//	public int addMannerScore() throws Exception;
+	//public int addMannerScore() throws Exception;
 	
 	public int calculateMannerScore(String memberId, int accumulScore) throws Exception;
 	
