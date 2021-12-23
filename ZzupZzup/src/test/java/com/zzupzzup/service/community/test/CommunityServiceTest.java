@@ -3,6 +3,7 @@ package com.zzupzzup.service.community.test;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.community.CommunityService;
 import com.zzupzzup.service.domain.Community;
@@ -128,7 +130,7 @@ public class CommunityServiceTest {
 	}
 	
 	
-	@Test
+	//@Test
 	public void testUpdateCommunity() throws Exception {
 		
 		Community community = communityService.getCommunity(6);
@@ -157,8 +159,78 @@ public class CommunityServiceTest {
 	//@Test
 	public void testListCommunity() throws Exception {
 		
+		Search search = new Search();
 		
-				
+		search.setCurrentPage(1);
+		search.setPageSize(3);
+		Map<String, Object> map = communityService.listCommunity(search);
+		
+		List<Community> list = (List<Community>) map.get("list");
+		
+		for(Community cn : list) {
+			System.out.println(cn);
+		}
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println(resultPage);
+		
+	}
+	
+	
+	//@Test
+	public void testDeleteCommunity() throws Exception {
+		
+		Community community = new Community();
+		
+		community.setPostNo(5);
+		
+		if(communityService.deleteCommunity(community.getPostNo()) == 1) {
+			System.out.println("DELETE COMPLETE");
+		}
+		
+	}
+	
+	
+	//@Test
+	public void testAddLike() throws Exception {
+		
+		if(communityService.addLike("hihi@a.com", 7) == 1) {
+			System.out.println("ADDLIKE OK");
+		}
+		
+	}
+	
+	
+	//@Test
+	public void testDeleteLike() throws Exception {
+			
+		if(communityService.deleteLike("hihi@a.com", 7) == 1) {
+			System.out.println("DELETELIKE OK");
+		}
+		
+	}
+	
+	
+	@Test
+	public void testListLike() throws Exception {
+		
+		Search search = new Search();
+		
+		search.setCurrentPage(1);
+		search.setPageSize(3);
+		
+		String memberId = "hihi@a.com";
+		
+		Map<String, Object> map = communityService.listLike(search, memberId);
+		
+		List<Community> list = (List<Community>) map.get("list");
+		
+		System.out.println("HERE YOUR LIST");
+		
+		for(Community cn : list) {
+			System.out.println(cn);
+		}
+		
 	}
 	
 	

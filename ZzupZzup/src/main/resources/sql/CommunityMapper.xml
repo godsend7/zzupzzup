@@ -118,8 +118,70 @@
 	<!-- SQL : SELECT LIST -->
 	<select id="listCommunity" parameterType="search" resultMap="communitySelectMap">
 		SELECT *
+		FROM (SELECT *
+			  FROM COMMUNITY AS cn
+			  ORDER BY cn.POST_NO LIMIT #{startRowNum}, #{pageSize}) AS cn
+		LEFT OUTER JOIN (SELECT IMAGE, POST_NO
+						 FROM IMAGE) AS img
+						 ON (cn.POST_NO = img.POST_NO)
+	</select>
+	
+	
+	<!-- SQL : DELETE -->
+	<delete id="deleteCommunity" parameterType="community" >
+		DELETE FROM REPORT WHERE POST_NO = #{postNo};
+	
+		DELETE FROM IMAGE WHERE POST_NO = #{postNo};
+		
+		DELETE FROM RESTAURANT_TIME WHERE POST_NO = #{postNo};
+		
+		DELETE FROM COMMUNITY WHERE POST_NO = #{postNo};
+	</delete>
+	
+	
+	<!-- SQL : INSERT -->
+	<insert id="addLike" parameterType="community">
+		INSERT
+		INTO MARK(MEMBER_ID, POST_NO)
+		VALUES(#{memberId}, #{postNo});
+	</insert>
+	
+	
+	<!-- SQL : DELETE -->
+	<delete id="deleteLike" parameterType="community">
+		DELETE
+		FROM MARK
+		WHERE MEMBER_ID = #{memberId} AND POST_NO = #{postNo};
+	</delete>
+	
+	
+	<!-- SQL : SELECT LIST -->
+	<select id="listLike" parameterType="map" resultMap="communitySelectMap">
+		SELECT *
+		FROM COMMUNITY AS cn
+		INNER JOIN (SELECT POST_NO, MARK_NO
+					FROM MARK
+					WHERE MEMBER_ID = #{memberId} AND POST_NO IS NOT NULL
+					ORDER BY MARK_NO LIMIT #{search.startRowNum}, #{search.pageSize}) AS mk
+					ON (cn.POST_NO = mk.POST_NO)
+		LEFT OUTER JOIN (SELECT IMAGE, POST_NO
+						 FROM IMAGE) AS img
+						 ON (cn.POST_NO = img.POST_NO)	
+	</select>
+	
+	
+	<!-- SQL : SELECT -->
+	<select id="getTotalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
 		FROM COMMUNITY
-		ORDER BY POST_NO LIMIT #{startRowNum}, #{pageSize}
+	</select>
+	
+	
+	<!-- SQL : SELECT -->
+	<select id="getLikeCount" parameterType="int" resultType="int">
+		SELECT COUNT(POST_NO)
+		FROM MARK
+		WHERE POST_NO = #{value};
 	</select>
 	
 	
