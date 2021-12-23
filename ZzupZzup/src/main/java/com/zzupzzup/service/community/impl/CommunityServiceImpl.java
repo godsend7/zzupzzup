@@ -59,34 +59,10 @@ public class CommunityServiceImpl implements CommunityService {
 		
 		return map;
 	}
-
+	
 	@Override
-	public int deleteCommunity(Community community) throws Exception {
-		return communityDAO.deleteCommunity(community);
-	}
-
-	@Override
-	public void addLike() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteLike() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Map<String, Object> listLike() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<String, Object> listMyPost() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public int deleteCommunity(int postNo) throws Exception {
+		return communityDAO.deleteCommunity(postNo);
 	}
 
 	@Override
@@ -94,7 +70,56 @@ public class CommunityServiceImpl implements CommunityService {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
 
+
+	@Override
+	public int addLike(String memberId, int postNo) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("postNo", postNo);
+		
+		return communityDAO.addLike(map);
+	}
+
+
+	@Override
+	public int deleteLike(String memberId, int postNo) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("postNo", postNo);
+		
+		return communityDAO.deleteLike(map);
+	}
+
+
+	@Override
+	public Map<String, Object> listLike(Search search, String memberId) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("memberId", memberId);
+		
+		map.put("list", communityDAO.listLike(map));
+		map.put("totalCount", communityDAO.getTotalCount(search));
+		
+		return map;
+	}
+
+
+	@Override
+	public Map<String, Object> listMyPost(Search search, String memberId) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("memberId", memberId);
+		
+		map.put("list", communityDAO.listMyPost(map));
+		map.put("totalCount", communityDAO.getTotalCount(search));
+		
+		return map;
+	}
+	
+	
 }
