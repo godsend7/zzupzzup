@@ -65,12 +65,13 @@
 	     	
 	    실제 PJT 진행시 일반적으로 resources 폴더를 만들고 폴더내부에
 	     css , image, js 등 넣어 관리하며 아래와 같이 1번의 설정으로 관리
-	     <mvc:resources mapping="/resources/**" location="/resources/" />
+	    <mvc:resources mapping="/css/**" location="/css/" />
+	   	<mvc:resources mapping="/images/**" location="/images/" />
+	   	<mvc:resources mapping="/javascript/**" location="/javascript/" />
+		
 	--> 
-	<mvc:resources mapping="/css/**" location="/css/" />
-   	<mvc:resources mapping="/images/**" location="/images/" />
-   	<mvc:resources mapping="/javascript/**" location="/javascript/" />
-   	
+	
+   	<mvc:resources mapping="/resources/**" location="/resources/" />
 
 	<!-- 	:: exception resolver  선언 :: 서술적 / 선언적 예외처리 
 			:: Servlet 에서의 선언적 예외처리를 다시 생각하며....  -->
