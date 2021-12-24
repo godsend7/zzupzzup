@@ -29,7 +29,7 @@
 									<li><a href="#">내 활동 점수 적립 내역</a></li>
 									<li><a href="#">내가 작성한 리뷰 내역</a></li>
 									<li><a href="#">내가 작성한 게시판 내역</a></li>
-									<li><a href="#">예약 및 결제 내역</a></li>
+									<li><a href="/reservation/addReservation">예약 및 결제 내역</a></li>
 									<li><a href="#">내가 좋아요 누른 리뷰 내역</a></li>
 									<li><a href="#">내가 좋아요 누른 게시물 내역</a></li>
 									<li><a href="#">나의 신고/제보 접수 내역</a></li>
