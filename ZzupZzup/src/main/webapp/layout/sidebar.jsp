@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
 					</section>
 					<!--  end Banner -->
 				</div>
@@ -19,7 +22,7 @@
 							<h2>Menu</h2>
 						</header>
 						<ul>
-							<li><a href="index.html">Homepage</a></li>
+							<li><a href="/reservation/addReservation">예약 및 결제 내역</a></li>
 							<li><a href="generic.html">Generic</a></li>
 							<li><a href="elements.html">Elements</a></li>
 							<li>
