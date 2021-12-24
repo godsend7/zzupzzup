@@ -234,4 +234,10 @@
 	</select>
 	
 	
+	<!-- SQL : INSERT -->
+	<!-- <insert id="addRestaurant" parameterType="restaurant">
+		
+	</insert>
+	 -->
+	
 </mapper>
