@@ -18,6 +18,7 @@
 		<link rel="stylesheet" href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css">
 		<link rel="stylesheet" href="/resources/css/main.css" />
 		
+
 		<!-- Scripts -->
 		<!-- defer :: HTML이 파싱 완료된 후 script 실행 -->
 		<script defer src="/resources/js/jquery.min.js"></script>
@@ -26,8 +27,6 @@
 		<script defer src="/resources/js/breakpoints.min.js"></script>
 		<script defer src="/resources/js/util.js"></script>
 		<script defer src="/resources/js/main.js"></script>
-		
-		
 		
 	</head>
 	

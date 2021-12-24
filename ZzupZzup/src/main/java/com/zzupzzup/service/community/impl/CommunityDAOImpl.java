@@ -79,9 +79,8 @@ public class CommunityDAOImpl implements CommunityDAO {
 
 	
 	@Override
-	public void officialCommunity() throws Exception {
-		// TODO Auto-generated method stub
-		
+	public int officialCommunity(Community community) throws Exception {
+		return sqlSession.update("CommunityMapper.officialCommunity", community);
 	}
 
 
