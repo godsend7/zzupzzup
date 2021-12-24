@@ -1859,7 +1859,7 @@ button,
     margin: 0 auto;
     max-width: 110em; }
     #main > .inner > section {
-      padding: 3em 0 4em 0 ;
+      padding: 6em 0 4em 0 ;
       border-top: solid 2px rgba(210, 215, 217, 0.75); }
       #main > .inner > section:first-of-type {
         border-top: 0 !important; }
@@ -1867,17 +1867,17 @@ button,
     #main > .inner {
       padding: 0 5em 0.1em 5em ; }
       #main > .inner > section {
-        padding: 2em 0 3em 0 ; } }
+        padding: 5em 0 3em 0 ; } }
   @media screen and (max-width: 1280px) {
     #main > .inner {
       padding: 0 4em 0.1em 4em ; }
       #main > .inner > section {
-        padding: 2em 0 2em 0 ; } }
+        padding: 4em 0 2em 0 ; } }
   @media screen and (max-width: 736px) {
     #main > .inner {
       padding: 0 2em 0.1em 2em ; }
       #main > .inner > section {
-        padding: 1em 0 1em 0 ; } }
+        padding: 3em 0 1em 0 ; } }
 
 /* Sidebar */
 #search form {
@@ -2076,7 +2076,7 @@ button,
   display: -ms-flex;
   display: flex;
   border-bottom: solid 5px #f56a6a;
-  padding: 3em 0 1em 0;
+  padding: 6em 0 1em 0;
   position: relative; }
   #header > * {
     -moz-flex: 1;
@@ -2093,10 +2093,10 @@ button,
     text-align: right; }
   @media screen and (max-width: 1680px) {
     #header {
-      padding-top: 2em; } }
+      padding-top: 5em; } }
   @media screen and (max-width: 736px) {
     #header {
-      padding-top: 3.5em; }
+      padding-top: 6.5em; }
       #header .logo {
         font-size: 1.25em;
         margin: 0; }

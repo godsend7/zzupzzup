@@ -26,7 +26,7 @@ public interface CommunityDAO {
 	
 	public List<Community> listMyPost(Map<String, Object> map) throws Exception;
 	
-	public void officialCommunity() throws Exception;
+	public int officialCommunity(Community community) throws Exception;
 	
 	public int getLikeCount(int postNo) throws Exception;
 	

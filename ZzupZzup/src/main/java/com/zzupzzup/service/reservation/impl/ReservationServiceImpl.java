@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.common.util.SendMessage;
 import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.reservation.ReservationService;
 import com.zzupzzup.service.reservation.ReservationDAO;
@@ -73,6 +74,17 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		public int updateReservation(Reservation reservation) throws Exception {
 			return reservationDao.updateReservation(reservation);
 		}
+
+		@Override
+		public void sendMessage(String phone, String text) throws Exception {
+			text = null;
+			SendMessage sendMessage = new SendMessage();
+			sendMessage.sendMessage(phone, text);
+				
+			
+		}
+		
+	
 
 		
 }

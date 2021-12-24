@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.Community;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.RestaurantMenu;
@@ -243,7 +244,7 @@ public class RestaurantServiceTest {
 	}
 	
 	
-	@Test
+	//@Test
 	public void testListCallDibs() throws Exception {
 		
 		Search search = new Search();

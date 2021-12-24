@@ -6,8 +6,60 @@
 
   <display-name>Archetype Created Web Application</display-name>
 
+<!--	:: ContextLoaderListener 을 이용한 Business logic  Meta-Data 등록   -->		
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener	</listener-class>
+	</listener>		
+	 
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:config/context-aspect.xml,
+			classpath:config/context-common.xml,
+			classpath:config/context-mybatis.xml,
+			classpath:config/context-transaction.xml
+		</param-value>
+	</context-param>
+		
+	<!-- :: Spring API 에 제공하는 CharacterEncodingFilter 로 한글 인코딩처리 -->	
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>	
+
+ 	 <!-- ::SpringMVC 에서의 Front Controller(단일인입점)  DispatcherServlet 선언 -->
+	  <servlet>
+		    <servlet-name>action</servlet-name>
+		    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		    
+		    <init-param>
+		      <param-name>contextConfigLocation</param-name>
+		      <param-value>/config/springMVC/common-servlet.xml</param-value>
+		      <!-- Servlet Meta-data / Spring Meta-data 위치 분리함 -->
+		    </init-param>
+		    
+		    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
+	<!-- 	URI : / 형식  Servlet Mapping -->
+	<servlet-mapping>
+	  <servlet-name>action</servlet-name>
+	  <url-pattern>/</url-pattern>
+	</servlet-mapping>
+
   <welcome-file-list>
     <welcome-file>main.html</welcome-file>
     <welcome-file>main.jsp</welcome-file>
     </welcome-file-list>
+    
+	
   </web-app>

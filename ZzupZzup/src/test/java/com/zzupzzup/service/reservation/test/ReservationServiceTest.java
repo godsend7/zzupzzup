@@ -20,6 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
+import com.zzupzzup.common.util.SendMessage;
 import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Order;
@@ -173,7 +174,7 @@ public class ReservationServiceTest {
 	
 //========================================================================================
 		
-		@Test
+		//@Test
 		public void testUpdateReservation() throws Exception {
 			
 			Reservation reservation = new Reservation();
@@ -193,4 +194,16 @@ public class ReservationServiceTest {
 			}
 		
 		}
-}		
+		
+//========================================================================================	
+		
+		@Test
+		public void testSendMessage() throws Exception {
+	
+			SendMessage sendMessage = new SendMessage();
+			
+			sendMessage.sendMessage("010-3023-5823","유희주 coolsms 명의 내놔~~~~~~~~");
+			//for문을 돌리는 member.getMemerphone 위에값을 list에 넣어서 넣기
+		
+		}
+}

@@ -25,6 +25,6 @@ public interface CommunityService {
 	
 	public Map<String, Object> listMyPost(Search search, String memberId) throws Exception;
 	
-	public void officialCommunity() throws Exception;
+	public int officialCommunity(Community community) throws Exception;
 
 }
