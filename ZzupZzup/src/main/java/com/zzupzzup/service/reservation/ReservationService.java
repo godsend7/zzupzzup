@@ -22,6 +22,9 @@ public interface ReservationService {
 
 	// UPDATE
 	public int updateReservation(Reservation reservation) throws Exception ;
+	
+	
+	public void sendMessage(String phone, String text) throws Exception ;
 			
 
 }
