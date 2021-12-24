@@ -15,18 +15,21 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		
-		<link rel="stylesheet" href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="/resources/css/main.css" />
-		
-
 		<!-- Scripts -->
 		<!-- defer :: HTML이 파싱 완료된 후 script 실행 -->
 		<script defer src="/resources/js/jquery.min.js"></script>
+		<link rel="stylesheet" href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css">
+		
+		<script defer src="/webjars/popper.js/1.16.0/umd/popper.min.js"></script>
 		<script defer src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="/resources/css/main.css" />
+		
 		<script defer src="/resources/js/browser.min.js"></script>
 		<script defer src="/resources/js/breakpoints.min.js"></script>
 		<script defer src="/resources/js/util.js"></script>
 		<script defer src="/resources/js/main.js"></script>
+		
+		<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 		
 	</head>
 	
