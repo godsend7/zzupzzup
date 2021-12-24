@@ -27,41 +27,39 @@ public class CommonUtil {
 	
 	
 	
-	public static String returnAgeRange(String birth) {
+	public static String returnAgeRange(String ageRange) {
 		
-		String ageRange = null;
+		int parseAge = Integer.parseInt(ageRange.substring(0, 1));
+		String age = null;
 		
-		int birthYear = Integer.parseInt(birth.substring(0, 4));
-		int currentYear = LocalDate.now().getYear();
-		
-		switch ((currentYear-birthYear+1)/10) {
+		switch (parseAge) {
 		case 1:
-			ageRange = AGE_TEN;
+			age = AGE_TEN;
 			break;
 		case 2:
-			ageRange = AGE_TWENTY;
+			age = AGE_TWENTY;
 			break;
 		case 3:
-			ageRange = AGE_THIRTY;
+			age = AGE_THIRTY;
 			break;
 		case 4:
-			ageRange = AGE_FOURTY;
+			age = AGE_FOURTY;
 			break;
 		case 5:
-			ageRange = AGE_FIFTY;
+			age = AGE_FIFTY;
 			break;
 		case 6:
 		case 7:
 		case 8:
 		case 9:
 		case 10:
-			ageRange = AGE_ELDER;
+			age = AGE_ELDER;
 			break;
 		default:
 			break;
 		}
 		
-		return ageRange;
+		return age;
 	
 	}
 	

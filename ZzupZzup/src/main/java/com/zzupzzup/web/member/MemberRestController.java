@@ -1,9 +1,7 @@
 package com.zzupzzup.web.member;
 
-import java.util.HashMap;
 import java.util.Random;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zzupzzup.service.member.MemberService;
 
-import net.nurigo.java_sdk.api.Message;
-import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
 @RestController
 @RequestMapping("/member/*")
@@ -60,21 +56,28 @@ public class MemberRestController {
 	@RequestMapping(value="json/sendCertificatedNum", method=RequestMethod.GET)
 	public String sendCertificatedNum(String phoneNum) throws Exception {
 		
-	    String certificatedNum = "";
-	    
+		String certificatedNum = "";
+		
 	    for(int i = 1; i <= 6; i++) {
 	    	Random random = new Random();
 	    	certificatedNum += random.nextInt(10);
 	    }
 
-	    memberService.sendCertificatedNum(phoneNum, certificatedNum);
+	    memberService.sendCertificatedNum(certificatedNum, phoneNum);
 	    
-	    return certificatedNum;
+	    String inputCertificatedNum = null;
+	    String inputPhoneNum = null;
+	    memberService.checkCertificatedNum(inputCertificatedNum, certificatedNum, inputPhoneNum, phoneNum);
+	    
+	    return "";
 	}
 	
-	public void checkCertificatedNum() {
-		
-	}
+//	@RequestMapping(value="json/checkCertificatedNum", method=RequestMethod.POST)
+//	public void checkCertificatedNum(String inputCertificatedNum, String certificatedNum, String inputPhoneNum, String phoneNum) throws Exception {
+//		
+//		memberService.checkCertificatedNum(inputCertificatedNum, certificatedNum, inputPhoneNum, phoneNum);
+//		
+//	}
 	
 	public void getOtherUser() {
 		

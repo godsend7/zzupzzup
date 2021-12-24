@@ -1,5 +1,9 @@
 package com.zzupzzup.service.member.impl;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,13 +50,13 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void kakaoLogin(Member member) throws Exception {
+	public void kakaoLogin() throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void naverLogin(Member member) throws Exception {
+	public void naverLogin() throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
@@ -96,7 +100,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void sendCertificatedNum(String certificatedNum, String phoneNum) throws Exception {
+	public int sendCertificatedNum(String certificatedNum, String phoneNum) throws Exception {
 		// TODO Auto-generated method stub
 		String api_key = "NCSLYO2SLAESQXGO";
         String api_secret = "NMOLMFQKWYPLSVUECGKKZP7FUATZWNHU";
@@ -107,7 +111,7 @@ public class MemberServiceImpl implements MemberService{
 	    params.put("to", phoneNum);
 	    params.put("from", "01048290865");
 	    params.put("type", "SMS");
-	    params.put("text", "인증번호 ["+certificatedNum+"]를 입력해주세요.");
+	    params.put("text", "[쩝쩝듀스101]\n인증번호 ["+certificatedNum+"]를 입력해주세요.");
 	    params.put("app_version", "test app 1.2"); // application name and version
 
         try {
@@ -117,17 +121,18 @@ public class MemberServiceImpl implements MemberService{
             System.out.println(e.getMessage());
             System.out.println(e.getCode());
         }
+        
+        return 1;
 	}
 
 	@Override
-	public boolean checkCertificatedNum(String certificatedNum) throws Exception {
+	public boolean checkCertificatedNum(String inputCertificatedNum, String certificatedNum, String inputPhoneNum, String phoneNum) throws Exception {
 		// TODO Auto-generated method stub
-		String inputCertificatedNum = null;
-
-//		if(inputCertificatedNum == sendCertificatedNum(certificatedNum)) {
-//			return true;
-//		}
-
+	
+		if(inputCertificatedNum == certificatedNum && inputPhoneNum == phoneNum) {
+			return true;
+		}
+		
 		return false;
 	}
 
