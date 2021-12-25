@@ -10,9 +10,9 @@ public interface MemberService {
 	
 	public void login(Member member) throws Exception;
 	
-	public void kakaoLogin(Member member) throws Exception;
+	public void kakaoLogin() throws Exception;
 	
-	public void naverLogin(Member member) throws Exception;
+	public void naverLogin() throws Exception;
 	
 	//public void selectMemberRole() throws Exception;
 	
@@ -24,9 +24,9 @@ public interface MemberService {
 	
 	public void findId() throws Exception;
 	
-	public void sendCertificatedNum(String certificatedNum, String phoneNum) throws Exception;
+	public int sendCertificatedNum(String certificatedNum, String phoneNum) throws Exception;
 	
-	public boolean checkCertificatedNum(String certificatedNum) throws Exception;
+	public boolean checkCertificatedNum(String inputCertificatedNum, String certificatedNum, String inputPhoneNum, String phoneNum) throws Exception;
 	
 	public int updateMember(Member member) throws Exception;
 	

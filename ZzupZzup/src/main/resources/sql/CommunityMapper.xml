@@ -19,7 +19,7 @@
 		<result property="receiptImage" 	column="RECEIPT_IMAGE" 		jdbcType="VARCHAR"/>
 		<result property="postRegDate" 		column="POST_REG_DATE" 		jdbcType="DATE"/>
 		<result property="postShowStatus" 	column="POST_SHOW_STATUS" 	jdbcType="BOOLEAN"/>
-		<result property="officialDate" 	column="OFFICAIL_DATE" 		jdbcType="DATE"/>
+		<result property="officialDate" 	column="OFFICIAL_DATE" 		jdbcType="DATE"/>
 		<result property="menuType" 		column="MENU_TYPE" 			jdbcType="NUMERIC"/>
 		<result property="mainMenuTitle" 	column="MAIN_MENU_TITLE" 	jdbcType="VARCHAR"/>
 		<result property="mainMenuPrice" 	column="MAIN_MENU_PRICE" 	jdbcType="NUMERIC"/>
@@ -127,6 +127,21 @@
 	</select>
 	
 	
+	<!-- SQL : SELECT LIST -->
+	<select id="listMyPost" parameterType="map" resultMap="communitySelectMap">
+		SELECT *
+		FROM COMMUNITY cn
+		INNER JOIN (SELECT POST_NO 
+					FROM MARK
+					WHERE MEMBER_ID = #{memberId} AND POST_NO IS NOT NULL
+					ORDER BY MARK_NO LIMIT #{search.startRowNum}, #{search.pageSize}) AS mk
+					ON (cn.POST_NO = mk.POST_NO)
+		LEFT OUTER JOIN (SELECT IMAGE, POST_NO
+						 FROM IMAGE) AS img
+						 ON (cn.POST_NO = img.POST_NO)
+	</select>
+	
+	
 	<!-- SQL : DELETE -->
 	<delete id="deleteCommunity" parameterType="community" >
 		DELETE FROM REPORT WHERE POST_NO = #{postNo};
@@ -183,6 +198,20 @@
 		FROM MARK
 		WHERE POST_NO = #{value};
 	</select>
+	
+	
+	<!-- SQL : UPDATE -->
+	<update id="officialCommunity"	parameterType="community">
+		UPDATE COMMUNITY
+		<set>
+			OFFICIAL_DATE = now()
+		</set>
+		WHERE POST_NO = #{postNo};
+		
+		INSERT
+		INTO RESTAURANT(RESTAURANT_NAME, RESTAURANT_TEL, RESERVATION_STATUS, STREET_ADDRESS, AREA_ADDRESS, REST_ADDRESS, MENU_TYPE)
+		VALUES (#{restaurantName}, #{restaurantTel}, false, #{streetAddress}, #{areaAddress}, #{restAddress}, #{menuType});
+	</update>
 	
 	
 </mapper>

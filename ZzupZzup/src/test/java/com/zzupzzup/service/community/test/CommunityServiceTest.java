@@ -1,6 +1,7 @@
 package com.zzupzzup.service.community.test;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -178,6 +179,29 @@ public class CommunityServiceTest {
 	
 	
 	//@Test
+	public void testListMyPost() throws Exception {
+		
+		Search search = new Search();
+		String memberId = "hihi@a.com";
+		
+		search.setCurrentPage(1);
+		search.setPageSize(3);
+		
+		Map<String, Object> map = communityService.listMyPost(search, memberId);
+		
+		List<Community> list = (List<Community>) map.get("list");
+		
+		for(Community cn : list) {
+			System.out.println("LISTMYPOST : " + cn);
+		}
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println(resultPage);
+		
+	}
+	
+	
+	//@Test
 	public void testDeleteCommunity() throws Exception {
 		
 		Community community = new Community();
@@ -211,7 +235,7 @@ public class CommunityServiceTest {
 	}
 	
 	
-	@Test
+	//@Test
 	public void testListLike() throws Exception {
 		
 		Search search = new Search();
@@ -231,6 +255,24 @@ public class CommunityServiceTest {
 			System.out.println(cn);
 		}
 		
+	}
+	
+	
+	@Test
+	public void testOfficialCommunity() throws Exception {
+		
+		Community community = communityService.getCommunity(10);
+		
+//		String od = "2021-12-24 11:11:11";
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		java.util.Date offdat = sdf.parse(od);
+//		
+//		community.setOfficialDate(offdat);
+		
+		
+		communityService.officialCommunity(community);
+		
+		System.out.println("RESULT : " + community);
 	}
 	
 	

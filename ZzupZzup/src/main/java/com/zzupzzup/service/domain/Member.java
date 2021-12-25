@@ -19,7 +19,7 @@ public class Member {
 	private String memberPhone3;				//번호3
 	private String ageRange;					//연령대(10대, 20대, 30대, 40대, 50대, 60대 이상)
 	private String gender;						//성별(여자/남자)
-	private String birth;						//생일(생년만 추출)
+	private String age;							//연령대 > "20~29" 저장해서 ageRange에 값 선언
 	private String profileImage;				//프로필 이미지
 	private String statusMessage;				//자기소개 및 특이사항(= 상태메세지)
 	private String pushNickname;				//추천인 닉네임
@@ -96,6 +96,7 @@ public class Member {
 	}
 
 	public String getMemberPhone() {
+		memberPhone = memberPhone1+"-"+memberPhone2+"-"+memberPhone3;
 		return memberPhone;
 	}
 
@@ -128,8 +129,8 @@ public class Member {
 	}
 
 	public String getAgeRange() {
-		if(birth != null) {
-			ageRange = CommonUtil.returnAgeRange(birth);
+		if(age != null) {
+			ageRange = CommonUtil.returnAgeRange(age);
 		}
 		return ageRange;
 	}
@@ -139,6 +140,15 @@ public class Member {
 	}
 
 	public String getGender() {
+		
+		String genderData = null;
+		
+		if(genderData.startsWith("F") || genderData.startsWith("f")) {
+			gender = "female";
+		} else {
+			gender = "male";
+		}
+		
 		return gender;
 	}
 
@@ -146,12 +156,12 @@ public class Member {
 		this.gender = gender;
 	}
 
-	public String getBirth() {
-		return birth;
+	public String getAge() {
+		return age;
 	}
 
-	public void setBirth(String birth) {
-		this.birth = birth;
+	public void setAge(String age) {
+		this.age = age;
 	}
 
 	public String getProfileImage() {
@@ -343,7 +353,7 @@ public class Member {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "Member [ memberId : "+memberId+", password : "+password+", nickname : "+nickname+", memberRole : "+memberRole+", memberName : "+memberName+", memberPhone : "+memberPhone+", ageRange : "+ageRange+", gender : "+gender+", birth : "+birth+", profileImage : "+profileImage+", statusMessage : "+statusMessage+", pushNickname : "+pushNickname
+		return "Member [ memberId : "+memberId+", password : "+password+", nickname : "+nickname+", memberRole : "+memberRole+", memberName : "+memberName+", memberPhone : "+memberPhone+", ageRange : "+ageRange+", gender : "+gender+", age : "+age+", profileImage : "+profileImage+", statusMessage : "+statusMessage+", pushNickname : "+pushNickname
 				+", deleteReason : "+deleteReason+", accumulDate : "+accumulDate+", accumulContents : "+accumulContents+", accumulScore : "+accumulScore+", mannerScore : "+mannerScore+", memberRank : "+memberRank+", accumulAllScore : "+accumulAllScore+", mannerAllScore : "+mannerAllScore+", regDate : "+regDate+", eliminated : "+eliminated+", deleteDate : "+deleteDate
 				+", blacklistDate : "+blacklistDate+", reportCount : "+reportCount+", certificatedNum : "+certificatedNum+", loginType : "+loginType+", deleteType : "+deleteType+", regRestaurantCount : "+regRestaurantCount+", regBlacklist : "+regBlacklist+", accumulType : "+accumulType+" ]";
 	}
