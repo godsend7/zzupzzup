@@ -1,6 +1,5 @@
 package com.zzupzzup.service.member;
 
-import java.util.List;
 import java.util.Map;
 
 import com.zzupzzup.common.Search;
@@ -22,7 +21,7 @@ public interface MemberService {
 	
 	public boolean checkNicknameDuplication(String nickname) throws Exception;
 	
-	public void findId() throws Exception;
+//	public void findId() throws Exception;
 	
 	public int sendCertificatedNum(String certificatedNum, String phoneNum) throws Exception;
 	
