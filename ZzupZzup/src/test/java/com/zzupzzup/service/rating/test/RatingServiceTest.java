@@ -91,7 +91,7 @@ public class RatingServiceTest {
 		memberService.calculateMannerScore(rating.getRatingToId(), rating.getRatingScore());
 	}
 	
-	//@Test
+	@Test
 	public void testListRating() throws Exception {
 		
 		System.out.println("testListRating");
