@@ -8,7 +8,19 @@
 	<script>
 		window.onload = function() {
 			
-			var HOME_PATH = window.HOME_PATH || '.';
+			$(function() {
+				initMap();
+			});
+			
+			function initMap() {
+				var arrayLayout = new Array();
+				arrayLayout.push(
+					{location:'강남', lat:'37.4959854', lng:'127.066401'}
+				
+				)
+			}
+			
+			/* var HOME_PATH = window.HOME_PATH || '.';
 			console.log(HOME_PATH);
 			var cityhall = new naver.maps.LatLng(37.5666805, 126.9784147),
 			    map = new naver.maps.Map('content', {
@@ -24,7 +36,6 @@
 			        '<div class="iw_inner">',
 			        '   <h3>서울특별시청</h3>',
 			        '   <p>서울특별시 중구 태평로1가 31 | 서울특별시 중구 세종대로 110 서울특별시청<br />',
-			        '       <img src="'+ HOME_PATH +'/img/example/hi-seoul.jpg" width="55" height="55" alt="서울시청" class="thumb" /><br />',
 			        '       02-120 | 공공,사회기관 &gt; 특별,광역시청<br />',
 			        '       <a href="http://www.seoul.go.kr" target="_blank">www.seoul.go.kr/</a>',
 			        '   </p>',
@@ -33,7 +44,7 @@
 
 			var infowindow = new naver.maps.InfoWindow({
 			    content: contentString,
-			    maxWidth: 140,
+			    maxWidth: 200,
 			    backgroundColor: "#eee",
 			    borderColor: "#2db400",
 			    borderWidth: 5,
@@ -49,10 +60,10 @@
 			    } else {
 			        infowindow.open(map, marker);
 			    }
-			});
+			}); */
 			
 			
-			
+			/* 
 			$(function() {
 				$.ajax(
 					{
@@ -71,10 +82,10 @@
 					}
 				)
 						
-			});
+			}); */
 		}
 	</script>
 	
-	<div class="content" id="content" style="width: 100%; height:400px;"></div>
+	<div class="content" id="content" style="width: 100%; height:70vh;"></div>
 	
 	 <jsp:include page="/layout/sidebar.jsp" />
