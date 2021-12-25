@@ -23,6 +23,7 @@
 		<script defer src="/webjars/popper.js/1.16.0/umd/popper.min.js"></script>
 		<script defer src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="/resources/css/main.css" />
+		<link rel="stylesheet" href="/resources/css/custom.css" />
 		
 		<script defer src="/resources/js/browser.min.js"></script>
 		<script defer src="/resources/js/breakpoints.min.js"></script>

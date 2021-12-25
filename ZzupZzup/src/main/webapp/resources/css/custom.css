@@ -1,0 +1,249 @@
+@charset "UTF-8";
+
+/*Basic*/
+/*font*/
+small { font-size: 80%; }
+
+/*align*/
+.text-center { text-align: ceter; }
+
+/* Button */
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button,
+.button {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -moz-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  -webkit-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  -ms-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  background-color: transparent;
+  border-radius: 0.375em;
+  border: 0;
+  box-shadow: inset 0 0 0 2px #f56a6a;
+  color: #f56a6a !important;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Roboto Slab", serif;
+  font-size: 0.8em;
+  font-weight: 700;
+  height: 3.5em;
+  letter-spacing: 0.075em;
+  line-height: 3.5em;
+  padding: 0 2.25em;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap; }
+  input[type="submit"]:hover,
+  input[type="reset"]:hover,
+  input[type="button"]:hover,
+  button:hover,
+  .button:hover {
+    background-color: rgba(245, 106, 106, 0.05); }
+  input[type="submit"]:active,
+  input[type="reset"]:active,
+  input[type="button"]:active,
+  button:active,
+  .button:active {
+    background-color: rgba(245, 106, 106, 0.15); }
+  input[type="submit"].icon:before,
+  input[type="reset"].icon:before,
+  input[type="button"].icon:before,
+  button.icon:before,
+  .button.icon:before {
+    margin-right: 0.5em; }
+  input[type="submit"].fit,
+  input[type="reset"].fit,
+  input[type="button"].fit,
+  button.fit,
+  .button.fit {
+    width: 100%; }
+  input[type="submit"].small,
+  input[type="reset"].small,
+  input[type="button"].small,
+  button.small,
+  .button.small {
+    font-size: 0.6em; }
+  input[type="submit"].large,
+  input[type="reset"].large,
+  input[type="button"].large,
+  button.large,
+  .button.large {
+    font-size: 1em;
+    height: 3.65em;
+    line-height: 3.65em; }
+    
+  input[type="submit"].primary,
+  input[type="reset"].primary,
+  input[type="button"].primary,
+  button.primary,
+  .button.primary {
+    background-color: #f56a6a;
+    box-shadow: none;
+    color: #ffffff !important; }
+    input[type="submit"].primary:hover,
+    input[type="reset"].primary:hover,
+    input[type="button"].primary:hover,
+    button.primary:hover,
+    .button.primary:hover {
+      background-color: #f67878; }
+    input[type="submit"].primary:active,
+    input[type="reset"].primary:active,
+    input[type="button"].primary:active,
+    button.primary:active,
+    .button.primary:active {
+      background-color: #f45c5c; }
+      
+  input[type="submit"].secondary,
+  input[type="reset"].secondary,
+  input[type="button"].secondary,
+  button.secondary,
+  .button.secondary {
+    background-color: rgba(226,227,229,0.9);;
+    box-shadow: none;
+    color: #383d41 !important;
+    box-shadow: inset 0 0 0 2px #d6d8db; }
+    input[type="submit"].secondary:hover,
+    input[type="reset"].secondary:hover,
+    input[type="button"].secondary:hover,
+    button.secondary:hover,
+    .button.secondary:hover {
+      background-color: rgba(226,227,229,0.7); }
+    input[type="submit"].secondary:active,
+    input[type="reset"].secondary:active,
+    input[type="button"].secondary:active,
+    button.secondary:active,
+    .button.secondary:active {
+      background-color: rgba(226,227,229,1); }
+      
+  input[type="submit"].success,
+  input[type="reset"].success,
+  input[type="button"].success,
+  button.success,
+  .button.success {
+    background-color: rgba(212,237,218,0.9);
+    box-shadow: none;
+    color: #155724 !important;
+    box-shadow: inset 0 0 0 2px #c3e6cb; }
+    input[type="submit"].success:hover,
+    input[type="reset"].success:hover,
+    input[type="button"].success:hover,
+    button.success:hover,
+    .button.success:hover {
+      background-color: rgba(212,237,218,0.7); }
+    input[type="submit"].success:active,
+    input[type="reset"].success:active,
+    input[type="button"].success:active,
+    button.success:active,
+    .button.success:active {
+      background-color: rgba(212,237,218,1); }
+      
+  input[type="submit"].danger,
+  input[type="reset"].danger,
+  input[type="button"].danger,
+  button.danger,
+  .button.danger {
+    background-color: rgb(248,215,218,0.9);
+    box-shadow: none;
+    color: #721c24 !important;
+    box-shadow: inset 0 0 0 2px #f5c6cb; }
+    input[type="submit"].danger:hover,
+    input[type="reset"].danger:hover,
+    input[type="button"].danger:hover,
+    button.danger:hover,
+    .button.danger:hover {
+      background-color: rgb(248,215,218,0.7); }
+    input[type="submit"].danger:active,
+    input[type="reset"].danger:active,
+    input[type="button"].danger:active,
+    button.danger:active,
+    .button.danger:active {
+      background-color: rgb(248,215,218,1); }
+      
+  input[type="submit"].warning,
+  input[type="reset"].warning,
+  input[type="button"].warning,
+  button.warning,
+  .button.warning {
+    background-color: rgb(255,243,205,0.9);
+    box-shadow: none;
+    color: #856404 !important;
+    box-shadow: inset 0 0 0 2px #ffeeba; }
+    input[type="submit"].warning:hover,
+    input[type="reset"].warning:hover,
+    input[type="button"].warning:hover,
+    button.warning:hover,
+    .button.warning:hover {
+      background-color: rgb(255,243,205,0.7); }
+    input[type="submit"].warning:active,
+    input[type="reset"].warning:active,
+    input[type="button"].warning:active,
+    button.warning:active,
+    .button.warning:active {
+      background-color: rgb(255,243,205,1); }
+      
+  input[type="submit"].info,
+  input[type="reset"].info,
+  input[type="button"].info,
+  button.info,
+  .button.info {
+    background-color: rgba(204,229,255,0.9);
+    box-shadow: none;
+    color: #004085 !important;
+    box-shadow: inset 0 0 0 2px #b8daff; }
+    input[type="submit"].info:hover,
+    input[type="reset"].info:hover,
+    input[type="button"].info:hover,
+    button.info:hover,
+    .button.info:hover {
+       background-color: rgba(204,229,255,0.7); }
+    input[type="submit"].info:active,
+    input[type="reset"].info:active,
+    input[type="button"].info:active,
+    button.info:active,
+    .button.info:active {
+       background-color: rgba(204,229,255,1); }
+       
+  input[type="submit"].normal,
+  input[type="reset"].normal,
+  input[type="button"].normal,
+  button.normal,
+  .button.normal {
+  		color: #6d7378 !important;
+  		box-shadow: inset 0 0 0 2px #969799
+     }
+    input[type="submit"].normal:hover,
+    input[type="reset"].normal:hover,
+    input[type="button"].normal:hover,
+    button.normal:hover,
+    .button.normal:hover {
+   		background-color: rgb(108,107,107,0.05);
+        }
+    input[type="submit"].normal:active,
+    input[type="reset"].normal:active,
+    input[type="button"].normal:active,
+    button.normal:active,
+    .button.normal:active {
+    	background-color: rgb(108,107,107,0.15);
+        }
+       
+  input[type="submit"].disabled, input[type="submit"]:disabled,
+  input[type="reset"].disabled,
+  input[type="reset"]:disabled,
+  input[type="button"].disabled,
+  input[type="button"]:disabled,
+  button.disabled,
+  button:disabled,
+  .button.disabled,
+  .button:disabled {
+    pointer-events: none;
+    opacity: 0.25; }
+
+/* Thumbnail */
+.card .thumb { height: 225px; overflow:hidden; }
+.card .thumb img { width: 100%; }
