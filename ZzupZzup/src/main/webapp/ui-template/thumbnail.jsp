@@ -5,6 +5,7 @@
 
 <jsp:include page="/layout/toolbar.jsp" />
 
+<!-- start:해당 부분은 지우고 아래 container안에 작성 -->
 <div class="row">
 	<div class="col-12">
 		<ul>
@@ -13,9 +14,14 @@
 			<li><a href="/ui-template/form.jsp">등록양식</a></li>
 			<li><a href="/ui-template/form-view.jsp">등록양식 결과</a></li>
 			<li><a href="/ui-template/thumbnail.jsp">썸네일리스트</a></li>
+			<li><a href="/ui-template/list.jsp">일반리스트</a></li>
+			<li><a href="/ui-template/carousel.jsp">슬라이드</a></li>
+			<li><a href="/ui-template/table.jsp">테이블</a></li>
+			<li><a href="/ui-template/etc-ui.jsp">기타ui</a></li>
 		</ul>
 	</div>
 </div>
+<!-- end -->
 
 <div class="container">
 
@@ -28,14 +34,12 @@
 					alt="플래터, 음식, 선발, 식사, 잔치, 다 이닝 테이블, 테이블, 먹다, 맛있는 음식, 식당, 요리"></a>
 
 				<div class="card-body">
+					<h4 class="card-title">Card with stretched links</h4>
 					<p class="card-text">This is a wider card with supporting text
 						below as a natural lead-in to additional content. This content is
 						a little bit longer.</p>
 					<div class="d-flex justify-content-between align-items-center">
-						<div class="btn-group">
-							<button type="button" class="btn small normal">View</button>
-							<button type="button" class="btn small normal">Edit</button>
-						</div>
+						<a href="#" class="button small primary stretched-link">Go somewhere</a>
 						<small class="text-muted">9 mins</small>
 					</div>
 				</div>
@@ -48,14 +52,12 @@
 					alt="플래터, 음식, 선발, 식사, 잔치, 다 이닝 테이블, 테이블, 먹다, 맛있는 음식, 식당, 요리"></a>
 
 				<div class="card-body">
+					<h4 class="card-title">Card with stretched links</h4>
 					<p class="card-text">This is a wider card with supporting text
 						below as a natural lead-in to additional content. This content is
 						a little bit longer.</p>
 					<div class="d-flex justify-content-between align-items-center">
-						<div class="btn-group">
-							<button type="button" class="btn small normal">View</button>
-							<button type="button" class="btn small normal">Edit</button>
-						</div>
+						<a href="#" class="button small primary stretched-link">Go somewhere</a>
 						<small class="text-muted">9 mins</small>
 					</div>
 				</div>
@@ -68,14 +70,12 @@
 					alt="플래터, 음식, 선발, 식사, 잔치, 다 이닝 테이블, 테이블, 먹다, 맛있는 음식, 식당, 요리"></a>
 
 				<div class="card-body">
+					<h4 class="card-title">Card with stretched links</h4>
 					<p class="card-text">This is a wider card with supporting text
 						below as a natural lead-in to additional content. This content is
 						a little bit longer.</p>
 					<div class="d-flex justify-content-between align-items-center">
-						<div class="btn-group">
-							<button type="button" class="btn small normal">View</button>
-							<button type="button" class="btn small normal">Edit</button>
-						</div>
+						<a href="#" class="button small primary stretched-link">Go somewhere</a>
 						<small class="text-muted">9 mins</small>
 					</div>
 				</div>
@@ -206,7 +206,7 @@
 
 	</div>
 
-	<div class="col-12 text-center">
+	<div class="col-12 text-center thumb-more">
 		<a href="#" class="icon solid fa fa-plus-circle"></a>
 	</div>
 	<!-- end -->
