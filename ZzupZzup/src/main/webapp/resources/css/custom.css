@@ -6,6 +6,7 @@
 /*Basic*/
 /*font*/
 small { font-size: 80%; }
+a { border-bottom: none; }
 
 /*align*/
 .text-center { text-align: ceter; }
