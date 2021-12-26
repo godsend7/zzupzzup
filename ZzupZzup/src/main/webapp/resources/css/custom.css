@@ -1,8 +1,12 @@
 @charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap');
+
+* { font-family: 'Noto Serif KR', serif; }
 
 /*Basic*/
 /*font*/
 small { font-size: 80%; }
+a { border-bottom: none; }
 
 /*align*/
 .text-center { text-align: ceter; }
@@ -243,7 +247,50 @@ button,
   .button:disabled {
     pointer-events: none;
     opacity: 0.25; }
+    
+  .modal-header .close {
+  	padding: 0;
+  	box-shadow: none;
+  	background: transparent;
+  	margin: 0;
+  	height: 20px;
+  }
+  .modal-header .close:hover {
+  	background: transparent;
+  }
+  .modal-header .close:active {
+  	background: transparent;
+  }
+  
+/* badge */
+.badge-primary {
+    background-color: #f67878;
+}
+.badge-secondary{
+	color: #383d41;
+	background: #e2e3e5;
+}
+.badge-success{
+	color: #155724;
+	background: #d4edda;
+}
+.badge-danger{
+	color: #721c24;
+	background: #f8d7da;
+}
+.badge-warning{
+	color: #856404;
+	background: #fff3cd;
+}
+.badge-info{
+	color: #004085;
+	background: #d1ecf1;
+}
 
 /* Thumbnail */
 .card .thumb { height: 225px; overflow:hidden; }
 .card .thumb img { width: 100%; }
+.thumb-more { font-size: 25px; }
+
+/* pagination */
+.pagination { justify-content: center; align-items: center; }

@@ -49,6 +49,7 @@ public class ChatController {
 	
 	@RequestMapping(value="addChat", method=RequestMethod.POST)
 	public String addChat(@ModelAttribute("chat") Chat chat, HttpServletRequest request, HttpSession session) throws Exception {
+		System.out.println("들어왔당");
 		
 		return "forward:/chat/addchat.jsp";
 		

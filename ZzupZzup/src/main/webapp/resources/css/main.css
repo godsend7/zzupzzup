@@ -1,5 +1,6 @@
 @import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,400italic,600italic|Roboto+Slab:400,700");
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
 /*
 	Editorial by HTML5 UP
 	html5up.net | @ajlkn
@@ -92,7 +93,7 @@ body {
 /* Type */
 body, input, select, textarea {
   color: #7f888f;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Open Sans","Gowun Dodum", sans-serif;
   font-size: 13pt;
   font-weight: 400;
   line-height: 1.65; }
@@ -132,7 +133,7 @@ p {
 
 h1, h2, h3, h4, h5, h6 {
   color: #3d4449;
-  font-family: "Roboto Slab", serif;
+  font-family: "Roboto Slab","Gowun Dodum", serif;
   font-weight: 700;
   line-height: 1.5;
   margin: 0 0 1em 0; }
@@ -990,7 +991,7 @@ section.special, article.special {
   text-align: center; }
 
 header p {
-  font-family: "Roboto Slab", serif;
+  font-family: "Roboto Slab","Gowun Dodum", serif;
   font-size: 1em;
   font-weight: 400;
   letter-spacing: 0.075em;
@@ -1023,6 +1024,8 @@ input[type="email"],
 input[type="tel"],
 input[type="search"],
 input[type="url"],
+input[type="date"],
+input[type="time"],
 select,
 textarea {
   -moz-appearance: none;
@@ -1045,6 +1048,8 @@ textarea {
   input[type="tel"]:invalid,
   input[type="search"]:invalid,
   input[type="url"]:invalid,
+  input[type="date"]:invalid,
+  input[type="time"]:invalid,
   select:invalid,
   textarea:invalid {
     box-shadow: none; }
@@ -1054,6 +1059,8 @@ textarea {
   input[type="tel"]:focus,
   input[type="search"]:focus,
   input[type="url"]:focus,
+  input[type="date"]:focus,
+  input[type="time"]:focus,
   select:focus,
   textarea:focus {
     border-color: #f56a6a;
@@ -1081,6 +1088,8 @@ input[type="email"],
 input[type="tel"],
 input[type="search"],
 input[type="url"],
+input[type="date"],
+input[type="time"],
 select {
   height: 2.75em; }
 
@@ -1499,7 +1508,7 @@ button,
   color: #f56a6a !important;
   cursor: pointer;
   display: inline-block;
-  font-family: "Roboto Slab", serif;
+  font-family: "Roboto Slab","Gowun Dodum", serif;
   font-size: 0.8em;
   font-weight: 700;
   height: 3.5em;
@@ -1963,9 +1972,9 @@ button,
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     border: 0;
     display: block;
-    height: 7.5em;
+    height: 7em;
     left: 26em;
-    line-height: 7.5em;
+    line-height: 7em;
     outline: 0;
     overflow: hidden;
     position: absolute;
@@ -2076,7 +2085,7 @@ button,
   display: -ms-flex;
   display: flex;
   border-bottom: solid 5px #f56a6a;
-  padding: 6em 0 1em 0;
+  padding: 2em 0 1em 0;
   position: relative; }
   #header > * {
     -moz-flex: 1;
@@ -2087,16 +2096,16 @@ button,
   #header .logo {
     border-bottom: 0;
     color: inherit;
-    font-family: "Roboto Slab", serif;
+    font-family: "Roboto Slab","Gowun Dodum", serif;
     font-size: 1.125em; }
   #header .icons {
     text-align: right; }
   @media screen and (max-width: 1680px) {
     #header {
-      padding-top: 5em; } }
+      padding-top: 2em; } }
   @media screen and (max-width: 736px) {
     #header {
-      padding-top: 6.5em; }
+      padding-top: 5em; }
       #header .logo {
         font-size: 1.25em;
         margin: 0; }
@@ -2199,7 +2208,7 @@ button,
   -ms-user-select: none;
   user-select: none;
   color: #3d4449;
-  font-family: "Roboto Slab", serif;
+  font-family: "Roboto Slab","Gowun Dodum", serif;
   font-weight: 400;
   letter-spacing: 0.075em;
   list-style: none;

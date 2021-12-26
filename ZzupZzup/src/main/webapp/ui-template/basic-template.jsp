@@ -14,6 +14,10 @@
 			<li><a href="/ui-template/form.jsp">등록양식</a></li>
 			<li><a href="/ui-template/form-view.jsp">등록양식 결과</a></li>
 			<li><a href="/ui-template/thumbnail.jsp">썸네일리스트</a></li>
+			<li><a href="/ui-template/list.jsp">일반리스트</a></li>
+			<li><a href="/ui-template/carousel.jsp">슬라이드</a></li>
+			<li><a href="/ui-template/table.jsp">테이블</a></li>
+			<li><a href="/ui-template/etc-ui.jsp">기타ui</a></li>
 		</ul>
 	</div>
 </div>
