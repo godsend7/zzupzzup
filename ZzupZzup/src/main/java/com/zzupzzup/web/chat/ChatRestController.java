@@ -38,8 +38,8 @@ public class ChatRestController {
 	@RequestMapping(value="json/getChat/{chatNo}", method=RequestMethod.GET)
 	public Chat getChat(@PathVariable int chatNo) throws Exception {
 		
-		System.out.println("/product/json/getProduct : GET");
-		System.out.println("prodNo : " + chatNo);
+		System.out.println("/chat/json/getProduct : GET");
+		System.out.println("chatNo : " + chatNo);
 
 		// Business Logic
 		return chatService.getChat(chatNo);
