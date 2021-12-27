@@ -16,4 +16,9 @@ public interface RatingDAO {
 	
 	// Page Row(totalCount) return
 	public int getTotalCount(Search search) throws Exception;
+	
+	// Select List
+	public List<Rating> listMyRating(Map<String, Object> map) throws Exception;
+	
+	
 }
