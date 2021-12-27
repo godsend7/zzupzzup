@@ -41,15 +41,19 @@ public class MemberRestController {
 		System.out.println("/member/json/login : POST");
 		System.out.println("::"+member.getMemberId()+", "+member.getPassword());
 		//Business Logic
-		member.setMemberId(member.getMemberId());
 		Member mb = memberService.getMember(member);
 		
 		if( mb.getPassword().equals(member.getPassword())){
 			session.setAttribute("member", member);
+			member.setLoginCheck(true);
 			System.out.println(member.getMemberId()+" 님 로그인");
+			
+			return mb;
+			
+		} else {
+			
+			return null;
 		}
-		
-		return member;
 	}
 	
 	public void selectMemberRole() {

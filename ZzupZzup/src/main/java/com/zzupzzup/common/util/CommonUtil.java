@@ -63,6 +63,20 @@ public class CommonUtil {
 	
 	}
 	
+	public static String returnGender(String gender) {
+		
+		String genderData = null;
+		
+		if(gender.startsWith("F") || gender.startsWith("f")) {
+			genderData = "female";
+		} else {
+			genderData = "male";
+		}
+		
+		
+		return genderData;
+	}
+	
 	public static String returnMemberRank(int activityScore) {
 		
 		if (activityScore <= 100) {
