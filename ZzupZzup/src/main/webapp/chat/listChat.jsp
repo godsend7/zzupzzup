@@ -39,7 +39,7 @@
 			let url= $(this).attr("href");
 			alert(url);
 			$.ajax({
-				url: url,
+				url: "/chat/json/getChat/" + 1,
 				method: "GET",
 				dataType: "json",
 				headers: {
