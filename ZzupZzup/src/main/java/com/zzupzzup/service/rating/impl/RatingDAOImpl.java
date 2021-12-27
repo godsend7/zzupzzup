@@ -51,4 +51,13 @@ public class RatingDAOImpl implements RatingDAO {
 		return sqlSession.selectOne("RatingMapper.getTotalCount", search);
 	}
 
+	@Override
+	public List<Rating> listMyRating(Map<String, Object> map) throws Exception {
+		System.out.println("ratingDaoImpl listMyRating map : " + map);
+		
+		List<Rating> list = sqlSession.selectList("RatingMapper.listMyRating", map);
+		
+		return list;
+	}
+
 }

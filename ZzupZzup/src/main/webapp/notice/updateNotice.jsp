@@ -4,9 +4,8 @@
     <jsp:include page="/layout/toolbar.jsp" />
     
     <div class="container">
-    	
-    
-    </div>
+  		<!-- 여기 안에 작성해주세요``~~~ -->
+	</div>
     
     <jsp:include page="/layout/sidebar.jsp" />
 			

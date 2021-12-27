@@ -1,231 +1,152 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
-    <jsp:include page="/layout/toolbar.jsp" />
-    
-    <div class="container">
-  <main>
-    <div class="py-5 text-center">
-      <img class="d-block mx-auto mb-4" src="/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-      <h2>Checkout form</h2>
-      <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
-    </div>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-    <div class="row g-5">
-      <div class="col-md-5 col-lg-4 order-md-last">
-        <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <span class="text-primary">Your cart</span>
-          <span class="badge bg-primary rounded-pill">3</span>
-        </h4>
-        <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Product name</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$12</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Second product</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$8</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Third item</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$5</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between bg-light">
-            <div class="text-success">
-              <h6 class="my-0">Promo code</h6>
-              <small>EXAMPLECODE</small>
-            </div>
-            <span class="text-success">−$5</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between">
-            <span>Total (USD)</span>
-            <strong>$20</strong>
-          </li>
-        </ul>
+<jsp:include page="/layout/toolbar.jsp" />
 
-        <form class="card p-2">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Promo code">
-            <button type="submit" class="btn btn-secondary">Redeem</button>
-          </div>
-        </form>
-      </div>
-      <div class="col-md-7 col-lg-8">
-        <h4 class="mb-3">Billing address</h4>
-        <form class="needs-validation" novalidate>
-          <div class="row g-3">
-            <div class="col-sm-6">
-              <label for="firstName" class="form-label">First name</label>
-              <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
-              <div class="invalid-feedback">
-                Valid first name is required.
-              </div>
-            </div>
+<!-- start:해당 부분은 지우고 아래 container안에 작성 -->
 
-            <div class="col-sm-6">
-              <label for="lastName" class="form-label">Last name</label>
-              <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
-              <div class="invalid-feedback">
-                Valid last name is required.
-              </div>
-            </div>
+<!-- end -->
 
-            <div class="col-12">
-              <label for="username" class="form-label">Username</label>
-              <div class="input-group has-validation">
-                <span class="input-group-text">@</span>
-                <input type="text" class="form-control" id="username" placeholder="Username" required>
-              <div class="invalid-feedback">
-                  Your username is required.
-                </div>
-              </div>
-            </div>
+<div class="container">
 
-            <div class="col-12">
-              <label for="email" class="form-label">Email <span class="text-muted">(Optional)</span></label>
-              <input type="email" class="form-control" id="email" placeholder="you@example.com">
-              <div class="invalid-feedback">
-                Please enter a valid email address for shipping updates.
-              </div>
-            </div>
+	<!-- start:Form -->
+	<h3>예약하기</h3>
 
-            <div class="col-12">
-              <label for="address" class="form-label">Address</label>
-              <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
-              <div class="invalid-feedback">
-                Please enter your shipping address.
-              </div>
-            </div>
-
-            <div class="col-12">
-              <label for="address2" class="form-label">Address 2 <span class="text-muted">(Optional)</span></label>
-              <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-            </div>
-
-            <div class="col-md-5">
-              <label for="country" class="form-label">Country</label>
-              <select class="form-select" id="country" required>
+	<form method="post" action="#">
+		<div class="row gtr-uniform">
+			<div class="col-6 col-12-xsmall">
+				<label for="demo-name">NickName</label> 
+				<p>비트캠프, 에이아이</p>
+			</div>
+			<div class="col-6 col-12-xsmall">
+				<label for="demo-restaurantName">음식점 명</label> 
+				<p>거구장</p>
+			</div>
+			<div class="col-6 col-12-xsmall">
+				<label for="demo-restaurantPhone">음식점 전화번호</label> 
+				<p>999-9999</p>
+			</div>
+			
+			<div class="col-6 col-12-xsmall">
+				<label for="demo-restaurantAdress">음식점 소재지 주소</label> 
+				<p> 도로명 - 서울 특별시~~~
+              		지번  - 인사동 ~~~~ </p>
+			</div>
+			
+			<div class="col-6 col-12-xsmall">
+				<label for="demo-restaurantType">음식 종류</label> 
+				<p>중식</p>
+			</div>
+			
+			<div class="col-6 col-12-xsmall">
+				<label for="demo-memberCount">예약 인원 수</label> 
+				<p>3 명</p>
+			</div>
+			
+			<!-- Break -->
+			<div class="col-4 col-12-small">
+				<label for="demo-orderName">주문 메뉴 명</label> 
+				<select class="form-select" id="orderName" required>
                 <option value="">Choose...</option>
                 <option>United States</option>
               </select>
-              <div class="invalid-feedback">
-                Please select a valid country.
-              </div>
-            </div>
-
-            <div class="col-md-4">
-              <label for="state" class="form-label">State</label>
-              <select class="form-select" id="state" required>
+			</div>
+			<div class="col-4 col-12-small">
+				<label for="demo-orderCount">주문 메뉴 수량</label> 
+				<select class="form-select" id="orderCount" required>
                 <option value="">Choose...</option>
-                <option>California</option>
+                <option>United States</option>
               </select>
-              <div class="invalid-feedback">
-                Please provide a valid state.
-              </div>
-            </div>
-
-            <div class="col-md-3">
-              <label for="zip" class="form-label">Zip</label>
-              <input type="text" class="form-control" id="zip" placeholder="" required>
-              <div class="invalid-feedback">
-                Zip code required.
-              </div>
-            </div>
-          </div>
-
-          <hr class="my-4">
-
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="same-address">
-            <label class="form-check-label" for="same-address">Shipping address is the same as my billing address</label>
-          </div>
-
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="save-info">
-            <label class="form-check-label" for="save-info">Save this information for next time</label>
-          </div>
-
-          <hr class="my-4">
-
-          <h4 class="mb-3">Payment</h4>
-
-          <div class="my-3">
-            <div class="form-check">
-              <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required>
-              <label class="form-check-label" for="credit">Credit card</label>
-            </div>
-            <div class="form-check">
-              <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
-              <label class="form-check-label" for="debit">Debit card</label>
-            </div>
-            <div class="form-check">
-              <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
-              <label class="form-check-label" for="paypal">PayPal</label>
-            </div>
-          </div>
-
-          <div class="row gy-3">
-            <div class="col-md-6">
-              <label for="cc-name" class="form-label">Name on card</label>
-              <input type="text" class="form-control" id="cc-name" placeholder="" required>
-              <small class="text-muted">Full name as displayed on card</small>
-              <div class="invalid-feedback">
-                Name on card is required
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <label for="cc-number" class="form-label">Credit card number</label>
-              <input type="text" class="form-control" id="cc-number" placeholder="" required>
-              <div class="invalid-feedback">
-                Credit card number is required
-              </div>
-            </div>
-
-            <div class="col-md-3">
-              <label for="cc-expiration" class="form-label">Expiration</label>
-              <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
-              <div class="invalid-feedback">
-                Expiration date required
-              </div>
-            </div>
-
-            <div class="col-md-3">
-              <label for="cc-cvv" class="form-label">CVV</label>
-              <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
-              <div class="invalid-feedback">
-                Security code required
-              </div>
-            </div>
-          </div>
-
-          <hr class="my-4">
-
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
-        </form>
-      </div>
-    </div>
-  </main>
-
-  <footer class="my-5 pt-5 text-muted text-center text-small">
-    <p class="mb-1">&copy; 2017–2021 Company Name</p>
-    <ul class="list-inline">
-      <li class="list-inline-item"><a href="#">Privacy</a></li>
-      <li class="list-inline-item"><a href="#">Terms</a></li>
-      <li class="list-inline-item"><a href="#">Support</a></li>
-    </ul>
-  </footer>
-</div>
-    
-    <jsp:include page="/layout/sidebar.jsp" />
+			</div>
 			
-    
+			<div class="col-4 col-12-small">
+			<label >주문 메뉴와 수량을 확인 후 체크해주세요</label> 
+				<input type="checkbox" id="demo-copy" name="demo-copy"> <label
+					for="demo-copy"></label>
+			</div>
+			<!-- Break -->
+			
+			<!-- Break -->
+			<div class="col-6">
+				<label for="date">날짜 선택</label>
+				<input type="date" id="date">
+			</div>
+			<div class="col-6">
+				<label for="time">시간 선택</label>
+      			<input type="time" id="time">
+			</div>
+			<!-- Break -->
+			<h3>결제하기</h3>
+			
+			<!-- Break -->
+			<div class="col-12">
+				<label for="demo-priority">결제 수단</label>
+			</div>
+			<div class="col-4 col-12-small">
+				<input type="radio" id="demo-priority-low" name="demo-priority"
+					checked> <label for="demo-priority-low">선 결제</label>
+			</div>
+			<div class="col-4 col-12-small">
+				<input type="radio" id="demo-priority-normal" name="demo-priority">
+				<label for="demo-priority-normal">방문 결제</label>
+			</div>
+			
+			<!-- Break -->
+			<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+			<script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+			<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+			<script type="text/javascript"></script>
+		 
+		 
+
+			
+			<script>
+			var IMP = window.IMP; // 생략가능
+		    IMP.init('imp30711347');
+		    function requestPay() {
+		      // IMP.request_pay(param, callback) 결제창 호출
+		      IMP.request_pay({ // param
+		          pg: "html5_inicis",
+		          pay_method: "card",
+		          merchant_uid: 'merchant_' + new Date().getTime(),
+		          name: "노르웨이 회전 의자",
+		          amount: 100,
+		          buyer_email: "gildong@gmail.com",
+		          buyer_name: "홍길동",
+		          buyer_tel: "010-4242-4242",
+		          buyer_addr: "서울특별시 강남구 신사동",
+		          buyer_postcode: "01181"
+		      }, function (rsp) { // callback
+		    	  console.log(rsp);
+		          if (rsp.success) {
+		        	  var msg = '결제가 완료되었습니다.';
+		              msg += '고유ID : ' + rsp.imp_uid;
+		              msg += '상점 거래ID : ' + rsp.merchant_uid;
+		              msg += '결제 금액 : ' + rsp.paid_amount;
+		              msg += '카드 승인번호 : ' + rsp.apply_num;
+		              alert('성공<a href="javascript:Test()">');
+		          } else {
+		        	  var msg = '결제에 실패하였습니다.';
+		              msg += '에러내용 : ' + rsp.error_msg;
+		          }
+		      });
+		    }        
+		    </script>
+			
+			<!-- Break -->
+			
+			<div class="col-12">
+				<ul class="actions">
+					<li><input type="button" value="결제하기" class="primary" onclick="requestPay()"/></li>
+					<li><input type="reset" value="이전 페이지" class="normal" /></li>
+				</ul>
+			</div>
+		</div>
+	</form>
+	<!-- end -->
+
+</div>
+
+<jsp:include page="/layout/sidebar.jsp" />
