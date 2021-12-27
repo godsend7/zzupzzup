@@ -2,12 +2,16 @@ package com.zzupzzup.web.member;
 
 import java.util.Random;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.member.MemberService;
 
 
@@ -23,10 +27,29 @@ public class MemberRestController {
 	//*Constructor
 	public MemberRestController() {
 		// TODO Auto-generated constructor stub
+		System.out.println(this.getClass());
 	}
 
-	public void login() {
+	//*Method
+//	public void login() {
+//		
+//	}
+	
+	@RequestMapping( value="json/login", method=RequestMethod.POST )
+	public Member login(HttpSession session, String memberId, String password) throws Exception{
 		
+		System.out.println("/member/json/login : POST");
+		System.out.println("::"+memberId+", "+password);
+		//Business Logic
+		Member member = new Member();
+		member.setMemberId(memberId);
+		memberService.getMember(member);
+		
+		if( member.getPassword().equals(password)){
+			session.setAttribute("member", member);
+		}
+		
+		return member;
 	}
 	
 	public void selectMemberRole() {

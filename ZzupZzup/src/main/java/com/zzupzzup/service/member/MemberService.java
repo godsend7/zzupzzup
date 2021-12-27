@@ -7,7 +7,7 @@ import com.zzupzzup.service.domain.Member;
 
 public interface MemberService {
 	
-	public void login(Member member) throws Exception;
+//	public void login(Member member) throws Exception;
 	
 	public void kakaoLogin() throws Exception;
 	
@@ -51,6 +51,6 @@ public interface MemberService {
 	
 	public int calculateMannerScore(String memberId, int accumulScore) throws Exception;
 	
-	public void logout() throws Exception;
+//	public void logout() throws Exception;
 
 }

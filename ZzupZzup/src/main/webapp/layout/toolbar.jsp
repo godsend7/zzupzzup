@@ -21,7 +21,7 @@
 
 		<!-- Scripts -->
 		<!-- defer :: HTML이 파싱 완료된 후 script 실행 -->
-		<script defer src="/resources/js/jquery.min.js"></script>
+		<script src="/resources/js/jquery.min.js"></script>
 		<script defer src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
 		<script defer src="/resources/js/browser.min.js"></script>
 		<script defer src="/resources/js/breakpoints.min.js"></script>

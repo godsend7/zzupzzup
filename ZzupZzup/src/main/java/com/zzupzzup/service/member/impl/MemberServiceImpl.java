@@ -50,11 +50,11 @@ public class MemberServiceImpl implements MemberService{
 		return 1;
 	}
 
-	@Override
-	public void login(Member member) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void login(Member member) throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public void kakaoLogin() throws Exception {
@@ -236,10 +236,10 @@ public class MemberServiceImpl implements MemberService{
 		return 1;
 	}
 
-	@Override
-	public void logout() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void logout() throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 }
