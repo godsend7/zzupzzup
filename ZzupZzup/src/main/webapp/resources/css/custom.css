@@ -32,8 +32,8 @@ button,
   color: #f56a6a !important;
   cursor: pointer;
   display: inline-block;
-  font-family: "Roboto Slab", serif;
-  font-size: 0.8em;
+  font-family: "Roboto Slab","Gowun Dodum", serif;
+  font-size: 0.9em;
   font-weight: 700;
   height: 3.5em;
   letter-spacing: 0.075em;
@@ -72,7 +72,12 @@ button,
   input[type="button"].small,
   button.small,
   .button.small {
-    font-size: 0.6em; }
+    font-size: 0.7em;
+    font-weight: 400;
+    height: 2.8em;
+  	line-height: 2.8em;
+  	padding: 0 1.8em;
+     }
   input[type="submit"].large,
   input[type="reset"].large,
   input[type="button"].large,
@@ -290,6 +295,8 @@ button,
 /* Thumbnail */
 .card .thumb { height: 225px; overflow:hidden; }
 .card .thumb img { width: 100%; }
+.card .card-img { height: 225px; overflow:hidden; }
+.card .card-img img { width: 100%; }
 .thumb-more { font-size: 25px; }
 
 /* pagination */

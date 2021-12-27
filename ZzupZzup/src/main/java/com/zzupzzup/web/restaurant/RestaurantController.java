@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.zzupzzup.service.domain.Restaurant;
+import com.zzupzzup.service.domain.RestaurantMenu;
+import com.zzupzzup.service.domain.RestaurantTime;
 import com.zzupzzup.service.restaurant.RestaurantService;
 
 @Controller
@@ -38,11 +40,28 @@ public class RestaurantController {
 	}
 	
 	@RequestMapping(value="addRestaurant", method=RequestMethod.POST)
-	public String addRestaurant(@ModelAttribute("restaurant") Restaurant restaurant) throws Exception {
+	public String addRestaurant(@ModelAttribute("restaurant") Restaurant restaurant, 
+			@ModelAttribute("restaurantMenus") Restaurant restaurantMenus,
+			@ModelAttribute("restaurantTimes") Restaurant restaurantTimes,
+			@ModelAttribute("restaurantImage") Restaurant restaurantImage) throws Exception {
 		
 		System.out.println("restaurant/addRestaurant : POST");
 		
 		restaurantService.addRestaurant(restaurant);
+		
+		for(RestaurantMenu rm : restaurantMenus.getRestaurantMenus()) {
+			System.out.println(rm);
+		}
+		
+		for(RestaurantTime rt : restaurantTimes.getRestaurantTimes()) {
+			System.out.println(rt);
+		}
+		
+		for(String ri : restaurantImage.getRestaurantImage()) {
+			System.out.println(ri);
+		}
+		
+		//System.out.println("Restaurant Menu : " + restaurant.getRestaurantMenus());
 		
 		return "redirect:/restaurant/addRestaurant.jsp";
 	}

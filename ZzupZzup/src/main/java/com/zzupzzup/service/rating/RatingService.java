@@ -13,4 +13,7 @@ public interface RatingService {
 	
 	// Select List
 	public Map<String, Object> listRating(Search search) throws Exception;
+	
+	// Select List
+	public Map<String, Object> listMyRating(Search search, String memberId) throws Exception;
 }
