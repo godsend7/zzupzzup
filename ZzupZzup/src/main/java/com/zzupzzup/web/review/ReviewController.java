@@ -1,11 +1,15 @@
 package com.zzupzzup.web.review;
 
+import java.util.Iterator;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.review.ReviewService;
@@ -37,11 +41,15 @@ public class ReviewController {
 	}
 	
 	@RequestMapping(value="addReview", method=RequestMethod.POST)
-	public String addReview(@ModelAttribute("review") Review review) throws Exception {
+	public String addReview(@ModelAttribute("review") Review review, @RequestParam(value="fileName", required = false) MultipartFile uploadFile) throws Exception {
 		
 		System.out.println("review/addReview : POST");
 		
 		System.out.println(review);
+		
+		for (int i=0; i<uploadFile.getSize(); i++) {
+			System.out.println(uploadFile.getOriginalFilename());
+		}
 		
 		return "redirect:/review/addReviewView.jsp";
 	}
