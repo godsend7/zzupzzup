@@ -36,20 +36,24 @@ public class MemberRestController {
 //	}
 	
 	@RequestMapping( value="json/login", method=RequestMethod.POST )
-	public Member login(HttpSession session, String memberId, String password) throws Exception{
+	public Member login(@RequestBody Member member, HttpSession session) throws Exception{
 		
 		System.out.println("/member/json/login : POST");
-		System.out.println("::"+memberId+", "+password);
+		System.out.println("::"+member.getMemberId()+", "+member.getPassword());
 		//Business Logic
-		Member member = new Member();
-		member.setMemberId(memberId);
-		memberService.getMember(member);
+		Member mb = memberService.getMember(member);
 		
-		if( member.getPassword().equals(password)){
+		if( mb.getPassword().equals(member.getPassword())){
 			session.setAttribute("member", member);
+			member.setLoginCheck(true);
+			System.out.println(member.getMemberId()+" 님 로그인");
+			
+			return mb;
+			
+		} else {
+			
+			return null;
 		}
-		
-		return member;
 	}
 	
 	public void selectMemberRole() {

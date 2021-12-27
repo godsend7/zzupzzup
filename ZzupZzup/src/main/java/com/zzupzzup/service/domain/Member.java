@@ -42,6 +42,7 @@ public class Member {
 	private int regRestaurantCount;				//업주의 경우에 상세조회에서 표시될 음식점 수
 	private boolean regBlacklist;				//블랙리스트 등록 여부 확인
 	private int accumulType;					//활동점수 적립 유형
+	private boolean loginCheck;
 
 	//*Constructor
 	public Member() {
@@ -140,15 +141,9 @@ public class Member {
 	}
 
 	public String getGender() {
-		
-		String genderData = null;
-		
-		if(genderData.startsWith("F") || genderData.startsWith("f")) {
-			gender = "female";
-		} else {
-			gender = "male";
+		if(gender != null) {
+			gender = CommonUtil.returnGender(gender);
 		}
-		
 		return gender;
 	}
 
@@ -356,6 +351,14 @@ public class Member {
 		return "Member [ memberId : "+memberId+", password : "+password+", nickname : "+nickname+", memberRole : "+memberRole+", memberName : "+memberName+", memberPhone : "+memberPhone+", ageRange : "+ageRange+", gender : "+gender+", age : "+age+", profileImage : "+profileImage+", statusMessage : "+statusMessage+", pushNickname : "+pushNickname
 				+", deleteReason : "+deleteReason+", accumulDate : "+accumulDate+", accumulContents : "+accumulContents+", accumulScore : "+accumulScore+", mannerScore : "+mannerScore+", memberRank : "+memberRank+", accumulAllScore : "+accumulAllScore+", mannerAllScore : "+mannerAllScore+", regDate : "+regDate+", eliminated : "+eliminated+", deleteDate : "+deleteDate
 				+", blacklistDate : "+blacklistDate+", reportCount : "+reportCount+", certificatedNum : "+certificatedNum+", loginType : "+loginType+", deleteType : "+deleteType+", regRestaurantCount : "+regRestaurantCount+", regBlacklist : "+regBlacklist+", accumulType : "+accumulType+" ]";
+	}
+
+	public boolean isLoginCheck() {
+		return loginCheck;
+	}
+
+	public void setLoginCheck(boolean loginCheck) {
+		this.loginCheck = loginCheck;
 	}
 	
 }
