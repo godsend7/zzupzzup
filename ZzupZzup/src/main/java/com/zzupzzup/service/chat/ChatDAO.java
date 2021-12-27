@@ -44,7 +44,7 @@ public interface ChatDAO {
 	public List<ChatMember> getChatMember(int chatNo, Member memberId) throws Exception;
 	
 	// Update
-	public void deleteChatMember(String memberId, int chatNo) throws Exception;
+	public int deleteChatMember(ChatMember chatMember) throws Exception;
 	
 	// Update
 	public int updateReadyCheck(ChatMember chatMember) throws Exception;
@@ -53,5 +53,5 @@ public interface ChatDAO {
 	public List<ChatMember> listChatMember(Map<String, Object> map) throws Exception;
 	
 	// Select List
-	public List<ChatMember> listReadyCheckMember(Search search) throws Exception;
+	public List<ChatMember> listReadyCheckMember(Map<String, Object> map) throws Exception;
 }

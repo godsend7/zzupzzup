@@ -11,7 +11,9 @@ public class Rating {
 	private String ratingValue; //평가 내용
 	private String ratingFromId; //평가한 사람 아이디
 	private String ratingToId; //평가받은 사람 아이디
+	private int ratingType;
 	private Date ratingRegDate;
+
 
 	///Constructor
 	public Rating() {
@@ -65,6 +67,14 @@ public class Rating {
 	public void setRatingToId(String ratingToId) {
 		this.ratingToId = ratingToId;
 	}
+	
+	public int getRatingType() {
+		return ratingType;
+	}
+
+	public void setRatingType(int ratingType) {
+		this.ratingType = ratingType;
+	}
 
 	public Date getRatingRegDate() {
 		return ratingRegDate;
@@ -73,11 +83,15 @@ public class Rating {
 	public void setRatingRegDate(Date ratingRegDate) {
 		this.ratingRegDate = ratingRegDate;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Rating : [ratingNo] "+ratingNo+" [chatNo] "+chatNo+" [ratingScore] "+ratingScore+" [ratingValue] "+ ratingValue+" [ratingFromId] "+ratingFromId+" [ratingToId] "+ratingToId+" [ratingRegDate] "+ratingRegDate;
+		return "Rating [ratingNo=" + ratingNo + ", chatNo=" + chatNo + ", ratingScore=" + ratingScore + ", ratingValue="
+				+ ratingValue + ", ratingFromId=" + ratingFromId + ", ratingToId=" + ratingToId + ", ratingType="
+				+ ratingType + ", ratingRegDate=" + ratingRegDate + "]";
 	}
+	
+	
 
 	
 

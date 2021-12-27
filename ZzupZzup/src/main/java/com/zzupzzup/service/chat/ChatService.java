@@ -41,7 +41,7 @@ public interface ChatService {
 	public Map<String, Object> getChatMember(int chatNo, Member memberId) throws Exception;
 	
 	// Delete
-	public void deleteChatMember(String memberId, int chatNo) throws Exception;
+	public int deleteChatMember(ChatMember chatMember) throws Exception;
 	
 	// update
 	public int updateReadyCheck(ChatMember chatMember) throws Exception;
@@ -50,6 +50,6 @@ public interface ChatService {
 	public Map<String, Object> listChatMember(Search search, int chatNo) throws Exception;
 	
 	// Select One
-	public Map<String, Object> listReadyCheckMember(Search search) throws Exception;
+	public Map<String, Object> listReadyCheckMember(Search search, int chatNo) throws Exception;
 
 }
