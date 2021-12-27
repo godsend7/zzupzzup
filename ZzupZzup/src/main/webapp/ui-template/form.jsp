@@ -5,15 +5,33 @@
 
 <jsp:include page="/layout/toolbar.jsp" />
 
+<!-- start:해당 부분은 지우고 아래 container안에 작성 -->
+<div class="row">
+	<div class="col-12">
+		<ul>
+			<li><a href="/ui-template/basic-template.jsp">기본 템플릿</a></li>
+			<li><a href="/ui-template/button.jsp">버튼</a></li>
+			<li><a href="/ui-template/form.jsp">등록양식</a></li>
+			<li><a href="/ui-template/form-view.jsp">등록양식 결과</a></li>
+			<li><a href="/ui-template/thumbnail.jsp">썸네일리스트</a></li>
+			<li><a href="/ui-template/list.jsp">일반리스트</a></li>
+			<li><a href="/ui-template/carousel.jsp">슬라이드</a></li>
+			<li><a href="/ui-template/table.jsp">테이블</a></li>
+			<li><a href="/ui-template/etc-ui.jsp">기타ui</a></li>
+		</ul>
+	</div>
+</div>
+<!-- end -->
+
 <div class="container">
 
 	<!-- start:Form -->
-	<h3>쩝쩝친구 생성</h3>
+	<h3>Form</h3>
 
 	<form method="post" action="#">
 		<div class="row gtr-uniform">
 			<div class="col-6 col-12-xsmall">
-				<label for="demo-name">음식점명</label> <input type="text"
+				<label for="demo-name">Name</label> <input type="text"
 					name="demo-name" id="demo-name" value="" placeholder="Name" />
 			</div>
 			<div class="col-6 col-12-xsmall">
@@ -77,6 +95,15 @@
 				<label for="demo-priority">Message</label>
 				<textarea name="demo-message" id="demo-message"
 					placeholder="Enter your message" rows="6"></textarea>
+			</div>
+			<!-- Break -->
+			<div class="col-6">
+				<label for="date">Example date</label>
+				<input type="date" id="date">
+			</div>
+			<div class="col-6">
+				<label for="time">Example time</label>
+      			<input type="time" id="time">
 			</div>
 			<!-- Break -->
 			<div class="col-12">

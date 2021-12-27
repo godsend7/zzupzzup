@@ -167,6 +167,29 @@ public class ChatServiceTest {
 	}
 	
 	//@Test
+	public void testGetChatEntrance() throws Exception {
+		
+		System.out.println("testGetChatEntrance");
+		
+		Chat chat = new Chat();
+		Restaurant restaurant = new Restaurant();
+		Member member = new Member();
+		
+		chat.setChatNo(1);
+		chat = chatService.getChatEntrance(chat.getChatNo());
+		
+		//restaurant = restaurantService.getRestaurant(chat.getChatRestaurant().getRestaurantNo());
+		restaurant.setRestaurantNo(chat.getChatRestaurant().getRestaurantNo());
+		member = memberService.getMember(chat.getChatLeaderId());
+		
+		chat.setChatRestaurant(restaurant);
+		chat.setChatLeaderId(member);
+		
+		System.out.println("chat : " + chat);
+		
+	}
+	
+	//@Test
 	public void testDeleteChat() throws Exception {
 		
 		System.out.println("testDeleteChat");
@@ -200,9 +223,9 @@ public class ChatServiceTest {
 		
 		ChatMember chatMember = new ChatMember();
 		Member member = new Member();
-		member.setMemberId("hihi@a.com");
+		member.setMemberId("owner01@zzupzzup.com");
 		
-		chatMember.setChatNo(7);
+		chatMember.setChatNo(10);
 		chatMember.setMember(member);
 		
 		chatService.addChatMember(chatMember);
@@ -261,6 +284,8 @@ public class ChatServiceTest {
 	}
 	
 	// 예약에 기록이 되어야 해서 채팅방 멤버 지우는건 없음...
+	// 레디 체크 안한사람은 나갈 수 있음
+	// 레디 체크한 사람은 나갈 수 없음
 	//@Test
 	public void testDeleteChatMember() throws Exception {
 		
@@ -274,7 +299,7 @@ public class ChatServiceTest {
 		chatMember.setChatNo(1);
 		chatMember.setMember(member);
 		
-		chatService.deleteChatMember(chatMember.getMember().getMemberId(),chatMember.getChatNo());
+		chatService.deleteChatMember(chatMember);
 		
 	}
 	
@@ -286,7 +311,7 @@ public class ChatServiceTest {
 		ChatMember chatMember = new ChatMember();
 		Member member = new Member();
 		
-		member.setMemberId("hihi@a.com");
+		member.setMemberId("user02@zzupzzup.com");
 		
 		chatMember.setChatNo(10);
 		chatMember.setMember(member);
@@ -296,13 +321,33 @@ public class ChatServiceTest {
 	}
 	
 	@Test
-	public void testGetChatEntrance() throws Exception {
+	public void testListReadyCheckMember() throws Exception {
 		
-		System.out.println("testGetChatEntrance");
+		System.out.println("testListReadyCheckMember");
 		
-		Chat chat = new Chat();
+		ChatMember chatMember = new ChatMember();
+		chatMember.setChatNo(10);
+		Search search = new Search();
+		search.setCurrentPage(1);
+		search.setPageSize(pageSize);		
 		
+		System.out.println("search : " + search);
+		
+		Map<String, Object> map = chatService.listReadyCheckMember(search, chatMember.getChatNo());
+		System.out.println("===================================");
+		System.out.println("testListChat map : " + map);
+		System.out.println("===================================");
+		
+		List<ChatMember> list = (List<ChatMember>)map.get("list");
+		System.out.println("list : " + list);
+		
+		for (ChatMember c : list) {
+			System.out.println(c.getChatNo());
+			System.out.println(c);
+		}
 	}
+	
+	
 	
 	
 	

@@ -26,6 +26,7 @@
 		<typeAlias alias="search" type="com.zzupzzup.common.Search"/>
 		<typeAlias alias="chat" type="com.zzupzzup.service.domain.Chat"/>
 		<typeAlias alias="chatMember" type="com.zzupzzup.common.ChatMember"/>
+		<typeAlias alias="rating" type="com.zzupzzup.service.domain.Rating"/>
 	</typeAliases>
 	
 	 <!-- SQL Definition :: file include -->
@@ -38,6 +39,7 @@
 		<mapper resource="sql/ReportMapper.xml"/>
 		<mapper resource="sql/ReservationMapper.xml"/>
 		<mapper resource="sql/ChatMapper.xml"/>
+		<mapper resource="sql/RatingMapper.xml"/>
 	</mappers>
 
 </configuration>
