@@ -1,48 +1,105 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
-    <jsp:include page="/layout/toolbar.jsp" />
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-    <div class="container">
-  <main>
-    <div class="py-5 text-center">
-      <!-- <img class="d-block mx-auto mb-4" src="/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
-      <h2>예약 및 결제하기</h2>
-      <!-- <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p> -->
-    </div>
+<jsp:include page="/layout/toolbar.jsp" />
 
-    <div class="row g-5">
-      <div class="col-md-5 col-lg-4 order-md-last">
-        <h3 class="d-flex justify-content-between align-items-center mb-3">
-          <span class="text-primary">결제하기</span>
-        </h3>
-        <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0"></h6>
-             <div class="my-2">
-            <div class="form-check">
-              <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required>
-              <label class="form-check-label" for="credit">선 결제</label>
-              
-            </div>
-            <div class="form-check">
-              <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
-              <label class="form-check-label" for="debit">방문 결제</label>
-            </div>
-            </div>
-            <span class="text-muted"></span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-          <!--  //////////////////////결제파트/////////////////////////////// -->
-            <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<!-- start:해당 부분은 지우고 아래 container안에 작성 -->
+
+<!-- end -->
+
+<div class="container">
+
+	<!-- start:Form -->
+	<h3>예약하기</h3>
+
+	<form method="post" action="#">
+		<div class="row gtr-uniform">
+			<div class="col-6 col-12-xsmall">
+				<label for="demo-name">NickName</label> 
+				<p>비트캠프, 에이아이</p>
+			</div>
+			<div class="col-6 col-12-xsmall">
+				<label for="demo-restaurantName">음식점 명</label> 
+				<p>거구장</p>
+			</div>
+			<div class="col-6 col-12-xsmall">
+				<label for="demo-restaurantPhone">음식점 전화번호</label> 
+				<p>999-9999</p>
+			</div>
+			
+			<div class="col-6 col-12-xsmall">
+				<label for="demo-restaurantAdress">음식점 소재지 주소</label> 
+				<p> 도로명 - 서울 특별시~~~
+              		지번  - 인사동 ~~~~ </p>
+			</div>
+			
+			<div class="col-6 col-12-xsmall">
+				<label for="demo-restaurantType">음식 종류</label> 
+				<p>중식</p>
+			</div>
+			
+			<div class="col-6 col-12-xsmall">
+				<label for="demo-memberCount">예약 인원 수</label> 
+				<p>3 명</p>
+			</div>
+			
+			<!-- Break -->
+			<div class="col-4 col-12-small">
+				<label for="demo-orderName">주문 메뉴 명</label> 
+				<select class="form-select" id="orderName" required>
+                <option value="">Choose...</option>
+                <option>United States</option>
+              </select>
+			</div>
+			<div class="col-4 col-12-small">
+				<label for="demo-orderCount">주문 메뉴 수량</label> 
+				<select class="form-select" id="orderCount" required>
+                <option value="">Choose...</option>
+                <option>United States</option>
+              </select>
+			</div>
+			
+			<div class="col-4 col-12-small">
+			<label >주문 메뉴와 수량을 확인 후 체크해주세요</label> 
+				<input type="checkbox" id="demo-copy" name="demo-copy"> <label
+					for="demo-copy"></label>
+			</div>
+			<!-- Break -->
+			
+			<!-- Break -->
+			<div class="col-6">
+				<label for="date">날짜 선택</label>
+				<input type="date" id="date">
+			</div>
+			<div class="col-6">
+				<label for="time">시간 선택</label>
+      			<input type="time" id="time">
+			</div>
+			<!-- Break -->
+			<h3>결제하기</h3>
+			
+			<!-- Break -->
+			<div class="col-12">
+				<label for="demo-priority">결제 수단</label>
+			</div>
+			<div class="col-4 col-12-small">
+				<input type="radio" id="demo-priority-low" name="demo-priority"
+					checked> <label for="demo-priority-low">선 결제</label>
+			</div>
+			<div class="col-4 col-12-small">
+				<input type="radio" id="demo-priority-normal" name="demo-priority">
+				<label for="demo-priority-normal">방문 결제</label>
+			</div>
+			
+			<!-- Break -->
+			<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 			<script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 			<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 			<script type="text/javascript"></script>
 		 
-		 	<body>
-			<button onclick="requestPay()">결제하기</button>
-			</body>
+		 
 
 			
 			<script>
@@ -77,162 +134,19 @@
 		      });
 		    }        
 		    </script>
-		    <!--  //////////////////////결제파트/////////////////////////////// -->
-          </li>
-         
-      </div>
-      <div class="col-md-7 col-lg-8">
-        <h3 class="mb-3">예약하기</h3>
-        <form class="needs-validation" novalidate>
-          <div class="row g-3">
-            <div class="col-sm-6">
-              <label for="firstName" class="form-label">Nick name</label>
-              비트캠프, 에이아이, 아카데미
-              <div class="invalid-feedback">
-                Valid first name is required.
-              </div>
-            </div>
-            
-            <div class="col-sm-6">
-              <label for="firstName" class="form-label">음식점 명</label>
-              거구장
-              <div class="invalid-feedback">
-                Valid first name is required.
-              </div>
-            </div>
-
-            <div class="col-sm-6">
-              <label for="lastName" class="form-label">음식점 전화번호</label>
-              999-9999
-              <div class="invalid-feedback">
-                Valid last name is required.
-              </div>
-            </div>
-            
-            <div class="col-sm-6">
-              <label for="firstName" class="form-label">음식점 소재지 주소</label>
-              도로명 - 서울 특별시~~~
-              지번  - 인사동 ~~~~ 
-              <div class="invalid-feedback">
-                Valid first name is required.
-              </div>
-            </div>
-            
-             <div class="col-sm-6">
-              <label for="firstName" class="form-label">음식 종류</label>
-              중식
-              <div class="invalid-feedback">
-                Valid first name is required.
-              </div>
-            </div>
-            
-             <div class="col-sm-6">
-              <label for="firstName" class="form-label">예약 인원 수</label>
-              3 명
-              <div class="invalid-feedback">
-                Valid first name is required.
-              </div>
-            </div>
-
-
-            <div class="col-12">
-              <label for="email" class="form-label">음식점 전화번호 <span class="text-muted">(Optional)</span></label>
-             02-976-7834
-              <div class="invalid-feedback">
-                Please enter a valid email address for shipping updates.
-              </div>
-            </div>
-
-            <div class="col-12">
-              <label for="address" class="form-label">주문 메뉴 명</label>
-              <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
-              <div class="invalid-feedback">
-                Please enter your shipping address.
-              </div>
-            </div>
-
-            <div class="col-12">
-              <label for="address2" class="form-label">주문 메뉴 수량 <span class="text-muted">(Optional)</span></label>
-              <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-            </div>
-
-            <div class="col-md-5">
-              <label for="country" class="form-label">주문 메뉴 명</label>
-              <select class="form-select" id="country" required>
-                <option value="">Choose...</option>
-                <option>United States</option>
-              </select>
-              <div class="invalid-feedback">
-                Please select a valid country.
-              </div>
-            </div>
-
-            <div class="col-md-4">
-              <label for="state" class="form-label">주문 메뉴 수량</label>
-              <select class="form-select" id="state" required>
-                <option value="">Choose...</option>
-                <option>California</option>
-              </select>
-              <div class="invalid-feedback">
-                Please provide a valid state.
-              </div>
-            </div>
-
-            <div class="col-md-3">
-              <label for="zip" class="form-label">라디오로 어케바꿈????</label>
-              <input type="text" class="form-control" id="zip" placeholder="" required>
-              <div class="invalid-feedback">
-                Zip code required.
-              </div>
-            </div>
-          </div>
-
-          <hr class="my-4">
-
-	          <div class="input-group">
-			  <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-			  <label for="inputGroupSelect04" class="form-label">예약 날짜 시간 선택</label>
-			    <option selected>예약 날짜/시간 선택</option>
-			    <option value="1">One</option>
-			    <option value="2">Two</option>
-			    <option value="3">Three</option>
-			  </select>
-			  <div class="input-group-append">
-			    <button class="btn btn-outline-secondary" type="button">Button</button>
-			  </div>
-			</div>
 			
-			<div class="input-group">
-			  <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-			    <option selected>예약 날짜/시간 선택</option>
-			    <option value="1">One</option>
-			    <option value="2">Two</option>
-			    <option value="3">Three</option>
-			  </select>
-			  <div class="input-group-append">
-			    <button class="btn btn-outline-secondary" type="button">Button</button>
-			  </div>
+			<!-- Break -->
+			
+			<div class="col-12">
+				<ul class="actions">
+					<li><input type="button" value="결제하기" class="primary" onclick="requestPay()"/></li>
+					<li><input type="reset" value="이전 페이지" class="normal" /></li>
+				</ul>
 			</div>
+		</div>
+	</form>
+	<!-- end -->
 
-
-          <hr class="my-4">
-
-          <button class="w-50 btn btn-primary btn-lg" type="submit">이전 페이지</button>
-        </form>
-      </div>
-    </div>
-  </main>
-
-  <footer class="my-5 pt-5 text-muted text-center text-small">
-    <p class="mb-1">&copy; 2017–2021 Company Name</p>
-    <ul class="list-inline">
-      <li class="list-inline-item"><a href="#">Privacy</a></li>
-      <li class="list-inline-item"><a href="#">Terms</a></li>
-      <li class="list-inline-item"><a href="#">Support</a></li>
-    </ul>
-  </footer>
 </div>
-    
-    <jsp:include page="/layout/sidebar.jsp" />
-			
-    
+
+<jsp:include page="/layout/sidebar.jsp" />
