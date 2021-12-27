@@ -59,11 +59,11 @@ CREATE TABLE `activity_score` (
 
 CREATE TABLE `restaurant` (
     `restaurant_no` INT NOT NULL AUTO_INCREMENT,
-    `member_id` VARCHAR(50) NOT NULL,
-    `owner_name` VARCHAR(10) NOT NULL,
-    `owner_image` VARCHAR(50) NOT NULL,
-    `restaurant_text` VARCHAR(100) NOT NULL,
-    `reservation_status` BOOLEAN NOT NULL DEFAULT 1,
+    `member_id` VARCHAR(50),
+    `owner_name` VARCHAR(10),
+    `owner_image` VARCHAR(50),
+    `restaurant_text` VARCHAR(100),
+    `reservation_status` BOOLEAN DEFAULT 1,
     `parkable` BOOLEAN,
     `request_date` DATE,
     `judge_status` BOOLEAN,
@@ -376,5 +376,9 @@ INSERT INTO hashtag(hashtag) VALUES ("#데이트하기 좋은 맛집");
 -- activity_score
 INSERT INTO activity_score(member_id, accumulate_type, accumulate_score)
 VALUES('hihi@a.com', 1, 10);
+-- review
+INSERT
+INTO REVIEW(member_id, reservation_no, restaurant_no, review_detail, scope_taste, scope_kind, scope_clean, avg_scope)
+VALUES ( 'hihi@a.com', 1, 1, '하이하이', 1, 1, 1, 1);
 
 commit;

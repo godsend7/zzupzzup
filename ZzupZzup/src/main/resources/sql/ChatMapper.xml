@@ -86,7 +86,7 @@
 	<!-- SQL : SELECT ROW COUNT -->
 	<select id="getTotalCount" parameterType="search" resultType="int">
 		SELECT count(*)
-		FROM CHAT
+		FROM chat
 	</select>
 	<!-- <select id="getTotalCount" parameterType="search" resultType="int">
 		<bind name="searchKeywords" value="'%' + _parameter.getSearchKeyword() + '%'" />
@@ -107,6 +107,15 @@
 				</where>
 			</if> ) countTable
 	</select> -->
+	
+	<!-- SQL : SELECT ONE -->
+	<select id="getChatEntrance" parameterType="int" resultMap="chatSelectMap">
+		SELECT
+		c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(*) chat_member_count
+		FROM chat c
+		LEFT OUTER JOIN chat_member cm ON ( c.chat_no = cm.chat_no)
+		WHERE c.chat_no IN (#{chatNo})
+	</select>
 	
 	<!-- SQL : UPDATE -->
 	<update id="deleteChat" parameterType="chat">
@@ -153,7 +162,7 @@
 	
 	<!-- SQL : DELETE -->
 	<delete id="deleteChatMember">
-		DELETE FROM chat_member WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
+		DELETE FROM chat_member WHERE chat_member_id = #{member.memberId} and chat_no = #{chatNo};
 	</delete>
 	
 	<!-- SQL : update -->
@@ -165,6 +174,15 @@
 		</set>
 		 WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
 	</delete>
+	
+	<!-- SQL : SELECT ALL -->
+	<select id="listReadyCheckMember" parameterType="map" resultMap="chatMemberSelectMap">
+		<!-- <bind name="searchKeywords" value="'%' + searchKeyword + '%'" /> -->
+		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check 
+			FROM chat_member
+			WHERE chat_no = #{chatNo} and ready_check = 1
+			ORDER BY chat_member_no
+	</select>
 	
 	
 	<!--
@@ -187,6 +205,25 @@
 				LEFT JOIN member m ON c.chat_leader_id = m.member_id 
 				WHERE c.restaurant_no = r.restaurant_no
 				ORDER BY c.chat_no LIMIT #{search.startRowNum}, #{search.endRowNum}) AS c -->
+	
+	
+	<!-- SELECT (SELECT COUNT(*) FROM chat WHERE chat_no = 1) + (SELECT COUNT(*) FROM chat_member WHERE chat_no = 1) AS cnt;
+	
+	SELECT (SELECT COUNT(*) FROM chat_member WHERE chat_no = 1) AS cnt; -->
+	
+	
+	<!-- 참여자수 보기 -->
+	<!-- SELECT
+		c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(*) chat_member_count
+		FROM chat c
+		LEFT OUTER JOIN chat_member cm ON ( c.chat_no = cm.chat_no)
+		WHERE c.chat_no IN (1) -->
+	
+	
+	
+	
+	
+	
 	
 	
 	

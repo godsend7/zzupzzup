@@ -86,8 +86,8 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public void deleteChatMember(String memberId, int chatNo) throws Exception {
-		chatDao.deleteChatMember(memberId, chatNo);
+	public int deleteChatMember(ChatMember chatMember) throws Exception {
+		return chatDao.deleteChatMember(chatMember);
 	}
 	
 	@Override
@@ -127,11 +127,17 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public Map<String, Object> listReadyCheckMember(Search search) throws Exception {
-		List<ChatMember> list = chatDao.listReadyCheckMember(search);
-		
+	public Map<String, Object> listReadyCheckMember(Search search, int chatNo) throws Exception {
 		Map<String, Object> map = new HashMap<String,Object>();
-		map.put("list", list);
+		map.put("search", search);
+		//map.put("searchCondition", search.getSearchCondition() );
+		//map.put("searchKeyword",  search.getSearchKeyword() );
+		//map.put("endRowNum",  search.getEndRowNum() );
+		//map.put("startRowNum",  search.getStartRowNum() );
+		map.put("chatNo", chatNo);
+		
+		map.put("list", chatDao.listReadyCheckMember(map));
+		map.put("totalCount", chatDao.getTotalCount(search));
 		
 		return map;
 	}

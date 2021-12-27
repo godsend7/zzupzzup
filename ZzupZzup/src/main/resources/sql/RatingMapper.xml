@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="RatingMapper">
+	<resultMap id="ratingSelectMap" type="rating">
+		<result property="ratingNo" column="rating_no" jdbcType="INTEGER"/>
+		<result property="chatNo" column="chat_no" jdbcType="INTEGER"/>
+		<result property="ratingScore" column="rating_score" jdbcType="INTEGER"/>
+		<result property="ratingFromId" column="rating_from_id" jdbcType="VARCHAR"/>
+		<result property="ratingToId" column="rating_to_id" jdbcType="VARCHAR"/>
+		<result property="ratingType" column="rating_type" jdbcType="INTEGER"/>
+		<result property="ratingRegDate" column="rating_reg_date" jdbcType="DATE"/>
+	</resultMap>
+	
+	<!-- SQL : INSERT -->
+	<insert id="addRating" parameterType="rating" useGeneratedKeys="true" keyProperty="ratingNo">
+		INSERT INTO rating (
+			chat_no, rating_to_id, rating_from_id, rating_score, rating_type
+		) VALUES (
+			#{chatNo}, #{ratingToId}, #{ratingFromId}, #{ratingScore}, #{ratingType}
+		)
+	</insert>
+	
+	<!-- SQL : SELECT ALL -->
+	<select id="listRating" parameterType="map" resultMap="ratingSelectMap">
+		SELECT *
+		FROM ( SELECT r.rating_no, r.chat_no, r.rating_to_id, r.rating_from_id, r.rating_score, r.rating_type
+				FROM rating r, chat c
+				WHERE r.chat_no = c.chat_no
+				ORDER BY r.chat_no LIMIT #{search.startRowNum}, #{search.endRowNum}) AS r
+	</select>
+	
+	<!-- SQL : SELECT ROW COUNT -->
+	<select id="getTotalCount" parameterType="search" resultType="int">
+		SELECT count(*)
+		FROM rating
+	</select>
+</mapper>
+
+<!-- INSERT INTO rating (
+			chat_no, rating_to_id, rating_from_id, rating_score, rating_type
+		) VALUES (
+			1, "hihi@a.com", "user02@zzupzzup.com", -1, 1
+		) -->

@@ -66,8 +66,6 @@ public class ChatDAOImpl implements ChatDAO {
 		
 		List<Chat> list = sqlSession.selectList("ChatMapper.listChat", map);
 		
-		System.out.println("dfsiofwef : " + list);
-		
 		return list;
 	}
 
@@ -131,8 +129,8 @@ public class ChatDAOImpl implements ChatDAO {
 	}
 
 	@Override
-	public void deleteChatMember(String memberId, int chatNo) throws Exception {
-		sqlSession.update("ChatMapper.deleteChat", memberId);
+	public int deleteChatMember(ChatMember chatMember) throws Exception {
+		return sqlSession.delete("ChatMapper.deleteChatMember", chatMember);
 	}
 	
 	@Override
@@ -157,8 +155,11 @@ public class ChatDAOImpl implements ChatDAO {
 	}
 
 	@Override
-	public List<ChatMember> listReadyCheckMember(Search search) throws Exception {
-		return sqlSession.selectList("ChatMapper.listReadyCheckMember", search);
+	public List<ChatMember> listReadyCheckMember(Map<String, Object> map) throws Exception {
+		System.out.println("chatDaoImpl listReadyCheckMember map : " + map);
+		List<ChatMember> list = sqlSession.selectList("ChatMapper.listReadyCheckMember", map);
+		
+		return list;
 	}
 
 }

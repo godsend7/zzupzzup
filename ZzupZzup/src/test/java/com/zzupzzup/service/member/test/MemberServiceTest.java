@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.json.simple.JSONObject;
 import org.junit.Test;
@@ -22,6 +23,7 @@ import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.member.MemberDAO;
 import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.restaurant.RestaurantService;
+import com.zzupzzup.web.member.MemberRestController;
 
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
@@ -315,5 +317,32 @@ public class MemberServiceTest {
 		//활동점수 추가 및 계산
 		
 	}
+	
+	//@Test
+	public void testController() throws Exception {
+		
+		//문자 인증(전화번호 인증에서 이용)
+		String phoneNum = "01048290865";
+		
+		//*인증번호 전송
+//		String certificatedNum = "";
+//	    
+//	    for(int i = 1; i <= 6; i++) {
+//	    	Random random = new Random();
+//	    	certificatedNum += random.nextInt(10);
+//	    }
+//	    memberService.sendCertificatedNum(certificatedNum, phoneNum);
+		
+		//*전송받은 인증번호 확인
+		String certificatedNum = "217754";
+		if(memberService.checkCertificatedNum("217754", certificatedNum, "01048290865", phoneNum)) {
+			System.out.println("전화번호 인증이 완료되었습니다.");
+		} else {
+			System.out.println("인증번호가 일치하지 않습니다. 다시 확인하여 주세요.");
+		}
+		
+		//카카오 로그인
+		
+	}	
 
 }
