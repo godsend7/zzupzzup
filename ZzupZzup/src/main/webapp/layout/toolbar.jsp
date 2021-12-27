@@ -20,4 +20,3 @@
 <link rel="stylesheet" href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="/resources/css/main.css" />
 <link rel="stylesheet" href="/resources/css/custom.css" />
-

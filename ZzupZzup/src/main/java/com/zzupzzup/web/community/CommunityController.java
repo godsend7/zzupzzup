@@ -33,12 +33,24 @@ public class CommunityController {
 	
 	
 	///Method
-	@RequestMapping(value="addCommunityView", method=RequestMethod.GET)
+	@RequestMapping(value="addCommunity", method=RequestMethod.GET)
 	public String addCommunity() throws Exception {
 		
 		System.out.println("/community/addCommunityView : GET");
 		
 		return "forward:/community/addCommunityView.jsp";
+	}
+	
+	@RequestMapping(value="addCommunity", method=RequestMethod.POST)
+	public String addCommunity(@ModelAttribute("community") Community community) throws Exception {
+		
+		System.out.println("/community/addCommunity : POST");
+		
+		System.out.println(community);
+		
+		communityService.addCommunity(community);
+		
+		return "redirect:/community/getCommunity.jsp";
 	}
 	
 	@RequestMapping(value="getCommunity", method=RequestMethod.GET)
