@@ -18,12 +18,13 @@
         	$.ajax({
         	    url: "/member/json/login",
         	    method: "POST",
-        	    dataType: "json",
+        	    contentType: 'application/json',
         	    data: {
         	    	"memberId":memberId, 
         	    	"password":password
         	    },
         	    success : function(data){
+        	    	
         	      self.location("/main.jsp");
         	    },
         	    error : function(){
