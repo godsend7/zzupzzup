@@ -139,16 +139,7 @@ public class Member {
 		this.ageRange = ageRange;
 	}
 
-	public String getGender() {
-		
-		String genderData = null;
-		
-		if(genderData.startsWith("F") || genderData.startsWith("f")) {
-			gender = "female";
-		} else {
-			gender = "male";
-		}
-		
+	public String getGender() {		
 		return gender;
 	}
 

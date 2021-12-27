@@ -39,7 +39,7 @@
 			let url= $(this).attr("href");
 			alert(url);
 			$.ajax({
-				url: "/chat/json/getChat/" + 1,
+				url: url,
 				method: "GET",
 				dataType: "json",
 				headers: {
@@ -47,8 +47,11 @@
 					"Content-Type": "application/json"
 				},
 				success: function(JSONData, status){
-					console.log(JSONData.chatNo);
-						
+					var displayValue = 
+						""
+					alert(
+							JSONData.chatNo,JSONData.chatTitle,JSONData.chatImage,JSONData.chatText
+						);
 				},
 				error: function(request, status, error){
 					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -120,18 +123,19 @@
 												<span class="badge badge-secondary chat-no">${chat.chatNo }</span>
 												<c:choose>
 													<c:when test="${chat.chatState=='1'}">
-													<span class="badge badge-success chat-state">모집중</span></div>
+													<span class="badge badge-success chat-state">모집중</span>
 													</c:when>
 													<c:when test="${chat.chatState=='2'}">
-													<span class="badge badge-warning chat-state">인원확정</span></div>
+													<span class="badge badge-warning chat-state">인원확정</span>
 													</c:when>
 													<c:when test="${chat.chatState=='3'}">
-													<span class="badge badge-info chat-state">예약확정</span></div>
+													<span class="badge badge-info chat-state">예약확정</span>
 													</c:when>
 													<c:when test="${chat.chatState=='4'}">
-													<span class="badge badge-danger chat-state">모임완료</span></div>
+													<span class="badge badge-danger chat-state">모임완료</span>
 													</c:when>
 												</c:choose>
+											</div>
 											<div class="card-img">
 												<img src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg">
 											</div>
@@ -158,136 +162,47 @@
 											</div>
 										</div>
 									</div>								
-								</c:forEach>
-								
-								
-								<div class="col-md-6">
-									<div class="card mb-4 shadow-sm">
-										<div class="card-head"><span class="badge badge-secondary chat-no">1</span>
-											<span class="badge badge-success chat-state">모집중</span></div>
-										<div class="card-img">
-											<img
-											src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"
-											alt="플래터, 음식, 선발, 식사, 잔치, 다 이닝 테이블, 테이블, 먹다, 맛있는 음식, 식당, 요리">
-										</div>
-										<div class="card-body">
-											<div class="chat-rating-info">
-												<i class="fa fa-eye-slash" aria-hidden="true"></i> <i class="fa fa-exclamation-triangle" aria-hidden="true"> 5회</i> 
-											</div>
-											<h4 class="card-title">채팅방 제목</h4>
-											<h5 class="card-text mb-2 text-muted">채팅방 소개글 채팅방 소개글 채팅방 소개글 채팅방 소개글 채팅방 소개글 채팅방 소개글</h4>
-											<div class="d-flex justify-content-between align-items-end">
-												<div>
-													<p class="card-subtitle text-right">음식점 명(한식)</p>
-													<p class="card-text text-right">서울시 종로구 도로명 주소</p>
-												</div>
-												<div class="btn-group">
-													<a href="#" class="button small primary">평가하기</a>
-													<a href="#" class="button small primary">참여하기</a>
-												</div>
-											</div>
-										</div>
-									</div>
+									</c:forEach>		
 								</div>
-								<div class="col-md-6">
-									<div class="card mb-4 shadow-sm">
-										<div class="card-head"><span class="badge badge-secondary chat-no">1</span>
-											<span class="badge badge-warning chat-state">인원확정</span></div>
-										<div class="card-img">
-											<img
-											src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"
-											alt="플래터, 음식, 선발, 식사, 잔치, 다 이닝 테이블, 테이블, 먹다, 맛있는 음식, 식당, 요리">
-										</div>
-										<div class="card-body">
-											<div class="chat-rating-info">
-												<i class="fa fa-eye-slash" aria-hidden="true"></i> <i class="fa fa-exclamation-triangle" aria-hidden="true"> 5회</i> 
-											</div>
-											<h4 class="card-title">채팅방 제목</h4>
-											<h5 class="card-text mb-2 text-muted">채팅방 소개글 채팅방 소개글 채팅방 소개글 채팅방 소개글 채팅방 소개글 채팅방 소개글</h4>
-											<div class="d-flex justify-content-between align-items-end">
-												<div>
-													<p class="card-subtitle text-right">음식점 명(한식)</p>
-													<p class="card-text text-right">서울시 종로구 도로명 주소</p>
-												</div>
-												<div class="btn-group">
-													<a href="#" class="button small primary">평가하기</a>
-													<!-- <a href="#" class="button small primary">참여하기</a> -->
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								
-								<div class="col-md-6">
-									<div class="card mb-4 shadow-sm">
-										<div class="card-head"><span class="badge badge-secondary chat-no">1</span>
-											<span class="badge badge-info chat-state">예약확정</span></div>
-										<div class="card-img">
-											<img
-											src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"
-											alt="플래터, 음식, 선발, 식사, 잔치, 다 이닝 테이블, 테이블, 먹다, 맛있는 음식, 식당, 요리">
-										</div>
-										<div class="card-body">
-											<div class="chat-rating-info">
-												<i class="fa fa-eye-slash" aria-hidden="true"></i> <i class="fa fa-exclamation-triangle" aria-hidden="true"> 5회</i> 
-											</div>
-											<h4 class="card-title">채팅방 제목</h4>
-											<h5 class="card-text mb-2 text-muted">채팅방 소개글 채팅방 소개글 채팅방 소개글 채팅방 소개글 채팅방 소개글 채팅방 소개글</h4>
-											<div class="d-flex justify-content-between align-items-end">
-												<div>
-													<p class="card-subtitle text-right">음식점 명(한식)</p>
-													<p class="card-text text-right">서울시 종로구 도로명 주소</p>
-												</div>
-												<div class="btn-group">
-													<a href="#" class="button small primary">평가하기</a>
-													<!-- <a href="#" class="button small primary">참여하기</a> -->
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="card mb-4 shadow-sm">
-										<div class="card-head"><span class="badge badge-secondary chat-no">1</span>
-											<span class="badge badge-danger chat-state">모임완료</span></div>
-										<div class="card-img">
-											<img
-											src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"
-											alt="플래터, 음식, 선발, 식사, 잔치, 다 이닝 테이블, 테이블, 먹다, 맛있는 음식, 식당, 요리">
-										</div>
-										<div class="card-body">
-											<div class="chat-rating-info">
-												<i class="fa fa-eye-slash" aria-hidden="true"></i> <i class="fa fa-exclamation-triangle" aria-hidden="true"> 5회</i> 
-											</div>
-											<h4 class="card-title">채팅방 제목</h4>
-											<h5 class="card-text mb-2 text-muted">채팅방 소개글 채팅방 소개글 채팅방 소개글 채팅방 소개글 채팅방 소개글 채팅방 소개글</h4>
-											<div class="d-flex justify-content-between align-items-end">
-												<div>
-													<p class="card-subtitle text-right">음식점 명(한식)</p>
-													<p class="card-text text-right">서울시 종로구 도로명 주소</p>
-												</div>
-												<div class="btn-group">
-													<a href="#" class="button small primary">평가하기</a>
-													<!-- <a href="#" class="button small primary">참여하기</a> -->
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
+								<!-- E:Thumbnail -->
 	
-							</div>
-	
-							<div class="col-12 text-center thumb-more">
-								<a href="#" class="icon solid fa fa-plus-circle"></a>
+								<div class="col-12 text-center thumb-more">
+									<a href="#" class="icon solid fa fa-plus-circle"></a>
+								</div>
+								
+								
+								<!-- rest -->
+								<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+									<span class="badge badge-success chat-state">모집중</span>
+									<input type="hidden" value="chatNo">
+									<div class="col p-4 d-flex flex-column position-static">
+										<p class="card-text mb-auto">${chat.chatNo}</p>
+										<strong class="d-inline-block mb-2 text-primary">${chat.chatTitle }</strong>
+										<h3 class="mb-0">개설일: ${chat.chatRegDate }</h3>
+										<p class="card-text mb-auto">${chat.chatText}</p>
+										<p class="card-text mb-auto">참여 인원수: ${chat.chatMemberCount }</p>
+										<p class="card-text mb-auto">참여가능 성별: ${chat.chatGender }</p>
+										<p class="card-text mb-auto">참여가능 연령대: ${chat.chatAge }</p>
+									</div>
+									
+									<div class="col p-4 d-flex flex-column position-static">
+										${chat.chatLeaderId.profileImage} ${chat.chatLeaderId.nickname } ${chat.chatLeaderId.gender } ${chat.chatLeaderId.age } ${chat.chatMember.chatLeaderCheck }
+									</div>
+									
+									<div>
+										${chat.chatRestaurant.restaurantName } ${chat.chatRestaurant.menuType } ${chat.chatRestaurant.streetAddress } ${chat.chatRestaurant.areaAddress }
+									</div>
+										
+									<a href="#" class="stretched-link">Continue reading</a>
+								</div>
+								<!-- //rest -->
+
 							</div>
 						</div>
-						<!-- E:Thumbnail -->
-
-					</div>
-				</section>
+					</section>
+				</div>
 			</div>
-		</div>
-		<!-- E:Main -->
+			<!-- E:Main -->
 
 		<!-- Sidebar -->
 		<jsp:include page="/layout/sidebar.jsp" />
