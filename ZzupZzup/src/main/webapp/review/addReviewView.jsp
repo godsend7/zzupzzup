@@ -204,7 +204,7 @@
 								
 								<div class="col-6 col-12-small">
 									<label for="reviewImage">리뷰 이미지</label>
-									<input type="file" id="fileName" name="fileName" multiple="multiple">
+									<input type="file" id="file" name="file" multiple="multiple">
 								</div>
 								
 								<!-- Break -->
