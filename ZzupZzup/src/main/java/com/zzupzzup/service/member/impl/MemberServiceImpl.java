@@ -7,6 +7,13 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Random;
+
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +50,11 @@ public class MemberServiceImpl implements MemberService{
 		return 1;
 	}
 
-	@Override
-	public void login(Member member) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void login(Member member) throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public void kakaoLogin() throws Exception {
@@ -93,11 +100,11 @@ public class MemberServiceImpl implements MemberService{
 		return checkNickname;
 	}
 
-	@Override
-	public void findId() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void findId() throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public int sendCertificatedNum(String certificatedNum, String phoneNum) throws Exception {
@@ -229,10 +236,10 @@ public class MemberServiceImpl implements MemberService{
 		return 1;
 	}
 
-	@Override
-	public void logout() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void logout() throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 }

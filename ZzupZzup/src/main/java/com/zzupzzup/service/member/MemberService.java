@@ -1,6 +1,5 @@
 package com.zzupzzup.service.member;
 
-import java.util.List;
 import java.util.Map;
 
 import com.zzupzzup.common.Search;
@@ -8,7 +7,7 @@ import com.zzupzzup.service.domain.Member;
 
 public interface MemberService {
 	
-	public void login(Member member) throws Exception;
+//	public void login(Member member) throws Exception;
 	
 	public void kakaoLogin() throws Exception;
 	
@@ -22,7 +21,7 @@ public interface MemberService {
 	
 	public boolean checkNicknameDuplication(String nickname) throws Exception;
 	
-	public void findId() throws Exception;
+//	public void findId() throws Exception;
 	
 	public int sendCertificatedNum(String certificatedNum, String phoneNum) throws Exception;
 	
@@ -52,6 +51,6 @@ public interface MemberService {
 	
 	public int calculateMannerScore(String memberId, int accumulScore) throws Exception;
 	
-	public void logout() throws Exception;
+//	public void logout() throws Exception;
 
 }

@@ -63,7 +63,7 @@ public class RestaurantController {
 		
 		//System.out.println("Restaurant Menu : " + restaurant.getRestaurantMenus());
 		
-		return "redirect:/restaurant/addRestaurant.jsp";
+		return "forward:/restaurant/addRestaurant.jsp";
 	}
 	
 	@RequestMapping(value="getRestaurant", method=RequestMethod.GET)
