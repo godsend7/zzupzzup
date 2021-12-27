@@ -48,17 +48,19 @@ public class MemberServiceTest {
 	@Value("#{commonProperties['pageSize']?: 2}")
 	int pageSize;
 
-	//@Test
+	@Test
 	public void testAddMember() throws Exception {
 		
 		Member member = new Member();
 		///*
 		//유저(일반)
-		member.setMemberId("test@test.com");
+		member.setMemberId("tes@test.com");
 		member.setMemberRole("user");
 		member.setPassword("testPasswd");
 		member.setMemberName("abc");
-		member.setMemberPhone("111-2222-3333");
+		member.setMemberPhone1("111");
+		member.setMemberPhone2("2222");
+		member.setMemberPhone3("3333");
 		member.setLoginType(1);
 		member.setAgeRange("10대");
 		member.setGender("female");
