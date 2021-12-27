@@ -7,6 +7,12 @@
 /*font*/
 small { font-size: 80%; }
 a { border-bottom: none; }
+.text-primary { color: #f56a6a; }
+.text-normal { color: #6d7378; }
+.text-success { color: #155724; }
+.text-danger { color: #721c24; }
+.text-warning { color: #856404; }
+.text-info { color: #004085; }
 
 /*align*/
 .text-center { text-align: ceter; }
