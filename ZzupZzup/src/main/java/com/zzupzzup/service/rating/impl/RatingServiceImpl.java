@@ -44,4 +44,16 @@ public class RatingServiceImpl implements RatingService {
 		return map;
 	}
 
+	@Override
+	public Map<String, Object> listMyRating(Search search, String memberId) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("memberId", memberId);
+		
+		map.put("list", ratingDao.listMyRating(map));
+		map.put("totalCount", ratingDao.getTotalCount(search));
+		
+		return map;
+	}
+
 }

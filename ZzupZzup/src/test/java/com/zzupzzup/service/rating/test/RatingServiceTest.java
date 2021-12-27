@@ -91,7 +91,7 @@ public class RatingServiceTest {
 		memberService.calculateMannerScore(rating.getRatingToId(), rating.getRatingScore());
 	}
 	
-	@Test
+	//@Test
 	public void testListRating() throws Exception {
 		
 		System.out.println("testListRating");
@@ -103,6 +103,37 @@ public class RatingServiceTest {
 		System.out.println("search : " + search);
 		
 		Map<String, Object> map = ratingService.listRating(search);
+		System.out.println("===================================");
+		System.out.println("testListChat map : " + map);
+		System.out.println("===================================");
+		
+		List<Rating> list = (List<Rating>)map.get("list");
+		System.out.println("list : " + list);
+		
+		for (Rating r : list) {
+			System.out.println(r.getRatingNo());
+			System.out.println(r);
+		}
+		
+		//Integer totalCount = (Integer)map.get("totalCount");
+		//System.out.println("totalCount : " + totalCount);
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		 System.out.println(resultPage);
+	}
+	
+	@Test
+	public void testListMyRating() throws Exception {
+		
+		System.out.println("testListRating");
+		
+		Search search = new Search();
+		search.setCurrentPage(1);
+		search.setPageSize(pageSize);
+		
+		System.out.println("search : " + search);
+		
+		Map<String, Object> map = ratingService.listMyRating(search, "user01@zzupzzup.com");
 		System.out.println("===================================");
 		System.out.println("testListChat map : " + map);
 		System.out.println("===================================");

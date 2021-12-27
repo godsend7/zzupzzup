@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+.search-box { margin-bottom: 20px; }
+.search-box .jumbotron { padding: 2rem; }
+.search-box .search-btn { padding: 0 10px; line-height: 30px; height: 30px; position: absolute; top: 50%; right: 10px; margin-top: -5px; }
+.search-box .search-btn:before { margin-right: 0; }
+
+.chatting .card-head .chat-no { position: absolute; top: 10px; left: 10px;}
+.chatting .card-head .chat-state { position: absolute; top: 10px; right: 10px; }
+.chatting .card-body { position: relative; }
+.chatting .card-body .chat-rating-info  { position: absolute; top: 5px; right: 10px; font-size: 12px; }
+.chatting .card-body .chat-rating-info i { margin-right: 10px; }
+.chatting .card-body p.card-text { margin-bottom: 0; font-size:15px; }
+.chatting .card-body .d-flex { flex-direction: row-reverse; }
+.chatting .card-body .btn-group .button { margin-right: 10px; }
