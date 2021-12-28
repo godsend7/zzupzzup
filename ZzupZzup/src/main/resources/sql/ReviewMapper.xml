@@ -122,9 +122,11 @@
 		  	  	<when test="restaurantNo != null">
 		  			WHERE r.restaurant_no = #{restaurantNo}
 		  		</when>
-		  		<when test="memberId != null">
-		  			WHERE r.member_id = #{memberId}
-		  		</when>
+		  		<otherwise>
+		  			<if test="memberId != null">
+		  				WHERE r.member_id = #{memberId}
+		  			</if>
+		  		</otherwise>
 		  	  </choose>   
 			  ORDER BY r.review_no limit #{search.startRowNum}, #{search.pageSize}) AS r
 		LEFT OUTER JOIN (SELECT image, review_no

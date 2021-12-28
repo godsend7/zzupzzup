@@ -9,9 +9,8 @@
 <title>ZZUPZZUP-addReviewView</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <link rel="stylesheet" href="/resources/css/review.css" />
  
 <!--  ///////////////////////// CSS ////////////////////////// -->
@@ -28,7 +27,7 @@
 	//hashTag id 초기화
 	var hashTagCount = 0;
 	
-	function funAddReview() {
+	function fncAddReview() {
 		console.log("funAddReview");
 		//alert("선택하지 않은 평점이 존재합니다!");
 		if(scopeClean != 0) {
@@ -50,11 +49,6 @@
 		
 		$("#review").attr("method", "POST").attr("action" , "/review/addReview").attr("enctype", "multipart/form-data").submit();
 	} 
-	
-	function funAddHashTag() {
-		console.log("click!");
-		
-	}
 	
 	window.onload = function() {
 		$(".starClean").on('click',function(){
@@ -88,8 +82,8 @@
 		});
 		
 		$("#addBtn").on("click", function() {
-			console.log("button");
-			funAddReview();
+			/* console.log("button"); */
+			fncAddReview();
 		});
 		
 		//button click 시 append

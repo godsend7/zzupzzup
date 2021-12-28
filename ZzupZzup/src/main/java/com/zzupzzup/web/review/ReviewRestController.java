@@ -22,9 +22,10 @@ public class ReviewRestController {
 	@Qualifier("reviewServiceImpl")
 	private ReviewService reviewService;
 	
-	@Value("#{commonProperties['pageUnit']}")
+	@Value("#{commonProperties['pageUnit']?: 3}")
 	int pageUnit;
-	@Value("#{commonProperties['pageSize']}")
+	
+	@Value("#{commonProperties['pageSize']?: 2}")
 	int pageSize;
 
 	public ReviewRestController() {
