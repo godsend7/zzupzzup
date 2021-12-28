@@ -1,5 +1,10 @@
 package com.zzupzzup.web.review;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -82,25 +88,13 @@ public class ReviewController {
 	}
 	
 	@RequestMapping(value="addReview", method=RequestMethod.POST)
-	public String addReview(@ModelAttribute("review") Review review, MultipartHttpServletRequest uploadFile, Model model, HttpServletRequest request) throws Exception {
+	public String addReview(@ModelAttribute("review") Review review, MultipartHttpServletRequest uploadfile, Model model, HttpServletRequest request) throws Exception {
+				
+		System.out.println("review/addReview : POST");
 		
 		String temDir = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		
-		System.out.println("review/addReview : POST");
-		
-		//file의 name을 가지고 있는 input tag 가져오
-		List<MultipartFile> fileList = uploadFile.getFiles("file");
-		
-		List<String> reviewImage = new ArrayList<String>();
-		
-		for (MultipartFile mf : fileList) {
-			//image가 존재한다면(image의 name이 공백이 아닐경우)
-			if (!mf.getOriginalFilename().equals("")) {
-				reviewImage.add(mf.getOriginalFilename());
-				review.setReviewImage(reviewImage);
-			}
-		}
-		
+		String fileName = uploadFilePath(uploadfile, temDir, review);
 		
 		System.out.println(review);
 		
@@ -166,5 +160,47 @@ public class ReviewController {
 		return "forward:/review/listReview.jsp";
 	}
 	
-	
+	private String uploadFilePath(MultipartHttpServletRequest uploadfile, String temDir, Review review) {
+		
+		//file의 name을 가지고 있는 input tag 가져오기
+		List<MultipartFile> fileList = uploadfile.getFiles("file");
+		
+		List<String> reviewImage = new ArrayList<String>();
+		
+		for (MultipartFile mf : fileList) {
+			//image가 존재한다면(image의 name이 공백이 아닐경우)
+			if (!mf.getOriginalFilename().equals("")) {
+//				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
+//				System.out.println(":: 파일 사이즈 => " + mf.getSize());
+				
+				
+				String saveName = mf.getOriginalFilename();
+				
+				reviewImage.add(saveName);
+				review.setReviewImage(reviewImage);
+			}
+		}
+		
+		
+			
+		
+		
+		System.out.println(":: 저장할 이름 => " + saveName);
+		
+		Path copy = Paths.get(temDir, File.separator + StringUtils.cleanPath(saveName));
+		
+		try {
+			Files.copy(uploadfile.getInputStream(), copy, StandardCopyOption.REPLACE_EXISTING);
+			//File saveFile = new File(temDir, saveName);
+			//uploadfile.transferTo(saveFile); //���ε� ���Ͽ� saveFile�̶�� �����⸦ ����
+			System.out.println("�ƹ��͵� ����");
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("�ƹ��͵� �ȳ���");
+			e.printStackTrace();
+			saveName = "notFile.png";
+		}
+		
+		return saveName;
+	}
 }
