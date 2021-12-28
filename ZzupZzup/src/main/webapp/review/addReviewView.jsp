@@ -155,6 +155,11 @@
 					
 						<form id="review">
 							<div class="row gtr-uniform">
+							
+								<input type="hidden" id="member.memberId" name="member.memberId" value="${member.memberId}">
+								<input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" value="${review.reservation.reservationNo}">
+								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${review.restaurant.restaurantNo}">
+							
 								<div class="col-12 col-12-xsmall">
 					 				<label for="order">주문 내역</label>
 					 				<p>음식점명 : ${review.restaurant.restaurantName}<br>
@@ -204,7 +209,7 @@
 								
 								<div class="col-6 col-12-small">
 									<label for="reviewImage">리뷰 이미지</label>
-									<input type="file" id="fileName" name="fileName" multiple="multiple">
+									<input type="file" id="file" name="file" multiple="multiple">
 								</div>
 								
 								<!-- Break -->
