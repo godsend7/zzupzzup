@@ -13,3 +13,9 @@
 .chatting .card-body p.card-text { margin-bottom: 0; font-size:15px; }
 .chatting .card-body .d-flex { flex-direction: row-reverse; }
 .chatting .card-body .btn-group .button { margin-right: 10px; }
+
+.modal-body { background-size: cover; filter:alpha(opacity=50); }
+
+
+/* addChatView */
+#addChatView .row.gtr-uniform { margin-top: 0px; }
