@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+.star-box {
+	display:inline;
+	text-align: center;
+}
+
+.star-in {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	margin: 0;
+}
+
+.star {
+	background: url(http://gahyun.wooga.kr/main/img/testImg/star.png);
+	display:inline-block;
+	width: 45px;height: 45px;
+	background-size: contain;
+	cursor: pointer;
+}
+
+.star.on {
+	background-image: url(http://gahyun.wooga.kr/main/img/testImg/star_on.png);
+}
+
+@media screen and (max-width: 480px){
+	.star { width: 40px; height: 40px; white-space: nowrap;}
+}
+
+@media screen and (max-width: 1200px){
+	.star { width: 40px; height: 40px;}
+}
+
+textarea {
+	resize: none;
+}
+
+.hashTag {
+	margin-right: 10px;
+}
