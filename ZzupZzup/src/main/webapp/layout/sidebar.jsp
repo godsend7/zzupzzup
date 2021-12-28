@@ -16,31 +16,34 @@
 		<!-- Menu -->
 		<nav id="menu">
 			<header class="major">
-				<h2>Menu</h2>
+				<h2>Welcome to ZZUPZZUPDUCE_101</h2>
 			</header>
 			<ul>
-				<li>
-					<span class="opener">MyPage</span>
-					<ul>
-						<li><a href="#">내 정보 조회</a></li>
-						<li><a href="#">내 활동 점수 적립 내역</a></li>
-						<li><a href="#">내가 작성한 리뷰 내역</a></li>
-						<li><a href="#">내가 작성한 게시판 내역</a></li>
-						<li><a href="/reservation/addReservation">예약 및 결제 내역</a></li>
-						<li><a href="#">내가 좋아요 누른 리뷰 내역</a></li>
-						<li><a href="#">내가 좋아요 누른 게시물 내역</a></li>
-						<li><a href="#">나의 신고/제보 접수 내역</a></li>
-						<li><a href="#">나의 평가 내역</a></li>
-						<li><a href="#">내가 찜한 음식점 내역</a></li>
-					</ul>
-				</li>
-				<li><a href="#">쩝쩝친구 구하기</a></li>
-				<li><a href="/community/listCommunity">나만의 작고 소중한 맛집</a></li>
-				<li><a href="/community/addCommunity">test-나만의 작고 소중한 맛집(add)</a></li>
-				<li><a href="#">공지사항</a></li>
-				<li><a href="/restaurant/addRestaurant">test-음식점</a></li>
-				<li><a href="/restaurant/listRestaurant">test-(관리자)음식점목록</a></li>
-				
+				<c:if test="${ ! empty member}">
+					<c:if test="${sessionScope.member.memberRole == 'user'}">
+					<li>
+						<span class="opener">MyPage</span>
+						<ul>
+							<li><a href="#">내 정보 조회</a></li>
+							<li><a href="#">내 활동 점수 적립 내역</a></li>
+							<li><a href="#">내가 작성한 리뷰 내역</a></li>
+							<li><a href="#">내가 작성한 게시판 내역</a></li>
+							<li><a href="/reservation/addReservation">예약 및 결제 내역</a></li>
+							<li><a href="#">내가 좋아요 누른 리뷰 내역</a></li>
+							<li><a href="#">내가 좋아요 누른 게시물 내역</a></li>
+							<li><a href="#">나의 신고/제보 접수 내역</a></li>
+							<li><a href="#">나의 평가 내역</a></li>
+							<li><a href="#">내가 찜한 음식점 내역</a></li>
+						</ul>
+					</li>
+					</c:if>
+					<li><a href="#">쩝쩝친구 구하기</a></li>
+					<li><a href="/community/listCommunity">나만의 작고 소중한 맛집</a></li>
+					<li><a href="/community/addCommunity">test-나만의 작고 소중한 맛집(add)</a></li>
+					<li><a href="#">공지사항</a></li>
+					<li><a href="/restaurant/addRestaurant">test-음식점</a></li>
+					<li><a href="/restaurant/listRestaurant">test-(관리자)음식점목록</a></li>
+				</c:if>
 			</ul>
 		</nav>
 

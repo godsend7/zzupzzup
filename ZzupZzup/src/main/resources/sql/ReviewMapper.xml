@@ -51,7 +51,9 @@
 		INTO HASHTAG_LOG(review_no, hashtag_no) 
 		VALUES
 		<foreach collection="hashTag" item="item" separator=",">	
-			 (#{reviewNo}, #{item.hashTagNo})
+			<if test="item.hashTagNo != 0">
+			 	(#{reviewNo}, #{item.hashTagNo})
+			</if>
   		</foreach>
 	</insert>
 	
@@ -120,9 +122,11 @@
 		  	  	<when test="restaurantNo != null">
 		  			WHERE r.restaurant_no = #{restaurantNo}
 		  		</when>
-		  		<when test="memberId != null">
-		  			WHERE r.member_id = #{memberId}
-		  		</when>
+		  		<otherwise>
+		  			<if test="memberId != null">
+		  				WHERE r.member_id = #{memberId}
+		  			</if>
+		  		</otherwise>
 		  	  </choose>   
 			  ORDER BY r.review_no limit #{search.startRowNum}, #{search.pageSize}) AS r
 		LEFT OUTER JOIN (SELECT image, review_no
@@ -170,9 +174,19 @@
 		WHERE member_id = #{memberId} AND REVIEW_NO = #{reviewNo};
 	</delete>
 	
-	<select id="getTotalCount" parameterType="search" resultType="int">
+	<select id="getTotalCount" parameterType="map" resultType="int">
 		SELECT count(*)
 		FROM REVIEW
+		<choose>
+			<when test="restaurantNo != null">
+		  		WHERE restaurant_no = #{restaurantNo}
+		  	</when>
+		  	<otherwise>
+		  		<if test="memberId != null">
+		  			WHERE member_id = #{memberId}
+		  		</if>
+		  	</otherwise>
+		</choose>   
 	</select>
 	
 	<select id="getTotalAvg" parameterType="String" resultType="double">

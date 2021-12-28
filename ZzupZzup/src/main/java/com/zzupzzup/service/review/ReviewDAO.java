@@ -27,7 +27,7 @@ public interface ReviewDAO {
 	
 	public int deleteLike(Map<String, Object> map) throws Exception;
 	
-	public int getTotalCount(Search search) throws Exception; 
+	public int getTotalCount(Map<String, Object> map) throws Exception; 
 	
 	public double getTotalAvg(String restaurantNo) throws Exception;
 	

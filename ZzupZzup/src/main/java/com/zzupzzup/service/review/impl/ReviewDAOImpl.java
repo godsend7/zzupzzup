@@ -128,9 +128,9 @@ public class ReviewDAOImpl implements ReviewDAO {
 	}
 
 	@Override
-	public int getTotalCount(Search search) throws Exception {
+	public int getTotalCount(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne("ReviewMapper.getTotalCount", search);
+		return sqlSession.selectOne("ReviewMapper.getTotalCount", map);
 	}
 
 	@Override
