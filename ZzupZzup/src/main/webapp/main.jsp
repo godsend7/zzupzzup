@@ -145,7 +145,7 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="">
+				<section id="map">
 					<div class="content" id="content" style="width: 100%; height:70vh;"></div>
 				</section>
 			</div>
