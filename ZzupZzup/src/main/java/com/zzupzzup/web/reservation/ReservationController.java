@@ -56,7 +56,7 @@ public class ReservationController {
 		System.out.println("/reservation/addReservation : POST");
 		//Business Logic
 		reservationService.addReservation(reservation);
-		
+		System.out.println("/reservation/addReservation22222 : POST");
 		return "foward:/reservation/addReservation.jsp";
 	}
 	

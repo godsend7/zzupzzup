@@ -7,6 +7,7 @@ public class Review {
 	
 	private Member member;
 	private Reservation reservation;
+	private Restaurant restaurant;
 	private int reviewNo;
 	private int scopeClean;
 	private int scopeTaste;
@@ -43,6 +44,14 @@ public class Review {
 
 	public void setReservation(Reservation reservation) {
 		this.reservation = reservation;
+	}
+	
+	public Restaurant getRestaurant() {
+		return restaurant;
+	}
+
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
 	}
 
 	public int getReviewNo() {
