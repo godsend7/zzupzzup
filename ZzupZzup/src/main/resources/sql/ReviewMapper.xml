@@ -7,18 +7,18 @@
 <mapper namespace="ReviewMapper">
 
 	<resultMap id="reviewSelectMap" type="review">
-		<result property="member.memberId"   					column="member_id" 				jdbcType="VARCHAR"/>
-		<result property="reservation.reservationNo"			column="reservation_no" 		jdbcType="INTEGER" />
-		<result property="reservation.restaurant.restaurantNo"	column="restaurant_no" 			jdbcType="INTEGER" />
-		<result property="reviewNo" 							column="review_no" 				jdbcType="INTEGER" />
-		<result property="scopeClean" 							column="scope_taste" 			jdbcType="INTEGER" />
-		<result property="scopeTaste" 							column="scope_kind" 			jdbcType="INTEGER" />
-		<result property="scopeKind" 							column="scope_clean" 			jdbcType="INTEGER" />
-		<result property="reviewDetail" 						column="review_detail" 			jdbcType="VARCHAR"  />
-		<result property="reviewRegDate" 						column="review_reg_date" 		jdbcType="DATE" />
-		<result property="avgScope" 							column="avg_scope" 				jdbcType="DECIMAL" />
-		<result property="reviewShowStatus" 					column="review_show_status" 	jdbcType="BOOLEAN" />
-		<result property="reportCount"							column="report_count"			jdbcType="INTEGER" />
+		<result property="member.memberId"   				column="member_id" 				jdbcType="VARCHAR"/>
+		<result property="reservation.reservationNo"		column="reservation_no" 		jdbcType="INTEGER" />
+		<result property="restaurant.restaurantNo"			column="restaurant_no" 			jdbcType="INTEGER" />
+		<result property="reviewNo" 						column="review_no" 				jdbcType="INTEGER" />
+		<result property="scopeClean" 						column="scope_taste" 			jdbcType="INTEGER" />
+		<result property="scopeTaste" 						column="scope_kind" 			jdbcType="INTEGER" />
+		<result property="scopeKind" 						column="scope_clean" 			jdbcType="INTEGER" />
+		<result property="reviewDetail" 					column="review_detail" 			jdbcType="VARCHAR"  />
+		<result property="reviewRegDate" 					column="review_reg_date" 		jdbcType="DATE" />
+		<result property="avgScope" 						column="avg_scope" 				jdbcType="DECIMAL" />
+		<result property="reviewShowStatus" 				column="review_show_status" 	jdbcType="BOOLEAN" />
+		<result property="reportCount"						column="report_count"			jdbcType="INTEGER" />
 		
 		<!-- <collection property="hashTag" ofType="String" javaType="list">
 			<result column="hashTag"/>
@@ -41,7 +41,7 @@
 	<insert id="addReview"	parameterType="review" useGeneratedKeys="true" keyProperty="reviewNo">
 	 	INSERT
 		INTO REVIEW(member_id, reservation_no, restaurant_no, review_detail, scope_taste, scope_kind, scope_clean, avg_scope) 
-		VALUES ( #{member.memberId}, #{reservation.reservationNo}, #{reservation.restaurant.restaurantNo},#{reviewDetail}, #{scopeTaste}, #{scopeKind}, #{scopeClean}, #{avgScope})
+		VALUES ( #{member.memberId}, #{reservation.reservationNo}, #{restaurant.restaurantNo}, #{reviewDetail}, #{scopeTaste}, #{scopeKind}, #{scopeClean}, #{avgScope})
 	</insert>
 	
 	<insert id="addHashTag"	parameterType="review">
@@ -51,7 +51,9 @@
 		INTO HASHTAG_LOG(review_no, hashtag_no) 
 		VALUES
 		<foreach collection="hashTag" item="item" separator=",">	
-			 (#{reviewNo}, #{item.hashTagNo})
+			<if test="item.hashTagNo != 0">
+			 	(#{reviewNo}, #{item.hashTagNo})
+			</if>
   		</foreach>
 	</insert>
 	
@@ -120,9 +122,11 @@
 		  	  	<when test="restaurantNo != null">
 		  			WHERE r.restaurant_no = #{restaurantNo}
 		  		</when>
-		  		<when test="memberId != null">
-		  			WHERE r.member_id = #{memberId}
-		  		</when>
+		  		<otherwise>
+		  			<if test="memberId != null">
+		  				WHERE r.member_id = #{memberId}
+		  			</if>
+		  		</otherwise>
 		  	  </choose>   
 			  ORDER BY r.review_no limit #{search.startRowNum}, #{search.pageSize}) AS r
 		LEFT OUTER JOIN (SELECT image, review_no

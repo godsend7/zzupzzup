@@ -17,15 +17,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.chat.ChatService;
 import com.zzupzzup.service.domain.Chat;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
+import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.restaurant.RestaurantService;
 
 @Controller
-@RequestMapping("/chat")
+@RequestMapping("/chat/*")
 
 public class ChatController {
 	
@@ -37,6 +40,10 @@ public class ChatController {
 	@Autowired
 	@Qualifier("restaurantServiceImpl")
 	private RestaurantService restaurantService;
+	
+	@Autowired
+	@Qualifier("memberServiceImpl")
+	private MemberService memberService;
 
 	public ChatController() {
 		System.out.println(this.getClass());
@@ -54,17 +61,30 @@ public class ChatController {
 		
 		System.out.println("/chat/addCaht : GET");
 		
-		Integer chatNo = Integer.parseInt(request.getParameter("chat_no"));
-		System.out.println("AddPurchaseView prodNo : " + chatNo);
+		//Integer chatNo = Integer.parseInt(request.getParameter("chat_no"));
+		//System.out.println("AddPurchaseView prodNo : " + chatNo);
 		
-		return "redirect:/chat/addChat.jsp";
+		return "redirect:/chat/addChatView.jsp";
 	}
 	
 	@RequestMapping(value="addChat", method=RequestMethod.POST)
 	public String addChat(@ModelAttribute("chat") Chat chat, HttpServletRequest request, HttpSession session) throws Exception {
-		System.out.println("들어왔당");
+		System.out.println("/chat/addCaht : POST");
 		
-		return "forward:/chat/addchat.jsp";
+		System.out.println("chat : " + chat);
+		
+		//Business Logic
+		chatService.addChat(chat);
+		
+		ChatMember chatMember = new ChatMember();
+		
+		chatMember.setChatNo(chat.getChatNo());
+		chatMember.setMember(chat.getChatLeaderId());
+		chatMember.setChatLeaderCheck(true);
+		
+		chatService.addChatMember(chatMember);
+		
+		return "forward:/chat/addChat.jsp";
 		
 	}
 	
@@ -119,6 +139,15 @@ public class ChatController {
 		//Business Logic
 		Chat chat = chatService.getChat(chatNo);
 		System.out.println(chat);
+		
+		Restaurant restaurant = new Restaurant();
+		Member member = new Member();
+		
+		restaurant = restaurantService.getRestaurant(chat.getChatRestaurant().getRestaurantNo());
+		member = memberService.getMember(chat.getChatLeaderId());
+		
+		chat.setChatRestaurant(restaurant);
+		chat.setChatLeaderId(member);
 		
 		model.addAttribute("chat", chat);
 		

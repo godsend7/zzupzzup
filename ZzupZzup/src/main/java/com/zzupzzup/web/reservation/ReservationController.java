@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.chat.ChatService;
 import com.zzupzzup.service.domain.Reservation;
+import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.reservation.ReservationService;
+import com.zzupzzup.service.restaurant.RestaurantService;
 
 @Controller
 @RequestMapping("/reservation/*")
@@ -31,6 +34,14 @@ public class ReservationController {
 	@Autowired
 	@Qualifier("reservationServiceImpl")
 	private ReservationService reservationService;
+	
+	@Autowired
+	@Qualifier("chatServiceImpl")
+	private ChatService chatService;
+	
+	@Autowired
+	@Qualifier("restaurantServiceImpl")
+	private RestaurantService restaurantService;
 	
 	public ReservationController() {
 		System.out.println(this.getClass());
@@ -43,20 +54,27 @@ public class ReservationController {
 	
 	
 	@RequestMapping( value="addReservation", method=RequestMethod.GET )
-	public String addReservation() throws Exception{
+	public String addReservation(@RequestParam("chatNo") int chatNo, Model model) throws Exception{
 	
 		System.out.println("/reservation/addReservation : GET");
+		
+		Reservation reservation = new Reservation();
+		reservation.setChat(chatService.getChat(chatNo));
+		reservation.setRestaurant(restaurantService.getRestaurant(reservation.getChat().getChatRestaurant().getRestaurantNo()));
+		
+		System.out.println(reservation);
+		model.addAttribute("reservation", reservation);
 		
 		return "forward:/reservation/addReservationView.jsp";
 	}
 	
 	@RequestMapping( value="addReservation", method=RequestMethod.POST )
-	public String addReservation ( @ModelAttribute("reservation") Reservation reservation ) throws Exception {
+	public String addReservation ( @ModelAttribute("reservation") Reservation reservation, Model model ) throws Exception {
 
 		System.out.println("/reservation/addReservation : POST");
 		//Business Logic
 		reservationService.addReservation(reservation);
-		
+		System.out.println("/reservation/addReservation22222 : POST");
 		return "foward:/reservation/addReservation.jsp";
 	}
 	

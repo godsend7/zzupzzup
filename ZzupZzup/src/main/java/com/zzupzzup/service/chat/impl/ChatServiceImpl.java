@@ -35,7 +35,27 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public Chat getChat(int chatNo) throws Exception {
-		return chatDao.getChat(chatNo);
+		Chat chat = new Chat();
+		chat = chatDao.getChat(chatNo);
+		
+		System.out.println("getChat 결과 chat : " + chat);
+		
+		System.out.println("시간 나오는거 볼랭 : " + chat.getChatRegDate());
+		
+		/*
+		 * String chatState = chat.getChatState();
+		 * System.out.println("getChat 결과 chat의 chatState : " + chatState);
+		 * 
+		 * if(chatState.equals("1")){ System.out.println("여기 들어오나나나나");
+		 * chat.setChatState("모집중"); }else if(chatState.equals("2")){
+		 * chat.setChatState("인원확정"); }else if(chatState.equals("3")){
+		 * chat.setChatState("예약확정"); }else if(chatState.equals("4")){
+		 * chat.setChatState("모임완료"); }
+		 */
+		
+		System.out.println("fdfsfeofewofsd : " + chat);
+		
+		return chat;
 	}
 	
 	@Override
