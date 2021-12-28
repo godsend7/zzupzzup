@@ -1,5 +1,7 @@
 package com.zzupzzup.web.restaurant;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.RestaurantMenu;
 import com.zzupzzup.service.domain.RestaurantTime;
@@ -34,7 +37,7 @@ public class RestaurantController {
 	@RequestMapping(value="addRestaurant", method=RequestMethod.GET)
 	public String addRestaurant() throws Exception {
 		
-		System.out.println("restaurant/addRestaurant : GET");
+		System.out.println("/restaurant/addRestaurant : GET");
 		
 		return "forward:/restaurant/addRestaurantView.jsp";
 	}
@@ -45,7 +48,7 @@ public class RestaurantController {
 			@ModelAttribute("restaurantTimes") Restaurant restaurantTimes,
 			@ModelAttribute("restaurantImage") Restaurant restaurantImage) throws Exception {
 		
-		System.out.println("restaurant/addRestaurant : POST");
+		System.out.println("/restaurant/addRestaurant : POST");
 		
 		restaurantService.addRestaurant(restaurant);
 		
@@ -69,13 +72,27 @@ public class RestaurantController {
 	@RequestMapping(value="getRestaurant", method=RequestMethod.GET)
 	public String getRestaurant(@RequestParam() int restaurantNo, Model model) throws Exception {
 		
-		System.out.println("restaurant/getRestaurant : GET");
+		System.out.println("/restaurant/getRestaurant : GET");
 		
 		Restaurant restaurant = restaurantService.getRestaurant(restaurantNo);
 		
 		model.addAttribute("restaurant", restaurant);
 		
 		return "forward:/restaurant/getRestaurant.jsp";
+	}
+	
+	@RequestMapping(value="listRestaurant")
+	public String listRestaurant(@ModelAttribute("search") Search search, Model model) throws Exception {
+		
+		System.out.println("/restaurant/listRestaurant : GET / POST");
+		
+		Map<String, Object> map = restaurantService.listRestaurant(search);
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("search", search);
+		
+		return "forward:/restaurant/listRestaurant.jsp";
+		
 	}
 	
 	
