@@ -51,7 +51,9 @@
 		INTO HASHTAG_LOG(review_no, hashtag_no) 
 		VALUES
 		<foreach collection="hashTag" item="item" separator=",">	
-			 (#{reviewNo}, #{item.hashTagNo})
+			<if test="item.hashTagNo != 0">
+			 	(#{reviewNo}, #{item.hashTagNo})
+			</if>
   		</foreach>
 	</insert>
 	

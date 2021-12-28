@@ -123,16 +123,34 @@
 						"keyWord" : $("#hashTagAuto").val()
 					},
 					success : function(data, status) {
-						var arrayLayout = new Array();
+						/* var arrayLayout = new Array();
+						var arrayLayout2 = new Array();
 						
 						$.each(data, function(index, item) {
 							console.log(item.hashTag);
 							arrayLayout.push(item.hashTag);
-						});
+							arrayLayout2.push(item.hashTagNo);
+						}); */
 						
-						response(arrayLayout);//response 
+						response(
+							$.map(data, function(item) {
+                                return {
+                                    label: item.hashTag,
+                                    value: item.hashTagNo
+                                }
+                            })
+						);//response 
 					}
 	      		});
+	 		},
+	 		select : function(event, ui) {
+	 			$("#hashTagBox").append("<span class='badge badge-pill badge-secondary hashTag' id='hashtag" 
+	 									+ hashTagCount + "'>" + ui.item.label + " x <input type='hidden' name='hashTag[" 
+	 										+ hashTagCount + "].hashTagNo' value='" + ui.item.value + "'></span>");
+				hashTagCount++;
+				
+				$("#hashTagAuto").text('');
+				$("#hashTagAuto").val('');
 	 		}
 		});
 	}
@@ -189,7 +207,7 @@
 							 	</div>
 							 	
 								<div class="col-md-4 star-box">
-									<label for="scopeTaste" class="starLabel">맛있해요</label>
+									<label for="scopeTaste" class="starLabel">맛있어요</label>
 									<div class="star-in">
 										<span class="star starTaste"></span>
 										<span class="star starTaste"></span>
