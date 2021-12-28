@@ -37,8 +37,19 @@ public class CommunityDAOImpl implements CommunityDAO {
 		int result = sqlSession.insert("CommunityMapper.addCommunity", community);
 		
 		if(result == 1) {
-			sqlSession.insert("CommunityMapper.addRestaurantTime", community);
-			sqlSession.insert("CommunityMapper.addImage", community);
+			if(community.getRestaurantTimes() != null) {
+				sqlSession.insert("CommunityMapper.addRestaurantTime", community);
+			}
+			
+			if(community.getPostImage() != null) {
+				sqlSession.insert("CommunityMapper.addImage", community);
+			}
+				
+				
+			/*
+			 * sqlSession.insert("CommunityMapper.addRestaurantTime", community);
+			 * sqlSession.insert("CommunityMapper.addImage", community);
+			 */
 			
 			return 1;
 			
