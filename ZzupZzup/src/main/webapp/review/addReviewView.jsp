@@ -155,6 +155,11 @@
 					
 						<form id="review">
 							<div class="row gtr-uniform">
+							
+								<input type="hidden" id="member.memberId" name="member.memberId" value="${member.memberId}">
+								<input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" value="${review.reservation.reservationNo}">
+								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${review.restaurant.restaurantNo}">
+							
 								<div class="col-12 col-12-xsmall">
 					 				<label for="order">주문 내역</label>
 					 				<p>음식점명 : ${review.restaurant.restaurantName}<br>
