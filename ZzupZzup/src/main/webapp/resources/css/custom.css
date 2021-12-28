@@ -259,21 +259,25 @@ button,
     pointer-events: none;
     opacity: 0.25; }
     
-  .modal-header .close {
-  	padding: 0;
-  	box-shadow: none;
-  	background: transparent;
-  	margin: 0;
-  	height: 20px;
-  }
-  .modal-header .close:hover {
-  	background: transparent;
-  }
-  .modal-header .close:active {
-  	background: transparent;
-  }
+/* input */
+input:disabled { background-color: rgba(0,0,0,0.1); }
+    
+/* Modal */    
+ .modal-header .close {
+ 	padding: 0;
+ 	box-shadow: none;
+ 	background: transparent;
+ 	margin: 0;
+ 	height: 20px;
+ }
+ .modal-header .close:hover {
+ 	background: transparent;
+ }
+ .modal-header .close:active {
+ 	background: transparent;
+ }
   
-/* badge */
+/* Badge */
 .badge-primary {
     background-color: #f67878;
 }
