@@ -4,6 +4,9 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Locale;
+
+import org.apache.commons.io.FilenameUtils;
 
 
 public class CommonUtil {
@@ -170,9 +173,34 @@ public class CommonUtil {
 		return data;
 	}
 	
+	public static String getTimeStamp(String pattern, String fileName) {
+		         
+        // 문자열로 변환하기 위한 패턴 설정(년도-월-일 시:분:초:초(자정이후 초))
+        // SimpleDateFormat sdfCurrent = new SimpleDateFormat(pattern, Locale.KOREA);
+        // Timestamp ts = new Timestamp(System.currentTimeMillis());
+        // String rtnStr = sdfCurrent.format(ts.getTime());
+        
+        String newFileName = new SimpleDateFormat("yyyyMMddHmsS").format(new Date());  //현재시간
+        System.out.println("변형된 파일 이름 출력 => " + newFileName);
+        
+       
+        //newFileName + 확장자 출력
+        newFileName = newFileName(FilenameUtils.getExtension(fileName), newFileName);
+        System.out.println("newFileName.확장자 출력 => " + newFileName);
+        
+        return newFileName;
+    }
+	
 	//======================================================================================================================
 	
 	///Method
+	public static String newFileName(String ext, String fileName) {
+		if (ext == null || ext.trim().length() == 0) 
+			return fileName;
+		else 
+			return fileName+"."+ext;
+	}
+	
 	public static String null2str(String org, String converted) {
 		if (org == null || org.trim().length() == 0)
 			return converted;

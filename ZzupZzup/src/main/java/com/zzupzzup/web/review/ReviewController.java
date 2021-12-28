@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
+import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.member.MemberService;
@@ -94,7 +95,7 @@ public class ReviewController {
 		
 		String temDir = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		
-		String fileName = uploadFilePath(uploadfile, temDir, review);
+		uploadFilePath(uploadfile, temDir, review);
 		
 		System.out.println(review);
 		
@@ -160,7 +161,7 @@ public class ReviewController {
 		return "forward:/review/listReview.jsp";
 	}
 	
-	private String uploadFilePath(MultipartHttpServletRequest uploadfile, String temDir, Review review) {
+	private void uploadFilePath(MultipartHttpServletRequest uploadfile, String temDir, Review review) {
 		
 		//file의 name을 가지고 있는 input tag 가져오기
 		List<MultipartFile> fileList = uploadfile.getFiles("file");
@@ -173,34 +174,31 @@ public class ReviewController {
 //				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
 //				System.out.println(":: 파일 사이즈 => " + mf.getSize());
 				
+				String saveName = CommonUtil.getTimeStamp("yyyyMMddHmsS", mf.getOriginalFilename());
+				System.out.println(":: 저장할 이름 => " + saveName);
 				
-				String saveName = mf.getOriginalFilename();
+				File oldFile = new File(temDir + mf.getOriginalFilename());
+	            File newFile = new File(temDir + saveName);
+	           
+	            oldFile.renameTo(newFile); // 파일명 변경
 				
-				reviewImage.add(saveName);
-				review.setReviewImage(reviewImage);
+				
+				Path copy = Paths.get(temDir, File.separator + StringUtils.cleanPath(saveName));
+				
+				try {
+					Files.copy(uploadfile.getInputStream(), copy, StandardCopyOption.REPLACE_EXISTING);
+					
+					reviewImage.add(saveName);
+					review.setReviewImage(reviewImage);
+					
+					System.out.println("업로드 성공");
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println("업로드 없음");
+					e.printStackTrace();
+					//saveName = "notFile.png";
+				}
 			}
 		}
-		
-		
-			
-		
-		
-		System.out.println(":: 저장할 이름 => " + saveName);
-		
-		Path copy = Paths.get(temDir, File.separator + StringUtils.cleanPath(saveName));
-		
-		try {
-			Files.copy(uploadfile.getInputStream(), copy, StandardCopyOption.REPLACE_EXISTING);
-			//File saveFile = new File(temDir, saveName);
-			//uploadfile.transferTo(saveFile); //���ε� ���Ͽ� saveFile�̶�� �����⸦ ����
-			System.out.println("�ƹ��͵� ����");
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("�ƹ��͵� �ȳ���");
-			e.printStackTrace();
-			saveName = "notFile.png";
-		}
-		
-		return saveName;
 	}
 }
