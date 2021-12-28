@@ -5,7 +5,7 @@
 
 <!-- start:Header -->
 <header id="header">
-	<a href="/main.jsp" class="logo"><strong>쩝쩝듀스101</strong></a>
+	<a href="/main.jsp" class="logo"><strong>ZZUPZZUPDUCE_101</strong></a>
 	
 	
 	<ul class="icons">

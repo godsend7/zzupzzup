@@ -250,8 +250,8 @@
 		</div>
 		<div class="col">	
 			<!-- <input type="text" class="form-control" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" placeholder="대표메뉴 여부"> -->
-			<input type="checkbox" id="mainMenuStatus" name="restaurantMenus[1].mainMenuStatus" value="1">
-			<label for="mainMenuStatus">메인메뉴</label>
+			<input type="checkbox" id="mainMenuStatus1" name="restaurantMenus[1].mainMenuStatus" value="1">
+			<label for="mainMenuStatus1">메인메뉴</label>
 		</div>
 	</div><br>
 	
