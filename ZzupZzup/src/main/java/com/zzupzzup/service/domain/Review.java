@@ -7,6 +7,7 @@ public class Review {
 	
 	private Member member;
 	private Reservation reservation;
+	private Restaurant restaurant;
 	private int reviewNo;
 	private int scopeClean;
 	private int scopeTaste;
@@ -43,6 +44,14 @@ public class Review {
 
 	public void setReservation(Reservation reservation) {
 		this.reservation = reservation;
+	}
+	
+	public Restaurant getRestaurant() {
+		return restaurant;
+	}
+
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
 	}
 
 	public int getReviewNo() {
@@ -142,11 +151,13 @@ public class Review {
 	}
 
 	public double getAvgScope() {
+		avgScope = (scopeClean + scopeTaste + scopeKind) / 3d;
+		avgScope = Double.parseDouble(String.format("%.1f", avgScope));
 		return avgScope;
 	}
 
 	public void setAvgScope(double d) {
-		this.avgScope = Double.parseDouble(String.format("%.1f", d));
+		this.avgScope = d;
 	}
 
 	public double getAvgTotalScope() {
@@ -167,10 +178,11 @@ public class Review {
 
 	@Override
 	public String toString() {
-		return "Review [member=" + member + ", reservation=" + reservation + ", reviewNo=" + reviewNo + ", scopeClean="
-				+ scopeClean + ", scopeTaste=" + scopeTaste + ", scopeKind=" + scopeKind + ", reviewImage="
-				+ reviewImage + ", reviewDetail=" + reviewDetail + ", hashTag=" + hashTag + ", reviewRegDate="
-				+ reviewRegDate + ", likeCount=" + likeCount + ", reportCount=" + reportCount + ", avgScope=" + avgScope
-				+ ", avgTotalScope=" + avgTotalScope + ", reviewShowStatus=" + reviewShowStatus + "]";
+		return "Review [member=" + member + ", reservation=" + reservation + ", restaurant=" + restaurant
+				+ ", reviewNo=" + reviewNo + ", scopeClean=" + scopeClean + ", scopeTaste=" + scopeTaste
+				+ ", scopeKind=" + scopeKind + ", reviewImage=" + reviewImage + ", reviewDetail=" + reviewDetail
+				+ ", hashTag=" + hashTag + ", reviewRegDate=" + reviewRegDate + ", likeCount=" + likeCount
+				+ ", reportCount=" + reportCount + ", avgScope=" + avgScope + ", avgTotalScope=" + avgTotalScope
+				+ ", reviewShowStatus=" + reviewShowStatus + "]";
 	}
 }

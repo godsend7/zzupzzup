@@ -37,8 +37,8 @@
 	});
 </script>
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal"
-	data-target="#loginModal">로그인</button>
+<input type="button" value="로그인" class="btn btn-primary" data-toggle="modal"
+	data-target="#loginModal"/>
 
 <!-- Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog"

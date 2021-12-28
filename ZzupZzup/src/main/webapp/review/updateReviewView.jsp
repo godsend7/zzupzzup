@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-listReview</title>
+<title>ZZUPZZUP-updateReview</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
