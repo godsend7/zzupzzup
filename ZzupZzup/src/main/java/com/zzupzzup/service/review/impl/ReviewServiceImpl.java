@@ -58,7 +58,7 @@ public class ReviewServiceImpl implements ReviewService {
 		map.put("memberId", memberId);
 		
 		map.put("list", reviewDao.listReview(map));
-		map.put("totalCount", reviewDao.getTotalCount(search));
+		map.put("totalCount", reviewDao.getTotalCount(map));
 		
 		if (restaurantNo != null) {
 			map.put("avgTotalScope", reviewDao.getTotalAvg(restaurantNo));
@@ -75,7 +75,7 @@ public class ReviewServiceImpl implements ReviewService {
 		map.put("memberId", memberId);
 		
 		map.put("list", reviewDao.listMyLikeReview(map));
-		map.put("totalCount", reviewDao.getTotalCount(search));
+		map.put("totalCount", reviewDao.getTotalCount(map));
 		
 		return map;
 	}

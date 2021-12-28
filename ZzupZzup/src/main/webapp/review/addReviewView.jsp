@@ -9,8 +9,6 @@
 <title>ZZUPZZUP-addReviewView</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <link rel="stylesheet" href="/resources/css/review.css" />
  
 <!--  ///////////////////////// CSS ////////////////////////// -->

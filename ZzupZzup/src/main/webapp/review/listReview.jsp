@@ -23,7 +23,7 @@
 	    document.detailForm.submit(); */
 	    console.log(currentPage);
 	    $("#currentPage").val(currentPage);
-	    $("#listReview").attr("action","/review/listReview").attr("method", "POST").submit();
+	    $("#review").attr("action","/review/listReview").attr("method", "POST").submit();
 	 }
 </script>
 </head>
@@ -40,14 +40,14 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="review">
+				<section id="listReview">
 					<div class="container">
 						<!-- 내용 들어가는 부분 -->
 						
 						<!-- start:Form -->
 						<h3>리뷰 리스트</h3>
 					
-						<form id="listReview">
+						<form id="review">
 							<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 							<input type="hidden" id="currentPage" name="currentPage" value=""/>
 						</form>

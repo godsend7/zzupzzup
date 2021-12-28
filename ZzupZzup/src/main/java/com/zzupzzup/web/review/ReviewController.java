@@ -82,7 +82,9 @@ public class ReviewController {
 	}
 	
 	@RequestMapping(value="addReview", method=RequestMethod.POST)
-	public String addReview(@ModelAttribute("review") Review review, MultipartHttpServletRequest uploadFile, Model model) throws Exception {
+	public String addReview(@ModelAttribute("review") Review review, MultipartHttpServletRequest uploadFile, Model model, HttpServletRequest request) throws Exception {
+		
+		String temDir = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		
 		System.out.println("review/addReview : POST");
 		
@@ -102,11 +104,11 @@ public class ReviewController {
 		
 		System.out.println(review);
 		
-		if(reviewService.addReview(review) == 1) {
-			System.out.println("review insert success");
-			//리뷰 작성 성공 시 활동점수 추가 
-			memberService.addActivityScore(review.getMember().getMemberId(), 2, 5); //리뷰 작성 시 5
-		}
+//		if(reviewService.addReview(review) == 1) {
+//			System.out.println("review insert success");
+//			//리뷰 작성 성공 시 활동점수 추가 
+//			memberService.addActivityScore(review.getMember().getMemberId(), 2, 5); //리뷰 작성 시 5
+//		}
 		
 		return "redirect:/review/listReview";
 	}
@@ -133,7 +135,7 @@ public class ReviewController {
 		
 		String memberId = null;
 		
-		if (member != null) {
+		if (member != null && !member.getMemberRole().equals("admin")) {
 			memberId = member.getMemberId();
 		}
 		
