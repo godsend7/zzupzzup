@@ -19,6 +19,9 @@
 				<h2>Welcome to ZZUPZZUPDUCE_101</h2>
 			</header>
 			<ul>
+				<c:if test="${ empty member}">
+					로그인이 필요한 서비스입니다.
+				</c:if>
 				<c:if test="${ ! empty member}">
 					<c:if test="${sessionScope.member.memberRole == 'user'}">
 					<li>
