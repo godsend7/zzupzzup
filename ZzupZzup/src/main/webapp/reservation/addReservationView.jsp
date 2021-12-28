@@ -149,33 +149,35 @@
 						<h3>예약하기</h3>
 					
 						<form name="addReservation" method="post" action="/addReservation">
-						<input type="hidden" name="chatNo" value="${reservation.chat.chatNo}" />
-						<input type="hidden" name="restaurantNo" value="${reservation.restaurant.restaurantNo}" />
-						<input type="hidden" name="reservationNo" value="${reservation.reservationNo}" />
+						
+								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
+								<input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" value="${reservation.reservationNo}">
+								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}">
+							
 							<div class="row gtr-uniform">
 								<div class="col-6 col-12-xsmall">
-									<label for="demo-name">NickName</label> 
-									<p>${chat.getChatLeaderId(member.getNickname())}</p>
+									<label for="nickname">NickName</label> 
+									<p>${reservation.chat.chatLeaderId.nickname}</p>
 								</div>
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantName">음식점 명</label> 
-									<p>${restaurant.restaurantName}</p>
+									<p>${reservation.restaurant.restaurantName}</p>
 								</div>
 								<div class="col-6 col-12-xsmall">
-									<label for="restaurantPhone">음식점 전화번호</label> 
-									<p>${restaurant.restaurantTel}</p>
+									<label for="restaurantTel">음식점 전화번호</label> 
+									<p>${reservation.restaurant.restaurantTel}</p>
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantAdress">음식점 소재지 주소</label> 
-									<p>${restaurant.streetAddress}</p>
-									<p>${restaurant.areaAddress}</p>
-									<p>${restaurant.restAddress}</p>
+									<p>${reservation.restaurant.streetAddress}</p>
+									<p>${reservation.restaurant.areaAddress}</p>
+									<p>${reservation.restaurant.restAddress}</p>
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantType">음식 종류</label> 
-									<p>${restaurant.menuType}</p>
+									<p>${reservation.restaurant.menuType}</p>
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
@@ -187,15 +189,19 @@
 								<div class="col-4 col-12-small">
 									<label for="orderName">주문 메뉴 명</label> 
 									<select class="form-select" id="orderName" required>
-					                <option value="">${order.menuTitle}</option>
-					                <option>United States</option>
+					                <option value="">${reservation.restaurant.restaurantMenus.menuTitle}</option>
+					                <option>${reservation.restaurant.restaurantMenus.menuTitle}</option>
+					                <option>${reservation.restaurant.restaurantMenus.menuTitle}</option>
+					                <option>${reservation.restaurant.restaurantMenus.menuTitle}</option>
 					              </select>
 								</div>
 								<div class="col-4 col-12-small">
 									<label for="orderCount">주문 메뉴 수량</label> 
 									<select class="form-select" id="orderCount" required>
 					                <option value="">${order.orderCount}</option>
-					                <option>United States</option>
+					                <option>1</option>
+					                <option>2</option>
+					                <option>3</option>
 					              </select>
 								</div>
 								
@@ -218,7 +224,7 @@
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="demo-memberCount">음식점 영업 시간</label> 
-									<%-- <p><%=restaurant.getRestaurantNo(restaurantTime) %></p> --%>
+									<%-- <p>${reservation.restaurant.restaurantTime}</p> --%>
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
