@@ -1,7 +1,6 @@
 package com.zzupzzup.web.review;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.zzupzzup.service.domain.Member;
-import com.zzupzzup.service.domain.Reservation;
-import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.reservation.ReservationService;
@@ -76,8 +72,9 @@ public class ReviewController {
 		
 		System.out.println("review/addReview : POST");
 		
+		//file의 name을 가지고 있는 input tag 가져오
 		List<MultipartFile> fileList = uploadFile.getFiles("file");
-		System.out.println(fileList.size());
+		
 		List<String> reviewImage = new ArrayList<String>();
 		
 		for (MultipartFile mf : fileList) {
@@ -90,10 +87,10 @@ public class ReviewController {
 		
 		
 		System.out.println(review);
-		//System.out.println(review.getAvgScope());
-		//리뷰 작성 성공 시 활동점수 추가 
+		
 		if(reviewService.addReview(review) == 1) {
-			System.out.println("review insert success " + review.getAvgScope());
+			System.out.println("review insert success");
+			//리뷰 작성 성공 시 활동점수 추가 
 			memberService.addActivityScore(review.getMember().getMemberId(), 2, 5); //리뷰 작성 시 5
 		}
 		

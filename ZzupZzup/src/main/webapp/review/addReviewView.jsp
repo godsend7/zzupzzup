@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE HTML>
 
@@ -8,64 +9,14 @@
 <title>ZZUPZZUP-addReviewView</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
- <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/css/review.css" />
  
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
-	*{margin:0; padding:0;}
-	.starClean{
-	 background: url(http://gahyun.wooga.kr/main/img/testImg/star.png);
-	  display:inline-block;
-	  width: 50px;height: 50px;
-	  background-size: contain;
-	  cursor: pointer;
-	}
 	
-	.starClean.on{
-	  background-image: url(http://gahyun.wooga.kr/main/img/testImg/star_on.png);
-	}
-	
-	.starTaste{
-	 background: url(http://gahyun.wooga.kr/main/img/testImg/star.png);
-	  display:inline-block;
-	  width: 50px;height: 50px;
-	  background-size: contain;
-	  cursor: pointer;
-	}
-	
-	.starTaste.on{
-	  background-image: url(http://gahyun.wooga.kr/main/img/testImg/star_on.png);
-	}
-	
-	.starKind{
-	 background: url(http://gahyun.wooga.kr/main/img/testImg/star.png);
-	  display:inline-block;
-	  width: 50px;height: 50px;
-	  background-size: contain;
-	  cursor: pointer;
-	}
-	
-	.starKind.on{
-	  background-image: url(http://gahyun.wooga.kr/main/img/testImg/star_on.png);
-	}
-	
-	@media screen and (max-width: 480px){
-		.star { width: 40px; height: 40px;}
-	
-	}
-	
-	.starLabel {
-		text-align: center;
-	}
-	
-	.star-box {
-		margin-right: 80px;
-	}
-	
-	textarea {
-		resize: none;
-	}
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -73,6 +24,9 @@
 	var scopeClean = 0;
 	var scopeTaste = 0;
 	var scopeKind = 0;
+	
+	//hashTag id 초기화
+	var hashTagCount = 0;
 	
 	function funAddReview() {
 		console.log("funAddReview");
@@ -96,12 +50,17 @@
 		
 		$("#review").attr("method", "POST").attr("action" , "/review/addReview").attr("enctype", "multipart/form-data").submit();
 	} 
-
-	window.onload = function() {
+	
+	function funAddHashTag() {
+		console.log("click!");
 		
+	}
+	
+	window.onload = function() {
 		$(".starClean").on('click',function(){
 			var idx = $(this).index();
 			scopeClean = idx+1;
+			/* console.log(scopeClean); */
 	  		$(".starClean").removeClass("on");
 	  		for(var i=0; i<=idx; i++){
 	        	$(".starClean").eq(i).addClass("on");
@@ -111,6 +70,7 @@
 		$(".starTaste").on('click',function(){
 			var idx = $(this).index();
 			scopeTaste = idx+1;
+			/* console.log(scopeTaste); */
 	  		$(".starTaste").removeClass("on");
 	  		for(var i=0; i<=idx; i++){
 	        	$(".starTaste").eq(i).addClass("on");
@@ -120,6 +80,7 @@
 		$(".starKind").on('click',function(){
 			var idx = $(this).index();
 			scopeKind = idx+1;
+			/* console.log(scopeKind); */
 	  		$(".starKind").removeClass("on");
 	  		for(var i=0; i<=idx; i++){
 	        	$(".starKind").eq(i).addClass("on");
@@ -131,7 +92,51 @@
 			funAddReview();
 		});
 		
+		//button click 시 append
+		$("#hashTagAppend").on("click", function() {
+			$("#hashTagBox").append("<span class='badge badge-pill badge-secondary hashTag' id='hashtag" + hashTagCount + "'>#인스타 맛집  x</span>");
+			hashTagCount++;
+		});
+		
+		$("#hashTagBox").on("click", "span", function(e) {
+			e.stopPropagation();
+			
+			$(this).remove();
+			
+			if ($("#hashTagBox").children().length == 0) {
+				hashTagCount = 0;
+			}
+		});
+		
+		
+		$("#hashTagAuto").autocomplete({
+			source: function(request, response) {
+		 		$.ajax({
+		 			url:"/review/json/listHashTag",
+	    	  		method : "GET",
+					dataType : "json",
+					headers : {
+						"Accept" : "application/json",
+						"Content-Type" : "application/json"
+					},
+					data : {
+						"keyWord" : $("#hashTagAuto").val()
+					},
+					success : function(data, status) {
+						var arrayLayout = new Array();
+						
+						$.each(data, function(index, item) {
+							console.log(item.hashTag);
+							arrayLayout.push(item.hashTag);
+						});
+						
+						response(arrayLayout);//response 
+					}
+	      		});
+	 		}
+		});
 	}
+	
 </script>
 </head>
 
@@ -171,9 +176,9 @@
 					 				방문 확정일 : ${review.reservation.fixedDate}</p>
 					 			</div>
 							 
-							 	<div class="star-box">
+							 	<div class="col-md-4 star-box">
 							 		<label for="scopeClean" class="starLabel">청결해요</label>
-									<div>
+									<div class="star-in">
 										<span class="star starClean"></span>
 										<span class="star starClean"></span>
 										<span class="star starClean"></span>
@@ -183,9 +188,9 @@
 									<input type="hidden" id="scopeClean" name="scopeClean" />
 							 	</div>
 							 	
-								<div class="star-box">
+								<div class="col-md-4 star-box">
 									<label for="scopeTaste" class="starLabel">맛있해요</label>
-									<div >
+									<div class="star-in">
 										<span class="star starTaste"></span>
 										<span class="star starTaste"></span>
 										<span class="star starTaste"></span>
@@ -195,9 +200,9 @@
 									<input type="hidden" id="scopeTaste" name="scopeTaste" />
 								</div>
 								
-								<div class="star-box">
+								<div class="col-md-4 star-box">
 									<label for="scopeKind" class="starLabel">친절해요</label>
-									<div>
+									<div class="star-in">
 										<span class="star starKind"></span>
 										<span class="star starKind"></span>
 										<span class="star starKind"></span>
@@ -207,7 +212,7 @@
 									<input type="hidden" id="scopeKind" name="scopeKind" />
 								</div>
 								
-								<div class="col-6 col-12-small">
+								<div class="col-12">
 									<label for="reviewImage">리뷰 이미지</label>
 									<input type="file" id="file" name="file" multiple="multiple">
 								</div>
@@ -221,7 +226,13 @@
 								<!-- Break -->
 								<div class="col-12">
 									<label for="hashTag">해시태그 등록</label>
-									<textarea name="review.hashTag" id="review.hashTag" placeholder="#을 입력하여 해시태그를 선택해주세요." rows="2"></textarea>
+									<input id="hashTagAuto" type="text"><br>
+									
+									<div class="box" id="hashTagBox">
+										<!-- <span class='badge badge-pill badge-secondary' id="hashtag0">#인스타 맛집  x</span> -->
+									</div>
+									<!-- <input id="hashTagAppend" type="button" value="X"> -->
+									<!-- <textarea name="review.hashTag" id="review.hashTag" placeholder="#을 입력하여 해시태그를 선택해주세요." rows="2"></textarea> -->
 								</div>
 								
 					 	   		<!-- Break -->
