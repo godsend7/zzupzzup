@@ -19,7 +19,6 @@
 				<h2>Menu</h2>
 			</header>
 			<ul>
-				<c:if test="${ ! empty member}">
 					<c:if test="${sessionScope.member.memberRole == 'user'}">
 					<li>
 						<span class="opener">MyPage</span>
@@ -39,7 +38,6 @@
 					</c:if>
 					<li><a href="#">쩝쩝친구 구하기</a></li>
 					<li><a href="#">나만의 작고 소중한 맛집</a></li>
-				</c:if>
 				<li><a href="#">공지사항</a></li>
 				<li><a href="/restaurant/addRestaurant">test-음식점</a></li>
 				<li><a href="/restaurant/listRestaurant">test-(관리자)음식점목록</a></li>

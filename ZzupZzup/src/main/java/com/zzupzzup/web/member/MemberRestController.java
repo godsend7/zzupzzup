@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zzupzzup.service.domain.Member;
@@ -67,12 +68,20 @@ public class MemberRestController {
 		
 	}
 	
-	public void checkIdDuplication() {
+	@RequestMapping(value="json/checkIdDuplication", method=RequestMethod.POST)
+	public boolean checkIdDuplication(@RequestParam("memberId") String memberId) throws Exception {
 		
+		System.out.println("/member/json/checkIdDuplication : POST");
+		
+		return memberService.checkIdDuplication(memberId);
 	}
 
-	public void checkNicknameDuplication() {
+	@RequestMapping(value="json/checkNicknameDuplication", method=RequestMethod.POST)
+	public boolean checkNicknameDuplication(@RequestParam("nickname") String nickname) throws Exception {
 		
+		System.out.println("/member/json/checkNicknameDuplication : POST");
+		
+		return memberService.checkNicknameDuplication(nickname);
 	}
 	
 	public void findId() {
@@ -81,6 +90,8 @@ public class MemberRestController {
 	
 	@RequestMapping(value="json/sendCertificatedNum", method=RequestMethod.GET)
 	public String sendCertificatedNum(String phoneNum) throws Exception {
+		
+		System.out.println("/member/json/sendCertificatedNum : GET");
 		
 		String certificatedNum = "";
 		
@@ -91,17 +102,19 @@ public class MemberRestController {
 
 	    memberService.sendCertificatedNum(certificatedNum, phoneNum);
 	    
-	    String inputCertificatedNum = null;
-	    String inputPhoneNum = null;
-	    memberService.checkCertificatedNum(inputCertificatedNum, certificatedNum, inputPhoneNum, phoneNum);
+//	    String inputCertificatedNum = null;
+//	    String inputPhoneNum = null;
+//	    memberService.checkCertificatedNum(inputCertificatedNum, certificatedNum, inputPhoneNum, phoneNum);
 	    
-	    return "";
+	    return certificatedNum;
 	}
 	
 //	@RequestMapping(value="json/checkCertificatedNum", method=RequestMethod.POST)
-//	public void checkCertificatedNum(String inputCertificatedNum, String certificatedNum, String inputPhoneNum, String phoneNum) throws Exception {
+//	public void checkCertificatedNum(String inputCertificatedNum, String certificatedNum) throws Exception {
 //		
-//		memberService.checkCertificatedNum(inputCertificatedNum, certificatedNum, inputPhoneNum, phoneNum);
+//		System.out.println("/member/json/checkCertificatedNum : POST");
+//		
+//		memberService.checkCertificatedNum(inputCertificatedNum, certificatedNum);
 //		
 //	}
 	

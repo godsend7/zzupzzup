@@ -73,11 +73,12 @@ public class MemberController {
 		
 	}
 	
-	@RequestMapping(value="addMember", method=RequestMethod.POST)
-	public String addMember(@ModelAttribute("member") Member member) throws Exception {
+	@RequestMapping(value="addMember/{memberRole}", method=RequestMethod.POST)
+	public String addMember(@PathVariable String memberRole, @ModelAttribute("member") Member member) throws Exception {
 		
-		System.out.println("/member/addMember : POST");
+		System.out.println("/member/addMember/"+memberRole+" : POST");
 		
+		member.setMemberRole(memberRole);
 		memberService.addMember(member);
 		System.out.println(member.getMemberRole());
 		if(member.getPushNickname() != null) {
