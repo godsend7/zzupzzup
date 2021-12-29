@@ -31,20 +31,8 @@
 	    console.log(currentPage);
 	    $("#currentPage").val(currentPage);
 	    $("#review").attr("action","/review/listReview").attr("method", "POST").submit();
-	 }
-	
-	function fncGetReview(reviewNo) {
-		//console.log(reviewNo);
-		
-		$.ajax({
-			url : "/review/json/getReview/"+reviewNo,
-			method : "GET",
-			dataType : "json",
-			success : function(data, status) {
-				console.log(data);
-			}
-		}); 
 	}
+
 </script>
 </head>
 
@@ -97,7 +85,7 @@
 												</c:forEach>
 											</div>
 											<div>
-												<a href="javascript:fncGetReview('${review.reviewNo}')" class="stretched-link">상세보기</a>
+												<a href="#reviewModal" class="stretched-link" data-toggle="modal" data-id="${review.reviewNo}">상세보기</a>
 												<span style="float: right; margin-right: 0;">작성일  ${review.reviewRegDate}</span>
 												<span style="float: right;">좋아요 수 : ${review.likeCount}</span>
 											</div>
@@ -105,6 +93,9 @@
 									</div>
 								</div>
 							</c:forEach>
+							<ul class='icons'> 
+								<jsp:include page='/review/getReview.jsp'/>
+							</ul>
 						</div>
 						
 						<jsp:include page="../common/pageNavigator.jsp"/>
