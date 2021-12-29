@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-ListChat</title>
+<title>ZZUPZZUP-채팅방 목록</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 <link rel="stylesheet" href="/resources/css/chat.css" />
@@ -88,8 +88,13 @@
 						+"<li>"+JSONData.chatRestaurant.areaAddress+"</li>"
 						+"<li>"+JSONData.chatRestaurant.restaurantTel+"</li>"
 						+ "</ul>";
+					let displayValueFt = "<input type='button' data-target="+JSONData.chatNo+" class='button small warning' value='대화기록보기'/>"
+					+"<input type='button' data-target="+JSONData.chatNo+" class='button small info' value='수정하기'/>"
+					+"<input type='button' class='button small secondary' data-dismiss='modal' value='닫기' />"
+					+"<input type='button' data-target="+JSONData.chatNo+" class='button small primary' value='입장하기'>"
 					$(".modal-title").html(displayValueHd);
 					$(".modal-body").html(displayValueBd);
+					$(".modal-footer").html(displayValueFt);
 					if(chatImg == 'chatimg.jpg'){
 						$(".modal-body").css("background-image", "url(/resources/images/sub/"+chatImg+")");
 					}else{
@@ -103,6 +108,27 @@
 				}
 			});
 		});
+		
+		//============= "대화기록보기" Event 처리 ============
+		$("body").on("click", "input[value='대화기록보기']", function(){
+			console.log("대화기록보기");
+			
+		});
+			
+		//============= "수정하기" Event 처리 ============
+		$("body").on("click", "input[value='수정하기']", function(){
+			console.log("수정하기");
+			let chatNo = $(this).attr("data-target");
+			location.href="/chat/updateChat?chatNo="+chatNo;
+		});
+				
+		//============= "입장하기" Event 처리 ============
+		$("body").on("click", "input[value='입장하기']", function(){
+			console.log("입장하기");
+		});
+			
+			
+			
 	});
 </script>
 </head>
@@ -218,45 +244,13 @@
 							</div>
 							<!-- E:Thumbnail -->
 
+							<!-- S:Infinity page -->
 							<div class="col-12 text-center thumb-more">
 								<a href="#" class="icon solid fa fa-plus-circle"></a>
 							</div>
-
-
-							<!-- rest -->
-							<div
-								class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative get-chat-pop">
-								<span class="badge badge-success chat-state">모집중</span> <input
-									type="hidden" value="chatNo">
-								<div class="col p-4 d-flex flex-column position-static">
-									<p class="card-text mb-auto">${chat.chatNo}</p>
-									<strong class="d-inline-block mb-2 text-primary">${chat.chatTitle }</strong>
-									<h3 class="mb-0">개설일: ${chat.chatRegDate }</h3>
-									<p class="card-text mb-auto">${chat.chatText}</p>
-									<p class="card-text mb-auto">참여 인원수: ${chat.chatMemberCount }</p>
-									<p class="card-text mb-auto">참여가능 성별: ${chat.chatGender }</p>
-									<p class="card-text mb-auto">참여가능 연령대: ${chat.chatAge }</p>
-								</div>
-
-								<div class="col p-4 d-flex flex-column position-static">
-									${chat.chatLeaderId.profileImage} ${chat.chatLeaderId.nickname }
-									${chat.chatLeaderId.gender } ${chat.chatLeaderId.age }
-									${chat.chatMember.chatLeaderCheck }</div>
-
-								<div>${chat.chatRestaurant.restaurantName }
-									${chat.chatRestaurant.menuType }
-									${chat.chatRestaurant.streetAddress }
-									${chat.chatRestaurant.areaAddress }
-									${chat.chatRestaurant.restaurantTel }</div>
-
-								<a href="" class="button normal get-chat-btn">닫기</a> <a
-									href="/chat/json/getChat/${chat.chatNo}"
-									class="button primary get-chat-btn">참여하기</a>
-							</div>
-							<!-- //rest -->
+							<!-- E:Infinity page -->
 
 							<!-- S:Modal -->
-
 							<div class="modal fade" id="getChatModal" tabindex="-1"
 								aria-labelledby="exampleModalLabel" aria-hidden="true">
 								<div class="modal-dialog">
@@ -270,10 +264,7 @@
 										</div>
 										<div class="modal-body"></div>
 										<div class="modal-footer">
-											<button type="button" class="button small warning">대화기록보기</button>
-											<button type="button" class="button small info">수정하기</button>
-											<button type="button" class="button small secondary" data-dismiss="modal">닫기</button>
-											<button type="button" class="button small primary">입장하기</button>
+											
 										</div>
 									</div>
 								</div>
