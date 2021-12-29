@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Restaurant;
@@ -56,9 +57,15 @@ public class RestaurantController {
 	public String addRestaurant(@ModelAttribute("restaurant") Restaurant restaurant, 
 			@ModelAttribute("restaurantMenus") Restaurant restaurantMenus,
 			@ModelAttribute("restaurantTimes") Restaurant restaurantTimes,
-			@ModelAttribute("restaurantImage") Restaurant restaurantImage) throws Exception {
+			/*@ModelAttribute("restaurantImage") Restaurant restaurantImage*/
+			MultipartHttpServletRequest uploadFile,
+			HttpServletRequest request) throws Exception {
+		
+		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		
 		System.out.println("/restaurant/addRestaurant : POST");
+		
+		
 		
 		restaurantService.addRestaurant(restaurant);
 		
@@ -70,9 +77,10 @@ public class RestaurantController {
 			System.out.println(rt);
 		}
 		
-		for(String ri : restaurantImage.getRestaurantImage()) {
-			System.out.println(ri);
-		}
+		/*
+		 * for(String ri : restaurantImage.getRestaurantImage()) {
+		 * System.out.println(ri); }
+		 */
 		
 		//System.out.println("Restaurant Menu : " + restaurant.getRestaurantMenus());
 		
@@ -80,7 +88,7 @@ public class RestaurantController {
 	}
 	
 	@RequestMapping(value="getRestaurant", method=RequestMethod.GET)
-	public String getRestaurant(@RequestParam() int restaurantNo, Model model) throws Exception {
+	public String getRestaurant(@RequestParam("restaurantNo") int restaurantNo, Model model) throws Exception {
 		
 		System.out.println("/restaurant/getRestaurant : GET");
 		

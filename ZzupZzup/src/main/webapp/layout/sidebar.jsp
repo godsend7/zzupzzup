@@ -23,7 +23,8 @@
 					로그인이 필요한 서비스입니다.
 				</c:if>
 				<c:if test="${ ! empty member}">
-					<c:if test="${sessionScope.member.memberRole == 'user'}">
+					<c:if test="${sessionScope.member.memberRole == 'user' || 
+								sessionScope.member.memberRole == 'admin'}">
 					<li>
 						<span class="opener">MyPage</span>
 						<ul>
@@ -42,11 +43,19 @@
 					</c:if>
 					<li><a href="#">쩝쩝친구 구하기</a></li>
 					<li><a href="/community/listCommunity">나만의 작고 소중한 맛집</a></li>
-					<li><a href="/community/addCommunity">test-나만의 작고 소중한 맛집(add)</a></li>
-					<li><a href="#">공지사항</a></li>
 					<li><a href="/restaurant/addRestaurant">test-음식점</a></li>
-					<li><a href="/restaurant/listRestaurant">test-(관리자)음식점목록</a></li>
 				</c:if>
+				<c:if test="${ ! empty member}">
+					<c:if test="${sessionScope.member.memberRole == 'admin'}">
+					<li>
+						<span class="opener">ManagePage</span>
+						<ul>
+							<li><a href="/restaurant/listRestaurant">등록된 음식점 목록</a></li>
+						</ul>
+					</li>
+					</c:if>
+				</c:if>
+					<li><a href="#">>> 공지사항</a></li>
 			</ul>
 		</nav>
 
