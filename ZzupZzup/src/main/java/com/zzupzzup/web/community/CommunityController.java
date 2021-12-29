@@ -60,7 +60,7 @@ public class CommunityController {
 		
 		communityService.addCommunity(community);
 		
-		return "redirect:/community/getCommunity.jsp";
+		return "forward:/community/listCommunity.jsp";
 	}
 	
 	@RequestMapping(value="getCommunity", method=RequestMethod.GET)
@@ -68,9 +68,15 @@ public class CommunityController {
 		
 		System.out.println("/community/getCommunity : GET");
 		
+		System.out.println("test section 1 : " + postNo);
+		
 		Community community = communityService.getCommunity(postNo);
 		
+		System.out.println("test section 2 : " + postNo);
+		
 		model.addAttribute("community", community);
+		
+		System.out.println("test section 3 : " + community);
 		
 		return "forward:/community/getCommunity.jsp";
 	}
@@ -98,12 +104,15 @@ public class CommunityController {
 		System.out.println("/community/listCommunity : SERVICE");
 		
 		if(search.getCurrentPage() == 0) {
-			search.setPageSize(1);
+			search.setCurrentPage(1);
 		}
 		
-		if(request.getParameter("page") != null) {
-			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
-		}
+		/*
+		 * if(request.getParameter("page") != null) {
+		 * search.setCurrentPage(Integer.parseInt(request.getParameter("page"))); }
+		 */
+		
+		System.out.println(search);
 		
 		search.setPageSize(pageSize);
 		
@@ -117,7 +126,7 @@ public class CommunityController {
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
 		
-		return "forward:/community/listcommunity.jsp";	
+		return "forward:/community/listCommunity.jsp";	
 	}
 	
 	

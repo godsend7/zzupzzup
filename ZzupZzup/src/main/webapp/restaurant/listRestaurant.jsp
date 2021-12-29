@@ -20,7 +20,7 @@
 <script type="text/javascript">
 
 	window.onload = function(){
-		// 등록 버튼 실행
+		// 상세조회 버튼 실행
 		$(function() {
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			$( "#restinfo" ).on("click" , function() {
