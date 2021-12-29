@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-GETCOMMUNITY</title>
+<title>ZZUPZZUP-GETRESTAURANT</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
@@ -52,15 +52,11 @@
 				<jsp:include page="/layout/header.jsp" />
 				
 				<section id="">
-				
-				<div class="container">
+					<div class="container">
 					
-					<div class="row">
-				       <h2 class=" col">${community.postTitle} &nbsp;
-				       	<small style="color:gray;">작성자: ${community.member.memberId}</small></h2>
-				    </div><hr>
-				    
-				    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+					<h2 class="text-warning">${restaurant.restaurantName}&nbsp;<small style="color:gray;">${restaurant.menuType}</small></h2><hr>
+					
+					<div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
 					  <div class="carousel-inner">
 					    <div class="carousel-item active">
 					      <img src="/resources/images/uploadImages/burger-king-logo.png" height="600" class="d-block w-100" alt="...">
@@ -83,56 +79,48 @@
 					</div><br><br>
 					
 					<div class="row">
-				  		<div class="col-xs-4 col-md-2"><strong>게시물 설명</strong></div>
-						<div class="col-xs-8 col-md-4">${community.postText}</div>
-					</div><hr/>
-				    
-				    <div class="row">
-				  		<div class="col-xs-4 col-md-2"><strong>음식점명</strong></div>
-						<div class="col-xs-8 col-md-4">${community.restaurantName}</div>
-					</div>
+		  				<div class="col-xs-4 col-md-2"><strong>전화번호</strong></div>
+						<div class="col-xs-8 col-md-4">${restaurant.restaurantTel}</div>
+					</div><br><br>
+					
+					<div class="row col-xs-4">
+		  				<div class="col"><strong>위치</strong></div>
+						<div class="col">도로명주소: ${restaurant.streetAddress}</div>
+						<div class="col">지번주소: ${restaurant.areaAddress}</div>
+						<div class="col">상세주소: ${restaurant.restAddress}</div>
+					</div><br><br>
+					
+					<div class="row col-xs-4">
+		  				<div class="col"><strong>영업시간</strong></div>
+						<div class="col">오픈시간: ${restaurant.restaurantTimes[0].restaurantOpen}</div>
+						<div class="col">마감시간: ${restaurant.restaurantTimes[0].restaurantClose}</div>
+						<div class="col">브레이크타임: ${restaurant.restaurantTimes[0].restaurantBreak}</div>
+						<div class="col">라스트오더: ${restaurant.restaurantTimes[0].restaurantLastOrder}</div>
+						<div class="col">휴무일: ${restaurant.restaurantTimes[0].restaurantDayOff}</div>
+					</div><br><br>
+					
+					<div class="row col-xs-4">
+		  				<div class="col"><strong>음식점 메뉴</strong></div>
+						<div class="col">메뉴이름: ${restaurant.restaurantMenus[0].menuTitle}</div>
+						<div class="col">메뉴가격: ${restaurant.restaurantMenus[0].menuPrice}</div>
+						<div class="col">대표메뉴여부: ${restaurant.restaurantMenus[0].mainMenuStatus}</div>
+					</div><br><br>
 					
 					<div class="row">
-				  		<div class="col-xs-4 col-md-2"><strong>음식점 전화번호</strong></div>
-						<div class="col-xs-8 col-md-4">${community.restaurantTel}</div>
-					</div>
+		  				<div class="col-xs-4 col-md-2"><strong>음식점 소개글</strong></div>
+						<div class="col-xs-8 col-md-4">${restaurant.restaurantText}</div>
+					</div><br><br>
 					
 					<div class="row">
-				  		<div class="col-xs-4 col-md-2"><strong>음식점 도로명주소</strong></div>
-						<div class="col-xs-8 col-md-4">${community.streetAddress}</div>
-					</div>
-					
-					<div class="row">
-				  		<div class="col-xs-4 col-md-2"><strong>음식점 지번주소</strong></div>
-						<div class="col-xs-8 col-md-4">${community.areaAddress}</div>
-					</div>
-					
-					<div class="row">
-				  		<div class="col-xs-4 col-md-2"><strong>음식점 상세주소</strong></div>
-						<div class="col-xs-8 col-md-4">${community.restAddress}</div>
-					</div>
-					
-					<div class="row">
-				  		<div class="col-xs-4 col-md-2"><strong>음식 종류</strong></div>
-						<div class="col-xs-8 col-md-4">${community.menuType}</div>
-					</div><hr>
-					
-					<div class="row">
-				  		<div class="col-xs-4 col-md-2"><strong>음식점 메인메뉴 이름</strong></div>
-						<div class="col-xs-8 col-md-4">${community.mainMenuTitle}</div>
-					</div>
-					
-					<div class="row">
-				  		<div class="col-xs-4 col-md-2"><strong>음식점 메인메뉴 가격</strong></div>
-						<div class="col-xs-8 col-md-4">${community.mainMenuPrice}</div>
-					</div><hr>
+		  				<div class="col-xs-4 col-md-2"><strong>음식점 등록일</strong></div>
+						<div class="col-xs-8 col-md-4">${restaurant.restaurantRegDate}</div>
+					</div><br><br><hr>
 					
 					<div class="text-center">
 						<button type="button" class="btn btn-warning">목록으로</button>
 					</div>
 					
-				</div>
-	
+					</div>
 				</section>
 			</div>
 		</div>

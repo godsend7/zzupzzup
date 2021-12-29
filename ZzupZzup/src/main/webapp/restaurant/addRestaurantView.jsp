@@ -93,6 +93,7 @@
 			var areaAddress = $("input[name='areaAddress']").val();
 			var restAddress = $("input[name='restAddress']").val();
 			var menuType = $("select[name='menuType']").val();
+			/* var restaurantImage = $("input[name='restaurantImage[0].restaurantImage']").val(); */
 			
 			console.log(restaurantName);
 			
@@ -335,9 +336,13 @@
 	</div> -->
 	
 	<div class="col-sm-4">음식점 사진
+		
+		<label for="restaurantImage">음식점 이미지</label>
+		<input type="file" id="resImg" name="restaurantImage" multiple="multiple">
+		
+		<!-- <input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
 		<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
-		<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
-		<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
+		<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진"> -->
 	</div><br><hr>
 	
 	<!-- <div class="form-group"> -->

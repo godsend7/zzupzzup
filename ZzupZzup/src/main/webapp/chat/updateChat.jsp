@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-채팅방 생성</title>
+<title>ZZUPZZUP-채팅방 수정</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 <link rel="stylesheet" href="/resources/css/chat.css" />
@@ -23,8 +23,8 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
 	$(function() {
-		console.log("addCahtView.jsp");
-		function fncAddChat() {
+		console.log("updateChatView.jsp");
+		function fncUpdateChat() {
 			
 			//==> 유효성 체크
 			let restaurantName = $("input[name='restaurantName']").val();
@@ -65,76 +65,72 @@
 			$("form").attr("method", "POST").attr("action", "/chat/addChat").submit();
 		}
 
-		//==> Form Submit 처리
-		$("input[value='채팅방 등록']").on("click", function() {
-			fncAddChat();
-		});
-		
-		//=========== 음식점 찾는거 rest ================//
-		
-		/* $("input[name='restauratName']").on("keypress",function() {
-			console.log("하하하");
+		$(function() {
+			//==> Form Submit 처리
+			$("input[value='채팅방 수정']").on("click", function() {
+				fncUpdateChat();
+			});
 			
-		}); */			
-		
-		/* $("#restauratName").autocomplete({
-			source: function(request, response){
-				console.log($("#restauratName").val());
-				$.ajax({
-					url: "/chat/json/listRestaurant",
-					method: "GET",
-					dataType: "json",
-					headers: {
-						"Accept": "application/json",
-						"contentType": "application/json; charset=euc-kr"
-					},
-					success: function(JSONData, status){
-						
-					},
-					error: function(e){
-						alert(e.responseText);
-					}
-				});
-			}
-		}); */
-		
-		//=========== 연령대 무관 클릭시 나머지 연령대 체크 해제 ================//
-		$("input[name='chatAge']").on("click", function(){
-			//console.log($(this).attr("id"));
-			if($(this).attr("id") == "chatAge7"){
-				$("#chatAge1").prop("checked", false);
-				$("#chatAge2").prop("checked", false);
-				$("#chatAge3").prop("checked", false);
-				$("#chatAge4").prop("checked", false);
-				$("#chatAge5").prop("checked", false);
-				$("#chatAge6").prop("checked", false);
-			}else{
-				$("#chatAge7").prop("checked", false);
-			}
+			//=========== 음식점 찾는거 rest ================//
 			
-		});
-		
-		//=========== 연령대 클릭시 나머지 연령대 다 체크하면 해당 체크 해제 연령대 무관 체크================//
-		$("input[name='chatAge']").change(function(){
-			if($("#chatAge6").is(":checked") && $("#chatAge5").is(":checked") && $("#chatAge4").is(":checked") && $("#chatAge3").is(":checked") && $("#chatAge2").is(":checked") && $("#chatAge1").is(":checked")){
-				//console.log("나이대 상관 없이 다 선택");
-				$("#chatAge1").prop("checked", false);
-				$("#chatAge2").prop("checked", false);
-				$("#chatAge3").prop("checked", false);
-				$("#chatAge4").prop("checked", false);
-				$("#chatAge5").prop("checked", false);
-				$("#chatAge6").prop("checked", false);
-				$("#chatAge7").prop("checked", true);
-			}else{
-				//console.log("나이대 하나씩 선택");
-			}
-		});
-		
-		//=========== 취소 클릭시 list로 감 ================//
-		$("input[value='취소']").on("click", function(){
-			history.back();
-		});
+			/* $("input[name='restauratName']").on("keypress",function() {
+				console.log("하하하");
+				
+			}); */			
+			
+			/* $("#restauratName").autocomplete({
+				source: function(request, response){
+					console.log($("#restauratName").val());
+					$.ajax({
+						url: "/chat/json/listRestaurant",
+						method: "GET",
+						dataType: "json",
+						headers: {
+							"Accept": "application/json",
+							"contentType": "application/json; charset=euc-kr"
+						},
+						success: function(JSONData, status){
+							
+						},
+						error: function(e){
+							alert(e.responseText);
+						}
+					});
+				}
+			}); */
+			
+			//=========== 연령대 무관 클릭시 나머지 연령대 체크 해제 ================//
+			$("input[name=chatAge]").on("click", function(){
+				//console.log($(this).attr("id"));
+				if($(this).attr("id") == "chatAge7"){
+					$("#chatAge1").prop("checked", false);
+					$("#chatAge2").prop("checked", false);
+					$("#chatAge3").prop("checked", false);
+					$("#chatAge4").prop("checked", false);
+					$("#chatAge5").prop("checked", false);
+					$("#chatAge6").prop("checked", false);
+				}else{
+					$("#chatAge7").prop("checked", false);
+				}
+			});
+			
+			//=========== 연령대 클릭시 나머지 연령대 다 체크하면 해당 체크 해제 연령대 무관 체크================//
+			$("input[name=chatAge]").change(function(){
+				if($("#chatAge6").is(":checked") && $("#chatAge5").is(":checked") && $("#chatAge4").is(":checked") && $("#chatAge3").is(":checked") && $("#chatAge2").is(":checked") && $("#chatAge1").is(":checked")){
+					//console.log("나이대 상관 없이 다 선택");
+					$("#chatAge1").prop("checked", false);
+					$("#chatAge2").prop("checked", false);
+					$("#chatAge3").prop("checked", false);
+					$("#chatAge4").prop("checked", false);
+					$("#chatAge5").prop("checked", false);
+					$("#chatAge6").prop("checked", false);
+					$("#chatAge7").prop("checked", true);
+				}else{
+					//console.log("나이대 하나씩 선택");
+				}
+			})
 
+		});
 	});
 </script>
 </head>
@@ -151,46 +147,42 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="addChatView">
+				<section id="updateChatView">
 					<div class="container">
 
 						<!-- start:Form -->
-						<h3>쩝쩝친구 생성</h3>
+						<h3>쩝쩝친구 수정</h3>
 
 						<form id="addChatView">
 							<input type="hidden" name="chatRestaurant.restaurantNo" id="restaurantNo" value="1">
 							<input type="hidden" name="chatLeaderId.memberId" id="chatLeaderId" value="hihi@a.com">
 							<div class="row gtr-uniform">
 								<div class="col-md-8">
-									<label for="restaurantName">음식점명</label> <input type="text"
-										name="restaurantName" id="restaurantName" value="거구장"
-										placeholder="" required maxlength="50"/> 
+									<label for="restaurantName">음식점명</label> 
+									<p>${chat.chatRestaurant.restaurantName }</p>
 										
 								</div> 
 							</div>
 							<div class="row gtr-uniform">
 								<div class="col-md-4">
-									<label for="restaurantTel">음식점 전화번호</label> <input type="text"
-										name="restaurantTel" id="restaurantTel" value=""
-										placeholder="" disabled="disabled"/>
+									<label for="restaurantTel">음식점 전화번호</label> 
+									<p>${chat.chatRestaurant.restaurantTel }</p>
 								</div>
 								
 								<div class="col-md-4">
-									<label for="streetAddress">음식점 도로명 주소</label> <input type="text"
-										name="streetAddress" id="streetAddress" value=""
-										placeholder="" disabled="disabled"/>
+									<label for="streetAddress">음식점 도로명 주소</label> 
+									<p>${chat.chatRestaurant.streetAddress }</p>
 								</div>
 								
 								<div class="col-md-4">
-									<label for="areaAddress">음식점 지번 주소</label> <input type="text"
-										name="areaAddress" id="areaAddress" value=""
-										placeholder="" disabled="disabled"/>
+									<label for="areaAddress">음식점 지번 주소</label> 
+									<p>${chat.chatRestaurant.areaAddress }</p>
 								</div>
 							</div>
 							<div class="row gtr-uniform">
 								<div class="col-md-8">
-									<label for="chatTitle">채팅방 제목</label> <input type="text"
-										name="chatTitle" id="chatTitle" placeholder="" required maxlength="100"/>
+									<label for="chatTitle">채팅방 제목</label> 
+									<p>${chat.chatTitle }</p>
 								</div>
 							</div>
 							<div class="row gtr-uniform">
@@ -201,14 +193,19 @@
 							</div>
 							<div class="row gtr-uniform">
 								<div class="col-md-12">
-									<input type="radio" id="male" name="chatGender" value="1"
-										checked> <label for="male">남</label>
-								
-									<input type="radio" id="female" name="chatGender" value="2">
-									<label for="female">여</label>
-								
-									<input type="radio" id="malefemale" name="chatGender" value="3">
-									<label for="malefemale">성별무관</label>
+									<c:choose>
+										<c:when test="${chat.chatGender=='1' }">
+										<p>남</p>
+										</c:when>
+										
+										<c:when test="${chat.chatGender=='2' }">
+										<p>여</p>
+										</c:when>
+										
+										<c:otherwise>
+										<p>성별무관</p>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 							<div class="row gtr-uniform">
@@ -243,22 +240,43 @@
 								<!-- Break -->
 								<div class="col-12">
 									<label for="chatText">채팅방 소개글</label>
-									<textarea name="chatText" id="chatText"	placeholder="소개글 입력" rows="6"></textarea>
+									<p>${chat.chatText }</p>
 								</div>
 							</div>
 							<div class="row gtr-uniform">
 								<!-- Break -->
 								<div class="col-12">
 									<label for="chatImage">채팅방 대표 이미지</label>
-									<input type="file" id="chatImage" name="chatImage"/>
+									<c:if test="${chat.chatImage != 'chatchat.jpg' }">
+									<p>기본 이미지 :${chat.chatImage }</p>
+									<p><img src="/resources/images/uploadImages/chat/${chat.chatImage }"/></p>
+									</c:if>
+									
+								</div>
+							</div>
+							<div class="row gtr-uniform">
+								<!-- Break -->
+								<div class="col-12">
+									<label for="chatShowStatus">채팅방 노출 여부</label>
+								</div>
+								<div class="col-md-12">
+									<c:choose>
+										<c:when test="${chat.chatShowStatus==false }">
+										채팅방 미노출
+										</c:when>
+										<c:when test="${chat.chatShowStatus==true }">
+										채팅방 노출
+										</c:when>
+									</c:choose>
+									<label for="chatShowStatus">채팅방 노출하지 않기</label>
 								</div>
 							</div>
 							<div class="row gtr-uniform">
 								<!-- Break -->
 								<div class="col-12">
 									<ul class="actions justify-content-center">
-										<li><input type="submit" value="채팅방 등록" class="primary" /></li>
-										<li><input type="reset" value="취소" class="normal" /></li>
+										<li><input type="button" value="채팅방 목록" class="primary" /></li>
+										<!-- <li><input type="reset" value="취소" class="normal" /></li> -->
 									</ul>
 								</div>
 							</div>

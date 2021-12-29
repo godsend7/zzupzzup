@@ -10,6 +10,7 @@
 <!-- Scripts -->
 <!-- defer :: HTML이 파싱 완료된 후 script 실행 -->
 <script src="/resources/js/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <script defer src="/webjars/popper.js/2.5.4/umd/popper.min.js"></script>
 <script defer src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
 <script defer src="/resources/js/browser.min.js"></script>
@@ -20,3 +21,4 @@
 <link rel="stylesheet" href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="/resources/css/main.css" />
 <link rel="stylesheet" href="/resources/css/custom.css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">

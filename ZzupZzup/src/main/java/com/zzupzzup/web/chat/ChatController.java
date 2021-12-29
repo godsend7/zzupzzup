@@ -153,9 +153,34 @@ public class ChatController {
 		
 		return "forword:/chat/getChat.jsp";
 	}
-
 	
+	@RequestMapping( value="updateChat", method=RequestMethod.GET)
+	public String updateChat( @RequestParam("chatNo") int chatNo, Model model) throws Exception {
+		System.out.println("chat/updateChat : GET");
+		
+		Restaurant restaurant = new Restaurant();
+		
+		//Business Logic
+		Chat chat = chatService.getChat(chatNo);
+		restaurant = restaurantService.getRestaurant(chat.getChatRestaurant().getRestaurantNo());
+		chat.setChatRestaurant(restaurant);
+		
+		model.addAttribute("chat", chat);
+		
+		return "forward:/chat/updateChatView.jsp";
+	}
 	
+	@RequestMapping( value="updateChat", method=RequestMethod.POST)
+	public String updateChat( @ModelAttribute("chat") Chat chat, Model model, HttpSession session, HttpServletRequest request) throws Exception {
+		
+		System.out.println("/chat/updateChat : POST");
+		System.out.println();
+		
+		//Business Logic
+		chatService.updateChat(chat);
+		
+		return "forward:/chat/updateChat.jsp";
+	}
 	
 	
 	

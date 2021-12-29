@@ -8,17 +8,9 @@ public class RestaurantTime {
 	private Restaurant restaurant;
 	private int restaurantDay;
 	private String restaurantOpen;
-	private String restaurantOpen1;
-	private String restaurantOpen2;
 	private String restaurantClose;
-	private String restaurantClose1;
-	private String restaurantClose2;
 	private String restaurantBreak;
-	private String restaurantBreak1;
-	private String restaurantBreak2;
 	private String restaurantLastOrder;
-	private String restaurantLastOrder1;
-	private String restaurantLastOrder2;
 	private boolean restaurantDayOff;
 	
 	
@@ -77,28 +69,8 @@ public class RestaurantTime {
 	public void setRestaurantOpen(String restaurantOpen) {
 		this.restaurantOpen = restaurantOpen;
 	}
-
-
-	public String getRestaurantOpen1() {
-		return restaurantOpen1;
-	}
-
-
-	public void setRestaurantOpen1(String restaurantOpen1) {
-		this.restaurantOpen1 = restaurantOpen1;
-	}
-
-
-	public String getRestaurantOpen2() {
-		return restaurantOpen2;
-	}
-
-
-	public void setRestaurantOpen2(String restaurantOpen2) {
-		this.restaurantOpen2 = restaurantOpen2;
-	}
-
-
+	
+	
 	public String getRestaurantClose() {
 		return restaurantClose;
 	}
@@ -106,26 +78,6 @@ public class RestaurantTime {
 
 	public void setRestaurantClose(String restaurantClose) {
 		this.restaurantClose = restaurantClose;
-	}
-
-
-	public String getRestaurantClose1() {
-		return restaurantClose1;
-	}
-
-
-	public void setRestaurantClose1(String restaurantClose1) {
-		this.restaurantClose1 = restaurantClose1;
-	}
-
-
-	public String getRestaurantClose2() {
-		return restaurantClose2;
-	}
-
-
-	public void setRestaurantClose2(String restaurantClose2) {
-		this.restaurantClose2 = restaurantClose2;
 	}
 
 
@@ -139,26 +91,6 @@ public class RestaurantTime {
 	}
 
 
-	public String getRestaurantBreak1() {
-		return restaurantBreak1;
-	}
-
-
-	public void setRestaurantBreak1(String restaurantBreak1) {
-		this.restaurantBreak1 = restaurantBreak1;
-	}
-
-
-	public String getRestaurantBreak2() {
-		return restaurantBreak2;
-	}
-
-
-	public void setRestaurantBreak2(String restaurantBreak2) {
-		this.restaurantBreak2 = restaurantBreak2;
-	}
-
-
 	public String getRestaurantLastOrder() {
 		return restaurantLastOrder;
 	}
@@ -166,26 +98,6 @@ public class RestaurantTime {
 
 	public void setRestaurantLastOrder(String restaurantLastOrder) {
 		this.restaurantLastOrder = restaurantLastOrder;
-	}
-
-
-	public String getRestaurantLastOrder1() {
-		return restaurantLastOrder1;
-	}
-
-
-	public void setRestaurantLastOrder1(String restaurantLastOrder1) {
-		this.restaurantLastOrder1 = restaurantLastOrder1;
-	}
-
-
-	public String getRestaurantLastOrder2() {
-		return restaurantLastOrder2;
-	}
-
-
-	public void setRestaurantLastOrder2(String restaurantLastOrder2) {
-		this.restaurantLastOrder2 = restaurantLastOrder2;
 	}
 
 
@@ -197,21 +109,15 @@ public class RestaurantTime {
 	public void setRestaurantDayOff(boolean restaurantDayOff) {
 		this.restaurantDayOff = restaurantDayOff;
 	}
-
-
+	
+	
 	@Override
 	public String toString() {
 		return "RestaurantTime [restaurantTimeNo=" + restaurantTimeNo + ", community=" + community + ", restaurant="
 				+ restaurant + ", restaurantDay=" + restaurantDay + ", restaurantOpen=" + restaurantOpen
-				+ ", restaurantOpen1=" + restaurantOpen1 + ", restaurantOpen2=" + restaurantOpen2 + ", restaurantClose="
-				+ restaurantClose + ", restaurantClose1=" + restaurantClose1 + ", restaurantClose2=" + restaurantClose2
-				+ ", restaurantBreak=" + restaurantBreak + ", restaurantBreak1=" + restaurantBreak1
-				+ ", restaurantBreak2=" + restaurantBreak2 + ", restaurantLastOrder=" + restaurantLastOrder
-				+ ", restaurantLastOrder1=" + restaurantLastOrder1 + ", restaurantLastOrder2=" + restaurantLastOrder2
-				+ ", restaurantDayOff=" + restaurantDayOff + "]";
+				+ ", restaurantClose=" + restaurantClose + ", restaurantBreak=" + restaurantBreak
+				+ ", restaurantLastOrder=" + restaurantLastOrder + ", restaurantDayOff=" + restaurantDayOff + "]";
 	}
-	
-	
 	
 	
 }

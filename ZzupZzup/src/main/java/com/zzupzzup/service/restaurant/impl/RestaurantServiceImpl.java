@@ -48,8 +48,14 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 	@Override
 	public Map<String, Object> listRestaurant(Search search) throws Exception {
+		
+		System.out.println("ddddd");
+		System.out.println("search : " + search);
+		
 		List<Restaurant> list = restaurantDAO.listRestaurant(search);
 		int totalCount = restaurantDAO.getTotalCount(search);
+		
+		System.out.println("ddddd8888");
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);

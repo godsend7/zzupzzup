@@ -1,5 +1,6 @@
 package com.zzupzzup.web.review;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
+import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.member.MemberService;
@@ -82,23 +84,13 @@ public class ReviewController {
 	}
 	
 	@RequestMapping(value="addReview", method=RequestMethod.POST)
-	public String addReview(@ModelAttribute("review") Review review, MultipartHttpServletRequest uploadFile, Model model) throws Exception {
-		
+	public String addReview(@ModelAttribute("review") Review review, MultipartHttpServletRequest uploadfile, Model model, HttpServletRequest request) throws Exception {
+				
 		System.out.println("review/addReview : POST");
 		
-		//file의 name을 가지고 있는 input tag 가져오
-		List<MultipartFile> fileList = uploadFile.getFiles("file");
+		String temDir = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		
-		List<String> reviewImage = new ArrayList<String>();
-		
-		for (MultipartFile mf : fileList) {
-			//image가 존재한다면(image의 name이 공백이 아닐경우)
-			if (!mf.getOriginalFilename().equals("")) {
-				reviewImage.add(mf.getOriginalFilename());
-				review.setReviewImage(reviewImage);
-			}
-		}
-		
+		uploadFilePath(uploadfile, temDir, review);
 		
 		System.out.println(review);
 		
@@ -133,7 +125,7 @@ public class ReviewController {
 		
 		String memberId = null;
 		
-		if (member != null) {
+		if (member != null && member.getMemberRole().equals("user")) {
 			memberId = member.getMemberId();
 		}
 		
@@ -164,5 +156,38 @@ public class ReviewController {
 		return "forward:/review/listReview.jsp";
 	}
 	
+	private void uploadFilePath(MultipartHttpServletRequest uploadfile, String temDir, Review review) {
+		
+		//file의 name을 가지고 있는 input tag 가져오기
+		List<MultipartFile> fileList = uploadfile.getFiles("file");
+		
+		List<String> reviewImage = new ArrayList<String>();
+		
+		for (MultipartFile mf : fileList) {
+			//image가 존재한다면(image의 name이 공백이 아닐경우)
+			if (!mf.getOriginalFilename().equals("")) {
+//				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
+//				System.out.println(":: 파일 사이즈 => " + mf.getSize());
 	
+				try {
+					String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
+					
+					File file = new File(temDir + "/" + saveName);
+					mf.transferTo(file);
+									
+					//System.out.println(":: 저장할 이름 => " + saveName);
+					 
+					reviewImage.add(saveName);
+					review.setReviewImage(reviewImage);
+				
+					System.out.println("업로드 성공");
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println("업로드 없음");
+					e.printStackTrace();
+					//saveName = "notFile.png";
+				}
+			}
+		}
+	}
 }
