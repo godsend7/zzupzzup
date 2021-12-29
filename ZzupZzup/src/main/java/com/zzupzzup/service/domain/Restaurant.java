@@ -28,6 +28,8 @@ public class Restaurant {
 	private String streetAddress;
 	private String areaAddress;
 	private String restAddress;
+	private String latitude; // 위도
+	private String longitude; // 경도
 	private Date restaurantRegDate; 
 	private List<RestaurantMenu> restaurantMenus;
 	private List<RestaurantTime> restaurantTimes;
@@ -222,21 +224,34 @@ public class Restaurant {
 		return areaAddress;
 	}
 
-
 	public void setAreaAddress(String areaAddress) {
 		this.areaAddress = areaAddress;
 	}
-
 
 	public String getRestAddress() {
 		return restAddress;
 	}
 
-
 	public void setRestAddress(String restAddress) {
 		this.restAddress = restAddress;
 	}
 	
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
 	public Date getRestaurantRegDate() {
 		return restaurantRegDate;
 	}
@@ -245,6 +260,7 @@ public class Restaurant {
 		this.restaurantRegDate = restaurantRegDate;
 	}
 
+	
 	public List<RestaurantMenu> getRestaurantMenus() {
 		return restaurantMenus;
 	}

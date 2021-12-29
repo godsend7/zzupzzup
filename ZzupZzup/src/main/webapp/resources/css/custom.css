@@ -259,6 +259,8 @@ button,
     pointer-events: none;
     opacity: 0.25; }
     
+
+    
 /* input */
 input:disabled { background-color: rgba(0,0,0,0.1); }
     

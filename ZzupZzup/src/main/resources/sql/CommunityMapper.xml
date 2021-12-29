@@ -89,9 +89,9 @@
 	<select 	id="getCommunity"	parameterType="int" resultMap="communitySelectMap">
 		SELECT *
 		FROM COMMUNITY AS cn
-		RIGHT OUTER JOIN (SELECT * FROM RESTAURANT_TIME) AS rt
+		LEFT OUTER JOIN (SELECT * FROM RESTAURANT_TIME) AS rt
 		ON (cn.POST_NO = rt.POST_NO)
-		RIGHT OUTER JOIN (SELECT * FROM IMAGE) AS img
+		LEFT OUTER JOIN (SELECT * FROM IMAGE) AS img
 		ON (cn.POST_NO = img.POST_NO)
 		WHERE cn.POST_NO = #{value};
 	</select>
