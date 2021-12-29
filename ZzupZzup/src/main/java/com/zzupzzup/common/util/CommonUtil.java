@@ -180,13 +180,23 @@ public class CommonUtil {
         // Timestamp ts = new Timestamp(System.currentTimeMillis());
         // String rtnStr = sdfCurrent.format(ts.getTime());
         
-        String newFileName = new SimpleDateFormat("yyyyMMddHmsS").format(new Date());  //현재시간
-        System.out.println("변형된 파일 이름 출력 => " + newFileName);
+        String newFileName = new SimpleDateFormat(pattern).format(new Date());  //현재시간
+        //System.out.println("변형된 파일 이름 출력 => " + newFileName);
         
+        //확장자 제외한 이름 출력
+        String originName = FilenameUtils.getBaseName(fileName);
+        //변경한 파일명_원본 파일명  
+        newFileName = newFileName + "_" + originName;
+        
+        if (newFileName.length() > 50) {
+			newFileName = null2str(newFileName.substring(0,46));
+		}
        
         //newFileName + 확장자 출력
         newFileName = newFileName(FilenameUtils.getExtension(fileName), newFileName);
-        System.out.println("newFileName.확장자 출력 => " + newFileName);
+        //System.out.println("newFileName.확장자 출력 => " + newFileName);
+        
+        System.out.println("최종 :: " + newFileName);
         
         return newFileName;
     }

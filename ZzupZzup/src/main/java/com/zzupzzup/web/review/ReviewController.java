@@ -99,11 +99,11 @@ public class ReviewController {
 		
 		System.out.println(review);
 		
-//		if(reviewService.addReview(review) == 1) {
-//			System.out.println("review insert success");
-//			//리뷰 작성 성공 시 활동점수 추가 
-//			memberService.addActivityScore(review.getMember().getMemberId(), 2, 5); //리뷰 작성 시 5
-//		}
+		if(reviewService.addReview(review) == 1) {
+			System.out.println("review insert success");
+			//리뷰 작성 성공 시 활동점수 추가 
+			memberService.addActivityScore(review.getMember().getMemberId(), 2, 5); //리뷰 작성 시 5
+		}
 		
 		return "redirect:/review/listReview";
 	}
@@ -173,24 +173,18 @@ public class ReviewController {
 			if (!mf.getOriginalFilename().equals("")) {
 //				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
 //				System.out.println(":: 파일 사이즈 => " + mf.getSize());
-				
-				String saveName = CommonUtil.getTimeStamp("yyyyMMddHmsS", mf.getOriginalFilename());
-				System.out.println(":: 저장할 이름 => " + saveName);
-				
-				File oldFile = new File(temDir + mf.getOriginalFilename());
-	            File newFile = new File(temDir + saveName);
-	           
-	            oldFile.renameTo(newFile); // 파일명 변경
-				
-				
-				Path copy = Paths.get(temDir, File.separator + StringUtils.cleanPath(saveName));
-				
+	
 				try {
-					Files.copy(uploadfile.getInputStream(), copy, StandardCopyOption.REPLACE_EXISTING);
+					String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
 					
+					File file = new File(temDir + "/" + saveName);
+					mf.transferTo(file);
+									
+					//System.out.println(":: 저장할 이름 => " + saveName);
+					 
 					reviewImage.add(saveName);
 					review.setReviewImage(reviewImage);
-					
+				
 					System.out.println("업로드 성공");
 				} catch (Exception e) {
 					// TODO: handle exception
