@@ -2,8 +2,12 @@ package com.zzupzzup.web.restaurant;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +24,12 @@ import com.zzupzzup.service.restaurant.RestaurantService;
 @Controller
 @RequestMapping("/restaurant/*")
 public class RestaurantController {
+	
+	@Value("#{commonProperties['pageUnit']}")
+	int pageUnit;
+	
+	@Value("#{commonProperties['pageSize']}")
+	int pageSize;
 	
 	///Field
 	@Autowired
@@ -81,10 +91,39 @@ public class RestaurantController {
 		return "forward:/restaurant/getRestaurant.jsp";
 	}
 	
-	@RequestMapping(value="listRestaurant")
-	public String listRestaurant(@ModelAttribute("search") Search search, Model model) throws Exception {
+	@RequestMapping(value="updateRestaurant", method=RequestMethod.POST)
+	public String updateRestaurant(@ModelAttribute("restaurant") Restaurant restaurant, HttpSession session) throws Exception {
 		
-		System.out.println("/restaurant/listRestaurant : GET / POST");
+		System.out.println("/restaurant/updateRestaurant : POST");
+		
+		restaurantService.updateRestaurant(restaurant);
+		
+		int sessionNo = restaurant.getRestaurantNo();
+		String sessionNum = Integer.toString(sessionNo);
+		
+		if(sessionNum.equals(restaurant.getRestaurantNo())) {
+			session.setAttribute("restaurant", restaurant);
+		}
+		
+		return "redirect:/restaurant/getRestaurant?restaurantNo=" + restaurant.getRestaurantNo();
+	}
+	
+	
+	
+	@RequestMapping(value="listRestaurant")
+	public String listRestaurant(@ModelAttribute("search") Search search, Model model, HttpServletRequest request) throws Exception {
+		
+		System.out.println("/restaurant/listRestaurant : SERVICE");
+		
+		if(search.getCurrentPage() == 0){
+			search.setCurrentPage(1);
+		}
+		
+		if(request.getParameter("page") != null) {
+			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+		}
+		
+		search.setPageSize(pageSize);
 		
 		Map<String, Object> map = restaurantService.listRestaurant(search);
 		

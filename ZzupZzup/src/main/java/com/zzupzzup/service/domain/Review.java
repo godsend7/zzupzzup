@@ -1,7 +1,10 @@
 package com.zzupzzup.service.domain;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+
+import com.zzupzzup.common.util.CommonUtil;
 
 public class Review {
 	
@@ -17,7 +20,7 @@ public class Review {
 	//private List<Integer> hashTagNo;
 	//private List<String> hashTag;
 	private List<HashTag> hashTag;
-	private Date reviewRegDate;
+	private Timestamp reviewRegDate;
 	private int likeCount;
 	private int reportCount;
 	private double avgScope;
@@ -118,8 +121,8 @@ public class Review {
 //		this.hashTagNo = hashTagNo;
 //	}
 	
-	public Date getReviewRegDate() {
-		return reviewRegDate;
+	public String getReviewRegDate() {
+		return CommonUtil.getDate(reviewRegDate);
 	}
 
 	public List<HashTag> getHashTag() {
@@ -130,7 +133,7 @@ public class Review {
 		this.hashTag = hashTag;
 	}
 
-	public void setReviewRegDate(Date reviewRegDate) {
+	public void setReviewRegDate(Timestamp reviewRegDate) {
 		this.reviewRegDate = reviewRegDate;
 	}
 

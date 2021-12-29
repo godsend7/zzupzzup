@@ -4,6 +4,9 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Locale;
+
+import org.apache.commons.io.FilenameUtils;
 
 
 public class CommonUtil {
@@ -170,9 +173,47 @@ public class CommonUtil {
 		return data;
 	}
 	
+	public static String getTimeStamp(String pattern, String fileName) {
+
+        String newFileName = new SimpleDateFormat(pattern).format(new Date());  //현재시간
+        //System.out.println("변형된 파일 이름 출력 => " + newFileName);
+        
+        //확장자 제외한 이름 출력
+        String originName = FilenameUtils.getBaseName(fileName);
+        //변경한 파일명_원본 파일명  
+        newFileName = newFileName + "_" + originName;
+        
+        if (newFileName.length() > 50) {
+			newFileName = null2str(newFileName.substring(0,46));
+		}
+       
+        //newFileName + 확장자 출력
+        newFileName = newFileName(FilenameUtils.getExtension(fileName), newFileName);
+        //System.out.println("newFileName.확장자 출력 => " + newFileName);
+        
+        //System.out.println("최종 :: " + newFileName);
+        
+        return newFileName;
+    }
+	
 	//======================================================================================================================
 	
 	///Method
+	public static String newFileName(String ext, String fileName) {
+		if (ext == null || ext.trim().length() == 0) 
+			return fileName;
+		else 
+			return fileName+"."+ext;
+	}
+	
+	public static String getDate(Timestamp regDate) {
+		if (regDate == null || regDate.toString().trim().length() == 0) {
+			return "";
+		} else {
+			return regDate.toString().split(" ")[0];
+		}
+	}
+	
 	public static String null2str(String org, String converted) {
 		if (org == null || org.trim().length() == 0)
 			return converted;

@@ -13,11 +13,15 @@ public class Community {
 	private String streetAddress;
 	private String areaAddress;
 	private String restAddress;
+	private String latitude;
+	private String longitude;
 	private String restaurantName;
 	private String restaurantTel;
+	////////////EL 적용 ////////////
 	private String restaurantTel1;
 	private String restaurantTel2;
 	private String restaurantTel3;
+	///////////////////////////////
 	private String receiptImage;
 	private Date postRegDate;
 	private int likeCount; // Column 없음
@@ -90,6 +94,26 @@ public class Community {
 		this.restAddress = restAddress;
 	}
 	
+	public String getLatitude() {
+		return latitude;
+	}
+
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+
 	public String getRestaurantName() {
 		return restaurantName;
 	}
