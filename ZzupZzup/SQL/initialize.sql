@@ -75,6 +75,8 @@ CREATE TABLE `restaurant` (
     `rest_address` VARCHAR(20),
     `menu_type` INT NOT NULL,
     `restaurant_reg_date` DATE,
+    `latitude` VARCHAR(50),
+    `longitude` VARCHAR(50),
     PRIMARY KEY (`restaurant_no`),
     FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
 );
@@ -106,6 +108,8 @@ CREATE TABLE `community` (
     `main_menu_title` VARCHAR(20) NOT NULL,
     `main_menu_price` INT NOT NULL,
     `official_date` DATETIME,
+    `latitude` VARCHAR(50),
+    `longitude` VARCHAR(50),
     PRIMARY KEY (`post_no`),
     FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
 );

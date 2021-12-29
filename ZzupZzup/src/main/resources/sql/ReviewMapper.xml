@@ -8,6 +8,8 @@
 
 	<resultMap id="reviewSelectMap" type="review">
 		<result property="member.memberId"   				column="member_id" 				jdbcType="VARCHAR"/>
+		<result property="member.nickname"   				column="nickname" 				jdbcType="VARCHAR"/>
+		<result property="member.profileImage" 				column="profile_image" 			jdbcType="VARCHAR"/>
 		<result property="reservation.reservationNo"		column="reservation_no" 		jdbcType="INTEGER" />
 		<result property="restaurant.restaurantNo"			column="restaurant_no" 			jdbcType="INTEGER" />
 		<result property="reviewNo" 						column="review_no" 				jdbcType="INTEGER" />
@@ -104,6 +106,8 @@
 		LEFT OUTER JOIN (SELECT review_no, hl.hashtag_no, h.hashtag
 					FROM HASHTAG_LOG AS hl, HASHTAG AS h
                     WHERE hl.hashtag_no = h.hashtag_no) AS h ON (r.review_no = h.review_no)
+        INNER JOIN (SELECT member_id, nickname, profile_image
+        			FROM Member) AS m ON (r.member_id = m.member_id)
 		WHERE r.review_no = #{reviewNo}
 	</select>
 	
@@ -130,10 +134,12 @@
 		  	  </choose>   
 			  ORDER BY r.review_no limit #{search.startRowNum}, #{search.pageSize}) AS r
 		LEFT OUTER JOIN (SELECT image, review_no
-					FROM image) AS i ON (r.review_no = i.review_no)
+						 FROM image) AS i ON (r.review_no = i.review_no)
 		LEFT OUTER JOIN (SELECT hl.HASHTAG_no, h.hashtag, review_no 
-			FROM HASHTAG_LOG as hl, HASHTAG as h
-            WHERE hl.hashtag_no = h.hashtag_no) as hh on(r.review_no = hh.review_no);
+						 FROM HASHTAG_LOG as hl, HASHTAG as h
+           				 WHERE hl.hashtag_no = h.hashtag_no) AS hh ON(r.review_no = hh.review_no)
+        INNER JOIN (SELECT member_id, nickname, profile_image
+        			FROM Member) AS m ON (r.member_id = m.member_id);
 	</select>
 	
 	<select id="listMyLikeReview" parameterType="map" resultMap="reviewSelectMap">
