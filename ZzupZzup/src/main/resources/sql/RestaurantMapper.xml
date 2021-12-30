@@ -234,10 +234,14 @@
 	</select>
 	
 	
-	<!-- SQL : INSERT -->
-	<!-- <insert id="addRestaurant" parameterType="restaurant">
-		
-	</insert>
-	 -->
+	<!-- SQL : SELECT LIST -->
+	<select id="listRestaurantName" parameterType="search" resultMap="restaurantSelectMap">
+		SELECT *
+		FROM RESTAURANT AS rt
+		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
+		FROM IMAGE) AS img
+		ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
+		WHERE RESTAURANT_NAME LIKE CONCAT('%',#{search.searchKeyword},'%')
+	</select>
 	
 </mapper>

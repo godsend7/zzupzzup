@@ -28,8 +28,8 @@ public class Restaurant {
 	private String streetAddress;
 	private String areaAddress;
 	private String restAddress;
-	private String latitude;
-	private String longitude;
+	private String latitude; // 위도
+	private String longitude; // 경도
 	private Date restaurantRegDate; 
 	private List<RestaurantMenu> restaurantMenus;
 	private List<RestaurantTime> restaurantTimes;

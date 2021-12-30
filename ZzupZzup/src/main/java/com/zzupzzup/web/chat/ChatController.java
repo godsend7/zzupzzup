@@ -73,6 +73,11 @@ public class ChatController {
 		
 		System.out.println("chat : " + chat);
 		
+		//이미지 값이 없으면 null로 들어가서 default 이미지 들어가게 함
+		if(chat.getChatImage().equals("") || chat.getChatImage() == "") {
+			chat.setChatImage(null);
+		}
+		
 		//Business Logic
 		chatService.addChat(chat);
 		
@@ -84,7 +89,7 @@ public class ChatController {
 		
 		chatService.addChatMember(chatMember);
 		
-		return "forward:/chat/addChat.jsp";
+		return "redirect:/chat/listChat";
 		
 	}
 	
@@ -106,12 +111,12 @@ public class ChatController {
 		
 		// Business logic
 		Map<String, Object> map = chatService.listChat(search);
-		System.out.println("===================================");
-		System.out.println("listChat map : " + map);
-		System.out.println("===================================");
+		//System.out.println("===================================");
+		//System.out.println("listChat map : " + map);
+		//System.out.println("===================================");
 		
 		List<Chat> list = (List<Chat>)map.get("list");
-		System.out.println("list : " + list);
+		//System.out.println("list : " + list);
 		
 		Restaurant restaurant = new Restaurant();
 		
@@ -153,9 +158,45 @@ public class ChatController {
 		
 		return "forword:/chat/getChat.jsp";
 	}
-
 	
+	@RequestMapping( value="updateChat", method=RequestMethod.GET)
+	public String updateChat( @RequestParam("chatNo") int chatNo, Model model) throws Exception {
+		System.out.println("chat/updateChat : GET");
+		
+		Restaurant restaurant = new Restaurant();
+		
+		//Business Logic
+		Chat chat = chatService.getChat(chatNo);
+		restaurant = restaurantService.getRestaurant(chat.getChatRestaurant().getRestaurantNo());
+		chat.setChatRestaurant(restaurant);
+		
+		model.addAttribute("chat", chat);
+		
+		return "forward:/chat/updateChatView.jsp";
+	}
 	
+	@RequestMapping( value="updateChat", method=RequestMethod.POST)
+	public String updateChat( @ModelAttribute("chat") Chat chat, Model model, HttpSession session, HttpServletRequest request) throws Exception {
+		
+		System.out.println("/chat/updateChat : POST");
+		System.out.println("chat : " + chat);
+		
+		//이미지 값이 없으면 null로 들어가서 default 이미지 들어가게 함
+		if(chat.getChatImage().equals("") || chat.getChatImage() == "") {
+			chat.setChatImage(null);
+		}
+		Restaurant restaurant = new Restaurant();
+		
+		//Business Logic
+		chatService.updateChat(chat);
+		
+		chat = chatService.getChat(chat.getChatNo());
+		restaurant = restaurantService.getRestaurant(chat.getChatRestaurant().getRestaurantNo());
+		chat.setChatRestaurant(restaurant);
+		model.addAttribute("chat", chat);
+		
+		return "forward:/chat/updateChat.jsp";
+	}
 	
 	
 	

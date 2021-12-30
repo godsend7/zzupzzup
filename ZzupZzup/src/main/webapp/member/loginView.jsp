@@ -86,10 +86,8 @@
 						class="btn btn-lg btn-primary btn-block" id="naverLogin"
 						type="button" value="네이버 로그인 (구현 예정)" /><br/><br/>
 						회원이 아니신가요? > 
-						<a href="/member/addMember/user">
-						<input type="hidden" value="user"/>유저</a>&nbsp;/
-						<a href="/member/addMember/owner">
-						<input type="hidden" value="owner"/>업주</a>
+						<a href="/member/addMember/user">유저</a>&nbsp;/
+						<a href="/member/addMember/owner">업주</a>
 					<p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
 				</form>
 			</div>

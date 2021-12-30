@@ -75,6 +75,8 @@ CREATE TABLE `restaurant` (
     `rest_address` VARCHAR(20),
     `menu_type` INT NOT NULL,
     `restaurant_reg_date` DATE,
+    `latitude` VARCHAR(50),
+    `longitude` VARCHAR(50),
     PRIMARY KEY (`restaurant_no`),
     FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
 );
@@ -106,6 +108,8 @@ CREATE TABLE `community` (
     `main_menu_title` VARCHAR(20) NOT NULL,
     `main_menu_price` INT NOT NULL,
     `official_date` DATETIME,
+    `latitude` VARCHAR(50),
+    `longitude` VARCHAR(50),
     PRIMARY KEY (`post_no`),
     FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
 );
@@ -337,6 +341,11 @@ owner_image, restaurant_text, parkable, restaurant_name,
 restaurant_tel, street_address, area_address, menu_type)
 VALUES('hihi@a.com', '홍진호', 'zzazang.jpg', '짜파게티보다 맛있는집', '0', '거구장',
 '010-1234-5678', '서울시 종로구 인사동3길 29', '서울시 종로구 인사동 215-1', '1');
+INSERT INTO restaurant(member_id, owner_name,
+owner_image, restaurant_text, parkable, restaurant_name, 
+restaurant_tel, street_address, area_address, menu_type)
+VALUES('hihi@a.com', '가가가', 'zzazang.jpg', '짜파게티보다 맛있는집', '0', '거구류',
+'010-1234-9876', '서울시 용산구 인사동3길 29', '서울시 용산구 인사동 215-1', '1');
 INSERT INTO restaurant(member_id, owner_name,
 owner_image, restaurant_text, restaurant_name, 
 restaurant_tel, street_address, area_address, menu_type)

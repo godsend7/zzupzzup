@@ -52,12 +52,7 @@
 	</insert>
 	
 	<!-- SQL : SELECT ONE -->
-	<select id="getChat" parameterType="int" resultMap="chatSelectMap">
-		<!-- SELECT
-		chat_no, chat_leader_id, restaurant_no, chat_title, chat_image, chat_text, chat_reg_date, chat_gender, chat_member_count, chat_state, chat_show_status, age_type
-		FROM chat
-		WHERE chat_no = #{chatNo} -->
-		
+	<select id="getChat" parameterType="int" resultMap="chatSelectMap">		
 		SELECT c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(rp.chat_no) report_count, count(*) chat_member_count
 		FROM chat c
 		LEFT OUTER JOIN report rp ON ( c.chat_no = rp.chat_no)

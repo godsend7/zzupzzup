@@ -1,5 +1,8 @@
 package com.zzupzzup.web.restaurant;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +17,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
+import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.RestaurantMenu;
 import com.zzupzzup.service.domain.RestaurantTime;
+import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.restaurant.RestaurantService;
 
 @Controller
@@ -35,6 +43,10 @@ public class RestaurantController {
 	@Autowired
 	@Qualifier("restaurantServiceImpl")
 	private RestaurantService restaurantService;
+	
+	@Autowired
+	@Qualifier("memberServiceImpl")
+	private MemberService memberService;
 	
 	
 	///Constructor
@@ -56,11 +68,22 @@ public class RestaurantController {
 	public String addRestaurant(@ModelAttribute("restaurant") Restaurant restaurant, 
 			@ModelAttribute("restaurantMenus") Restaurant restaurantMenus,
 			@ModelAttribute("restaurantTimes") Restaurant restaurantTimes,
-			@ModelAttribute("restaurantImage") Restaurant restaurantImage) throws Exception {
-		
+			/*@ModelAttribute("restaurantImage") Restaurant restaurantImage*/
+			MultipartHttpServletRequest uploadFile,
+			HttpServletRequest request) throws Exception {
+			
 		System.out.println("/restaurant/addRestaurant : POST");
 		
-		restaurantService.addRestaurant(restaurant);
+		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
+		
+		uploadFilePath(uploadFile, empty, restaurant);
+		
+		if(restaurantService.addRestaurant(restaurant) == 1) {
+			System.out.println("INSERT RESTAURANT SUCCESS");
+			
+			System.out.println("888888"+restaurant.getMember());
+			memberService.addActivityScore(restaurant.getMember().getMemberId(), 3, 10);
+		}
 		
 		for(RestaurantMenu rm : restaurantMenus.getRestaurantMenus()) {
 			System.out.println(rm);
@@ -70,9 +93,10 @@ public class RestaurantController {
 			System.out.println(rt);
 		}
 		
-		for(String ri : restaurantImage.getRestaurantImage()) {
-			System.out.println(ri);
-		}
+		/*
+		 * for(String ri : restaurantImage.getRestaurantImage()) {
+		 * System.out.println(ri); }
+		 */
 		
 		//System.out.println("Restaurant Menu : " + restaurant.getRestaurantMenus());
 		
@@ -80,7 +104,7 @@ public class RestaurantController {
 	}
 	
 	@RequestMapping(value="getRestaurant", method=RequestMethod.GET)
-	public String getRestaurant(@RequestParam() int restaurantNo, Model model) throws Exception {
+	public String getRestaurant(@RequestParam("restaurantNo") int restaurantNo, Model model) throws Exception {
 		
 		System.out.println("/restaurant/getRestaurant : GET");
 		
@@ -127,10 +151,46 @@ public class RestaurantController {
 		
 		Map<String, Object> map = restaurantService.listRestaurant(search);
 		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("search", search);
+		model.addAttribute("totalCount", map.get("totalCount"));
+		model.addAttribute("resultPage", resultPage);
 		
 		return "forward:/restaurant/listRestaurant.jsp";
+		
+	}
+	
+	
+	private void uploadFilePath(MultipartHttpServletRequest uploadFile, String empty, Restaurant restaurant) {
+		
+		List<MultipartFile> fileList = uploadFile.getFiles("file");
+		
+		List<String> resImg = new ArrayList<String>();
+		
+		for(MultipartFile mpf : fileList) {
+			if(!mpf.getOriginalFilename().equals("")) {
+				
+				try {
+					String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mpf.getOriginalFilename());
+					
+					File file = new File(empty + "/" + fileName);
+					
+					mpf.transferTo(file);
+					
+					resImg.add(fileName);
+					restaurant.setRestaurantImage(resImg);
+					
+					System.out.println("IMAGES UPLOAD SUCCESS");
+					
+				} catch (Exception e) {
+					System.out.println("YOU CAN NOT UPLOAD IMAGES");
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		
 	}
 	

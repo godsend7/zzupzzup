@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.chat.ChatService;
+import com.zzupzzup.service.domain.Chat;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.domain.Review;
+import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.reservation.ReservationService;
 import com.zzupzzup.service.restaurant.RestaurantService;
 
@@ -43,6 +46,10 @@ public class ReservationController {
 	@Qualifier("restaurantServiceImpl")
 	private RestaurantService restaurantService;
 	
+	@Autowired
+	@Qualifier("memberServiceImpl")
+	private MemberService memberService;
+	
 	public ReservationController() {
 		System.out.println(this.getClass());
 	}
@@ -59,8 +66,17 @@ public class ReservationController {
 		System.out.println("/reservation/addReservation : GET");
 		
 		Reservation reservation = new Reservation();
+		Member member = new Member();
+	
 		reservation.setChat(chatService.getChat(chatNo));
 		reservation.setRestaurant(restaurantService.getRestaurant(reservation.getChat().getChatRestaurant().getRestaurantNo()));
+		System.out.println("dfsfsdffsd"+reservation.getChat().getChatLeaderId());
+		
+		
+		member = memberService.getMember(reservation.getChat().getChatLeaderId());
+		reservation.setMember(member);
+		
+		System.out.println(member+"member~~~~~~~");
 		
 		System.out.println(reservation);
 		model.addAttribute("reservation", reservation);
