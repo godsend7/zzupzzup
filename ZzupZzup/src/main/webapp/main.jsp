@@ -21,13 +21,50 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">	
+	var arrayLayout = new Array();
+	
+	var nowLatitude = "";
+	var newLongitude = "";
+	//현재위치로 이동
+	//naver.maps.Event.once(map, '')
+	
+	
+
 	window.onload = function() {
-		var arrayLayout = new Array();
+		var options = {
+			enableHighAccuracy: true,
+			timeout: 5000,
+			maximumAge: 0
+		};
+		
+		function success(pos) {
+			var crd = pos.coords;
 			
+			nowLatitude = crd.latitude;
+			newLongitude = crd.longitude;
+		}
+		
+		function error(err) {
+			console.warn("error :: " + err);
+		}
+		
+		// geolocation 을 지원한다면 위치를 요청 
+		if(navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(success, error, options);
+		} else {
+			alert("위치 정보 사용이 불가능한 웹입니다.");
+		}
+		
+		/* navigator.geolocation.getCurrentPosition(function(pos) {
+			nowLatitude = pos.coords.latitude;
+			newLongitude = pos.coords.longitude;
+	   	 	//alert("현재 위치는 : " + nowLatitude + ", "+ newLongitude);
+		}); */
+		
 		$(function() {
 			$.ajax(
 				{
-					url : "https://openapi.gg.go.kr/PlaceThatDoATasteyFoodSt?KEY=0584ed7e427d4676a15a4bf7f91b1597&Type=json&pIndex=1&pSize=10",
+					url : "https://openapi.gg.go.kr/PlaceThatDoATasteyFoodSt?KEY=0584ed7e427d4676a15a4bf7f91b1597&Type=json&pIndex=1&pSize=100",
     				type : "GET",
     				dataType : "json",
     				success : function(data, status) {
@@ -37,7 +74,7 @@
 						//alert("data : \n"+data);
 						
     					//var obj = JSON.parse(data);
-    					console.log(data.PlaceThatDoATasteyFoodSt[1].row);
+    					//console.log(data.PlaceThatDoATasteyFoodSt[1].row);
     					
     					$.each(data.PlaceThatDoATasteyFoodSt[1].row, function(index, item){ 
     						//console.log(item.SIGUN_NM);
@@ -73,9 +110,11 @@
 			let markers = new Array();
 			let infowindows = new Array();
 			
+			
+			
 			var map = new naver.maps.Map('content', {
-		        center: new naver.maps.LatLng(37.5666805, 126.9784147), //지도 시작 좌표, 현재위치로 변경
-		        zoom: 15
+		        center: new naver.maps.LatLng(nowLatitude, newLongitude),  //지도 시작 좌표, 현재위치로 변경
+		        zoom: 10
 		    });
 			
 			for (var i=0; i<arrayLayout.length; i++) {

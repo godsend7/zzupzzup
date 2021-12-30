@@ -30,21 +30,51 @@
 	    document.detailForm.submit(); */
 	    console.log(currentPage);
 	    $("#currentPage").val(currentPage);
-	    $("#review").attr("action","/review/listReview").attr("method", "POST").submit();
-	 }
-	
-	function fncGetReview(reviewNo) {
-		//console.log(reviewNo);
-		
-		$.ajax({
-			url : "/review/json/getReview/"+reviewNo,
-			method : "GET",
-			dataType : "json",
-			success : function(data, status) {
-				console.log(data);
-			}
-		}); 
+	    
+	    if (${param.restaurantNo == null}) {
+	    	$("#review").attr("action","/review/listReview").attr("method", "POST").submit();
+		} else {
+			$("#review").attr("action","/review/listReview?restaurantNo=${param.restaurantNo}").attr("method", "POST").submit();
+		}
 	}
+	
+	
+	$(function() {
+		$(".reviewBox").on("click", function() {
+			if (${member.memberId == null}) {
+				alert("로그인이 필요한 서비스입니다.");
+				return;
+			}
+			
+			if (${member.memberRole != "user"}) {
+				return;
+			}
+			
+			console.log($(this).find("input[name='reviewNo']").val());
+			
+			//좋아요 체크한 상태일 경우(좋아요에 색깔이 있을 경우)
+			/* if (condition) {
+				
+			} */
+			
+			
+			var likeCount = $(this).find(".reviewLike");
+			console.log(likeCount);
+			
+			/* $.ajax({
+				url : "/review/json/addLike/"+$(this).find("input[name='reviewNo']").val(),
+				method : "GET",
+				success : function(data, status) {
+					console.log(data);
+					console.log(data.likeCount);
+					
+					$(this).find(".reviewLike").text(data.likeCount);
+					
+				}
+			}) */
+		});
+	});
+
 </script>
 </head>
 
@@ -69,13 +99,12 @@
 					
 						<form id="review">
 							<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
+							<%-- <input type="hidden" id="restaurantNo" name="restaurantNo" value="${param.restaurantNo}"/> --%>
 							<input type="hidden" id="currentPage" name="currentPage" value=""/>
 						</form>
 						
 						<div class="row table-list mb-2">
-							<c:set var="i" value="0" />
 				 		 	<c:forEach var="review" items= "${list}">
-				 		 		<c:set var="i" value="${i+1}" />
 								<div class="col-md-12">
 									<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 										<div class="col p-4 d-flex flex-column position-static divBox">
@@ -97,14 +126,20 @@
 												</c:forEach>
 											</div>
 											<div>
-												<a href="javascript:fncGetReview('${review.reviewNo}')" class="stretched-link">상세보기</a>
+												<a href="#reviewModal" class="reviewModal" data-toggle="modal" data-id="${review.reviewNo}">상세보기</a>
 												<span style="float: right; margin-right: 0;">작성일  ${review.reviewRegDate}</span>
-												<span style="float: right;">좋아요 수 : ${review.likeCount}</span>
+												<div style="float: right;" class="reviewBox">
+													<span class="reviewLike">${review.likeCount}</span>
+													<input type="hidden" name="reviewNo" value="${review.reviewNo}">
+												</div>												
 											</div>
 										</div>
 									</div>
 								</div>
 							</c:forEach>
+							<ul class='icons'> 
+								<jsp:include page='/review/getReview.jsp'/>
+							</ul>
 						</div>
 						
 						<jsp:include page="../common/pageNavigator.jsp"/>

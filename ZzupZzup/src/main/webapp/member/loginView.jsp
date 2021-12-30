@@ -26,7 +26,8 @@
 				}),
 				success : function(data) {
 					if (data != null) {
-						location.href = "/main.jsp";
+						//main.jsp로 이동
+						location.href = "/";
 					}
 				},
 				error : function() {

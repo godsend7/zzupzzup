@@ -43,7 +43,7 @@
 						</ul>
 					</li>
 					</c:if>
-					<li><a href="#">쩝쩝친구 구하기</a></li>
+					<li><a href="/chat/listChat">쩝쩝친구 구하기</a></li>
 					<li><a href="/community/listCommunity">나만의 작고 소중한 맛집</a></li>
 					<li><a href="/restaurant/addRestaurant">test-음식점</a></li>
 				</c:if>

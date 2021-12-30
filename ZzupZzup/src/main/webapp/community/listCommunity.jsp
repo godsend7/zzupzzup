@@ -76,6 +76,9 @@
 										<img src="/resources/images/uploadImages/default.jpg" height="100%">
 									</a>
 									<div class="card-body">
+										<c:if test="${member.memberRole == 'admin'}">
+											<strong class="d-inline-block mb-2 text-primary">신고누적수: ${community.postReportCount}</strong>
+										</c:if>
 										<p>${community.member.memberId}</p>
 										<h3 class="card-title">${community.postTitle}</h3>
 										<p class="card-text">${community.postText}</p>
