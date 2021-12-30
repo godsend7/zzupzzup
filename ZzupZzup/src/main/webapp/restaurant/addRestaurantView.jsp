@@ -20,11 +20,14 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<!-- 지도(위도, 경도)를 사용하기 위해 key 설정 -->
 	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=86fc1389540999ea4a3cdaa2a9ca1cc1&libraries=services"></script>
 	
 	<script>
+		//음식점의 위도와 경도를 가져오기 위해 선언
+		var geocoder = new daum.maps.services.Geocoder();
+	
 		function daumPostcode() {
-			
 	        new daum.Postcode({
 	            oncomplete: function(data) {
 	                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
@@ -50,20 +53,20 @@
 	
 	                // 우편번호와 주소 정보를 해당 필드에 넣는다.
 	                //document.getElementById('sample4_postcode').value = data.zonecode;
+	                //console.log(data.address);
 	                
-	                var geocoder = new daum.maps.services.Geocoder();
-             
-		            var callback = function(result, status) {
-		            	console.log(result);
-		            	 
+	                //주소의 위도와 경도 가져오기
+	                geocoder.addressSearch(data.address, function(results, status) {
 		             	if (status === daum.maps.services.Status.OK) {
-		             		/* jQuery('#ypoint').val(result[0].x);
-		         			jQuery('#xpoint').val(result[0].y); */
-		         			console.log(result);
+		             		var result = results[0];
+			            	//console.log(result.y);
+			            	//console.log(result.x);
+			            	$("input[name='latitude']").val(result.x);
+			            	$("input[name='longitude']").val(result.y);
 						}	
-		            }
+		            });
 	                
-	                geocoder.addressSearch(data, callback);
+	                
 	                
 	                $("#streetAddress").val(roadAddr);
 	                $("#areaAddress").val(data.jibunAddress);
@@ -216,6 +219,9 @@
 			<button type="button" class="normal btn-sm" id="button2">주소찾기</button>
 		</div>
 	</div>
+	
+	<input type="hidden" name="latitude" value="">
+	<input type="hidden" name="longitude" value="">
 	
 	<!-- <div class="form-group">
 		<label for="areaAddress" class="col-sm-offset-1 col-sm-3 control-label">음식점 지번주소</label>
