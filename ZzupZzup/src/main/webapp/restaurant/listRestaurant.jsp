@@ -20,11 +20,18 @@
 <script type="text/javascript">
 
 	window.onload = function(){
+		
+		function fncPageNavigation(currentPage) {
+			console.log(currentPage);
+			$("#currentPage").val(currentPage);
+			$("#restaurant").attr("action","/restaurant/listRestaurant").attr("method", "POST").submit();
+		}
+		
 		// 상세조회 버튼 실행
 		$(function() {
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			$( "#restinfo" ).on("click" , function() {
-				self.location = "/restaurant/getRestaurant?restaurantNo=" + ${restaurant.restaurantNo};
+				self.location = "/restaurant/getRestaurant?restaurantNo=${restaurant.restaurantNo}";
 			});
 		});
 	}
@@ -48,6 +55,10 @@
 					<div class="container">
 					
 					<h2>등록된 음식점 목록</h2><hr>
+					<form id="restaurant">
+					<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
+						<input type="hidden" id="currentPage" name="currentPage" value=""/>
+					</form>
 					
 					<c:set var="i" value="0" />
 					<c:forEach var="restaurant" items="${list}">
@@ -69,7 +80,7 @@
 
 					</div><br><br><br>
 					
-					<ul class="pagination">
+					<!-- <ul class="pagination">
 						<li><span class="button disabled">Prev</span></li>
 						<li><a href="#" class="page active">1</a></li>
 						<li><a href="#" class="page">2</a></li>
@@ -79,7 +90,9 @@
 						<li><a href="#" class="page">9</a></li>
 						<li><a href="#" class="page">10</a></li>
 						<li><a href="#" class="button">Next</a></li>
-					</ul>
+					</ul> -->
+					
+					<jsp:include page="../common/pageNavigator.jsp"/>
 					
 				</section>
 			</div>

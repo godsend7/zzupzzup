@@ -6,7 +6,7 @@
 <!-- start:Header -->
 <header id="header">
 
-	<a href="/main.jsp" class="logo"><strong>ZZUPZZUPDUCE_101</strong></a>
+	<a href="/" class="logo"><strong>ZZUPZZUPDUCE_101</strong></a>
 
 	<ul class="icons">
 		<jsp:include page="/member/loginView.jsp" />

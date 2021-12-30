@@ -20,8 +20,13 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<!-- 지도(위도, 경도)를 사용하기 위해 key 설정 -->
+	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=86fc1389540999ea4a3cdaa2a9ca1cc1&libraries=services"></script>
 	
 	<script>
+		//음식점의 위도와 경도를 가져오기 위해 선언
+		var geocoder = new daum.maps.services.Geocoder();
+	
 		function daumPostcode() {
 	        new daum.Postcode({
 	            oncomplete: function(data) {
@@ -48,12 +53,28 @@
 	
 	                // 우편번호와 주소 정보를 해당 필드에 넣는다.
 	                //document.getElementById('sample4_postcode').value = data.zonecode;
+	                //console.log(data.address);
+	                
+	                //주소의 위도와 경도 가져오기
+	                geocoder.addressSearch(data.address, function(results, status) {
+		             	if (status === daum.maps.services.Status.OK) {
+		             		var result = results[0];
+			            	//console.log(result.y);
+			            	//console.log(result.x);
+			            	$("input[name='latitude']").val(result.x);
+			            	$("input[name='longitude']").val(result.y);
+						}	
+		            });
+	                
+	                
 	                
 	                $("#streetAddress").val(roadAddr);
 	                $("#areaAddress").val(data.jibunAddress);
 	                
 	               	$("#restAddress").attr("readonly",false);
 	                $("#restAddress").focus();
+	                
+	                
 	                //self.close();
 	                /* 
 	                // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
@@ -128,7 +149,7 @@
 				return;
 			}
 		
-			$("#restaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").submit();
+			$("#restaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").attr("enctype", "multipart/form-data").submit();
 			
 		}
 		
@@ -172,13 +193,16 @@
 	
 	<form class="form-horizontal" id="restaurant">
 	
+	<input type="hidden" name="member.memberId" value="${member.memberId}">
+	<input type="hidden" name="member.memberName" value="${member.memberName}">
+	
 	<div class="form-group">
 		<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>
 		<div class="col-sm-4">
 			<input type="text" class="form-control" id="restaurantName" name="restaurantName" placeholder="음식점명">
 		</div>
 	</div>
-	
+		
 	<div class="form-group">
 		<label for="restaurantTel" class="col-sm-offset-1 col-sm-3 control-label">음식점 전화번호</label>
 		<div class="col-sm-4">
@@ -195,6 +219,9 @@
 			<button type="button" class="normal btn-sm" id="button2">주소찾기</button>
 		</div>
 	</div>
+	
+	<input type="hidden" name="latitude" value="">
+	<input type="hidden" name="longitude" value="">
 	
 	<!-- <div class="form-group">
 		<label for="areaAddress" class="col-sm-offset-1 col-sm-3 control-label">음식점 지번주소</label>
@@ -325,7 +352,7 @@
 	    	<label for="time"></label>
 	    	<input type="time" id="time" name="restaurantTimes[1].restaurantLastOrder">
 	    </div>
-	</div><br>
+	</div><br><br>
 	
 	<!-- <div class="col-sm-4">음식점 운영시간
 		<input type="text" name="restaurantTimes[0].restaurantOpen" placeholder="음식점 오픈시간">
@@ -335,14 +362,18 @@
 		<input type="text" name="restaurantTimes[0].restaurantDayOff" placeholder="음식점 휴무일">
 	</div> -->
 	
-	<div class="col-sm-4">음식점 사진
-		
+	<div class="col-sm-4">
 		<label for="restaurantImage">음식점 이미지</label>
-		<input type="file" id="resImg" name="restaurantImage" multiple="multiple">
+		<input type="file" id="file" name="file" multiple="multiple">
 		
 		<!-- <input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
 		<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
 		<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진"> -->
+	</div><br><br>
+	
+	<div class="col-sm-12">
+		<label for="restaurantText">음식점 소개글</label>
+		<textarea id="restaurantText" name="restaurantText" placeholder="음식점 소개글" rows="3" style="resize: none; height: 10em;"></textarea>
 	</div><br><hr>
 	
 	<!-- <div class="form-group"> -->

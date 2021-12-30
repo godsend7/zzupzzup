@@ -60,7 +60,7 @@ public class CommunityController {
 		
 		communityService.addCommunity(community);
 		
-		return "forward:/community/listCommunity.jsp";
+		return "redirect:/community/listCommunity";
 	}
 	
 	@RequestMapping(value="getCommunity", method=RequestMethod.GET)

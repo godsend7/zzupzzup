@@ -156,6 +156,14 @@ public class ReviewController {
 		return "forward:/review/listReview.jsp";
 	}
 	
+	@RequestMapping(value="deleteReview", method=RequestMethod.GET)
+	public String deleteReview(@RequestParam("reviewNo") int reviewNo) throws Exception {
+		
+		reviewService.deleteReview(reviewNo);
+		
+		return "redirect:/review/listReview";
+	}
+	
 	private void uploadFilePath(MultipartHttpServletRequest uploadfile, String temDir, Review review) {
 		
 		//file의 name을 가지고 있는 input tag 가져오기

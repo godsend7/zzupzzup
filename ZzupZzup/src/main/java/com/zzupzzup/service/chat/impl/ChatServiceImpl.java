@@ -40,7 +40,7 @@ public class ChatServiceImpl implements ChatService {
 		
 		System.out.println("getChat 결과 chat : " + chat);
 		
-		System.out.println("시간 나오는거 볼랭 : " + chat.getChatRegDate());
+		//System.out.println("시간 나오는거 볼랭 : " + chat.getChatRegDate());
 		
 		/*
 		 * String chatState = chat.getChatState();
@@ -53,7 +53,7 @@ public class ChatServiceImpl implements ChatService {
 		 * chat.setChatState("모임완료"); }
 		 */
 		
-		System.out.println("fdfsfeofewofsd : " + chat);
+		//System.out.println("fdfsfeofewofsd : " + chat);
 		
 		return chat;
 	}
@@ -158,6 +158,21 @@ public class ChatServiceImpl implements ChatService {
 		
 		map.put("list", chatDao.listReadyCheckMember(map));
 		map.put("totalCount", chatDao.getTotalCount(search));
+		
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> listRestaurantName(Search search) throws Exception {
+		System.out.println("chatServiceImpl listRestaurantName " );
+		System.out.println("search : " + search);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		
+		System.out.println("map : " + map);
+		
+		map.put("list", chatDao.listRestaurantName(map));
 		
 		return map;
 	}
