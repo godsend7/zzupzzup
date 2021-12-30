@@ -44,14 +44,15 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		}
 
 		@Override
-		public Map<String , Object > listReservation(Search search) throws Exception {
+		public Map<String , Object > listReservation(Search search, String memberId, String restaurantNo) throws Exception {
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("search", search);
-			
+			map.put("memberId", memberId);
+			map.put("restaurantNo", restaurantNo);
 			
 			map.put("list", reservationDao.listReservation(map));
-			map.put("totalCount", reservationDao.getTotalCount(search));
+			map.put("totalCount", reservationDao.getTotalCount(map));
 			
 			return map;
 		}
@@ -65,7 +66,7 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 			map.put("restaurantNo", restaurantNo);
 			
 			map.put("list", reservationDao.listMyReservation(map));
-			map.put("totalCount", reservationDao.getTotalCount(search));
+			map.put("totalCount", reservationDao.getTotalCount(map));
 			
 			return map;
 		}

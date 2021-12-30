@@ -91,9 +91,9 @@ public class ReservationController {
 		//Business Logic
 		reservationService.addReservation(reservation);
 		System.out.println("/reservation/addReservation22222 : POST");
-		return "foward:/reservation/addReservation.jsp";
+		return "redirect:/reservation/listReservation.jsp";
 	}
-	
+	//컨트롤러로 하면 안되고 레스트 타야됨 add 안할거면 controller는 성공하기도 전에 리턴해버림
 //==================================================================================================
 	//질문
 	@RequestMapping( value="getReservation", method=RequestMethod.GET )
@@ -105,7 +105,37 @@ public class ReservationController {
 		// Model 과 View 연결
 		model.addAttribute("reservation", reservation);
 		
-		return "foward:/reservation/getReservation.jsp";
+		
+		Member member = new Member();
+		Chat chat = new Chat();
+		
+		chat = chatService.getChat(reservation.getChat().getChatNo());
+		
+		
+		reservation.setChat(chat);
+		reservation.setRestaurant(restaurantService.getRestaurant(reservation.getChat().getChatRestaurant().getRestaurantNo()));
+		System.out.println("dfsfsdffsd"+reservation.getChat().getChatLeaderId());
+		
+		
+		member = memberService.getMember(reservation.getChat().getChatLeaderId());
+		reservation.setMember(member);
+		
+		System.out.println(member+"member~~~~~~~");
+		
+		System.out.println(reservation);
+		model.addAttribute("reservation", reservation);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		return "forward:/reservation/getReservation.jsp";
 	}
 	
 	
@@ -121,31 +151,53 @@ public class ReservationController {
 		// Model 과 View 연결
 		model.addAttribute("reservation", reservation);
 		
-		return "foward:/reservation/updateReservation.jsp";
+		return "forward:/reservation/updateReservation.jsp";
 	}
 
 //==================================================================================================	
 	
 	@RequestMapping(value="listReservation")
-	public String listReservation(@ModelAttribute("search") Search search, Model model) throws Exception {
+	public String listReservation(HttpServletRequest request, @ModelAttribute Search search, Model model, HttpSession session) throws Exception {
 		
 		System.out.println("/reservation/listReservation");
 		
-		if(search.getCurrentPage() == 0) {
-			search.setPageSize(1);
+		String restaurantNo = request.getParameter("restaurantNo");
+		Member member = (Member) session.getAttribute("member");
+		
+		String memberId = null;
+		
+		if (member != null && member.getMemberRole().equals("user")) {
+			memberId = member.getMemberId();
+		}
+			
+			else if (member !=null && member.getMemberRole().equals("owner")) {
+				memberId = member.getMemberId();
+			
 		}
 		
-		search.setPageSize(0); //pageSize
 		
-		Map<String, Object> map = reservationService.listReservation(search);
+		System.out.println(restaurantNo+"::restaurantNo~~~~~");
+		System.out.println(member+"::member~~~~~");
+	
 		
-		//pageUnit, pageSize
-		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), 0, 0);
-		System.out.println("RESULT PAGE : " + resultPage);
+		if (search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+		
+		System.out.println(search.getCurrentPage() + ":: currentPage");
+		
+		search.setPageSize(pageSize);
+		
+		
+		Map<String, Object> map = reservationService.listReservation(search, restaurantNo, memberId);
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
 		model.addAttribute("list", map.get("list"));
-		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
+		model.addAttribute("totalCount", map.get("totalCount"));
+		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
+		model.addAttribute("resultPage", resultPage);
 		
 		return "forward:/reservation/listReservation.jsp";	
 	}
