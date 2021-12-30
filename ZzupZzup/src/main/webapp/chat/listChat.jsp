@@ -66,15 +66,16 @@
 					}else if(chatState == 4){
 						chatState = "<span class='badge badge-danger chat-state'>모임완료</span>";
 					}
-					let displayValueHd = JSONData.chatTitle;
 					let displayValueBd = 
 						"<ul class='data-list'>"
 						+"<li>"+chatState+"</li>"
 						+"<li><span class='badge badge-secondary chat-no'>"+JSONData.chatNo+"</span></li>"
+						+"<li>채팅방 제목 : "+JSONData.chatTitle+"</li>"
 						+"<li>개설일 : "+chatRegDate+"</li>"
 						+"<li>"+JSONData.chatText+"</li>"
 						+"<li>참가인원수 : "+JSONData.chatMemberCount+"</li>"
 						+"<li>참가가능성별 : "+JSONData.chatGender+"</li>"
+						+"<li>참가가능연령대 : "+JSONData.chatAge+"</li>"
 						+"<li>"+JSONData.chatLeaderId.profileImage+"</li>"
 						+"<li>"+JSONData.chatLeaderId.nickname+"</li>"
 						+"<li>"+JSONData.chatLeaderId.gender+"</li>"
@@ -92,7 +93,6 @@
 					+"<input type='button' data-target="+JSONData.chatNo+" class='button small info' value='수정하기'/>"
 					+"<input type='button' class='button small secondary' data-dismiss='modal' value='닫기' />"
 					+"<input type='button' data-target="+JSONData.chatNo+" class='button small primary' value='입장하기'>"
-					$(".modal-title").html(displayValueHd);
 					$(".modal-body").html(displayValueBd);
 					$(".modal-footer").html(displayValueFt);
 					if(chatImg == 'chatimg.jpg'){
@@ -256,7 +256,7 @@
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h5 class="modal-title" id="exampleModalLabel"></h5>
+											<h5 class="modal-title" id="exampleModalLabel">채팅방 정보 상세보기</h5>
 											<button type="button" class="close" data-dismiss="modal"
 												aria-label="Close">
 												<span aria-hidden="true">&times;</span>

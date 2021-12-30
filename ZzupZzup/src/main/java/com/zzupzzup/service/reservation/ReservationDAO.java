@@ -26,6 +26,6 @@ public interface ReservationDAO {
 	public int updateReservation(Reservation reservation) throws Exception ;
 	
 	// 게시판 Page 처리를 위한 전체Row(totalCount)  return
-	public int getTotalCount(Search search) throws Exception ;
+	public int getTotalCount(Map<String, Object> map) throws Exception ;
 	
 }

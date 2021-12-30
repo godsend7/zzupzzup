@@ -7,6 +7,7 @@ import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.Member;
+import com.zzupzzup.service.domain.Restaurant;
 
 public interface ChatDAO {
 	
@@ -54,4 +55,8 @@ public interface ChatDAO {
 	
 	// Select List
 	public List<ChatMember> listReadyCheckMember(Map<String, Object> map) throws Exception;
+
+	
+	// 임시로 만들어 둠
+	public List<Restaurant> listRestaurantName(Map<String, Object> map);
 }

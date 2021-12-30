@@ -13,6 +13,7 @@ import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.Member;
+import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.chat.ChatDAO;
 
 
@@ -158,6 +159,15 @@ public class ChatDAOImpl implements ChatDAO {
 	public List<ChatMember> listReadyCheckMember(Map<String, Object> map) throws Exception {
 		System.out.println("chatDaoImpl listReadyCheckMember map : " + map);
 		List<ChatMember> list = sqlSession.selectList("ChatMapper.listReadyCheckMember", map);
+		
+		return list;
+	}
+
+	@Override
+	public List<Restaurant> listRestaurantName(Map<String, Object> map) {
+		System.out.println("chatDaoImpl listRestaurantName map : " + map);
+		
+		List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listRestaurantName", map);
 		
 		return list;
 	}

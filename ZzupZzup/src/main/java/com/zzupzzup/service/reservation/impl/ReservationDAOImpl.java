@@ -87,8 +87,8 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		}
 		
 		// 게시판 Page 처리를 위한 전체 Row(totalCount)  return
-		public int getTotalCount(Search search) throws Exception {
-			return sqlSession.selectOne("ReservationMapper.getTotalCount", search);
+		public int getTotalCount(Map<String, Object> map) throws Exception {
+			return sqlSession.selectOne("ReservationMapper.getTotalCount", map);
 		}
 
 
