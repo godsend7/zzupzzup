@@ -291,7 +291,7 @@
 								<!-- Break -->
 								<div class="col-12">
 									<label for="chatImage">채팅방 대표 이미지</label>
-									<input type="file" id="chatImage" name="chatImage"/>
+									<input type="file" id="chatImage" name="chatImage" value="${chat.chatImage}"/>
 									<c:if test="${chat.chatImage != 'chatchat.jpg' }">
 									<p>기본 이미지 :${chat.chatImage }</p>
 									<p><img src="/resources/images/uploadImages/chat/${chat.chatImage }"/></p>
@@ -305,7 +305,6 @@
 									<label for="chatShowStatus">채팅방 노출 여부</label>
 								</div>
 								<div class="col-md-12">
-									<label for="chatText">채팅방 소개글</label>
 									<c:choose>
 										<c:when test="${chat.chatShowStatus==false }">
 										<input type="checkbox" id=chatShowStatus name="chatShowStatus" checked>

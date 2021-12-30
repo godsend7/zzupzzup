@@ -342,6 +342,11 @@ restaurant_tel, street_address, area_address, menu_type)
 VALUES('hihi@a.com', '홍진호', 'zzazang.jpg', '짜파게티보다 맛있는집', '0', '거구장',
 '010-1234-5678', '서울시 종로구 인사동3길 29', '서울시 종로구 인사동 215-1', '1');
 INSERT INTO restaurant(member_id, owner_name,
+owner_image, restaurant_text, parkable, restaurant_name, 
+restaurant_tel, street_address, area_address, menu_type)
+VALUES('hihi@a.com', '가가가', 'zzazang.jpg', '짜파게티보다 맛있는집', '0', '거구류',
+'010-1234-9876', '서울시 용산구 인사동3길 29', '서울시 용산구 인사동 215-1', '1');
+INSERT INTO restaurant(member_id, owner_name,
 owner_image, restaurant_text, restaurant_name, 
 restaurant_tel, street_address, area_address, menu_type)
 VALUES('hihi@a.com', '유희주', 'bab.jpg', '도시락보다 맛있는집', '김가네',

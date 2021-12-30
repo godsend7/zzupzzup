@@ -11,10 +11,6 @@
 
 <jsp:include page="/layout/toolbar.jsp" />
 <link rel="stylesheet" href="/resources/css/chat.css" />
-<script
-  src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"
-  integrity="sha256-xI/qyl9vpwWFOXz7+x/9WkG5j/SVnSw21viy8fWwbeE="
-  crossorigin="anonymous"></script>
 
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
@@ -70,33 +66,66 @@
 			fncAddChat();
 		});
 		
-		//=========== 음식점 찾는거 rest ================//
+		//=========== 음식점 찾는거 autocomplete ================//
 		
-		/* $("input[name='restauratName']").on("keypress",function() {
+		/* $("#restaurantName").on("keypress",function() {
 			console.log("하하하");
-			
-		}); */			
+		});	 */		
 		
-		/* $("#restauratName").autocomplete({
+		var autoResArr = [];
+		
+		$("#restaurantName").autocomplete({
 			source: function(request, response){
-				console.log($("#restauratName").val());
+				console.log($("#restaurantName").val());
+				var searchKeyword = $("#restaurantName").val();
+				searchKeyword = escape(encodeURIComponent(searchKeyword));
 				$.ajax({
-					url: "/chat/json/listRestaurant",
+					url: "/chat/json/listRestaurantAutocomplete/searchKeyword="+searchKeyword,
 					method: "GET",
 					dataType: "json",
 					headers: {
 						"Accept": "application/json",
-						"contentType": "application/json; charset=euc-kr"
+						"contentType": "application/json; charset=utf-8"
 					},
-					success: function(JSONData, status){
-						
+					success: function(JSONData){
+						console.log(JSONData);
+						response(
+							$.map(JSONData.list, function(item){
+								
+								autoResArr = {
+										"restaurantName" : item.restaurantName,
+										"restaurantTel" : item.restaurantTel,
+										"restaurantAddr" : item.streetAddress
+								};
+								
+								console.log(item.restaurantName);
+								console.log(item.restaurantTel);
+								console.log(item.streetAddress);
+								console.log(item.areaAddress);
+								
+								return{
+									label: item.restaurantName
+								}
+							})
+						);
 					},
 					error: function(e){
 						alert(e.responseText);
 					}
 				});
+			},
+			minLength: 1,
+			select:function(event, ui){
+				//log( "Selected: " + ui.item.value + " aka " + ui.item.id );
 			}
-		}); */
+		});
+		
+		$("body").on("click", ".ui-menu-item-wrapper", function(){
+			console.log(autoResArr);
+			let restaurantName = autoResArr.restaurantName; 
+			let restaurantTel = autoResArr.restaurantTel; 
+			let restaurantAddr = autoResArr.restaurantAddr;
+		});
 		
 		//=========== 연령대 무관 클릭시 나머지 연령대 체크 해제 ================//
 		$("input[name='chatAge']").on("click", function(){
@@ -163,8 +192,7 @@
 							<div class="row gtr-uniform">
 								<div class="col-md-8">
 									<label for="restaurantName">음식점명</label> <input type="text"
-										name="restaurantName" id="restaurantName" value="거구장"
-										placeholder="" required maxlength="50"/> 
+										name="restaurantName" id="restaurantName" class="ui-autocomplete-input" value="거구장" autocomplete="off" placeholder="" required maxlength="50"/> 
 										
 								</div> 
 							</div>

@@ -1,13 +1,20 @@
 package com.zzupzzup.web.chat;
 
+import java.net.URLDecoder;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zzupzzup.common.Search;
 import com.zzupzzup.service.chat.ChatService;
 import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.Member;
@@ -64,6 +71,33 @@ public class ChatRestController {
 
 		// Business Logic
 		return chat;
+	}
+	
+	@RequestMapping(value="json/listRestaurantAutocomplete/searchKeyword={searchKeyword}", method=RequestMethod.GET)
+	public Map listRestaurantAutocomplete(@ModelAttribute("search") Search search, HttpServletRequest requeste) throws Exception {
+		
+		System.out.println("/chat/json/listRestaurantAutocomplete : GET");
+		System.out.println("listRestaurantAutocomplete request menu : " + search.getSearchKeyword());
+		
+		String searchKeyword2 = search.getSearchKeyword();
+		
+		search.setSearchKeyword(null);
+		
+		String decText= URLDecoder.decode(searchKeyword2,"UTF-8");
+		System.out.println("decText : " + decText);
+		search.setSearchKeyword(decText);
+		
+		//Business Logic
+		Map<String, Object> map = chatService.listRestaurantName(search);
+		
+		Restaurant restaurant = new Restaurant();
+		
+		System.out.println(map);
+		
+		map.put("restaurant", restaurant);
+
+		// Business Logic
+		return map;
 	}
 
 }
