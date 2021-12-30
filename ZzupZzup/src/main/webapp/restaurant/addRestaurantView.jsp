@@ -20,9 +20,11 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=86fc1389540999ea4a3cdaa2a9ca1cc1&libraries=services"></script>
 	
 	<script>
 		function daumPostcode() {
+			
 	        new daum.Postcode({
 	            oncomplete: function(data) {
 	                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
@@ -49,11 +51,27 @@
 	                // 우편번호와 주소 정보를 해당 필드에 넣는다.
 	                //document.getElementById('sample4_postcode').value = data.zonecode;
 	                
+	                var geocoder = new daum.maps.services.Geocoder();
+             
+		            var callback = function(result, status) {
+		            	console.log(result);
+		            	 
+		             	if (status === daum.maps.services.Status.OK) {
+		             		/* jQuery('#ypoint').val(result[0].x);
+		         			jQuery('#xpoint').val(result[0].y); */
+		         			console.log(result);
+						}	
+		            }
+	                
+	                geocoder.addressSearch(data, callback);
+	                
 	                $("#streetAddress").val(roadAddr);
 	                $("#areaAddress").val(data.jibunAddress);
 	                
 	               	$("#restAddress").attr("readonly",false);
 	                $("#restAddress").focus();
+	                
+	                
 	                //self.close();
 	                /* 
 	                // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
