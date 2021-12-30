@@ -66,12 +66,7 @@
 			fncAddChat();
 		});
 		
-		//=========== 음식점 찾는거 autocomplete ================//
-		
-		/* $("#restaurantName").on("keypress",function() {
-			console.log("하하하");
-		});	 */		
-		
+		//==> 음식점 찾는 autocomplete
 		var autoResArr = [];
 		
 		$("#restaurantName").autocomplete({
@@ -88,26 +83,37 @@
 						"contentType": "application/json; charset=utf-8"
 					},
 					success: function(JSONData){
-						console.log(JSONData);
-						response(
-							$.map(JSONData.list, function(item){
-								
-								autoResArr = {
+						
+						if(JSONData.list == null || JSONData.list == undefined || JSONData.list == "" || JSONData.list.length == 0 ){
+							//alert("자료가 없음");
+							$(".find-restaurant-txt").text("");
+							$(".find-restaurant-txt").text("선택할 수 있는 음식점이 없습니다.");
+						}else{
+							$(".find-restaurant-txt").text("");
+							console.log(JSONData);
+							response(
+								$.map(JSONData.list, function(item){
+									
+									autoResArr = {
+										"restaurantNo" : item.restaurantNo,
 										"restaurantName" : item.restaurantName,
 										"restaurantTel" : item.restaurantTel,
-										"restaurantAddr" : item.streetAddress
-								};
-								
-								console.log(item.restaurantName);
-								console.log(item.restaurantTel);
-								console.log(item.streetAddress);
-								console.log(item.areaAddress);
-								
-								return{
-									label: item.restaurantName
-								}
-							})
-						);
+										"restaurantSAddr" : item.streetAddress,
+										"restaurantAAddr" : item.areaAddress
+									};
+									
+									/* console.log(item.restaurantName);
+									console.log(item.restaurantTel);
+									console.log(item.streetAddress);
+									console.log(item.areaAddress); */
+									
+									return{
+										label: item.restaurantName
+									}
+								})
+							);
+						}
+						
 					},
 					error: function(e){
 						alert(e.responseText);
@@ -122,12 +128,19 @@
 		
 		$("body").on("click", ".ui-menu-item-wrapper", function(){
 			console.log(autoResArr);
+			let restaurantNo = autoResArr.restaurantNo;
 			let restaurantName = autoResArr.restaurantName; 
 			let restaurantTel = autoResArr.restaurantTel; 
-			let restaurantAddr = autoResArr.restaurantAddr;
+			let restaurantSAddr = autoResArr.restaurantSAddr;
+			let restaurantAAddr = autoResArr.restaurantAAddr;
+			
+			$("#restaurantNo").val(restaurantNo);
+			$("#restaurantTel").val(restaurantTel);
+			$("#streetAddress").val(restaurantSAddr);
+			$("#areaAddress").val(restaurantAAddr);
 		});
 		
-		//=========== 연령대 무관 클릭시 나머지 연령대 체크 해제 ================//
+		//==>연령대 무관 클릭시 나머지 연령대 체크 해제
 		$("input[name='chatAge']").on("click", function(){
 			//console.log($(this).attr("id"));
 			if($(this).attr("id") == "chatAge7"){
@@ -143,7 +156,7 @@
 			
 		});
 		
-		//=========== 연령대 클릭시 나머지 연령대 다 체크하면 해당 체크 해제 연령대 무관 체크================//
+		//==>연령대 클릭시 나머지 연령대 다 체크하면 해당 체크 해제 연령대 무관 체크
 		$("input[name='chatAge']").change(function(){
 			if($("#chatAge6").is(":checked") && $("#chatAge5").is(":checked") && $("#chatAge4").is(":checked") && $("#chatAge3").is(":checked") && $("#chatAge2").is(":checked") && $("#chatAge1").is(":checked")){
 				//console.log("나이대 상관 없이 다 선택");
@@ -159,7 +172,7 @@
 			}
 		});
 		
-		//=========== 취소 클릭시 list로 감 ================//
+		//==>취소 클릭시 뒤로 감
 		$("input[value='취소']").on("click", function(){
 			history.back();
 		});
@@ -187,13 +200,13 @@
 						<h3>쩝쩝친구 생성</h3>
 
 						<form id="addChatView">
-							<input type="hidden" name="chatRestaurant.restaurantNo" id="restaurantNo" value="1">
+							<input type="hidden" name="chatRestaurant.restaurantNo" id="restaurantNo">
 							<input type="hidden" name="chatLeaderId.memberId" id="chatLeaderId" value="hihi@a.com">
 							<div class="row gtr-uniform">
 								<div class="col-md-8">
 									<label for="restaurantName">음식점명</label> <input type="text"
-										name="restaurantName" id="restaurantName" class="ui-autocomplete-input" value="거구장" autocomplete="off" placeholder="" required maxlength="50"/> 
-										
+										name="restaurantName" id="restaurantName" class="ui-autocomplete-input" autocomplete="off" placeholder="" required maxlength="50"/> 
+									<p class="find-restaurant-txt"></p>	
 								</div> 
 							</div>
 							<div class="row gtr-uniform">
@@ -230,10 +243,10 @@
 							<div class="row gtr-uniform">
 								<div class="col-md-12">
 									<input type="radio" id="male" name="chatGender" value="1"
-										checked> <label for="male">남</label>
+										checked> <label for="male">남자</label>
 								
 									<input type="radio" id="female" name="chatGender" value="2">
-									<label for="female">여</label>
+									<label for="female">여자</label>
 								
 									<input type="radio" id="malefemale" name="chatGender" value="3">
 									<label for="malefemale">성별무관</label>
@@ -278,7 +291,7 @@
 								<!-- Break -->
 								<div class="col-12">
 									<label for="chatImage">채팅방 대표 이미지</label>
-									<input type="file" id="chatImage" name="chatImage"/>
+									<input type="file" id="chatImage" name="chatImage" />
 								</div>
 							</div>
 							<div class="row gtr-uniform">

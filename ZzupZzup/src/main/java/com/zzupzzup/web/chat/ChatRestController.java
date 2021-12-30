@@ -92,7 +92,7 @@ public class ChatRestController {
 		
 		Restaurant restaurant = new Restaurant();
 		
-		System.out.println(map);
+		//System.out.println(map);
 		
 		map.put("restaurant", restaurant);
 

@@ -11,10 +11,6 @@
 
 <jsp:include page="/layout/toolbar.jsp" />
 <link rel="stylesheet" href="/resources/css/chat.css" />
-<script
-  src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"
-  integrity="sha256-xI/qyl9vpwWFOXz7+x/9WkG5j/SVnSw21viy8fWwbeE="
-  crossorigin="anonymous"></script>
 
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
@@ -62,7 +58,7 @@
 			}
 			
 			//==> submit 기능
-			$("form").attr("method", "POST").attr("action", "/chat/addChat").submit();
+			$("form").attr("method", "POST").attr("action", "/chat/updateChat").submit();
 		}
 
 		//==> Form Submit 처리
@@ -70,35 +66,81 @@
 			fncUpdateChat();
 		});
 		
-		//=========== 음식점 찾는거 rest ================//
+		//==> 음식점 찾는 autocomplete
+		var autoResArr = [];
 		
-		/* $("input[name='restauratName']").on("keypress",function() {
-			console.log("하하하");
-			
-		}); */			
-		
-		/* $("#restauratName").autocomplete({
+		$("#restaurantName").autocomplete({
 			source: function(request, response){
-				console.log($("#restauratName").val());
+				console.log($("#restaurantName").val());
+				var searchKeyword = $("#restaurantName").val();
+				searchKeyword = escape(encodeURIComponent(searchKeyword));
 				$.ajax({
-					url: "/chat/json/listRestaurant",
+					url: "/chat/json/listRestaurantAutocomplete/searchKeyword="+searchKeyword,
 					method: "GET",
 					dataType: "json",
 					headers: {
 						"Accept": "application/json",
-						"contentType": "application/json; charset=euc-kr"
+						"contentType": "application/json; charset=utf-8"
 					},
-					success: function(JSONData, status){
+					success: function(JSONData){
+						
+						if(JSONData.list == null || JSONData.list == undefined || JSONData.list == "" || JSONData.list.length == 0 ){
+							//alert("자료가 없음");
+							$(".find-restaurant-txt").text("");
+							$(".find-restaurant-txt").text("선택할 수 있는 음식점이 없습니다.");
+						}else{
+							$(".find-restaurant-txt").text("");
+							console.log(JSONData);
+							response(
+								$.map(JSONData.list, function(item){
+									
+									autoResArr = {
+										"restaurantNo" : item.restaurantNo,
+										"restaurantName" : item.restaurantName,
+										"restaurantTel" : item.restaurantTel,
+										"restaurantSAddr" : item.streetAddress,
+										"restaurantAAddr" : item.areaAddress
+									};
+									
+									/* console.log(item.restaurantName);
+									console.log(item.restaurantTel);
+									console.log(item.streetAddress);
+									console.log(item.areaAddress); */
+									
+									return{
+										label: item.restaurantName
+									}
+								})
+							);
+						}
 						
 					},
 					error: function(e){
 						alert(e.responseText);
 					}
 				});
+			},
+			minLength: 1,
+			select:function(event, ui){
+				//log( "Selected: " + ui.item.value + " aka " + ui.item.id );
 			}
-		}); */
+		});
 		
-		//=========== 연령대 무관 클릭시 나머지 연령대 체크 해제 ================//
+		$("body").on("click", ".ui-menu-item-wrapper", function(){
+			console.log(autoResArr);
+			let restaurantNo = autoResArr.restaurantNo;
+			let restaurantName = autoResArr.restaurantName; 
+			let restaurantTel = autoResArr.restaurantTel; 
+			let restaurantSAddr = autoResArr.restaurantSAddr;
+			let restaurantAAddr = autoResArr.restaurantAAddr;
+			
+			$("#restaurantNo").val(restaurantNo);
+			$("#restaurantTel").val(restaurantTel);
+			$("#streetAddress").val(restaurantSAddr);
+			$("#areaAddress").val(restaurantAAddr);
+		});
+		
+		//==>연령대 무관 클릭시 나머지 연령대 체크 해제
 		$("input[name=chatAge]").on("click", function(){
 			//console.log($(this).attr("id"));
 			if($(this).attr("id") == "chatAge7"){
@@ -113,7 +155,7 @@
 			}
 		});
 		
-		//=========== 연령대 클릭시 나머지 연령대 다 체크하면 해당 체크 해제 연령대 무관 체크================//
+		//==>연령대 클릭시 나머지 연령대 다 체크하면 해당 체크 해제 연령대 무관 체크
 		$("input[name=chatAge]").change(function(){
 			if($("#chatAge6").is(":checked") && $("#chatAge5").is(":checked") && $("#chatAge4").is(":checked") && $("#chatAge3").is(":checked") && $("#chatAge2").is(":checked") && $("#chatAge1").is(":checked")){
 				//console.log("나이대 상관 없이 다 선택");
@@ -129,7 +171,7 @@
 			}
 		});
 		
-		//=========== 연령대 값에 따라 체크되어있기 ================//
+		//==> 연령대 값에 따라 체크되어있기
 		let ageArr = [${chat.chatAge}];
 		//console.log(ageArr.length);
 		$(ageArr).each(function(index){
@@ -139,7 +181,7 @@
 		});
 		
 		
-		//=========== 채팅방 노출여부 체크시 ================//
+		//==> 채팅방 노출여부 체크시
 		$("input[name='chatShowStatus']").change(function(){
 			if($("#chatShowStatus").is(":checked")){
 				console.log("체크한거니?");
@@ -148,6 +190,11 @@
 				console.log("체크한거니??");
 				$("#chatShowStatus").val(true);
 			}
+		});
+		
+		//==>취소 클릭시 뒤로 감
+		$("input[value='취소']").on("click", function(){
+			history.back();
 		});
 
 	});
@@ -173,13 +220,16 @@
 						<h3>쩝쩝친구 수정</h3>
 
 						<form id="addChatView">
-							<input type="hidden" name="chatRestaurant.restaurantNo" id="restaurantNo" value="1">
+						<input type="hidden" name="chatNo" id="chatNo" value="${chat.chatNo }">
+							<input type="hidden" name="chatRestaurant.restaurantNo" id="restaurantNo" value="${chat.chatRestaurant.restaurantNo }">
 							<input type="hidden" name="chatLeaderId.memberId" id="chatLeaderId" value="hihi@a.com">
+							
 							<div class="row gtr-uniform">
 								<div class="col-md-8">
 									<label for="restaurantName">음식점명</label> <input type="text"
 										name="restaurantName" id="restaurantName" value="${chat.chatRestaurant.restaurantName }"
-										placeholder="" required maxlength="50"/> 
+										placeholder="" autocomplete="off" required maxlength="50"/> 
+										<p class="find-restaurant-txt"></p>	
 										
 								</div> 
 							</div>
@@ -241,10 +291,10 @@
 										
 										<c:otherwise>
 										<input type="radio" id="male" name="chatGender" value="1">
-										<label for="male">남</label>
+										<label for="male">남자</label>
 								
 										<input type="radio" id="female" name="chatGender" value="2">
-										<label for="female">여</label>
+										<label for="female">여자</label>
 									
 										<input type="radio" id="malefemale" name="chatGender" value="3" checked>
 										<label for="malefemale">성별무관</label>
@@ -294,7 +344,7 @@
 									<input type="file" id="chatImage" name="chatImage" value="${chat.chatImage}"/>
 									<c:if test="${chat.chatImage != 'chatchat.jpg' }">
 									<p>기본 이미지 :${chat.chatImage }</p>
-									<p><img src="/resources/images/uploadImages/chat/${chat.chatImage }"/></p>
+									<div class="card col-md-4"><img src="/resources/images/uploadImages/chat/${chat.chatImage }"/></div>
 									</c:if>
 									
 								</div>

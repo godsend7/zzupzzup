@@ -40,7 +40,7 @@ public class ChatServiceImpl implements ChatService {
 		
 		System.out.println("getChat 결과 chat : " + chat);
 		
-		System.out.println("시간 나오는거 볼랭 : " + chat.getChatRegDate());
+		//System.out.println("시간 나오는거 볼랭 : " + chat.getChatRegDate());
 		
 		/*
 		 * String chatState = chat.getChatState();
@@ -53,7 +53,7 @@ public class ChatServiceImpl implements ChatService {
 		 * chat.setChatState("모임완료"); }
 		 */
 		
-		System.out.println("fdfsfeofewofsd : " + chat);
+		//System.out.println("fdfsfeofewofsd : " + chat);
 		
 		return chat;
 	}
