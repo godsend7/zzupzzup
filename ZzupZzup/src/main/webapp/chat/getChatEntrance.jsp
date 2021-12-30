@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-Chatting</title>
+<title>ZZUPZZUP-채팅방</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 <link rel="stylesheet" href="/resources/css/chat.css" />

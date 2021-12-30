@@ -71,6 +71,7 @@
 		
 	--> 
 	
+   	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
    	<mvc:resources mapping="/resources/**" location="/resources/" />
    	<mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
 

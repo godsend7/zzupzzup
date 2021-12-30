@@ -26,8 +26,8 @@ public class Reservation {
 	private boolean refundStatus;
 	private Date reservationCancelDate;
 	private int totalPrice;
-	private int orderCount;
-	private int orderTotal;
+	private int orderCount; //주문메뉴수량
+	private int orderTotal; //주문메뉴 총수량
 	private List<Order> order;
 	
 	//Constructor
