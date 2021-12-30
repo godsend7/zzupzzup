@@ -62,7 +62,7 @@
 		</nav>
 
 		<!-- Section -->
-		<section>
+		<section style="display:none">
 			<header class="major">
 				<h2>Benchmarking</h2>
 			</header>
