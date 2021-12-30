@@ -42,6 +42,13 @@ public class Order {
 	}
 	
 	
+	@Override
+	public String toString() {
+		return "Order [orderNo=" + orderNo + ", menuTitle=" + menuTitle + ", orderCount=" + orderCount + ", menuPrice="
+				+ menuPrice + "]";
+	}
+	
+	
 	
 	//Method
 	
