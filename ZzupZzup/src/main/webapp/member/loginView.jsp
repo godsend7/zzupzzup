@@ -42,14 +42,7 @@
 	});
 </script>
 
-<c:if test="${ empty member}">
-	<!-- Button trigger modal -->
-	<input type="button" value="로그인" class="btn btn-primary"
-		data-toggle="modal" data-target="#loginModal" />
-</c:if>
-<c:if test="${ ! empty member}">
-	<input type="button" value="로그아웃" class="btn btn-primary" id="logout" />
-</c:if>
+
 
 <!-- Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog"

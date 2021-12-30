@@ -2299,4 +2299,5 @@ button,
 
 #main.index > .inner > section { padding: 0px; }
 
+#sidebar .toggle { background-color: rgba(255,255,255,0.6); z-index: 1; }
 #sidebar > .inner > .alt { display: none }

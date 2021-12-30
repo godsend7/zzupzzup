@@ -95,3 +95,7 @@
 	</div>
 </div>
 <!--  E:Sidebar -->
+
+<!-- S: Login Modal -->
+<jsp:include page="/member/loginView.jsp" />
+<!-- E: Login Modal -->
