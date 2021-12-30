@@ -129,16 +129,20 @@ public class ReservationServiceTest {
 		
 //========================================================================================
 		 
-		//@Test
+		@Test
 		public void testListReservation() throws Exception {
 			Search search = new Search();
 			
 			search.setCurrentPage(3);		
 			search.setPageSize(pageSize);
 			
+			//해당 음식점의 리뷰 출력
+			String restaurantNo = "1";
+			//내가 작성한 리뷰 출력 
+			String memberId = "hihi@a.com";
 			
 			
-			Map<String, Object> map = reservationService.listReservation(search);
+			Map<String, Object> map = reservationService.listReservation(search,  memberId, restaurantNo);
 			
 			List<Reservation> list = (List<Reservation>) map.get("list");
 			

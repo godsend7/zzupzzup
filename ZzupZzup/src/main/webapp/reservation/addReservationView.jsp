@@ -1,6 +1,3 @@
-<%@page import="com.zzupzzup.service.domain.RestaurantTime"%>
-<%@page import="com.zzupzzup.service.domain.RestaurantMenu"%>
-<%@page import="com.zzupzzup.service.domain.Order"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -10,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-template</title>
+<title>ZZUPZZUP-addReservationView</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
@@ -26,6 +23,7 @@
 	$(function() {
 		var orderCount = 0;
 		var order_price_total = 0;
+	
 		
 		console.log("addReservationView.jsp");
 		
@@ -39,24 +37,20 @@
 			console.log("orderName : " + orderName);
 			console.log("orderCount : " + orderCount);
 			
-			if(orderName == null || orderName.length<1){
+			if(orderName == null){
 				alert("메뉴를 선택해주세요");
-				$("#orderName").focus();
 				return;
 			}
 			
-			if(orderCount == null || orderCount.length<1){
-				alert("채팅방 제목은 반드시 입력하여야 합니다.");
-				$("#orderCount").focus();
+			if(orderCount == null){
+				alert("수량을 선택해주세요");
 				return;
 			}
 			
-			}
-			
-		
-		
-		
-		//$("form").attr("method" , "POST").attr("action" , "/reservation/addReservation").submit();
+			$("#totalPrice").val(order_price_total);
+			//console.log("totalPrice~~~"+$("#totalPrice").val());
+			$("#addReservation").attr("method" , "POST").attr("action" , "/reservation/addReservation").submit();
+		}
 		
 		 //console.log(${reservation.restaurant.restaurantName}+"거구장~~~");
 		 
@@ -69,13 +63,13 @@
 	          pg: "html5_inicis",
 	          pay_method: "card",
 	          merchant_uid: 'merchant_' + new Date().getTime(),
-	          name:  "거구장",
-	          amount: 3500,
-	          buyer_email: " ",
-	          buyer_name: " ",
-	          buyer_tel: " ",
-	          buyer_addr: "서울특별시 강남구 신사동",
-	          buyer_postcode: "01181"
+	          name:  $("#restaurantName").val(),
+	          amount: parseInt(order_price_total),
+	          buyer_email:$("#memberId").val(),
+	          buyer_name: $("#memberName").val(),
+	          buyer_tel: $("#memberId").val(),
+	          buyer_addr: $("#memberPhone").val(),
+	          buyer_postcode: " "
 	      }, function (rsp) { // callback
 	    	  console.log(rsp);
 	          if (rsp.success) {
@@ -85,22 +79,22 @@
 	              msg += '결제 금액 : ' + rsp.paid_amount;
 	              msg += '카드 승인번호 : ' + rsp.apply_num;
 	              alert('결제가 완료되었습니다.');
+	              fncAddReservation();  //form 경로 넣어줌
 	              $("#modal").trigger('click'); //class는 . 아이디는 #
 	          } else {
 	        	  var msg = '결제에 실패하였습니다.';
 	              msg += '에러내용 : ' + rsp.error_msg;
-	              //alert('결제에 실패하였습니다.');
+	              alert('결제에 실패하였습니다.');
 	          }
 	      });
 	    } 
 	     
 	    $( "body" ).on("click" , ".payment1", function() {
-	    	console.log("fjdkjfd");
 	    	requestPay();
 		});
 	    
 	    $( "body" ).on("click" , ".payment2", function() {
-	    	console.log("8237183");
+	    	fncAddReservation();
 	    	$("#modal").trigger('click');
 		});
 	    /* $( ".payment2" ).on("click" , function() {
@@ -123,17 +117,12 @@
 		
 		//////////모달 이동////////////////
 	    $("#ReservationPage").on("click" , function() {
-	    	self.location = "/reservation/addReservationView"
+	    	self.location = "/reservation/listReservation"
 		});
 		//////////모달 이동////////////////
 		
 		//////////주문 메뉴 체크////////////////
 		$("#orderCheck").on("click" , function() {
-	/* 		var title = JSON.stringify($("#orderName").val()) ;
-			var title2 = $("#orderName").val();
-			var menu = "${title2.menuTitle}";
-			console.log(menu);
-			console.log("title : " + title2); */
 
 			console.log( $("#orderName").val()); 
 			console.log( $("#orderName option:checked").text()); 
@@ -188,9 +177,7 @@
 		});
 		//////////주문 메뉴 체크////////////////
 		 $("body").on("click" , "#resetCheck", function() {
-	    		 console.log("123456"); 
-	    		 //$(".resetCheck-btn").removeClass("resetCheck");
-	    	///console.log(order[0].orderCount);
+			 
 	    	var count = $("#orderCount").val();
 	    	var price = $("#orderName").val();
 	    	console.log(count+"kkjjkj");
@@ -204,11 +191,6 @@
 	    	console.log(findPrice+"findPrice~~~~");
 	    	
 	    	console.log(reset);
-	    	
-	    	//console.log($(this).("#menuPrice").val());
-	    	
-	    	
-	    	//order_price_total -= price * count;
 	    	
 	    	order_price_total =parseInt(order_price_total) - (parseInt(findCount) * parseInt(findPrice));
 	    	
@@ -259,27 +241,32 @@
 						<!-- start:Form -->
 						<h3>예약하기</h3>
 					
-						<form name="addReservation" method="post" action="/addReservation">
+						<form id="addReservation">
 						
-								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
-								<%-- <input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" 								value="${reservation.reservationNo}"> --%>
-								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" 								value="${reservation.restaurant.restaurantNo}">
+								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="1">
+								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="1">
+<%-- 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
+								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}"> --%>
+								
+								<input type="hidden" id="member.memberId" name="member.memberId" value="${reservation.member.memberId}">
+								<%-- <input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" value="${reservation.reservationNo}"> --%>
+								<input type="hidden" id="restaurantNo" name="restaurantNo" value="${reservation.restaurant.restaurantNo}">
 							
 							<div class="row gtr-uniform">
 								<div class="col-6 col-12-xsmall">
 									<label for="nickname">NickName</label> 
 									<p>${reservation.member.nickname}</p>
-									<input id="nickname" type="hidden">
+									<input id="nickname" type="hidden" name="nickname" value="${reservation.member.nickname}">
 								</div>
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantName">음식점 명</label> 
 									<p>${reservation.restaurant.restaurantName}</p>
-									<input id="restaurantName" type="hidden">
+									<input id="restaurantName" type="hidden" name="restaurantName" value="${reservation.restaurant.restaurantName}">
 								</div>
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantTel">음식점 전화번호</label> 
 									<p>${reservation.restaurant.restaurantTel}</p>
-									<input id="restaurantTel" type="hidden">
+									<input id="restaurantTel" type="hidden" name="restaurantTel" value="${reservation.restaurant.restaurantTel}">
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
@@ -287,19 +274,21 @@
 									<p>${reservation.restaurant.streetAddress}</p>
 									<p>${reservation.restaurant.areaAddress}</p>
 									<p>${reservation.restaurant.restAddress}</p>
-									<input id="restaurantAdress" type="hidden">
+									<input id="streetAddress" type="hidden" name="streetAddress" value="${reservation.restaurant.streetAddress}">
+									<input id="areaAddress" type="hidden" name="areaAddress" value="${reservation.restaurant.areaAddress}">
+									<input id="restAddress" type="hidden" name="restAddress" value="${reservation.restaurant.restAddress}">
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantType">음식 종류</label> 
 									<p>${reservation.restaurant.menuType}</p>
-									<input id="restaurantType" type="hidden">
+									<input id="menuType" type="hidden" name="menuType" value="${reservation.restaurant.menuType}">
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="memberCount">예약 인원 수</label> 
 									<p>${reservation.memberCount} 명</p>
-									<input id="memberCount" type="hidden">
+									<input id="memberCount" type="hidden" name="memberCount" value="${reservation.memberCount}">
 								</div>
 								
 								<!-- Break -->
@@ -310,6 +299,7 @@
 					              		<option value="">선택해주세요.</option>
 					                	<c:forEach var="menu" items="${reservation.restaurant.restaurantMenus}">
 					                		<option value=${menu.menuPrice}>${menu.menuTitle}</option>
+					                		
 										</c:forEach>
 					                		
 					              </select>
@@ -341,9 +331,9 @@
 								</div>
 								
 								<div class="col-12 menutotalprice">
-									<label for="ordertotal">주문 메뉴 총 가격</label>
+									<label for="orderTotal">주문 메뉴 총 가격</label>
 									<div class="orderTotal"></div>
-									<input id="ordertotal" name="ordertotal" type="hidden">
+									<input id="totalPrice" name="totalPrice" type="hidden">
 								</div>
 								
 								
@@ -352,11 +342,11 @@
 								<!-- Break -->
 								<div class="col-6">
 									<label for="planDate">날짜 선택</label>
-									<input type="date" id="planDate">
+									<input type="date" id="planDate" name="planDate">
 								</div>
 								<div class="col-6">
 									<label for="planTime">시간 선택</label>
-					      			<input type="time" id="planTime">
+					      			<input type="time" id="planTime" name="planTime">
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
@@ -376,11 +366,11 @@
 									<label for="demo-priority">결제 수단</label>
 								</div>
 								<div class="col-4 col-12-small">
-									<input type="radio" id="sunPayment" name="demo-priority"
+									<input type="radio" id="sunPayment" name="payOption" value="2"
 										checked> <label for="sunPayment">선 결제</label>
 								</div>
 								<div class="col-4 col-12-small">
-									<input type="radio" id="huPayment" name="demo-priority">
+									<input type="radio" id="huPayment" name="payOption" value="1">
 									<label for="huPayment">방문 결제</label>
 								</div>
 								
@@ -427,13 +417,13 @@
 										<div class="modal-body">
 											<form class="form-signin">
 												
-												<h6 class="h6 mb-6 font-weight-normal">닉네임 예약 및 결제가 완료되었습니다.</h6>
+												<h6 class="h6 mb-6 font-weight-normal">예약 및 결제가 완료되었습니다.</h6>
 												
 												</div>
 												<input class="btn btn-lg ReservationPage" id="listReservationPage"
 													type="button" value="내 예약 내역 확인하러가기" />
 													
-												<input class="btn btn-lg btn-primary homePage" id="mainPage"
+												<input class="btn btn-lg btn-primary homePage" id="homePage"
 													type="button" value="홈" />	
 												
 											</form>
