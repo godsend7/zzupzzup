@@ -125,12 +125,43 @@
 	function certificatedNumCheckFunction() {
 		var certificatedNum = globalVariable;
 		var inputCertificatedNum = $("#certificatedNum").val();
-		console.log(inputCertificatedNum);
 		if (certificatedNum != inputCertificatedNum
 				&& inputCertificatedNum.length != 6) {
 			$("#checkCertificatedNumMsg").html("인증번호가 일치하지 않습니다. 다시 입력해주세요.");
 		} else {
 			$("#checkCertificatedNumMsg").html("");
+		}
+	}
+	
+	function fncAddUser() {
+		var name = $("#memberName").val();
+		var id = $("#memberId").val();
+		var pwd = $("#password").val();
+		var checkPwd = $("#checkPassword").val();
+		var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
+		var nickname = $("#nickname").val();
+		console.log("Member : [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+", 닉네임 : "+nickname+"]");
+		
+		if(name.length != 0 && id.length != 0 && pwd.length != 0 && checkPwd.length != 0 && phoneNum.length != 0 && nickname.length != 0) {
+			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user").submit();
+		} else {
+			alert("누락된 항목 확인 후 다시 입력하여 주세요.");
+		}
+	}
+	
+	function fncAddOwner() {
+		var name = $("#memberName").val();
+		var id = $("#memberId").val();
+		var pwd = $("#password").val();
+		var checkPwd = $("#checkPassword").val();
+		var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
+		var nickname = $("#nickname").val();
+		console.log("Member : [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+"]");
+		
+		if(name.length != 0 && id.length != 0 && pwd.length != 0 && checkPwd.length != 0 && phoneNum.length != 0) {
+			alert("회원가입 함수 진입");
+			$("#addMember").attr("method" , "POST").attr("action" , "/member/addMember/owner").submit();
+			alert("회원가입 완료 !");
 		}
 	}
 
@@ -142,33 +173,13 @@
 	$(function() {
 		console.log("addMember.jsp");
 		console.log("${param.memberRole}");
-
-		$("input:button[1]").on("click", function() {
-			
-			var name = $("#memberName").val();
-			var id = $("memberId").val();
-			var pwd = $("#password").val();
-			var checkPwd = $("#checkPassword").val();
-			var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
-			var nickname = $("#nickname").val();
-			
-			if(name.length != 0 && id.length != 0 && pwd.length != 0 && checkPwd.length != 0 && phoneNum.length != 0 && nickname.length != 0) {
-				$("#addMember").attr("method" , "POST").attr("action" , "/member/addMember/user").submit();	
-			}
-			
+		
+		$("input[value='회원가입']").on("click", function() {
+			fncAddUser();
 		})
-
-		$("input:button[2]").on("click", function() {
-			
-			var name = $("#memberName").val();
-			var id = $("memberId").val();
-			var pwd = $("#password").val();
-			var checkPwd = $("#checkPassword").val();
-			var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
-			
-			if(name.length != 0 && id.length != 0 && pwd.length != 0 && checkPwd.length != 0 && phoneNum.length != 0) {
-				$("#addMember").attr("method" , "POST").attr("action" , "/member/addMember/owner").submit();	
-			}
+		
+		$("input[value='다음']").on("click", function() {
+			fncAddOwner();
 		})
 
 		$("input[value='인증번호 전송']").on(
@@ -219,10 +230,10 @@
 				<section id="addMember">
 					<div class="container">
 						<div>
-							<form class="needs-validation" id="addMember" novalidate>
+							<form class="needs-validation" id="addMember-complete" novalidate>
 								<div>
 									<label for="memberName">이름</label> <input type="text"
-										onkeyup="fncCheckAccountForm();"
+										onkeyup="fncCheckAccountForm();" name="memberName"
 										class="col-sm-offset-1 col-sm-3 control-label" id="memberName"
 										value="" required><span id="checkNameMsg"
 										style="color: red; font-weight: bold"></span>
@@ -230,7 +241,7 @@
 								<br />
 								<div>
 									<label for="memberId">아이디</label> <input type="text"
-										class="form-control" id="memberId"
+										class="form-control" id="memberId" name="memberId"
 										onkeyup="fncCheckAccountForm();idCheckFunction();"
 										placeholder="example@zzupzzup.com" style="width: 300px"
 										required>&nbsp;<span id="checkIdMsg"
@@ -239,7 +250,7 @@
 								<br />
 								<div>
 									<label for="password">비밀번호</label> <input type="password"
-										class="form-control" id="password"
+										class="form-control" id="password" name="password"
 										onkeyup="fncCheckAccountForm();"
 										placeholder="8-15자 이내로 입력해주세요." style="width: 250px" required><span
 										id="checkPwdMsg" style="color: red; font-weight: bold"></span>
@@ -257,11 +268,11 @@
 								</div>
 								<br />
 								<div>
-									<label for="memberPhone1">전화번호</label> <input type="text"
+									<label for="memberPhone1">전화번호</label> <input type="text" name="memberPhone1"
 										class="form-control" id="memberPhone1" required>&nbsp;-&nbsp;
-									<input type="text" class="form-control" id="memberPhone2"
+									<input type="text" class="form-control" id="memberPhone2" name="memberPhone2"
 										required>&nbsp;-&nbsp; <input type="text"
-										onkeyup="fncCheckAccountForm();" class="form-control"
+										onkeyup="fncCheckAccountForm();" class="form-control" name="memberPhone3"
 										id="memberPhone3" required>&nbsp; <span
 										id="checkPhoneNumMsg" style="color: red; font-weight: bold"></span>
 									<input type="button" value="인증번호 전송" /> <label
@@ -274,14 +285,14 @@
 								<br />
 								<div>
 									<label for="profileImage">프로필 이미지</label> <input type="text"
-										class="form-control" id="profileImage">&nbsp; <input
+										class="form-control" id="profileImage" name="profileImage">&nbsp; <input
 										type="button" value="파일첨부" />
 								</div>
 								<br />
 								<c:if test="${param.memberRole == 'user'}">
 									<div>
 										<label for="nickname">닉네임</label> <input type="text"
-											class="form-control" id="nickname"
+											class="form-control" id="nickname" name="nickname"
 											onkeyup="fncCheckAccountForm();nicknameCheckFunction();"
 											placeholder="10자 이내로 입력해주세요." required>&nbsp; <span
 											id="checkNicknameMsg" style="color: red; font-weight: bold"></span>
@@ -290,13 +301,13 @@
 									<br />
 									<div>
 										<label for="stateMessage">자기소개 및 특이사항</label>
-										<textarea class="form-control" id="stateMessage"
+										<textarea class="form-control" id="stateMessage" name="stateMessage"
 											placeholder="100자 이내로 자유롭게 기술해주세요." rows="3"></textarea>
 									</div>
 									<br />
 									<div>
 										<label for="pushNickname">추천인 닉네임</label> <input type="text"
-											class="form-control" id="pushNickname"
+											class="form-control" id="pushNickname" name="pushNickname"
 											placeholder="10자 이내로 입력해주세요.">
 									</div>
 								</c:if>
@@ -316,10 +327,10 @@
 							<hr class="mb-4">
 							<input type="button" class="btn btn-lg btn-primary" value="취소"></input>
 							<c:if test="${param.memberRole == 'user'}">
-								<input type="button" class="btn btn-lg btn-primary" value="회원가입"></input>
+								<input type="button" id="addUser" class="btn btn-lg btn-primary" value="회원가입"></input>
 							</c:if>
 							<c:if test="${param.memberRole == 'owner'}">
-								<input type="button" class="btn btn-lg btn-primary" value="다음"></input>
+								<input type="button" id="addOwner" class="btn btn-lg btn-primary" value="다음"></input>
 							</c:if>
 						</div>
 					</div>

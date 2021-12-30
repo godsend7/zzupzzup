@@ -77,18 +77,21 @@ public class MemberController {
 	public String addMember(@PathVariable String memberRole, @ModelAttribute("member") Member member) throws Exception {
 		
 		System.out.println("/member/addMember/"+memberRole+" : POST");
-		
+		System.out.println(member);
 		member.setMemberRole(memberRole);
 		memberService.addMember(member);
 		System.out.println(member.getMemberRole());
-		if(member.getPushNickname() != null) {
-			//활동점수 추가하기
-			
-		}
-		if(member.getMemberRole() == "owner") {
-			//member domain과 같이 음식점 등록으로 페이지 넘기기
-			
-		}
+//		if(member.getPushNickname() != null) {
+//			//활동점수 추가하기
+//			Member pushMember = new Member();
+//			pushMember.setNickname(member.getPushNickname());
+//			
+//			
+//		}
+//		if(member.getMemberRole() == "owner") {
+//			//member domain과 같이 음식점 등록으로 페이지 넘기기
+//			
+//		}
 		
 		return "redirect:/main.jsp";
 		
