@@ -128,7 +128,7 @@
 				return;
 			}
 		
-			$("#restaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").submit();
+			$("#restaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").attr("enctype", "multipart/form-data").submit();
 			
 		}
 		
@@ -172,13 +172,16 @@
 	
 	<form class="form-horizontal" id="restaurant">
 	
+	<input type="hidden" name="member.memberId" value="${member.memberId}">
+	<input type="hidden" name="member.memberName" value="${member.memberName}">
+	
 	<div class="form-group">
 		<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>
 		<div class="col-sm-4">
 			<input type="text" class="form-control" id="restaurantName" name="restaurantName" placeholder="음식점명">
 		</div>
 	</div>
-	
+		
 	<div class="form-group">
 		<label for="restaurantTel" class="col-sm-offset-1 col-sm-3 control-label">음식점 전화번호</label>
 		<div class="col-sm-4">
@@ -338,7 +341,7 @@
 	<div class="col-sm-4">음식점 사진
 		
 		<label for="restaurantImage">음식점 이미지</label>
-		<input type="file" id="resImg" name="restaurantImage" multiple="multiple">
+		<input type="file" id="file" name="file" multiple="multiple">
 		
 		<!-- <input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
 		<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
