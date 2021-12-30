@@ -328,7 +328,7 @@
 	    	<label for="time"></label>
 	    	<input type="time" id="time" name="restaurantTimes[1].restaurantLastOrder">
 	    </div>
-	</div><br>
+	</div><br><br>
 	
 	<!-- <div class="col-sm-4">음식점 운영시간
 		<input type="text" name="restaurantTimes[0].restaurantOpen" placeholder="음식점 오픈시간">
@@ -338,14 +338,18 @@
 		<input type="text" name="restaurantTimes[0].restaurantDayOff" placeholder="음식점 휴무일">
 	</div> -->
 	
-	<div class="col-sm-4">음식점 사진
-		
+	<div class="col-sm-4">
 		<label for="restaurantImage">음식점 이미지</label>
 		<input type="file" id="file" name="file" multiple="multiple">
 		
 		<!-- <input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
 		<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
 		<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진"> -->
+	</div><br><br>
+	
+	<div class="col-sm-12">
+		<label for="restaurantText">음식점 소개글</label>
+		<textarea id="restaurantText" name="restaurantText" placeholder="음식점 소개글" rows="3" style="resize: none; height: 10em;"></textarea>
 	</div><br><hr>
 	
 	<!-- <div class="form-group"> -->
