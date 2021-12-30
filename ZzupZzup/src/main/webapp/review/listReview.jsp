@@ -30,7 +30,12 @@
 	    document.detailForm.submit(); */
 	    console.log(currentPage);
 	    $("#currentPage").val(currentPage);
-	    $("#review").attr("action","/review/listReview").attr("method", "POST").submit();
+	    
+	    if (${param.restaurantNo == null}) {
+	    	$("#review").attr("action","/review/listReview").attr("method", "POST").submit();
+		} else {
+			$("#review").attr("action","/review/listReview?restaurantNo=${param.restaurantNo}").attr("method", "POST").submit();
+		}
 	}
 	
 	
@@ -40,6 +45,11 @@
 				alert("로그인이 필요한 서비스입니다.");
 				return;
 			}
+			
+			if (${member.memberRole != "user"}) {
+				return;
+			}
+			
 			console.log($(this).find("input[name='reviewNo']").val());
 			
 			//좋아요 체크한 상태일 경우(좋아요에 색깔이 있을 경우)
@@ -89,6 +99,7 @@
 					
 						<form id="review">
 							<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
+							<%-- <input type="hidden" id="restaurantNo" name="restaurantNo" value="${param.restaurantNo}"/> --%>
 							<input type="hidden" id="currentPage" name="currentPage" value=""/>
 						</form>
 						

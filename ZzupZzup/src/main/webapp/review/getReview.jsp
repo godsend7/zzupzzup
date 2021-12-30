@@ -27,6 +27,8 @@ img {
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
+	var reviewNo = "";
+	
     $(document).on("click", ".reviewModal", function () { 
     	var reviewNo = $(this).data('id'); 
     	
@@ -37,6 +39,12 @@ img {
 			dataType : "json",
 			success : function(data, status) {
 				console.log(data);
+				
+				if (data == null) {
+					alert("다시 시도해주세요");
+					return;
+				}
+				
 				//review = data;
 				//onsole.log(review.member.memberId);
 				
@@ -50,7 +58,7 @@ img {
 				$("#scopeKind").text(data.scopeKind);
 				
 				$("#reviewDetail").text(data.reviewDetail);
-				$()
+				reviewNo = data.reviewNo;
 				
 				
 				$("#hashtagBox").empty();
@@ -65,9 +73,28 @@ img {
 					imageOutPut(item);
 				});
 				
-				if (!data) {
-					alert("다시 시도해주세요");
+				if ("${member.memberId}" === data.member.memberId) {
+					
+					var footer = "<div class='modal-footer'>" 
+								+ "<input type='button' class='normal' id='reviewDelete' value='삭제'></input> "
+								+ "<input type='button' class='primary' id='reviewUpdate' value='수정'></input>"
+								+ "</div>";
+					
+					$(".footerBox").empty();
+					$(".footerBox").append(footer);
 				}
+				
+				$("#reviewDelete").on("click", function() {
+		   	    	console.log("삭제 클릭");
+		   	    	if (confirm("정말 삭제하시겠습니까?")) {
+		   	    		self.location = "/review/deleteReview?reviewNo=" + data.reviewNo;
+		   	    	}
+		   	    });
+		   	    
+		   	    $("#reviewUpdate").on("click", function() {
+		   	    	console.log("수정 클릭");
+		   	    	self.location = "/review/updateReview?reviewNo=" + data.reviewNo;
+		   	    });
 			}
 		}); 
     });
@@ -84,16 +111,9 @@ img {
     	$("#reviewImage").append(image);
     } 
     
-    window.onload = function () {
-    	$("#reviewDelete").on("click", function() {
-   	    	console.log("삭제 클릭");
-   	    });
+    $(function() {
    	    
-   	    $("#reviewUpdate").on("click", function() {
-   	    	console.log("수정 클릭");
-   	    });
-   	    
-   	// carousel prev & next
+   		// carousel prev & next
 		$("#car_prev").on("click", function(){
 			console.log("prev");
 			$("#carouselExampleIndicators").carousel("prev");
@@ -103,7 +123,7 @@ img {
 			console.log("next");
 			$("#carouselExampleIndicators").carousel("next");
 		});
-    }
+    });
    
 </script>
 
@@ -122,11 +142,11 @@ img {
 			</div>
 			<div class="modal-body">
 				<div class="mb-6" style="float: right;">
-					<span id="reviewRegDate">${sessionScope.review.reviewRegDate}</span>
+					<span id="reviewRegDate"></span>
 				</div>
 				<!-- <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
 				<h5 class="h6 mb-6 font-weight-normal">
-					<span id="memberRank">${sessionScope.review.member.memberRank}</span> <span id="nickname">${sessionScope.review.member.nickname}</span> 
+					<span id="memberRank"></span> <span id="nickname"></span> 
 				</h5>
 				
 				<br/>
@@ -195,40 +215,40 @@ img {
 				<div class="row">
 					<div class="col-md-4">
 						<label for="scopeClean" class="label star_label">청결해요</label>
-						<p id="scopeClean" class="star_p">${sessionScope.review.scopeClean}</p>
+						<p id="scopeClean" class="star_p"></p>
 					</div>
 					<div class="col-md-4">
 						<label for="scopeTaste" class="label star_label">맛있어요</label>
-						<p id="scopeTaste" class="star_p">${sessionScope.review.scopeTaste}</p>
+						<p id="scopeTaste" class="star_p"></p>
 					</div>
 					<div class="col-md-4">
 						<label for="scopeKind" class="label star_label">친절해요</label> 
-						<p id="scopeKind" class="star_p">${sessionScope.review.scopeKind}</p>
+						<p id="scopeKind" class="star_p"></p>
 					</div>
 				</div>
 				
 				<br/>
 				
 				<label for="reviewDetail">리뷰 상세내용</label>
-				<p id="reviewDetail">${sessionScope.review.reviewDetail}</p>
+				<p id="reviewDetail"></p>
 				
 				<br/>
 				
 				<label for="hashTag">해시태그</label>
 				<div class="box" id="hashtagBox" >
-					<c:forEach var="hashtag" items="${sessionScope.review.hashTag}">
-						<span class='badge badge-pill badge-secondary'>${hashtag.hashTag}</span>
-					</c:forEach>
 				</div>
 				
 				<p class="mt-5 mb-3 text-muted" style="text-align: right;" id="reviewLike"></p>
 				
 			</div>
-			<div class="modal-footer">
-		        <input type="button" class="normal" id="reviewDelete" value="삭제"></input>
-		        <input type="button" class="secondary" id="reviewDelete" value="삭제"></input>
-		        <input type="button" class="primary" id="reviewUpdate" value="수정"></input>
-		    </div>
+			<div class="footerBox">
+			</div>
+			<%-- <c:if test="${!empty member}">
+				<div class="modal-footer">
+			        <input type="button" class="normal" id="reviewDelete" value="삭제"></input>
+			        <input type="button" class="primary" id="reviewUpdate" value="수정"></input>
+			    </div>
+			</c:if> --%>
 		</div>
 	</div>
 </div>
