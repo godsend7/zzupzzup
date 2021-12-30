@@ -331,12 +331,12 @@ public class MemberServiceTest {
 //	    memberService.sendCertificatedNum(certificatedNum, phoneNum);
 		
 		//*전송받은 인증번호 확인
-		String certificatedNum = "217754";
-		if(memberService.checkCertificatedNum("217754", certificatedNum, "01048290865", phoneNum)) {
-			System.out.println("전화번호 인증이 완료되었습니다.");
-		} else {
-			System.out.println("인증번호가 일치하지 않습니다. 다시 확인하여 주세요.");
-		}
+//		String certificatedNum = "217754";
+//		if(memberService.checkCertificatedNum("217754", certificatedNum)) {
+//			System.out.println("전화번호 인증이 완료되었습니다.");
+//		} else {
+//			System.out.println("인증번호가 일치하지 않습니다. 다시 확인하여 주세요.");
+//		}
 		
 		//카카오 로그인
 		

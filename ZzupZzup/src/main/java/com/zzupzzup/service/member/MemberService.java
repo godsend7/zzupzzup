@@ -25,11 +25,11 @@ public interface MemberService {
 	
 	public int sendCertificatedNum(String certificatedNum, String phoneNum) throws Exception;
 	
-	public boolean checkCertificatedNum(String inputCertificatedNum, String certificatedNum, String inputPhoneNum, String phoneNum) throws Exception;
+//	public boolean checkCertificatedNum(String inputCertificatedNum, String certificatedNum) throws Exception;
 	
 	public int updateMember(Member member) throws Exception;
 	
-	public boolean confirmPwd(String password) throws Exception;
+//	public boolean confirmPwd(String password) throws Exception;
 	
 	public Member getMember(Member member) throws Exception;
 	

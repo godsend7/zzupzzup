@@ -131,7 +131,7 @@
 			}
 			
 		
-			$("#community").attr("method" , "POST").attr("action" , "/community/listCommunity").submit();
+			$("#community").attr("method" , "POST").attr("action" , "/community/addCommunity").submit();
 			
 		}
 		
