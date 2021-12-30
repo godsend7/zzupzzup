@@ -53,9 +53,9 @@
 	<insert		id="addCommunity"	parameterType="community" useGeneratedKeys="true" keyProperty="postNo">
 		INSERT
 		INTO COMMUNITY(MEMBER_ID, POST_TITLE, POST_TEXT, RESTAURANT_NAME, RESTAURANT_TEL,
-		STREET_ADDRESS, AREA_ADDRESS, MENU_TYPE, RECEIPT_IMAGE, MAIN_MENU_TITLE, MAIN_MENU_PRICE)
+		STREET_ADDRESS, AREA_ADDRESS, REST_ADDRESS, MENU_TYPE, RECEIPT_IMAGE, MAIN_MENU_TITLE, MAIN_MENU_PRICE)
 		VALUES ( #{member.memberId}, #{postTitle}, #{postText}, #{restaurantName}, #{restaurantTel},
-		#{streetAddress}, #{areaAddress}, #{menuType}, #{receiptImage}, #{mainMenuTitle}, #{mainMenuPrice})
+		#{streetAddress}, #{areaAddress}, #{restAddress}, #{menuType}, #{receiptImage}, #{mainMenuTitle}, #{mainMenuPrice})
 	</insert>
 	
 	<insert 	id="addRestaurantTime"	parameterType="community" >

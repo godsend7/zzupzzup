@@ -26,6 +26,18 @@
 			});
 		});
 		
+		$(function() {
+			$("button.btn.btn-link").on("click", function() {
+				$("#restaurant").attr("method", "POST").attr("action","/community/deleteCommunity").submit();
+			});
+		});
+		
+		$(function() {
+			$("button.btn.btn-primary").on("click", function() {
+				self.location = "/community/updateCommunity?postNo=${community.postNo}"
+			});
+		});
+		
 		// carousel prev & next
 		$("#car_prev").click(function(){
 			$("#carouselExampleFade").carousel("prev");
@@ -53,11 +65,15 @@
 				
 				<section id="">
 				
+				<form id="restaurant">
+				
+				<input type="hidden" class="form-control" id="community.postNo" name="community.postNo" value="${community.postNo}">
+				
 				<div class="container">
 					
 					<div class="row">
 				       <h2 class=" col">${community.postTitle} &nbsp;
-				       	<small style="color:gray;">작성자: ${community.member.memberId}</small></h2>
+				       	<small style="color:gray;">작성자: ${community.member.nickname}</small></h2>
 				    </div><hr>
 				    
 				    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
@@ -128,10 +144,14 @@
 					</div><hr>
 					
 					<div class="text-center">
+						<button type="button" class="btn btn-link">삭제하기</button>
+						<button type="button" class="btn btn-primary">수정하기</button>
 						<button type="button" class="btn btn-warning">목록으로</button>
 					</div>
 					
 				</div>
+				
+				</form>
 	
 				</section>
 			</div>
