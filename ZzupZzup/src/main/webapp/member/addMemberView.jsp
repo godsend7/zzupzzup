@@ -19,6 +19,9 @@
 <script src="/resources/js/jquery.min.js"></script>
 <script type="text/javascript">
 	
+	//회원가입 시 확인하는 사항
+	var addMemberFlag = false;
+	
 	//양식 유효성 확인
 	function fncCheckAccountForm() {
 		var name = $("#memberName").val();
@@ -27,39 +30,73 @@
 		var checkPwd = $("#checkPassword").val();
 		var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
 		var nickname = $("#nickname").val();
+		var gender = $("#input[name=genders]:checked");
+		var ageRange = $("#input[name=ageRanges]:checked");
 
 		var pattern1 = /[0-9]/;
 		var pattern2 = /[a-zA-Z]/i;
+		
+		var regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/
 
 		//이름이 비었을 때
 		if (name.length == 0) {
-			$("#checkNameMsg").html("이름을 입력해주세요.");
+			$("#checkNameMsg").text("이름을 입력해주세요.");
+			addMemberFlag = false;
 		} else {
-			$("#checkNameMsg").html("");
+			$("#checkNameMsg").text("");
+			addMemberFlag = true;
 		}
 		
 		if (pwd.length == 0) {	//비밀번호가 비었을 때
-			$("#checkPwdMsg").html("비밀번호를 입력해주세요.");
+			$("#checkPwdMsg").text("비밀번호를 입력해주세요.");
+			addMemberFlag = false;
 		} else if (!pattern1.test(pwd) || !pattern2.test(pwd) || pwd.length < 8 || pwd.length > 15) {
-			$("#checkPwdMsg").html("비밀번호 형식에 맞춰 다시 입력해주세요.");	//비밀번호 형식 확인(알파벳 대소문자, 숫자, 특수문자)
+			$("#checkPwdMsg").text("비밀번호 형식에 맞춰 다시 입력해주세요.");	//비밀번호 형식 확인(알파벳 대소문자, 숫자, 특수문자)
+			addMemberFlag = false;
 		} else {
-			$("#checkPwdMsg").html("");
+			$("#checkPwdMsg").text("");
+			addMemberFlag = true;
 		}
 		
 		//전화번호가 비었을 때
 		if ($("#memberPhone1").val().length == 0 || $("#memberPhone2").val().length == 0 || $("#memberPhone3").val().length == 0) {
-			$("#checkPhoneNumMsg").html("전화번호를 입력해주세요.");
+			$("#checkPhoneNumMsg").text("전화번호를 입력해주세요.");
+			addMemberFlag = false;
+		} else if (!regPhone.test(phoneNum)) {
+			$("#checkPhoneNumMsg").text("전화번호 형식에 맞춰 다시 입력해주세요.");	//전화번호 형식 확인
+			addMemberFlag = false;
 		} else {
-			$("#checkPhoneNumMsg").html("");
+			$("#checkPhoneNumMsg").text("");
+			addMemberFlag = true;
 		}
 		
 		//닉네임이 비었을 때(유저만 해당)
-		if (${param.memberRole == 'user'} && nickname == 0) {
-			$("#checkNicknameMsg").html("닉네임을 입력해주세요.");
+		if (${param.memberRole == 'user'} && nickname.length == 0) {
+			$("#checkNicknameMsg").text("닉네임을 입력해주세요.");
+			addMemberFlag = false;
 		} else {
-			$("#checkNicknameMsg").html("");
+			$("#checkNicknameMsg").text("");
+			addMemberFlag = true;
 		}
-
+		
+		//성별 선택 안 되었을 때
+		if (${param.memberRole == 'user'} && !gender1.checked && !gender2.checked) {
+			$("#checkGenderMsg").text("성별을 선택해주세요.");
+			addMemberFlag = false;
+		} else {
+			$("#checkGenderMsg").text("");
+			addMemberFlag = true;
+		}
+		
+		//연령대 선택 안 되었을 때
+		if (${param.memberRole == 'user'} && !ageRange1.checked && !ageRange2.checked && !ageRange3.checked && !ageRange4.checked && !ageRange5.checked && !ageRange6.checked) {
+			$("#checkAgeRangeMsg").text("연령대를 선택해주세요.");
+			addMemberFlag = false;
+		} else {
+			$("#checkAgeRangeMsg").text("");
+			addMemberFlag = true;
+		}
+		
 	}
 
 	//이메일 정규식 전역변수 선언
@@ -77,12 +114,15 @@
 			success : function(result) {
 				if(emailForm.test(memberId)) {
 					if (result) {
-						$("#checkIdMsg").html("사용할 수 있는 아이디입니다.");	
+						$("#checkIdMsg").text("사용할 수 있는 아이디입니다.");	
+						addMemberFlag = true;
 					} else {
-						$("#checkIdMsg").html("이미 사용 중인 아이디입니다. 다른 아이디를 입력해 주세요.");
+						$("#checkIdMsg").text("이미 사용 중인 아이디입니다. 다른 아이디를 입력해 주세요.");
+						addMemberFlag = false;
 					}
 				} else {
-					$("#checkIdMsg").html("이메일 형식에 맞춰 다시 입력해주세요.");
+					$("#checkIdMsg").text("이메일 형식에 맞춰 다시 입력해주세요.");
+					addMemberFlag = false;
 				}
 			}
 		})
@@ -99,9 +139,11 @@
 			},
 			success : function(result) {
 				if (result) {
-					$("#checkNicknameMsg").html("사용할 수 있는 닉네임입니다.");
+					$("#checkNicknameMsg").text("사용할 수 있는 닉네임입니다.");
+					addMemberFlag = true;
 				} else {
-					$("#checkNicknameMsg").html("이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해 주세요.");
+					$("#checkNicknameMsg").text("이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해 주세요.");
+					addMemberFlag = false;
 				}
 			}
 		})
@@ -112,9 +154,11 @@
 		var pwd = $("#password").val();
 		var checkPwd = $("#checkPassword").val();
 		if (pwd != checkPwd) {
-			$("#checkSamePwdMsg").html("비밀번호가 일치하지 않습니다.");
+			$("#checkSamePwdMsg").text("비밀번호가 일치하지 않습니다.");
+			addMemberFlag = false;
 		} else {
-			$("#checkSamePwdMsg").html("");
+			$("#checkSamePwdMsg").text("");
+			addMemberFlag = true;
 		}
 	}
 
@@ -125,14 +169,19 @@
 	function certificatedNumCheckFunction() {
 		var certificatedNum = globalVariable;
 		var inputCertificatedNum = $("#certificatedNum").val();
+		
 		if (certificatedNum != inputCertificatedNum
 				&& inputCertificatedNum.length != 6) {
-			$("#checkCertificatedNumMsg").html("인증번호가 일치하지 않습니다. 다시 입력해주세요.");
-		} else {
-			$("#checkCertificatedNumMsg").html("");
+			$("#checkCertificatedNumMsg").text("인증번호가 일치하지 않습니다. 다시 입력해주세요.");
+			addMemberFlag = false;
+		} else if(certificatedNum == inputCertificatedNum
+				&& inputCertificatedNum.length == 6) {
+			$("#checkCertificatedNumMsg").text("");
+			addMemberFlag = true;
 		}
 	}
 	
+	//유저 회원가입 함수
 	function fncAddUser() {
 		var name = $("#memberName").val();
 		var id = $("#memberId").val();
@@ -140,15 +189,22 @@
 		var checkPwd = $("#checkPassword").val();
 		var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
 		var nickname = $("#nickname").val();
-		console.log("Member : [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+", 닉네임 : "+nickname+"]");
+		var gender = $("#input[name=genders]:checked").val();
+		var ageRange = $("#input[name=ageRanges]:checked").val();
+		console.log("Member : [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+", 닉네임 : "+nickname+", 성별 : "+gender+", 연령대 : "+ageRange+"]");
 		
-		if(name.length != 0 && id.length != 0 && pwd.length != 0 && checkPwd.length != 0 && phoneNum.length != 0 && nickname.length != 0) {
-			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user").submit();
-		} else {
-			alert("누락된 항목 확인 후 다시 입력하여 주세요.");
+		if(${param.loginType == '1'} && addMemberFlag == true) {
+			alert("hi");
+			$("#addUser").replaceWith("<input type='button' id='addUser' class='btn btn-lg btn-primary' style='float:right' value='회원가입'></input>");
+			alert("successed change !");
+			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
+		} else if(${param.loginType != '1'} && addMemberFlag == true) {
+			$("#addUser").replaceWith("<input type='button' id='addUser' class='btn btn-lg btn-primary' style='float:right' value='회원가입'></input>");
+			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
 		}
 	}
 	
+	//업주 회원가입 함수
 	function fncAddOwner() {
 		var name = $("#memberName").val();
 		var id = $("#memberId").val();
@@ -158,10 +214,9 @@
 		var nickname = $("#nickname").val();
 		console.log("Member : [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+"]");
 		
-		if(name.length != 0 && id.length != 0 && pwd.length != 0 && checkPwd.length != 0 && phoneNum.length != 0) {
-			alert("회원가입 함수 진입");
-			$("#addMember").attr("method" , "POST").attr("action" , "/member/addMember/owner").submit();
-			alert("회원가입 완료 !");
+		if(addMemberFlag == true) {
+			$("#addUser").replaceWith("<input type='button' id='addOwner' class='btn btn-lg btn-primary' style='float:right' value='다음'></input>");
+			$("#addMember-complete").attr("method" , "POST").attr("action" , "/member/addMember/owner/1").submit();
 		}
 	}
 
@@ -206,7 +261,7 @@
 		})
 
 		$("input[value='취소']").on("click", function() {
-			location.href = "/main.jsp";
+			location.href = "/";
 		})
 	});
 </script>
@@ -231,87 +286,159 @@
 					<div class="container">
 						<div>
 							<form class="needs-validation" id="addMember-complete" novalidate>
-								<div>
-									<label for="memberName">이름</label> <input type="text"
-										onkeyup="fncCheckAccountForm();" name="memberName"
-										class="col-sm-offset-1 col-sm-3 control-label" id="memberName"
-										value="" required><span id="checkNameMsg"
-										style="color: red; font-weight: bold"></span>
+								<div class="row">
+									<div class="col">
+										<label for="memberName">이름</label> <input type="text"
+											onkeyup="fncCheckAccountForm();" name="memberName" maxlength="9"
+											class="form-control" id="memberName"
+											value="" required><span id="checkNameMsg"
+											style="color: red; font-weight: bold"></span>
+										<br/>
+										<c:if test="${param.loginType == '1'}">
+										<label for="password">비밀번호</label> <input type="password"
+												class="form-control" id="password" name="password"
+												onkeyup="fncCheckAccountForm();" minlength="8" maxlength="15"
+												placeholder="8-15자 이내로 입력해주세요." required><span
+												id="checkPwdMsg" style="color: red; font-weight: bold"></span>
+											<!-- <h5>알파벳 대소문자, 숫자, 특수문자(~, !, @, #, $, %, ^, &, *, \, /)를
+												조합하여 비밀번호를 구성하세요.</h5> -->
+										</c:if>
+									</div>
+										<div class="col">
+											<label for="memberId">아이디</label> <input type="text"
+											class="form-control" id="memberId" name="memberId"
+											onkeyup="fncCheckAccountForm();idCheckFunction();"
+											placeholder="example@zzupzzup.com"
+											required>&nbsp;<span id="checkIdMsg"
+											style="color: red; font-weight: bold"></span>
+											<br/>
+										<c:if test="${param.loginType == '1'}">
+											<label for="checkPassword">비밀번호 확인</label> <input
+												type="password" class="form-control" id="checkPassword"
+												onkeyup="fncCheckAccountForm();pwdCheckFunction();" minlength="8" maxlength="15"
+												placeholder="비밀번호를 다시 입력해주세요." required>
+											<span id="checkSamePwdMsg"
+												style="color: red; font-weight: bold"></span>
+										</c:if>
+									</div>
 								</div>
-								<br />
-								<div>
-									<label for="memberId">아이디</label> <input type="text"
-										class="form-control" id="memberId" name="memberId"
-										onkeyup="fncCheckAccountForm();idCheckFunction();"
-										placeholder="example@zzupzzup.com" style="width: 300px"
-										required>&nbsp;<span id="checkIdMsg"
-										style="color: red; font-weight: bold"></span>
+								<br/>
+								<div class="row">
+									<div>
+										<label for="memberPhone1">전화번호</label>
+									</div>
 								</div>
-								<br />
-								<div>
-									<label for="password">비밀번호</label> <input type="password"
-										class="form-control" id="password" name="password"
-										onkeyup="fncCheckAccountForm();"
-										placeholder="8-15자 이내로 입력해주세요." style="width: 250px" required><span
-										id="checkPwdMsg" style="color: red; font-weight: bold"></span>
-									<h5>알파벳 대소문자, 숫자, 특수문자(~, !, @, #, $, %, ^, &, *, \, /)를
-										조합하여 비밀번호를 구성하세요.</h5>
+								<div class="row">
+									<div class="col">
+										<input type="text" name="memberPhone1"
+											class="form-control" id="memberPhone1" maxlength="3" required>
+									</div>
+									<div class="col">
+										<input type="text" class="form-control" id="memberPhone2" name="memberPhone2"
+											maxlength="4" required>
+									</div>
+									<div class="col">	
+										<input type="text"
+											onkeyup="fncCheckAccountForm();" class="form-control" name="memberPhone3"
+											id="memberPhone3" maxlength="4" required>
+									</div>
 								</div>
-								<br />
-								<div>
-									<label for="checkPassword">비밀번호 확인</label> <input
-										type="password" class="form-control" id="checkPassword"
-										onkeyup="fncCheckAccountForm();pwdCheckFunction();"
-										placeholder="비밀번호를 다시 입력해주세요." style="width: 250px" required>
-									<span id="checkSamePwdMsg"
-										style="color: red; font-weight: bold"></span>
+								<div class="row">
+									<div class="col">
+										<span id="checkPhoneNumMsg" style="color: red; font-weight: bold; float:left"></span>
+									</div>
+									<div class="col">
+										<br/>
+										<input type="button" value="인증번호 전송" style="float:right"/>
+									</div>
 								</div>
-								<br />
-								<div>
-									<label for="memberPhone1">전화번호</label> <input type="text" name="memberPhone1"
-										class="form-control" id="memberPhone1" required>&nbsp;-&nbsp;
-									<input type="text" class="form-control" id="memberPhone2" name="memberPhone2"
-										required>&nbsp;-&nbsp; <input type="text"
-										onkeyup="fncCheckAccountForm();" class="form-control" name="memberPhone3"
-										id="memberPhone3" required>&nbsp; <span
-										id="checkPhoneNumMsg" style="color: red; font-weight: bold"></span>
-									<input type="button" value="인증번호 전송" /> <label
-										for="certificeatedNum">인증번호</label> <input type="text"
-										class="form-control" id="certificatedNum"
+								<div class="row">
+									<div class="col">
+										<label for="certificeatedNum">인증번호</label>
+										<input type="text" class="form-control" id="certificatedNum"
 										onkeyup="fncCheckAccountForm();certificatedNumCheckFunction();"
-										required><span id="checkCertificatedNumMsg"
+										required>
+										<span id="checkCertificatedNumMsg"
 										style="color: red; font-weight: bold"></span>
+									</div>
 								</div>
-								<br />
-								<div>
-									<label for="profileImage">프로필 이미지</label> <input type="text"
-										class="form-control" id="profileImage" name="profileImage">&nbsp; <input
-										type="button" value="파일첨부" />
+								<hr class="mb-4">
+								<div class="row">
+									<div class="col">
+										<label class="form-label" for="profileImage">프로필 이미지</label>
+										<input type="file" class="form-control" id="profileImage" name="profileImage"/>
+									</div>
+									<br/>
+									<c:if test="${param.memberRole == 'user'}">
+										<div class="col">
+											<label for="nickname">닉네임</label> <input type="text"
+												class="form-control" id="nickname" name="nickname"
+												onkeyup="fncCheckAccountForm();nicknameCheckFunction();"
+												placeholder="10자 이내로 입력해주세요." required>&nbsp; <span
+												id="checkNicknameMsg" style="color: red; font-weight: bold"></span>
+											<br/>
+											<label for="stateMessage">자기소개 및 특이사항</label>
+											<textarea class="form-control" id="stateMessage" name="stateMessage"
+												placeholder="100자 이내로 자유롭게 기술해주세요." rows="3"></textarea>
+										</div>
+									</c:if>
 								</div>
-								<br />
 								<c:if test="${param.memberRole == 'user'}">
-									<div>
-										<label for="nickname">닉네임</label> <input type="text"
-											class="form-control" id="nickname" name="nickname"
-											onkeyup="fncCheckAccountForm();nicknameCheckFunction();"
-											placeholder="10자 이내로 입력해주세요." required>&nbsp; <span
-											id="checkNicknameMsg" style="color: red; font-weight: bold"></span>
-										<div class="invalid-feedback">닉네임은 반드시 입력해야 합니다.</div>
+									<br/>
+									<div class="row">
+										<div class="col">
+											<label for="stateMessage">성별</label>
+												<input class="form-check-input" type="radio" name="genders" id="gender1" value="male">
+												<label class="form-check-label" for="gender1">
+												    남
+												</label>
+												<input class="form-check-input" type="radio" name="genders" id="gender2" value="female">
+												<label class="form-check-label" for="gender2">
+												    여
+												</label>
+												<span id="checkGenderMsg"
+												style="color: red; font-weight: bold"></span>
+										</div>
+										<div class="col">
+											<label for="stateMessage">연령대</label>
+												<input class="form-check-input" type="radio" name="ageRanges" id="ageRange1" value="10대">
+												<label class="form-check-label" for="ageRange1">
+												    10대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRanges" id="ageRange2" value="20대">
+												<label class="form-check-label" for="ageRange2">
+												    20대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRanges" id="ageRange3" value="30대">
+												<label class="form-check-label" for="ageRange3">
+												    30대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRanges" id="ageRange4" value="40대">
+												<label class="form-check-label" for="ageRange4">
+												    40대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRanges" id="ageRange5" value="50대">
+												<label class="form-check-label" for="ageRange5">
+												    50대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRanges" id="ageRange6" value="60대 이상">
+												<label class="form-check-label" for="ageRange6">
+												    60대 이상
+												</label>
+												<span id="checkAgeRangeMsg"
+												style="color: red; font-weight: bold"></span>
+										</div>
 									</div>
-									<br />
-									<div>
-										<label for="stateMessage">자기소개 및 특이사항</label>
-										<textarea class="form-control" id="stateMessage" name="stateMessage"
-											placeholder="100자 이내로 자유롭게 기술해주세요." rows="3"></textarea>
-									</div>
-									<br />
-									<div>
-										<label for="pushNickname">추천인 닉네임</label> <input type="text"
-											class="form-control" id="pushNickname" name="pushNickname"
-											placeholder="10자 이내로 입력해주세요.">
+									<br/>
+									<div class="row">
+										<div class="col">
+											<label for="pushNickname">추천인 닉네임</label> <input type="text"
+												class="form-control" id="pushNickname" name="pushNickname"
+												placeholder="10자 이내로 입력해주세요.">
+										</div>
 									</div>
 								</c:if>
-								<hr class="mb-4">
+								<!-- <hr class="mb-4">
 								<div class="custom-control custom-checkbox">
 									<input type="checkbox" class="custom-control-input"
 										id="same-address"> <label class="custom-control-label"
@@ -322,15 +449,15 @@
 									<input type="checkbox" class="custom-control-input"
 										id="save-info"> <label class="custom-control-label"
 										for="save-info">Save this information for next time</label>
-								</div>
+								</div> -->
 							</form>
 							<hr class="mb-4">
-							<input type="button" class="btn btn-lg btn-primary" value="취소"></input>
+							<input type="button" class="btn btn-lg btn-primary" style="float:right" value="취소"></input>
 							<c:if test="${param.memberRole == 'user'}">
-								<input type="button" id="addUser" class="btn btn-lg btn-primary" value="회원가입"></input>
+								<input type="button" id="addUser" class="btn btn-lg btn-primary" style="float:right" value="회원가입" disabled></input>
 							</c:if>
 							<c:if test="${param.memberRole == 'owner'}">
-								<input type="button" id="addOwner" class="btn btn-lg btn-primary" value="다음"></input>
+								<input type="button" id="addOwner" class="btn btn-lg btn-primary" style="float:right" value="다음" disabled></input>
 							</c:if>
 						</div>
 					</div>
