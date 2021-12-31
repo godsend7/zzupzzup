@@ -31,4 +31,7 @@ public interface RestaurantService {
 	
 	public int cancelCallDibs(String memberId, int restaurantNo) throws Exception;
 	
+	// Select List
+	public Map<String, Object> listRestaurantName(Search search) throws Exception;
+	
 }

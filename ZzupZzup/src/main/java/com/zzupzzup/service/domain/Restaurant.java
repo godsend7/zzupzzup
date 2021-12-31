@@ -3,6 +3,8 @@ package com.zzupzzup.service.domain;
 import java.util.Date;
 import java.util.List;
 
+import com.zzupzzup.common.util.CommonUtil;
+
 public class Restaurant {
 	
 	///Field
@@ -120,8 +122,8 @@ public class Restaurant {
 	}
 
 
-	public int getMenuType() {
-		return menuType;
+	public String getMenuType() {
+		return CommonUtil.intToStringMenuType(menuType);
 	}
 
 

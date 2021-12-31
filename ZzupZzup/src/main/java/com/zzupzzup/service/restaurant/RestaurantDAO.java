@@ -34,4 +34,6 @@ public interface RestaurantDAO {
 	
 	public int cancelCallDibs(Map<String, Object> map) throws Exception;
 	
+	public List<Restaurant> listRestaurantName(Map<String, Object> map);
+	
 }

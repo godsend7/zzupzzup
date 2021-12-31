@@ -9,7 +9,14 @@
 	<a href="/" class="logo"><strong>ZZUPZZUPDUCE_101</strong></a>
 
 	<ul class="icons">
-		<jsp:include page="/member/loginView.jsp" />
+		<c:if test="${ empty member}">
+			<!-- Button trigger modal -->
+			<input type="button" value="로그인" class="button"
+				data-toggle="modal" data-target="#loginModal" />
+		</c:if>
+		<c:if test="${ ! empty member}">
+			<input type="button" value="로그아웃" class="button" id="logout" />
+		</c:if>
 	</ul>
 
 

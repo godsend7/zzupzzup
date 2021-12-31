@@ -1,5 +1,6 @@
 package com.zzupzzup.web.member;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,34 +65,36 @@ public class MemberController {
 		
 	}
 	
-	@RequestMapping(value="addMember/{memberRole}", method=RequestMethod.GET)
-	public String addMember(@PathVariable String memberRole) throws Exception {
+	@RequestMapping(value="addMember/{memberRole}/{loginType}", method=RequestMethod.GET)
+	public String addMember(@PathVariable String memberRole, @PathVariable String loginType) throws Exception {
 		
-		System.out.println("/member/addMember/"+memberRole+" : GET");
+		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : GET");
 		
-		return "redirect:/member/addMemberView.jsp?memberRole="+memberRole;
+		return "redirect:/member/addMemberView.jsp?memberRole="+memberRole+"&loginType="+loginType;
 		
 	}
 	
-	@RequestMapping(value="addMember/{memberRole}", method=RequestMethod.POST)
-	public String addMember(@PathVariable String memberRole, @ModelAttribute("member") Member member) throws Exception {
+	@RequestMapping(value="addMember/{memberRole}/{loginType}", method=RequestMethod.POST)
+	public String addMember(@PathVariable String memberRole, @PathVariable String loginType, @ModelAttribute("member") Member member, HttpServletRequest request) throws Exception {
 		
-		System.out.println("/member/addMember/"+memberRole+" : POST");
-		System.out.println(member);
+		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : POST");
+		
 		member.setMemberRole(memberRole);
 		memberService.addMember(member);
-		System.out.println(member.getMemberRole());
-//		if(member.getPushNickname() != null) {
-//			//활동점수 추가하기
-//			Member pushMember = new Member();
-//			pushMember.setNickname(member.getPushNickname());
-//			
-//			
-//		}
-//		if(member.getMemberRole() == "owner") {
-//			//member domain과 같이 음식점 등록으로 페이지 넘기기
-//			
-//		}
+		String pushNickname = member.getPushNickname();
+		
+		if(pushNickname != null) {
+			//활동점수 추가하기
+			Member pushMember = new Member();
+			pushMember.setNickname(pushNickname);
+			memberService.getMember(pushMember);
+			memberService.addActivityScore(pushNickname, 1, 10);
+		}
+		if(member.getMemberRole() == "owner") {
+			//member domain과 같이 음식점 등록으로 페이지 넘기기
+			request.setAttribute("addOwner", memberService.getMember(member));
+			return "forward:/restaurant/addRestaurant.jsp";
+		}
 		
 		return "redirect:/main.jsp";
 		
