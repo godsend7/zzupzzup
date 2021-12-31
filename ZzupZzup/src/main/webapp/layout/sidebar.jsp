@@ -62,7 +62,7 @@
 		</nav>
 
 		<!-- Section -->
-		<section>
+		<section style="display:none">
 			<header class="major">
 				<h2>Benchmarking</h2>
 			</header>
@@ -95,3 +95,7 @@
 	</div>
 </div>
 <!--  E:Sidebar -->
+
+<!-- S: Login Modal -->
+<jsp:include page="/member/loginView.jsp" />
+<!-- E: Login Modal -->

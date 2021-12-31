@@ -123,5 +123,15 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 		return sqlSession.delete("RestaurantMapper.cancelCallDibs", map);
 	}
 
+
+	@Override
+	public List<Restaurant> listRestaurantName(Map<String, Object> map) {
+		System.out.println("restaurantDaoImpl listRestaurantName map : " + map);
+	      
+	      List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listRestaurantName", map);
+	      
+	      return list;
+	}
+
 	
 }

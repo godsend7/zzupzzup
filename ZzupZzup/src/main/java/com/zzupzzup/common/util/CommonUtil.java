@@ -108,6 +108,43 @@ public class CommonUtil {
 		}
 	}
 	
+	public static String intToStringMenuType(int menuType) {
+		
+		String typeName = "";
+		
+		if(menuType == 1) {
+			typeName = "한식";
+			
+			return typeName;
+			
+		} else if(menuType == 2) {
+			typeName = "중식";
+			
+			return typeName;
+			
+		} else if(menuType == 3) {
+			typeName = "일식";
+			
+			return typeName;
+			
+		} else if(menuType == 4) {
+			typeName = "양식";
+			
+			return typeName;
+		
+		} else if(menuType == 5) {
+			typeName = "카페";
+			
+			return typeName;
+		
+		} else {
+			
+			return "YOU CAN NOT TRANSFORMATION";
+		}
+		
+	}
+	
+	
 	public static String returnReportData(int reportCategory, int reportType) {
 		
 		String data = "";

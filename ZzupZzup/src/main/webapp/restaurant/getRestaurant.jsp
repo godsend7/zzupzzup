@@ -26,6 +26,12 @@
 			});
 		});
 		
+		$(function() {
+			$("button.btn.btn-link").on("click", function() {
+				$("#restaurant").attr("method", "POST").attr("action","/restaurant/deleteRestaurant").submit();
+			});
+		});
+		
 		// carousel prev & next
 		$("#car_prev").click(function(){
 			$("#carouselExampleFade").carousel("prev");
@@ -51,7 +57,7 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 				
-				<section id="">
+				<section id="restaurant">
 					<div class="container">
 					
 					<h2 class="text-warning">${restaurant.restaurantName}&nbsp;<small style="color:gray;">${restaurant.menuType}</small></h2><hr>
@@ -117,6 +123,7 @@
 					</div><br><br><hr>
 					
 					<div class="text-center">
+						<button type="button" class="btn btn-link">삭제하기</button>
 						<button type="button" class="btn btn-warning">목록으로</button>
 					</div>
 					

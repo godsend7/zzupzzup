@@ -131,4 +131,21 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 
 
+	@Override
+	public Map<String, Object> listRestaurantName(Search search) throws Exception {
+		
+		System.out.println("restaurantServiceImpl listRestaurantName");
+		System.out.println("search : " + search);
+	      
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		
+		System.out.println("map : " + map);
+		
+		map.put("list", restaurantDAO.listRestaurantName(map));
+		
+		return map;
+	}
+
+
 }

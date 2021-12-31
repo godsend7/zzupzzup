@@ -68,18 +68,31 @@ public class CommunityController {
 		
 		System.out.println("/community/getCommunity : GET");
 		
-		System.out.println("test section 1 : " + postNo);
+//		System.out.println("test section 1 : " + postNo);
 		
 		Community community = communityService.getCommunity(postNo);
 		
-		System.out.println("test section 2 : " + postNo);
+//		System.out.println("test section 2 : " + postNo);
 		
 		model.addAttribute("community", community);
 		
-		System.out.println("test section 3 : " + community);
+//		System.out.println("test section 3 : " + community);
 		
 		return "forward:/community/getCommunity.jsp";
 	}
+	
+	@RequestMapping(value="updateCommunity", method=RequestMethod.GET)
+	public String updateCommunity(@RequestParam("postNo") int postNo, HttpSession session) throws Exception {
+		
+		System.out.println("community/updateCommunity : GET");
+		
+		Community community = communityService.getCommunity(postNo);
+		
+		session.setAttribute("community", community);
+		
+		return "forward:/community/updateCommunity.jsp";
+	}
+	
 	
 	@RequestMapping(value="updateCommunity", method=RequestMethod.POST)
 	public String updateCommunity(@ModelAttribute("community") Community community, HttpSession session) throws Exception {
@@ -127,6 +140,20 @@ public class CommunityController {
 		model.addAttribute("search", search);
 		
 		return "forward:/community/listCommunity.jsp";	
+	}
+	
+	@RequestMapping(value="deleteCommunity", method=RequestMethod.POST)
+	public String deleteCommunity(@RequestParam("postNo") int postNo) throws Exception {
+		
+		System.out.println("/community/deleteCommunity : POST");
+		
+		System.out.println("THE POST YOU ARE GOING TO DELETE : " + postNo);
+		
+		communityService.deleteCommunity(postNo);
+		
+		System.out.println("POST DELETE SUCCESS");
+		
+		return "redirect:/community/listCommunity";
 	}
 	
 	

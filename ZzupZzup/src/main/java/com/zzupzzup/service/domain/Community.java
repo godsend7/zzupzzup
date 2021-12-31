@@ -1,7 +1,10 @@
 package com.zzupzzup.service.domain;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+
+import com.zzupzzup.common.util.CommonUtil;
 
 public class Community {
 	
@@ -23,7 +26,7 @@ public class Community {
 	private String restaurantTel3;
 	///////////////////////////////
 	private String receiptImage;
-	private Date postRegDate;
+	private Timestamp postRegDate;
 	private int likeCount; // Column 없음
 	private boolean postShowStatus;
 	private Date officialDate;
@@ -166,11 +169,11 @@ public class Community {
 		this.receiptImage = receiptImage;
 	}
 
-	public Date getPostRegDate() {
-		return postRegDate;
+	public String getPostRegDate() {
+		return CommonUtil.getDate(postRegDate);
 	}
 
-	public void setPostRegDate(Date postRegDate) {
+	public void setPostRegDate(Timestamp postRegDate) {
 		this.postRegDate = postRegDate;
 	}
 
@@ -198,8 +201,8 @@ public class Community {
 		this.officialDate = officialDate;
 	}
 
-	public int getMenuType() {
-		return menuType;
+	public String getMenuType() {
+		return CommonUtil.intToStringMenuType(menuType);
 	}
 
 	public void setMenuType(int menuType) {

@@ -73,7 +73,13 @@
 							<div class="col-md-4">
 								<div class="card mb-4 shadow-sm">
 									<a href="" class="thumb">
-										<img src="/resources/images/uploadImages/default.jpg" height="100%">
+										<c:if test="${community.postImage[0] == null}">
+											<img src="/resources/images/uploadImages/default.jpg" height="100%">
+										</c:if>
+										<c:if test="${community.postImage[0] != null}">
+											<img src="/resources/images/uploadImages/${community.postImage[0]}" height="100%">
+										</c:if>
+										
 									</a>
 									<div class="card-body">
 										<c:if test="${member.memberRole == 'admin'}">
