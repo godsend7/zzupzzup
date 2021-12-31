@@ -349,10 +349,10 @@
 					      			<input type="time" id="planTime" name="planTime">
 								</div>
 								
-								<div class="col-6 col-12-xsmall">
+								<%-- <div class="col-6 col-12-xsmall">
 									<label for="restaurantTimes">음식점 영업 시간</label> 
 									<p>${reservation.restaurant.restaurantTimes}</p>
-								</div>
+								</div> --%>
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="demo-memberCount"></label> 

@@ -42,14 +42,7 @@
 	});
 </script>
 
-<c:if test="${ empty member}">
-	<!-- Button trigger modal -->
-	<input type="button" value="로그인" class="btn btn-primary"
-		data-toggle="modal" data-target="#loginModal" />
-</c:if>
-<c:if test="${ ! empty member}">
-	<input type="button" value="로그아웃" class="btn btn-primary" id="logout" />
-</c:if>
+
 
 <!-- Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog"
@@ -86,8 +79,8 @@
 						class="btn btn-lg btn-primary btn-block" id="naverLogin"
 						type="button" value="네이버 로그인 (구현 예정)" /><br/><br/>
 						회원이 아니신가요? > 
-						<a href="/member/addMember/user">유저</a>&nbsp;/
-						<a href="/member/addMember/owner">업주</a>
+						<a href="/member/addMember/user/1">유저</a>&nbsp;/
+						<a href="/member/addMember/owner/1">업주</a>
 					<p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
 				</form>
 			</div>

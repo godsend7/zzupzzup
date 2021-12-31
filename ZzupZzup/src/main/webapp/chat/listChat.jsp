@@ -56,6 +56,10 @@
 					let chatState = JSONData.chatState;
 					let chatRegDate = JSONData.chatRegDate;
 					let regdate = new Date(chatRegDate);
+					let showStatus = "";
+					if(JSONData.chatShowStatus == false){
+						showStatus = "<i class='fa fa-eye-slash' aria-hidden='true'></i>";
+					}
 					chatRegDate = regdate.getFullYear()+"-"+(regdate.getMonth()+1)+"-"+regdate.getDate();
 					if(chatState == 1){
 						chatState = "<span class='badge badge-success chat-state'>모집중</span>";
@@ -67,33 +71,59 @@
 						chatState = "<span class='badge badge-danger chat-state'>모임완료</span>";
 					}
 					let displayValueBd = 
-						"<ul class='data-list'>"
-						+"<li>"+chatState+"</li>"
-						+"<li><span class='badge badge-secondary chat-no'>"+JSONData.chatNo+"</span></li>"
-						+"<li>채팅방 제목 : "+JSONData.chatTitle+"</li>"
-						+"<li>개설일 : "+chatRegDate+"</li>"
-						+"<li>"+JSONData.chatText+"</li>"
-						+"<li>참가인원수 : "+JSONData.chatMemberCount+"</li>"
-						+"<li>참가가능성별 : "+JSONData.chatGender+"</li>"
-						+"<li>참가가능연령대 : "+JSONData.chatAge+"</li>"
-						+"<li>"+JSONData.chatLeaderId.profileImage+"</li>"
-						+"<li>"+JSONData.chatLeaderId.nickname+"</li>"
-						+"<li>"+JSONData.chatLeaderId.gender+"</li>"
-						+"<li>"+JSONData.chatLeaderId.age+"</li>"
-						+"<li> 상태메세지 : "+JSONData.chatLeaderId.statusMessage+"</li>"
-						+"<li> 노출여부 : "+JSONData.chatShowStatus+"</li>"
-						+"<li> 신고횟수 : "+JSONData.reportCount+"</li>"
-						+"<li>"+JSONData.chatRestaurant.restaurantName+"</li>"
-						+"<li>음식점 타입 : "+JSONData.chatRestaurant.menuType+"</li>"
-						+"<li>"+JSONData.chatRestaurant.streetAddress+"</li>"
-						+"<li>"+JSONData.chatRestaurant.areaAddress+"</li>"
-						+"<li>"+JSONData.chatRestaurant.restaurantTel+"</li>"
-						+ "</ul>";
+						'<div class="get-chat-info mb-3">'
+						+'<div class="d-flex justify-content-between">'
+						+'<div><span class="badge badge-secondary chat-no">'+JSONData.chatNo+'</span></div>'
+						+'<div><span class="badge badge-success chat-state">'+chatState+'</span></div>'
+						+'</div>'
+						+'<div class="d-flex justify-content-between">'
+						+'<h3 class="card-title mb-2">'+JSONData.chatTitle+'</h3>'
+						+'</div>'
+						+'<div class="d-flex justify-content-between">'
+						+'<h4 class="card-subtitle mb-2">'+JSONData.chatText+'</h4>'
+						+'</div>'
+						+'<div class="d-flex justify-content-between">'
+						+'<div>참가중인 인원수</div>'
+						+'<div>'+JSONData.chatMemberCount+'</div>'
+						+'</div>'
+						+'<div class="d-flex justify-content-between">'
+						+'<div>참가가능한 성별</div>'
+						+'<div>'+JSONData.chatGender+'</div>'
+						+'</div>'
+						+'<div class="d-flex justify-content-between">'
+						+'<div>참가가능한 연령대</div>'
+						+'<div>'+JSONData.chatAge+'</div>'
+						+'</div>'
+						+'<div class="d-flex justify-content-between">'
+						+'<div>개설일</div>'
+						+'<div>'+chatRegDate+'</div>'
+						+'</div>'
+						+'<div class="d-flex justify-content-between">'
+						+'<div>'+showStatus+ ' ' +JSONData.reportCount+' 회</div>'
+						+'</div>'
+						+'</div>'
+						+'<div class="get-chat-user-info mb-3">'
+						+'<div class="chatProfile d-flex flex-row align-items-center">'
+						+'<img src="/resources/images/common/'+JSONData.chatLeaderId.profileImage+'">'
+						+'<div class="dropdown-parent">'
+						+'<a href="">'+JSONData.chatLeaderId.nickname+'</a>'
+						+'</div>'
+						+'<span class="badge badge-info gender">'+JSONData.chatLeaderId.gender+'</span>'
+						+'<span class="badge badge-warning age">'+JSONData.chatLeaderId.ageRange+'</span>'
+						+'</div>'
+						+'<div>'+JSONData.chatLeaderId.statusMessage+'</div>'
+						+'</div>'
+						+'<div clas="get-chat-restaurant-info">'
+						+'<div>'+JSONData.chatRestaurant.restaurantName+' ('+JSONData.chatRestaurant.menuType+')</div>'
+						+'<div>'+JSONData.chatRestaurant.restaurantTel+'</div>'
+						+'<div>'+JSONData.chatRestaurant.streetAddress+'</div>'
+						+'<div>'+JSONData.chatRestaurant.areaAddress+'</div>'
+						+'</div>';
 					let displayValueFt = "<input type='button' data-target="+JSONData.chatNo+" class='button small warning' value='대화기록보기'/>"
 					+"<input type='button' data-target="+JSONData.chatNo+" class='button small info' value='수정하기'/>"
 					+"<input type='button' class='button small secondary' data-dismiss='modal' value='닫기' />"
 					+"<input type='button' data-target="+JSONData.chatNo+" class='button small primary' value='입장하기'>"
-					$(".modal-body").html(displayValueBd);
+					$(".get-chat-con").html(displayValueBd);
 					$(".modal-footer").html(displayValueFt);
 					if(chatImg == 'chatimg.jpg'){
 						$(".modal-body").css("background-image", "url(/resources/images/sub/"+chatImg+")");
@@ -212,7 +242,7 @@
 											</div>
 											<div class="card-img">
 												<img
-													src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg">
+													src="/resources/images/uploadImages/chat/${chat.chatImage}">
 											</div>
 											<div class="card-body">
 												<div class="chat-rating-info">
@@ -262,7 +292,9 @@
 												<span aria-hidden="true">&times;</span>
 											</button>
 										</div>
-										<div class="modal-body"></div>
+										<div class="modal-body">
+											<div class="get-chat-con"></div>
+										</div>
 										<div class="modal-footer">
 											
 										</div>

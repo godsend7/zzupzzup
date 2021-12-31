@@ -114,7 +114,7 @@
 			
 			var map = new naver.maps.Map('content', {
 		        center: new naver.maps.LatLng(nowLatitude, newLongitude),  //지도 시작 좌표, 현재위치로 변경
-		        zoom: 10
+		        zoom: 15
 		    });
 			
 			for (var i=0; i<arrayLayout.length; i++) {
@@ -179,13 +179,13 @@
 	<div id="wrapper">
 
 		<!-- S:Main -->
-		<div id="main">
+		<div id="main" class="index">
 			<div class="inner">
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
 				<section id="map">
-					<div class="content" id="content" style="width: 100%; height:70vh;"></div>
+					<div class="content" id="content" style="width: 100%; height:100vh;"></div>
 				</section>
 			</div>
 		</div>

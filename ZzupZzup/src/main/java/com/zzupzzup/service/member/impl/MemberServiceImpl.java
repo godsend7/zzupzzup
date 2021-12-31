@@ -199,9 +199,9 @@ public class MemberServiceImpl implements MemberService{
 //	}
 
 	@Override
-	public int addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception {
+	public int addActivityScore(String nickname, int accumulType, int accumulScore) throws Exception {
 		// TODO Auto-generated method stub
-		memberDao.addActivityScore(memberId, accumulType, accumulScore);
+		memberDao.addActivityScore(nickname, accumulType, accumulScore);
 		
 		return 1;
 	}
