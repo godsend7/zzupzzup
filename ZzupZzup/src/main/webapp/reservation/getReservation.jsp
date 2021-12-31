@@ -21,170 +21,39 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
 	$(function() {
-		/* var orderCount = 0;
-		var order_price_total = 0;
-	 */
-		
+
 		console.log("getReservationView.jsp");
 		
 		////////////////////////////////////==> 유효성 체크
-		function fncGetReservation() {
-			
-			
-			/* let orderName = $("#orderName").val();
-			let orderCount = $("#orderCount").val();
-			
-			console.log("orderName : " + orderName);
-			console.log("orderCount : " + orderCount);
-			
-			if(orderName == null){
-				alert("메뉴를 선택해주세요");
-				return;
-			}
-			
-			if(orderCount == null){
-				alert("수량을 선택해주세요");
-				return; */
-			}
-			
-			//$("#totalPrice").val(order_price_total);
-			//console.log("totalPrice~~~"+$("#totalPrice").val());
-			//$("#addReservation").attr("method" , "POST").attr("action" , "/reservation/addReservation").submit();
-		}
-		
-		 //console.log(${reservation.restaurant.restaurantName}+"거구장~~~");
-		 
-	     
-	    $( "body" ).on("click" , ".payment1", function() {
-	    	requestPay();
-		});
-	    
-	    $( "body" ).on("click" , ".payment2", function() {
-	    	fncAddReservation();
-	    	$("#modal").trigger('click');
-		});
-	    /* $( ".payment2" ).on("click" , function() {
-	    	$("#modal");
-		}); */
-	    
-		/////////아임포트 function//////////////////
 		
 		//////////이전페이지////////////////
-	    $(".reset").on("click" , function() {
+	   /*  $(".no").on("click" , function() {
 	    	self.location = "/reservation/listReservation"
-		});
+		}); */
 		//////////이전페이지////////////////
 		
 		//////////모달 이동////////////////
-	    $("#yes").on("click" , function() {
+	    /* $(".yes").on("click" , function() {
 	    	self.location = "/reservation/getReservation"
-		});
+		}); */
 		//////////모달 이동////////////////
 		
 		//////////모달 이동////////////////
-	    $("#close").on("click" , function() {
-	    	self.location = "/reservation/getReservation"
-		});
+	    /* $(".close").on("click" , function() {
+	    	self.location = "/"
+		}); */
+		
 		//////////모달 이동////////////////
 		
-		//////////주문 메뉴 체크////////////////
-		$("#orderCheck").on("click" , function() {
-
-			console.log( $("#orderName").val()); 
-			console.log( $("#orderName option:checked").text()); 
-			console.log($("#orderCount").val());
-			//console.log($("#price").val());
-			
-	    	/* $(".order").append("<input type='hidden' name='order["+ orderCount +"].menuTitle' value='"+ 
-	    			$("#orderName option:checked").text() + "'>");
-	    	$(".order").append("<input type='hidden' name='order["+ orderCount +"].orderCount' value='"+ $("#orderCount").val() + "'>");
-	    	$(".order").append("<input type='hidden' name='order["+ orderCount +"].menuPrice' value='"+ $("#orderName").val() + "'>"); */
-	    	
-	    	//
-	    	var menu_order_list = "";
-	    	menu_order_list += "<div class='row nbsp'>";
-	    	menu_order_list += "<div class='col-md-3'>선택 메뉴 : <input type='text' name='order["+ orderCount +"].menuTitle' id='menuTitle' value='"+ 
-			$("#orderName option:checked").text() + "'></div>";
-			menu_order_list += "<div class='col-md-3'>메뉴 수량 : <input type='text' name='order["+ orderCount +"].orderCount' id='orderCount' value='"+ $("#orderCount").val() + "'></div>";
-			menu_order_list += "<div class='col-md-3'>메뉴 가격 : <input type='text' name='order["+ orderCount +"].menuPrice' id='menuPrice' value='"+ $("#orderName").val() + "'></div>";
-			menu_order_list += "<div class='col-md-2'><input type='button' id='resetCheck' name='resetCheck' value='취소' class= 'button small primary'></div>";
-			menu_order_list += "</div>";
-			
-			//console.log(menu_order_list);
-			
-			$(".orderresult").append(menu_order_list);
-			
-			orderCount++;
-	    	
-	    	/* $(".orderresult").append("<p class='nbsp'><input type='text' name='order["+ orderCount +"].menuTitle' value='"+ 
-	    			$("#orderName option:checked").text() + "'><input type='text' name='order["+ orderCount +"].orderCount' value='"+ $("#orderCount").val() + "'><input type='text' name='order["+ orderCount +"].menuPrice' value='"+ $("#orderName").val() + "'><input type='button' id='resetCheck' 			name='resetCheck' value='취소' class= 'button small primary'></p>"); */
-	    	
-	    	/* $(".orderresult").append("<p class='nbsp'><span>"+ $("#orderName option:checked").text() + 
-	    	"</span> <span>" + $("#orderCount").val() + "</span> <span>" + 	$("#orderName").val() + "</span><input type='button' id='resetCheck' 			name='resetCheck' value='취소' class= 'button small primary'></p>"); */
-	    	
-	    	//$(".orderresult").append("<span>" + $("#orderCount").val() + "</span>");
-	    	//$(".orderresult").append("<span>" + $("#orderName").val() + "</span></p>");
-	    	
-	    	/////////////////////////최종가격//////////////////////////
+		/////////////////////////getReservation 모달사용//////////////////////////
+		/* $( "body" ).on("click" , ".fixedDate", function() {
+			$("#modal").trigger('click');
+			$(".yes").on("click" , function() {
+				self.location = "/main.jsp"
+			});  */
+	   	
+	   	/////////////////////////최종가격//////////////////////////
 	  
-	   
-			
-	    	var count = $("#orderCount").val();
-	    	var price = $("#orderName").val();
-	    	
-	    	order_price_total = parseInt(order_price_total) + (parseInt(count) * parseInt(price));
-		    console.log(parseInt(count) * parseInt(price));
-   
-		    $(".orderTotal").empty();
-			$(".orderTotal").append(order_price_total);
-	    	//$("#orderCount").val();
-	    	
-	    	 
-		});
-		//////////주문 메뉴 체크////////////////
-		 $("body").on("click" , "#resetCheck", function() {
-			 
-	    	var count = $("#orderCount").val();
-	    	var price = $("#orderName").val();
-	    	console.log(count+"kkjjkj");
-	    	console.log(price+"jjjj");
-	    	
-	    	
-	    	var reset = $(this).parent().parent('.nbsp');
-	    	var findCount = $(this).parent().parent('.nbsp').find("#orderCount").val();
-	    	var findPrice = $(this).parent().parent('.nbsp').find("#menuPrice").val();
-	    	console.log(findCount+"findCount~~~");
-	    	console.log(findPrice+"findPrice~~~~");
-	    	
-	    	console.log(reset);
-	    	
-	    	order_price_total =parseInt(order_price_total) - (parseInt(findCount) * parseInt(findPrice));
-	    	
-	    	reset.remove();
-	    	$(".orderTotal").empty();
-			$(".orderTotal").append(order_price_total);
-	    	
-	 	});
-		/////////결제 선택 페이지//////////////
-	
-       
-     // 선결제 체크시 결제페이지 class 값을 2개로 나눠서 1번일시 결제페이지 2번일시 모달창이 나오도록 구현
-            $("#sunPayment").click(function(){ //선결제 라디오
-            	$(".payment-btn").removeClass("payment2");
-            	$(".payment-btn").addClass("payment1");
-            
-            		console.log("sunPayment");
-            });
-            
-          
-         	$("#huPayment").click(function(){ //방문결제
-                $(".payment-btn").removeClass("payment1");
-                $(".payment-btn").addClass("payment2");
-            		console.log("huPayment111");
-            }); 
-            
-	///////////결제 선택 페이지////////////////////////////////////////////////////
-	
 	});
 </script>
 </head>
@@ -230,14 +99,11 @@
 								</div>
 							
 							
-								<div class="col-6 col-12-xsmall">
+								<div class="col-12">
 									<label for="nickname">NickName</label> 
 									<p>${reservation.member.nickname}</p>
 								</div>
-								<div class="col-6 col-12-xsmall">
-									<label for="restaurantName">음식점 명</label> 
-									<p>${reservation.restaurant.restaurantName}</p>
-								</div>
+								
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantTel">음식점 전화번호</label> 
 									<p>${reservation.restaurant.restaurantTel}</p>
@@ -263,16 +129,29 @@
 					<!-- ///////////////////get 추가///////////////////////// -->			
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantType">방문 확정 전</label>
-									<p>${reservation.planDate}
+									<p>${reservation.planDate} ${reservation.planTime}
 									<!-- Button trigger modal -->
-									<input type="button" value="방문 확정" class="button small primary stretched-link" id="modal" data-toggle="modal"
+								
+								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->
+								<c:if test="${member.memberRole == 'admin'}">
+									<input type="button" value="방문 확정" class="button small primary stretched-link" id="admin-modal" data-toggle="modal"
 									data-target="#getReservationModal"/></p>
+								</c:if>	
+								
+								<c:if test="${member.memberRole == 'owner'}">
+									<input type="button" value="예약 거절" class="button small primary stretched-link" id="owner-modal" data-toggle="modal"
+									data-target="#getReservationModal"/></p>
+								</c:if>	
+								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->	
 									<!-- Button trigger modal --> 
 								</div>
 								
-								<div class="col-6 col-12-xsmall">
+								<div class="col-6 col-12-xsmall fixedDate">
 									<label for="memberCount">방문 확정 후</label> 
 									<p>${reservation.fixedDate}</p>
+									<input id="fixedDate" name="fixedDate" type="hidden" value="1">
+									
+									
 								</div>
 								
 								<div class="col-12">
@@ -288,7 +167,7 @@
 								<!-- Break -->
 								<div class="col-12">
 									<label for="restaurantType">예약 및 결제 일시</label> 
-									<p>${reservation.restaurant.menuType}</p>
+									<p>${reservation.reservationDate}</p>
 								</div>
 								
 								<!-- ///////////////////get 추가///////////////////////// -->
@@ -296,12 +175,10 @@
 								<div class="col-6 col-12-xsmall">
 									<label for="orderName">주문 메뉴 명, 수량</label> 
 									
-					                <p>	<c:forEach var="menu" items="${order.menuTitle}">
-					                		<option value=${order.menuTitle}>${order.menuTitle}</option>
-					                		<p>${order.orderCount}</p>
+					                <p>	<c:forEach var="order" items="${reservation.order[0].menuTitle}">
+					                		<c:out value = "${reservation.order[0].menuTitle} ${reservation.order[0].orderCount}"/>
 										</c:forEach> </p>
 								</div>
-								
 								
 								
 								<div class="col-6 col-12-xsmall">
@@ -316,28 +193,6 @@
 									<p>${reservation.payOption}</p>
 								</div>
 								
-								
-								<!-- Break -->
-								
-								
-								
-								
-								
-								
-								<!-- <div class="col-12">
-									<label for="demo-priority">결제 수단</label>
-								</div>
-								<div class="col-4 col-12-small">
-									<input type="radio" id="sunPayment" name="payOption" value="2"
-										checked> <label for="sunPayment">선 결제</label>
-								</div>
-								<div class="col-4 col-12-small">
-									<input type="radio" id="huPayment" name="payOption" value="1">
-									<label for="huPayment">방문 결제</label>
-								</div> -->
-								
-								<!-- Break -->
-							
 								
 								<script type="text/javascript"></script>
 							 
