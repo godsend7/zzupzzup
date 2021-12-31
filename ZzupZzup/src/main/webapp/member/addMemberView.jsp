@@ -20,7 +20,7 @@
 <script type="text/javascript">
 	
 	//회원가입 시 확인하는 사항
-	boolean addMemberFlag = false;
+	var addMemberFlag = false;
 	
 	//양식 유효성 확인
 	function fncCheckAccountForm() {
@@ -30,65 +30,70 @@
 		var checkPwd = $("#checkPassword").val();
 		var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
 		var nickname = $("#nickname").val();
-		var gender = $("#input[name=genders]:checked").val();
-		var ageRange = $("#input[name=ageRanges]:checked").val();
+		var gender = $("#input[name=genders]:checked");
+		var ageRange = $("#input[name=ageRanges]:checked");
 
 		var pattern1 = /[0-9]/;
 		var pattern2 = /[a-zA-Z]/i;
+		
+		var regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/
 
 		//이름이 비었을 때
 		if (name.length == 0) {
-			$("#checkNameMsg").html("이름을 입력해주세요.");
+			$("#checkNameMsg").text("이름을 입력해주세요.");
 			addMemberFlag = false;
 		} else {
-			$("#checkNameMsg").html("");
+			$("#checkNameMsg").text("");
 			addMemberFlag = true;
 		}
 		
 		if (pwd.length == 0) {	//비밀번호가 비었을 때
-			$("#checkPwdMsg").html("비밀번호를 입력해주세요.");
+			$("#checkPwdMsg").text("비밀번호를 입력해주세요.");
 			addMemberFlag = false;
 		} else if (!pattern1.test(pwd) || !pattern2.test(pwd) || pwd.length < 8 || pwd.length > 15) {
-			$("#checkPwdMsg").html("비밀번호 형식에 맞춰 다시 입력해주세요.");	//비밀번호 형식 확인(알파벳 대소문자, 숫자, 특수문자)
+			$("#checkPwdMsg").text("비밀번호 형식에 맞춰 다시 입력해주세요.");	//비밀번호 형식 확인(알파벳 대소문자, 숫자, 특수문자)
 			addMemberFlag = false;
 		} else {
-			$("#checkPwdMsg").html("");
+			$("#checkPwdMsg").text("");
 			addMemberFlag = true;
 		}
 		
 		//전화번호가 비었을 때
 		if ($("#memberPhone1").val().length == 0 || $("#memberPhone2").val().length == 0 || $("#memberPhone3").val().length == 0) {
-			$("#checkPhoneNumMsg").html("전화번호를 입력해주세요.");
+			$("#checkPhoneNumMsg").text("전화번호를 입력해주세요.");
+			addMemberFlag = false;
+		} else if (!regPhone.test(phoneNum)) {
+			$("#checkPhoneNumMsg").text("전화번호 형식에 맞춰 다시 입력해주세요.");	//전화번호 형식 확인
 			addMemberFlag = false;
 		} else {
-			$("#checkPhoneNumMsg").html("");
+			$("#checkPhoneNumMsg").text("");
 			addMemberFlag = true;
 		}
 		
 		//닉네임이 비었을 때(유저만 해당)
 		if (${param.memberRole == 'user'} && nickname.length == 0) {
-			$("#checkNicknameMsg").html("닉네임을 입력해주세요.");
+			$("#checkNicknameMsg").text("닉네임을 입력해주세요.");
 			addMemberFlag = false;
 		} else {
-			$("#checkNicknameMsg").html("");
+			$("#checkNicknameMsg").text("");
 			addMemberFlag = true;
 		}
 		
 		//성별 선택 안 되었을 때
-		if (${param.memberRole == 'user'} && gender.length == 0) {
-			$("#checkGenderMsg").html("성별을 선택해주세요.");
+		if (${param.memberRole == 'user'} && !gender1.checked && !gender2.checked) {
+			$("#checkGenderMsg").text("성별을 선택해주세요.");
 			addMemberFlag = false;
 		} else {
-			$("#checkGenderMsg").html("");
+			$("#checkGenderMsg").text("");
 			addMemberFlag = true;
 		}
 		
 		//연령대 선택 안 되었을 때
-		if (${param.memberRole == 'user'} && ageRange.length == 0) {
-			$("#checkAgeRangeMsg").html("연령대를 선택해주세요.");
+		if (${param.memberRole == 'user'} && !ageRange1.checked && !ageRange2.checked && !ageRange3.checked && !ageRange4.checked && !ageRange5.checked && !ageRange6.checked) {
+			$("#checkAgeRangeMsg").text("연령대를 선택해주세요.");
 			addMemberFlag = false;
 		} else {
-			$("#checkAgeRangeMsg").html("");
+			$("#checkAgeRangeMsg").text("");
 			addMemberFlag = true;
 		}
 		
@@ -109,14 +114,14 @@
 			success : function(result) {
 				if(emailForm.test(memberId)) {
 					if (result) {
-						$("#checkIdMsg").html("사용할 수 있는 아이디입니다.");	
+						$("#checkIdMsg").text("사용할 수 있는 아이디입니다.");	
 						addMemberFlag = true;
 					} else {
-						$("#checkIdMsg").html("이미 사용 중인 아이디입니다. 다른 아이디를 입력해 주세요.");
+						$("#checkIdMsg").text("이미 사용 중인 아이디입니다. 다른 아이디를 입력해 주세요.");
 						addMemberFlag = false;
 					}
 				} else {
-					$("#checkIdMsg").html("이메일 형식에 맞춰 다시 입력해주세요.");
+					$("#checkIdMsg").text("이메일 형식에 맞춰 다시 입력해주세요.");
 					addMemberFlag = false;
 				}
 			}
@@ -134,10 +139,10 @@
 			},
 			success : function(result) {
 				if (result) {
-					$("#checkNicknameMsg").html("사용할 수 있는 닉네임입니다.");
+					$("#checkNicknameMsg").text("사용할 수 있는 닉네임입니다.");
 					addMemberFlag = true;
 				} else {
-					$("#checkNicknameMsg").html("이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해 주세요.");
+					$("#checkNicknameMsg").text("이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해 주세요.");
 					addMemberFlag = false;
 				}
 			}
@@ -149,10 +154,10 @@
 		var pwd = $("#password").val();
 		var checkPwd = $("#checkPassword").val();
 		if (pwd != checkPwd) {
-			$("#checkSamePwdMsg").html("비밀번호가 일치하지 않습니다.");
+			$("#checkSamePwdMsg").text("비밀번호가 일치하지 않습니다.");
 			addMemberFlag = false;
 		} else {
-			$("#checkSamePwdMsg").html("");
+			$("#checkSamePwdMsg").text("");
 			addMemberFlag = true;
 		}
 	}
@@ -164,13 +169,14 @@
 	function certificatedNumCheckFunction() {
 		var certificatedNum = globalVariable;
 		var inputCertificatedNum = $("#certificatedNum").val();
+		
 		if (certificatedNum != inputCertificatedNum
 				&& inputCertificatedNum.length != 6) {
-			$("#checkCertificatedNumMsg").html("인증번호가 일치하지 않습니다. 다시 입력해주세요.");
+			$("#checkCertificatedNumMsg").text("인증번호가 일치하지 않습니다. 다시 입력해주세요.");
 			addMemberFlag = false;
 		} else if(certificatedNum == inputCertificatedNum
 				&& inputCertificatedNum.length == 6) {
-			$("#checkCertificatedNumMsg").html("");
+			$("#checkCertificatedNumMsg").text("");
 			addMemberFlag = true;
 		}
 	}
@@ -188,8 +194,10 @@
 		console.log("Member : [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+", 닉네임 : "+nickname+", 성별 : "+gender+", 연령대 : "+ageRange+"]");
 		
 		if(${param.loginType == '1'} && addMemberFlag == true) {
+			alert("hi");
 			$("#addUser").replaceWith("<input type='button' id='addUser' class='btn btn-lg btn-primary' style='float:right' value='회원가입'></input>");
-			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/1").submit();
+			alert("successed change !");
+			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
 		} else if(${param.loginType != '1'} && addMemberFlag == true) {
 			$("#addUser").replaceWith("<input type='button' id='addUser' class='btn btn-lg btn-primary' style='float:right' value='회원가입'></input>");
 			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
