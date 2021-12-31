@@ -81,8 +81,8 @@ public class RestaurantController {
 		if(restaurantService.addRestaurant(restaurant) == 1) {
 			System.out.println("INSERT RESTAURANT SUCCESS");
 			
-			System.out.println("888888"+restaurant.getMember());
-			memberService.addActivityScore(restaurant.getMember().getMemberId(), 3, 10);
+			System.out.println("Uploaded by : " + restaurant.getMember().getMemberId());
+			//memberService.addActivityScore(restaurant.getMember().getMemberId(), 3, 10);
 		}
 		
 		for(RestaurantMenu rm : restaurantMenus.getRestaurantMenus()) {
