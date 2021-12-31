@@ -25,12 +25,60 @@
 		console.log("getReservationView.jsp");
 		
 		////////////////////////////////////==> 유효성 체크
+		var reservation_status = 0;
+		reservation_status ="<input type='text' name='reservationStatus["+ reservation_status +"].orderCount' id='reservationStatus' value='3'></div>";
 		
+	     $(".no").on("click" , function() {
+	    	 reservation_status
+		}); 
 		//////////이전페이지////////////////
-	   /*  $(".no").on("click" , function() {
-	    	self.location = "/reservation/listReservation"
-		}); */
-		//////////이전페이지////////////////
+		
+		
+	   //console.log(reviewNo);
+	    	function reservationStatusFunction() {
+				var reservationStaus = $("#reservationStaus").val();
+				$.ajax({
+					type : "GET",
+					url : "/reservation/json/getReservation",
+					data : {
+						"reservationStaus" : reservationStatus
+					},
+					success : function(result) {
+						
+							if (result==1) {
+								$("#reservationStaus").text("결제완료");
+							} 
+							
+							else if (result==2) {
+								$("#reservationStaus").text("방문완료");	
+							}
+							 else if (result==3) {
+							$("#reservationStaus").text("미방문");	
+							}
+							
+							 else if (result==4) {
+							$("#reservationStaus").text("예약 취소");	
+							}
+							
+							 else if (result==5) {
+							$("#reservationStaus").text("예약 거절");	
+							}
+							
+							}
+						})
+			}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		//////////모달 이동////////////////
 	    /* $(".yes").on("click" , function() {
@@ -133,21 +181,22 @@
 									<!-- Button trigger modal -->
 								
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->
-								<c:if test="${member.memberRole == 'admin'}">
-									<input type="button" value="방문 확정" class="button small primary stretched-link" id="admin-modal" data-toggle="modal"
-									data-target="#getReservationModal"/></p>
-								</c:if>	
 								
-								<c:if test="${member.memberRole == 'owner'}">
-									<input type="button" value="예약 거절" class="button small primary stretched-link" id="owner-modal" data-toggle="modal"
+								<%-- <c:if test="${reservation.member.reservationStatus == false}">
+									<input type="button" value="예약 거절" class="button small primary stretched-link" id="admin-modal" data-toggle="modal"
 									data-target="#getReservationModal"/></p>
-								</c:if>	
+								</c:if>	 --%>
+								
+								<%-- <c:if test="${reservation.member.memberRole == 'owner'}"> --%>
+									<input type="button" value="방문 확정" name= "reservationStatus" class="button small primary stretched-link" id="reservationStatus-modal" data-toggle="modal"
+									data-target="#getReservationModal"/></p>
+								<%-- </c:if>	 --%>
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->	
 									<!-- Button trigger modal --> 
 								</div>
 								
 								<div class="col-6 col-12-xsmall fixedDate">
-									<label for="memberCount">방문 확정 후</label> 
+									<label for=""fixedDate"">방문 확정 후</label> 
 									<p>${reservation.fixedDate}</p>
 									<input id="fixedDate" name="fixedDate" type="hidden" value="1">
 									
@@ -155,7 +204,7 @@
 								</div>
 								
 								<div class="col-12">
-									<label for="memberCount">예약 및 결제 현황</label>
+									<label for="reservationStatus">예약 및 결제 현황</label>
 									<p>${reservation.reservationStatus}</p>
 								</div>
 								
@@ -218,7 +267,7 @@
 							
 							<!-- Modal -->
 							<div class="modal fade" id="getReservationModal" tabindex="-1" role="dialog"
-								aria-labelledby="loginModalLabel" aria-hidden="true">
+								aria-labelledby="getReservationModalLabel" aria-hidden="true">
 								<div class="modal-dialog" role="document">
 									<div class="modal-content">
 									

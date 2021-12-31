@@ -105,13 +105,13 @@
 		
 		//////////이전페이지////////////////
 	    $(".reset").on("click" , function() {
-	    	self.location = "/main.jsp"
+	    	self.location = "/"
 		});
 		//////////이전페이지////////////////
 		
 		//////////모달 이동////////////////
 	    $("#homePage").on("click" , function() {
-	    	self.location = "/main.jsp"
+	    	self.location = "/"
 		});
 		//////////모달 이동////////////////
 		

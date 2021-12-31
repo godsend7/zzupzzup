@@ -101,12 +101,12 @@
 			                 WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)
 			LEFT OUTER JOIN reservation_order AS ro ON (r.reservation_no = ro.reservation_no)
 			<choose>
-				<when test="member_role = user">
-				WHERE ch.chat_member_id = #{memberId}
+				<when test='member.memberRole == "user"'>
+				WHERE ch.chat_member_id = #{member.memberId}
 				</when>
-				<when test="member_role = owner">
+				<otherwise>
 				WHERE r.RESTAURANT_NO = #{restaurantNo}
-				</when>
+				</otherwise>
 			</choose>
 			ORDER BY RESERVATION_NO LIMIT #{search.startRowNum}, #{search.pageSize}		
 	 </select>
@@ -118,10 +118,16 @@
 	   	<set>
 	   		FIXED_DATE = NOW(),
 			RESERVATION_STATUS = #{reservationStatus},
-           	CANCEL_DATE = NOW(),
-            FIXED_STATUS = #{fixedStatus},
+		<choose>
+			<when test='member.memberRole == "user"'>	
+           	CANCEL_DATE = NOW()
+ 		  	</when>
+ 		  	<otherwise>
+ 		  	FIXED_STATUS = #{fixedStatus},
             RESERVATION_CANCEL_TYPE = #{reservationCancelReason},
             RESERVATION_CANCEL_DETAIL = #{reservationCancelDetail}
+ 		  	</otherwise>
+          </choose>  
 	   	</set>
 	   	WHERE reservation_no = #{reservationNo}
 	</update>
