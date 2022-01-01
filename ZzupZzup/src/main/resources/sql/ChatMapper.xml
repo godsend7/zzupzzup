@@ -89,7 +89,7 @@
 		FROM chat c
 		LEFT OUTER JOIN report rp ON ( c.chat_no = rp.chat_no)
 		GROUP BY c.chat_no
-		ORDER BY c.chat_no LIMIT 0, 8) AS c
+		ORDER BY c.chat_no DESC LIMIT 0, 8) AS c
 	</select>
 	
 	<!-- SQL : SELECT ROW COUNT -->

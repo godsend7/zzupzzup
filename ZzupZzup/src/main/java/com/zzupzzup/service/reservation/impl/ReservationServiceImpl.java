@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.SendMessage;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.reservation.ReservationService;
 import com.zzupzzup.service.reservation.ReservationDAO;
@@ -44,11 +45,10 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		}
 
 		@Override
-		public Map<String , Object > listReservation(Search search, String memberId, String restaurantNo) throws Exception {
+		public Map<String , Object > listReservation(Search search, String restaurantNo) throws Exception {
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("search", search);
-			map.put("memberId", memberId);
 			map.put("restaurantNo", restaurantNo);
 			
 			map.put("list", reservationDao.listReservation(map));
@@ -58,11 +58,11 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		}
 		
 		@Override
-		public Map<String , Object > listMyReservation(Search search, String memberId, String restaurantNo) throws Exception {
+		public Map<String , Object > listMyReservation(Search search, Member member, String restaurantNo) throws Exception {
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("search", search);
-			map.put("memberId", memberId);
+			map.put("member", member);
 			map.put("restaurantNo", restaurantNo);
 			
 			map.put("list", reservationDao.listMyReservation(map));

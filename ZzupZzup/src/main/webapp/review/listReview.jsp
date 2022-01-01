@@ -61,7 +61,7 @@
 			var likeCount = $(this).find(".reviewLike");
 			console.log(likeCount);
 			
-			/* $.ajax({
+			$.ajax({
 				url : "/review/json/addLike/"+$(this).find("input[name='reviewNo']").val(),
 				method : "GET",
 				success : function(data, status) {
@@ -71,7 +71,7 @@
 					$(this).find(".reviewLike").text(data.likeCount);
 					
 				}
-			}) */
+			})
 		});
 	});
 

@@ -28,7 +28,10 @@
 		
 		$(function() {
 			$("button.btn.btn-link").on("click", function() {
-				$("#restaurant").attr("method", "POST").attr("action","/community/deleteCommunity").submit();
+				if(confirm("진심 삭제하고싶니?")) {
+					self.location = "/community/deleteCommunity?postNo=${community.postNo}"
+				}
+				/* $("#restaurant").attr("method", "POST").attr("action","/community/deleteCommunity").submit(); */
 			});
 		});
 		
@@ -73,20 +76,32 @@
 					
 					<div class="row">
 				       <h2 class=" col">${community.postTitle} &nbsp;
-				       	<small style="color:gray;">작성자: ${community.member.nickname}</small></h2>
+				       	<small style="color:gray;">by. ${community.member.nickname}</small></h2>
 				    </div><hr>
 				    
 				    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
 					  <div class="carousel-inner">
-					    <div class="carousel-item active">
-					      <img src="/resources/images/uploadImages/burger-king-logo.png" height="600" class="d-block w-100" alt="...">
+					  	<c:forEach var="image" items="${community.postImage}" varStatus="status">
+					  		<c:choose>
+					  			<c:when test="${status.index == 0}">
+					  				<div class="carousel-item active">
+					  			</c:when>
+					  			<c:otherwise>
+					  				<div class="carousel-item">
+					  			</c:otherwise>
+					  		</c:choose>
+						      <img src="/resources/images/uploadImages/${image}" height="600" class="d-block w-100" alt="...">
+						    </div>
+					  	</c:forEach>
+					   <%--  <div class="carousel-item active">
+					      <img src="/resources/images/uploadImages/${community.postImage[0]}" height="600" class="d-block w-100" alt="...">
 					    </div>
 					    <div class="carousel-item">
-					      <img src="/resources/images/uploadImages/mcdonald.jpg" height="600" class="d-block w-100" alt="...">
+					      <img src="/resources/images/uploadImages/${community.postImage[1]}" height="600" class="d-block w-100" alt="...">
 					    </div>
 					    <div class="carousel-item">
-					      <img src="/resources/images/uploadImages/kfc.png" height="600" class="d-block w-100" alt="...">
-					    </div>
+					      <img src="/resources/images/uploadImages/${community.postImage[2]}" height="600" class="d-block w-100" alt="...">
+					    </div> --%>
 					  </div>
 					  <button class="carousel-control-prev" type="button" id="car_prev" data-target="#carouselExampleFade" data-slide="prev">
 					    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -100,43 +115,43 @@
 					
 					<div class="row">
 				  		<div class="col-xs-4 col-md-2"><strong>게시물 설명</strong></div>
-						<div class="col-xs-8 col-md-4">${community.postText}</div>
+						<div class="col-xs-8 col-md-9">${community.postText}</div>
 					</div><hr/>
 				    
 				    <div class="row">
 				  		<div class="col-xs-4 col-md-2"><strong>음식점명</strong></div>
 						<div class="col-xs-8 col-md-4">${community.restaurantName}</div>
-					</div>
+					</div><br>
 					
 					<div class="row">
 				  		<div class="col-xs-4 col-md-2"><strong>음식점 전화번호</strong></div>
 						<div class="col-xs-8 col-md-4">${community.restaurantTel}</div>
-					</div>
+					</div><br>
 					
 					<div class="row">
 				  		<div class="col-xs-4 col-md-2"><strong>음식점 도로명주소</strong></div>
 						<div class="col-xs-8 col-md-4">${community.streetAddress}</div>
-					</div>
+					</div><br>
 					
 					<div class="row">
 				  		<div class="col-xs-4 col-md-2"><strong>음식점 지번주소</strong></div>
 						<div class="col-xs-8 col-md-4">${community.areaAddress}</div>
-					</div>
+					</div><br>
 					
 					<div class="row">
 				  		<div class="col-xs-4 col-md-2"><strong>음식점 상세주소</strong></div>
 						<div class="col-xs-8 col-md-4">${community.restAddress}</div>
-					</div>
+					</div><br>
 					
 					<div class="row">
 				  		<div class="col-xs-4 col-md-2"><strong>음식 종류</strong></div>
-						<div class="col-xs-8 col-md-4">${community.menuType}</div>
+						<div class="col-xs-8 col-md-4">${community.returnMenuType}</div>
 					</div><hr>
 					
 					<div class="row">
 				  		<div class="col-xs-4 col-md-2"><strong>음식점 메인메뉴 이름</strong></div>
 						<div class="col-xs-8 col-md-4">${community.mainMenuTitle}</div>
-					</div>
+					</div><br>
 					
 					<div class="row">
 				  		<div class="col-xs-4 col-md-2"><strong>음식점 메인메뉴 가격</strong></div>
