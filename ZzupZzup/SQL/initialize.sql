@@ -94,6 +94,7 @@ CREATE TABLE `menu` (
 CREATE TABLE `community` (
     `post_no` INT NOT NULL AUTO_INCREMENT,
     `member_id` VARCHAR(50) NOT NULL,
+    `nickname` VARCHAR(10),
     `post_title` VARCHAR(100) NOT NULL,
     `post_text` VARCHAR(1000) NOT NULL,
     `receipt_image` VARCHAR(50),
@@ -189,6 +190,7 @@ CREATE TABLE `reservation` (
     `chat_no` INT NOT NULL,
     `booker_id` VARCHAR(50) NOT NULL,
     `plan_date` DATETIME NOT NULL,
+    `plan_time` VARCHAR(10) NOT NULL,
     `fixed_date` DATETIME,
     `member_count` INT NOT NULL,
     `reservation_status` INT NOT NULL,
@@ -196,7 +198,7 @@ CREATE TABLE `reservation` (
     `reservation_date` DATE NOT NULL,
     `total_price` INT NOT NULL,
     `pay_option` INT NOT NULL,
-    `pay_mothod` INT,
+    `pay_method` INT,
     `cancel_date` DATETIME,
     `reservation_cancel_type` INT,
     `reservation_cancel_detail` VARCHAR(100),
@@ -368,10 +370,10 @@ INSERT INTO chat_log (chat_no, chat_contents, chat_time) VALUES (1,'하이하이
 -- rating
 INSERT INTO rating (chat_no, rating_to_id, rating_from_id, rating_score, rating_type) VALUES (1,'hihi@a.com', 'user01@zzupzzup.com', 1, 1);
 -- reservation
-INSERT INTO reservation(reservation_number, restaurant_no, chat_no, booker_id, plan_date, fixed_date,
-member_count, reservation_status, fixed_status, reservation_date, total_price, pay_option, pay_mothod, 
+INSERT INTO reservation(reservation_number, restaurant_no, chat_no, booker_id, plan_date, plan_time, fixed_date,
+member_count, reservation_status, fixed_status, reservation_date, total_price, pay_option, pay_method, 
 cancel_date, reservation_cancel_type, reservation_cancel_detail, refund_status)
-VALUES(CONCAT(DATE_FORMAT(NOW(), "%Y%m%e%H%i%S"),'_',FLOOR(RAND()*1000000000)),'1','1','hihi@a.com', NOW(), NOW(),'3','1', '0', NOW(), '30000','2','1', NOW(), '1', '재고없음~~~','0');
+VALUES(CONCAT(DATE_FORMAT(NOW(), "%Y%m%e%H%i%S"),'_',FLOOR(RAND()*1000000000)),'1','1','hihi@a.com', NOW(), '12:59', NOW(),'3','1', '0', NOW(), '30000','2','1', NOW(), '1', '재고없음~~~','0');
 -- reservation_order
 INSERT INTO reservation_order(reservation_no, menu_title, order_count, menu_price)
 VALUES('1', '짜장면', '3', '3500');

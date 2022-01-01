@@ -142,7 +142,7 @@ public class ReservationServiceTest {
 			String memberId = "hihi@a.com";
 			
 			
-			Map<String, Object> map = reservationService.listReservation(search,  memberId, restaurantNo);
+			Map<String, Object> map = reservationService.listReservation(search, restaurantNo);
 			
 			List<Reservation> list = (List<Reservation>) map.get("list");
 			
@@ -162,10 +162,14 @@ public class ReservationServiceTest {
 		public void testListMyReservation() throws Exception {
 			Search search = new Search();
 			
-			String memberId = "user";
+			Member member = new Member();
+			member.setMemberId("hihi@a.com");
+			member.setMemberRole("user");
+			
+			//String memberId = "user";
 			String restaurantNo = null;
 				
-			Map<String, Object> map = reservationService.listMyReservation(search, memberId, restaurantNo);
+			Map<String, Object> map = reservationService.listMyReservation(search, member, restaurantNo);
 				
 			List<Reservation> list = (List<Reservation>) map.get("list");
 				
