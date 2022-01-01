@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
@@ -30,7 +31,6 @@ import com.zzupzzup.service.restaurant.RestaurantService;
 
 @Controller
 @RequestMapping("/reservation/*")
-
 public class ReservationController {
 	
 	//Field
@@ -85,13 +85,15 @@ public class ReservationController {
 	}
 	
 	@RequestMapping( value="addReservation", method=RequestMethod.POST )
-	public String addReservation ( @ModelAttribute("reservation") Reservation reservation, Model model ) throws Exception {
+	@ResponseBody
+	public int addReservation ( @ModelAttribute("reservation") Reservation reservation, Model model ) throws Exception {
 
 		System.out.println("/reservation/addReservation : POST");
 		//Business Logic
-		reservationService.addReservation(reservation);
+		//reservationService.addReservation(reservation);
 		System.out.println("/reservation/addReservation22222 : POST");
-		return "redirect:/reservation/listReservation.jsp";
+		//return "redirect:/reservation/listReservation";
+		return reservationService.addReservation(reservation);
 	}
 	//컨트롤러로 하면 안되고 레스트 타야됨 add 안할거면 controller는 성공하기도 전에 리턴해버림
 //==================================================================================================
@@ -125,16 +127,6 @@ public class ReservationController {
 		System.out.println(reservation);
 		model.addAttribute("reservation", reservation);
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		return "forward:/reservation/getReservation.jsp";
 	}
 	
@@ -166,14 +158,6 @@ public class ReservationController {
 		
 		String memberId = null;
 		
-		if (member != null && member.getMemberRole().equals("user")) {
-			memberId = member.getMemberId();
-		}
-			
-			else if (member !=null && member.getMemberRole().equals("owner")) {
-				memberId = member.getMemberId();
-			
-		}
 		
 		
 		System.out.println(restaurantNo+"::restaurantNo~~~~~");
@@ -188,8 +172,15 @@ public class ReservationController {
 		
 		search.setPageSize(pageSize);
 		
+		Map<String, Object> map = null;
 		
-		Map<String, Object> map = reservationService.listReservation(search, restaurantNo, memberId);
+		if (member != null && member.getMemberRole().equals("admin")) {
+			map = reservationService.listReservation(search, restaurantNo);
+			System.out.println("listReservation admin");
+		} else {
+			map = reservationService.listMyReservation(search, member, restaurantNo);
+			System.out.println("listMyReservation");
+		}
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		

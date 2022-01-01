@@ -60,7 +60,7 @@ public class ReservationServiceTest {
 	@Value("#{commonProperties['pageSize']?: 2}")
 	int pageSize;
 
-	//@Test
+	@Test
 	public void testAddReservation() throws Exception {
 		
 		Reservation reservation = new Reservation();
@@ -80,15 +80,17 @@ public class ReservationServiceTest {
 		reservation.setOrder(order);
 	
 		restaurant.setRestaurantNo(1); //음식점 예약no
-		chat.setChatNo(2); //채팅 no
+		chat.setChatNo(1); //채팅 no
 		member.setMemberId("owner01@zzupzzup.com"); // memberId
 
 		reservation.setRestaurant(restaurant);
 		reservation.setChat(chat);
 		reservation.setMember(member);
 		
+		//reservation.setPlanDate(2021-20-12); // 예약 시간
+		reservation.setPlanTime("12:12"); // 예약 시간
 		reservation.setMemberCount(3); // 예약 인원 수
-		reservation.setReservationStatus(true); // 예약 및 결제 현황
+		reservation.setReservationStatus(1); // 예약 및 결제 현황
 		reservation.setFixedStatus(false); // 방문 확정 여부
 		reservation.setTotalPrice(10000); // 주문 메뉴 총 가격
 		reservation.setPayOption(2); //결제 방법 (선결제, 방문결제)
@@ -129,7 +131,7 @@ public class ReservationServiceTest {
 		
 //========================================================================================
 		 
-		@Test
+		//@Test
 		public void testListReservation() throws Exception {
 			Search search = new Search();
 			
@@ -142,7 +144,7 @@ public class ReservationServiceTest {
 			String memberId = "hihi@a.com";
 			
 			
-			Map<String, Object> map = reservationService.listReservation(search,  memberId, restaurantNo);
+			Map<String, Object> map = reservationService.listReservation(search, restaurantNo);
 			
 			List<Reservation> list = (List<Reservation>) map.get("list");
 			
@@ -162,10 +164,14 @@ public class ReservationServiceTest {
 		public void testListMyReservation() throws Exception {
 			Search search = new Search();
 			
-			String memberId = "user";
+			Member member = new Member();
+			member.setMemberId("hihi@a.com");
+			member.setMemberRole("user");
+			
+			//String memberId = "user";
 			String restaurantNo = null;
 				
-			Map<String, Object> map = reservationService.listMyReservation(search, memberId, restaurantNo);
+			Map<String, Object> map = reservationService.listMyReservation(search, member, restaurantNo);
 				
 			List<Reservation> list = (List<Reservation>) map.get("list");
 				
@@ -185,7 +191,7 @@ public class ReservationServiceTest {
 			
 			reservation.setReservationNo(15);
 			//reservation.setFixedDate(null); now()여서 없는지 확인
-			reservation.setReservationStatus(false);
+			reservation.setReservationStatus(1);
 			//reservation.setReservationCancelDate(null);
 			reservation.setFixedStatus(false);
 			reservation.setReservationCancelReason(1);
@@ -201,7 +207,7 @@ public class ReservationServiceTest {
 		
 //========================================================================================	
 		
-		@Test
+		//@Test
 		public void testSendMessage() throws Exception {
 	
 			SendMessage sendMessage = new SendMessage();

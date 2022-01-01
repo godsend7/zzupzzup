@@ -46,7 +46,7 @@ public class MemberRestController {
 		Member mb = memberService.getMember(member);
 		
 
-		if( mb.getPassword().equals(member.getPassword())){
+		if(mb != null && mb.getPassword().equals(member.getPassword())){
 			session.setAttribute("member", mb);
 			System.out.println(mb.getMemberId()+" 님 로그인");
 			

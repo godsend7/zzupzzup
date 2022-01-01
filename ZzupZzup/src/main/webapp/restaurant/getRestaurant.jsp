@@ -60,7 +60,7 @@
 				<section id="restaurant">
 					<div class="container">
 					
-					<h2 class="text-warning">${restaurant.restaurantName}&nbsp;<small style="color:gray;">${restaurant.menuType}</small></h2><hr>
+					<h2 class="text-warning">${restaurant.restaurantName}&nbsp;<small style="color:gray;">${restaurant.returnMenuType}</small></h2><hr>
 					
 					<div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
 					  <div class="carousel-inner">

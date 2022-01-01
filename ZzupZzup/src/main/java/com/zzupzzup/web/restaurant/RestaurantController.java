@@ -57,9 +57,10 @@ public class RestaurantController {
 	
 	///Method
 	@RequestMapping(value="addRestaurant", method=RequestMethod.GET)
-	public String addRestaurant() throws Exception {
+	public String addRestaurant(@RequestParam("memberId") String memberId) throws Exception {
 		
 		System.out.println("/restaurant/addRestaurant : GET");
+		//System.out.println("memberId : "+memberId);
 		
 		return "forward:/restaurant/addRestaurantView.jsp";
 	}
@@ -81,8 +82,8 @@ public class RestaurantController {
 		if(restaurantService.addRestaurant(restaurant) == 1) {
 			System.out.println("INSERT RESTAURANT SUCCESS");
 			
-			System.out.println("888888"+restaurant.getMember());
-			memberService.addActivityScore(restaurant.getMember().getMemberId(), 3, 10);
+			System.out.println("Uploaded by : " + restaurant.getMember().getMemberId());
+			//memberService.addActivityScore(restaurant.getMember().getMemberId(), 3, 10);
 		}
 		
 		for(RestaurantMenu rm : restaurantMenus.getRestaurantMenus()) {

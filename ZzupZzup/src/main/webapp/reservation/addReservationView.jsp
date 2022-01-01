@@ -27,33 +27,75 @@
 		
 		console.log("addReservationView.jsp");
 		
+		 
 		////////////////////////////////////==> 유효성 체크
-		function fncAddReservation() {
+		function fncAddReservation(payment) {
 			
-			
-			let orderName = $("#orderName").val();
+			let orderName = $("#menuTitle").val();
 			let orderCount = $("#orderCount").val();
-			
+			let planDate = $("input[name='planDate']").val();
+			let planTime = $("input[name='planTime']").val();
+		
 			console.log("orderName : " + orderName);
 			console.log("orderCount : " + orderCount);
+			console.log("planDate : " + planDate);
+			console.log("planTime : " + planTime);
 			
-			if(orderName == null){
-				alert("메뉴를 선택해주세요");
+			console.log("fncAddReservation inner payment : " + payment);
+			
+			
+			if(orderName == null || orderName<1 || orderName == ''){
+				alert("메뉴를 선택해 주세요.");
+				$("#orderName").focus();
 				return;
 			}
 			
-			if(orderCount == null){
-				alert("수량을 선택해주세요");
+			if(orderCount == null || orderCount<1){
+				alert("수량을 선택해 주세요.");
+				$("#orderCount").focus();
 				return;
 			}
+			
+			if(planDate == null || planDate<1){
+				alert("날짜를 선택해 주세요.");
+				$("input[name='planDate']").focus();
+				return;
+			}
+			
+			if(planTime == null || planTime<1){
+				alert("시간을 선택해 주세요.");
+				$("input[name='planTime']").focus();
+				return;
+			}
+			
+			if(payment == "payment1"){
+				console.log("ㅎ히히");
+				requestPay();
+				return;
+			}else if(payment == "payment2"){
+				console.log("후후후");
+				$(".listReservationModal").trigger('click');
+				return
+			};
 			
 			$("#totalPrice").val(order_price_total);
-			//console.log("totalPrice~~~"+$("#totalPrice").val());
-			$("#addReservation").attr("method" , "POST").attr("action" , "/reservation/addReservation").submit();
+			console.log("totalPrice~~~"+$("#totalPrice").val());
+			
 		}
 		
-		 //console.log(${reservation.restaurant.restaurantName}+"거구장~~~");
-		 
+		$("input[value='결제하기']").on("click", function() {
+			console.log("결제하기 버튼 클릭");
+			
+			if($(this).hasClass("payment1")){
+				console.log("payment1");
+				fncAddReservation("payment1");
+			}else if($(this).hasClass("payment2")){
+				console.log("payment2");
+				fncAddReservation("payment2");
+			};
+		});
+		//////////////////////////////////////////
+		
 		/////////아임포트 function//////////////////
 		var IMP = window.IMP; // 생략가능
 	    IMP.init('imp30711347');
@@ -80,44 +122,71 @@
 	              msg += '카드 승인번호 : ' + rsp.apply_num;
 	              alert('결제가 완료되었습니다.');
 	              fncAddReservation();  //form 경로 넣어줌
-	              $("#modal").trigger('click'); //class는 . 아이디는 #
+	              $(".listReservationModal").trigger('click'); //class는 . 아이디는 #
 	          } else {
 	        	  var msg = '결제에 실패하였습니다.';
 	              msg += '에러내용 : ' + rsp.error_msg;
 	              alert('결제에 실패하였습니다.');
 	          }
 	      });
-	    } 
-	     
-	    $( "body" ).on("click" , ".payment1", function() {
-	    	requestPay();
-		});
+	    }
 	    
-	    $( "body" ).on("click" , ".payment2", function() {
-	    	fncAddReservation();
-	    	$("#modal").trigger('click');
+/* 	    function ajax(){
+	    	  
+	    	 
+	        var listReservation= $("form[name=listReservationPage]").serialize() ;
+	 
+	        $.ajax({
+	            type : 'post',
+	            url : '/reservation/json/listReservation',
+	            data : listReservation,
+	            dataType : 'json',
+	            error: function(xhr, status, error){
+	                alert(error);
+	            },
+	            success : function(json){
+	                alert(json)
+	            }
+	        });
+	  
+	    } */
+	    
+	    $(".listReservationPage").on("click" , function() {
+	    	 var listReservation= $("form[name=listReservationPage]").serialize() ;
+	    	 
+		        $.ajax({
+		            type : 'post',
+		            url : '/reservation/addReservation',
+		            data : listReservation,
+		            error: function(xhr, status, error){
+		                alert(error);
+		            },
+		            success : function(json){
+		                alert(json)
+		            }
+		        });
+	    	console.log("success");
 		});
-	    /* $( ".payment2" ).on("click" , function() {
-	    	$("#modal");
-		}); */
+	     
 	    
 		/////////아임포트 function//////////////////
 		
 		//////////이전페이지////////////////
 	    $(".reset").on("click" , function() {
-	    	self.location = "/main.jsp"
+	    	self.location = "/"
 		});
 		//////////이전페이지////////////////
 		
 		//////////모달 이동////////////////
 	    $("#homePage").on("click" , function() {
-	    	self.location = "/main.jsp"
+	    	self.location = "/"
 		});
 		//////////모달 이동////////////////
 		
 		//////////모달 이동////////////////
-	    $("#ReservationPage").on("click" , function() {
-	    	self.location = "/reservation/listReservation"
+	    $("#listReservationPage").on("click" , function() {
+	    	//self.location = "/reservation/listReservation"
+	    	$("#addReservation").attr("method" , "POST").attr("action" , "/reservation/listReservation").submit();
 		});
 		//////////모달 이동////////////////
 		
@@ -349,10 +418,10 @@
 					      			<input type="time" id="planTime" name="planTime">
 								</div>
 								
-								<div class="col-6 col-12-xsmall">
+								<%-- <div class="col-6 col-12-xsmall">
 									<label for="restaurantTimes">음식점 영업 시간</label> 
 									<p>${reservation.restaurant.restaurantTimes}</p>
-								</div>
+								</div> --%>
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="demo-memberCount"></label> 
@@ -399,8 +468,8 @@
 							
 							
 							<!-- Button trigger modal -->
-							<input type="button" value="페이지 이동" class="btn btn-primary" id="modal" data-toggle="modal"
-								data-target="#listReservationModal"/>
+							<input type="button" value="페이지 이동" class="btn btn-primary listReservationModal" id="" data-toggle="modal"
+								data-target="#listReservationModal"/ style="visibility: hidden;">
 							
 							<!-- Modal -->
 							<div class="modal fade" id="listReservationModal" tabindex="-1" role="dialog"
@@ -420,7 +489,7 @@
 												<h6 class="h6 mb-6 font-weight-normal">예약 및 결제가 완료되었습니다.</h6>
 												
 												</div>
-												<input class="btn btn-lg ReservationPage" id="listReservationPage"
+												<input class="btn btn-lg listReservationPage" id="listReservationPage"
 													type="button" value="내 예약 내역 확인하러가기" />
 													
 												<input class="btn btn-lg btn-primary homePage" id="homePage"

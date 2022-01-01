@@ -18,8 +18,13 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- 지도(위도, 경도)를 사용하기 위해 key 설정 -->
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=86fc1389540999ea4a3cdaa2a9ca1cc1&libraries=services"></script>
 	
 	<script>
+		//음식점의 위도와 경도를 가져오기 위해 선언
+		var geocoder = new daum.maps.services.Geocoder();
+	
 		function daumPostcode() {
 	        new daum.Postcode({
 	            oncomplete: function(data) {
@@ -46,6 +51,17 @@
 	
 	                // 우편번호와 주소 정보를 해당 필드에 넣는다.
 	                //document.getElementById('sample4_postcode').value = data.zonecode;
+	                
+	                //주소의 위도와 경도 가져오기
+	                geocoder.addressSearch(data.address, function(results, status) {
+		             	if (status === daum.maps.services.Status.OK) {
+		             		var result = results[0];
+			            	//console.log(result.y);
+			            	//console.log(result.x);
+			            	$("input[name='latitude']").val(result.x);
+			            	$("input[name='longitude']").val(result.y);
+						}	
+		            });
 	                
 	                $("#streetAddress").val(roadAddr);
 	                $("#areaAddress").val(data.jibunAddress);
@@ -131,7 +147,7 @@
 			}
 			
 		
-			$("#community").attr("method" , "POST").attr("action" , "/community/addCommunity").submit();
+			$("#community").attr("method" , "POST").attr("action" , "/community/addCommunity").attr("enctype", "multipart/form-data").submit();
 			
 		}
 		
@@ -182,6 +198,7 @@
 					</div> -->
 					
 					<input type="hidden" class="form-control" id="member.memberId" name="member.memberId" value="${member.memberId}">
+					<input type="hidden" class="form-control" id="member.nickname" name="member.nickname" value="${member.nickname}">
 					
 					<div class="form-group">
 						<label for="postTitle" class="col-sm-offset-1 col-sm-3 control-label">게시물 제목</label>
@@ -308,7 +325,12 @@
 					    	<label for="time"></label>
 					    	<input type="time" id="time" name="restaurantTimes[0].restaurantLastOrder">
 					    </div>
-					</div><br><hr>
+					</div><br>
+					
+					<div class="col-sm-4">
+						<label for="postImage">음식점 이미지</label>
+						<input type="file" id="file" name="file" multiple="multiple">
+					</div><br><br><hr>
 					
 					<!-- <div class="form-group"> -->
 						<div class="text-center">
