@@ -156,10 +156,8 @@
 	    	 
 		        $.ajax({
 		            type : 'post',
-		            contentType : 'application/json',
-		            url : '/reservation/json/addReservation',
-		            data : JSON.stringify(listReservation),
-		            dataType : 'json',
+		            url : '/reservation/addReservation',
+		            data : listReservation,
 		            error: function(xhr, status, error){
 		                alert(error);
 		            },
