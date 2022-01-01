@@ -198,6 +198,7 @@
 					</div> -->
 					
 					<input type="hidden" class="form-control" id="member.memberId" name="member.memberId" value="${member.memberId}">
+					<input type="hidden" class="form-control" id="member.nickname" name="member.nickname" value="${member.nickname}">
 					
 					<div class="form-group">
 						<label for="postTitle" class="col-sm-offset-1 col-sm-3 control-label">게시물 제목</label>

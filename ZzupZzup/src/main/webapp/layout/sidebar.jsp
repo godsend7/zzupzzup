@@ -54,7 +54,8 @@
 					<li>
 						<span class="opener">ManagePage</span>
 						<ul>
-							<li><a href="/restaurant/listRestaurant">등록된 음식점 목록</a></li>
+							<li><a href="/restaurant/listRestaurant">등록된 전체 음식점 목록</a></li>
+							<li><a href="/restaurant/listRequestRestaurant.jsp">등록 요청 음식점 목록</a></li>
 						</ul>
 					</li>
 					</c:if>

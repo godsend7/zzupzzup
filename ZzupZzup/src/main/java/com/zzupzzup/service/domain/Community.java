@@ -201,12 +201,16 @@ public class Community {
 		this.officialDate = officialDate;
 	}
 
-	public String getMenuType() {
-		return CommonUtil.intToStringMenuType(menuType);
+	public int getMenuType() {
+		return menuType;
 	}
 
 	public void setMenuType(int menuType) {
 		this.menuType = menuType;
+	}
+	
+	public String getReturnMenuType() {
+		return CommonUtil.intToStringMenuType(menuType);
 	}
 
 	public String getMainMenuTitle() {
@@ -252,8 +256,8 @@ public class Community {
 	public void setPostImage(List<String> postImage) {
 		this.postImage = postImage;
 	}
-
-
+	
+	
 	@Override
 	public String toString() {
 		return "Community [member=" + member + ", postNo=" + postNo + ", postTitle=" + postTitle + ", postText="
