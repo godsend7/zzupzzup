@@ -1,17 +1,32 @@
 package com.zzupzzup.web.member;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.domain.Member;
+import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.member.MemberService;
 
 @Controller
@@ -61,7 +76,7 @@ public class MemberController {
 		
 		session.invalidate();
 		
-		return "redirect:/main.jsp";
+		return "redirect:/";
 		
 	}
 	
@@ -70,38 +85,58 @@ public class MemberController {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : GET");
 		
-		return "redirect:/member/addMemberView.jsp?memberRole="+memberRole+"&loginType="+loginType;
+		return "forward:/member/addMemberView.jsp?memberRole="+memberRole+"&loginType="+loginType;
+//		return "redirect:/member/addMember/"+memberRole+"/"+loginType;
 		
 	}
 	
 	@RequestMapping(value="addMember/{memberRole}/{loginType}", method=RequestMethod.POST)
-	public String addMember(@PathVariable String memberRole, @PathVariable String loginType, @ModelAttribute("member") Member member, HttpServletRequest request) throws Exception {
+	public String addMember(@PathVariable String memberRole, @PathVariable int loginType,
+				@ModelAttribute("member") Member member, HttpServletRequest request,
+				@RequestParam(value="file", required = false) MultipartFile uploadfile) throws Exception {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : POST");
 		
+		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
+		String profileImage = uploadFile(uploadfile, temp);
+		
 		member.setMemberRole(memberRole);
+		member.setProfileImage(profileImage);
+		member.setLoginType(loginType);
 		memberService.addMember(member);
-		String pushNickname = member.getPushNickname();
 		
-		if(pushNickname != null) {
+		Member pushMem = new Member();
+		pushMem.setNickname(member.getPushNickname());
+		Member push = memberService.getMember(pushMem);
+		
+		if(push != null) {
 			//활동점수 추가하기
-			Member pushMember = new Member();
-			pushMember.setNickname(pushNickname);
-			memberService.getMember(pushMember);
-			memberService.addActivityScore(pushNickname, 1, 10);
-		}
-		if(member.getMemberRole() == "owner") {
-			//member domain과 같이 음식점 등록으로 페이지 넘기기
-			request.setAttribute("addOwner", memberService.getMember(member));
-			return "forward:/restaurant/addRestaurant.jsp";
+			memberService.addActivityScore(push.getMemberId(), 1, 10);
+			memberService.calculateActivityScore(push.getMemberId());
 		}
 		
-		return "redirect:/main.jsp";
+		if(member.getMemberRole().equals("owner")) {
+			//member domain과 같이 음식점 등록으로 페이지 넘기기
+			//request.setAttribute("addOwner", member);
+			return "redirect:/restaurant/addRestaurant?memberId="+member.getMemberId();
+		} else {
+			return "redirect:/";
+		}
 		
 	}
 	
-	public void getUser() {
+	@RequestMapping(value="getMember", method=RequestMethod.GET)
+	public String getMember(@RequestParam("memberId") String memberId, Model model) throws Exception {
 		
+		System.out.println("/member/getMember : GET");
+		
+		Member memberIdSet = new Member();
+		memberIdSet.setMemberId(memberId);
+		Member member = memberService.getMember(memberIdSet);
+		
+		model.addAttribute("member", member);
+		
+		return "forward:/member/getMember.jsp";
 	}
 	
 	public void getOwner() {
@@ -134,6 +169,27 @@ public class MemberController {
 	
 	public void calculateMannerScore() {
 		
+	}
+	
+	private String uploadFile(MultipartFile uploadfile, String temp) {
+		System.out.println(":: uploadfile.getOriginalFilename() => " + uploadfile.getOriginalFilename());
+		System.out.println(":: uploadfile.getSize() => " + uploadfile.getSize());
+			
+		String saveName = uploadfile.getOriginalFilename();
+		
+		System.out.println(":: saveName => " + saveName);
+		
+		Path copy = Paths.get(temp, File.separator + StringUtils.cleanPath(saveName));
+		
+		try {
+			Files.copy(uploadfile.getInputStream(), copy, StandardCopyOption.REPLACE_EXISTING);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			saveName = "defaultImage.png";
+		}
+		
+		return saveName;
 	}
 
 }
