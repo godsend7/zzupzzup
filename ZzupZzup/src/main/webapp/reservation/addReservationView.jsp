@@ -27,31 +27,32 @@
 		
 		console.log("addReservationView.jsp");
 		
+		 
 		////////////////////////////////////==> 유효성 체크
-		function fncAddReservation() {
+		function fncAddReservation(payment) {
 			
-			let orderName = $("input[name='orderName']:checked").length;
-			let orderCount = $("input[name='orderCount']:checked").length;
-			let planDate = $("input[name='planDate']:checked").length;
-			let planTime = $("input[name='planTime']:checked").length;
-			//let planDate = $("input[name='planDate']").val();
-			//let planTime = $("input[name='planTime']").val();
+			let orderName = $("#menuTitle").val();
+			let orderCount = $("#orderCount").val();
+			let planDate = $("input[name='planDate']").val();
+			let planTime = $("input[name='planTime']").val();
 		
 			console.log("orderName : " + orderName);
 			console.log("orderCount : " + orderCount);
 			console.log("planDate : " + planDate);
 			console.log("planTime : " + planTime);
 			
+			console.log("fncAddReservation inner payment : " + payment);
 			
-			if(orderName == null || orderName<1){
+			
+			if(orderName == null || orderName<1 || orderName == ''){
 				alert("메뉴를 선택해 주세요.");
-				$("input[name='orderName']").focus();
+				$("#orderName").focus();
 				return;
 			}
 			
 			if(orderCount == null || orderCount<1){
 				alert("수량을 선택해 주세요.");
-				$("input[name='orderCount']").focus();
+				$("#orderCount").focus();
 				return;
 			}
 			
@@ -67,9 +68,19 @@
 				return;
 			}
 			
+			if(payment == "payment1"){
+				console.log("ㅎ히히");
+				requestPay();
+				return;
+			}else if(payment == "payment2"){
+				console.log("후후후");
+				$(".listReservationModal").trigger('click');
+				return
+			};
+			
 			$("#totalPrice").val(order_price_total);
-			//console.log("totalPrice~~~"+$("#totalPrice").val());
-			$("#addReservation").attr("method" , "POST").attr("action" , "/reservation/listReservation").submit();
+			console.log("totalPrice~~~"+$("#totalPrice").val());
+			
 		}
 		
 		$("input[value='결제하기']").on("click", function() {
@@ -77,17 +88,14 @@
 			
 			if($(this).hasClass("payment1")){
 				console.log("payment1");
-				fncAddReservation();
-				requestPay();
+				fncAddReservation("payment1");
 			}else if($(this).hasClass("payment2")){
 				console.log("payment2");
-				fncAddReservation();
-				$(".listReservationModal").trigger('click');
+				fncAddReservation("payment2");
 			};
 		});
+		//////////////////////////////////////////
 		
-		 //console.log(${reservation.restaurant.restaurantName}+"거구장~~~");
-		 
 		/////////아임포트 function//////////////////
 		var IMP = window.IMP; // 생략가능
 	    IMP.init('imp30711347');
@@ -121,20 +129,47 @@
 	              alert('결제에 실패하였습니다.');
 	          }
 	      });
-	    } 
-	     
-	    /* $( "body" ).on("click" , ".payment1", function() {
-	    	requestPay();
-		});
+	    }
 	    
-	    $( "body" ).on("click" , ".payment2", function() {
-	    	
-	    	$(".listReservationModal").trigger('click');
-	    	//fncAddReservation();
-		}); */
-	    /* $( ".payment2" ).on("click" , function() {
-	    	$("#modal");
-		}); */
+/* 	    function ajax(){
+	    	  
+	    	 
+	        var listReservation= $("form[name=listReservationPage]").serialize() ;
+	 
+	        $.ajax({
+	            type : 'post',
+	            url : '/reservation/json/listReservation',
+	            data : listReservation,
+	            dataType : 'json',
+	            error: function(xhr, status, error){
+	                alert(error);
+	            },
+	            success : function(json){
+	                alert(json)
+	            }
+	        });
+	  
+	    } */
+	    
+	    $(".listReservationPage").on("click" , function() {
+	    	 var listReservation= $("form[name=listReservationPage]").serialize() ;
+	    	 
+		        $.ajax({
+		            type : 'post',
+		            contentType : 'application/json',
+		            url : '/reservation/json/addReservation',
+		            data : JSON.stringify(listReservation),
+		            dataType : 'json',
+		            error: function(xhr, status, error){
+		                alert(error);
+		            },
+		            success : function(json){
+		                alert(json)
+		            }
+		        });
+	    	console.log("success");
+		});
+	     
 	    
 		/////////아임포트 function//////////////////
 		
@@ -152,7 +187,8 @@
 		
 		//////////모달 이동////////////////
 	    $("#listReservationPage").on("click" , function() {
-	    	self.location = "/reservation/listReservation"
+	    	//self.location = "/reservation/listReservation"
+	    	$("#addReservation").attr("method" , "POST").attr("action" , "/reservation/listReservation").submit();
 		});
 		//////////모달 이동////////////////
 		

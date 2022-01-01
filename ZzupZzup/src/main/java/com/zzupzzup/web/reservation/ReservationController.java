@@ -83,15 +83,15 @@ public class ReservationController {
 		return "forward:/reservation/addReservationView.jsp";
 	}
 	
-	@RequestMapping( value="addReservation", method=RequestMethod.POST )
-	public String addReservation ( @ModelAttribute("reservation") Reservation reservation, Model model ) throws Exception {
+	//@RequestMapping( value="addReservation", method=RequestMethod.POST )
+	//public String addReservation ( @ModelAttribute("reservation") Reservation reservation, Model model ) throws Exception {
 
-		System.out.println("/reservation/addReservation : POST");
+	//	System.out.println("/reservation/addReservation : POST");
 		//Business Logic
-		reservationService.addReservation(reservation);
-		System.out.println("/reservation/addReservation22222 : POST");
-		return "redirect:/reservation/listReservation";
-	}
+	//	reservationService.addReservation(reservation);
+	//	System.out.println("/reservation/addReservation22222 : POST");
+	//	return "redirect:/reservation/listReservation";
+	//}
 	//컨트롤러로 하면 안되고 레스트 타야됨 add 안할거면 controller는 성공하기도 전에 리턴해버림
 //==================================================================================================
 	//질문

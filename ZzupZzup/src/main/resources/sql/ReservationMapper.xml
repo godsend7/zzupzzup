@@ -46,7 +46,7 @@
 						reservation_date, total_price, pay_option, pay_method, reservation_cancel_type, 
 						reservation_cancel_detail, refund_status)
 		VALUES (CONCAT(DATE_FORMAT(NOW(), "%Y%m%e%H%i%S"),'_',FLOOR(RAND()*1000000000)), #{restaurant.restaurantNo}, #{chat.chatNo}, 
-				#{member.memberId}, #{planDate}, #{planTime},#{memberCount}, 
+				#{member.memberId}, now(), #{planDate}, #{planTime},#{memberCount}, 
 				#{reservationStatus}, #{fixedStatus}, NOW(), #{totalPrice}, #{payOption}, #{payMethod},
 				#{reservationCancelReason}, #{reservationCancelDetail}, #{refundStatus});
 
