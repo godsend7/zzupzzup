@@ -84,7 +84,7 @@ public class MemberController {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : GET");
 		
-		return "redirect:/member/addMemberView.jsp?memberRole="+memberRole+"&loginType="+loginType;
+		return "forward:/member/addMemberView.jsp?memberRole="+memberRole+"&loginType="+loginType;
 //		return "redirect:/member/addMember/"+memberRole+"/"+loginType;
 		
 	}
@@ -101,7 +101,6 @@ public class MemberController {
 		String profileImage = uploadFile(uploadfile, temp);
 		
 		member.setMemberRole(memberRole);
-		System.out.println("saved memberRole :: "+member.getMemberRole());
 		member.setProfileImage(profileImage);
 		member.setLoginType(loginType);
 		memberService.addMember(member);
@@ -117,11 +116,9 @@ public class MemberController {
 		
 		if(member.getMemberRole().equals("owner")) {
 			//member domain과 같이 음식점 등록으로 페이지 넘기기
-			request.setAttribute("addOwner", member);
-			System.out.println("왜 안 넘어가?");
-			return "forward:/restaurant/addRestaurant";
+			//request.setAttribute("addOwner", member);
+			return "redirect:/restaurant/addRestaurant?memberId="+member.getMemberId();
 		} else {
-			System.out.println("업주 회원이 왜 자꾸 여길 와");
 			return "redirect:/";
 		}
 		
