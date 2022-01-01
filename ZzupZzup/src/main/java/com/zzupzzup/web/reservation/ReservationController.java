@@ -30,7 +30,6 @@ import com.zzupzzup.service.restaurant.RestaurantService;
 
 @Controller
 @RequestMapping("/reservation/*")
-
 public class ReservationController {
 	
 	//Field
@@ -124,16 +123,6 @@ public class ReservationController {
 		
 		System.out.println(reservation);
 		model.addAttribute("reservation", reservation);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		return "forward:/reservation/getReservation.jsp";
 	}
