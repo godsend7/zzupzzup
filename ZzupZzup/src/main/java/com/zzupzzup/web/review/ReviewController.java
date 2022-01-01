@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
+import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.member.MemberService;
@@ -123,10 +124,13 @@ public class ReviewController {
 		String restaurantNo = request.getParameter("restaurantNo");
 		Member member = (Member) session.getAttribute("member");
 		
+		List<Mark> listLike = null;
+		
 		String memberId = null;
 		
 		if (member != null && member.getMemberRole().equals("user")) {
 			memberId = member.getMemberId();
+			listLike = reviewService.listLike(memberId);
 		}
 		
 		
@@ -148,6 +152,7 @@ public class ReviewController {
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
 		model.addAttribute("list", map.get("list"));
+		model.addAttribute("listLike", listLike);
 		model.addAttribute("search", search);
 		model.addAttribute("totalCount", map.get("totalCount"));
 		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
