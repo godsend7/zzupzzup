@@ -283,25 +283,23 @@
 											value="" required><span id="checkNameMsg"
 											style="color: red; font-weight: bold"></span>
 										<br/>
-										<c:if test="${param.loginType == '1'}">
-										<label for="password">비밀번호</label> <input type="password"
-												class="form-control" id="password" name="password"
-												onkeyup="fncCheckAccountForm();" minlength="8" maxlength="15"
-												placeholder="8-15자 이내로 입력해주세요." required><span
-												id="checkPwdMsg" style="color: red; font-weight: bold"></span>
-											<!-- <h5>알파벳 대소문자, 숫자, 특수문자(~, !, @, #, $, %, ^, &, *, \, /)를
-												조합하여 비밀번호를 구성하세요.</h5> -->
-										</c:if>
-									</div>
-										<div class="col">
-											<label for="memberId">아이디</label> <input type="text"
+										<label for="memberId">아이디</label> <input type="text"
 											class="form-control" id="memberId" name="memberId"
 											onkeyup="fncCheckAccountForm();idCheckFunction();"
 											placeholder="example@zzupzzup.com"
 											required>&nbsp;<span id="checkIdMsg"
 											style="color: red; font-weight: bold"></span>
 											<br/>
+									</div>
+									<div class="col">
 										<c:if test="${param.loginType == '1'}">
+											<label for="password">비밀번호</label> <input type="password"
+													class="form-control" id="password" name="password"
+													onkeyup="fncCheckAccountForm();" minlength="8" maxlength="15"
+													placeholder="8-15자 이내로 입력해주세요." required><span
+													id="checkPwdMsg" style="color: red; font-weight: bold"></span>
+												<!-- <h5>알파벳 대소문자, 숫자, 특수문자(~, !, @, #, $, %, ^, &, *, \, /)를
+													조합하여 비밀번호를 구성하세요.</h5> -->
 											<label for="checkPassword">비밀번호 확인</label> <input
 												type="password" class="form-control" id="checkPassword"
 												onkeyup="fncCheckAccountForm();pwdCheckFunction();" minlength="8" maxlength="15"

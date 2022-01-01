@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -96,7 +97,6 @@ public class MemberController {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : POST");
 		
-		
 		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		String profileImage = uploadFile(uploadfile, temp);
 		
@@ -111,7 +111,8 @@ public class MemberController {
 		
 		if(push != null) {
 			//활동점수 추가하기
-			memberService.addActivityScore(push.getNickname(), 1, 10);
+			memberService.addActivityScore(push.getMemberId(), 1, 10);
+			memberService.calculateActivityScore(push.getMemberId());
 		}
 		
 		if(member.getMemberRole().equals("owner")) {
@@ -124,8 +125,18 @@ public class MemberController {
 		
 	}
 	
-	public void getUser() {
+	@RequestMapping(value="getMember", method=RequestMethod.GET)
+	public String getMember(@RequestParam("memberId") String memberId, Model model) throws Exception {
 		
+		System.out.println("/member/getMember : GET");
+		
+		Member memberIdSet = new Member();
+		memberIdSet.setMemberId(memberId);
+		Member member = memberService.getMember(memberIdSet);
+		
+		model.addAttribute("member", member);
+		
+		return "forward:/member/getMember.jsp";
 	}
 	
 	public void getOwner() {
