@@ -13,6 +13,7 @@
 		<result property="chat.chatNo"   						column="chat_no" 					jdbcType="INTEGER"/>
 		<result property="member.memberId"   					column="booker_id" 					jdbcType="VARCHAR"/>
 		<result property="planDate"   							column="plan_date" 					jdbcType="DATE"/>
+		<result property="planTime"   							column="plan_time" 					jdbcType="VARCHAR"/>
 		<result property="fixedDate"   							column="fixed_date" 				jdbcType="DATE"/>
 		<result property="memberCount"   						column="member_count" 				jdbcType="INTEGER"/>
 		<result property="reservationStatus"   					column="reservation_status" 		jdbcType="INTEGER"/>
@@ -41,12 +42,12 @@
 	<!-- SQL : INSERT -->
 	<insert id="addReservation"	parameterType="reservation" useGeneratedKeys="true" keyProperty="reservationNo">
 	 	INSERT
-		INTO RESERVATION(reservation_number, restaurant_no, chat_no, booker_id, plan_date, fixed_date, member_count, reservation_status, fixed_status, 
-						reservation_date, total_price, pay_option, pay_method, cancel_date, reservation_cancel_type, 
+		INTO RESERVATION(reservation_number, restaurant_no, chat_no, booker_id, plan_date, plan_time, member_count, reservation_status, fixed_status, 
+						reservation_date, total_price, pay_option, pay_method, reservation_cancel_type, 
 						reservation_cancel_detail, refund_status)
 		VALUES (CONCAT(DATE_FORMAT(NOW(), "%Y%m%e%H%i%S"),'_',FLOOR(RAND()*1000000000)), #{restaurant.restaurantNo}, #{chat.chatNo}, 
-				#{member.memberId}, NOW(), NOW(), #{memberCount}, 
-				#{reservationStatus}, #{fixedStatus}, NOW(), #{totalPrice}, #{payOption}, #{payMethod}, NOW(), 
+				#{member.memberId}, #{planDate}, #{planTime},#{memberCount}, 
+				#{reservationStatus}, #{fixedStatus}, NOW(), #{totalPrice}, #{payOption}, #{payMethod},
 				#{reservationCancelReason}, #{reservationCancelDetail}, #{refundStatus});
 
 	</insert>
@@ -100,12 +101,12 @@
 			                 WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)
 			LEFT OUTER JOIN reservation_order AS ro ON (r.reservation_no = ro.reservation_no)
 			<choose>
-				<when test="member_role = user">
-				WHERE ch.chat_member_id = #{memberId}
+				<when test='member.memberRole == "user"'>
+				WHERE ch.chat_member_id = #{member.memberId}
 				</when>
-				<when test="member_role = owner">
+				<otherwise>
 				WHERE r.RESTAURANT_NO = #{restaurantNo}
-				</when>
+				</otherwise>
 			</choose>
 			ORDER BY RESERVATION_NO LIMIT #{search.startRowNum}, #{search.pageSize}		
 	 </select>
@@ -117,10 +118,16 @@
 	   	<set>
 	   		FIXED_DATE = NOW(),
 			RESERVATION_STATUS = #{reservationStatus},
-           	CANCEL_DATE = NOW(),
-            FIXED_STATUS = #{fixedStatus},
+		<choose>
+			<when test='member.memberRole == "user"'>	
+           	CANCEL_DATE = NOW()
+ 		  	</when>
+ 		  	<otherwise>
+ 		  	FIXED_STATUS = #{fixedStatus},
             RESERVATION_CANCEL_TYPE = #{reservationCancelReason},
             RESERVATION_CANCEL_DETAIL = #{reservationCancelDetail}
+ 		  	</otherwise>
+          </choose>  
 	   	</set>
 	   	WHERE reservation_no = #{reservationNo}
 	</update>

@@ -42,6 +42,12 @@ public class ReservationRestController {
 		System.out.println(this.getClass());
 	}
 
-	
+	@RequestMapping(value = "json/getReservation/{reservationNo}", method = RequestMethod.GET)
+	public Reservation getReservation(@PathVariable("reservationNo") int reservationNo) throws Exception {
+		
+		System.out.println("/reservation/json/getReservation : GET");
+
+		return reservationService.getReservation(reservationNo);
+	}
 
 }

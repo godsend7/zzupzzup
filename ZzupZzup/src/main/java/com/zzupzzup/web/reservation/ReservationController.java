@@ -91,7 +91,7 @@ public class ReservationController {
 		//Business Logic
 		reservationService.addReservation(reservation);
 		System.out.println("/reservation/addReservation22222 : POST");
-		return "redirect:/reservation/listReservation.jsp";
+		return "redirect:/reservation/listReservation";
 	}
 	//컨트롤러로 하면 안되고 레스트 타야됨 add 안할거면 controller는 성공하기도 전에 리턴해버림
 //==================================================================================================
@@ -166,14 +166,6 @@ public class ReservationController {
 		
 		String memberId = null;
 		
-		if (member != null && member.getMemberRole().equals("user")) {
-			memberId = member.getMemberId();
-		}
-			
-			else if (member !=null && member.getMemberRole().equals("owner")) {
-				memberId = member.getMemberId();
-			
-		}
 		
 		
 		System.out.println(restaurantNo+"::restaurantNo~~~~~");
@@ -188,8 +180,15 @@ public class ReservationController {
 		
 		search.setPageSize(pageSize);
 		
+		Map<String, Object> map = null;
 		
-		Map<String, Object> map = reservationService.listReservation(search, restaurantNo, memberId);
+		if (member != null && member.getMemberRole().equals("admin")) {
+			map = reservationService.listReservation(search, restaurantNo);
+			System.out.println("listReservation admin");
+		} else {
+			map = reservationService.listMyReservation(search, member, restaurantNo);
+			System.out.println("listMyReservation");
+		}
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		

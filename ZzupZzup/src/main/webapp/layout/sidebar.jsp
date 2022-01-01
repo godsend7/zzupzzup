@@ -46,6 +46,8 @@
 					<li><a href="/chat/listChat">쩝쩝친구 구하기</a></li>
 					<li><a href="/community/listCommunity">나만의 작고 소중한 맛집</a></li>
 					<li><a href="/restaurant/addRestaurant">test-음식점</a></li>
+					<li><a href="/review/addReview?reservationNo=1">test-리뷰</a></li>
+					<li><a href="/reservation/addReservation?chatNo=1">test-예약</a></li>
 				</c:if>
 				<c:if test="${ ! empty member}">
 					<c:if test="${sessionScope.member.memberRole == 'admin'}">

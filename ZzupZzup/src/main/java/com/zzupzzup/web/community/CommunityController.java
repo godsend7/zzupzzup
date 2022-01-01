@@ -1,5 +1,8 @@
 package com.zzupzzup.web.community;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +17,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
+import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.community.CommunityService;
 import com.zzupzzup.service.domain.Community;
+import com.zzupzzup.service.domain.RestaurantTime;
+import com.zzupzzup.service.member.MemberService;
 
 @Controller
 @RequestMapping("/community/*")
@@ -34,6 +42,10 @@ public class CommunityController {
 	@Autowired
 	@Qualifier("communityServiceImpl")
 	private CommunityService communityService;
+	
+	@Autowired
+	@Qualifier("memberServiceImpl")
+	private MemberService memberService;
 	
 	
 	///Constructor
@@ -52,13 +64,29 @@ public class CommunityController {
 	}
 	
 	@RequestMapping(value="addCommunity", method=RequestMethod.POST)
-	public String addCommunity(@ModelAttribute("community") Community community) throws Exception {
+	public String addCommunity(@ModelAttribute("community") Community community, 
+			@ModelAttribute("restaurantTimes") Community restaurantTimes, 
+			MultipartHttpServletRequest uploadFile, 
+			HttpServletRequest request) throws Exception {
 		
 		System.out.println("/community/addCommunity : POST");
 		
-		System.out.println(community);
+		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		
-		communityService.addCommunity(community);
+		uploadFilePath(uploadFile, empty, community);
+		
+		if(communityService.addCommunity(community) == 1) {
+			System.out.println("POST UPLOAD SUCCESS");
+			
+			System.out.println("write by : " + community.getMember());
+			memberService.addActivityScore(community.getMember().getMemberId(), 3, 10);
+		}
+		
+		for(RestaurantTime rt : restaurantTimes.getRestaurantTimes()) {
+			System.out.println(rt);
+		}
+		
+		System.out.println(community);
 		
 		return "redirect:/community/listCommunity";
 	}
@@ -154,6 +182,37 @@ public class CommunityController {
 		System.out.println("POST DELETE SUCCESS");
 		
 		return "redirect:/community/listCommunity";
+	}
+	
+	private void uploadFilePath(MultipartHttpServletRequest uploadFile, String empty, Community community) {
+		
+		List<MultipartFile> fileList = uploadFile.getFiles("file");
+		
+		List<String> cnImg = new ArrayList<String>();
+		
+		for(MultipartFile mpf : fileList) {
+			if(!mpf.getOriginalFilename().equals("")) {
+				
+				try {
+					String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mpf.getOriginalFilename());
+					
+					File file = new File(empty + "/" + fileName);
+					
+					mpf.transferTo(file);
+					
+					cnImg.add(fileName);
+					community.setPostImage(cnImg);
+					
+					System.out.println("IMAGES UPLOAD SUCCESS");
+					
+				} catch (Exception e) {
+					System.out.println("YOU CAN NOT UPLOAD IMAGES");
+					e.printStackTrace();
+				}
+				
+			}
+		}
+		
 	}
 	
 	
