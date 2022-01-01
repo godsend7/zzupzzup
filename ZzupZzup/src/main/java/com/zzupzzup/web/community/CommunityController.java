@@ -170,10 +170,10 @@ public class CommunityController {
 		return "forward:/community/listCommunity.jsp";	
 	}
 	
-	@RequestMapping(value="deleteCommunity", method=RequestMethod.POST)
+	@RequestMapping(value="deleteCommunity", method=RequestMethod.GET)
 	public String deleteCommunity(@RequestParam("postNo") int postNo) throws Exception {
 		
-		System.out.println("/community/deleteCommunity : POST");
+		System.out.println("/community/deleteCommunity : GET");
 		
 		System.out.println("THE POST YOU ARE GOING TO DELETE : " + postNo);
 		
