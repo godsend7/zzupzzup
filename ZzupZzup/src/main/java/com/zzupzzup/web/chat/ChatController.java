@@ -90,7 +90,7 @@ public class ChatController {
 		
 		chatService.addChatMember(chatMember);
 		
-		return "redirect:/chat/listChat";
+		return "redirect:/chat/getChatEntrance?chatNo="+chat.getChatNo();
 		
 	}
 	
@@ -157,7 +157,7 @@ public class ChatController {
 		
 		model.addAttribute("chat", chat);
 		
-		return "forword:/chat/getChat.jsp";
+		return "forward:/chat/getChat.jsp";
 	}
 	
 	@RequestMapping( value="updateChat", method=RequestMethod.GET)
@@ -199,6 +199,43 @@ public class ChatController {
 		return "forward:/chat/updateChat.jsp";
 	}
 	
+	@RequestMapping(value="getChatEntrance", method=RequestMethod.GET)
+	public String getChatEntrance( HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		
+		System.out.println("/chat/getChatEntrance : GET");
+		
+		Integer chatNo = Integer.parseInt(request.getParameter("chatNo"));
+		System.out.println("getChatEntrance chatNo : " + chatNo);
+		
+		//Business Logic
+		Chat chat = chatService.getChat(chatNo);
+		System.out.println("getChatEntrance chat : " + chat);
+		
+		Restaurant restaurant = new Restaurant();		
+		restaurant = restaurantService.getRestaurant(chat.getChatRestaurant().getRestaurantNo());
+		chat.setChatRestaurant(restaurant);
+		
+		Member member = (Member)session.getAttribute("member");
+		System.out.println("getChatEntrance member : " + member);
+		
+		//입장하는 사람이 개설자인지 참여자인지 체크
+		String chatLeaderId = chat.getChatLeaderId().getMemberId();
+		String memberId = member.getMemberId();
+		//System.out.println("chatLeaderId : " + chatLeaderId + "memberId : " + memberId);
+		if(chatLeaderId.equals(memberId)) {
+			System.out.println("개설자야");
+		}else {
+			System.out.println("참가자야");
+		}
+		
+		
+		
+		request.setAttribute("chat", chat);
+		request.setAttribute("member", member);
+		
+		
+		return "forward:/chat/getChatEntrance.jsp";
+	}
 	
 	
 	
