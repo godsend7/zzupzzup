@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-main</title>
+<title>ZZUPZZUP</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
@@ -91,13 +91,38 @@
  				    }
 				}
 			)
+			
+			$.ajax(
+				{
+					url : "/map/json/listRestaurant",
+    				type : "GET",
+    				dataType : "json",
+    				success : function(data, status) {
+    					alert( "JSON.stringify(JSONData) : \n"+JSON.stringify(data) );
+    					console.log(JSON.stringify(data));
+    					//alert(status);
+						//alert("data : \n"+data);
+						
+    					//var obj = JSON.parse(data);
+    					//console.log(data.PlaceThatDoATasteyFoodSt[1].row);
+    					
+    					/* $.each(data, function(index, item){ 
+    						//console.log(item.SIGUN_NM);
+    						arrayLayout.push(
+    							item
+    						);
+    					});
+    					
+    					initMap(); */
+						
+    				},
+    				error:function(request,status,error){
+ 				       console.log("실패");
+ 				    }
+				}
+			)
 					
 		});
-			
-			
-		/* $(function() {
-			initMap();
-		}); */
 		
 		function initMap() {
 			/* var arrayLayout = new Array();
