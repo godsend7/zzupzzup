@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-GETCOMMUNITY</title>
+<title>ZZUPZZUP-GET_COMMUNITY</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
