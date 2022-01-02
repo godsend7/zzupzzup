@@ -6,7 +6,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-addReviewView</title>
+<title>ZZUPZZUP</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 <link rel="stylesheet" href="/resources/css/review.css" />

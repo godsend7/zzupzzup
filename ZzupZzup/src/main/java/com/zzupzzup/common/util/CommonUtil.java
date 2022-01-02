@@ -28,7 +28,7 @@ public class CommonUtil {
 	private static final String DELETE_TYPE_2 = "기존의 타 사이트를 이용하고 있어서";
 	private static final String DELETE_TYPE_3 = "탈퇴 후 재가입을 위해서";
 	
-	
+	public static final String IMAGE_PATH = "/resources/images/uploadImages";
 	
 	public static String returnAgeRange(String ageRange) {
 		

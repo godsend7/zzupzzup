@@ -62,6 +62,7 @@ public class ReviewController {
 	@Value("#{commonProperties['pageSize']?: 2}")
 	int pageSize;
 	
+	
 	///Constructor
 	public ReviewController() {
 		System.out.println(this.getClass());
@@ -89,7 +90,7 @@ public class ReviewController {
 				
 		System.out.println("review/addReview : POST");
 		
-		String temDir = request.getServletContext().getRealPath("/resources/images/uploadImages");
+		String temDir = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH);
 		
 		uploadFilePath(uploadfile, temDir, review);
 		
@@ -114,6 +115,20 @@ public class ReviewController {
 		model.addAttribute("review", review);
 		
 		return "forward:/review/updateReviewView.jsp";
+	}
+	
+	@RequestMapping(value="updateReview", method=RequestMethod.POST)
+	public String updateReview(@ModelAttribute("review") Review review, MultipartHttpServletRequest uploadfile, Model model, HttpServletRequest request) throws Exception {
+		
+		System.out.println("review/updateReview : POST");
+		
+		String temDir = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH);
+		
+		uploadFilePath(uploadfile, temDir, review);
+		
+		reviewService.updateReview(review);
+		
+		return "redirect:/review/listReview";
 	}
 	
 	@RequestMapping("listReview")
