@@ -57,9 +57,10 @@ public class RestaurantController {
 	
 	///Method
 	@RequestMapping(value="addRestaurant", method=RequestMethod.GET)
-	public String addRestaurant() throws Exception {
+	public String addRestaurant(@RequestParam("memberId") String memberId) throws Exception {
 		
 		System.out.println("/restaurant/addRestaurant : GET");
+		//System.out.println("memberId : "+memberId);
 		
 		return "forward:/restaurant/addRestaurantView.jsp";
 	}

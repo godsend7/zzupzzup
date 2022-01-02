@@ -122,13 +122,18 @@ public class Restaurant {
 	}
 
 
-	public String getMenuType() {
-		return CommonUtil.intToStringMenuType(menuType);
+	public int getMenuType() {
+		return menuType;
 	}
 
 
 	public void setMenuType(int menuType) {
 		this.menuType = menuType;
+	}
+	
+	
+	public String getReturnMenuType() {
+		return CommonUtil.intToStringMenuType(menuType);
 	}
 
 

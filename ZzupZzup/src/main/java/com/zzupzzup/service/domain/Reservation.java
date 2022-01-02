@@ -18,7 +18,7 @@ public class Reservation {
 	private String fixedTime;
 	private Date fixedDate;
 	private int memberCount;
-	private boolean reservationStatus;
+	private int reservationStatus;
 	private boolean fixedStatus;
 	private Date reservationDate;
 	private int reservationCancelReason;
@@ -131,11 +131,11 @@ public class Reservation {
 		this.memberCount = memberCount;
 	}
 
-	public boolean isReservationStatus() {
+	public int isReservationStatus() {
 		return reservationStatus;
 	}
 
-	public void setReservationStatus(boolean reservationStatus) {
+	public void setReservationStatus(int reservationStatus) {
 		this.reservationStatus = reservationStatus;
 	}
 

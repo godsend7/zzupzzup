@@ -10,17 +10,11 @@
 <title>ZZUPZZUP-listReview</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
+<link rel="stylesheet" href="/resources/css/review.css" />
 
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
- span {
- 	white-space:nowrap;
- 	margin-right: 20px;
- }
- 
- .divBox {
- 	 float:left;
- }
+
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -39,8 +33,30 @@
 	}
 	
 	
+	
 	$(function() {
-		$(".reviewBox").on("click", function() {
+		
+		function fncHeartChange(result, likeCount, items) {
+			if (result === "add") {
+				console.log("heartChange add");
+				console.log(items);
+				console.log(items.closest("div").find(".reviewCount").text());
+				$(this).closest("div").find(".reviewCount").text(likeCount);
+				
+				$(this).attr('class','reviewLike check'); 
+				
+			} else {
+				console.log("heartChange delete");
+				console.log(items);
+				console.log(items.closest("div").find(".reviewCount").text());
+				$(this).closest("div").find(".reviewCount").text(likeCount);
+				
+				$(this).attr('class','reviewLike'); 
+			}
+		}
+
+		
+		$(".reviewLike").on("click", function() {
 			if (${member.memberId == null}) {
 				alert("로그인이 필요한 서비스입니다.");
 				return;
@@ -50,28 +66,49 @@
 				return;
 			}
 			
-			console.log($(this).find("input[name='reviewNo']").val());
+			/* console.log($(this));
+			console.log($(this).closest("div"));
+			console.log($(this).closest("div").find("input[name='reviewNo']").val()); */
 			
-			//좋아요 체크한 상태일 경우(좋아요에 색깔이 있을 경우)
-			/* if (condition) {
+			if ($(this).hasClass("check") === true) {
+				var likeCount = $(this).closest("div").find("span").text();
+				$(this).closest("div").find("span").text(parseInt(likeCount)-1);
+				$(this).attr('class','reviewLike'); 
 				
-			} */
-			
-			
-			var likeCount = $(this).find(".reviewLike");
-			console.log(likeCount);
-			
-			$.ajax({
-				url : "/review/json/addLike/"+$(this).find("input[name='reviewNo']").val(),
-				method : "GET",
-				success : function(data, status) {
-					console.log(data);
-					console.log(data.likeCount);
-					
-					$(this).find(".reviewLike").text(data.likeCount);
-					
-				}
-			})
+				$.ajax({
+					url : "/review/json/deleteLike/"+$(this).closest("div").find("input[name='reviewNo']").val(),
+					method : "GET",
+					success : function(data, status) {
+						
+						//성공 시 하트와 값 변경...ㅠㅠ
+						
+						/* console.log("delete");
+						console.log($(this));
+						console.log(test.text()); */
+						
+						//fncHeartChange("delete", data.likeCount, $(this));
+					}
+				});	
+			} else {
+				var likeCount = $(this).closest("div").find("span").text();
+				$(this).closest("div").find("span").text(parseInt(likeCount)+1);
+				$(this).attr('class','reviewLike check'); 
+				
+				$.ajax({
+					url : "/review/json/addLike/"+$(this).closest("div").find("input[name='reviewNo']").val(),
+					method : "GET",
+					success : function(data, status) {
+						
+						//성공 시 하트와 값 변경...ㅠㅠ
+						
+						/* console.log("add");
+						console.log($(this));
+						console.log($(this).closest("div").find(".reviewCount").text());
+						fncHeartChange("add", data.likeCount, $(this)); */
+						
+					}
+				});
+			}
 		});
 	});
 
@@ -82,11 +119,9 @@
 
 	<!-- S:Wrapper -->
 	<div id="wrapper">
-
 		<!-- S:Main -->
 		<div id="main">
 			<div class="inner">
-
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
@@ -109,7 +144,11 @@
 									<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 										<div class="col p-4 d-flex flex-column position-static divBox">
 											<c:if test="${member.memberRole == 'admin'}">
-												<strong class="d-inline-block mb-2 text-primary">${review.reportCount}</strong>
+												<div class="review-report-info">
+													<i class="fa fa-exclamation-triangle" aria-hidden="true">
+														${review.reportCount} 회
+													</i>
+												</div>
 											</c:if>
 											<div>
 												<span class="star_span">평점 ${review.avgScope}</span>
@@ -119,24 +158,32 @@
 											</div>
 											
 											<h3 class="mb-0"><span>${review.member.memberRank}</span> ${review.member.nickname}</h3>
+											
 											<p class="card-text mb-auto">${review.reviewDetail}</p>
 											<div class="mb-1 text-muted">
 												<c:forEach var="hashtag" items="${review.hashTag}">
 													<span class='badge badge-pill badge-secondary'>${hashtag.hashTag}</span>
 												</c:forEach>
 											</div>
-											<div>
+											<br>
+											
+											<div class="review-info-bottom">
 												<a href="#reviewModal" class="reviewModal" data-toggle="modal" data-id="${review.reviewNo}">상세보기</a>
-												<span style="float: right; margin-right: 0;">작성일  ${review.reviewRegDate}</span>
-												<div style="float: right;" class="reviewBox">
-													<span class="reviewLike">${review.likeCount}</span>
-													<input type="hidden" name="reviewNo" value="${review.reviewNo}">
-												</div>												
-											</div>
+												<div class="review-info-bottom-right">
+													<div class="likeBox">
+														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill reviewLike <c:forEach var="like" items="${listLike}">${(review.reviewNo == like.reviewNo && !empty member && member.memberId == like.memberId )? ' check' : ''}</c:forEach>" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>			
+														<span class="reviewCount">${review.likeCount}</span>
+														<input type="hidden" name="reviewNo" value="${review.reviewNo}">
+													</div>
+													<span>작성일&nbsp;&nbsp;${review.reviewRegDate}</span>													
+												</div>		
+											</div>										
 										</div>
 									</div>
 								</div>
 							</c:forEach>
+							
+							
 							<ul class='icons'> 
 								<jsp:include page='/review/getReview.jsp'/>
 							</ul>
@@ -146,6 +193,8 @@
 						무한스크롤 필요
 					</div>
 				</section>
+				
+				
 			</div>
 		</div>
 		<!-- E:Main -->
