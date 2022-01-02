@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
@@ -84,13 +85,15 @@ public class ReservationController {
 	}
 	
 	@RequestMapping( value="addReservation", method=RequestMethod.POST )
-	public String addReservation ( @ModelAttribute("reservation") Reservation reservation, Model model ) throws Exception {
+	@ResponseBody
+	public int addReservation ( @ModelAttribute("reservation") Reservation reservation, Model model ) throws Exception {
 
 		System.out.println("/reservation/addReservation : POST");
 		//Business Logic
-		reservationService.addReservation(reservation);
+		//reservationService.addReservation(reservation);
 		System.out.println("/reservation/addReservation22222 : POST");
-		return "redirect:/reservation/listReservation";
+		//return "redirect:/reservation/listReservation";
+		return reservationService.addReservation(reservation);
 	}
 	//컨트롤러로 하면 안되고 레스트 타야됨 add 안할거면 controller는 성공하기도 전에 리턴해버림
 //==================================================================================================

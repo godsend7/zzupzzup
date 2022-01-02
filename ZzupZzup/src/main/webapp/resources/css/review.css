@@ -38,3 +38,38 @@ textarea {
 .hashTag {
 	margin-right: 10px;
 }
+
+.divBox .review-info-bottom a {
+ 	position: absolute; 
+ 	bottom: 5px;
+}
+
+.divBox .review-info-bottom .review-info-bottom-right {
+ 	position: absolute; 
+ 	bottom: 5px; 
+ 	right: 10px;
+}
+ 
+.divBox .review-info-bottom .review-info-bottom-right .likeBox {
+ 	float: left;
+} 
+
+.divBox .review-info-bottom .review-info-bottom-right .likeBox span {
+ 	margin-right: 10px;
+ 	margin-left: 10px;
+}
+ 
+.divBox .review-report-info { 
+ 	position: absolute; 
+ 	top: 5px; 
+ 	right: 10px; 
+ 	font-size: 12px; 
+}
+ 
+.divBox .review-report-info i {
+	margin-right: 10px;
+}
+
+.check {
+ 	fill : red;
+}

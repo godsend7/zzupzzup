@@ -23,8 +23,8 @@
 <script type="text/javascript">	
 	var arrayLayout = new Array();
 	
-	var nowLatitude = "";
-	var newLongitude = "";
+	var nowLatitude = "37.5703942";
+	var newLongitude = "126.9832113";
 	//현재위치로 이동
 	//naver.maps.Event.once(map, '')
 	

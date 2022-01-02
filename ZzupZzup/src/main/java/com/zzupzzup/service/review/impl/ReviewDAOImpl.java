@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.HashTag;
+import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.review.ReviewDAO;
 
@@ -111,8 +112,13 @@ public class ReviewDAOImpl implements ReviewDAO {
 	@Override
 	public List<HashTag> listHashTag(String search) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println();
 		return sqlSession.selectList("ReviewMapper.listHashTag", search);
+	}
+	
+	@Override
+	public List<Mark> listLike(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("ReviewMapper.listLike", memberId);
 	}
 
 	@Override

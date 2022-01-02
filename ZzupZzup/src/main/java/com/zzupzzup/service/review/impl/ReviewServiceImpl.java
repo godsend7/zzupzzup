@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.HashTag;
+import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.review.ReviewDAO;
 import com.zzupzzup.service.review.ReviewService;
@@ -85,6 +86,12 @@ public class ReviewServiceImpl implements ReviewService {
 		// TODO Auto-generated method stub
 		return reviewDao.listHashTag(search);
 	}
+	
+	@Override
+	public List<Mark> listLike(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		return reviewDao.listLike(memberId);
+	}
 
 	@Override
 	public int addLike(String memberId, int reviewNo) throws Exception {
@@ -105,5 +112,4 @@ public class ReviewServiceImpl implements ReviewService {
 		
 		return reviewDao.deleteLike(map);
 	}
-
 }
