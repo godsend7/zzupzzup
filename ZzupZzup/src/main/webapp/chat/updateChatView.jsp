@@ -180,6 +180,206 @@
 			$("input[value="+ageArr[index]+"]").prop("checked", true);
 		});
 		
+		//==> drag 파일 업로드
+		let $fileDragArea = $(".file-drag-area");
+		let $fileDragBtn = $(".file-drag-btn");
+		let $fileDragInput = $(".file-drag-input");
+		let $fileDragMsg = $(".file-drag-msg");
+		let $fileDragView = $(".file-drag-view");
+		let $chatImage = $("#chatImage");
+		
+		//박스 안에 Drag 들어왔을 때
+		$fileDragArea.on("dragenter", function(e){
+			console.log("dragenter");
+			$fileDragArea.addClass('is-active');
+		});
+		
+		//박스 안에 Drag 하고 있을 때
+		$fileDragArea.on("dragover", function(e){
+			console.log("dragover");
+			
+			// 드래그 한 것이 파일인지 아닌지 체크
+			let valid = e.originalEvent.dataTransfer.types.indexOf('Files')>= 0;
+			console.log(valid);
+			
+			if(!valid){
+				$fileDragArea.addClass('is-warning');
+			}else{
+				$fileDragArea.addClass('is-active');
+			}
+		});
+		
+		//박스 밖으로 Drag 나갈 때
+		$fileDragArea.on("dragleave", function(e){
+			console.log("dragleave");
+			$fileDragArea.removeClass('is-active');
+		});
+		
+		//박스 안에서 Drag를 Drop 했을 때
+		$fileDragArea.on("drop", function(e){
+			console.log("drop");
+			$fileDragArea.removeClass('is-active');
+			
+		});
+
+		// change inner text
+		$fileDragInput.on('change', function(e) {
+			var fileName = $(this).val().split('\\').pop();
+			
+			const data = e.target;
+			console.dir(data);
+			
+			//유효성 체크
+			if(!isValid(data)){
+				return;
+			}
+			
+			const formData = new FormData();
+			formData.append('uploadFile', data.files[0]);
+			
+			const saveName = "";
+			
+			ajax({
+				url: '/chat/json/addDragFile',
+				method: 'POST',
+				data: formData,
+				progress: () => {
+					
+				},
+				loadend: () => {
+				}
+			});
+			
+			/* $.ajax({
+				url: '/chat/json/addDragFile',
+				method: 'POST',
+				data: formData,
+				success:function(JSONData){
+					console.log("성공");
+			    },
+			    error:function(e){
+					console.log("실패");
+			    }
+			}); */
+			
+			$fileDragMsg.text(fileName);
+			
+		});
+
+		function isValid(data){
+			
+			//파일인지 유효성 검사
+			if(data.type.indexOf('file') < 0){
+				alert("파일이 아닙니다.");
+				return false;
+			}
+			
+			//이미지인지 유효성 검사
+			if(data.files[0].type.indexOf('image') < 0){
+				alert('이미지 파일만 업로드 가능합니다.');
+				return false;
+			}
+			
+			//파일의 개수는 1개씩만 가능하도록 유효성 검사
+			if(data.files.length > 1){
+				alert('파일은 하나씩 전송이 가능합니다.');
+				return false;
+			}
+			
+			//파일의 사이즈는 10MB 미만
+			if(data.files[0].size >= 1024 * 1024 * 10){
+				alert('10MB 이상인 파일은 업로드할 수 없습니다.');
+				return false;
+			}
+			
+			return true;
+		}
+		
+		//참고 ajax 커스텀 모듈
+		function ajax(obj){
+			
+			const xhr = new XMLHttpRequest();
+			
+			var method = obj.method || 'GET';
+			var url = obj.url || '';
+			var data = obj.data || null;
+			
+			/* 성공/에러 */
+			xhr.addEventListener('load', function() {
+				
+				const data = xhr.responseText;
+				
+				if(obj.load)
+					obj.load(data);
+			});
+			
+			/* 성공 */
+			xhr.addEventListener('loadend', function() {
+				
+				const data = xhr.responseText;
+				
+				if(obj.loadend) {
+					obj.loadend(data);
+				}
+				saveName = JSON.parse(data).saveName;
+				$fileDragView.html("<img src='/resources/images/uploadImages/chat/"+saveName+"'/>");
+				console.log("saveName : " + saveName);
+				$chatImage.val(saveName);
+				
+			});
+			
+			/* 실패 */
+			xhr.addEventListener('error', function() {
+				
+				console.log('Ajax 중 에러 발생 : ' + xhr.status + ' / ' + xhr.statusText);
+				
+				if(obj.error){
+					obj.error(xhr, xhr.status, xhr.statusText);
+				}
+			});
+			
+			/* 중단 */
+			xhr.addEventListener('abort', function() {
+				
+				if(obj.abort){
+					obj.abort(xhr);
+				}
+			});
+			
+			/* 진행 */
+			xhr.upload.addEventListener('progress', function() {
+				
+				if(obj.progress){
+					obj.progress(xhr);
+				}
+			});
+			
+			/* 요청 시작 */
+			xhr.addEventListener('loadstart', function() {
+				
+				if(obj.loadstart)
+					obj.loadstart(xhr);
+			});
+			
+			if(obj.async === false)
+				xhr.open(method, url, obj.async);
+			else
+				xhr.open(method, url, true);
+			
+			if(obj.contentType)
+				xhr.setRequestHeader('Content-Type', obj.contentType);	
+				
+			xhr.send(data);	
+		}
+		
+		//사진 클릭시 첨부 이미지 삭제
+		$("body").on("click", ".file-drag-view img", function(){
+			console.log("이미지에 마우스 올렸다");
+			$chatImage.val('');
+			$(this).remove();
+			$fileDragMsg.text("파일을 여기로 드래그 하거나 선택하세요.");
+		});
+		
 		
 		//==> 채팅방 노출여부 체크시
 		$("input[name='chatShowStatus']").change(function(){
@@ -339,14 +539,21 @@
 							</div>
 							<div class="row gtr-uniform">
 								<!-- Break -->
-								<div class="col-12">
-									<label for="chatImage">채팅방 대표 이미지</label>
-									<input type="file" id="chatImage" name="chatImage" value="${chat.chatImage}"/>
-									<c:if test="${chat.chatImage != 'chatchat.jpg' }">
-									<p>기본 이미지 :${chat.chatImage }</p>
-									<div class="card col-md-4"><img src="/resources/images/uploadImages/chat/${chat.chatImage }"/></div>
-									</c:if>
-									
+								<div class="col-md-8">
+									<label for="fileDragInput">채팅방 대표 이미지</label>
+									<div class="file-drag-area">
+										<span class="file-drag-btn">파일 선택</span> 
+										<span class="file-drag-msg">
+										${chat.chatImage != 'chatimg.jpg' ? chat.chatImage : "파일을 여기로 드래그 하거나 선택하세요."}
+										</span> 
+										<input class="file-drag-input" type="file" id="fileDragInput" name="fileDragInput" >
+										<input type="hidden" id="chatImage" name="chatImage" value="${chat.chatImage}">
+									</div>
+									<div class="file-drag-view mt-4">
+										<c:if test="${chat.chatImage != 'chatimg.jpg' }">
+										<img src="/resources/images/uploadImages/chat/${chat.chatImage }"/>
+										</c:if>
+									</div>									
 								</div>
 							</div>
 							<div class="row gtr-uniform">
