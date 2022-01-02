@@ -24,6 +24,7 @@
 
 			//==> 유효성 체크
 			let restaurantName = $("input[name='restaurantName']").val();
+			let restaurantTel = $("input[name='restaurantTel']").val();
 			let chatTitle = $("input[name='chatTitle']").val();
 			let chatGender = $("input[name='chatGender']:checked").length;
 			let chatAge = $("input[name='chatAge']:checked").length;
@@ -34,7 +35,14 @@
 			console.log("chatAge : " + chatAge); */
 
 			if (restaurantName == null || restaurantName.length < 1) {
-				alert("음식점명은 반드시 입력하여야 합니다.");
+				alert("음식점을 반드시 선택하여야 합니다.");
+				$("input[name='restaurantName']").focus();
+				return;
+			}
+			
+			if (restaurantTel == null || restaurantTel.length < 1) {
+				alert("음식점을 반드시 선택하여야 합니다.");
+				$("input[name='restaurantName']").val('');
 				$("input[name='restaurantName']").focus();
 				return;
 			}
@@ -183,6 +191,7 @@
 		let $fileDragInput = $(".file-drag-input");
 		let $fileDragMsg = $(".file-drag-msg");
 		let $fileDragView = $(".file-drag-view");
+		let $chatImage = $("#chatImage");
 		
 		//박스 안에 Drag 들어왔을 때
 		$fileDragArea.on("dragenter", function(e){
@@ -216,59 +225,10 @@
 			console.log("drop");
 			$fileDragArea.removeClass('is-active');
 			
-			/* console.dir(e.originalEvent.dataTransfer.files[0]);
-			let fileName = e.originalEvent.dataTransfer.files[0].name;
-			
-			const data = e.originalEvent.dataTransfer;
-			console.dir(data);
-			
-			//유효성 체크
-			if(!isValid(data)){
-				return;
-			}
-			
-			const formData = new FormData();
-			formData.append('uploadFile', data.files[0]);
-			
-			ajax({
-				url: '/chat/json/addDragFile',
-				method: 'POST',
-				data: formData,
-				progress: () => {
-					
-				},
-				loadend: () => {
-				}
-			}); */
-			
-			/* 			
-			console.log("a : " + formData);
-			const xhr = new XMLHttpRequest();
-			formData = JSON.stringify(formData);
-			console.log("b : " + formData);
-			
-			$.ajax({
-				url: '/chat/json/addDragFile',
-				method: 'POST',
-				data: formData,
-				dataType : "json",
-				headers : {
-					"Accept" : "application/json",
-					"contentType" : "application/json; charset=utf-8"
-				},
-				success : function(JSONData) {
-					console.log("성공");
-				},
-				error : function(e) {
-					alert(e.responseText);
-				}
-			}); */
-			
 		});
 
 		// change inner text
 		$fileDragInput.on('change', function(e) {
-			console.log("인풋 첸지");
 			var fileName = $(this).val().split('\\').pop();
 			
 			const data = e.target;
@@ -282,6 +242,8 @@
 			const formData = new FormData();
 			formData.append('uploadFile', data.files[0]);
 			
+			const saveName = "";
+			
 			ajax({
 				url: '/chat/json/addDragFile',
 				method: 'POST',
@@ -290,11 +252,23 @@
 					
 				},
 				loadend: () => {
-					$(".file-drag-view").html("<img src='/resources/images/uploadImages/chat/"+fileName+"'/>");
 				}
 			});
 			
+			/* $.ajax({
+				url: '/chat/json/addDragFile',
+				method: 'POST',
+				data: formData,
+				success:function(JSONData){
+					console.log("성공");
+			    },
+			    error:function(e){
+					console.log("실패");
+			    }
+			}); */
+			
 			$fileDragMsg.text(fileName);
+			
 		});
 
 		function isValid(data){
@@ -349,10 +323,14 @@
 				
 				const data = xhr.responseText;
 				
-				//console.log(data);
-				
-				if(obj.loadend)
+				if(obj.loadend) {
 					obj.loadend(data);
+				}
+				saveName = JSON.parse(data).saveName;
+				$fileDragView.html("<img src='/resources/images/uploadImages/chat/"+saveName+"'/>");
+				console.log("saveName : " + saveName);
+				$chatImage.val(saveName);
+				
 			});
 			
 			/* 실패 */
@@ -402,7 +380,7 @@
 		//사진 클릭시 첨부 이미지 삭제
 		$("body").on("click", ".file-drag-view img", function(){
 			console.log("이미지에 마우스 올렸다");
-			$fileDragInput.val('');
+			$chatImage.val('');
 			$(this).remove();
 			$fileDragMsg.text("파일을 여기로 드래그 하거나 선택하세요.");
 		});
@@ -433,12 +411,13 @@
 
 						<!-- start:Form -->
 						<h3>쩝쩝친구 생성</h3>
+						
 
 						<form id="addChatView">
 							<input type="hidden" name="chatRestaurant.restaurantNo"
 								id="restaurantNo"> <input type="hidden"
 								name="chatLeaderId.memberId" id="chatLeaderId"
-								value="hihi@a.com">
+								value="${member.memberId}">
 							<div class="row gtr-uniform">
 								<div class="col-md-8">
 									<label for="restaurantName">음식점명</label> <input type="text"
@@ -523,11 +502,12 @@
 							<div class="row gtr-uniform">
 								<!-- Break -->
 								<div class="col-md-8">
-									<label for="chatImage">채팅방 대표 이미지</label>
+									<label for="fileDragInput">채팅방 대표 이미지</label>
 									<div class="file-drag-area">
 										<span class="file-drag-btn">파일 선택</span> <span
 											class="file-drag-msg">파일을 여기로 드래그 하거나 선택하세요.</span> <input
-											class="file-drag-input" type="file" id="chatImage" name="chatImage" >
+											class="file-drag-input" type="file" id="fileDragInput" name="fileDragInput" >
+											<input type="hidden" id="chatImage" name="chatImage">
 									</div>
 									<div class="file-drag-view mt-4">
 									</div>

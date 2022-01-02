@@ -1,7 +1,10 @@
 package com.zzupzzup.service.domain;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
+
+import com.zzupzzup.common.util.CommonUtil;
 
 public class Reservation {
 	
@@ -16,7 +19,7 @@ public class Reservation {
 	private String planTime;
 	private Date planDate;
 	private String fixedTime;
-	private Date fixedDate;
+	private Timestamp fixedDate;
 	private int memberCount;
 	private int reservationStatus;
 	private boolean fixedStatus;
@@ -115,11 +118,11 @@ public class Reservation {
 		this.fixedTime = fixedTime;
 	}
 
-	public Date getFixedDate() {
+	public Timestamp getFixedDate() {
 		return fixedDate;
 	}
 
-	public void setFixedDate(Date fixedDate) {
+	public void setFixedDate(Timestamp fixedDate) {
 		this.fixedDate = fixedDate;
 	}
 
@@ -131,7 +134,7 @@ public class Reservation {
 		this.memberCount = memberCount;
 	}
 
-	public int isReservationStatus() {
+	public int getReservationStatus() {
 		return reservationStatus;
 	}
 
@@ -217,6 +220,14 @@ public class Reservation {
 
 	public void setOrder(List<Order> order) {
 		this.order = order;
+	}
+	
+	public String getReturnStatus() {
+		return CommonUtil.reservationStatus(reservationStatus);
+	}
+	
+	public String getReturnPayOption() {
+		return CommonUtil.payOption(payOption);
 	}
 
 	@Override

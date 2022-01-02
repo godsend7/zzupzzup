@@ -18,15 +18,15 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
-		function fncPageNavigation(currentPage) {
-			  /* document.getElementById("currentPage").value = currentPage;
-		  document.detailForm.submit(); */
+		/* function fncPageNavigation(currentPage) {
+			   document.getElementById("currentPage").value = currentPage;
+		  document.detailForm.submit(); 
 		  console.log(currentPage);
 		  $("#currentPage").val(currentPage);
 		  $("#reservation").attr("action","/reservation/listReservation").attr("method", "POST").submit();
 		}
 		
-		 function fncGetReservation(reservationNo) {
+		 function fnclistReservation(reservationNo) {
 			 
 			console.log(reservationNo);
 
@@ -39,7 +39,13 @@
 					console.log(data);
 				}
 			}); 
-		} 
+		}   */
+		
+		$(".reviewWrite").on("click" , function() {
+	    	//self.location = "/review/addReview?reservationNo=${reservation.member.memberId}"
+	    	self.location = "/review/addReview?reservationNo=1"
+		});
+		
 </script>
 </head>
 
@@ -72,21 +78,20 @@
 						<div class="col-md-4">
 							<div class="card mb-4 shadow-sm">
 								<a href="" class="thumb"><img
-									src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"
-									alt="플래터, 음식, 선발, 식사, 잔치, 다 이닝 테이블, 테이블, 먹다, 맛있는 음식, 식당, 요리"></a>
+									src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"></a>
 				
 								<div class="card-body">
 									<h3 class="card-title">${reservation.restaurant.restaurantName}</h3>
-									<h4 class="text-primary card-title">에약번호  <a href="javascript:fncGetProductList();">${reservation.reservationNumber}</a></h4>
+									<h4 class="text-primary card-title">에약번호  <a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h4>
 								
 										<div class="col-6 col-12-xsmall">
-										<label for="demo-name">참여자 NickName</label> 
+										<label for="nickname">참여자 NickName</label> 
 										<p>${reservation.member.nickname}</p>
 										</div>
 										
 										<div class="col-6 col-12-xsmall">
 										<label for="demo-name">방문 확정 전</label> 
-										<p>${reservation.planDate}</p>
+										<p>${reservation.planDate} ${reservation.planTime}</p>
 										</div>
 										
 										<div class="container">
@@ -95,20 +100,13 @@
 									    <label for="demo-name">방문 확정 후(승인)</label> 
 										<p>${reservation.fixedDate} </div>
 									    <div class="col-6 col-md-4">
-									    <a href="#" class="button small primary stretched-link">리뷰 쓰기</a></div>
+									    <a href="#" class="button small primary stretched-link rivewWrite" name = "rivewWrite" id ="rivewWrite">리뷰 쓰기</a></div>
 									  	</div> 
 									  	</div>
-										<!-- <div class="col-6 col-12-xsmall">
-										<label for="demo-name">방문 확정 후(승인)</label> 
-										<p>2021-12-04  13:30   
-										<div class="d-flex justify-content-between align-items-end">
-										<a href="#" class="button small primary stretched-link">리뷰 쓰기</a></p>
-										</div>
-										</div> -->
 									
 										<div class="col-6 col-12-xsmall">
 										<label for="demo-name">예약 및 결제 현황</label> 
-										<p>${reservation.fixedDate}</p>
+										<p>${reservation.returnStatus}</p>
 										</div>
 								</div>
 							</div>

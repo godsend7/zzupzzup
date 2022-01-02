@@ -21,9 +21,13 @@
 	$(function() {
 		console.log("updateChat.jsp");
 		
-		//==> Form Submit 처리
+		//==> Button 이동 처리
 		$("input[value='채팅방 목록']").on("click", function() {
 			window.open("/chat/listChat", "_self");
+		});
+		
+		$("input[value='채팅방 수정']").on("click", function() {
+			location.href="/chat/updateChat?chatNo="+${chat.chatNo};
 		});
 		
 
@@ -163,15 +167,16 @@
 							</div>
 							<div class="row gtr-uniform">
 								<!-- Break -->
-								<div class="col-12">
-									<label for="chatImage">채팅방 대표 이미지</label>
-									<c:if test="${chat.chatImage != 'chatimg.jpg' }">
-									<p>${chat.chatImage }</p>
-									<p><img src="/resources/images/uploadImages/chat/${chat.chatImage }"/></p>
-									</c:if>
-									<c:if test="${chat.chatImage == 'chatimg.jpg' }">
-									<p>대표 이미지 없음</p>
-									</c:if>
+								<div class="col-md-8">
+									<label for="fileDragInput">채팅방 대표 이미지</label>
+										<span class="file-drag-msg">
+										${chat.chatImage != 'chatimg.jpg' ? chat.chatImage : "대표이미지 없음"}
+										</span> 
+									<div class="file-drag-view mt-4">
+										<c:if test="${chat.chatImage != 'chatimg.jpg' }">
+										<img src="/resources/images/uploadImages/chat/${chat.chatImage }"/>
+										</c:if>
+									</div>
 								</div>
 							</div>
 							<div class="row gtr-uniform">
@@ -194,7 +199,8 @@
 								<!-- Break -->
 								<div class="col-12">
 									<ul class="actions justify-content-center">
-										<li><input type="button" value="채팅방 목록" class="primary" /></li>
+										<li><input type="button" value="채팅방 수정" class="primary" /></li>
+										<li><input type="button" value="채팅방 목록" class="" /></li>
 									</ul>
 								</div>
 							</div>

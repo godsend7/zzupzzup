@@ -313,3 +313,30 @@ input:disabled { background-color: rgba(0,0,0,0.1); }
 
 /* pagination */
 .pagination { justify-content: center; align-items: center; }
+
+/* drag file upload */
+.file-drag-area { position: relative; display: flex; align-items: center; max-width: 100%; padding: 25px; border: 1px dashed rgba(210, 215, 217, 0.75); border-radius: 3px; transition: 0.2s; }
+.file-drag-btn { flex-shrink: 0; background-color: rgba(210, 215, 217, 0.3); border: 1px solid rgba(210, 215, 217, 0.75); border-radius: 3px; padding: 8px 15px; margin-right: 10px; font-size: 12px; text-transform: uppercase; }
+.file-drag-msg { font-size: small; font-weight: 300; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.file-drag-input { position: absolute; left: 0; top: 0; height: 100%; width: 100%; cursor: pointer; opacity: 0; }
+.file-drag-area.is-active { background-color: royalblue; }
+.file-drag-area.is-warning { background-color: magenta; }
+.file-drag-view { display: inline-block; position: relative; }
+.file-drag-view:after { transition: all 0.5s; margin-top: 0; }
+.file-drag-view:hover:after { content: "닫기"; display: block; position: absolute; top: -20px; right: -20px; width: 50px; height: 50px; border-radius: 50%; background-color: rgba(0,0,0,0.4); text-align: center; cursor: pointer; line-height: 50px; color: #fff; }
+.file-drag-view img { width: 100%; max-width: 200px; cursor: pointer; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

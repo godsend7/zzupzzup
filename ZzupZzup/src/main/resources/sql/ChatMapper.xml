@@ -68,6 +68,7 @@
 			<if test="chatRestaurant.restaurantNo != null">restaurant_no = #{chatRestaurant.restaurantNo},</if>
 			<if test="chatTitle != null">chat_title = #{chatTitle},</if>
 			<if test="chatImage != null">chat_image = #{chatImage},</if>
+			<if test="chatImage == null">chat_image = 'chatimg.jpg',</if>
 			<if test="chatText != null">chat_text = #{chatText},</if>
 			<if test="chatGender != null">chat_gender = #{chatGender},</if>
 			<if test="chatAge != null">age_type = #{chatAge},</if>
