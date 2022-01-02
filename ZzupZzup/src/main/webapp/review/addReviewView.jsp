@@ -45,7 +45,7 @@
 			return;
 		}
 		
-		$("#review").attr("method", "POST").attr("action" , "/review/addReview").attr("enctype", "multipart/form-data").submit();
+		$("#review").attr("method", "POST").attr("action" , "/review/addReview").attr("enctype", "multipart/form-data").attr("accept-charset","UTF-8").submit();
 	} 
 	
 	window.onload = function() {
