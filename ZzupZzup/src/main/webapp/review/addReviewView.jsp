@@ -6,7 +6,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-addReviewView</title>
+<title>ZZUPZZUP</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 <link rel="stylesheet" href="/resources/css/review.css" />
@@ -45,7 +45,7 @@
 			return;
 		}
 		
-		$("#review").attr("method", "POST").attr("action" , "/review/addReview").attr("enctype", "multipart/form-data").submit();
+		$("#review").attr("method", "POST").attr("action" , "/review/addReview").attr("enctype", "multipart/form-data").attr("accept-charset","UTF-8").submit();
 	} 
 	
 	window.onload = function() {
@@ -248,8 +248,8 @@
 					 	   		<!-- Break -->
 								<div class="col-12">
 									<ul class="actions">
-										<li><input type="button" value="등록" class="primary" id="addBtn" /></li>
 										<li><input type="reset" value="이전" class="normal" /></li>
+										<li><input type="button" value="등록" class="primary" id="addBtn" /></li>
 									</ul>
 								</div>
 						  	</div>

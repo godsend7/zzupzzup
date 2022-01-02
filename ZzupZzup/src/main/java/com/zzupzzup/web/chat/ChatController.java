@@ -86,6 +86,7 @@ public class ChatController {
 		chatMember.setChatNo(chat.getChatNo());
 		chatMember.setMember(chat.getChatLeaderId());
 		chatMember.setChatLeaderCheck(true);
+		chatMember.setReadyCheck(true);
 		
 		chatService.addChatMember(chatMember);
 		

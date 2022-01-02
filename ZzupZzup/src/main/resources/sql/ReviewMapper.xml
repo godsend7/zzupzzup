@@ -27,7 +27,6 @@
 		</collection> -->
 		
 		<collection property="hashTag" resultMap="hashTagSelectMap"></collection>
-		
 		<collection property="reviewImage" ofType="String" javaType="list">
 			<result column="image"/>
 		</collection>
@@ -36,6 +35,12 @@
 	<resultMap id="hashTagSelectMap" type="hashtag">
 		<result property="hashTagNo" column="hashtag_no" jdbcType="INTEGER"/>
 		<result property="hashTag" column="hashtag" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap id="markSelectMap" type="mark">
+		<result property="markNo" column="mark_no" jdbcType="INTEGER"/>
+		<result property="memberId" column="member_id" jdbcType="VARCHAR"/>
+		<result property="reviewNo" column="review_no" jdbcType="INTEGER"/>
 	</resultMap>
 	
 	
@@ -74,11 +79,13 @@
 	<update id="updateReview" parameterType="review">
 		UPDATE REVIEW
 	   	<set>
-	   		review_detail = #{reviewDetail},
-			scope_taste	= #{scopeTaste},
-			scope_kind = #{scopeKind},
-			scope_clean	= #{scopeClean},
-			avg_scope = #{avgScope},
+	   		<if test='member.memberRole.equals("user")'>
+	   			review_detail = #{reviewDetail},
+				scope_taste	= #{scopeTaste},
+				scope_kind = #{scopeKind},
+				scope_clean	= #{scopeClean},
+				avg_scope = #{avgScope},
+	   		</if>
 			review_show_status = #{reviewShowStatus}
 	   	</set>
 	   	WHERE review_no = #{reviewNo}
@@ -156,6 +163,12 @@
 			FROM HASHTAG_LOG as hl, HASHTAG as h
             WHERE hl.hashtag_no = h.hashtag_no) as hh on(r.review_no = hh.review_no);
 	</select>  
+
+	<select id="listHashTag" parameterType="String" resultMap="hashTagSelectMap">
+		SELECT hashtag_no, hashtag
+		FROM HASHTAG
+		WHERE HASHTAG Like CONCAT('%',#{value},'%')
+	</select>
 	
 	<select id="getLikeCount" parameterType="int" resultType="int">
 		SELECT count(review_no)
@@ -163,10 +176,13 @@
 		WHERE review_no = #{value};
 	</select>
 	
-	<select id="listHashTag" parameterType="String" resultMap="hashTagSelectMap">
-		SELECT hashtag_no, hashtag
-		FROM HASHTAG
-		WHERE HASHTAG Like CONCAT('%',#{value},'%')
+	<select id="listLike" parameterType="string" resultMap="markSelectMap">
+		SELECT mark_no, member_id, review_no
+		FROM MARK
+		WHERE review_no IS NOT NULL 
+		<if test="value != null">
+			AND member_id = #{value}
+		</if>
 	</select>
 	
 	<insert id="addLike" parameterType="map">
