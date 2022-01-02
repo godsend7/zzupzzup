@@ -78,7 +78,9 @@
 		
 		
 		
-		
+	   	 $(".reset").on("click" , function() {
+	    	self.location = "/reservation/listReservation"
+		}); 
 		
 		//////////모달 이동////////////////
 	    /* $(".yes").on("click" , function() {
@@ -167,7 +169,7 @@
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantType">음식 종류</label> 
-									<p>${reservation.restaurant.menuType}</p>
+									<p>${reservation.restaurant.returnMenuType}</p>
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
@@ -177,7 +179,7 @@
 					<!-- ///////////////////get 추가///////////////////////// -->			
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantType">방문 확정 전</label>
-									<p>${reservation.planDate} ${reservation.planTime}
+									<p>${reservation.planDate} ${reservation.planTime}</p>
 									<!-- Button trigger modal -->
 								
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->
@@ -188,8 +190,14 @@
 								</c:if>	 --%>
 								
 								<%-- <c:if test="${reservation.member.memberRole == 'owner'}"> --%>
-									<input type="button" value="방문 확정" name= "reservationStatus" class="button small primary stretched-link" id="reservationStatus-modal" data-toggle="modal"
+									<p><input type="button" value="방문 확정" name= "reservationStatus" class="button small primary stretched-link" id="reservationStatus-modal" data-toggle="modal"
 									data-target="#getReservationModal"/></p>
+									
+									<p><input type="button" value="예약 거절" name= "reservationRejection" class="button small primary stretched-link" id="reservationRejection-modal" data-toggle="modal"
+									data-target="#rejectionModal"/></p>
+									
+									<p><input type="button" value="예약 취소" name= "reservationCancel" class="button small primary stretched-link" id="reservationCancel-modal" data-toggle="modal"
+									data-target="#reservationRejectionModal"/></p>
 								<%-- </c:if>	 --%>
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->	
 									<!-- Button trigger modal --> 
@@ -205,7 +213,7 @@
 								
 								<div class="col-12">
 									<label for="reservationStatus">예약 및 결제 현황</label>
-									<p>${reservation.reservationStatus}</p>
+									<p>${reservation.returnStatus}</p>
 								</div>
 								
 								
@@ -224,8 +232,8 @@
 								<div class="col-6 col-12-xsmall">
 									<label for="orderName">주문 메뉴 명, 수량</label> 
 									
-					                <p>	<c:forEach var="order" items="${reservation.order[0].menuTitle}">
-					                		<c:out value = "${reservation.order[0].menuTitle} ${reservation.order[0].orderCount}"/>
+					                <p>	<c:forEach var="order" items="${reservation.order}" varStatus="status">
+					                		<c:out value = "${order.menuTitle} - ${order.orderCount} ${status.last ? '' : '/'}"/>
 										</c:forEach> </p>
 								</div>
 								
@@ -239,7 +247,7 @@
 								<div class="col-6 col-12-xsmall">
 									<label for="orderTotal">결제 수단</label>
 									<div class="orderTotal"></div>
-									<p>${reservation.payOption}</p>
+									<p>${reservation.returnPayOption}</p>
 								</div>
 								
 								
@@ -262,15 +270,17 @@
 									</ul>
 								</div>
 							</div>
-							
-							
+			
+						<!-- Button trigger modal -->
+							<input type="button" value="페이지 이동" class="btn btn-primary getReservationModal" id="" data-toggle="modal"
+								data-target="#getReservationModal"/ style="visibility: hidden;">
 							
 							<!-- Modal -->
 							<div class="modal fade" id="getReservationModal" tabindex="-1" role="dialog"
 								aria-labelledby="getReservationModalLabel" aria-hidden="true">
 								<div class="modal-dialog" role="document">
 									<div class="modal-content">
-									
+										
 										<div class="modal-body">
 											<form class="form-signin">
 												
@@ -285,6 +295,34 @@
 													
 												<input class="btn btn-lg btn-primary close" id="close"
 													type="button" value="닫기" />		
+												
+											</form>
+										</div>
+										
+						</form>
+						<!-- end -->
+						
+						<!-- Button trigger modal 예약 거절 -->
+							<input type="button" value=" " class="btn btn-primary rejectionModal" id="" data-toggle="modal"
+								data-target="#rejectionModal"/ style="visibility: hidden;">
+							
+							<!-- Modal -->
+							<div class="modal fade" id="rejectionModal" tabindex="-1" role="dialog"
+								aria-labelledby="rejectionModalLabel" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										
+										<div class="modal-body">
+											<form class="form-signin">
+												
+												<h6 class="h6 mb-6 font-weight-normal">취소 사유를 말씀해주세요	</h6>
+												
+												</div>
+												<input class="btn btn-lg cancel" id="cancel"
+													type="button" value="취소" />
+													
+												<input class="btn btn-lg btn-primary confirm" id="confirm"
+													type="button" value="확인" />	
 												
 											</form>
 										</div>
