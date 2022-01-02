@@ -79,11 +79,13 @@
 	<update id="updateReview" parameterType="review">
 		UPDATE REVIEW
 	   	<set>
-	   		review_detail = #{reviewDetail},
-			scope_taste	= #{scopeTaste},
-			scope_kind = #{scopeKind},
-			scope_clean	= #{scopeClean},
-			avg_scope = #{avgScope},
+	   		<if test='member.memberRole.equals("user")'>
+	   			review_detail = #{reviewDetail},
+				scope_taste	= #{scopeTaste},
+				scope_kind = #{scopeKind},
+				scope_clean	= #{scopeClean},
+				avg_scope = #{avgScope},
+	   		</if>
 			review_show_status = #{reviewShowStatus}
 	   	</set>
 	   	WHERE review_no = #{reviewNo}

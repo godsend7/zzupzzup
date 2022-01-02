@@ -248,8 +248,8 @@
 					 	   		<!-- Break -->
 								<div class="col-12">
 									<ul class="actions">
-										<li><input type="button" value="등록" class="primary" id="addBtn" /></li>
 										<li><input type="reset" value="이전" class="normal" /></li>
+										<li><input type="button" value="등록" class="primary" id="addBtn" /></li>
 									</ul>
 								</div>
 						  	</div>

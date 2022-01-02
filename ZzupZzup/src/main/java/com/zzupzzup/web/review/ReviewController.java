@@ -118,13 +118,16 @@ public class ReviewController {
 	}
 	
 	@RequestMapping(value="updateReview", method=RequestMethod.POST)
-	public String updateReview(@ModelAttribute("review") Review review, MultipartHttpServletRequest uploadfile, Model model, HttpServletRequest request) throws Exception {
+	public String updateReview(@ModelAttribute("review") Review review, MultipartHttpServletRequest uploadfile, Model model, HttpServletRequest request, HttpSession session) throws Exception {
 		
 		System.out.println("review/updateReview : POST");
 		
 		String temDir = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH);
 		
 		uploadFilePath(uploadfile, temDir, review);
+		
+		Member member = (Member) session.getAttribute("member");
+		review.setMember(member);
 		
 		reviewService.updateReview(review);
 		
