@@ -43,7 +43,7 @@
 		
 		$(".reviewWrite").on("click" , function() {
 	    	//self.location = "/review/addReview?reservationNo=${reservation.member.memberId}"
-	    	self.location = "/review/addReview?memberId=hihi@a.com"
+	    	self.location = "/review/addReview?reservationNo=1"
 		});
 		
 </script>
@@ -78,15 +78,14 @@
 						<div class="col-md-4">
 							<div class="card mb-4 shadow-sm">
 								<a href="" class="thumb"><img
-									src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"
-									alt="플래터, 음식, 선발, 식사, 잔치, 다 이닝 테이블, 테이블, 먹다, 맛있는 음식, 식당, 요리"></a>
+									src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"></a>
 				
 								<div class="card-body">
 									<h3 class="card-title">${reservation.restaurant.restaurantName}</h3>
-									<h4 class="text-primary card-title">에약번호  <a href="javascript:fnclistProductList();">${reservation.reservationNumber}</a></h4>
+									<h4 class="text-primary card-title">에약번호  <a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h4>
 								
 										<div class="col-6 col-12-xsmall">
-										<label for="demo-name">참여자 NickName</label> 
+										<label for="nickname">참여자 NickName</label> 
 										<p>${reservation.member.nickname}</p>
 										</div>
 										
@@ -107,7 +106,7 @@
 									
 										<div class="col-6 col-12-xsmall">
 										<label for="demo-name">예약 및 결제 현황</label> 
-										<p>${reservation.fixedDate}</p>
+										<p>${reservation.returnStatus}</p>
 										</div>
 								</div>
 							</div>
