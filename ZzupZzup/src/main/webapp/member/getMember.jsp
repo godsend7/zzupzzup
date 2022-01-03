@@ -14,8 +14,8 @@
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
 	.badge-dark {
-    background-color: #f56a6a;
-}
+    	background-color: #f56a6a;
+	}
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -50,24 +50,30 @@
 												<div class="col-md" align="center">
 													<img
 														src="/resources/images/uploadImages/${member.profileImage}"
-														class="avatar-img rounded-circle" width="150" /> <br /> <span
-														id="mannerScore" style="font-weight: bold"> <svg
-															xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-															fill="currentColor" class="bi bi-heart-fill"
-															viewBox="0 0 16 16">
-														  <path fill-rule="evenodd"
-																d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
-																style="color : #b01025" />
-														</svg> ${member.mannerScore}
-													</span>
+														class="avatar-img rounded-circle" width="150" /> <br />
+													<c:if test="${sessionScope.member.memberRole == 'user'}">
+														<span
+															id="mannerScore" style="font-weight: bold">
+															<svg
+																xmlns="http://www.w3.org/2000/svg" width="10" height="10"
+																fill="#b01025" class="bi bi-heart-fill"
+																viewBox="0 0 16 16">
+															  <path fill-rule="evenodd"
+																	d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+																	/>
+															</svg> ${member.mannerScore}
+														</span>
+													</c:if>
 												</div>
-
 											</div>
 											<div class="col-md-5">
 												<div class="row align-items-right">
 													<div class="col-md-7">
 														<h4 class="mb-1">
-															<span class="badge badge-pill badge-dark">${member.memberRank}</span>&nbsp;&nbsp;${member.nickname}
+															<c:if test="${sessionScope.member.memberRole == 'user'}">
+																<span class="badge badge-pill badge-dark">${member.memberRank}</span>&nbsp;&nbsp;
+															</c:if>
+															${member.nickname}
 														</h4>
 													</div>
 												</div>
