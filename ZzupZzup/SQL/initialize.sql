@@ -154,6 +154,7 @@ CREATE TABLE `chat_member` (
     `chat_member_id` VARCHAR(50) NOT NULL,
     `ready_check` BOOLEAN NOT NULL DEFAULT 0,
     `chat_leader_check` BOOLEAN NOT NULL DEFAULT 0,
+    `in_out_check` BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY (`chat_member_no`),
     FOREIGN KEY (`chat_member_id`) REFERENCES `member`(`member_id`),
     FOREIGN KEY (`chat_no`) REFERENCES `chat`(`chat_no`),
