@@ -143,15 +143,21 @@
 					}
 				</c:forEach> */
 				
-				
-				if ("${member.memberId}" === data.list.member.memberId) {
-					
+				$(".footerBox").empty();
+				if (${member.memberRole eq "user"} && ("${member.memberId}" == data.list.member.memberId)) {
+					console.log("user");
 					var footer = "<div class='modal-footer'>" 
 								+ "<input type='button' class='normal' id='reviewDelete' value='삭제'></input> "
 								+ "<input type='button' class='primary' id='reviewUpdate' value='수정'></input>"
 								+ "</div>";
 					
-					$(".footerBox").empty();
+					$(".footerBox").append(footer);
+				} else if (${member.memberRole eq "admin"}) {
+					console.log("admin");
+					var footer = "<div class='modal-footer'>" 
+						+ "<input type='button' class='primary' id='reviewUpdate' value='수정'></input>"
+						+ "</div>";
+			
 					$(".footerBox").append(footer);
 				}
 				
@@ -175,7 +181,7 @@
     	
     	var image = "";
     	
-    	if (index === 0) {
+    	if (index == 0) {
     		console.log("active 필요");
 			image = "<div class='carousel-item active'>";
 		} else {
@@ -277,7 +283,7 @@
 				
 				<br/>
 				
-				<label for="reviewDetail">리뷰 상세내용</label>
+				<label for="reviewDetail">어떤 점이 좋았나요?</label>
 				<p id="reviewDetail"></p>
 				
 				<br/>

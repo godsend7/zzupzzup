@@ -65,16 +65,16 @@ CREATE TABLE `restaurant` (
     `restaurant_text` VARCHAR(100),
     `reservation_status` BOOLEAN DEFAULT 1,
     `parkable` BOOLEAN,
-    `request_date` DATE,
-    `judge_status` BOOLEAN,
-    `judge_date` DATE,
+    `request_date` DATETIME DEFAULT NOW(),
+    `judge_status` INT DEFAULT 1,
+    `judge_date` DATETIME,
     `restaurant_name` VARCHAR(50) NOT NULL,
     `restaurant_tel` VARCHAR(15) NOT NULL,
     `street_address` VARCHAR(50) NOT NULL,
     `area_address` VARCHAR(50) NOT NULL,
     `rest_address` VARCHAR(20),
     `menu_type` INT NOT NULL,
-    `restaurant_reg_date` DATE,
+    `restaurant_reg_date` DATETIME,
     `latitude` VARCHAR(50),
     `longitude` VARCHAR(50),
     PRIMARY KEY (`restaurant_no`),
@@ -154,6 +154,7 @@ CREATE TABLE `chat_member` (
     `chat_member_id` VARCHAR(50) NOT NULL,
     `ready_check` BOOLEAN NOT NULL DEFAULT 0,
     `chat_leader_check` BOOLEAN NOT NULL DEFAULT 0,
+    `in_out_check` BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY (`chat_member_no`),
     FOREIGN KEY (`chat_member_id`) REFERENCES `member`(`member_id`),
     FOREIGN KEY (`chat_no`) REFERENCES `chat`(`chat_no`),
@@ -340,24 +341,26 @@ INSERT INTO member(member_id, member_role, password, member_name, member_phone, 
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test2@test.com', 'user', '1234', '조영주2', '010-0000-0001','1', '20대', 'male', 'test2', '-', '0', '0', now());
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test1@test.com', 'user', '1234', '조영주3', '010-0000-0002','1', '30대', 'female', 'test1', '-', '0', '0', now());
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test3@test.com', 'user', '1234', '조영주4', '010-0000-0003','1', '40대', 'male', 'test3', '-', '0', '0', now());
+INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test4@test.com', 'user', '1234', '조영주5', '010-0000-0004','1', '50대', 'female', 'test4', '-', '0', '0', now());
+INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test5@test.com', 'user', '1234', '조영주6', '010-0000-0005','1', '60대', 'male', 'test5', '-', '0', '0', now());
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('owner1@test.com', 'owner', '1234', '조영주5', '010-0000-0400','1', '50대', 'female', 'owner1', '-', '0', '0', now());
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('owner2@test.com', 'owner', '1234', '조영주6', '010-0000-0500','1', '60대', 'female', 'owner2', '-', '0', '0', now());
 -- restaurant
 INSERT INTO restaurant(member_id, owner_name,
 owner_image, restaurant_text, parkable, restaurant_name, 
-restaurant_tel, street_address, area_address, menu_type)
+restaurant_tel, street_address, area_address, latitude, longitude, menu_type)
 VALUES('hihi@a.com', '홍진호', 'zzazang.jpg', '짜파게티보다 맛있는집', '0', '거구장',
-'010-1234-5678', '서울시 종로구 인사동3길 29', '서울시 종로구 인사동 215-1', '1');
+'010-1234-5678', '서울시 종로구 인사동3길 29', '서울시 종로구 인사동 215-1', '37.57166963363009', '126.98540705533098', '1');
 INSERT INTO restaurant(member_id, owner_name,
 owner_image, restaurant_text, parkable, restaurant_name, 
-restaurant_tel, street_address, area_address, menu_type)
+restaurant_tel, street_address, area_address, latitude, longitude, menu_type)
 VALUES('hihi@a.com', '가가가', 'zzazang.jpg', '짜파게티보다 맛있는집', '0', '거구류',
-'010-1234-9876', '서울시 용산구 인사동3길 29', '서울시 용산구 인사동 215-1', '1');
+'010-1234-9876', '서울시 용산구 인사동3길 29', '서울시 용산구 인사동 215-1', '37.57289900337021', '126.98377401141946', '1');
 INSERT INTO restaurant(member_id, owner_name,
 owner_image, restaurant_text, restaurant_name, 
-restaurant_tel, street_address, area_address, menu_type)
+restaurant_tel, street_address, area_address, latitude, longitude, menu_type)
 VALUES('hihi@a.com', '유희주', 'bab.jpg', '도시락보다 맛있는집', '김가네',
-'010-1111-2222', '서울시 종로구 종로 65', '서울시 종로구 종로2가 8-4', '1');
+'010-1111-2222', '서울시 종로구 종로 65', '서울시 종로구 종로2가 8-4', '37.570563535524535', '126.9846885976582', '1');
 -- menu
 INSERT INTO menu(restaurant_no, menu_title, menu_price, main_menu_status)
 VALUES('1', '짜장면', '3500', '0');

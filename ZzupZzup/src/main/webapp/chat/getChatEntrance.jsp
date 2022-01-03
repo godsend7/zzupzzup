@@ -15,7 +15,7 @@
 <!--  ///////////////////////// CSS ////////////////////////// -->
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
-<script src="http://localhost:1000/socket.io/socket.io.js"></script>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 	$(function() {
 		console.log("getChatEntrance.jsp");
@@ -23,7 +23,7 @@
 		let MY_USER_ID = "";
 		
 		//페이지 접속시 socket.io 접속
-		const socket = io.connect('http://localhost:1000', {
+		const socket = io.connect('http://localhost:3000', {
 			cors: { origin: '*' }
 		});
 		
@@ -160,12 +160,60 @@
 			console.log(time);
 			return time;
 		}
+		
+		//============= "예약하기" Event 처리 ============
+		$("input[value='예약하기']").on("click", function() {
+			console.log("예약하기");
+			let chatNo = "${chat.chatNo }";
+			location.href="/chat/getChatReservation?chatNo="+chatNo;
+		});
+		
+		//============= "모임참여 체크하기" Event 처리 ============
+		$("body").on("click", "input[value='모임참여 체크하기']", function() {
+			console.log("모임참여 체크하기");
+			$.ajax({
+				url : "/chat/json/updateReadyCheck/chatNo=${chat.chatNo}&readyCheck=true",
+				method : "GET",
+				dataType : "json",
+				headers : {
+					"Accept" : "application/json",
+					"contentType" : "application/json; charset=utf-8"
+				},
+				success : function(JSONData){
+					console.log("바꾸기 성공");
+					$("input[value='모임참여 체크하기']").val('모임참여 해제하기');
+				},
+				error : function(e) {
+					alert(e.responseText);
+				}
+			});
+		});
+			
+		//============= "모임참여 해제하기" Event 처리 ============
+		$("body").on("click", "input[value='모임참여 해제하기']", function() {
+			console.log("모임참여 해제하기");
+			$.ajax({
+				url : "/chat/json/updateReadyCheck/chatNo=${chat.chatNo}&readyCheck=false",
+				method : "GET",
+				dataType : "json",
+				headers : {
+					"Accept" : "application/json",
+					"contentType" : "application/json; charset=utf-8"
+				},
+				success : function(JSONData){
+					console.log("바꾸기 성공");
+					$("input[value='모임참여 해제하기']").val('모임참여 체크하기');
+				},
+				error : function(e) {
+					alert(e.responseText);
+				}
+			});
+		});
 	});
 </script>
 </head>
 
 <body class="is-preload">
-
 	<!-- S:Wrapper -->
 	<div id="wrapper">
 
@@ -181,12 +229,10 @@
 
 						<!-- S:chatting -->
 						<div class="d-flex flex-row chat-container">
-							<input type="hidden" id="memberId" value=""/>
-							<input type="hidden" id="nickname" value=""/>
-							<input type="hidden" id="chatNo" value=""/>
-							<input type="hidden" id="restaurantNo" value=""/>
-							
-						
+							<input type="hidden" id="memberId" value="${member.memberId }"/>
+							<input type="hidden" id="nickname" value="${member.nickname }"/>
+							<input type="hidden" id="chatNo" value="${chat.chatNo }"/>
+							<input type="hidden" id="restaurantNo" value="${chat.chatRestaurant.restaurantNo }"/>
 						
 							<div class="chat-contents d-flex flex-column">
 								<div class="chat-header d-flex flex-row align-items-center">
@@ -262,8 +308,16 @@
 									</ul>
 								</div>
 								<div class="chat-footer">
-									<input type="button" class="button small" value='모임참여 체크하기'/>
-									<input type="button" class="button primary small" value="예약하기"/>
+									<c:choose>
+										<c:when test="${chat.chatLeaderId.memberId == member.memberId }">
+											<input type="button" class="button primary small" value="예약하기"/>
+										</c:when>
+										<c:otherwise>
+											<input type="button" class="button small" value='${chatMember.readyCheck == true ? "모임참여 해제하기" : "모임참여 체크하기"}'/>
+										</c:otherwise>
+									</c:choose>
+									
+									
 								</div>
 							</div>
 							

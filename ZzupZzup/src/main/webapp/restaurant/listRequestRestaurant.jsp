@@ -39,13 +39,13 @@
 				<section id="">
 					<div class="container">
 					
-					<h2>등록된 음식점 목록</h2><hr>
+					<h2>심사 대기중인 음식점 목록</h2><hr>
 					<form id="restaurant">
 					<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 						<input type="hidden" id="currentPage" name="currentPage" value=""/>
 					</form>
 					
-					<c:if test="${restaurant.requestDate != null}">
+					<c:if test="${!empty restaurant.requestDate}">
 					
 					<c:set var="i" value="0" />
 					<c:forEach var="restaurant" items="${list}">
