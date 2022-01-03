@@ -25,6 +25,7 @@ public class Chat {
 	private Restaurant chatRestaurant; //음식점 도메인
 	private List<ChatMember> chatMember; //채팅방 참여자 리스트
 	private int reportCount; //누적 신고횟수
+	private int readyCount; //예약하는 사람 수
 
 	///Constructor
 	public Chat() {
@@ -154,14 +155,24 @@ public class Chat {
 		this.reportCount = reportCount;
 	}
 
+	public int getReadyCount() {
+		return readyCount;
+	}
+
+	public void setReadyCount(int readyCount) {
+		this.readyCount = readyCount;
+	}
+
 	@Override
 	public String toString() {
 		return "Chat [chatNo=" + chatNo + ", chatTitle=" + chatTitle + ", chatImage=" + chatImage + ", chatText="
 				+ chatText + ", chatRegDate=" + chatRegDate + ", chatAge=" + chatAge + ", chatGender=" + chatGender
 				+ ", chatMemberCount=" + chatMemberCount + ", chatState=" + chatState + ", chatLeaderId=" + chatLeaderId
 				+ ", chatShowStatus=" + chatShowStatus + ", chatRestaurant=" + chatRestaurant + ", chatMember="
-				+ chatMember + ", reportCount=" + reportCount + "]";
+				+ chatMember + ", reportCount=" + reportCount + ", readyCount=" + readyCount + "]";
 	}
+
+	
 	
 	
 

@@ -24,6 +24,8 @@ public interface RestaurantService {
 	
 	public int updateRestaurant(Restaurant restaurant) throws Exception;
 	
+	public int judgeRestaurant(Restaurant restaurant) throws Exception;
+	
 	public int deleteRestaurant(int restaurantNo) throws Exception;
 	
 	public Map<String, Object> listCallDibs(Search search, String memberId) throws Exception;

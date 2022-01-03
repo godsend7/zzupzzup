@@ -80,6 +80,11 @@ public class RestaurantServiceImpl implements RestaurantService {
 	public int updateRestaurant(Restaurant restaurant) throws Exception {
 		return restaurantDAO.updateRestaurant(restaurant);
 	}
+	
+	@Override
+	public int judgeRestaurant(Restaurant restaurant) throws Exception {
+		return restaurantDAO.judgeRestaurant(restaurant);
+	}
 
 	@Override
 	public int deleteRestaurant(int restaurantNo) throws Exception {
@@ -147,10 +152,10 @@ public class RestaurantServiceImpl implements RestaurantService {
 		return map;
 	}
 
-
 	@Override
 	public List<Restaurant> listMainRestaurant() throws Exception {
 		// TODO Auto-generated method stub
 		return restaurantDAO.listMainRestaurant();
 	}
+
 }

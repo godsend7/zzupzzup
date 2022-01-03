@@ -33,7 +33,7 @@ public interface ChatDAO {
 	public int deleteChat(Chat chat) throws Exception;
 	
 	// Update
-	public int updateChatState(Chat chat) throws Exception;
+	public int updateChatState(int chatNo, int chatState) throws Exception;
 	
 	// Select One
 	public Chat getChatRecord(int chatNo) throws Exception;
@@ -42,7 +42,7 @@ public interface ChatDAO {
 	public int addChatMember(ChatMember chatMember) throws Exception;
 	
 	// Select One
-	public List<ChatMember> getChatMember(int chatNo, Member memberId) throws Exception;
+	public ChatMember getChatMember(int chatNo, String memberId) throws Exception;
 	
 	// Update
 	public int deleteChatMember(ChatMember chatMember) throws Exception;

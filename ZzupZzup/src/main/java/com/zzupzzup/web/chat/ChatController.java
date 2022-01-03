@@ -218,30 +218,57 @@ public class ChatController {
 		Member member = (Member)session.getAttribute("member");
 		System.out.println("getChatEntrance member : " + member);
 		
+		ChatMember chatMember = new ChatMember();
+		ChatMember chatMember2 = new ChatMember();
+		
 		//입장하는 사람이 개설자인지 참여자인지 체크
 		String chatLeaderId = chat.getChatLeaderId().getMemberId();
 		String memberId = member.getMemberId();
+		
 		//System.out.println("chatLeaderId : " + chatLeaderId + "memberId : " + memberId);
 		if(chatLeaderId.equals(memberId)) {
-			System.out.println("개설자야");
+			//개설자로 들어갔을 때
+			//System.out.println("개설자야");
 		}else {
-			System.out.println("참가자야");
+			//참가자로 들어갔을 때
+			//System.out.println("참가자야");
+			//Business Logic
+			chatMember = chatService.getChatMember(chat.getChatNo(), memberId);
+			System.out.println("chatMember : " + chatMember);
+			
+			//참가자는 chat_member 테이블에 없으면 저장
+			if(chatMember == null) {
+				chatMember2.setChatNo(chat.getChatNo());
+				chatMember2.setMember(member); 
+				chatService.addChatMember(chatMember2);
+				
+				//저장 된 정보 다시 chatMember에 넣음
+				chatMember = chatService.getChatMember(chat.getChatNo(), memberId);
+			}
 		}
-		
-		
 		
 		request.setAttribute("chat", chat);
 		request.setAttribute("member", member);
-		
+		request.setAttribute("chatMember", chatMember);
 		
 		return "forward:/chat/getChatEntrance.jsp";
 	}
 	
 	
+	@RequestMapping(value="getChatReservation", method=RequestMethod.GET)
+	public String getChatReservation( HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		
+		System.out.println("/chat/getChatReservation : GET");
+		
+		Integer chatNo = Integer.parseInt(request.getParameter("chatNo"));
+		System.out.println("getChatReservation chatNo : " + chatNo);
+		
+		//Business Logic
+		//예약 넘어갈 때 채팅 상태 인원확정으로 업데이트
+		chatService.updateChatState(chatNo, 2);
 	
-	
-	
-	
+		return "forward:/reservation/addReservation?chatNo="+chatNo;
+	}
 	
 	
 	

@@ -210,7 +210,7 @@ public class ChatServiceTest {
 		Chat chat = chatService.getChat(1);
 		System.out.println("chat update state before : " + chat);
 		chat.setChatState(4);
-		chatService.updateChatState(chat);
+		chatService.updateChatState(chat.getChatNo(), 2);
 		
 		chat = chatService.getChat(1);
 		System.out.println("chat update state after : " + chat);

@@ -1,10 +1,14 @@
 package com.zzupzzup.web.reservation;
 
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.reservation.ReservationService;
 
@@ -48,13 +53,25 @@ public class ReservationRestController {
 		System.out.println(this.getClass());
 	}
 
-	@RequestMapping(value = "json/getReservation/{reservationNo}", method = RequestMethod.GET)
-	public Reservation getReservation(@PathVariable("reservationNo") int reservationNo) throws Exception {
+	@RequestMapping(value = "json/updateReservation/{reservationNo}/{reservationStatus}", method = RequestMethod.GET)
+	public int updateReservation(@PathVariable("reservationNo") int reservationNo, @PathVariable("reservationStatus") int reservationStatus ,HttpSession session) throws Exception {
 		
 		System.out.println("/reservation/json/getReservation : GET");
+		
+		Member member = (Member) session.getAttribute("member");
+		
+		Reservation reservation = new Reservation();
+		
+		reservation.setMember(member);
+		reservation.setReservationNo(reservationNo);
+		reservation.setReservationStatus(reservationStatus);
+		
+		System.out.println("getReservation reservation : " + reservation);
+		
 
-		return reservationService.getReservation(reservationNo);
-	}
+		
+		return reservationService.updateReservation(reservation);
+	}	
 	
 	@RequestMapping( value="json/addReservation", method=RequestMethod.POST )
 	public int addReservation ( @RequestBody Reservation reservation, HttpServletRequest httpServletRequest) throws Exception {
