@@ -5,61 +5,6 @@
 
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
-.starBox .col-md-4 .label {
-	font-size: 1.0em;
-	text-align: center;
-}
-
-.starBox .col-md-4 .star_p {
-	font-size: 1.0em;
-	text-align: center;
-}
-
-.carousel-item {
-	background: #dee2e6;
-}
-
-.carousel-item .imgBox {
-	margin:auto;
-	padding : 5px;
-	width: 300px;
-	height: 500px;
-	text-align: center;
-	line-height: 500px;
-}
-
-.carousel-item .imgBox:after {
-	display:inline-block; 
-	height:100%; 
-	vertical-align:middle;
-}
-
-.carousel-item .imgBox img{
-	width: 100%;
-	vertical-align: middle;
-}
-
-.review-modal-top {
-	text-align: right;
-	padding-right: 0px;
-}
-
-.review-modal-top i {
-	margin-left: 10px;
-}
-
-/* .bottom-like .check {
-	fill: red;
-} */
-
-.bottom-like {
-	text-align: right;
-	margin-bottom: 10px;
-}
-
-.bottom-like span {
-	margin-left: 10px;
-}
 
 </style>
 
@@ -88,6 +33,12 @@
 				//onsole.log(review.member.memberId);
 				
 				$("#reportCount").text(" " + data.list.reportCount + " 회");
+				
+				$("#reviewShowStatus").removeClass();
+				if (!data.list.reviewShowStatus) {
+					$("#reviewShowStatus").addClass("fa fa-eye-slash");
+				}
+				
 				$("#reviewRegDate").text(data.list.reviewRegDate);
 				$("#nickname").text(data.list.member.nickname);
 				$("#memberRank").text(data.list.member.memberRank);
@@ -146,12 +97,10 @@
 				$(".footerBox").empty();
 				if (${member.memberRole eq "user"} && ("${member.memberId}" == data.list.member.memberId)) {
 					console.log("user");
-					var footer = "<div class='modal-footer'>" 
-								+ "<input type='button' class='normal' id='reviewDelete' value='삭제'></input> "
-								+ "<input type='button' class='primary' id='reviewUpdate' value='수정'></input>"
-								+ "</div>";
+					var footer = "<div><input type='button' class='normal' id='reviewDelete' value='삭제'></input> "
+								+ "<input type='button' class='primary' id='reviewUpdate' value='수정'></input></div>";
 					
-					$(".footerBox").append(footer);
+					$(".modal-footer").append(footer);
 				} else if (${member.memberRole eq "admin"}) {
 					console.log("admin");
 					var footer = "<div class='modal-footer'>" 
@@ -236,6 +185,7 @@
 				<div class="col-sm-12 review-modal-top">
 					<span id="reviewRegDate"></span>
 					<c:if test="${member.memberRole == 'admin'}">
+						<i class="" aria-hidden="true" id="reviewShowStatus"></i>
 						<i class="fa fa-exclamation-triangle" id="reportCount" aria-hidden="true">
 						</i>
 					</c:if>
@@ -301,12 +251,13 @@
 			</div>
 			<div class="footerBox">
 			</div>
-			<%-- <c:if test="${!empty member}">
-				<div class="modal-footer">
-			        <input type="button" class="normal" id="reviewDelete" value="삭제"></input>
-			        <input type="button" class="primary" id="reviewUpdate" value="수정"></input>
+			<c:if test="${!empty member && member.memberRole eq 'user'}">
+				<div class="modal-footer review-modal-footer">
+					<div>
+						<input type='button' class='danger' value='신고'></input>
+					</div>
 			    </div>
-			</c:if> --%>
+			</c:if>
 		</div>
 	</div>
 </div>

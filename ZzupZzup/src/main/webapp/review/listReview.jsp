@@ -36,7 +36,7 @@
 	
 	$(function() {
 		
-		function fncHeartChange(result, likeCount, items) {
+		/* function fncHeartChange(result, likeCount, items) {
 			if (result === "add") {
 				console.log("heartChange add");
 				console.log(items);
@@ -53,7 +53,7 @@
 				
 				$(this).attr('class','reviewLike'); 
 			}
-		}
+		} */
 
 		
 		$(".reviewLike").on("click", function() {
@@ -72,40 +72,28 @@
 			
 			if ($(this).hasClass("check") === true) {
 				var likeCount = $(this).closest("div").find("span").text();
-				$(this).closest("div").find("span").text(parseInt(likeCount)-1);
-				$(this).attr('class','reviewLike'); 
 				
 				$.ajax({
 					url : "/review/json/deleteLike/"+$(this).closest("div").find("input[name='reviewNo']").val(),
 					method : "GET",
+					context : this,
 					success : function(data, status) {
 						
-						//성공 시 하트와 값 변경...ㅠㅠ
-						
-						/* console.log("delete");
-						console.log($(this));
-						console.log(test.text()); */
-						
-						//fncHeartChange("delete", data.likeCount, $(this));
+						$(this).closest("div").find("span").text(data.likeCount);
+						$(this).attr('class','reviewLike');
 					}
 				});	
 			} else {
 				var likeCount = $(this).closest("div").find("span").text();
-				$(this).closest("div").find("span").text(parseInt(likeCount)+1);
-				$(this).attr('class','reviewLike check'); 
 				
 				$.ajax({
 					url : "/review/json/addLike/"+$(this).closest("div").find("input[name='reviewNo']").val(),
 					method : "GET",
+					context : this, //ajax에서 $(this)를 사용하기 위해서 필요
 					success : function(data, status) {
 						
-						//성공 시 하트와 값 변경...ㅠㅠ
-						
-						/* console.log("add");
-						console.log($(this));
-						console.log($(this).closest("div").find(".reviewCount").text());
-						fncHeartChange("add", data.likeCount, $(this)); */
-						
+						$(this).closest("div").find("span").text(data.likeCount);
+						$(this).attr('class','reviewLike check'); 
 					}
 				});
 			}
@@ -130,7 +118,7 @@
 						<!-- 내용 들어가는 부분 -->
 						
 						<!-- start:Form -->
-						<h3>리뷰 리스트</h3>
+						<h3 id="reviewTitle">리뷰 리스트</h3>
 					
 						<form id="review">
 							<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
@@ -149,6 +137,9 @@
 												<div class="col p-4 d-flex flex-column position-static divBox">
 													<c:if test="${member.memberRole == 'admin'}">
 														<div class="review-report-info">
+															<c:if test="${!review.reviewShowStatus}">
+																<i class="fa fa-eye-slash" aria-hidden="true"></i>
+															</c:if>
 															<i class="fa fa-exclamation-triangle" aria-hidden="true">
 																${review.reportCount} 회
 															</i>
