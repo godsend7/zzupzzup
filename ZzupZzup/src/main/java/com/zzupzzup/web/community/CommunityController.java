@@ -88,7 +88,7 @@ public class CommunityController {
 		
 		System.out.println(community);
 		
-		return "redirect:/community/listCommunity";
+		return "redirect:/community/listCommunity.jsp";
 	}
 	
 	@RequestMapping(value="getCommunity", method=RequestMethod.GET)
@@ -112,7 +112,7 @@ public class CommunityController {
 	@RequestMapping(value="updateCommunity", method=RequestMethod.GET)
 	public String updateCommunity(@RequestParam("postNo") int postNo, HttpSession session) throws Exception {
 		
-		System.out.println("community/updateCommunity : GET");
+		System.out.println("/community/updateCommunity : GET");
 		
 		Community community = communityService.getCommunity(postNo);
 		
@@ -125,18 +125,18 @@ public class CommunityController {
 	@RequestMapping(value="updateCommunity", method=RequestMethod.POST)
 	public String updateCommunity(@ModelAttribute("community") Community community, HttpSession session) throws Exception {
 		
-		System.out.println("community/updateCommunity : POST");
+		System.out.println("/community/updateCommunity : POST");
 		
 		communityService.updateCommunity(community);
 		
 		int sessionNo = community.getPostNo();
-		String sessinNum = Integer.toString(sessionNo);
+		String sessionNum = Integer.toString(sessionNo);
 		
-		if(sessinNum.equals(community.getPostNo())) {
+		if(sessionNum.equals(community.getPostNo())) {
 			session.setAttribute("community", community);
 		}
 		
-		return "redirect:/community/updateCommunity" + community.getPostNo();
+		return "redirect:/community/getCommunity?postNo=" + community.getPostNo();
 	}
 	
 	@RequestMapping(value="listCommunity")

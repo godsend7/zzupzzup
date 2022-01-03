@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-LIST_REQUEST_RESTAURANT</title>
+<title>심사 대기중인 음식점</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
@@ -18,9 +18,13 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
-	$(function() {
-		console.log("template.jsp");
-	});
+	
+	function fncPageNavigation(currentPage) {
+		$("#currentPage").val(currentPage);
+		
+		$("#restaurant").attr("action","/restaurant/listRequestRestaurant").attr("method", "POST").submit();
+	}
+	
 </script>
 </head>
 
@@ -37,6 +41,7 @@
 				<jsp:include page="/layout/header.jsp" />
 				
 				<section id="">
+					
 					<div class="container">
 					
 					<h2>심사 대기중인 음식점 목록</h2><hr>
@@ -45,27 +50,28 @@
 						<input type="hidden" id="currentPage" name="currentPage" value=""/>
 					</form>
 					
-					<c:if test="${!empty restaurant.requestDate}">
-					
 					<c:set var="i" value="0" />
 					<c:forEach var="restaurant" items="${list}">
-						
+					<c:if test="${!empty restaurant.requestDate && empty restaurant.judgeDate && empty restaurant.restaurantRegDate}">
+					
 					<div class="col-md-12">
 						<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+						
 							<div class="col p-4 d-flex flex-column position-static">
-								<a style="text-align: right;"><strong class="d-inline-block mb-2 text-primary">불량음식점</strong></a>
-								<h2 class="mb-0">${restaurant.restaurantName}&nbsp;<small style="color:gray;">${restaurant.menuType}</small></h2><hr>
+								<c:if test="${restaurant.judgeStatus == 1}">
+									<div style="text-align: right;"><span class="badge badge-warning">심사 대기중</span></div>
+								</c:if>
+								<h2 class="mb-0">${restaurant.restaurantName}&nbsp;<small style="color:gray;">${restaurant.returnMenuType}</small></h2><hr>
 								<div class="mb-1 text-muted"><strong>대표자명</strong> | ${restaurant.member.memberName}</div>
 								<div class="mb-1 text-muted"><strong>주소</strong> | ${restaurant.streetAddress}</div>
 								<div class="mb-1 text-muted"><strong>전화번호</strong> | ${restaurant.restaurantTel}</div>
-								<a href="/restaurant/getRestaurant?restaurantNo=${restaurant.restaurantNo}" style="text-align: right;" class="stretched-link" id="restinfo">상세보기</a>
+								<a href="/restaurant/getRequestRestaurant?restaurantNo=${restaurant.restaurantNo}" style="text-align: right;" class="stretched-link" id="restinfo">상세보기</a>
 							</div>
 						</div>
 					</div>
 					
-					</c:forEach>
-					
 					</c:if>
+					</c:forEach>
 					
 					</div><br><br><br>
 					
