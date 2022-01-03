@@ -162,7 +162,7 @@
 		}
 		
 		//============= "예약하기" Event 처리 ============
-		$("input[value='예약하기']").on("click", function() {
+		$("#chatReservationBtn").on("click", function() {
 			console.log("예약하기");
 			let chatNo = "${chat.chatNo }";
 			location.href="/chat/getChatReservation?chatNo="+chatNo;
@@ -310,7 +310,7 @@
 								<div class="chat-footer">
 									<c:choose>
 										<c:when test="${chat.chatLeaderId.memberId == member.memberId }">
-											<input type="button" class="button primary small" value="예약하기"/>
+											<input type="button" class="button primary small" data-toggle="modal" data-target="#chatReservationModal" value="예약하기"/>
 										</c:when>
 										<c:otherwise>
 											<input type="button" class="button small" value='${chatMember.readyCheck == true ? "모임참여 해제하기" : "모임참여 체크하기"}'/>
@@ -323,7 +323,33 @@
 							
 						</div>
 						<!-- E:chatting -->
-
+						
+						<!-- S:Modal -->
+						<div class="modal fade" id="chatReservationModal" tabindex="-1" aria-labelledby="chatReservationModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          <span aria-hidden="true">&times;</span>
+								        </button>
+									</div>
+									<div class="modal-body">
+										<p>예약을 진행하시겠습니까?</p>
+										${chat.chatMember }
+										<c:set var="i" value="0" />
+										<c:forEach var="chat" items="${chat.chatMember}">
+											<c:set var="i" value="${ i+1 }" />
+											${chatMember.member.memberId }
+										</c:forEach>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">아니오</button>
+										<button type="button" class="btn btn-primary" id="chatReservationBtn">예</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- E:Modal -->
 					</div>
 				</section>
 			</div>
