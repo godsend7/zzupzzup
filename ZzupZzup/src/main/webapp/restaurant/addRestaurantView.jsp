@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-template</title>
+<title>음식점 등록하기</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
@@ -102,10 +102,91 @@
 	            }
 	        }).open();
 	    }
+		
+		$(function(){
+			// RESTAURANT_NAME AUTOCOMPLETE
+			var autoComplete = [];			
+			
+			$("#restaurantName").autocomplete({
+				source : function(request, response) {
+					console.log($("#restaurantName").val());
+					var searchKeyword = $("#restaurantName").val();
+					searchKeyword = escape(encodeURIComponent(searchKeyword));
+					
+					$.ajax({
+						url : "/restaurant/json/addRestaurant/searchKeyword=" + searchKeyword, 
+						method : "GET", 
+						dataType : "json", 
+						headers : {
+							"Accept" : "application/json",
+							"contentType" : "application/json; charset=utf-8"
+						},
+						success : function(JSONData) {
+							
+							if(JSONData.list == null || JSONData.list == undefined || 
+									JSONData.list == "" || JSONData.list.length == 0) {
+								$(".fromAutocomplete").text("");
+								$(".fromAutocomplete").text("해당하는 음식점이 없습니다.");
+							} else {
+								$(".fromAutocomplete").text("");
+								console.log(JSONData);
+								response(
+										$.map(JSONData.list, function(item) {
+											
+											autoComplete = {
+													"restaurantNo" : item.restaurantNo, 
+													"restaurantName" : item.restaurantName, 
+													"restaurantTel" : item.restaurantTel, 
+													"streetAddress" : item.streetAddress, 
+													"areaAddress" : item.areaAddress,
+													"restAddress" : restAddress
+											};
+											
+											return {
+												label : item.restaurantName
+											}
+											
+										})
+								);
+							}
+							
+						},
+						
+						error : function(e) {
+							alert(e.responseText);
+						}
+						
+					});
+				},
+				
+				minLength : 1
+				
+			});
+			
+			$("body").on("click", ".newAutocomplete", function() {
+				
+				console.log(autoComplete);
+				
+				var restaurantNo = autoComplete.restaurantNo;
+				var restaurantName = autoComplete.restaurantName;
+				var restaurantTel = autoComplete.restaurantTel;
+				var streetAddress = autoComplete.streetAddress;
+				var areaAddess = autoComplete.areaAddress;
+				var restAddress = autoComplete.restAddress;
+				
+				$("#restaurantNo").val(restaurantNo);
+				$("#restaurantTel").val(restaurantTel);
+				$("#streetAddress").val(streetAddress);
+				$("#areaAddress").val(areaAddress);
+				$("#restAddress").val(restAddress);
+				
+			});
+		});
+		
 	</script>
 
 	<script type="text/javascript">
-		var index = 0;
+		var index = 1;
 		
 		function fncAddRestaurant(){
 			
@@ -250,7 +331,8 @@
 	<div class="form-group">
 		<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>
 		<div class="col-sm-4">
-			<input type="text" class="form-control" id="restaurantName" name="restaurantName" placeholder="음식점명">
+			<input type="text" class="toAutocomplete" id="restaurantName" name="restaurantName" placeholder="음식점명" autocomplete="off" maxlength="50" required>
+			<p class="fromAutocomplete"></p>
 		</div>
 	</div>
 		
@@ -346,13 +428,13 @@
 		<!-- ######################### 월요일 ######################### -->
 		<div id="working1">
 			<div>음식점 운영요일 &nbsp;
-				<input type="radio" id="monday" name="restaurantTimes[0].restaurantDay" value="1" checked disabled> <label for="monday">월</label>
-				<input type="radio" id="tuesday" name="restaurantTimes[0].restaurantDay" value="2" disabled> <label for="tuesday">화</label>
-				<input type="radio" id="wednesday" name="restaurantTimes[0].restaurantDay" value="3" disabled> <label for="wednesday">수</label>
-				<input type="radio" id="thursday" name="restaurantTimes[0].restaurantDay" value="4" disabled> <label for="thursday">목</label>
-				<input type="radio" id="friday" name="restaurantTimes[0].restaurantDay" value="5" disabled> <label for="friday">금</label>
-				<input type="radio" id="saturday" name="restaurantTimes[0].restaurantDay" value="6" disabled> <label for="saturday">토</label>
-				<input type="radio" id="sunday" name="restaurantTimes[0].restaurantDay" value="7" disabled> <label for="sunday">일</label>
+				<input type="radio" id="monday" name="restaurantTimes[0].restaurantDay" value="1" onclick="return(false);" checked> <label for="monday">월</label>
+				<input type="radio" id="tuesday" name="restaurantTimes[0].restaurantDay" value="2" onclick="return(false);"> <label for="tuesday">화</label>
+				<input type="radio" id="wednesday" name="restaurantTimes[0].restaurantDay" value="3" onclick="return(false);"> <label for="wednesday">수</label>
+				<input type="radio" id="thursday" name="restaurantTimes[0].restaurantDay" value="4" onclick="return(false);"> <label for="thursday">목</label>
+				<input type="radio" id="friday" name="restaurantTimes[0].restaurantDay" value="5" onclick="return(false);"> <label for="friday">금</label>
+				<input type="radio" id="saturday" name="restaurantTimes[0].restaurantDay" value="6" onclick="return(false);"> <label for="saturday">토</label>
+				<input type="radio" id="sunday" name="restaurantTimes[0].restaurantDay" value="7" onclick="return(false);"> <label for="sunday">일</label>
 		    	<input type="checkbox" id="dayoff" name="restaurantTimes[0].restaurantDayOff" value="1"> <label for="dayoff">휴무일</label>
 		    </div>
 		    
@@ -379,13 +461,13 @@
 		<!-- ######################### 화요일 ######################### -->
 		<div id="working2">
 			<div>음식점 운영요일 &nbsp;
-				<input type="radio" id="monday1" name="restaurantTimes[1].restaurantDay" value="1" disabled> <label for="monday1">월</label>
-				<input type="radio" id="tuesday1" name="restaurantTimes[1].restaurantDay" value="2" checked disabled> <label for="tuesday1">화</label>
-				<input type="radio" id="wednesday1" name="restaurantTimes[1].restaurantDay" value="3" disabled> <label for="wednesday1">수</label>
-				<input type="radio" id="thursday1" name="restaurantTimes[1].restaurantDay" value="4" disabled> <label for="thursday1">목</label>
-				<input type="radio" id="friday1" name="restaurantTimes[1].restaurantDay" value="5" disabled> <label for="friday1">금</label>
-				<input type="radio" id="saturday1" name="restaurantTimes[1].restaurantDay" value="6" disabled> <label for="saturday1">토</label>
-				<input type="radio" id="sunday1" name="restaurantTimes[1].restaurantDay" value="7" disabled> <label for="sunday1">일</label>
+				<input type="radio" id="monday1" name="restaurantTimes[1].restaurantDay" value="1" onclick="return(false);"> <label for="monday1">월</label>
+				<input type="radio" id="tuesday1" name="restaurantTimes[1].restaurantDay" value="2" onclick="return(false);" checked> <label for="tuesday1">화</label>
+				<input type="radio" id="wednesday1" name="restaurantTimes[1].restaurantDay" value="3" onclick="return(false);"> <label for="wednesday1">수</label>
+				<input type="radio" id="thursday1" name="restaurantTimes[1].restaurantDay" value="4" onclick="return(false);"> <label for="thursday1">목</label>
+				<input type="radio" id="friday1" name="restaurantTimes[1].restaurantDay" value="5" onclick="return(false);"> <label for="friday1">금</label>
+				<input type="radio" id="saturday1" name="restaurantTimes[1].restaurantDay" value="6" onclick="return(false);"> <label for="saturday1">토</label>
+				<input type="radio" id="sunday1" name="restaurantTimes[1].restaurantDay" value="7" onclick="return(false);"> <label for="sunday1">일</label>
 		    	<input type="checkbox" id="dayoff1" name="restaurantTimes[1].restaurantDayOff" value="1"> <label for="dayoff1">휴무일</label>
 		    </div>
 		    
@@ -412,13 +494,13 @@
 		<!-- ######################### 수요일 ######################### -->
 		<div id="working3">
 			<div>음식점 운영요일 &nbsp;
-				<input type="radio" id="monday2" name="restaurantTimes[2].restaurantDay" value="1" disabled> <label for="monday2">월</label>
-				<input type="radio" id="tuesday2" name="restaurantTimes[2].restaurantDay" value="2" disabled> <label for="tuesday2">화</label>
-				<input type="radio" id="wednesday2" name="restaurantTimes[2].restaurantDay" value="3" checked disabled> <label for="wednesday2">수</label>
-				<input type="radio" id="thursday2" name="restaurantTimes[2].restaurantDay" value="4" disabled> <label for="thursday2">목</label>
-				<input type="radio" id="friday2" name="restaurantTimes[2].restaurantDay" value="5" disabled> <label for="friday2">금</label>
-				<input type="radio" id="saturday2" name="restaurantTimes[2].restaurantDay" value="6" disabled> <label for="saturday2">토</label>
-				<input type="radio" id="sunday2" name="restaurantTimes[2].restaurantDay" value="7" disabled> <label for="sunday2">일</label>
+				<input type="radio" id="monday2" name="restaurantTimes[2].restaurantDay" value="1" onclick="return(false);"> <label for="monday2">월</label>
+				<input type="radio" id="tuesday2" name="restaurantTimes[2].restaurantDay" value="2" onclick="return(false);"> <label for="tuesday2">화</label>
+				<input type="radio" id="wednesday2" name="restaurantTimes[2].restaurantDay" value="3" onclick="return(false);" checked> <label for="wednesday2">수</label>
+				<input type="radio" id="thursday2" name="restaurantTimes[2].restaurantDay" value="4" onclick="return(false);"> <label for="thursday2">목</label>
+				<input type="radio" id="friday2" name="restaurantTimes[2].restaurantDay" value="5" onclick="return(false);"> <label for="friday2">금</label>
+				<input type="radio" id="saturday2" name="restaurantTimes[2].restaurantDay" value="6" onclick="return(false);"> <label for="saturday2">토</label>
+				<input type="radio" id="sunday2" name="restaurantTimes[2].restaurantDay" value="7" onclick="return(false);"> <label for="sunday2">일</label>
 		    	<input type="checkbox" id="dayoff2" name="restaurantTimes[2].restaurantDayOff" value="1"> <label for="dayoff2">휴무일</label>
 		    </div>
 		    
@@ -445,13 +527,13 @@
 		<!-- ######################### 목요일 ######################### -->
 		<div id="working4">
 			<div>음식점 운영요일 &nbsp;
-				<input type="radio" id="monday3" name="restaurantTimes[3].restaurantDay" value="1" disabled> <label for="monday3">월</label>
-				<input type="radio" id="tuesday3" name="restaurantTimes[3].restaurantDay" value="2" disabled> <label for="tuesday3">화</label>
-				<input type="radio" id="wednesday3" name="restaurantTimes[3].restaurantDay" value="3" disabled> <label for="wednesday3">수</label>
-				<input type="radio" id="thursday3" name="restaurantTimes[3].restaurantDay" value="4" checked disabled> <label for="thursday3">목</label>
-				<input type="radio" id="friday3" name="restaurantTimes[3].restaurantDay" value="5" disabled> <label for="friday3">금</label>
-				<input type="radio" id="saturday3" name="restaurantTimes[3].restaurantDay" value="6" disabled> <label for="saturday3">토</label>
-				<input type="radio" id="sunday3" name="restaurantTimes[3].restaurantDay" value="7" disabled> <label for="sunday3">일</label>
+				<input type="radio" id="monday3" name="restaurantTimes[3].restaurantDay" value="1" onclick="return(false);"> <label for="monday3">월</label>
+				<input type="radio" id="tuesday3" name="restaurantTimes[3].restaurantDay" value="2" onclick="return(false);"> <label for="tuesday3">화</label>
+				<input type="radio" id="wednesday3" name="restaurantTimes[3].restaurantDay" value="3" onclick="return(false);"> <label for="wednesday3">수</label>
+				<input type="radio" id="thursday3" name="restaurantTimes[3].restaurantDay" value="4" onclick="return(false);" checked> <label for="thursday3">목</label>
+				<input type="radio" id="friday3" name="restaurantTimes[3].restaurantDay" value="5" onclick="return(false);"> <label for="friday3">금</label>
+				<input type="radio" id="saturday3" name="restaurantTimes[3].restaurantDay" value="6" onclick="return(false);"> <label for="saturday3">토</label>
+				<input type="radio" id="sunday3" name="restaurantTimes[3].restaurantDay" value="7" onclick="return(false);"> <label for="sunday3">일</label>
 		    	<input type="checkbox" id="dayoff3" name="restaurantTimes[3].restaurantDayOff" value="1"> <label for="dayoff3">휴무일</label>
 		    </div>
 		    
@@ -478,13 +560,13 @@
 		<!-- ######################### 금요일 ######################### -->
 		<div id="working5">
 			<div>음식점 운영요일 &nbsp;
-				<input type="radio" id="monday4" name="restaurantTimes[4].restaurantDay" value="1" disabled> <label for="monday4">월</label>
-				<input type="radio" id="tuesday4" name="restaurantTimes[4].restaurantDay" value="2" disabled> <label for="tuesday4">화</label>
-				<input type="radio" id="wednesday4" name="restaurantTimes[4].restaurantDay" value="3" disabled> <label for="wednesday4">수</label>
-				<input type="radio" id="thursday4" name="restaurantTimes[4].restaurantDay" value="4" disabled> <label for="thursday4">목</label>
-				<input type="radio" id="friday4" name="restaurantTimes[4].restaurantDay" value="5" checked disabled> <label for="friday4">금</label>
-				<input type="radio" id="saturday4" name="restaurantTimes[4].restaurantDay" value="6" disabled> <label for="saturday4">토</label>
-				<input type="radio" id="sunday4" name="restaurantTimes[4].restaurantDay" value="7" disabled> <label for="sunday4">일</label>
+				<input type="radio" id="monday4" name="restaurantTimes[4].restaurantDay" value="1" onclick="return(false);"> <label for="monday4">월</label>
+				<input type="radio" id="tuesday4" name="restaurantTimes[4].restaurantDay" value="2" onclick="return(false);"> <label for="tuesday4">화</label>
+				<input type="radio" id="wednesday4" name="restaurantTimes[4].restaurantDay" value="3" onclick="return(false);"> <label for="wednesday4">수</label>
+				<input type="radio" id="thursday4" name="restaurantTimes[4].restaurantDay" value="4" onclick="return(false);"> <label for="thursday4">목</label>
+				<input type="radio" id="friday4" name="restaurantTimes[4].restaurantDay" value="5" onclick="return(false);" checked> <label for="friday4">금</label>
+				<input type="radio" id="saturday4" name="restaurantTimes[4].restaurantDay" value="6" onclick="return(false);"> <label for="saturday4">토</label>
+				<input type="radio" id="sunday4" name="restaurantTimes[4].restaurantDay" value="7" onclick="return(false);"> <label for="sunday4">일</label>
 		    	<input type="checkbox" id="dayoff4" name="restaurantTimes[4].restaurantDayOff" value="1"> <label for="dayoff4">휴무일</label>
 		    </div>
 		    
@@ -511,13 +593,13 @@
 		<!-- ######################### 토요일 ######################### -->
 		<div id="working6">
 			<div>음식점 운영요일 &nbsp;
-				<input type="radio" id="monday5" name="restaurantTimes[5].restaurantDay" value="1" disabled> <label for="monday5">월</label>
-				<input type="radio" id="tuesday5" name="restaurantTimes[5].restaurantDay" value="2" disabled> <label for="tuesday5">화</label>
-				<input type="radio" id="wednesday5" name="restaurantTimes[5].restaurantDay" value="3" disabled> <label for="wednesday5">수</label>
-				<input type="radio" id="thursday5" name="restaurantTimes[5].restaurantDay" value="4" disabled> <label for="thursday5">목</label>
-				<input type="radio" id="friday5" name="restaurantTimes[5].restaurantDay" value="5" disabled> <label for="friday5">금</label>
-				<input type="radio" id="saturday5" name="restaurantTimes[5].restaurantDay" value="6" checked disabled> <label for="saturday5">토</label>
-				<input type="radio" id="sunday5" name="restaurantTimes[5].restaurantDay" value="7" disabled> <label for="sunday5">일</label>
+				<input type="radio" id="monday5" name="restaurantTimes[5].restaurantDay" value="1" onclick="return(false);"> <label for="monday5">월</label>
+				<input type="radio" id="tuesday5" name="restaurantTimes[5].restaurantDay" value="2" onclick="return(false);"> <label for="tuesday5">화</label>
+				<input type="radio" id="wednesday5" name="restaurantTimes[5].restaurantDay" value="3" onclick="return(false);"> <label for="wednesday5">수</label>
+				<input type="radio" id="thursday5" name="restaurantTimes[5].restaurantDay" value="4" onclick="return(false);"> <label for="thursday5">목</label>
+				<input type="radio" id="friday5" name="restaurantTimes[5].restaurantDay" value="5" onclick="return(false);"> <label for="friday5">금</label>
+				<input type="radio" id="saturday5" name="restaurantTimes[5].restaurantDay" value="6" onclick="return(false);" checked> <label for="saturday5">토</label>
+				<input type="radio" id="sunday5" name="restaurantTimes[5].restaurantDay" value="7" onclick="return(false);"> <label for="sunday5">일</label>
 		    	<input type="checkbox" id="dayoff5" name="restaurantTimes[5].restaurantDayOff" value="1"> <label for="dayoff5">휴무일</label>
 		    </div>
 		    
@@ -544,13 +626,13 @@
 		<!-- ######################### 일요일 ######################### -->
 		<div id="working7">
 			<div>음식점 운영요일 &nbsp;
-				<input type="radio" id="monday6" name="restaurantTimes[6].restaurantDay" value="1" disabled> <label for="monday6">월</label>
-				<input type="radio" id="tuesday6" name="restaurantTimes[6].restaurantDay" value="2" disabled> <label for="tuesday6">화</label>
-				<input type="radio" id="wednesday6" name="restaurantTimes[6].restaurantDay" value="3" disabled> <label for="wednesday6">수</label>
-				<input type="radio" id="thursday6" name="restaurantTimes[6].restaurantDay" value="4" disabled> <label for="thursday6">목</label>
-				<input type="radio" id="friday6" name="restaurantTimes[6].restaurantDay" value="5" disabled> <label for="friday6">금</label>
-				<input type="radio" id="saturday6" name="restaurantTimes[6].restaurantDay" value="6" disabled> <label for="saturday6">토</label>
-				<input type="radio" id="sunday6" name="restaurantTimes[6].restaurantDay" value="7" checked disabled> <label for="sunday6">일</label>
+				<input type="radio" id="monday6" name="restaurantTimes[6].restaurantDay" value="1" onclick="return(false);"> <label for="monday6">월</label>
+				<input type="radio" id="tuesday6" name="restaurantTimes[6].restaurantDay" value="2" onclick="return(false);"> <label for="tuesday6">화</label>
+				<input type="radio" id="wednesday6" name="restaurantTimes[6].restaurantDay" value="3" onclick="return(false);"> <label for="wednesday6">수</label>
+				<input type="radio" id="thursday6" name="restaurantTimes[6].restaurantDay" value="4" onclick="return(false);"> <label for="thursday6">목</label>
+				<input type="radio" id="friday6" name="restaurantTimes[6].restaurantDay" value="5" onclick="return(false);"> <label for="friday6">금</label>
+				<input type="radio" id="saturday6" name="restaurantTimes[6].restaurantDay" value="6" onclick="return(false);"> <label for="saturday6">토</label>
+				<input type="radio" id="sunday6" name="restaurantTimes[6].restaurantDay" value="7" onclick="return(false);" checked> <label for="sunday6">일</label>
 		    	<input type="checkbox" id="dayoff6" name="restaurantTimes[6].restaurantDayOff" value="1"> <label for="dayoff6">휴무일</label>
 		    </div>
 		    

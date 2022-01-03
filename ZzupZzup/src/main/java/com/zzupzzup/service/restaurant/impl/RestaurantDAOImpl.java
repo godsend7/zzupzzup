@@ -133,5 +133,10 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	      return list;
 	}
 
-	
+
+	@Override
+	public List<Restaurant> listMainRestaurant() throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("RestaurantMapper.listMainRestaurant");
+	}
 }

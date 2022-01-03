@@ -148,4 +148,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 
 
+	@Override
+	public List<Restaurant> listMainRestaurant() throws Exception {
+		// TODO Auto-generated method stub
+		return restaurantDAO.listMainRestaurant();
+	}
 }

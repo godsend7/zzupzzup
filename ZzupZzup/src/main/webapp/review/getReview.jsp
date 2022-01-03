@@ -144,7 +144,7 @@
 				</c:forEach> */
 				
 				$(".footerBox").empty();
-				if (${member.memberRole eq "user"} && "${member.memberId}" === data.list.member.memberId) {
+				if (${member.memberRole eq "user"} && ("${member.memberId}" == data.list.member.memberId)) {
 					console.log("user");
 					var footer = "<div class='modal-footer'>" 
 								+ "<input type='button' class='normal' id='reviewDelete' value='삭제'></input> "
@@ -181,7 +181,7 @@
     	
     	var image = "";
     	
-    	if (index === 0) {
+    	if (index == 0) {
     		console.log("active 필요");
 			image = "<div class='carousel-item active'>";
 		} else {
