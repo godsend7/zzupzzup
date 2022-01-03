@@ -13,12 +13,15 @@
 
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
+	.badge-dark {
+    	background-color: #f56a6a;
+	}
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
 	$(function() {
-		console.log("template.jsp");
+		console.log("getMember.jsp");
 	});
 </script>
 </head>
@@ -41,24 +44,37 @@
 							<div class="col-12 col-lg-10 col-xl-8 mx-auto">
 								<h2 class="h3 mb-4 page-title">내 정보 조회</h2>
 								<div class="my-4">
-									<form>
+									<form id="getMember">
 										<div class="row mt-5 align-items-center">
 											<div class="col-md-3 mb-5">
 												<div class="col-md" align="center">
 													<img
-														src="https://bootdey.com/img/Content/avatar/avatar6.png"
-														class="avatar-img rounded-circle" />
-													${member.mannerScore}
+														src="/resources/images/uploadImages/${member.profileImage}"
+														class="avatar-img rounded-circle" width="150" /> <br />
+													<c:if test="${sessionScope.member.memberRole == 'user'}">
+														<span
+															id="mannerScore" style="font-weight: bold">
+															<svg
+																xmlns="http://www.w3.org/2000/svg" width="10" height="10"
+																fill="#b01025" class="bi bi-heart-fill"
+																viewBox="0 0 16 16">
+															  <path fill-rule="evenodd"
+																	d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+																	/>
+															</svg> ${member.mannerScore}
+														</span>
+													</c:if>
 												</div>
-												
 											</div>
 											<div class="col-md-5">
 												<div class="row align-items-right">
 													<div class="col-md-7">
-														<h4 class="mb-1">${member.nickname}</h4>
-														<p class="small mb-3">
-															<span class="badge badge-dark">${member.memberRank}</span>
-														</p>
+														<h4 class="mb-1">
+															<c:if test="${sessionScope.member.memberRole == 'user'}">
+																<span class="badge badge-pill badge-dark">${member.memberRank}</span>&nbsp;&nbsp;
+															</c:if>
+															${member.nickname}
+														</h4>
 													</div>
 												</div>
 												<div class="row mb-4">
@@ -68,74 +84,73 @@
 												</div>
 											</div>
 										</div>
+										<input type="button" style="float: right"
+											class="btn btn-primary" value="수정하기" /> <br />
 										<hr class="my-4" />
 										<div class="form-row">
-											<div class="form-group">
-												<label for="memberName">이름</label>
-												<div></div>
-												<span id="memberName" class="form-control" value="${member.memberName}">
-												</span>
+											<div class="col-6">
+												<label for="memberName">이름</label> <span id="memberName"
+													style="font-weight: bold">${member.memberName}</span>
+											</div>
+											<div class="col-6">
+												<label for="email">이메일</label> <span id="email"
+													style="font-weight: bold">${member.memberId}</span>
 											</div>
 										</div>
-										<div class="form-group">
-											<label for="inputEmail4">Email</label> <input type="email"
-												class="form-control" id="inputEmail4"
-												placeholder="brown@asher.me" />
-										</div>
-										<div class="form-group">
-											<label for="inputAddress5">Address</label> <input type="text"
-												class="form-control" id="inputAddress5"
-												placeholder="P.O. Box 464, 5975 Eget Avenue" />
-										</div>
+										<br />
 										<div class="form-row">
-											<div class="form-group col-md-6">
-												<label for="inputCompany5">Company</label> <input
-													type="text" class="form-control" id="inputCompany5"
-													placeholder="Nec Urna Suscipit Ltd" />
-											</div>
-											<div class="form-group col-md-4">
-												<label for="inputState5">State</label> <select
-													id="inputState5" class="form-control">
-													<option selected="">Choose...</option>
-													<option>...</option>
-												</select>
-											</div>
-											<div class="form-group col-md-2">
-												<label for="inputZip5">Zip</label> <input type="text"
-													class="form-control" id="inputZip5" placeholder="98232" />
+											<div class="col-6">
+												<label for="memberPhone">전화번호</label> <span id="memberPhone"
+													style="font-weight: bold">${member.memberPhone}</span>
 											</div>
 										</div>
-										<hr class="my-4" />
-										<div class="row mb-4">
-											<div class="col-md-6">
-												<div class="form-group">
-													<label for="inputPassword4">Old Password</label> <input
-														type="password" class="form-control" id="inputPassword5" />
+										<c:if test="${sessionScope.member.memberRole != 'owner'}">
+											<br />
+											<div class="form-row">
+												<div class="col-6">
+													<label for="ageRange">연령대</label> <span id="ageRange"
+														style="font-weight: bold">${member.ageRange}</span>
 												</div>
-												<div class="form-group">
-													<label for="inputPassword5">New Password</label> <input
-														type="password" class="form-control" id="inputPassword5" />
-												</div>
-												<div class="form-group">
-													<label for="inputPassword6">Confirm Password</label> <input
-														type="password" class="form-control" id="inputPassword6" />
+												<div class="col-6">
+													<label for="gender">성별</label> <span id="gender"
+														style="font-weight: bold"> <c:if
+															test="${member.gender == 'male'}">
+													남자
+													</c:if> <c:if test="${member.gender == 'female'}">
+													여자
+													</c:if>
+													</span>
 												</div>
 											</div>
-											<div class="col-md-6">
-												<p class="mb-2">Password requirements</p>
-												<p class="small text-muted mb-2">To create a new
-													password, you have to meet all of the following
-													requirements:</p>
-												<ul class="small text-muted pl-4 mb-0">
-													<li>Minimum 8 character</li>
-													<li>At least one special character</li>
-													<li>At least one number</li>
-													<li>Can’t be the same as a previous password</li>
-												</ul>
+										</c:if>
+										<c:if test="${sessionScope.member.memberRole == 'admin'}">
+											<hr class="my-4"/>
+											<div class="form-row">
+												<div class="col-6">
+													<label for="regDate">가입일</label> <span id="regDate"
+														style="font-weight: bold">${member.regDate}</span>
+												</div>
+												<div class="col-6">
+													<label for="reportCount">신고 당한 횟수</label> <span
+														id="reportCount" style="font-weight: bold">${member.reportCount}</span>
+												</div>
 											</div>
-										</div>
-										<button type="submit" class="btn btn-primary">Save
-											Change</button>
+											<br/>
+											<div class="form-row">
+												<c:if test="${! empty member.deleteDate}">
+													<div class="col-6">
+														<label for="deleteDate">탈퇴일</label> <span id="deleteDate"
+															style="font-weight: bold">${member.deleteDate}</span>
+													</div>
+												</c:if>
+												<c:if test="${! empty member.blacklistDate}">
+													<div class="col-6">
+														<label for="blacklistDate">블랙리스트</label> <span id="blacklistDate"
+															style="font-weight: bold">${member.blacklistDate}</span>
+													</div>
+												</c:if>
+											</div>
+										</c:if>
 									</form>
 								</div>
 							</div>

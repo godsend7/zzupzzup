@@ -1,5 +1,6 @@
 package com.zzupzzup.service.domain;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -24,17 +25,17 @@ public class Member {
 	private String statusMessage;				//자기소개 및 특이사항(= 상태메세지)
 	private String pushNickname;				//추천인 닉네임
 	private String deleteReason;				//탈퇴 사유
-	private Date accumulDate;					//활동점수 적립일
+	private Timestamp accumulDate;				//활동점수 적립일
 	private String accumulContents;				//활동점수 적립 내용
 	private int accumulScore;					//활동점수 적립 점수
 	private int mannerScore;					//매너점수
 	private String memberRank;					//등급(쩝린이, 쩝쩝학사, 쩝쩝석사, 쩝쩝박사)
 	private int accumulAllScore;				//총 활동점수
 	private int mannerAllScore;					//총 매너점수
-	private Date regDate;						//가입일
+	private Timestamp regDate;						//가입일
 	private boolean eliminated;					//탈퇴 여부
-	private Date deleteDate;					//탈퇴일
-	private Date blacklistDate;					//블랙리스트 등록일
+	private Timestamp deleteDate;					//탈퇴일
+	private Timestamp blacklistDate;					//블랙리스트 등록일
 	private int reportCount;					//신고 횟수
 	private String certificatedNum;				//인증번호
 	private int loginType;						//로그인 유형(일반, 카카오, 네이버)
@@ -192,11 +193,11 @@ public class Member {
 		this.deleteReason = deleteReason;
 	}
 
-	public Date getAccumulDate() {
-		return accumulDate;
+	public String getAccumulDate() {
+		return CommonUtil.getDate(accumulDate);
 	}
 
-	public void setAccumulDate(Date accumulDate) {
+	public void setAccumulDate(Timestamp accumulDate) {
 		this.accumulDate = accumulDate;
 	}
 
@@ -249,11 +250,11 @@ public class Member {
 		this.mannerAllScore = mannerAllScore;
 	}
 
-	public Date getRegDate() {
-		return regDate;
+	public String getRegDate() {
+		return CommonUtil.getDate(regDate);
 	}
 
-	public void setRegDate(Date regDate) {
+	public void setRegDate(Timestamp regDate) {
 		this.regDate = regDate;
 	}
 
@@ -265,19 +266,19 @@ public class Member {
 		this.eliminated = eliminated;
 	}
 
-	public Date getDeleteDate() {
-		return deleteDate;
+	public String getDeleteDate() {
+		return CommonUtil.getDate(deleteDate);
 	}
 
-	public void setDeleteDate(Date deleteDate) {
+	public void setDeleteDate(Timestamp deleteDate) {
 		this.deleteDate = deleteDate;
 	}
 
-	public Date getBlacklistDate() {
-		return blacklistDate;
+	public String getBlacklistDate() {
+		return CommonUtil.getDate(blacklistDate);
 	}
 
-	public void setBlacklistDate(Date blacklistDate) {
+	public void setBlacklistDate(Timestamp blacklistDate) {
 		this.blacklistDate = blacklistDate;
 	}
 

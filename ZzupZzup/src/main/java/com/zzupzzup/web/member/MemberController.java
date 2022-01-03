@@ -138,13 +138,13 @@ public class MemberController {
 		
 		return "forward:/member/getMember.jsp";
 	}
-	
-	public void getOwner() {
-		
-	}
 
-	public void listUser() {
+	@RequestMapping(value="listMember")
+	public String listMember() {
 		
+		System.out.println("/member/listMember : GET / POST");
+		
+		return "forward:/member/listMember.jsp";
 	}
 	
 	public void listOwner() {
