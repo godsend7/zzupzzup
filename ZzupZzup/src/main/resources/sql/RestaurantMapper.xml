@@ -246,4 +246,10 @@
 		WHERE RESTAURANT_NAME LIKE CONCAT('%',#{search.searchKeyword},'%')
 	</select>
 	
+	<!-- main Map -->
+	<select id="listMainRestaurant" resultType="restaurant">
+		SELECT *
+		FROM RESTAURANT
+	</select>
+	
 </mapper>

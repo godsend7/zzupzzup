@@ -1,5 +1,6 @@
 package com.zzupzzup.web.map;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,14 +28,12 @@ public class MapRestController {
 		System.out.println(getClass());
 	}
 	
-	@RequestMapping(value = "json/listRestaurant/")
-	public Map<String, Object> listRestaurant(HttpServletRequest request, @RequestParam Search search) throws Exception {
+	@RequestMapping(value = "json/listRestaurant")
+	public List<Restaurant> listRestaurant(HttpServletRequest request, @RequestParam(value="search", required = false) Search search) throws Exception {
 		
 		System.out.println("/map/json/listRestaurant : Service");
 		
-		Map<String, Object> resultMap = restaurantService.listRestaurant(search);
-		
-		return resultMap;
+		return restaurantService.listMainRestaurant();
 	}
 	
 	@RequestMapping(value = "json/getSimpleRestaurant/{restaurantNo}")

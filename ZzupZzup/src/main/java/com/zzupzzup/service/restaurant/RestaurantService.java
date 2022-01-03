@@ -1,5 +1,6 @@
 package com.zzupzzup.service.restaurant;
 
+import java.util.List;
 import java.util.Map;
 
 import com.zzupzzup.common.Search;
@@ -33,5 +34,7 @@ public interface RestaurantService {
 	
 	// Select List
 	public Map<String, Object> listRestaurantName(Search search) throws Exception;
-	
+
+	// Select List Main
+	public List<Restaurant> listMainRestaurant() throws Exception;
 }
