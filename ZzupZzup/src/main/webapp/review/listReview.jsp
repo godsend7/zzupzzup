@@ -54,7 +54,6 @@
 				$(this).attr('class','reviewLike'); 
 			}
 		} */
-
 		
 		$(".reviewLike").on("click", function() {
 			if (${member.memberId == null}) {
@@ -179,15 +178,19 @@
 				 		 			</c:otherwise>
 				 		 		</c:choose>
 							</c:forEach>
-							
-							
 							<ul class='icons'> 
 								<jsp:include page='/review/getReview.jsp'/>
 							</ul>
 						</div>
 						
-						<jsp:include page="../common/pageNavigator.jsp"/>
-						무한스크롤 필요
+						<c:choose>
+							<c:when test="${empty param.restaurantNo}">
+								<jsp:include page="../common/pageNavigator.jsp"/>
+							</c:when>
+							<c:otherwise>
+								무한스크롤 필요
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</section>
 				

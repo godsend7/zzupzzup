@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<link rel="stylesheet" href="/resources/css/review.css" />
 
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
@@ -165,6 +166,13 @@
 			console.log("next");
 			$("#carouselExampleIndicators").carousel("next");
 		});
+		
+		$(".reportModal").on("click", function() {
+			console.log("reviewModal");
+			$("#reviewModal").modal("hide");
+			
+			$("#reportModal").modal("show");
+		});
     });
 </script>
 
@@ -254,10 +262,13 @@
 			<c:if test="${!empty member && member.memberRole eq 'user'}">
 				<div class="modal-footer review-modal-footer">
 					<div>
-						<input type='button' class='danger' value='신고'></input>
+						<input type='button' class='danger reportModal' value='신고' data-id="3" data-toggle="modal" data-target="#reportModal"></input>
 					</div>
 			    </div>
 			</c:if>
+			<ul class='icons'> 
+				<jsp:include page='/report/addReportView.jsp'/>
+			</ul>
 		</div>
 	</div>
 </div>
