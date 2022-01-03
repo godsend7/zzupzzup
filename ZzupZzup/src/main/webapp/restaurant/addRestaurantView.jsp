@@ -23,6 +23,9 @@
 	<!-- 지도(위도, 경도)를 사용하기 위해 key 설정 -->
 	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=86fc1389540999ea4a3cdaa2a9ca1cc1&libraries=services"></script>
 	
+	<link href="//cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">  
+	<script src="//cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+	
 	<script>
 		//음식점의 위도와 경도를 가져오기 위해 선언
 		var geocoder = new daum.maps.services.Geocoder();
@@ -240,10 +243,11 @@
 			$(function() {
 				// 등록 버튼 실행
 				$( "#button1" ).on("click" , function() {
+					alert("등록 요청이 완료되었습니다. 관리자의 심사 후 승인 시 정식으로 등록됩니다.");
 					fncAddRestaurant();
 				});
 				
-				// 주속 검색 버튼 실행
+				// 주소 검색 버튼 실행
 				$( "#button2" ).on("click" , function() {
 					daumPostcode();
 				});
@@ -349,7 +353,7 @@
 			<input type="text" class="form-control" id="streetAddress" name="streetAddress" placeholder="음식점 도로명주소" readonly="readonly">
 			<input type="text" class="form-control" id="areaAddress" name="areaAddress" placeholder="음식점 지번주소" readonly="readonly">
 			<input type="text" class="form-control" id="restAddress" name="restAddress" placeholder="음식점 상세주소" readonly="readonly">
-			<button type="button" class="normal btn-sm" id="button2">주소찾기</button>
+			<button type="button" class="normal btn-sm" id="button2" style="text-align:right;">주소찾기</button>
 		</div>
 	</div>
 	
@@ -424,7 +428,12 @@
 			<span class="badge badge-secondary" id="hideButton">숨기기</span>
 		</label>
 		
-		<div id="workingForms" style="display: none;">
+		<div id="workingForms" style="display: none;"><br>
+		
+		<div id="toggleButton">주차가능여부 &nbsp;&nbsp;
+			<input type="checkbox" name="parkable" id="parkable" data-toggle="toggle" data-size="sm" value="true" checked>
+		</div><br>
+		
 		<!-- ######################### 월요일 ######################### -->
 		<div id="working1">
 			<div>음식점 운영요일 &nbsp;

@@ -24,6 +24,8 @@ public interface RestaurantDAO {
 	
 	public int updateRestaurant(Restaurant restaurant) throws Exception;
 	
+	public int judgeRestaurant(Restaurant restaurant) throws Exception;
+	
 	public int deleteRestaurant(int restaurantNo) throws Exception;
 	
 	public int getTotalCount(Search search) throws Exception;

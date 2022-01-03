@@ -32,6 +32,8 @@ public class Restaurant {
 	private String restAddress;
 	private String latitude; // 위도
 	private String longitude; // 경도
+	private int judgeStatus; // 1. 심사중, 2. 승인, 3. 거절
+	private Date judgeDate;
 	private Date restaurantRegDate; 
 	private List<RestaurantMenu> restaurantMenus;
 	private List<RestaurantTime> restaurantTimes;
@@ -146,86 +148,69 @@ public class Restaurant {
 		this.mainMenuStatus = mainMenuStatus;
 	}
 
-
 	public String getOwnerName() {
 		return ownerName;
 	}
-
 
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
 	}
 
-
 	public String getOwnerImage() {
 		return ownerImage;
 	}
-
 
 	public void setOwnerImage(String ownerImage) {
 		this.ownerImage = ownerImage;
 	}
 
-
 	public String getRestaurantText() {
 		return restaurantText;
 	}
-
 
 	public void setRestaurantText(String restaurantText) {
 		this.restaurantText = restaurantText;
 	}
 
-
 	public boolean isReservationStatus() {
 		return reservationStatus;
 	}
-
 
 	public void setReservationStatus(boolean reservationStatus) {
 		this.reservationStatus = reservationStatus;
 	}
 
-
 	public boolean isParkable() {
 		return parkable;
 	}
-
 
 	public void setParkable(boolean parkable) {
 		this.parkable = parkable;
 	}
 
-
 	public Date getRequestDate() {
 		return requestDate;
 	}
-
 
 	public void setRequestDate(Date requestDate) {
 		this.requestDate = requestDate;
 	}
 
-
 	public Date getResponseDate() {
 		return responseDate;
 	}
-
 
 	public void setResponseDate(Date responseDate) {
 		this.responseDate = responseDate;
 	}
 
-
 	public String getStreetAddress() {
 		return streetAddress;
 	}
 
-
 	public void setStreetAddress(String streetAddress) {
 		this.streetAddress = streetAddress;
 	}
-
 
 	public String getAreaAddress() {
 		return areaAddress;
@@ -259,6 +244,22 @@ public class Restaurant {
 		this.longitude = longitude;
 	}
 
+	public int getJudgeStatus() {
+		return judgeStatus;
+	}
+
+	public void setJudgeStatus(int judgeStatus) {
+		this.judgeStatus = judgeStatus;
+	}
+
+	public Date getJudgeDate() {
+		return judgeDate;
+	}
+
+	public void setJudgeDate(Date judgeDate) {
+		this.judgeDate = judgeDate;
+	}
+
 	public Date getRestaurantRegDate() {
 		return restaurantRegDate;
 	}
@@ -266,22 +267,18 @@ public class Restaurant {
 	public void setRestaurantRegDate(Date restaurantRegDate) {
 		this.restaurantRegDate = restaurantRegDate;
 	}
-
 	
 	public List<RestaurantMenu> getRestaurantMenus() {
 		return restaurantMenus;
 	}
 
-
 	public void setRestaurantMenus(List<RestaurantMenu> restaurantMenus) {
 		this.restaurantMenus = restaurantMenus;
 	}
 
-
 	public List<RestaurantTime> getRestaurantTimes() {
 		return restaurantTimes;
 	}
-
 
 	public void setRestaurantTimes(List<RestaurantTime> restaurantTimes) {
 		this.restaurantTimes = restaurantTimes;
@@ -297,8 +294,9 @@ public class Restaurant {
 				+ ", ownerImage=" + ownerImage + ", restaurantText=" + restaurantText + ", reservationStatus="
 				+ reservationStatus + ", parkable=" + parkable + ", requestDate=" + requestDate + ", responseDate="
 				+ responseDate + ", streetAddress=" + streetAddress + ", areaAddress=" + areaAddress + ", restAddress="
-				+ restAddress + ", restaurantRegDate=" + restaurantRegDate + ", restaurantMenus=" + restaurantMenus
-				+ ", restaurantTimes=" + restaurantTimes + "]";
+				+ restAddress + ", latitude=" + latitude + ", longitude=" + longitude + ", judgeStatus=" + judgeStatus
+				+ ", judgeDate=" + judgeDate + ", restaurantRegDate=" + restaurantRegDate + ", restaurantMenus="
+				+ restaurantMenus + ", restaurantTimes=" + restaurantTimes + "]";
 	}
 	
 	
