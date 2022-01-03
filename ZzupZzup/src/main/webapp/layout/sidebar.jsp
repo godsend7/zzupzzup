@@ -37,8 +37,11 @@
 								<span class="badge badge-pill badge-dark"
 									style="color:#fff;background-color:#f56a6a;display:inline-block;padding: .25em .4em;padding-right: .6em;
 									padding-left: .6em;line-height: 1;">${member.memberRank}</span>&nbsp;
+								${member.nickname}
 							</c:if>
-							${member.nickname}
+							<c:if test="${sessionScope.member.memberRole != 'user'}">
+								${member.memberName}
+							</c:if>
 							</h4>
 						</div>
 					</div>

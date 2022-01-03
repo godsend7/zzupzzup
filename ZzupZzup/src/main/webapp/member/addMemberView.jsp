@@ -60,21 +60,6 @@
 		} else {
 			$("#checkPhoneNumMsg").text("");
 		}
-		
-		//성별 선택 안 되었을 때
-		if (${param.memberRole == 'user'} && !gender1.checked && !gender2.checked) {
-			$("#checkGenderMsg").text("성별을 선택해주세요.");
-		} else {
-			$("#checkGenderMsg").text("");
-		}
-		
-		//연령대 선택 안 되었을 때
-		if (${param.memberRole == 'user'} && !ageRange1.checked && !ageRange2.checked && !ageRange3.checked && !ageRange4.checked && !ageRange5.checked && !ageRange6.checked) {
-			$("#checkAgeRangeMsg").text("연령대를 선택해주세요.");
-		} else {
-			$("#checkAgeRangeMsg").text("");
-		}
-		
 	}
 
 	//이메일 정규식 전역변수 선언
@@ -190,7 +175,7 @@
 		var ageRange = $("#input[name=ageRanges]:checked").val();
 		console.log("Member [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+", 닉네임 : "+nickname+", 성별 : "+gender+", 연령대 : "+ageRange+"]");
 		
-		if(${param.loginType == '1'} || name.length < 1 || id.length < 1 || pwd.length < 1 || checkPwd.length < 1 || phoneNum.length < 1 || nickname.length < 1 || $('input[name="gender"]').is(":checked") || $('input[name="ageRange"]').is(":checked")) {
+		if(${param.loginType == '1'} || name.length < 1 || id.length < 1 || pwd.length < 1 || checkPwd.length < 1 || phoneNum.length < 1 || nickname.length < 1) {
 			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
 		} else if(${param.loginType != '1'}) {
 			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
@@ -221,6 +206,10 @@
 	$(function() {
 		console.log("addMember.jsp");
 		console.log("${param.memberRole}");
+		
+		$("a[href='#']").on("click", function() {
+			$("#form-reset").reset();
+		})
 		
 		$("input[value='회원가입']").on("click", function() {
 			fncAddUser();
@@ -274,7 +263,8 @@
 				<section id="addMember">
 					<div class="container">
 						<div>
-							<form class="needs-validation" id="addMember-complete" enctype="multipart/form-data" novalidate>
+							<form class="needs-validation" id="addMember-complete" enctype="multipart/form-data">
+							<a href="#"><input type="hidden" id="form-reset"/></a><!-- refresh 경우 form reset tag 추가 -->
 								<div class="row">
 									<div class="col">
 										<label for="memberName">이름</label> <input type="text"
@@ -375,7 +365,7 @@
 									<div class="row">
 										<div class="col">
 											<label for="stateMessage">성별</label>
-												<input class="form-check-input" type="radio" name="gender" id="gender1" value="male">
+												<input class="form-check-input" type="radio" name="gender" id="gender1" value="male" checked>
 												<label class="form-check-label" for="gender1">
 												    남
 												</label>
@@ -388,7 +378,7 @@
 										</div>
 										<div class="col">
 											<label for="stateMessage">연령대</label>
-												<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대">
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대" checked>
 												<label class="form-check-label" for="ageRange1">
 												    10대
 												</label>

@@ -97,7 +97,7 @@ public class MemberController {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : POST");
 		
-		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
+		String temp = request.getServletContext().getRealPath("/resources/images");
 		String profileImage = uploadFile(uploadfile, temp);
 		
 		member.setMemberRole(memberRole);
@@ -155,7 +155,8 @@ public class MemberController {
 		
 	}
 	
-	public void updateUser() {
+	@RequestMapping(value="updateMember", method=RequestMethod.GET)
+	public void updateMember() {
 		
 	}
 	
