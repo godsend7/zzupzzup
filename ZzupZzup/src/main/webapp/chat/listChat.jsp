@@ -33,12 +33,12 @@
 			fncGetList(1);
 		});
 		
-		//============= "검색"  Event  처리 =============		
+		//============= "작성하기"  Event  처리 =============		
 		$("a.button:contains(작성하기)").on("click", function(e) {
 			e.preventDefault();
 			window.open("/chat/addChat", "_self");
 		});
-
+		
 		//============= "참여하기" Event 처리 ============
 		$("a.button:contains(참여하기)").on("click", function(e) {
 			e.preventDefault();
@@ -155,6 +155,8 @@
 		//============= "입장하기" Event 처리 ============
 		$("body").on("click", "input[value='입장하기']", function(){
 			console.log("입장하기");
+			let chatNo = $(this).attr("data-target");
+			location.href="/chat/getChatEntrance?chatNo="+chatNo;
 		});
 			
 			

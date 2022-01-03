@@ -1,14 +1,10 @@
 package com.zzupzzup.web.chat;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URLDecoder;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.MultipartRequest;
 
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
@@ -113,35 +108,36 @@ public class ChatRestController {
 	}
 	
 	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
-	public String addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public Map addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		System.out.println("/chat/json/addDragFile : POST");
 		
 		Iterator<String> itr =  multipartRequest.getFileNames();
-		
-		System.out.println("itr : " + itr);
 
         String filePath = request.getServletContext().getRealPath("/resources/images/uploadImages/chat");
         
         System.out.println("filePath : " + filePath);
         
+        Map<String, Object> map = new HashMap<String, Object>();
+        
         while (itr.hasNext()) { //받은 파일들을 모두 돌린다.
             
-            MultipartFile mpf = multipartRequest.getFile(itr.next());
-            
-            System.out.println("mpf : " + mpf);
+            MultipartFile mf = multipartRequest.getFile(itr.next());
      
-            String originalFileName = mpf.getOriginalFilename(); //파일명
+            String originalFileName = mf.getOriginalFilename(); //파일명
             
-            System.out.println("originalFileName : " + originalFileName);
+            String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename()); //저장되는 파일명
      
-            String fileFullPath = filePath+"/"+originalFileName; //파일 전체 경로
+            String fileFullPath = filePath+"/"+saveName; //파일 전체 경로
+            
+            map.put("saveName", saveName);
      
             try {
                 //파일 저장
-                mpf.transferTo(new File(fileFullPath)); //파일저장 실제로는 service에서 처리
+                mf.transferTo(new File(fileFullPath)); //파일저장 실제로는 service에서 처리
                 
                 System.out.println("originalFilename => "+originalFileName);
+                System.out.println("saveName => "+saveName);
                 System.out.println("fileFullPath => "+fileFullPath);
      
             } catch (Exception e) {
@@ -151,7 +147,7 @@ public class ChatRestController {
                          
        }
          
-        return "success";
+        return map;
     }
 	
 

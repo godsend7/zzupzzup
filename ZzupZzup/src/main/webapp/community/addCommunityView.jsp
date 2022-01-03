@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-template</title>
+<title>게시물 작성하기</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 

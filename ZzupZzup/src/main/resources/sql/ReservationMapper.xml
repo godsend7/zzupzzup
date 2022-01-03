@@ -110,9 +110,7 @@
 			</choose>
 			ORDER BY RESERVATION_NO LIMIT #{search.startRowNum}, #{search.pageSize}		
 	 </select>
-	 
-	 
-	 
+
 	 <update id="updateReservation" parameterType="reservation">
 		UPDATE RESERVATION
 	   	<set>
@@ -125,7 +123,7 @@
  		  	<otherwise>
  		  	FIXED_STATUS = #{fixedStatus},
             RESERVATION_CANCEL_TYPE = #{reservationCancelReason},
-            RESERVATION_CANCEL_DETAIL = #{reservationCancelDetail}
+                  RESERVATION_CANCEL_DETAIL = #{reservationCancelDetail}
  		  	</otherwise>
           </choose>  
 	   	</set>

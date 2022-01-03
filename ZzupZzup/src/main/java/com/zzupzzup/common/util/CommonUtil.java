@@ -28,7 +28,7 @@ public class CommonUtil {
 	private static final String DELETE_TYPE_2 = "기존의 타 사이트를 이용하고 있어서";
 	private static final String DELETE_TYPE_3 = "탈퇴 후 재가입을 위해서";
 	
-	
+	public static final String IMAGE_PATH = "/resources/images/uploadImages";
 	
 	public static String returnAgeRange(String ageRange) {
 		
@@ -144,6 +144,62 @@ public class CommonUtil {
 		
 	}
 	
+	public static String reservationStatus(int reservationStatus) {
+		
+		String typeName = "";
+		
+		if(reservationStatus == 1) {
+			typeName = "결제완료";
+			
+			return typeName;
+			
+		} else if(reservationStatus == 2) {
+			typeName = "방문완료";
+			
+			return typeName;
+			
+		} else if(reservationStatus == 3) {
+			typeName = "미방문";
+			
+			return typeName;
+			
+		} else if(reservationStatus == 4) {
+			typeName = "예약 취소";
+			
+			return typeName;
+		
+		} else if(reservationStatus == 5) {
+			typeName = "예약 거절";
+			
+			return typeName;
+		
+		} else {
+			
+			return null;
+		}
+		
+	}
+	
+	public static String payOption(int payOption) {
+		
+		String typeName = "";
+		
+		if(payOption == 1) {
+			typeName = "방문결제";
+			
+			return typeName;
+			
+		} else if(payOption == 2) {
+			typeName = "선결제";
+			
+			return typeName;
+		
+		} else {
+			
+			return null;
+		}
+		
+	}
 	
 	public static String returnReportData(int reportCategory, int reportType) {
 		
@@ -209,6 +265,7 @@ public class CommonUtil {
 		}
 		return data;
 	}
+	
 	
 	public static String getTimeStamp(String pattern, String fileName) {
 

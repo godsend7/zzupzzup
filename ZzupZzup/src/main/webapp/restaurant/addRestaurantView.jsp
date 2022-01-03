@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-template</title>
+<title>음식점 등록하기</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
@@ -102,10 +102,92 @@
 	            }
 	        }).open();
 	    }
+		
+		$(function(){
+			// RESTAURANT_NAME AUTOCOMPLETE
+			var autoComplete = [];			
+			
+			$("#restaurantName").autocomplete({
+				source : function(request, response) {
+					console.log($("#restaurantName").val());
+					var searchKeyword = $("#restaurantName").val();
+					searchKeyword = escape(encodeURIComponent(searchKeyword));
+					
+					$.ajax({
+						url : "/restaurant/json/addRestaurant/searchKeyword=" + searchKeyword, 
+						method : "GET", 
+						dataType : "json", 
+						headers : {
+							"Accept" : "application/json",
+							"contentType" : "application/json; charset=utf-8"
+						},
+						success : function(JSONData) {
+							
+							if(JSONData.list == null || JSONData.list == undefined || 
+									JSONData.list == "" || JSONData.list.length == 0) {
+								$(".fromAutocomplete").text("");
+								$(".fromAutocomplete").text("해당하는 음식점이 없습니다.");
+							} else {
+								$(".fromAutocomplete").text("");
+								console.log(JSONData);
+								response(
+										$.map(JSONData.list, function(item) {
+											
+											autoComplete = {
+													"restaurantNo" : item.restaurantNo, 
+													"restaurantName" : item.restaurantName, 
+													"restaurantTel" : item.restaurantTel, 
+													"streetAddress" : item.streetAddress, 
+													"areaAddress" : item.areaAddress,
+													"restAddress" : restAddress
+											};
+											
+											return {
+												label : item.restaurantName
+											}
+											
+										})
+								);
+							}
+							
+						},
+						
+						error : function(e) {
+							alert(e.responseText);
+						}
+						
+					});
+				},
+				
+				minLength : 1
+				
+			});
+			
+			$("body").on("click", ".newAutocomplete", function() {
+				
+				console.log(autoComplete);
+				
+				var restaurantNo = autoComplete.restaurantNo;
+				var restaurantName = autoComplete.restaurantName;
+				var restaurantTel = autoComplete.restaurantTel;
+				var streetAddress = autoComplete.streetAddress;
+				var areaAddess = autoComplete.areaAddress;
+				var restAddress = autoComplete.restAddress;
+				
+				$("#restaurantNo").val(restaurantNo);
+				$("#restaurantTel").val(restaurantTel);
+				$("#streetAddress").val(streetAddress);
+				$("#areaAddress").val(areaAddress);
+				$("#restAddress").val(restAddress);
+				
+			});
+		});
+		
 	</script>
 
 	<script type="text/javascript">
-	
+		var index = 1;
+		
 		function fncAddRestaurant(){
 			
 			var restaurantName = $("input[name='restaurantName']").val();
@@ -154,21 +236,71 @@
 		}
 		
 		window.onload = function(){
-			// 등록 버튼 실행
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			$(function() {
-				//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+				// 등록 버튼 실행
 				$( "#button1" ).on("click" , function() {
 					fncAddRestaurant();
+				});
+				
+				// 주속 검색 버튼 실행
+				$( "#button2" ).on("click" , function() {
+					daumPostcode();
+				});
+				
+				// 이전으로 버튼 실행
+				$( "#button3" ).on("click" , function() {
+					history.go(-1);
 				});
 			});
 			
 			$(function() {
-				//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-				$( "#button2" ).on("click" , function() {
-					daumPostcode();
+				$( "#plus" ).on("click" , function() {
+					var menu = /* '<div><br><input type="text" name="txt" value="test[' + index + ']">'
+							+ '<input type="button" class="btnRemove" value="Remove"><br></div>'; */
+							
+							'<div class="row menuBox"> <div class="col-md-4">'
+							+ '<input type="text" class="form-control" id="menuTitle" name="restaurantMenus[' + index + '].menuTitle" placeholder="음식점 메뉴이름">'
+							+ '</div>'
+							+ '<div class="col-md-4">'
+							+ '<input type="text" class="form-control" id="menuPrice" name="restaurantMenus[' + index + '].menuPrice" placeholder="음식점 메뉴가격">'
+							+ '</div>'
+							+ '<div class="col-md-4">'
+							+ '<input type="checkbox" id="mainMenuStatus' + index + '" name="restaurantMenus[' + index + '].mainMenuStatus" value="1">'
+							+ '<label for="mainMenuStatus' + index + '">메인메뉴</label>'
+							+ '<span class="badge badge-primary remove">X</span>'
+							+ '</div></div>'
+							
+							
+					$("#inputMenu").parent().append (menu);
+					
+					index++;
+					
+					$('.remove').on('click', function () { 
+	                    $(this).prev().remove ();
+	                    $(this).next ().remove ();
+	                    console.log($(this));
+	                    
+	                    $(this).parents(".menuBox").remove ();
+	                });
+					
 				});
 			});
-		}
+			
+			$(function() {
+				// SHOW BUTTON OPERATION
+				$("#showButton").on("click", function() {
+					$("#workingForms").fadeIn();
+				});
+				
+				// HIDE BUTTON OPERATION
+				$("#hideButton").on("click", function() {
+					$("#workingForms").fadeOut();
+				});
+			});
+			
+			
+		} // window.onload FINISH
 	</script>
 	
 </head>
@@ -199,7 +331,8 @@
 	<div class="form-group">
 		<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>
 		<div class="col-sm-4">
-			<input type="text" class="form-control" id="restaurantName" name="restaurantName" placeholder="음식점명">
+			<input type="text" class="toAutocomplete" id="restaurantName" name="restaurantName" placeholder="음식점명" autocomplete="off" maxlength="50" required>
+			<p class="fromAutocomplete"></p>
 		</div>
 	</div>
 		
@@ -252,24 +385,26 @@
 		</div>
 	</div><br>
 	
-	<div class="col-sm-4">
-		<label>음식점 메뉴</label>
-	</div>
-	<div class="col-9 row">
-		<div class="col">
-			<input type="text" class="form-control" id="menuTitle" name="restaurantMenus[0].menuTitle" placeholder="음식점 메뉴이름">
-		</div>
-		<div class="col">
-			<input type="text" class="form-control" id="menuPrice" name="restaurantMenus[0].menuPrice" placeholder="음식점 메뉴가격">
-		</div>
-		<div class="col">	
-			<!-- <input type="text" class="form-control" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" placeholder="대표메뉴 여부"> -->
-			<input type="checkbox" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" value="1">
-			<label for="mainMenuStatus">메인메뉴</label>
+	<div class="col-md-12">
+		<label for="inputMenu">음식점 메뉴 &nbsp;
+			<span class="badge badge-success" id="plus">추가하기</span>
+		</label>
+		<div class="row" id="inputMenu">
+			<div class="col-md-4">
+				<input type="text" class="form-control" id="menuTitle" name="restaurantMenus[0].menuTitle" placeholder="음식점 메뉴이름">
+			</div>
+			<div class="col-md-4">
+				<input type="text" class="form-control" id="menuPrice" name="restaurantMenus[0].menuPrice" placeholder="음식점 메뉴가격">
+			</div>
+			<div class="col-md-4">	
+				<!-- <input type="text" class="form-control" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" placeholder="대표메뉴 여부"> -->
+				<input type="checkbox" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" value="1">
+				<label for="mainMenuStatus">메인메뉴</label>
+			</div>
 		</div>
 	</div><br>
 	
-	<div class="col-9 row">
+	<!-- <div class="col-9 row">
 		<div class="col">
 			<input type="text" class="form-control" id="menuTitle" name="restaurantMenus[1].menuTitle" placeholder="음식점 메뉴이름">
 		</div>
@@ -277,30 +412,257 @@
 			<input type="text" class="form-control" id="menuPrice" name="restaurantMenus[1].menuPrice" placeholder="음식점 메뉴가격">
 		</div>
 		<div class="col">	
-			<!-- <input type="text" class="form-control" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" placeholder="대표메뉴 여부"> -->
+			<input type="text" class="form-control" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" placeholder="대표메뉴 여부">
 			<input type="checkbox" id="mainMenuStatus1" name="restaurantMenus[1].mainMenuStatus" value="1">
 			<label for="mainMenuStatus1">메인메뉴</label>
 		</div>
+	</div><br> -->
+	
+	<div class="col-sm-8 restaurant-info">
+		<label for="working">음식점 운영정보 &nbsp;
+			<span class="badge badge-danger" id="showButton">보기</span>
+			<span class="badge badge-secondary" id="hideButton">숨기기</span>
+		</label>
+		
+		<div id="workingForms" style="display: none;">
+		<!-- ######################### 월요일 ######################### -->
+		<div id="working1">
+			<div>음식점 운영요일 &nbsp;
+				<input type="radio" id="monday" name="restaurantTimes[0].restaurantDay" value="1" onclick="return(false);" checked> <label for="monday">월</label>
+				<input type="radio" id="tuesday" name="restaurantTimes[0].restaurantDay" value="2" onclick="return(false);"> <label for="tuesday">화</label>
+				<input type="radio" id="wednesday" name="restaurantTimes[0].restaurantDay" value="3" onclick="return(false);"> <label for="wednesday">수</label>
+				<input type="radio" id="thursday" name="restaurantTimes[0].restaurantDay" value="4" onclick="return(false);"> <label for="thursday">목</label>
+				<input type="radio" id="friday" name="restaurantTimes[0].restaurantDay" value="5" onclick="return(false);"> <label for="friday">금</label>
+				<input type="radio" id="saturday" name="restaurantTimes[0].restaurantDay" value="6" onclick="return(false);"> <label for="saturday">토</label>
+				<input type="radio" id="sunday" name="restaurantTimes[0].restaurantDay" value="7" onclick="return(false);"> <label for="sunday">일</label>
+		    	<input type="checkbox" id="dayoff" name="restaurantTimes[0].restaurantDayOff" value="1"> <label for="dayoff">휴무일</label>
+		    </div>
+		    
+		    <div class="row">
+			    <div class="col">오픈시간
+			    	<label for="time"></label>
+			    	<input type="time" id="time" name="restaurantTimes[0].restaurantOpen">
+			    </div>
+			    <div class="col">마감시간
+			    	<label for="time"></label>
+			    	<input type="time" id="time" name="restaurantTimes[0].restaurantClose">
+			    </div>
+			    <div class="col">브레이크타임
+			    	<label for="time"></label>
+			    	<input type="time" id="time" name="restaurantTimes[0].restaurantBreak">
+			    </div>
+			    <div class="col">라스트오더
+			    	<label for="time"></label>
+			    	<input type="time" id="time" name="restaurantTimes[0].restaurantLastOrder">
+			    </div>
+			</div>
+		</div><br><br>
+		
+		<!-- ######################### 화요일 ######################### -->
+		<div id="working2">
+			<div>음식점 운영요일 &nbsp;
+				<input type="radio" id="monday1" name="restaurantTimes[1].restaurantDay" value="1" onclick="return(false);"> <label for="monday1">월</label>
+				<input type="radio" id="tuesday1" name="restaurantTimes[1].restaurantDay" value="2" onclick="return(false);" checked> <label for="tuesday1">화</label>
+				<input type="radio" id="wednesday1" name="restaurantTimes[1].restaurantDay" value="3" onclick="return(false);"> <label for="wednesday1">수</label>
+				<input type="radio" id="thursday1" name="restaurantTimes[1].restaurantDay" value="4" onclick="return(false);"> <label for="thursday1">목</label>
+				<input type="radio" id="friday1" name="restaurantTimes[1].restaurantDay" value="5" onclick="return(false);"> <label for="friday1">금</label>
+				<input type="radio" id="saturday1" name="restaurantTimes[1].restaurantDay" value="6" onclick="return(false);"> <label for="saturday1">토</label>
+				<input type="radio" id="sunday1" name="restaurantTimes[1].restaurantDay" value="7" onclick="return(false);"> <label for="sunday1">일</label>
+		    	<input type="checkbox" id="dayoff1" name="restaurantTimes[1].restaurantDayOff" value="1"> <label for="dayoff1">휴무일</label>
+		    </div>
+		    
+		    <div class="row">
+			    <div class="col">오픈시간
+			    	<label for="time1"></label>
+			    	<input type="time" id="time1" name="restaurantTimes[1].restaurantOpen">
+			    </div>
+			    <div class="col">마감시간
+			    	<label for="time1"></label>
+			    	<input type="time" id="time1" name="restaurantTimes[1].restaurantClose">
+			    </div>
+			    <div class="col">브레이크타임
+			    	<label for="time1"></label>
+			    	<input type="time" id="time1" name="restaurantTimes[1].restaurantBreak">
+			    </div>
+			    <div class="col">라스트오더
+			    	<label for="time1"></label>
+			    	<input type="time" id="time1" name="restaurantTimes[1].restaurantLastOrder">
+			    </div>
+			</div>
+		</div><br><br>
+		
+		<!-- ######################### 수요일 ######################### -->
+		<div id="working3">
+			<div>음식점 운영요일 &nbsp;
+				<input type="radio" id="monday2" name="restaurantTimes[2].restaurantDay" value="1" onclick="return(false);"> <label for="monday2">월</label>
+				<input type="radio" id="tuesday2" name="restaurantTimes[2].restaurantDay" value="2" onclick="return(false);"> <label for="tuesday2">화</label>
+				<input type="radio" id="wednesday2" name="restaurantTimes[2].restaurantDay" value="3" onclick="return(false);" checked> <label for="wednesday2">수</label>
+				<input type="radio" id="thursday2" name="restaurantTimes[2].restaurantDay" value="4" onclick="return(false);"> <label for="thursday2">목</label>
+				<input type="radio" id="friday2" name="restaurantTimes[2].restaurantDay" value="5" onclick="return(false);"> <label for="friday2">금</label>
+				<input type="radio" id="saturday2" name="restaurantTimes[2].restaurantDay" value="6" onclick="return(false);"> <label for="saturday2">토</label>
+				<input type="radio" id="sunday2" name="restaurantTimes[2].restaurantDay" value="7" onclick="return(false);"> <label for="sunday2">일</label>
+		    	<input type="checkbox" id="dayoff2" name="restaurantTimes[2].restaurantDayOff" value="1"> <label for="dayoff2">휴무일</label>
+		    </div>
+		    
+		    <div class="row">
+			    <div class="col">오픈시간
+			    	<label for="time2"></label>
+			    	<input type="time" id="time2" name="restaurantTimes[2].restaurantOpen">
+			    </div>
+			    <div class="col">마감시간
+			    	<label for="time2"></label>
+			    	<input type="time" id="time2" name="restaurantTimes[2].restaurantClose">
+			    </div>
+			    <div class="col">브레이크타임
+			    	<label for="time2"></label>
+			    	<input type="time" id="time2" name="restaurantTimes[2].restaurantBreak">
+			    </div>
+			    <div class="col">라스트오더
+			    	<label for="time2"></label>
+			    	<input type="time" id="time2" name="restaurantTimes[2].restaurantLastOrder">
+			    </div>
+			</div>
+		</div><br><br>
+		
+		<!-- ######################### 목요일 ######################### -->
+		<div id="working4">
+			<div>음식점 운영요일 &nbsp;
+				<input type="radio" id="monday3" name="restaurantTimes[3].restaurantDay" value="1" onclick="return(false);"> <label for="monday3">월</label>
+				<input type="radio" id="tuesday3" name="restaurantTimes[3].restaurantDay" value="2" onclick="return(false);"> <label for="tuesday3">화</label>
+				<input type="radio" id="wednesday3" name="restaurantTimes[3].restaurantDay" value="3" onclick="return(false);"> <label for="wednesday3">수</label>
+				<input type="radio" id="thursday3" name="restaurantTimes[3].restaurantDay" value="4" onclick="return(false);" checked> <label for="thursday3">목</label>
+				<input type="radio" id="friday3" name="restaurantTimes[3].restaurantDay" value="5" onclick="return(false);"> <label for="friday3">금</label>
+				<input type="radio" id="saturday3" name="restaurantTimes[3].restaurantDay" value="6" onclick="return(false);"> <label for="saturday3">토</label>
+				<input type="radio" id="sunday3" name="restaurantTimes[3].restaurantDay" value="7" onclick="return(false);"> <label for="sunday3">일</label>
+		    	<input type="checkbox" id="dayoff3" name="restaurantTimes[3].restaurantDayOff" value="1"> <label for="dayoff3">휴무일</label>
+		    </div>
+		    
+		    <div class="row">
+			    <div class="col">오픈시간
+			    	<label for="time3"></label>
+			    	<input type="time" id="time3" name="restaurantTimes[3].restaurantOpen">
+			    </div>
+			    <div class="col">마감시간
+			    	<label for="time3"></label>
+			    	<input type="time" id="time3" name="restaurantTimes[3].restaurantClose">
+			    </div>
+			    <div class="col">브레이크타임
+			    	<label for="time3"></label>
+			    	<input type="time" id="time3" name="restaurantTimes[3].restaurantBreak">
+			    </div>
+			    <div class="col">라스트오더
+			    	<label for="time3"></label>
+			    	<input type="time" id="time3" name="restaurantTimes[3].restaurantLastOrder">
+			    </div>
+			</div>
+		</div><br><br>
+		
+		<!-- ######################### 금요일 ######################### -->
+		<div id="working5">
+			<div>음식점 운영요일 &nbsp;
+				<input type="radio" id="monday4" name="restaurantTimes[4].restaurantDay" value="1" onclick="return(false);"> <label for="monday4">월</label>
+				<input type="radio" id="tuesday4" name="restaurantTimes[4].restaurantDay" value="2" onclick="return(false);"> <label for="tuesday4">화</label>
+				<input type="radio" id="wednesday4" name="restaurantTimes[4].restaurantDay" value="3" onclick="return(false);"> <label for="wednesday4">수</label>
+				<input type="radio" id="thursday4" name="restaurantTimes[4].restaurantDay" value="4" onclick="return(false);"> <label for="thursday4">목</label>
+				<input type="radio" id="friday4" name="restaurantTimes[4].restaurantDay" value="5" onclick="return(false);" checked> <label for="friday4">금</label>
+				<input type="radio" id="saturday4" name="restaurantTimes[4].restaurantDay" value="6" onclick="return(false);"> <label for="saturday4">토</label>
+				<input type="radio" id="sunday4" name="restaurantTimes[4].restaurantDay" value="7" onclick="return(false);"> <label for="sunday4">일</label>
+		    	<input type="checkbox" id="dayoff4" name="restaurantTimes[4].restaurantDayOff" value="1"> <label for="dayoff4">휴무일</label>
+		    </div>
+		    
+		    <div class="row">
+			    <div class="col">오픈시간
+			    	<label for="time4"></label>
+			    	<input type="time" id="time4" name="restaurantTimes[4].restaurantOpen">
+			    </div>
+			    <div class="col">마감시간
+			    	<label for="time4"></label>
+			    	<input type="time" id="time4" name="restaurantTimes[4].restaurantClose">
+			    </div>
+			    <div class="col">브레이크타임
+			    	<label for="time4"></label>
+			    	<input type="time" id="time4" name="restaurantTimes[4].restaurantBreak">
+			    </div>
+			    <div class="col">라스트오더
+			    	<label for="time4"></label>
+			    	<input type="time" id="time4" name="restaurantTimes[4].restaurantLastOrder">
+			    </div>
+			</div>
+		</div><br><br>
+		
+		<!-- ######################### 토요일 ######################### -->
+		<div id="working6">
+			<div>음식점 운영요일 &nbsp;
+				<input type="radio" id="monday5" name="restaurantTimes[5].restaurantDay" value="1" onclick="return(false);"> <label for="monday5">월</label>
+				<input type="radio" id="tuesday5" name="restaurantTimes[5].restaurantDay" value="2" onclick="return(false);"> <label for="tuesday5">화</label>
+				<input type="radio" id="wednesday5" name="restaurantTimes[5].restaurantDay" value="3" onclick="return(false);"> <label for="wednesday5">수</label>
+				<input type="radio" id="thursday5" name="restaurantTimes[5].restaurantDay" value="4" onclick="return(false);"> <label for="thursday5">목</label>
+				<input type="radio" id="friday5" name="restaurantTimes[5].restaurantDay" value="5" onclick="return(false);"> <label for="friday5">금</label>
+				<input type="radio" id="saturday5" name="restaurantTimes[5].restaurantDay" value="6" onclick="return(false);" checked> <label for="saturday5">토</label>
+				<input type="radio" id="sunday5" name="restaurantTimes[5].restaurantDay" value="7" onclick="return(false);"> <label for="sunday5">일</label>
+		    	<input type="checkbox" id="dayoff5" name="restaurantTimes[5].restaurantDayOff" value="1"> <label for="dayoff5">휴무일</label>
+		    </div>
+		    
+		    <div class="row">
+			    <div class="col">오픈시간
+			    	<label for="time5"></label>
+			    	<input type="time" id="time5" name="restaurantTimes[5].restaurantOpen">
+			    </div>
+			    <div class="col">마감시간
+			    	<label for="time5"></label>
+			    	<input type="time" id="time5" name="restaurantTimes[5].restaurantClose">
+			    </div>
+			    <div class="col">브레이크타임
+			    	<label for="time5"></label>
+			    	<input type="time" id="time5" name="restaurantTimes[5].restaurantBreak">
+			    </div>
+			    <div class="col">라스트오더
+			    	<label for="time5"></label>
+			    	<input type="time" id="time5" name="restaurantTimes[5].restaurantLastOrder">
+			    </div>
+			</div>
+		</div><br><br>
+		
+		<!-- ######################### 일요일 ######################### -->
+		<div id="working7">
+			<div>음식점 운영요일 &nbsp;
+				<input type="radio" id="monday6" name="restaurantTimes[6].restaurantDay" value="1" onclick="return(false);"> <label for="monday6">월</label>
+				<input type="radio" id="tuesday6" name="restaurantTimes[6].restaurantDay" value="2" onclick="return(false);"> <label for="tuesday6">화</label>
+				<input type="radio" id="wednesday6" name="restaurantTimes[6].restaurantDay" value="3" onclick="return(false);"> <label for="wednesday6">수</label>
+				<input type="radio" id="thursday6" name="restaurantTimes[6].restaurantDay" value="4" onclick="return(false);"> <label for="thursday6">목</label>
+				<input type="radio" id="friday6" name="restaurantTimes[6].restaurantDay" value="5" onclick="return(false);"> <label for="friday6">금</label>
+				<input type="radio" id="saturday6" name="restaurantTimes[6].restaurantDay" value="6" onclick="return(false);"> <label for="saturday6">토</label>
+				<input type="radio" id="sunday6" name="restaurantTimes[6].restaurantDay" value="7" onclick="return(false);" checked> <label for="sunday6">일</label>
+		    	<input type="checkbox" id="dayoff6" name="restaurantTimes[6].restaurantDayOff" value="1"> <label for="dayoff6">휴무일</label>
+		    </div>
+		    
+		    <div class="row">
+			    <div class="col">오픈시간
+			    	<label for="time6"></label>
+			    	<input type="time" id="time6" name="restaurantTimes[6].restaurantOpen">
+			    </div>
+			    <div class="col">마감시간
+			    	<label for="time6"></label>
+			    	<input type="time" id="time6" name="restaurantTimes[6].restaurantClose">
+			    </div>
+			    <div class="col">브레이크타임
+			    	<label for="time6"></label>
+			    	<input type="time" id="time6" name="restaurantTimes[6].restaurantBreak">
+			    </div>
+			    <div class="col">라스트오더
+			    	<label for="time6"></label>
+			    	<input type="time" id="time6" name="restaurantTimes[6].restaurantLastOrder">
+			    </div>
+			</div>
+		</div>
+		
+		</div>
+		
 	</div><br>
 	
-	<div class="col-sm-8">
+	<!-- <div class="col-sm-8">
 		<label>음식점 운영요일</label>
-		<!-- <input type="text" name="restaurantTimes[0].restaurantDay" placeholder="음식점 운영요일"> -->
-		<div>
-			<input type="radio" id="monday" name="restaurantTimes[0].restaurantDay" value="1" checked> <label for="monday">월</label>
-			<input type="radio" id="tuesday" name="restaurantTimes[0].restaurantDay" value="2"> <label for="tuesday">화</label>
-			<input type="radio" id="wednesday" name="restaurantTimes[0].restaurantDay" value="3"> <label for="wednesday">수</label>
-			<input type="radio" id="thursday" name="restaurantTimes[0].restaurantDay" value="4"> <label for="thursday">목</label>
-			<input type="radio" id="friday" name="restaurantTimes[0].restaurantDay" value="5"> <label for="friday">금</label>
-			<input type="radio" id="saturday" name="restaurantTimes[0].restaurantDay" value="6"> <label for="saturday">토</label>
-			<input type="radio" id="sunday" name="restaurantTimes[0].restaurantDay" value="7"> <label for="sunday">일</label>
-	    	<input type="checkbox" id="dayoff" name="restaurantMenus[0].restaurantDayOff" value="1"> <label for="dayoff">휴무일</label>
-	    </div>
-	</div><br>
-	
-	<div class="col-sm-8">
-		<label>음식점 운영요일</label>
-		<!-- <input type="text" name="restaurantTimes[0].restaurantDay" placeholder="음식점 운영요일"> -->
+		<input type="text" name="restaurantTimes[0].restaurantDay" placeholder="음식점 운영요일">
 		<div>
 			<input type="radio" id="monday1" name="restaurantTimes[1].restaurantDay" value="1" checked> <label for="monday1">월</label>
 			<input type="radio" id="tuesday1" name="restaurantTimes[1].restaurantDay" value="2"> <label for="tuesday1">화</label>
@@ -311,9 +673,9 @@
 			<input type="radio" id="sunday1" name="restaurantTimes[1].restaurantDay" value="7"> <label for="sunday1">일</label>
 	    	<input type="checkbox" id="dayoff1" name="restaurantMenus[1].restaurantDayOff" value="1"> <label for="dayoff1">휴무일</label>
 	    </div>
-	</div><br>
+	</div><br> -->
 	
-	<div class="col-sm-4">
+	<!-- <div class="col-sm-4">
 		<label>음식점 운영시간</label>
 	</div>
 	<div class="col-8 row">
@@ -333,9 +695,9 @@
 	    	<label for="time"></label>
 	    	<input type="time" id="time" name="restaurantTimes[0].restaurantLastOrder">
 	    </div>
-	</div><br>
+	</div><br> -->
 	
-	<div class="col-8 row">
+	<!-- <div class="col-8 row">
 	    <div class="col">오픈시간
 	    	<label for="time"></label>
 	    	<input type="time" id="time" name="restaurantTimes[1].restaurantOpen">
@@ -352,7 +714,7 @@
 	    	<label for="time"></label>
 	    	<input type="time" id="time" name="restaurantTimes[1].restaurantLastOrder">
 	    </div>
-	</div><br><br>
+	</div><br><br> -->
 	
 	<!-- <div class="col-sm-4">음식점 운영시간
 		<input type="text" name="restaurantTimes[0].restaurantOpen" placeholder="음식점 오픈시간">
@@ -379,7 +741,20 @@
 	<!-- <div class="form-group"> -->
 		<div class="text-center">
 			<!-- <button type="button" class="btn btn-warning" id="button1">등 &nbsp;록</button> -->
-			<input type='submit' id="button1" class="primary" />
+			<!-- <input type='submit' id="button1" class="primary" /> -->
+			<button type="button" class="btn btn-outline-warning btn-sm" id="button3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply-all" viewBox="0 0 16 16">
+  					<path d="M8.098 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.74 8.74 0 0 0-1.921-.306 7.404 7.404 0 0 0-.798.008h-.013l-.005.001h-.001L8.8 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L4.114 8.254a.502.502 0 0 0-.042-.028.147.147 0 0 1 0-.252.497.497 0 0 0 .042-.028l3.984-2.933zM9.3 10.386c.068 0 .143.003.223.006.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96v-.667z"/>
+  					<path d="M5.232 4.293a.5.5 0 0 0-.7-.106L.54 7.127a1.147 1.147 0 0 0 0 1.946l3.994 2.94a.5.5 0 1 0 .593-.805L1.114 8.254a.503.503 0 0 0-.042-.028.147.147 0 0 1 0-.252.5.5 0 0 0 .042-.028l4.012-2.954a.5.5 0 0 0 .106-.699z"/>
+				</svg> 이전으로
+			</button> &nbsp;
+			
+			<button type="button" class="btn btn-outline-danger btn-sm" id="button1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+  					<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+  					<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+  				</svg> 등록하기
+  			</button>
 		</div>
 	<!-- </div> -->
 	

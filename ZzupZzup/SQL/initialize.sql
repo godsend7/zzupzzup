@@ -154,6 +154,7 @@ CREATE TABLE `chat_member` (
     `chat_member_id` VARCHAR(50) NOT NULL,
     `ready_check` BOOLEAN NOT NULL DEFAULT 0,
     `chat_leader_check` BOOLEAN NOT NULL DEFAULT 0,
+    `in_out_check` BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY (`chat_member_no`),
     FOREIGN KEY (`chat_member_id`) REFERENCES `member`(`member_id`),
     FOREIGN KEY (`chat_no`) REFERENCES `chat`(`chat_no`),
@@ -345,19 +346,19 @@ INSERT INTO member(member_id, member_role, password, member_name, member_phone, 
 -- restaurant
 INSERT INTO restaurant(member_id, owner_name,
 owner_image, restaurant_text, parkable, restaurant_name, 
-restaurant_tel, street_address, area_address, menu_type)
+restaurant_tel, street_address, area_address, latitude, longitude, menu_type)
 VALUES('hihi@a.com', '홍진호', 'zzazang.jpg', '짜파게티보다 맛있는집', '0', '거구장',
-'010-1234-5678', '서울시 종로구 인사동3길 29', '서울시 종로구 인사동 215-1', '1');
+'010-1234-5678', '서울시 종로구 인사동3길 29', '서울시 종로구 인사동 215-1', '37.57166963363009', '126.98540705533098', '1');
 INSERT INTO restaurant(member_id, owner_name,
 owner_image, restaurant_text, parkable, restaurant_name, 
-restaurant_tel, street_address, area_address, menu_type)
+restaurant_tel, street_address, area_address, latitude, longitude, menu_type)
 VALUES('hihi@a.com', '가가가', 'zzazang.jpg', '짜파게티보다 맛있는집', '0', '거구류',
-'010-1234-9876', '서울시 용산구 인사동3길 29', '서울시 용산구 인사동 215-1', '1');
+'010-1234-9876', '서울시 용산구 인사동3길 29', '서울시 용산구 인사동 215-1', '37.57289900337021', '126.98377401141946', '1');
 INSERT INTO restaurant(member_id, owner_name,
 owner_image, restaurant_text, restaurant_name, 
-restaurant_tel, street_address, area_address, menu_type)
+restaurant_tel, street_address, area_address, latitude, longitude, menu_type)
 VALUES('hihi@a.com', '유희주', 'bab.jpg', '도시락보다 맛있는집', '김가네',
-'010-1111-2222', '서울시 종로구 종로 65', '서울시 종로구 종로2가 8-4', '1');
+'010-1111-2222', '서울시 종로구 종로 65', '서울시 종로구 종로2가 8-4', '37.570563535524535', '126.9846885976582', '1');
 -- menu
 INSERT INTO menu(restaurant_no, menu_title, menu_price, main_menu_status)
 VALUES('1', '짜장면', '3500', '0');

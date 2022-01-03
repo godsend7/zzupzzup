@@ -21,13 +21,6 @@
 
 /* addChatView */
 #addChatView .row.gtr-uniform { margin-top: 0px; }
-.file-drag-area { position: relative; display: flex; align-items: center; max-width: 100%; padding: 25px; border: 1px dashed rgba(210, 215, 217, 0.75); border-radius: 3px; transition: 0.2s; }
-.file-drag-btn { flex-shrink: 0; background-color: rgba(210, 215, 217, 0.3); border: 1px solid rgba(210, 215, 217, 0.75); border-radius: 3px; padding: 8px 15px; margin-right: 10px; font-size: 12px; text-transform: uppercase; }
-.file-drag-msg { font-size: small; font-weight: 300; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.file-drag-input { position: absolute; left: 0; top: 0; height: 100%; width: 100%; cursor: pointer; opacity: 0; }
-.file-drag-area.is-active { background-color: royalblue; }
-.file-drag-area.is-warning { background-color: magenta; }
-.file-drag-view img { width: 100%; max-width: 200px; }
 
 /* getChatModal */
 #getChatModal .modal-body { background-position: center; }

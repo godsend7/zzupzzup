@@ -15,9 +15,151 @@
 <!--  ///////////////////////// CSS ////////////////////////// -->
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
+<script src="http://localhost:1000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 	$(function() {
 		console.log("getChatEntrance.jsp");
+		
+		let MY_USER_ID = "";
+		
+		//페이지 접속시 socket.io 접속
+		const socket = io.connect('http://localhost:3000', {
+			cors: { origin: '*' }
+		});
+		
+		//페이지 접속시 현재 아이디 node 서버로 보내거나 로그인 안했으면 guest라고 보냄
+		socket.emit({
+			"name":"${member.nickname}",
+			"profileImg":"${member.profileImage}",
+			"age":"${memner.ageRange}",
+			"gender":"${member.gender}"
+		});
+		
+		//서버로 보낸 내 아이디 다시 받아옴
+		socket.on("send_user_id", (data) => {
+			MY_USER_ID = data.user_id;
+			sendMyName(data.user_name);
+			//alert(MY_USER_ID);
+		});
+		
+		//전체 사용자 정보 가져옴
+		socket.on("all_users", (data) => {				
+			var All_USER = data;
+			console.log(All_USER);
+			console.log(All_USER.length);
+			$(".user-list").html("");
+			All_USER.forEach(function(element, index){
+				$(".user-list").append("<li>"+element.user_name+"</li>");
+	        });
+			
+		});
+		
+		function sendMyName(send_user_name){
+			let data = {"name":send_user_name, "user_id":MY_USER_ID};
+			socket.emit("connect_name", data);
+		}
+		
+		const nickname = $("#nickname");
+		const chatList = $(".chatting-list");
+		const chatInput = $(".chatting-input");
+		const sendButton = $(".send-button");
+		const displayContainer = $(".display-container");
+		
+		chatInput.on("keypress", (e) => {
+			if(e.keyCode === 13){
+				send()
+			}
+		});
+		
+		function send(){
+			const param = {
+				room: 1,
+				name: nickname.val(),
+				msg: chatInput.val(),
+				time: new Date(),
+			}
+			
+			socket.emit("send_msg", param);
+			$(".chatting-input").val("");
+		}
+		
+		sendButton.on("click", function(){
+			send()
+		});
+		
+		socket.on("send_msg", (data) => {
+			console.log(data);
+			const { name, msg, time } = data;
+			const item = new LiModel(name, msg, time);
+			item.makeLi();
+			console.log("con scroll" + chatList.height());
+			displayContainer.scrollTop(chatList.height());
+		});
+
+		function LiModel(name, msg, time) {
+			
+			this.makeLi = () => {
+				console.log(name);
+				const $li = $("<li></li>");
+				$li.addClass(nickname.val() === name ? "sent" : "received");
+				const dom = "<span class='profile'><span class='user'>"+name+"</span><img class='image' src='https://placeimg.com/50/50/any' alt='any'></span><span class='message'>"+msg+"</span><span class='time'>"+time+"</span>";
+				$li.html(dom).appendTo(chatList);
+			}
+		}
+		
+		showCollections();
+		
+		function showCollections(){
+			$.ajax({
+				url:"/mongo/json/getChatCon/"+1,
+				type:"GET",
+				dataType: "json",
+				headers: {
+					"Accept": "application/json",
+					"Content-Type": "application/json"
+				},
+				success:function(JSONData, status){
+					//console.log(JSONData);
+					let dom = "";
+					
+					$.each(JSONData, function(key, value){
+						console.log(value.name);
+						let className = nickname.val() === value.name ? "sent" : "received";
+						let timeStemp = new Date(value.createdAt);
+						var newTime = timeFormatter(timeStemp);
+						dom += "<li class="+ className +"><span class='profile'><span class='user'>"+value.name+"</span><img class='image' src='https://placeimg.com/50/50/any' alt='any'></span><span class='message'>"+value.msg+"</span><span class='time'>"+newTime+"</span></li>";
+					});
+					//console.log(dom);
+					chatList.html(dom);
+					displayContainer.scrollTop(chatList.height());
+					
+					console.log("success");
+				},
+				error:function(e){
+					console.log("err : " + e);
+				}
+			});
+		}
+		
+		//채팅방 시간 포멧 함수
+		function timeFormatter(dateTime){
+			var date = new Date(dateTime);
+			if (date.getHours()>=12){
+			    var hour = parseInt(date.getHours()) - 12;
+			    var amPm = "PM";
+			} else {
+			    var hour = date.getHours();
+			    var amPm = "AM";
+			}
+			if (date.getMinutes() <10){
+				var minutes = "0"+date.getMinutes();
+			}else{
+				var minutes = date.getMinutes();
+			}
+			var time = hour + ":" + minutes + " " + amPm;
+			console.log(time);
+			return time;
+		}
 	});
 </script>
 </head>
@@ -39,10 +181,10 @@
 
 						<!-- S:chatting -->
 						<div class="d-flex flex-row chat-container">
-							<input type="hidden" id="memberId" value=""/>
-							<input type="hidden" id="nickname" value=""/>
-							<input type="hidden" id="chatNo" value=""/>
-							<input type="hidden" id="restaurantNo" value=""/>
+							<input type="hidden" id="memberId" value="${member.memberId }"/>
+							<input type="hidden" id="nickname" value="${member.nickname }"/>
+							<input type="hidden" id="chatNo" value="${chat.chatNo }"/>
+							<input type="hidden" id="restaurantNo" value="${chat.chatRestaurant.restaurantNo }"/>
 							
 						
 						
