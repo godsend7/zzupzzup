@@ -29,7 +29,7 @@ public interface ChatService {
 	public int deleteChat(Chat chat) throws Exception;
 	
 	// Update
-	public int updateChatState(Chat chat) throws Exception;
+	public int updateChatState(int chatNo, int chatState) throws Exception;
 	
 	// Select One
 	public Chat getChatRecord(int chatNo) throws Exception;
@@ -38,7 +38,7 @@ public interface ChatService {
 	public int addChatMember(ChatMember chatMember) throws Exception;
 	
 	// Select One
-	public Map<String, Object> getChatMember(int chatNo, Member memberId) throws Exception;
+	public ChatMember getChatMember(int chatNo, String memberId) throws Exception;
 	
 	// Delete
 	public int deleteChatMember(ChatMember chatMember) throws Exception;
@@ -46,10 +46,10 @@ public interface ChatService {
 	// update
 	public int updateReadyCheck(ChatMember chatMember) throws Exception;
 	
-	// Select One
+	// Select List
 	public Map<String, Object> listChatMember(Search search, int chatNo) throws Exception;
 	
-	// Select One
+	// Select List
 	public Map<String, Object> listReadyCheckMember(Search search, int chatNo) throws Exception;
 
 	

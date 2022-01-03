@@ -286,11 +286,11 @@
 
 							<!-- S:Modal -->
 							<div class="modal fade" id="getChatModal" tabindex="-1"
-								aria-labelledby="exampleModalLabel" aria-hidden="true">
+								aria-labelledby="getChatModalLabel" aria-hidden="true">
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h5 class="modal-title" id="exampleModalLabel">채팅방 정보 상세보기</h5>
+											<h5 class="modal-title" id="getChatModalLabel">채팅방 정보 상세보기</h5>
 											<button type="button" class="close" data-dismiss="modal"
 												aria-label="Close">
 												<span aria-hidden="true">&times;</span>

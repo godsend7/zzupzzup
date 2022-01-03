@@ -94,8 +94,12 @@ public class ChatDAOImpl implements ChatDAO {
 	}
 
 	@Override
-	public int updateChatState(Chat chat) throws Exception {
-		int result = sqlSession.update("ChatMapper.updateChatState", chat);
+	public int updateChatState(int chatNo, int chatState) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("chatNo", chatNo);
+		map.put("chatState", chatState);
+		
+		int result = sqlSession.update("ChatMapper.updateChatState", map);
 		
 		System.out.println("updateChatState" + result);
 		
@@ -125,9 +129,15 @@ public class ChatDAOImpl implements ChatDAO {
 	}
 	
 	@Override
-	public List<ChatMember> getChatMember(int chatNo, Member memberId) throws Exception {
-		return sqlSession.selectOne("ChatMapper.getChatMember", chatNo);
+	public ChatMember getChatMember(int chatNo, String memberId) throws Exception {		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("chatNo", chatNo);
+		map.put("memberId", memberId);
+		
+		return sqlSession.selectOne("ChatMapper.getChatMember", map);
 	}
+	
+	
 
 	@Override
 	public int deleteChatMember(ChatMember chatMember) throws Exception {

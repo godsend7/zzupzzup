@@ -96,8 +96,8 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public int updateChatState(Chat chat) throws Exception {
-		return chatDao.updateChatState(chat);
+	public int updateChatState(int chatNo, int chatState) throws Exception {
+		return chatDao.updateChatState(chatNo, chatState);
 	}
 
 	@Override
@@ -121,13 +121,8 @@ public class ChatServiceImpl implements ChatService {
 	}
 	
 	@Override
-	public Map<String, Object> getChatMember(int chatNo, Member memberId) throws Exception {
-		List<ChatMember> list = chatDao.getChatMember(chatNo, memberId);
-		
-		Map<String, Object> map= new HashMap<String, Object>();
-		map.put("list", list);
-		
-		return map;
+	public ChatMember getChatMember(int chatNo, String memberId) throws Exception {
+		return chatDao.getChatMember(chatNo, memberId);
 	}
 
 	@Override

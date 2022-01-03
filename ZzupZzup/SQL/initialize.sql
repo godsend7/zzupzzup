@@ -65,16 +65,16 @@ CREATE TABLE `restaurant` (
     `restaurant_text` VARCHAR(100),
     `reservation_status` BOOLEAN DEFAULT 1,
     `parkable` BOOLEAN,
-    `request_date` DATE,
-    `judge_status` BOOLEAN,
-    `judge_date` DATE,
+    `request_date` DATETIME DEFAULT NOW(),
+    `judge_status` INT DEFAULT 1,
+    `judge_date` DATETIME,
     `restaurant_name` VARCHAR(50) NOT NULL,
     `restaurant_tel` VARCHAR(15) NOT NULL,
     `street_address` VARCHAR(50) NOT NULL,
     `area_address` VARCHAR(50) NOT NULL,
     `rest_address` VARCHAR(20),
     `menu_type` INT NOT NULL,
-    `restaurant_reg_date` DATE,
+    `restaurant_reg_date` DATETIME,
     `latitude` VARCHAR(50),
     `longitude` VARCHAR(50),
     PRIMARY KEY (`restaurant_no`),
@@ -341,6 +341,8 @@ INSERT INTO member(member_id, member_role, password, member_name, member_phone, 
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test2@test.com', 'user', '1234', '조영주2', '010-0000-0001','1', '20대', 'male', 'test2', '-', '0', '0', now());
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test1@test.com', 'user', '1234', '조영주3', '010-0000-0002','1', '30대', 'female', 'test1', '-', '0', '0', now());
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test3@test.com', 'user', '1234', '조영주4', '010-0000-0003','1', '40대', 'male', 'test3', '-', '0', '0', now());
+INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test4@test.com', 'user', '1234', '조영주5', '010-0000-0004','1', '50대', 'female', 'test4', '-', '0', '0', now());
+INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test5@test.com', 'user', '1234', '조영주6', '010-0000-0005','1', '60대', 'male', 'test5', '-', '0', '0', now());
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('owner1@test.com', 'owner', '1234', '조영주5', '010-0000-0400','1', '50대', 'female', 'owner1', '-', '0', '0', now());
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('owner2@test.com', 'owner', '1234', '조영주6', '010-0000-0500','1', '60대', 'female', 'owner2', '-', '0', '0', now());
 -- restaurant
