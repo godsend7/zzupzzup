@@ -23,7 +23,7 @@
 		let MY_USER_ID = "";
 		
 		//페이지 접속시 socket.io 접속
-		const socket = io.connect('http://localhost:1000', {
+		const socket = io.connect('http://localhost:3000', {
 			cors: { origin: '*' }
 		});
 		
@@ -181,10 +181,10 @@
 
 						<!-- S:chatting -->
 						<div class="d-flex flex-row chat-container">
-							<input type="hidden" id="memberId" value=""/>
-							<input type="hidden" id="nickname" value=""/>
-							<input type="hidden" id="chatNo" value=""/>
-							<input type="hidden" id="restaurantNo" value=""/>
+							<input type="hidden" id="memberId" value="${member.memberId }"/>
+							<input type="hidden" id="nickname" value="${member.nickname }"/>
+							<input type="hidden" id="chatNo" value="${chat.chatNo }"/>
+							<input type="hidden" id="restaurantNo" value="${chat.chatRestaurant.restaurantNo }"/>
 							
 						
 						
