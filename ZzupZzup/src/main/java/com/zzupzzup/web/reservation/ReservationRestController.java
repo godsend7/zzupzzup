@@ -1,11 +1,14 @@
 package com.zzupzzup.web.reservation;
 
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -50,17 +53,26 @@ public class ReservationRestController {
 		System.out.println(this.getClass());
 	}
 
-	@RequestMapping(value = "json/getReservation", method = RequestMethod.GET)
-	public Reservation getReservation(@RequestParam("reservationNo") int reservationNo, HttpSession session) throws Exception {
+	@RequestMapping(value = "json/getReservation/reservation={reservationNo}&reservationStatus={reservationStaus}", method = RequestMethod.GET)
+	public Reservation getReservation(@RequestParam("reservationNo") int reservationNo, @RequestParam("reservationStatus") int reservationStatus ,HttpSession session) throws Exception {
 		
 		System.out.println("/reservation/json/getReservation : GET");
 		
 		Member member = (Member) session.getAttribute("member");
 		
-		Reservation reservation = reservationService.getReservation(reservationNo);
-		reservation.setReservationStatus(reservationNo);
-
-		return reservationService.getReservation(reservationNo);
+		Reservation reservation = new Reservation();
+		
+		reservation.setReservationNo(reservationNo);
+		reservation.setReservationStatus(reservationStatus);
+		
+		System.out.println("getReservation reservation : " + reservation);
+		
+		reservationService.getReservation(reservationNo);
+		
+		Map map = new HashMap();
+		map.put("reservation", reservation);
+		
+		return map;
 	}
 	
 	@RequestMapping( value="json/addReservation", method=RequestMethod.POST )
