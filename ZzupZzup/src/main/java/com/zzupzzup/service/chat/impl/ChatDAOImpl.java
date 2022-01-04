@@ -137,7 +137,10 @@ public class ChatDAOImpl implements ChatDAO {
 		return sqlSession.selectOne("ChatMapper.getChatMember", map);
 	}
 	
-	
+	@Override
+	public int updateChatMember(ChatMember chatMember) throws Exception {
+		return sqlSession.update("ChatMapper.updateChatMember", chatMember);
+	}
 
 	@Override
 	public int deleteChatMember(ChatMember chatMember) throws Exception {
@@ -181,5 +184,7 @@ public class ChatDAOImpl implements ChatDAO {
 		
 		return list;
 	}
+
+	
 
 }
