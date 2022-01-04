@@ -23,7 +23,7 @@
 	$(function() {
 
 		console.log("getReservationView.jsp");
-		
+		//console.log(${reservation.reservationDate});
 		///날짜 초 자르는 부분 ///
 		//var fixed = "${reservation.fixedDate}";
 		//var fixedDateSlice = fixed.slice(0,-5);
@@ -58,7 +58,7 @@
 				console.log("${reservation.reservationNo}");
 				console.log("${reservation.reservationStatus}");
 				 $.ajax({
-					url : "/reservation/json/updateReservation/${reservation.reservationNo}/3",
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/2",
 					method : "GET",
 					dataType : "json",
 					headers : {
@@ -83,7 +83,7 @@
 				console.log("${reservation.reservationNo}");
 				console.log("${reservation.reservationStatus}");
 				 $.ajax({
-					url : "/reservation/json/updateReservation/${reservation.reservationNo}/2",
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/1",
 					method : "GET",
 					dataType : "json",
 					headers : {
@@ -103,12 +103,12 @@
 					
 	   	/////////////////////////ajax//////////////////////////
 	   	
-	   		$("#reservationRejectionModal").on("click", function() {
+	   		$(".reservationRejectionModal").on("click", function() {
 				console.log("#reservationRejectionModal");
 				console.log("${reservation.reservationNo}");
 				console.log("${reservation.reservationStatus}");
 				 $.ajax({
-					url : "/reservation/json/updateReservation/${reservation.reservationNo}/4",
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/3",
 					method : "GET",
 					dataType : "json",
 					headers : {
@@ -127,12 +127,12 @@
 				}); 
 			});
 	   	//////////////////////////////////////////////////////////////////
-	   		$("#cancelUseModal").on("click", function() {
+	   		$(".cancelUseModal").on("click", function() {
 				console.log("#cancelUseModal");
 				console.log("${reservation.reservationNo}");
 				console.log("${reservation.reservationStatus}");
 				 $.ajax({
-					url : "/reservation/json/updateReservation/${reservation.reservationNo}/5",
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/4",
 					method : "GET",
 					dataType : "json",
 					headers : {
@@ -142,7 +142,7 @@
 					success : function(data){
 						console.log("바꾸기 성공");
 						$('#cancelUseModal').modal("hide");
-						alert("예약 취소가 완료되었습니다. 예약/주문 취소 메세지가 가게에 전송되었습니다.");
+						alert("예약 거절~~~~~");
 						
 					},
 					error : function(e) {
@@ -175,14 +175,11 @@
 					
 						<form id="getReservation">
 						
-								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="1">
-								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="1">
+							<!-- 	<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="1">
+								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="1"> -->
 <%-- 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
 								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}"> --%>
-								
-								<%-- <input type="hidden" id="member.memberId" name="member.memberId" value="${reservation.member.memberId}"> --%>
-								<%-- <input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" value="${reservation.reservationNo}"> --%>
-								<%-- <input type="hidden" id="restaurantNo" name="restaurantNo" value="${reservation.restaurant.restaurantNo}"> --%>
+				
 							
 							<div class="row gtr-uniform">
 								<div class="col-6 col-12-xsmall">
@@ -438,7 +435,7 @@
 											예약을 취소하시겠습니까?</div>
 											
 											<div class="modal-footer">
-												<button type="button" class="button small secondary"
+												<button type="button" class="button small secondary" id="userClose"
 													data-dismiss="modal">취소</button>
 												<button type="button" class="button small primary userConfirm" id="userConfirm" 
 													name="reservationStatus">확인</button>	

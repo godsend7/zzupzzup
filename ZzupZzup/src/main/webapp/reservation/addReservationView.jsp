@@ -135,7 +135,7 @@
 		            data : $("#addReservation").serialize(),
 		            dataType : "html",
 		            success : function(){
-		                alert("제발 성공.....");
+		                alert("결제가 완료되었습니다.");
 		                $(".listReservationModal").trigger('click');
 		            }
 		        });
@@ -277,6 +277,7 @@
 						
 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
 								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}">
+								<%-- <input type="hidden" id="reservationDate" name="reservationDate" value="${reservation.reservationDate}"> --%>
 								
 								<input type="hidden" id="member.memberId" name="member.memberId" value="${reservation.member.memberId}">
 								<%-- <input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" value="${reservation.reservationNo}"> --%>

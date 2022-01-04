@@ -28,6 +28,7 @@
 		  */
 			//////////이전페이지////////////////
 			console.log(${reservation.planTime}+"시간 왜 안찍혀");
+			console.log(${chat.chatLeaderId}+"닉네임 왜 안찍혀");
 		/*  function fnclistReservation(reservationNo) {
 			 
 			console.log(reservationNo);
@@ -88,7 +89,7 @@
 								
 										<div class="col-6 col-12-xsmall">
 										<label for="nickname">참여자 NickName</label> 
-										<p>${reservation.member.nickname}</p>
+										<p>${reservation.chat.chatLeaderId}</p>
 										</div>
 										
 										<div class="col-6 col-12-xsmall">
