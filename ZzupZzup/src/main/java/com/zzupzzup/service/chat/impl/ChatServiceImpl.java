@@ -142,17 +142,11 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public Map<String, Object> listReadyCheckMember(Search search, int chatNo) throws Exception {
+	public Map<String, Object> listReadyCheckMember(int chatNo) throws Exception {
 		Map<String, Object> map = new HashMap<String,Object>();
-		map.put("search", search);
-		//map.put("searchCondition", search.getSearchCondition() );
-		//map.put("searchKeyword",  search.getSearchKeyword() );
-		//map.put("endRowNum",  search.getEndRowNum() );
-		//map.put("startRowNum",  search.getStartRowNum() );
 		map.put("chatNo", chatNo);
 		
 		map.put("list", chatDao.listReadyCheckMember(map));
-		map.put("totalCount", chatDao.getTotalCount(search));
 		
 		return map;
 	}

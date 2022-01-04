@@ -40,7 +40,7 @@ public interface ChatService {
 	// Select One
 	public ChatMember getChatMember(int chatNo, String memberId) throws Exception;
 	
-	// Delete
+	// Update
 	public int deleteChatMember(ChatMember chatMember) throws Exception;
 	
 	// update
@@ -50,7 +50,7 @@ public interface ChatService {
 	public Map<String, Object> listChatMember(Search search, int chatNo) throws Exception;
 	
 	// Select List
-	public Map<String, Object> listReadyCheckMember(Search search, int chatNo) throws Exception;
+	public Map<String, Object> listReadyCheckMember(int chatNo) throws Exception;
 
 	
 	//임시 음식점 찾기

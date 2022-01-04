@@ -33,6 +33,7 @@
 	<resultMap id="chatMemberSelectMap" type="chatMember">
 		<result property="chatNo" column="chat_no" jdbcType="INTEGER"/>
 		<result property="member.memberId" column="chat_member_id" jdbcType="VARCHAR"/>
+		<result property="member.nickname" column="nickname" jdbcType="VARCHAR"/>
 		<result property="readyCheck" column="ready_check" jdbcType="BOOLEAN"/>
 		<result property="chatLeaderCheck" column="chat_leader_check" jdbcType="BOOLEAN"/>
 		<result property="inOutCheck" column="in_out_check" jdbcType="BOOLEAN"/>
@@ -163,12 +164,14 @@
 			chat_member_id, 
 			<if test="readyCheck != null">ready_check,</if>
 			<if test="chatLeaderCheck != null">chat_leader_check</if>
+			<if test="inOutCheck != null">in_out_check</if>
 		)
 		VALUES ( 
 			#{chatNo}, 
 			#{member.memberId}, 
 			<if test="readyCheck != null">#{readyCheck},</if>
 			<if test="chatLeaderCheck != null">#{chatLeaderCheck}</if>
+			<if test="inOutCheck != null">#{inOutCheck}</if>
 		)		
 	</insert>
 	
@@ -198,9 +201,14 @@
 	</select>
 	
 	<!-- SQL : DELETE -->
-	<delete id="deleteChatMember">
-		DELETE FROM chat_member WHERE chat_member_id = #{member.memberId} and chat_no = #{chatNo};
-	</delete>
+	<update id="deleteChatMember">
+		UPDATE chat_member
+		<set>
+			<if test="readyCheck != null">#{readyCheck},</if>
+			<if test="inOutCheck != null">#{inOutCheck},</if>
+		</set>
+		WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
+	</update>
 	
 	<!-- SQL : update -->
 	<delete id="updateReadyCheck" parameterType="chatMember">
@@ -214,10 +222,9 @@
 	
 	<!-- SQL : SELECT ALL -->
 	<select id="listReadyCheckMember" parameterType="map" resultMap="chatMemberSelectMap">
-		<!-- <bind name="searchKeywords" value="'%' + searchKeyword + '%'" /> -->
-		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check 
-			FROM chat_member
-			WHERE chat_no = #{chatNo} and ready_check = 1
+		SELECT c.chat_member_no, c.chat_no, c.chat_member_id, m.nickname, c.ready_check, c.chat_leader_check 
+			FROM chat_member c, member m
+			WHERE chat_no = #{chatNo} and c.ready_check = 1 and c.chat_member_id = m.member_id
 			ORDER BY chat_member_no
 	</select>
 	
