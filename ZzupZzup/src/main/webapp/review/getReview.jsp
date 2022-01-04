@@ -22,9 +22,9 @@
 			method : "GET",
 			dataType : "json",
 			success : function(data, status) {
-				console.log(data);
-				console.log(data.list);
-				console.log(data.listLike);
+				console.log(reviewNo);
+				//console.log(data.list);
+				//console.log(data.listLike);
 				if (data == null) {
 					alert("다시 시도해주세요");
 					return;
@@ -122,6 +122,16 @@
 		   	    	console.log("수정 클릭");
 		   	    	self.location = "/review/updateReview?reviewNo=" + reviewNo;
 		   	    });
+		   	    
+		   	    //console.log(reviewNo);
+		   	    //report data-id 값 등록
+		   	    var dataId = "[3,"+reviewNo+"]";
+		   	 	//console.log(dataId);
+		   	 	//console.log("1 ::" + $(".reportModal").attr("data-id"));
+		   	 	$(".reportModal").removeAttr("data-id");
+		   	 	//console.log("2 ::" + $(".reportModal").attr("data-id"));
+		   	    $(".reportModal").attr("data-id", dataId);
+		   	 	console.log("3 ::" + $(".reportModal").attr("data-id"));
 			}
 		}); 
     });
@@ -167,11 +177,8 @@
 			$("#carouselExampleIndicators").carousel("next");
 		});
 		
-		$(".reportModal").on("click", function() {
-			console.log("reviewModal");
+		$(".reportModal").on("click", function(){
 			$("#reviewModal").modal("hide");
-			
-			$("#reportModal").modal("show");
 		});
     });
 </script>
@@ -262,13 +269,14 @@
 			<c:if test="${!empty member && member.memberRole eq 'user'}">
 				<div class="modal-footer review-modal-footer">
 					<div>
-						<input type='button' class='danger reportModal' value='신고' data-id="3" data-toggle="modal" data-target="#reportModal"></input>
+						<input type='button' class='danger reportModal' value='신고' data-toggle="modal" data-target="#reportModal"></input>
 					</div>
 			    </div>
 			</c:if>
-			<ul class='icons'> 
-				<jsp:include page='/report/addReportView.jsp'/>
-			</ul>
 		</div>
 	</div>
 </div>
+
+<ul class='icons'> 
+	<jsp:include page='/report/addReportView.jsp'/>
+</ul>
