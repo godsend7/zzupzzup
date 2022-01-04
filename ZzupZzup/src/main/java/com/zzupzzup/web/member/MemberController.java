@@ -117,8 +117,10 @@ public class MemberController {
 		
 		if(member.getMemberRole().equals("owner")) {
 			//member domain과 같이 음식점 등록으로 페이지 넘기기
-			//request.setAttribute("addOwner", member);
-			return "redirect:/restaurant/addRestaurant?memberId="+member.getMemberId();
+			request.setAttribute("member", member);
+			//return "redirect:/restaurant/addRestaurant?memberId="+member.getMemberId()+"&memberName="+member.getMemberName();
+			
+			return "forward:/restaurant/addRestaurantView.jsp";
 		} else {
 			return "redirect:/";
 		}
