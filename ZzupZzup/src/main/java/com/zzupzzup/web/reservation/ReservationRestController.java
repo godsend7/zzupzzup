@@ -54,8 +54,8 @@ public class ReservationRestController {
 	}
 
 	@RequestMapping(value = "json/updateReservation/{reservationNo}/{reservationStatus}", method = RequestMethod.GET)
-	public int updateReservation(@PathVariable("reservationNo") int reservationNo, @PathVariable("reservationStatus") int reservationStatus, @PathVariable("reservationCancelReason") 
-		int reservationCancelReason ,HttpSession session) throws Exception {
+	public int updateReservation(@PathVariable("reservationNo") int reservationNo, @PathVariable("reservationStatus") int reservationStatus, /*@PathVariable("reservationCancelReason") 
+		int reservationCancelReason ,*/HttpSession session) throws Exception {
 		
 		System.out.println("/reservation/json/getReservation : GET");
 		
@@ -66,7 +66,7 @@ public class ReservationRestController {
 		reservation.setMember(member);
 		reservation.setReservationNo(reservationNo);
 		reservation.setReservationStatus(reservationStatus);
-		reservation.setReservationCancelReason(reservationCancelReason);
+		//reservation.setReservationCancelReason(reservationCancelReason);
 		
 		System.out.println("getReservation reservation : " + reservation);
 		
