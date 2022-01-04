@@ -98,8 +98,11 @@ public class Member {
 	}
 
 	public String getMemberPhone() {
-		memberPhone = memberPhone1+"-"+memberPhone2+"-"+memberPhone3;
-		return memberPhone;
+		if( memberPhone == null) {
+			return CommonUtil.returnTelNum(memberPhone1, memberPhone2, memberPhone3);
+		} else {
+			return memberPhone;
+		}
 	}
 
 	public void setMemberPhone(String memberPhone) {

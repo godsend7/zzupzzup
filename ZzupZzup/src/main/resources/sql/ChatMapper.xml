@@ -159,19 +159,17 @@
 	
 	<!-- SQL : INSERT -->
 	<insert id="addChatMember" parameterType="chatMember">
-		INSERT IGNORE INTO chat_member (
+		INSERT INTO chat_member (
 			chat_no, 
 			chat_member_id, 
 			<if test="readyCheck != null">ready_check,</if>
 			<if test="chatLeaderCheck != null">chat_leader_check</if>
-			<if test="inOutCheck != null">in_out_check</if>
 		)
 		VALUES ( 
 			#{chatNo}, 
 			#{member.memberId}, 
 			<if test="readyCheck != null">#{readyCheck},</if>
 			<if test="chatLeaderCheck != null">#{chatLeaderCheck}</if>
-			<if test="inOutCheck != null">#{inOutCheck}</if>
 		)		
 	</insert>
 	
@@ -189,9 +187,8 @@
 		<!-- <bind name="searchKeywords" value="'%' + searchKeyword + '%'" /> -->
 		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check, in_out_check
 			FROM chat_member
-			WHERE chat_no = 2 AND ready_check = 1
+			WHERE chat_no = #{chatNo} AND ready_check = 1
 	</select>
-	
 	
 	<!-- SQL : SELECT ONE -->
 	<select id="getChatMember" parameterType="map" resultMap="chatMemberSelectMap">		
@@ -200,12 +197,29 @@
 		WHERE chat_no = #{chatNo} AND chat_member_id = #{memberId}
 	</select>
 	
-	<!-- SQL : DELETE -->
-	<update id="deleteChatMember">
+	<!-- SQL : UPDATE -->
+	<update id="updateChatMember" parameterType="chatMember">
 		UPDATE chat_member
 		<set>
-			<if test="readyCheck != null">#{readyCheck},</if>
-			<if test="inOutCheck != null">#{inOutCheck},</if>
+			in_out_check = #{inOutCheck}
+		</set>
+		WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
+	</update>
+	
+	<!-- SQL : UPDATE -->
+	<update id="deleteAllChatMember" parameterType="chatMember">
+		UPDATE chat_member
+		<set>
+			in_out_check = #{inOutCheck}
+		</set>
+		WHERE chat_no = #{chatNo};
+	</update>
+	
+	<!-- SQL : UPDATE -->
+	<update id="deleteChatMember" parameterType="chatMember">
+		UPDATE chat_member
+		<set>
+			in_out_check = #{inOutCheck}
 		</set>
 		WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
 	</update>
@@ -214,8 +228,7 @@
 	<delete id="updateReadyCheck" parameterType="chatMember">
 		UPDATE chat_member
 		<set>
-			<if test="readyCheck == true">ready_check = TRUE</if>
-			<if test="readyCheck == false">ready_check = FALSE</if>
+			ready_check = #{readyCheck}
 		</set>
 		 WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
 	</delete>
