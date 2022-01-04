@@ -1,6 +1,10 @@
 package com.zzupzzup.web.restaurant;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,14 +76,21 @@ public class RestaurantController {
 			@ModelAttribute("restaurantMenus") Restaurant restaurantMenus,
 			@ModelAttribute("restaurantTimes") Restaurant restaurantTimes,
 			/*@ModelAttribute("restaurantImage") Restaurant restaurantImage*/
+			@RequestParam(value="file", required = false) MultipartFile uploadOwnerFile,
 			MultipartHttpServletRequest uploadFile,
 			HttpServletRequest request) throws Exception {
 			
 		System.out.println("/restaurant/addRestaurant : POST");
 		
 		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
-		
 		uploadFilePath(uploadFile, empty, restaurant);
+		
+		System.out.println("ooooooooooooooo : " + uploadOwnerFile);
+		
+		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/owner");
+		String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
+		
+		restaurant.setOwnerImage(ownerImage);
 		
 		if(restaurantService.addRestaurant(restaurant) == 1) {
 			System.out.println("INSERT RESTAURANT SUCCESS");
@@ -267,9 +279,26 @@ public class RestaurantController {
 					e.printStackTrace();
 				}
 			}
+		}	
+	}
+	
+	private String uploadOwnerImg(MultipartFile uploadOwnerFile, String vacant) {
+		
+		System.out.println("gggggggggggggggg : " + uploadOwnerFile.getOriginalFilename());
+		
+		String ownerInfo = uploadOwnerFile.getOriginalFilename();
+		
+		System.out.println("ownerInfo : " + ownerInfo);
+		
+		Path checkpoint = Paths.get(vacant, File.separator + StringUtils.cleanPath(ownerInfo));
+		
+		try {
+			Files.copy(uploadOwnerFile.getInputStream(), checkpoint, StandardCopyOption.REPLACE_EXISTING);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
-		
+		return ownerInfo;
 	}
 	
 	

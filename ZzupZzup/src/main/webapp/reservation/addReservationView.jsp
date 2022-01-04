@@ -275,14 +275,12 @@
 					
 						<form id="addReservation">
 						
-								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="1">
-								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="1">
-<%-- 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
-								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}"> --%>
+								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
+								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}">
 								
 								<input type="hidden" id="member.memberId" name="member.memberId" value="${reservation.member.memberId}">
 								<%-- <input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" value="${reservation.reservationNo}"> --%>
-								<input type="hidden" id="restaurantNo" name="restaurantNo" value="${reservation.restaurant.restaurantNo}">
+							
 							
 							<div class="row gtr-uniform">
 								<div class="col-6 col-12-xsmall">
@@ -313,14 +311,14 @@
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantType">음식 종류</label> 
-									<p>${reservation.restaurant.menuType}</p>
+									<p>${reservation.restaurant.returnMenuType}</p>
 									<input id="menuType" type="hidden" name="menuType" value="${reservation.restaurant.menuType}">
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="memberCount">예약 인원 수</label> 
-									<p>${reservation.memberCount} 명</p>
-									<input id="memberCount" type="hidden" name="memberCount" value="${reservation.memberCount}">
+									<p>${reservation.chat.readyCount} 명</p>
+									<input id="memberCount" type="hidden" name="memberCount" value="${reservation.chat.readyCount}">
 								</div>
 								
 								<!-- Break -->

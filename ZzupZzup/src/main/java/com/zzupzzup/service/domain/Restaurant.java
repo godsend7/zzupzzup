@@ -1,5 +1,6 @@
 package com.zzupzzup.service.domain;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class Restaurant {
 	private String longitude; // 경도
 	private int judgeStatus; // 1. 심사중, 2. 승인, 3. 거절
 	private Date judgeDate;
-	private Date restaurantRegDate; 
+	private Timestamp restaurantRegDate; 
 	private List<RestaurantMenu> restaurantMenus;
 	private List<RestaurantTime> restaurantTimes;
 	
@@ -260,11 +261,11 @@ public class Restaurant {
 		this.judgeDate = judgeDate;
 	}
 
-	public Date getRestaurantRegDate() {
-		return restaurantRegDate;
+	public String getRestaurantRegDate() {
+		return CommonUtil.getDate(restaurantRegDate);
 	}
 
-	public void setRestaurantRegDate(Date restaurantRegDate) {
+	public void setRestaurantRegDate(Timestamp restaurantRegDate) {
 		this.restaurantRegDate = restaurantRegDate;
 	}
 	
