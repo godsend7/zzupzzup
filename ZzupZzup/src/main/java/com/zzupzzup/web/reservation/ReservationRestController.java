@@ -53,8 +53,8 @@ public class ReservationRestController {
 		System.out.println(this.getClass());
 	}
 
-	@RequestMapping(value = "json/getReservation/reservation={reservationNo}&reservationStatus={reservationStaus}", method = RequestMethod.GET)
-	public Reservation getReservation(@RequestParam("reservationNo") int reservationNo, @RequestParam("reservationStatus") int reservationStatus ,HttpSession session) throws Exception {
+	@RequestMapping(value = "json/updateReservation/{reservationNo}/{reservationStatus}", method = RequestMethod.GET)
+	public int updateReservation(@PathVariable("reservationNo") int reservationNo, @PathVariable("reservationStatus") int reservationStatus ,HttpSession session) throws Exception {
 		
 		System.out.println("/reservation/json/getReservation : GET");
 		
@@ -62,18 +62,16 @@ public class ReservationRestController {
 		
 		Reservation reservation = new Reservation();
 		
+		reservation.setMember(member);
 		reservation.setReservationNo(reservationNo);
 		reservation.setReservationStatus(reservationStatus);
 		
 		System.out.println("getReservation reservation : " + reservation);
 		
-		reservationService.getReservation(reservationNo);
+
 		
-		Map map = new HashMap();
-		map.put("reservation", reservation);
-		
-		return map;
-	}
+		return reservationService.updateReservation(reservation);
+	}	
 	
 	@RequestMapping( value="json/addReservation", method=RequestMethod.POST )
 	public int addReservation ( @RequestBody Reservation reservation, HttpServletRequest httpServletRequest) throws Exception {

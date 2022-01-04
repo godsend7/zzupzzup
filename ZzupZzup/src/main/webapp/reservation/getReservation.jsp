@@ -31,9 +31,6 @@
 		}); 
 		
 		//////////모달 이동////////////////
-	     $(".no").on("click" , function() {
-	    	 reservationStatusFunction();
-		}); 
 		//////////모달 이동////////////////
 		
 		//////////모달 이동////////////////
@@ -52,22 +49,79 @@
 	   	
 	   	/////////////////////////ajax//////////////////////////
 	 
-					function reservationStatusFunction() {
-						var reservationStatus = $("#no").val();
-						$.ajax({
-							url : "/reservation/json/getReservation?reservationNo="+reservationNo,
-							method : "GET",
-							dataType : "json",
-							success : function(result) {
-									if (result==3) {
-										$(".no").text("미방문");
-									} 
-							}
-						})
-						
-					}					
+			$(".no").on("click", function() {
+				console.log(".no");
+				console.log("${reservation.reservationNo}");
+				console.log("${reservation.reservationStatus}");
+				 $.ajax({
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/3",
+					method : "GET",
+					dataType : "json",
+					headers : {
+						"Accept" : "application/json",
+						"contentType" : "application/json; charset=utf-8"
+					},
+					success : function(data){
+						console.log("바꾸기 성공");
+						//$("input[value='3']").val('미방문');
+						$('#getReservationModal').modal("hide");
+					},
+					error : function(e) {
+						alert(e.responseText);
+					}
+				}); 
+			});
 					
 	   	/////////////////////////ajax//////////////////////////
+	   	
+	   		$(".yes").on("click", function() {
+				console.log(".yes");
+				console.log("${reservation.reservationNo}");
+				console.log("${reservation.reservationStatus}");
+				 $.ajax({
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/2",
+					method : "GET",
+					dataType : "json",
+					headers : {
+						"Accept" : "application/json",
+						"contentType" : "application/json; charset=utf-8"
+					},
+					success : function(data){
+						console.log("바꾸기 성공");
+						//$("input[value='2']").val('방문완료');
+						$('#getReservationModal').modal("hide");
+					},
+					error : function(e) {
+						alert(e.responseText);
+					}
+				}); 
+			});
+					
+	   	/////////////////////////ajax//////////////////////////
+	   	
+	   		$("#reservationRejectionModal").on("click", function() {
+				console.log("#reservationRejectionModal");
+				console.log("${reservation.reservationNo}");
+				console.log("${reservation.reservationStatus}");
+				 $.ajax({
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/4",
+					method : "GET",
+					dataType : "json",
+					headers : {
+						"Accept" : "application/json",
+						"contentType" : "application/json; charset=utf-8"
+					},
+					success : function(data){
+						console.log("바꾸기 성공");
+						$('#reservationRejectionModal').modal("hide");
+						alert("예약 취소가 완료되었습니다. 예약/주문 취소 메세지가 가게에 전송되었습니다.");
+						
+					},
+					error : function(e) {
+						alert(e.responseText);
+					}
+				}); 
+			});
 	  
 	});
 </script>
@@ -104,7 +158,7 @@
 							
 							<div class="row gtr-uniform">
 								<div class="col-6 col-12-xsmall">
-									<label for="reservationNumber">예약 번호/label> 
+									<label for="reservationNumber">예약 번호</label> 
 									<p>${reservation.reservationNumber}</p>
 									
 								</div>
@@ -168,7 +222,7 @@
 								
 								<div class="col-6 col-12-xsmall fixedDate">
 									<label for=""fixedDate"">방문 확정 후</label> 
-									<p>${reservation.fixedDate}</p>
+									<p>${reservation.fixedDate} ${reservation.returnStatus}</p>
 									<input id="fixedDate" name="fixedDate" type="hidden" value="1">
 									
 									
@@ -323,7 +377,6 @@
 											</div>
 											
 											<div class="modal-body">해당 고객이 음식점을 방문하였습니까?</div>
-											
 											<div class="modal-footer">
 												<button type="button" class="button small secondary" id="close" 
 													data-dismiss="modal">취소</button>
@@ -337,38 +390,7 @@
 									</div>
 								</div>
 							
-							
-							<!-- Modal
-							<div class="modal fade" id="getReservationModal" tabindex="-1" role="dialog"
-								aria-labelledby="getReservationModalLabel" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										
-										<div class="modal-body">
-												
-											<h6 class="h6 mb-6 font-weight-normal">해당 고객이 음식점을 방문하였습니까?</h6>
-												
-										
-											<input class="btn btn-lg no" id="no"
-												type="button" value="아니오" />
-												
-											<input class="btn btn-lg btn-primary yes" id="yes"
-												type="button" value="예" />	
-												
-											<input class="btn btn-lg btn-primary close" id="close"
-												type="button" value="닫기" />		
-										</div>
-									</div>
-								</div>
-							</div> -->
-							
-							
-							
-							
-							
-							
-							
-							
+						
 					<!-- /////////////////////////////////////////////////////////////////////////////////////////// -->
 						<!-- 유저 Modal -->
 								<div class="modal fade" id="reservationRejectionModal" tabindex="-1"

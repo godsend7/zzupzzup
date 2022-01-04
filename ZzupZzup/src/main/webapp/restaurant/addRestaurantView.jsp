@@ -235,7 +235,7 @@
 				return;
 			}
 		
-			$("#restaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").attr("enctype", "multipart/form-data").submit();
+			$("#addRestaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").attr("enctype", "multipart/form-data").submit();
 			
 		}
 		
@@ -322,13 +322,13 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="">	
+				<section id="restaurant">	
 
 <div class="container">
 
 	<h2>음식점 등록하기</h2><hr>
 	
-	<form class="form-horizontal" id="restaurant">
+	<form class="form-horizontal" id="addRestaurant">
 	
 	<input type="hidden" name="member.memberId" value="${member.memberId}">
 	<input type="hidden" name="member.memberId" value="${param.memberId}">
