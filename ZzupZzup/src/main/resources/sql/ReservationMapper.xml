@@ -82,7 +82,7 @@
 	
 	<select id="listReservation"	parameterType="map"	resultMap="reservationSelectMap">
 		
-		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname, ch.CHAT_MEMBER_ID
+		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.PLAN_TIME, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname, ch.CHAT_MEMBER_ID
 			FROM RESERVATION AS r
 			LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
 							 FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)
@@ -94,7 +94,7 @@
 	 <!-- =========유저,업주======== -->
 	 <select id="listMyReservation"	parameterType="map"	resultMap="reservationSelectMap">
 		
-		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname
+		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.PLAN_TIME, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname
 			FROM RESERVATION AS r
 			LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
 							 FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)

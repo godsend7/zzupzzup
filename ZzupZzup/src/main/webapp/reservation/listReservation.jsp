@@ -27,7 +27,7 @@
 		}
 		  */
 			//////////이전페이지////////////////
-			
+			console.log(${reservation.planTime}+"시간 왜 안찍혀");
 		/*  function fnclistReservation(reservationNo) {
 			 
 			console.log(reservationNo);
