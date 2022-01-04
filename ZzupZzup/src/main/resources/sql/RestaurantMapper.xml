@@ -23,7 +23,7 @@
 		<result property="reservationStatus" 	column="RESERVATION_STATUS" 	jdbcType="NUMERIC" />
 		<result property="parkable" 			column="PARKABLE" 				jdbcType="BOOLEAN" />
 		<result property="requestDate" 			column="REQUEST_DATE" 			jdbcType="DATE" />
-		<result property="judgeStatus" 			column="JUDGE_STATUS" 			jdbcType="BOOLEAN" />
+		<result property="judgeStatus" 			column="JUDGE_STATUS" 			jdbcType="NUMERIC" />
 		<result property="judgeDate" 			column="JUDGE_DATE" 			jdbcType="DATE" />
 		<result property="restaurantRegDate" 	column="RESTAURANT_REG_DATE"	jdbcType="DATE" />
 		
@@ -61,9 +61,9 @@
 	<insert 	id="addRestaurant"		parameterType="restaurant" useGeneratedKeys="true" keyProperty="restaurantNo" >
 		INSERT
 		INTO RESTAURANT(MEMBER_ID, OWNER_NAME, OWNER_IMAGE, RESTAURANT_TEXT, RESTAURANT_NAME,
-		RESTAURANT_TEL, STREET_ADDRESS, AREA_ADDRESS, REST_ADDRESS, LATITUDE, LONGITUDE, MENU_TYPE)
+		RESTAURANT_TEL, STREET_ADDRESS, AREA_ADDRESS, REST_ADDRESS, LATITUDE, LONGITUDE, MENU_TYPE, PARKABLE)
 		VALUES ( #{member.memberId}, #{member.memberName}, #{ownerImage}, #{restaurantText}, #{restaurantName},
-		#{restaurantTel}, #{streetAddress}, #{areaAddress}, #{restAddress}, #{latitude}, #{longitude}, #{menuType})
+		#{restaurantTel}, #{streetAddress}, #{areaAddress}, #{restAddress}, #{latitude}, #{longitude}, #{menuType}, #{parkable})
 	</insert>
 	
 	<insert 	id="addRestaurantMenu"	parameterType="restaurant" >
@@ -100,7 +100,9 @@
 		INTO IMAGE(RESTAURANT_NO, IMAGE)
 		VALUES
 		<foreach collection="restaurantImage" item="item" separator=",">
-			(#{restaurantNo}, #{item})
+			<if test="item != null">
+				(#{restaurantNo}, #{item})
+			</if>
 		</foreach>
 	</insert>
 	
@@ -156,6 +158,24 @@
 		</set>
 		WHERE RESTAURANT_NO = #{restaurantNo}
 	</update> -->
+	
+	<!-- SQL : UPDATE -->
+	<update id="judgeRestaurant" parameterType="restaurant">
+		UPDATE RESTAURANT
+		<set>
+			<!-- ########## 승인 ########## -->
+			<if test="judgeStatus == 2">
+				JUDGE_STATUS = #{judgeStatus},
+				RESTAURANT_REG_DATE = NOW()
+			</if>
+			<!-- ########## 거절 ########## -->
+			<if test="judgeStatus == 3">
+				JUDGE_STATUS = #{judgeStatus},
+				JUDGE_DATE = NOW()
+			</if>
+		</set>
+		WHERE RESTAURANT_NO = #{restaurantNo}
+	</update>
 	
 	
 	<!-- SQL : SELECT LIST -->

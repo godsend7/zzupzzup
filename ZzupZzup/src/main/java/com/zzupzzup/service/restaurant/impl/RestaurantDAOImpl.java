@@ -40,7 +40,10 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 		if(result == 1) {
 			sqlSession.insert("RestaurantMapper.addRestaurantMenu", restaurant);
 			sqlSession.insert("RestaurantMapper.addRestaurantTime", restaurant);
-			sqlSession.insert("RestaurantMapper.addImage", restaurant);
+			
+			if (restaurant.getRestaurantImage() != null) {
+				sqlSession.insert("RestaurantMapper.addImage", restaurant);
+			}
 			
 			return 1;
 			
@@ -96,6 +99,11 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	}
 	
 	@Override
+	public int judgeRestaurant(Restaurant restaurant) throws Exception {
+		return sqlSession.update("RestaurantMapper.judgeRestaurant", restaurant);
+	}
+	
+	@Override
 	public int deleteRestaurant(int restaurantNo) throws Exception {
 		return sqlSession.delete("RestaurantMapper.deleteRestaurant", restaurantNo);
 	}
@@ -133,10 +141,10 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	      return list;
 	}
 
-
 	@Override
 	public List<Restaurant> listMainRestaurant() throws Exception {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("RestaurantMapper.listMainRestaurant");
 	}
+
 }
