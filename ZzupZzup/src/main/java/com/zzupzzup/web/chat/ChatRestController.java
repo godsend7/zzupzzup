@@ -160,8 +160,8 @@ public class ChatRestController {
 		
 		ChatMember chatMember = new ChatMember();
 		chatMember.setChatNo(chatNo);
-		chatMember.setReadyCheck(readyCheck);
 		chatMember.setMember(member);
+		chatMember.setReadyCheck(readyCheck);
 		
 		System.out.println("UpdateReadyCheck chatMember : " + chatMember);
 		

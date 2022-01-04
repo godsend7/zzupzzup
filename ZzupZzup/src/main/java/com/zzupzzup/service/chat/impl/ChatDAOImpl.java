@@ -141,7 +141,7 @@ public class ChatDAOImpl implements ChatDAO {
 
 	@Override
 	public int deleteChatMember(ChatMember chatMember) throws Exception {
-		return sqlSession.delete("ChatMapper.deleteChatMember", chatMember);
+		return sqlSession.update("ChatMapper.deleteChatMember", chatMember);
 	}
 	
 	@Override
