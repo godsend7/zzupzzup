@@ -214,6 +214,12 @@
 				}
 			});
 		});
+		
+		//============= "나가기" Event 처리 ============
+		$("input[value='나가기']").on("click", function() {
+			console.log("나가기 클릭");
+			location.href="/chat/deleteChatMember?chatNo=${chat.chatNo}";
+		});
 	});
 </script>
 </head>
@@ -326,7 +332,14 @@
 											
 										</c:when>
 										<c:otherwise>
+										<c:choose>
+											<c:when test="${chat.chatState == 1 || chat.chatState == 2}">
 											<input type="button" class="button small" value='${chatMember.readyCheck == true ? "모임참여 해제하기" : "모임참여 체크하기"}'/>
+											</c:when>
+											<c:otherwise>
+											<input type="button" class="button small" disabled value='모임참여 체크불가'/>
+											</c:otherwise>
+										</c:choose>
 										</c:otherwise>
 									</c:choose>
 									

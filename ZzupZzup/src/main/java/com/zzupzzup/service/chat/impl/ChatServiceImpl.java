@@ -104,6 +104,11 @@ public class ChatServiceImpl implements ChatService {
 	public Chat getChatRecord(int chatNo) throws Exception {
 		return chatDao.getChatRecord(chatNo);
 	}
+	
+	@Override
+	public int updateChatMember(ChatMember chatMember) throws Exception {
+		return chatDao.updateChatMember(chatMember);
+	}
 
 	@Override
 	public int deleteChatMember(ChatMember chatMember) throws Exception {
@@ -165,5 +170,7 @@ public class ChatServiceImpl implements ChatService {
 		
 		return map;
 	}
+
+	
 
 }

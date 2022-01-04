@@ -239,7 +239,8 @@ public class ChatController {
 			//참가자는 chat_member 도메인에 없으면 저장
 			if(chatMember == null) {
 				chatMember2.setChatNo(chat.getChatNo());
-				chatMember2.setMember(member); 
+				chatMember2.setMember(member);
+				chatMember2.setInOutCheck(true);
 				chatService.addChatMember(chatMember2);
 				
 				//저장 된 정보 다시 chatMember에 넣음
@@ -251,7 +252,7 @@ public class ChatController {
 					chatMember2.setChatNo(chat.getChatNo());
 					chatMember2.setMember(member);
 					chatMember2.setInOutCheck(true);
-					chatService.deleteChatMember(chatMember2);
+					chatService.updateChatMember(chatMember2);
 					
 					//저장 된 정보 다시 chatMember에 넣음
 					chatMember = chatService.getChatMember(chat.getChatNo(), memberId);
@@ -288,9 +289,33 @@ public class ChatController {
 		return "forward:/reservation/addReservation?chatNo="+chatNo;
 	}
 	
-	@RequestMapping(value="deleteChat", method=RequestMethod.GET)
+	@RequestMapping(value="deleteChatMember", method=RequestMethod.GET)
 	public int deleteChat( HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
-		System.out.println("chat/deleteChat : GET");
+		System.out.println("chat/deleteChatMember : GET");
+		
+		Integer chatNo = Integer.parseInt(request.getParameter("chatNo"));
+		System.out.println("deleteChatMember chatNo : " + chatNo);
+		
+		//Business Logic
+		Chat chat = chatService.getChat(chatNo);
+		System.out.println("getChatEntrance chat : " + chat);
+		
+		Member member = (Member)session.getAttribute("member");
+		System.out.println("getChatEntrance member : " + member);
+		
+		//입장하는 사람이 개설자인지 참여자인지 체크
+		String chatLeaderId = chat.getChatLeaderId().getMemberId();
+		String memberId = member.getMemberId();
+		
+		if(chatLeaderId.equals(memberId)) {
+			//개설자로 들어갔을 때
+			System.out.println("개설자야");
+			//chatService.deleteAllChatMember(chatMember2);
+		}else {
+			//참가자로 들어갔을 때
+			System.out.println("참가자야");
+		}
+		
 		return 1;
 	}
 	

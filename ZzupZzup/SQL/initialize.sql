@@ -35,7 +35,7 @@ CREATE TABLE `member` (
     `age_range` VARCHAR(6),
     `birth_year` INT,
     `gender` VARCHAR(6),
-    `profile_image` VARCHAR(50) NOT NULL DEFAULT 'defaultImage.jpg',
+    `profile_image` VARCHAR(50) NOT NULL DEFAULT 'defaultImage.png',
     `nickname` VARCHAR(10),
     `status_message` VARCHAR(100) DEFAULT '',
     `activity_score` INT NOT NULL DEFAULT 0,

@@ -139,6 +139,7 @@
 			}
 		});
 
+		//autocomplete 목록 클릭 했을 때 값 들어가기
 		$("body").on("click", ".ui-menu-item-wrapper", function() {
 			console.log(autoResArr);
 			let restaurantNo = autoResArr.restaurantNo;
@@ -151,6 +152,22 @@
 			$("#restaurantTel").val(restaurantTel);
 			$("#streetAddress").val(restaurantSAddr);
 			$("#areaAddress").val(restaurantAAddr);
+		});
+		//autocomplete 목록 엔터 했을 때 값 들어가기
+		$("body").on("keydown", "#restaurantName", function(e) {
+			if(e.keyCode == 13){
+				console.log(autoResArr);
+				let restaurantNo = autoResArr.restaurantNo;
+				let restaurantName = autoResArr.restaurantName;
+				let restaurantTel = autoResArr.restaurantTel;
+				let restaurantSAddr = autoResArr.restaurantSAddr;
+				let restaurantAAddr = autoResArr.restaurantAAddr;
+	
+				$("#restaurantNo").val(restaurantNo);
+				$("#restaurantTel").val(restaurantTel);
+				$("#streetAddress").val(restaurantSAddr);
+				$("#areaAddress").val(restaurantAAddr);
+			}
 		});
 
 		//==>연령대 무관 클릭시 나머지 연령대 체크 해제

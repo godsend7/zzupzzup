@@ -64,8 +64,8 @@
 		             		var result = results[0];
 			            	//console.log(result.y);
 			            	//console.log(result.x);
-			            	$("input[name='latitude']").val(result.x);
-			            	$("input[name='longitude']").val(result.y);
+			            	$("input[name='latitude']").val(result.y);
+			            	$("input[name='longitude']").val(result.x);
 						}	
 		            });
 	                
@@ -107,6 +107,7 @@
 	    }
 		
 		$(function(){
+			//console.log("${param.memberId}");
 			// RESTAURANT_NAME AUTOCOMPLETE
 			var autoComplete = [];			
 			
@@ -330,7 +331,9 @@
 	<form class="form-horizontal" id="addRestaurant">
 	
 	<input type="hidden" name="member.memberId" value="${member.memberId}">
+	<input type="hidden" name="member.memberId" value="${param.memberId}">
 	<input type="hidden" name="member.memberName" value="${member.memberName}">
+	<input type="hidden" name="member.memberName" value="${param.memberName}">
 	
 	<div class="form-group">
 		<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>
