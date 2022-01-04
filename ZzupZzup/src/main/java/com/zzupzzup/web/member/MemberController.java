@@ -5,8 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,11 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.domain.Member;
-import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.member.MemberService;
 
 @Controller
@@ -136,6 +131,8 @@ public class MemberController {
 		memberIdSet.setMemberId(memberId);
 		Member member = memberService.getMember(memberIdSet);
 		
+		System.out.println("!!!! "+member.getMemberPhone());
+		
 		model.addAttribute("member", member);
 		
 		return "forward:/member/getMember.jsp";
@@ -158,17 +155,30 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="updateMember", method=RequestMethod.GET)
-	public void updateMember() {
+	public String updateMember(@RequestParam("memberId") String memberId, HttpServletRequest request) throws Exception {
 		
+		System.out.println("/member/updateMember : GET");
+		
+		Member memberIdSet = new Member();
+		memberIdSet.setMemberId(memberId);
+		Member member = memberService.getMember(memberIdSet);
+		
+		request.setAttribute("member", member);
+		
+		return "forward:/member/updateMemberView.jsp";
 	}
 	
 	public void updateOwner() {
 		
 	}
 	
-	public void calculateActivityScore() {
+	public void deleteMember() {
 		
 	}
+	
+//	public void calculateActivityScore() {
+//		
+//	}
 	
 	public void calculateMannerScore() {
 		

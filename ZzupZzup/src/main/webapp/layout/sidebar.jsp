@@ -27,9 +27,15 @@
 				
 				<!-- profile image start -->
 				<div class="col-md" align="center">
-					<img
-						src="/resources/images/uploadImages/${member.profileImage}"
-						class="avatar-img rounded-circle" width="150" /> <br />
+					<c:if test="${member.profileImage == 'defaultImage.png'}">
+						<img src="/resources/images/${member.profileImage}"
+						class="avatar-img rounded-circle" width="150" height="150" />
+					</c:if>
+					<c:if test="${member.profileImage != 'defaultImage.png'}">
+						<img src="/resources/images/uploadImages/${member.profileImage}"
+						class="avatar-img rounded-circle" width="150" height="150"/>
+					</c:if>
+					<br />
 					<div class="d-flex justify-content-center">
 						<div class="col-md">
 							<h4>

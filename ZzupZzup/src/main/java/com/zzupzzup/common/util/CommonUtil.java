@@ -108,6 +108,10 @@ public class CommonUtil {
 		}
 	}
 	
+	public static String returnTelNum(String num1, String num2, String num3) {
+		return num1+"-"+num2+"-"+num3;
+	}
+	
 	public static String intToStringMenuType(int menuType) {
 		
 		String typeName = "";

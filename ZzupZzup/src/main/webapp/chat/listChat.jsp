@@ -226,7 +226,7 @@
 								<c:forEach var="chat" items="${list}">
 									<c:set var="i" value="${ i+1 }" />
 									<div class="col-md-6">
-										<div class="card mb-4 shadow-sm">
+										<div class="card mb-4 shadow-sm chat-state${chat.chatState}">
 											<div class="card-head">
 												<span class="badge badge-secondary chat-no">${chat.chatNo }</span>
 												<c:choose>
@@ -242,6 +242,9 @@
 													<c:when test="${chat.chatState=='4'}">
 														<span class="badge badge-danger chat-state">모임완료</span>
 													</c:when>
+													<c:otherwise>
+														<span class="badge badge-secondary chat-state">폭파된방</span>
+													</c:otherwise>
 												</c:choose>
 											</div>
 											<div class="card-img">
@@ -265,10 +268,10 @@
 															<p class="card-text text-right">${chat.chatRestaurant.streetAddress}</p>
 														</div>
 														<div class="btn-group">
-															<a href="/rating/addRating?chatNo=${chat.chatNo}"
-																class="button small primary">평가하기</a> <a
-																href="/chat/json/getChat/${chat.chatNo}"
-																class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal">참여하기</a>
+															<c:if test="${chat.chatState == 4}">
+																<a href="/rating/addRating?chatNo=${chat.chatNo}" class="button small primary">평가하기</a> 
+															</c:if>
+															<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal">참여하기</a>
 														</div>
 													</div>
 											</div>

@@ -45,7 +45,13 @@ public interface ChatDAO {
 	public ChatMember getChatMember(int chatNo, String memberId) throws Exception;
 	
 	// Update
+	public int updateChatMember(ChatMember chatMember) throws Exception;
+		
+	// Update
 	public int deleteChatMember(ChatMember chatMember) throws Exception;
+	
+	// Update
+	public int deleteAllChatMember(ChatMember chatMember) throws Exception;
 	
 	// Update
 	public int updateReadyCheck(ChatMember chatMember) throws Exception;
