@@ -227,6 +227,20 @@ public class RestaurantController {
 		
 	}
 	
+	@RequestMapping(value="deleteRestaurant", method=RequestMethod.GET)
+	public String deleteRestaurant(@RequestParam("restaurantNo") int restaurantNo) throws Exception {
+		
+		System.out.println("/restaurant/listRestaurant : GET");
+		
+		System.out.println("DELETE TO : " + restaurantNo);
+		
+		restaurantService.deleteRestaurant(restaurantNo);
+		
+		System.out.println("SUCCESS OF DELETE RESTAURANT");
+		
+		return "redirect:/restaurant/listRestaurant";
+	}
+	
 	private void uploadFilePath(MultipartHttpServletRequest uploadFile, String empty, Restaurant restaurant) {
 		
 		List<MultipartFile> fileList = uploadFile.getFiles("file");
