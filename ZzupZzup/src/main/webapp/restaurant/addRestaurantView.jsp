@@ -64,8 +64,8 @@
 		             		var result = results[0];
 			            	//console.log(result.y);
 			            	//console.log(result.x);
-			            	$("input[name='latitude']").val(result.x);
-			            	$("input[name='longitude']").val(result.y);
+			            	$("input[name='latitude']").val(result.y);
+			            	$("input[name='longitude']").val(result.x);
 						}	
 		            });
 	                
@@ -107,6 +107,7 @@
 	    }
 		
 		$(function(){
+			//console.log("${param.memberId}");
 			// RESTAURANT_NAME AUTOCOMPLETE
 			var autoComplete = [];			
 			
@@ -234,7 +235,7 @@
 				return;
 			}
 		
-			$("#restaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").attr("enctype", "multipart/form-data").submit();
+			$("#addRestaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").attr("enctype", "multipart/form-data").submit();
 			
 		}
 		
@@ -321,16 +322,18 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="">	
+				<section id="restaurant">	
 
 <div class="container">
 
 	<h2>음식점 등록하기</h2><hr>
 	
-	<form class="form-horizontal" id="restaurant">
+	<form class="form-horizontal" id="addRestaurant">
 	
 	<input type="hidden" name="member.memberId" value="${member.memberId}">
+	<input type="hidden" name="member.memberId" value="${param.memberId}">
 	<input type="hidden" name="member.memberName" value="${member.memberName}">
+	<input type="hidden" name="member.memberName" value="${param.memberName}">
 	
 	<div class="form-group">
 		<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>

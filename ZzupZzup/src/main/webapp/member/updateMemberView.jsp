@@ -126,41 +126,11 @@
 													</div>
 												</div> --%>
 											</c:if>
-											<c:if test="${sessionScope.member.memberRole == 'admin'}">
-												<h5>${member.memberId}</h5>
-												<div class="form-row col-md-9">
-													<div class="col-md-6">
-														<label for="regDate">가입일</label> <span id="regDate"
-															style="font-weight: bold">${member.regDate}</span>
-													</div>
-													<div class="col-md-6">
-														<label for="reportCount">신고 당한 횟수</label> <span
-															id="reportCount" style="font-weight: bold">${member.reportCount}</span>
-													</div>
-												</div>
-												<br/>
-												<div class="form-row col-md-9">
-													<c:if test="${! empty member.deleteDate}">
-														<div class="col-md-6">
-															<label for="deleteDate">탈퇴일</label> <span id="deleteDate"
-																style="font-weight: bold">${member.deleteDate}</span>
-														</div>
-													</c:if>
-													<c:if test="${! empty member.blacklistDate}">
-														<div class="col-md-6">
-															<label for="blacklistDate">블랙리스트</label> <span id="blacklistDate"
-																style="font-weight: bold">${member.blacklistDate}</span>
-														</div>
-													</c:if>
-												</div>
-											</c:if>
 										</div>
-										<c:if test="${sessionScope.member.memberRole != 'admin'}">
-											<a href="#" style="float:right;color:#bfbfbf">회원탈퇴</a>
-										</c:if>
+										<a href="#" style="float:right;color:#bfbfbf">회원탈퇴</a>
 										<br>
-										<c:if test="${sessionScope.member.memberRole == 'user'}">
 										<hr class="my-4" />
+										<c:if test="${sessionScope.member.memberRole == 'user'}">
 											<div class="form-row">
 												<div class="col-6">
 													<label for="memberName">이름</label> <span id="memberName"
@@ -230,6 +200,34 @@
 													</c:forEach>
 												</c:if> --%>
 												<br/>
+											</div>
+										</c:if>
+										<c:if test="${sessionScope.member.memberRole == 'admin'}">
+											<hr class="my-4"/>
+											<div class="form-row">
+												<div class="col-6">
+													<label for="regDate">가입일</label> <span id="regDate"
+														style="font-weight: bold">${member.regDate}</span>
+												</div>
+												<div class="col-6">
+													<label for="reportCount">신고 당한 횟수</label> <span
+														id="reportCount" style="font-weight: bold">${member.reportCount}</span>
+												</div>
+											</div>
+											<br/>
+											<div class="form-row">
+												<c:if test="${! empty member.deleteDate}">
+													<div class="col-6">
+														<label for="deleteDate">탈퇴일</label> <span id="deleteDate"
+															style="font-weight: bold">${member.deleteDate}</span>
+													</div>
+												</c:if>
+												<c:if test="${! empty member.blacklistDate}">
+													<div class="col-6">
+														<label for="blacklistDate">블랙리스트</label> <span id="blacklistDate"
+															style="font-weight: bold">${member.blacklistDate}</span>
+													</div>
+												</c:if>
 											</div>
 										</c:if>
 										<hr class="my-4" />

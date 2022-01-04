@@ -75,7 +75,7 @@
 						<form id="restaurant">
 						
 							<div class="page-header">
-						       <h2 class=" text-danger">심사 대기중인 음식점 정보입니다.</h2>
+						       <h3 class=" text-danger">심사 대기중인 음식점 정보입니다.</h3>
 						    </div><hr>
 						    
 						    <input type="hidden" name="restaurantNo" value="${restaurant.restaurantNo}" />
@@ -92,10 +92,12 @@
 							</div><br>
 							
 							<div class="row">
-						  		<div class="col-xs-4 col-md-2"><strong>음식점 주소</strong></div>
-								<div class="col-xs-8 col-md-4">${restaurant.streetAddress}</div><br>
-								<div class="col-xs-8 col-md-4">${restaurant.areaAddress}</div><br>
-								<div class="col-xs-8 col-md-4">${restaurant.restAddress}</div><br>
+						  		<div class="col-md-2"><strong>음식점 주소</strong></div>
+								<div class="col-md-3"><span class="badge badge-secondary">도로명주소</span> ${restaurant.streetAddress}</div>
+								<div class="col-md-3"><span class="badge badge-secondary">지번주소</span> ${restaurant.areaAddress}</div>
+								<c:if test="${!empty restaurant.restAddress}">
+									<div class="col-md-4"><span class="badge badge-secondary">상세주소</span> ${restaurant.restAddress}</div>
+								</c:if>
 							</div><br>
 							
 							<div class="row">
@@ -105,12 +107,35 @@
 							
 							<div class="row">
 						  		<div class="col-xs-4 col-md-2"><strong>음식점 메뉴</strong></div>
-								<div class="col-xs-8 col-md-4">${restaurant.restaurantMenus}</div>
+								<div class="col-xs-8 col-md-4">
+								<c:set var="i" value="0"/>
+								<c:forEach var="menus" items="${restaurant.restaurantMenus}">
+									<div>
+									${menus.menuTitle} &nbsp; ${menus.menuPrice}원 &nbsp;
+									<c:if test="${menus.mainMenuStatus}">
+										<span class="badge badge-success">메인메뉴</span>
+									</c:if>
+									</div>
+								</c:forEach>
+								</div>
 							</div><br>
 							
 							<div class="row">
 						  		<div class="col-xs-4 col-md-2"><strong>음식점 운영시간</strong></div>
-								<div class="col-xs-8 col-md-4">${restaurant.restaurantTimes}</div>
+								<div class="col-xs-8 col-md-4">
+								<c:set var="i" value="0"/>
+								<c:forEach var="times" items="${restaurant.restaurantTimes}">
+									<div>
+									${times.restaurantOpen} ~ ${times.restaurantClose}
+									<c:if test="${!empty times.restaurantBreak}">
+										, break at ${times.restaurantBreak}
+									</c:if>
+									<c:if test="${!empty times.restaurantLastOrder}">
+										, LastOrder Time is ${times.restaurantLastOrder}
+									</c:if>
+									</div>
+								</c:forEach>
+								</div>
 							</div><br>
 							
 							<div class="row">

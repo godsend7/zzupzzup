@@ -333,7 +333,7 @@ public class ChatServiceTest {
 		
 		System.out.println("search : " + search);
 		
-		Map<String, Object> map = chatService.listReadyCheckMember(search, chatMember.getChatNo());
+		Map<String, Object> map = chatService.listReadyCheckMember(chatMember.getChatNo());
 		System.out.println("===================================");
 		System.out.println("testListChat map : " + map);
 		System.out.println("===================================");
