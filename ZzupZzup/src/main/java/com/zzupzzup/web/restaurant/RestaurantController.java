@@ -58,7 +58,7 @@ public class RestaurantController {
 	
 	///Method
 	@RequestMapping(value="addRestaurant", method=RequestMethod.GET)
-	public String addRestaurant(@RequestParam("memberId") String memberId) throws Exception {
+	public String addRestaurant() throws Exception {
 		
 		System.out.println("/restaurant/addRestaurant : GET");
 		//System.out.println("memberId : "+memberId);
@@ -225,6 +225,20 @@ public class RestaurantController {
 		
 		return "redirect:/";
 		
+	}
+	
+	@RequestMapping(value="deleteRestaurant", method=RequestMethod.GET)
+	public String deleteRestaurant(@RequestParam("restaurantNo") int restaurantNo) throws Exception {
+		
+		System.out.println("/restaurant/listRestaurant : GET");
+		
+		System.out.println("DELETE TO : " + restaurantNo);
+		
+		restaurantService.deleteRestaurant(restaurantNo);
+		
+		System.out.println("SUCCESS OF DELETE RESTAURANT");
+		
+		return "redirect:/restaurant/listRestaurant";
 	}
 	
 	private void uploadFilePath(MultipartHttpServletRequest uploadFile, String empty, Restaurant restaurant) {
