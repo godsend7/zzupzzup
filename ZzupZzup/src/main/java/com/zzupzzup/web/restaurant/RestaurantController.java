@@ -255,7 +255,7 @@ public class RestaurantController {
 	
 	private void uploadFilePath(MultipartHttpServletRequest uploadFile, String empty, Restaurant restaurant) {
 		
-		List<MultipartFile> fileList = uploadFile.getFiles("file");
+		List<MultipartFile> fileList = uploadFile.getFiles("multiFile");
 		
 		List<String> resImg = new ArrayList<String>();
 		

@@ -16,8 +16,8 @@ public class Community {
 	private String streetAddress;
 	private String areaAddress;
 	private String restAddress;
-	private String latitude;
-	private String longitude;
+	private String latitude; // 위도
+	private String longitude; // 경도
 	private String restaurantName;
 	private String restaurantTel;
 	////////////EL 적용 ////////////

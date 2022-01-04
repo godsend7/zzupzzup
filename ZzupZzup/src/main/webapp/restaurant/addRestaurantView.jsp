@@ -69,8 +69,6 @@
 						}	
 		            });
 	                
-	                
-	                
 	                $("#streetAddress").val(roadAddr);
 	                $("#areaAddress").val(data.jibunAddress);
 	                
@@ -190,6 +188,7 @@
 	</script>
 
 	<script type="text/javascript">
+	
 		var index = 1;
 		
 		function fncAddRestaurant(){
@@ -200,6 +199,9 @@
 			var areaAddress = $("input[name='areaAddress']").val();
 			var restAddress = $("input[name='restAddress']").val();
 			var menuType = $("select[name='menuType']").val();
+			var menuTitle = $("input[name='restaurantMenus[0].menuTitle']").val();
+			var menuPrice = $("input[name='restaurantMenus[0].menuPrice']").val();
+			var ownerImage = $("input[id='ownerImage']").val();
 			/* var restaurantImage = $("input[name='restaurantImage[0].restaurantImage']").val(); */
 			
 			console.log(restaurantName);
@@ -231,9 +233,26 @@
 			} */
 			
 			if(menuType == null || menuType.length<1){
-				alert("음식 종류를 선책해주세요");
+				alert("음식 종류를 선택해주세요");
 				return;
 			}
+			
+			if(menuTitle == null || menuTitle.length<1){
+				alert("메뉴명은 최소 한가지 입력해 주셔야 합니다.");
+				return;
+			}
+			
+			if(menuPrice == null || menuPrice.length<1){
+				alert("메뉴가격은 최소 한가지 입력해 주셔야 합니다.");
+				return;
+			}
+			
+			if(ownerImage == null || ownerImage.length<1){
+				alert("사업자 등록증 이미지는 필수로 첨부해주셔야 합니다.");
+				return;
+			}
+			
+			alert("등록 요청이 완료되었습니다. 관리자의 심사 후 승인 시 정식으로 등록됩니다.");
 		
 			$("#addRestaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").attr("enctype", "multipart/form-data").submit();
 			
@@ -244,7 +263,6 @@
 			$(function() {
 				// 등록 버튼 실행
 				$( "#button1" ).on("click" , function() {
-					alert("등록 요청이 완료되었습니다. 관리자의 심사 후 승인 시 정식으로 등록됩니다.");
 					fncAddRestaurant();
 				});
 				
@@ -346,7 +364,7 @@
 			<label for="ownerImage">사업자 등록증 이미지</label>
 			<input type="file" name="file" id="ownerImage">
 		</div>	
-	</div>
+	</div><br>
 		
 	<div class="form-group">
 		<label for="restaurantTel" class="col-sm-offset-1 col-sm-3 control-label">음식점 전화번호</label>
@@ -743,7 +761,7 @@
 	
 	<div class="col-sm-4">
 		<label for="restaurantImage">음식점 이미지</label>
-		<input type="file" id="file" name="file" multiple="multiple">
+		<input type="file" id="file" name="multiFile" multiple="multiple">
 		
 		<!-- <input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
 		<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">

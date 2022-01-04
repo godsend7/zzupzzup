@@ -95,6 +95,7 @@
 				<div class="row">
 			  		<div class="col-xs-4 col-md-2"><strong>음식점 사진</strong></div>
 					<div class="col-xs-8 col-md-4">${restaurant.restaurantImage}</div>
+					<div class="col-xs-8 col-md-4">${restaurant.ownerImage}</div>
 				</div>
 				
 			</form><hr>
