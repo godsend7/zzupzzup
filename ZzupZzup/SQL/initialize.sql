@@ -196,7 +196,7 @@ CREATE TABLE `reservation` (
     `member_count` INT NOT NULL,
     `reservation_status` INT NOT NULL,
     `fixed_status` BOOLEAN NOT NULL,
-    `reservation_date` DATE NOT NULL,
+    `reservation_date` DATETIME NOT NULL,
     `total_price` INT NOT NULL,
     `pay_option` INT NOT NULL,
     `pay_method` INT,

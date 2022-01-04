@@ -331,9 +331,7 @@
 	<form class="form-horizontal" id="addRestaurant">
 	
 	<input type="hidden" name="member.memberId" value="${member.memberId}">
-	<input type="hidden" name="member.memberId" value="${param.memberId}">
 	<input type="hidden" name="member.memberName" value="${member.memberName}">
-	<input type="hidden" name="member.memberName" value="${param.memberName}">
 	
 	<div class="form-group">
 		<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>
@@ -341,6 +339,13 @@
 			<input type="text" class="toAutocomplete" id="restaurantName" name="restaurantName" placeholder="음식점명" autocomplete="off" maxlength="50" required>
 			<p class="fromAutocomplete"></p>
 		</div>
+	</div>
+	
+	<div class="form-group">
+		<div class="col-sm-4">
+			<label for="ownerImage">사업자 등록증 이미지</label>
+			<input type="file" name="file" id="ownerImage">
+		</div>	
 	</div>
 		
 	<div class="form-group">
