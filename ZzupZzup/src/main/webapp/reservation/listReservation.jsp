@@ -18,15 +18,17 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
-		/* function fncPageNavigation(currentPage) {
+	 /* 	function fncPageNavigation(currentPage) {
 			   document.getElementById("currentPage").value = currentPage;
 		  document.detailForm.submit(); 
 		  console.log(currentPage);
 		  $("#currentPage").val(currentPage);
 		  $("#reservation").attr("action","/reservation/listReservation").attr("method", "POST").submit();
 		}
-		
-		 function fnclistReservation(reservationNo) {
+		  */
+			//////////이전페이지////////////////
+			
+		/*  function fnclistReservation(reservationNo) {
 			 
 			console.log(reservationNo);
 
@@ -39,12 +41,12 @@
 					console.log(data);
 				}
 			}); 
-		}   */
+		}    */
 		
-		$(".reviewWrite").on("click" , function() {
+		/* $(".reviewWrite").on("click" , function() {
 	    	//self.location = "/review/addReview?reservationNo=${reservation.member.memberId}"
 	    	self.location = "/review/addReview?reservationNo=1"
-		});
+		}); */
 		
 </script>
 </head>
@@ -82,7 +84,7 @@
 				
 								<div class="card-body">
 									<h3 class="card-title">${reservation.restaurant.restaurantName}</h3>
-									<h4 class="text-primary card-title">에약번호  <a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h4>
+									<h4 class="text-primary card-title">에약번호<a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h4>
 								
 										<div class="col-6 col-12-xsmall">
 										<label for="nickname">참여자 NickName</label> 
@@ -96,7 +98,7 @@
 										
 										<div class="container">
 										<div class="row">
-									    <div class="col-md-8">
+									    <div class="col-md-8 fixedDate">
 									    <label for="demo-name">방문 확정 후(승인)</label> 
 										<p>${reservation.fixedDate} </div>
 									    <div class="col-6 col-md-4">

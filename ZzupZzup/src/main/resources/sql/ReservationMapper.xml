@@ -114,11 +114,11 @@
 	 <update id="updateReservation" parameterType="reservation">
 		UPDATE RESERVATION
 	   	<set>
-	   		FIXED_DATE = NOW(),
+	   		FIXED_DATE = now(),
 			RESERVATION_STATUS = #{reservationStatus},
 		<choose>
 			<when test='member.memberRole == "user"'>	
-           	CANCEL_DATE = NOW()
+           	CANCEL_DATE = now()
  		  	</when>
  		  	<otherwise>
  		  	FIXED_STATUS = #{fixedStatus},
