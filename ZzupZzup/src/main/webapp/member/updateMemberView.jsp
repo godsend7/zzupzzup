@@ -18,7 +18,9 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
 	$(function() {
-		console.log("getMember.jsp");
+		console.log("updateMemberView.jsp");
+		var memberRole = ${sessionScope.member.memberRole};
+		var checkBlacklist = $("#regBlacklist").prop("checked");
 		
 		$("#updateMember").on("click", function() {
 			location.href = "/member/updateMember";
@@ -49,9 +51,17 @@
 										<div class="row mt-5 align-items-center">
 											<div class="col-md-3 mb-5">
 												<div class="col-md" align="center">
-													<img
-														src="/resources/images/uploadImages/${member.profileImage}"
-														class="avatar-img rounded-circle" width="150" /> <br />
+													<c:if test="${member.profileImage == 'defaultImage.png'}">
+														<img
+															src="/resources/images/${member.profileImage}"
+															class="avatar-img rounded-circle" width="150" height="150"/>
+													</c:if>
+													<c:if test="${member.profileImage != 'defaultImage.png'}">
+														<img
+															src="/resources/images/uploadImages/${member.profileImage}"
+															class="avatar-img rounded-circle" width="150" height="150"/>
+													</c:if>
+													<br />
 													<c:if test="${sessionScope.member.memberRole == 'user'}">
 														<span
 															id="mannerScore" style="font-weight: bold">
@@ -109,27 +119,30 @@
 														${member.memberPhone}
 													</div>
 												</div>
-												
-												<%-- <div class="form-row">
-													<div class="col-12">
-														<h4>이름<span>${member.memberName}</span></h4>
+											</c:if>
+											<c:if test="${sessionScope.member.memberRole == 'admin'}">
+												<div class="form-row col-md-9" style="margin-bottom:40px">
+													<div class="col-md-2">
+														<label>이름</label>
+													</div>
+													<div class="col-md-10">
+														<h5>${member.memberName}</h5>
+													</div>
+													<br/>
+													<div class="col-md-2">
+														<label>아이디</label>
+													</div>
+													<div class="col-md-10">
+														<h5>${member.memberId}</h5>
 													</div>
 												</div>
-												<div class="form-row">
-													<div class="col-12">
-														<h4>아이디<span>${member.memberId}</span></h4>
-													</div>
-												</div>
-												<div class="form-row">
-													<div class="col-12">
-														<h4>전화번호<span>${member.memberPhone}</span></h4>
-													</div>
-												</div> --%>
 											</c:if>
 										</div>
-										<a href="#" style="float:right;color:#bfbfbf">회원탈퇴</a>
-										<br>
-										<hr class="my-4" />
+										<c:if test="${sessionScope.member.memberRole != 'admin'}">
+											<a href="#" style="float:right;color:#bfbfbf">회원탈퇴</a>
+											<br/>
+											<hr class="my-4" />
+										</c:if>
 										<c:if test="${sessionScope.member.memberRole == 'user'}">
 											<div class="form-row">
 												<div class="col-6">
@@ -172,15 +185,14 @@
 													<h4 align="left"><strong>등록된 음식점 목록</strong></h4>
 												</div>
 												<div class="col-6">
-													<a href="/restaurant/addRestaurant?memberId=${member.memberId}">
+													<a href="/restaurant/addRestaurant">
 														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16" id="addRestaurant-ownerPage" style="float:right;">
 														  <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
 														</svg>
 													</a>
 												</div>
 												<!-- 등록된 음식점 수 띄우기 -->
-												<%-- <c:if test="${restaurant.member.memberId == member.memberId}">
-													<c:set var="i" value="0" />
+												<c:if test="${restaurant.member.memberId == member.memberId}">
 													<c:forEach var="restaurant" items="${list}">
 														<div class="col-12">
 															<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
@@ -198,41 +210,46 @@
 															</div>
 														</div>
 													</c:forEach>
-												</c:if> --%>
-												<br/>
+												</c:if>
 											</div>
 										</c:if>
 										<c:if test="${sessionScope.member.memberRole == 'admin'}">
 											<hr class="my-4"/>
-											<div class="form-row">
-												<div class="col-6">
+											<div class="form-row col-md-12">
+												<div class="col-md-6">
 													<label for="regDate">가입일</label> <span id="regDate"
 														style="font-weight: bold">${member.regDate}</span>
 												</div>
-												<div class="col-6">
+												<div class="col-md-6">
 													<label for="reportCount">신고 당한 횟수</label> <span
 														id="reportCount" style="font-weight: bold">${member.reportCount}</span>
 												</div>
 											</div>
 											<br/>
-											<div class="form-row">
+											<div class="form-row col-md-12">
 												<c:if test="${! empty member.deleteDate}">
-													<div class="col-6">
+													<div class="col-md-6">
 														<label for="deleteDate">탈퇴일</label> <span id="deleteDate"
 															style="font-weight: bold">${member.deleteDate}</span>
 													</div>
 												</c:if>
 												<c:if test="${! empty member.blacklistDate}">
-													<div class="col-6">
-														<label for="blacklistDate">블랙리스트</label> <span id="blacklistDate"
+													<div class="col-md-6">
+														<label for="blacklistDate">블랙리스트</label>
+														<span id="blacklistDate"
 															style="font-weight: bold">${member.blacklistDate}</span>
+													</div>
+													<div class="checkbox mb-12">
+														<br/>
+														<input type="checkbox" class="custom-control-input" id="regBlacklist" value="" style="float:right;"/> 
+														<label for="regBlacklist">블랙리스트 설정/해제하기</label>
 													</div>
 												</c:if>
 											</div>
 										</c:if>
 										<hr class="my-4" />
 										<input type="button" style="float: right" id="updateMember"
-											class="btn btn-primary" value="수정하기" />
+											class="btn btn-primary" value="수정" />
 									</form>
 								</div>
 							</div>
