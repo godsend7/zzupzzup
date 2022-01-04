@@ -116,6 +116,11 @@ public class ChatServiceImpl implements ChatService {
 	}
 	
 	@Override
+	public int deleteAllChatMember(ChatMember chatMember) throws Exception {
+		return chatDao.deleteAllChatMember(chatMember);
+	}
+	
+	@Override
 	public int updateReadyCheck(ChatMember chatMember) throws Exception {
 		return chatDao.updateReadyCheck(chatMember);
 	}

@@ -51,6 +51,9 @@ public interface ChatDAO {
 	public int deleteChatMember(ChatMember chatMember) throws Exception;
 	
 	// Update
+	public int deleteAllChatMember(ChatMember chatMember) throws Exception;
+	
+	// Update
 	public int updateReadyCheck(ChatMember chatMember) throws Exception;
 	
 	// Select List

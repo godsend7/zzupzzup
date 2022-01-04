@@ -367,7 +367,7 @@ VALUES('1', '짜장면', '3500', '0');
 -- chat
 INSERT INTO CHAT (chat_leader_id, restaurant_no, chat_title, chat_text, chat_gender, age_type) VALUES ('hihi@a.com',1,'쩝쩝친구 구해유','소개한다',1,'1,2,3');
 -- chat_member
-INSERT INTO chat_member (chat_no, chat_member_id) VALUES (1,'hihi@a.com');
+INSERT INTO chat_member (chat_no, chat_member_id, ready_check, chat_leader_check) VALUES (1,'hihi@a.com',1,1);
 -- chat_log
 INSERT INTO chat_log (chat_no, chat_contents, chat_time) VALUES (1,'하이하이','2021-01-01');
 -- rating
