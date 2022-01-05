@@ -14,6 +14,57 @@
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
 
+  .img{
+    width: auto;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  /* 이미지 클릭 시, 밝기 조절 */
+  .img:hover {opacity: 0.8;}
+
+  .modal {
+    display: none; /* 모달창 숨겨 놓기 */
+    position: fixed; 
+    z-index: 1; /* 모달창을 제일 앞에 두기 */
+    padding-top: 100px;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    overflow: auto; /* 스크롤 허용 auto */
+    cursor: pointer; /* 마우스 손가락모양 */
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  /* 모달창 이미지 */
+  .modal_content {
+    margin: auto;
+    display: block;
+    width: 50%; height: auto;
+    max-width: 1000px;
+    border-radius: 10px;
+    animation-name: zoom;
+    animation-duration: 0.8s;
+  }
+  /* 모달창 애니메이션 추가 */
+  @keyframes zoom {
+    from {transform: scale(0)}
+    to {transform: scale(1)}
+  }
+  /* 닫기 버튼 꾸미기 */
+  .imgClose {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+  .imgClose:hover, .imgClose:focus{
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -52,6 +103,40 @@
 				});
 			});
 		});
+		
+		// MODAL IMAGE
+		$(function() {
+			
+			const modal = document.querySelector(".modal");
+			//const img = document.querySelector(".img");
+			const modal_img = document.querySelector(".modal_content");
+			const span = document.querySelector(".imgClose");
+			
+			const $img = $(".img");
+			$img.on("click" , function(){
+				let img_src = $(this).attr("src");
+				modalDisplay("block");
+				  modal_img.src = img_src;
+			});
+
+			/* img.addEventListener('click', ()=>{
+				console.log('img');
+			  modalDisplay("block");
+			  modal_img.src = img.src;
+			}); */
+			span.addEventListener('click', ()=>{
+			  modalDisplay("none");
+			});
+			modal.addEventListener('click', ()=>{
+			  modalDisplay("none");
+			});
+			
+			function modalDisplay(text){
+			  modal.style.display = text;
+			}
+			
+		});
+		
 	}
 	
 </script>
@@ -145,7 +230,8 @@
 									</div>
 								</c:forEach> --%>
 								
-								<div class="col">
+								<!-- ************* 월요일 ************* -->
+								<div class="col" style="padding-left: 0px;">
 									<c:if test="${restaurant.restaurantTimes[0].restaurantDayOff eq 'true'}">
 										월요일 휴무
 									</c:if>
@@ -167,7 +253,7 @@
 								</div>
 								
 								<!-- ************* 화요일 ************* -->
-								<div class="col">
+								<div class="col" style="padding-left: 0px;">
 									<c:if test="${restaurant.restaurantTimes[1].restaurantDayOff eq 'true'}">
 										화요일 휴무
 									</c:if>
@@ -189,7 +275,7 @@
 								</div>
 								
 								<!-- ************* 수요일 ************* -->
-								<div class="col">
+								<div class="col" style="padding-left: 0px;">
 									<c:if test="${restaurant.restaurantTimes[2].restaurantDayOff eq 'true'}">
 										수요일 휴무
 									</c:if>
@@ -211,7 +297,7 @@
 								</div>
 								
 								<!-- ************* 목요일 ************* -->
-								<div class="col">
+								<div class="col" style="padding-left: 0px;">
 									<c:if test="${restaurant.restaurantTimes[3].restaurantDayOff eq 'true'}">
 										목요일 휴무
 									</c:if>
@@ -233,7 +319,7 @@
 								</div>
 								
 								<!-- ************* 금요일 ************* -->
-								<div class="col">
+								<div class="col" style="padding-left: 0px;">
 									<c:if test="${restaurant.restaurantTimes[4].restaurantDayOff eq 'true'}">
 										금요일 휴무
 									</c:if>
@@ -255,7 +341,7 @@
 								</div>
 								
 								<!-- ************* 토요일 ************* -->
-								<div class="col">
+								<div class="col" style="padding-left: 0px;">
 									<c:if test="${restaurant.restaurantTimes[5].restaurantDayOff eq 'true'}">
 										토요일 휴무
 									</c:if>
@@ -277,7 +363,7 @@
 								</div>
 								
 								<!-- ************* 일요일 ************* -->
-								<div class="col">
+								<div class="col" style="padding-left: 0px;">
 									<c:if test="${restaurant.restaurantTimes[6].restaurantDayOff eq 'true'}">
 										일요일 휴무
 									</c:if>
@@ -299,15 +385,21 @@
 								</div>
 								
 								</div>
-							</div><br>
+							</div><br><br>
 							
 							<div class="row">
 						  		<div class="col-xs-4 col-md-2"><strong>음식점 사진</strong></div>
-								<div class="col-xs-8 col-md-4">
-								<c:set var="i" value="0" />
-								<c:forEach var="imgs" items="${restaurant.restaurantImage}">
-									<div><img alt="../resources/images/uploadImages/${imgs}" /></div>
-								</c:forEach>
+								<div class="col-xs-8 col-md-10 row" style="border: 1px solid pink; border-radius: 0.5em; padding-left: 0;">
+									<c:set var="i" value="0" />
+									<c:forEach var="imgs" items="${restaurant.restaurantImage}">
+										<div style="padding-top: 20px; padding-bottom: 20px; height: 140px;">
+											<img class="img" id="img" src="/resources/images/uploadImages/${imgs}" width="100px" height="100px" style="padding-left: 0;"/>
+										</div><br>
+									</c:forEach>
+									<div class="modal">
+									  <span class="imgClose">&times;</span>
+									  <img class="modal_content" id="originalImg">
+									</div>
 								</div>
 							</div><hr>
 						
