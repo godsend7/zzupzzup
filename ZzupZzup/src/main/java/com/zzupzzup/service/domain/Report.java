@@ -1,20 +1,31 @@
 package com.zzupzzup.service.domain;
 
+import java.sql.Timestamp;
 import java.util.Date;
+
+import com.zzupzzup.common.ChatMember;
+import com.zzupzzup.common.util.CommonUtil;
 
 public class Report {
 
 	private int reportNo;
 	private int reportCategory;
 	private String memberId;
-	private int reportChatNo;
-	private String reportMemberId;
-	private int reportReviewNo;
-	private int reportPostNo;
-	private int reportRestaurantNo;
-	private Date reportRegDate;
+	private Chat reportChat;
+	private Member reportMember;
+	private Review reportReview;
+	private Community reportPost;
+	private Restaurant reportRestaurant;
+	private Timestamp reportRegDate;
 	private int reportType;
 	private String reportDetail;
+	private boolean reportCheck;
+	
+	//신고 대상 번호(id)
+	private String toReport;
+	
+	//신고 대상 타이틀(닉네임)
+	private String toReportTitle;
 	
 	public Report() {
 		// TODO Auto-generated constructor stub
@@ -44,51 +55,51 @@ public class Report {
 		this.memberId = memberId;
 	}
 
-	public int getReportChatNo() {
-		return reportChatNo;
+	public Chat getReportChat() {
+		return reportChat;
 	}
 
-	public void setReportChatNo(int reportChatNo) {
-		this.reportChatNo = reportChatNo;
+	public void setReportChat(Chat reportChat) {
+		this.reportChat = reportChat;
 	}
 
-	public String getReportMemberId() {
-		return reportMemberId;
+	public Member getReportChatMember() {
+		return reportMember;
 	}
 
-	public void setReportMemberId(String reportMemberId) {
-		this.reportMemberId = reportMemberId;
+	public void setReportChatMember(Member reportMember) {
+		this.reportMember = reportMember;
 	}
 
-	public int getReportReviewNo() {
-		return reportReviewNo;
+	public Review getReportReview() {
+		return reportReview;
 	}
 
-	public void setReportReviewNo(int reportReviewNo) {
-		this.reportReviewNo = reportReviewNo;
+	public void setReportReview(Review reportReview) {
+		this.reportReview = reportReview;
 	}
 
-	public int getReportPostNo() {
-		return reportPostNo;
+	public Community getReportPost() {
+		return reportPost;
 	}
 
-	public void setReportPostNo(int reportPostNo) {
-		this.reportPostNo = reportPostNo;
+	public void setReportPost(Community reportPost) {
+		this.reportPost = reportPost;
 	}
 
-	public int getReportRestaurantNo() {
-		return reportRestaurantNo;
+	public Restaurant getReportRestaurant() {
+		return reportRestaurant;
 	}
 
-	public void setReportRestaurantNo(int reportRestaurantNo) {
-		this.reportRestaurantNo = reportRestaurantNo;
+	public void setReportRestaurant(Restaurant reportRestaurant) {
+		this.reportRestaurant = reportRestaurant;
 	}
 
-	public Date getReportRegDate() {
-		return reportRegDate;
+	public String getReportRegDate() {
+		return CommonUtil.getDate(reportRegDate);
 	}
 
-	public void setReportRegDate(Date reportRegDate) {
+	public void setReportRegDate(Timestamp reportRegDate) {
 		this.reportRegDate = reportRegDate;
 	}
 
@@ -107,13 +118,75 @@ public class Report {
 	public void setReportDetail(String reportDetail) {
 		this.reportDetail = reportDetail;
 	}
+	
+	public boolean isReportCheck() {
+		return reportCheck;
+	}
+
+	public void setReportCheck(boolean reportCheck) {
+		this.reportCheck = reportCheck;
+	}
+	
+	public String getToReport() {
+		if (reportChat != null) {
+			toReportTitle = reportChat.getChatTitle();
+			return toReport = Integer.toString(reportChat.getChatNo());
+		} else if (reportMember != null) {
+			toReportTitle = reportMember.getNickname();
+			return toReport = reportMember.getMemberId();
+		} else if (reportReview != null) {
+			toReportTitle = reportReview.getMember().getNickname();
+			return toReport = Integer.toString(reportReview.getReviewNo());
+		} else if (reportPost != null) {
+			toReportTitle = reportPost.getPostTitle();
+			return toReport = Integer.toString(reportPost.getPostNo());
+		} else if (reportRestaurant != null) {
+			toReportTitle = reportRestaurant.getRestaurantName();
+			return toReport = Integer.toString(reportRestaurant.getRestaurantNo());
+		} else {
+			return toReport;
+		}
+	}
+
+	public void setToReport(String toReport) {
+		//this.toReport = toReport;
+		if (reportCategory == 1) {
+			reportChat = new Chat();
+			reportChat.setChatNo(Integer.parseInt(toReport));
+			System.out.println(reportChat.getChatNo());
+		} else if (reportCategory == 2) {
+			reportMember = new Member();
+			reportMember.setMemberId(toReport);
+			System.out.println(reportMember.getMemberId());
+		} else if (reportCategory == 3) {
+			reportReview = new Review();
+			reportReview.setReviewNo(Integer.parseInt(toReport));
+			System.out.println(reportReview.getReviewNo());
+		} else if (reportCategory == 4) {
+			reportPost = new Community();
+			reportPost.setPostNo(Integer.parseInt(toReport));
+			System.out.println(reportPost.getPostNo());
+		} else if (reportCategory == 5) {
+			reportRestaurant = new Restaurant();
+			reportRestaurant.setRestaurantNo(Integer.parseInt(toReport));
+			System.out.println(reportRestaurant.getRestaurantNo());
+		}
+	}
+	
+	public String getToReportTitle() {
+		return toReportTitle;
+	}
+	
+	public String getReturnReportType() {
+		return CommonUtil.returnReportData(reportCategory, reportType);
+	}
 
 	@Override
 	public String toString() {
 		return "Report [reportNo=" + reportNo + ", reportCategory=" + reportCategory + ", memberId=" + memberId
-				+ ", reportChatNo=" + reportChatNo + ", reportMemberId=" + reportMemberId + ", reportReviewNo="
-				+ reportReviewNo + ", reportPostNo=" + reportPostNo + ", reportRestaurantNo=" + reportRestaurantNo
+				+ ", reportChat=" + reportChat + ", reportChatMember=" + reportMember + ", reportReview="
+				+ reportReview + ", reportPost=" + reportPost + ", reportRestaurant=" + reportRestaurant
 				+ ", reportRegDate=" + reportRegDate + ", reportType=" + reportType + ", reportDetail=" + reportDetail
-				+ "]";
+				+ ", reportCheck=" + reportCheck + ", toReport=" + toReport + "]";
 	}
 }

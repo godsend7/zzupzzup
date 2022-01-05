@@ -118,7 +118,7 @@
 					success : function(data){
 						console.log("바꾸기 성공");
 						$('#reservationRejectionModal').modal("hide");
-						alert("예약 취소가 완료되었습니다. 예약/주문 취소 메세지가 가게에 전송되었습니다.");
+						alert("예약 취소 및 선결제 시 환불이 완료되었습니다.(선결제시 환불이 동시에 진행됩니다.를 쓰기) 예약/주문 취소 메세지가 가게에 전송됩니다.");
 						
 					},
 					error : function(e) {
@@ -142,7 +142,7 @@
 					success : function(data){
 						console.log("바꾸기 성공");
 						$('#cancelUseModal').modal("hide");
-						alert("예약 거절~~~~~");
+						alert("예약 거절 및 선결제 시 환불이 완료되었습니다. 예약 거절 메세지가 해당 고객에게 전송됩니다.");
 						
 					},
 					error : function(e) {
@@ -150,6 +150,36 @@
 					}
 				}); 
 			});
+	   	
+	   	////////////////////////////////////////////////////////////////////////
+	   	/* Iamport 환불시스템*/
+		   /*  function cancelPay() {
+		        alert("환불완료!!!!!!!!")
+		        var payMethod = $("input[name='payMethod']").val();
+		        jQuery.ajax({
+		            url: "/reservation/json/getReservation/" + payMethod, // 예: http://www.myservice.com/payments/cancel
+		            type: "GET",
+		            dataType: "json",
+		            headers: {
+		                "Accept": "application/json",
+		                "Content-Type": "application/json"
+		            },
+		            success: function (JSONData, status) {
+		
+		            	console.log("바꾸기 성공");
+						$('#cancelUseModal').modal("hide");
+						alert("예약 거절~~~~~");
+		            }
+		
+		        });
+		    } */
+	   	
+	   	
+	   	
+	   	
+	   	
+	   	
+	   	////////////////////////////////////////////////////////////////////
 	  
 	});
 </script>

@@ -29,11 +29,11 @@
 				<div class="col-md" align="center">
 					<c:if test="${member.profileImage == 'defaultImage.png'}">
 						<img src="/resources/images/${member.profileImage}"
-						class="avatar-img rounded-circle" width="150" height="150" />
+						class="rounded-circle" width="150" height="150" />
 					</c:if>
 					<c:if test="${member.profileImage != 'defaultImage.png'}">
 						<img src="/resources/images/uploadImages/${member.profileImage}"
-						class="avatar-img rounded-circle" width="150" height="150"/>
+						class="rounded-circle" width="150" height="150"/>
 					</c:if>
 					<br />
 					<div class="d-flex justify-content-center">

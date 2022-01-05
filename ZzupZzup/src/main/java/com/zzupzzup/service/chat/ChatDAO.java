@@ -6,7 +6,6 @@ import java.util.Map;
 import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Chat;
-import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
 
 public interface ChatDAO {

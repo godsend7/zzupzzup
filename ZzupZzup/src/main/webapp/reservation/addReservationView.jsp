@@ -117,6 +117,8 @@
 	              msg += '상점 거래ID : ' + rsp.merchant_uid;
 	              msg += '결제 금액 : ' + rsp.paid_amount;
 	              msg += '카드 승인번호 : ' + rsp.apply_num;
+	              $("#payMethod").val(rsp.imp_uid);
+	  			console.log("I'mport 번호::::"+$("#payMethod").val());
 	              alert('결제가 완료되었습니다.');
 	              addReservation();
 	          } else {
@@ -274,7 +276,7 @@
 						<h3>예약하기</h3>
 					
 						<form id="addReservation">
-						
+								<input type="hidden" id="payMethod" name="payMethod" value="${reservation.payMethod}">
 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
 								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}">
 								<%-- <input type="hidden" id="reservationDate" name="reservationDate" value="${reservation.reservationDate}"> --%>

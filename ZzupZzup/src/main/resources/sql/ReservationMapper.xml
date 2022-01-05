@@ -21,7 +21,7 @@
 		<result property="reservationDate"   					column="reservation_date" 			jdbcType="DATE"/>
 		<result property="totalPrice"   						column="total_price" 				jdbcType="INTEGER"/>
 		<result property="payOption"   							column="pay_option" 				jdbcType="INTEGER"/>
-		<result property="payMethod"   							column="pay_method" 				jdbcType="INTEGER"/>
+		<result property="payMethod"   							column="pay_method" 				jdbcType="VARCHAR"/>
 		<result property="reservationCancelDate"   				column="cancel_date" 				jdbcType="DATE"/>
 		<result property="reservationCancelReason"   			column="reservation_cancel_type" 	jdbcType="INTEGER"/>
 		<result property="reservationCancelDetail"   			column="reservation_cancel_detail" 	jdbcType="VARCHAR"/>
