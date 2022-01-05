@@ -316,6 +316,20 @@
 					return '연령대 무관'
 			}
 		}
+		let page = 1;
+		//==> 페이징 스크롤
+		$(function(){
+			getList(page);
+			page ++;
+		});
+		
+		$(window).scroll(function(){
+			if($(window).srollTop() + 200 >= $(document).height() - $(window).height()){
+				getList(page);
+				page++;
+			}
+		});
+		
 			
 			
 	});
