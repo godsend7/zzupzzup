@@ -323,7 +323,7 @@ input:disabled { background-color: rgba(0,0,0,0.1); }
 .file-drag-area.is-warning { background-color: magenta; }
 .file-drag-view { display: inline-block; position: relative; }
 .file-drag-view:after { transition: all 0.5s; margin-top: 0; }
-.file-drag-view:hover:after { content: "닫기"; display: block; position: absolute; top: -20px; right: -20px; width: 50px; height: 50px; border-radius: 50%; background-color: rgba(0,0,0,0.4); text-align: center; cursor: pointer; line-height: 50px; color: #fff; }
+.file-drag-view:hover:after { content: "삭제"; display: block; position: absolute; top: -20px; right: -20px; width: 50px; height: 50px; border-radius: 50%; background-color: rgba(0,0,0,0.4); text-align: center; cursor: pointer; line-height: 50px; color: #fff; }
 .file-drag-view img { width: 100%; max-width: 200px; cursor: pointer; }
 
 
