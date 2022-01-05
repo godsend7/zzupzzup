@@ -99,6 +99,8 @@
 
 	<script type="text/javascript">
 	
+		var index = 1;
+	
 		function fncAddCommunity(){
 			
 			/* var memberId = $("input[name='memberId']").val(); */
@@ -142,7 +144,7 @@
 			} */
 			
 			if(menuType == null || menuType.length<1){
-				alert("음식 종류를 선책해주세요");
+				alert("음식 종류를 선택해주세요");
 				return;
 			}
 			

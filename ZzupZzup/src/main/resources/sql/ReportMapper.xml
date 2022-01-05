@@ -7,17 +7,23 @@
 <mapper namespace="ReportMapper">
 
 	<resultMap id="reportSelectMap" type="report">
-		<result property="reportNo" 			column="report_no" 				jdbcType="INTEGER"/>
-		<result property="reportCategory"		column="report_category" 		jdbcType="INTEGER" />
-		<result property="memberId" 			column="member_id" 				jdbcType="VARCHAR" />
-		<result property="reportChatNo" 		column="report_chat_no" 		jdbcType="INTEGER" />
-		<result property="reportMemberId" 		column="report_member_id" 		jdbcType="VARCHAR" />
-		<result property="reportReviewNo" 		column="report_review_no" 		jdbcType="INTEGER" />
-		<result property="reportPostNo" 		column="report_post_no" 		jdbcType="INTEGER" />
-		<result property="reportRestaurantNo" 	column="report_restaurant_no" 	jdbcType="INTEGER"  />
-		<result property="reportRegDate" 		column="report_reg_date" 		jdbcType="DATE" />
-		<result property="reportType" 			column="report_type" 			jdbcType="INTEGER" />
-		<result property="reportDetail" 		column="report_detail" 			jdbcType="VARCHAR" />
+		<result property="reportNo" 						column="report_no" 			jdbcType="INTEGER"/>
+		<result property="reportCategory"					column="report_category" 	jdbcType="INTEGER" />
+		<result property="memberId" 						column="member_id" 			jdbcType="VARCHAR" />
+		<result property="reportChat.chatNo" 				column="chat_no" 			jdbcType="INTEGER" />
+		<result property="reportChat.chatTitle"				column="chat_title" 		jdbcType="VARCHAR" />
+		<result property="reportMember.memberId" 			column="chat_member_id" 	jdbcType="VARCHAR" />
+		<result property="reportMember.nickname" 			column="nickname" 			jdbcType="VARCHAR" />
+		<result property="reportReview.reviewNo" 			column="review_no" 			jdbcType="INTEGER" />
+		<result property="reportReview.member.nickname" 	column="nickname" 			jdbcType="VARCHAR" />
+		<result property="reportPost.postNo" 				column="post_no" 			jdbcType="INTEGER" />
+		<result property="reportPost.postTitle" 			column="post_title" 		jdbcType="VARCHAR" />
+		<result property="reportRestaurant.restaurantNo" 	column="restaurant_no" 		jdbcType="INTEGER" />
+		<result property="reportRestaurant.restaurantName" 	column="restaurant_name" 	jdbcType="VARCHAR" />
+		<result property="reportRegDate" 					column="report_reg_date" 	jdbcType="DATE" />
+		<result property="reportType" 						column="report_type" 		jdbcType="INTEGER" />
+		<result property="reportDetail" 					column="report_detail" 		jdbcType="VARCHAR" />
+		<result property="reportCheck" 						column="report_check" 		jdbcType="BOOLEAN" />
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
@@ -27,23 +33,23 @@
 	 	<choose>
 	 		<when test="reportCategory == 1">
 	 			(member_id, chat_no, report_type, report_detail, report_category) 
-	 			VALUES(#{memberId}, #{reportChatNo}, #{reportType}, #{reportDetail}, #{reportCategory});
+	 			VALUES(#{memberId}, #{reportChat.chatNo}, #{reportType}, #{reportDetail}, #{reportCategory});
 	 		</when>
 	 		<when test="reportCategory == 2">
 	 			(member_id, chat_member_id, report_type, report_detail, report_category) 
-	 			VALUES(#{memberId}, #{reportMemberId}, #{reportType}, #{reportDetail}, #{reportCategory});
+	 			VALUES(#{memberId}, #{reportMember.memberId}, #{reportType}, #{reportDetail}, #{reportCategory});
 	 		</when>
 	 		<when test="reportCategory == 3">
 	 			(member_id, review_no, report_type, report_detail, report_category) 
-	 			VALUES(#{memberId}, #{reportReviewNo}, #{reportType}, #{reportDetail}, #{reportCategory});
+	 			VALUES(#{memberId}, #{reportReview.reviewNo}, #{reportType}, #{reportDetail}, #{reportCategory});
 	 		</when>
 	 		<when test="reportCategory == 4">
 	 			(member_id, post_no, report_type, report_detail, report_category) 
-	 			VALUES(#{memberId}, #{reportPostNo}, #{reportType}, #{reportDetail}, #{reportCategory});
+	 			VALUES(#{memberId}, #{reportPost.postNo}, #{reportType}, #{reportDetail}, #{reportCategory});
 	 		</when>
 	 		<when test="reportCategory == 5">
 	 			(member_id, restaurant_no, report_type, report_detail, report_category) 
-	 			VALUES(#{memberId},  #{reportRestaurantNo}, #{reportType}, #{reportDetail}, #{reportCategory});
+	 			VALUES(#{memberId},  #{reportRestaurant.restaurantNo}, #{reportType}, #{reportDetail}, #{reportCategory});
 	 		</when>
 	 	</choose>
 	</insert>
@@ -58,10 +64,31 @@
 	 
 	 <select id="listReport" parameterType="map" resultMap="reportSelectMap">
 	 	SELECT *
-	 	FROM REPORT
-	 	WHERE report_category = #{category} 
+	 	FROM REPORT AS r INNER JOIN
+	 	<if test="category == 1">
+	 		(SELECT chat_no, chat_title
+	 		 FROM CHAT) AS c ON (r.chat_no = c.chat_no)
+	 	</if>
+	 	<if test="category == 2">
+	 		(SELECT member_id, nickname
+	 		 FROM MEMBER) AS m ON (r.chat_member_id = m.member_id)
+	 	</if>
+	 	<if test="category == 3">
+	 		(SELECT re.review_no, m.nickname 
+			 FROM REVIEW re, MEMBER m 
+             WHERE re.member_id = m.member_id) AS rv on(r.review_no = rv.review_no)
+	 	</if>
+	 	<if test="category == 4">
+	 		(SELECT post_no, post_title 
+	 		 FROM COMMUNITY) AS p ON(r.post_no = p.post_no)
+	 	</if>
+	 	<if test="category == 5">
+	 		(SELECT restaurant_no, restaurant_name 
+	 		 FROM RESTAURANT) AS rt ON(rt.restaurant_no = r.restaurant_no)
+	 	</if>
+ 		WHERE report_category = #{category} 
 	 	<if test="memberId != null">
-	 		AND member_id = #{memberId}
+	 		AND r.member_id = #{memberId}
 	 	</if>
 	 	ORDER BY report_no LIMIT #{search.startRowNum}, #{search.pageSize}
 	 </select>
