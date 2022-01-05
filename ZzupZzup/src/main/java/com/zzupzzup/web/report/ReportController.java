@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -88,14 +89,15 @@ public class ReportController {
 		return "forward:/report/listReport.jsp";
 	}
 	
-	@RequestMapping(value="updateReport", method=RequestMethod.POST)
+	@RequestMapping(value="updateReport/{reportNo}", method=RequestMethod.GET)
 	@ResponseBody
-	public String updateReport(@RequestBody Report report) throws Exception {
+	public int updateReport(@PathVariable int reportNo) throws Exception {
 		
-		System.out.println("report/updateReport : POST");
+		System.out.println("report/updateReport : GET");
 		
-		reportService.checkReport(3);
 		
-		return "redirect:/report/listReport?reportCategory="+report.getReportCategory();
+		
+		//return "redirect:/report/listReport?reportCategory="+report.getReportCategory();
+		return reportService.checkReport(reportNo);
 	}
 }

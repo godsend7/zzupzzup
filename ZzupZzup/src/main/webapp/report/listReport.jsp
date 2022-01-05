@@ -128,14 +128,8 @@ h1 {
 		if (${member.memberRole eq "admin"}) {
 			$('.divBox').mousedown(function(event) {
 			    switch (event.which) {
-			        case 1:
-			            alert('Left Mouse button pressed.');
-			            break;
-			        case 2:
-			            alert('Middle Mouse button pressed.');
-			            break;
 			        case 3:
-			            fncUpdateReport($(this).find("input[name='toReport']").val());
+			            fncUpdateReport($(this).find("input[name='reportNo']").val());
 			            break;
 			        default:
 			            alert('You have a strange Mouse!');
@@ -145,19 +139,23 @@ h1 {
 		
 		function fncUpdateReport(items) {
 			console.log(items);
-			/* $.ajax({
-				url : "/report/updateReport?reviewNo="
-			});
-			
 			if (confirm("확인 처리하시겠습니까?")) {
-   	    		self.location = "/report/updateReport?reviewNo=" + reviewNo;
-   	    	} */
+				$.ajax({
+					url : "/report/updateReport/"+items,
+					method : "GET",
+					success : function(data, status) {
+						if (data == 1) {
+							location.reload();
+						}
+					}
+				});
+   	    	}
 		}
 	});
 </script>
 </head>
 
-<body class="is-preload">
+<body class="is-preload" oncontextmenu="return false">
 
 	<ul class="contextmenu">
 		<li><a href="#">Simple link</a></li>
@@ -214,6 +212,7 @@ h1 {
 			 		 				<div class="col-md-12">
 										<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 											<div class="col p-4 d-flex flex-column position-static divBox">
+												<input type="hidden" name="reportNo" value="${report.reportNo}">
 												<div class="report-info">
 													<c:choose>
 														<c:when test="${report.reportCheck}">
