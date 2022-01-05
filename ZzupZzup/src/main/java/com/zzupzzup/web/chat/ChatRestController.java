@@ -59,7 +59,7 @@ public class ChatRestController {
 	int pageSize;
 
 	@RequestMapping(value="json/getChat/{chatNo}", method=RequestMethod.GET)
-	public Chat getChat(@PathVariable int chatNo) throws Exception {
+	public Chat getChat(@PathVariable int chatNo, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 		
 		System.out.println("/chat/json/getProduct : GET");
 		System.out.println("chatNo : " + chatNo);
@@ -76,7 +76,9 @@ public class ChatRestController {
 		chat.setChatRestaurant(restaurant);
 		chat.setChatLeaderId(member);
 
-		System.out.println(chat);
+		System.out.println("json getChat chat : " + chat);
+		
+		request.setAttribute("chat", chat);
 
 		// Business Logic
 		return chat;

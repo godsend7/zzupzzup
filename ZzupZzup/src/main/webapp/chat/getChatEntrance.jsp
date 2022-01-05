@@ -352,7 +352,7 @@
 						<!-- S:Modal -->
 						<!-- 예약진행 모달 -->
 						<div class="modal fade" id="chatReservationModal" tabindex="-1" aria-labelledby="chatReservationModalLabel" aria-hidden="true">
-							<div class="modal-dialog">
+							<div class="modal-dialog modal-sm">
 								<div class="modal-content">
 									<div class="modal-header justify-content-end">
 										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -362,7 +362,7 @@
 									<div class="modal-body">
 										<p>예약을 진행하시겠습니까?</p>
 										<span>모임 참여 유저 </span>
-										<ul class="chat">
+										<ul class="chat-member-list bg-light p-2 rounded">
 										<c:set var="i" value="0" />
 										<c:forEach var="chatMember" items="${chatMemberList}">
 											<c:set var="i" value="${ i+1 }" />

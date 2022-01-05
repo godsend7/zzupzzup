@@ -1,7 +1,6 @@
 package com.zzupzzup.service.chat.impl;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import com.zzupzzup.common.Search;
 import com.zzupzzup.service.chat.ChatDAO;
 import com.zzupzzup.service.chat.ChatService;
 import com.zzupzzup.service.domain.Chat;
-import com.zzupzzup.service.domain.Member;
 
 @Service("chatServiceImpl")
 public class ChatServiceImpl implements ChatService {
@@ -35,10 +33,12 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public Chat getChat(int chatNo) throws Exception {
+		System.out.println(this.getClass());
+		
 		Chat chat = new Chat();
 		chat = chatDao.getChat(chatNo);
 		
-		System.out.println("getChat 결과 chat : " + chat);
+		//System.out.println("getChat 결과 chat : " + chat);
 		
 		//System.out.println("시간 나오는거 볼랭 : " + chat.getChatRegDate());
 		

@@ -112,9 +112,9 @@ public class ChatController {
 		
 		// Business logic
 		Map<String, Object> map = chatService.listChat(search);
-		//System.out.println("===================================");
-		//System.out.println("listChat map : " + map);
-		//System.out.println("===================================");
+		System.out.println("===================================");
+		System.out.println("listChat map : " + map);
+		System.out.println("===================================");
 		
 		List<Chat> list = (List<Chat>)map.get("list");
 		//System.out.println("list : " + list);
@@ -129,10 +129,14 @@ public class ChatController {
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		System.out.println("resultPage : " + resultPage);
 		
+		Member member = (Member)session.getAttribute("member");
+		System.out.println("listChat member : " + member);
+		
 		// Model and View
 		model.addAttribute("list", list);
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
+		request.setAttribute("member", member);
 		
 		return "forward:/chat/listChat.jsp";
 	}
@@ -250,6 +254,7 @@ public class ChatController {
 					System.out.println("나갔다 들어가는 사람이다.");
 					chatMember2.setChatNo(chat.getChatNo());
 					chatMember2.setMember(member);
+					chatMember2.setInOutCheck(true);
 					chatService.updateChatMember(chatMember2);
 					
 					//저장 된 정보 다시 chatMember에 넣음
@@ -283,6 +288,14 @@ public class ChatController {
 		//Business Logic
 		//예약 넘어갈 때 채팅 상태 인원확정으로 업데이트
 		chatService.updateChatState(chatNo, 2);
+		
+		Chat chat = chatService.getChat(chatNo);
+		
+		Map<String, Object> map = chatService.listReadyCheckMember(chat.getChatNo());
+		
+		List<ChatMember> chatMemberList = (List<ChatMember>)map.get("list");
+		
+		request.setAttribute("chatMemberList", chatMemberList);
 	
 		return "forward:/reservation/addReservation?chatNo="+chatNo;
 	}
