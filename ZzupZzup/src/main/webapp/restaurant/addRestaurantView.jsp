@@ -331,9 +331,7 @@
 	<form class="form-horizontal" id="addRestaurant">
 	
 	<input type="hidden" name="member.memberId" value="${member.memberId}">
-	<input type="hidden" name="member.memberId" value="${param.memberId}">
 	<input type="hidden" name="member.memberName" value="${member.memberName}">
-	<input type="hidden" name="member.memberName" value="${param.memberName}">
 	
 	<div class="form-group">
 		<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>

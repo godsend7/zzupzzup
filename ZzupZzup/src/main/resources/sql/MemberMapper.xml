@@ -54,7 +54,7 @@
 	<!-- SQL : SELECT -->
 	<select 	id="getMember"	parameterType="member" resultMap="memberSelectMap">
 		SELECT
-		MEMBER_ID, PASSWORD, MEMBER_NAME, NICKNAME, MEMBER_ROLE, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
+		MEMBER_ID, PASSWORD, MEMBER_NAME, NICKNAME, MEMBER_ROLE, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, LOGIN_TYPE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
 		FROM zzupzzup.MEMBER
 		WHERE MEMBER_ID LIKE #{memberId} OR NICKNAME LIKE #{nickname};
 	</select>
@@ -74,18 +74,18 @@
 			PASSWORD = #{password},
 			MEMBER_PHONE = #{memberPhone},
 			PROFILE_IMAGE = #{profileImage},
-			DELETE_DATE = #{},
+			DELETE_DATE = #{deleteDate},
 			DELETE_TYPE = #{deleteType},
 			DELETE_DETAIL = #{deleteReason}
 			<if test="memberRole == 'user'">
-			, STATUS_MESSAGE = #{statusMessage},
-			BLACKLIST_REG_DATE =
-			<if test="regBlacklist">
-				NOW()
-			</if>
-			<if test="!regBlacklist">
-				NULL
-			</if>
+				, STATUS_MESSAGE = #{statusMessage},
+				BLACKLIST_REG_DATE =
+				<if test="regBlacklist">
+					NOW()
+				</if>
+				<if test="!regBlacklist">
+					NULL
+				</if>
 			</if>
 		</set>
 		WHERE MEMBER_ID = #{memberId}
