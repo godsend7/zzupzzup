@@ -100,6 +100,7 @@ public class ReviewController {
 			System.out.println("review insert success");
 			//리뷰 작성 성공 시 활동점수 추가 
 			memberService.addActivityScore(review.getMember().getMemberId(), 2, 5); //리뷰 작성 시 5
+			memberService.calculateActivityScore(review.getMember().getMemberId());
 		}
 		
 		return "redirect:/review/listReview";

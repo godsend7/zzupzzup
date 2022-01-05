@@ -83,7 +83,16 @@
 						    
 						    <div class="row">
 						  		<div class="col-xs-4 col-md-2"><strong>음식점명</strong></div>
-								<div class="col-xs-8 col-md-4">${restaurant.restaurantName}</div>
+								<div class="col-xs-8 col-md-4">${restaurant.restaurantName} &nbsp;
+									<c:if test="${restaurant.parkable}">
+										<span class="badge badge-light">주차가능</span>
+									</c:if>
+								</div>
+							</div><br>
+							
+							<div class="row">
+						  		<div class="col-xs-4 col-md-2"><strong>대표자명</strong></div>
+								<div class="col-xs-8 col-md-4">${member.memberName}</div>
 							</div><br>
 							
 							<div class="row">
@@ -122,8 +131,8 @@
 							
 							<div class="row">
 						  		<div class="col-xs-4 col-md-2"><strong>음식점 운영시간</strong></div>
-								<div class="col-xs-8 col-md-4">
-								<c:set var="i" value="0"/>
+								<div class="col-xs-2 col-md-10">
+								<%-- <c:set var="i" value="0"/>
 								<c:forEach var="times" items="${restaurant.restaurantTimes}">
 									<div>
 									${times.restaurantOpen} ~ ${times.restaurantClose}
@@ -134,13 +143,172 @@
 										, LastOrder Time is ${times.restaurantLastOrder}
 									</c:if>
 									</div>
-								</c:forEach>
+								</c:forEach> --%>
+								
+								<div class="col">
+									<c:if test="${restaurant.restaurantTimes[0].restaurantDayOff eq 'true'}">
+										월요일 휴무
+									</c:if>
+									<c:if test="${restaurant.restaurantTimes[0].restaurantDayOff eq 'false'}">
+										월요일 | ${restaurant.restaurantTimes[0].restaurantOpen} ~ ${restaurant.restaurantTimes[0].restaurantClose}
+										<c:if test="${empty restaurant.restaurantTimes[0].restaurantBreak}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[0].restaurantBreak}">
+											, break at ${restaurant.restaurantTimes[0].restaurantBreak}
+										</c:if>
+										<c:if test="${empty restaurant.restaurantTimes[0].restaurantLastOrder}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[0].restaurantLastOrder}">
+											, LastOrder Time is ${restaurant.restaurantTimes[0].restaurantLastOrder}
+										</c:if>
+									</c:if>
+								</div>
+								
+								<!-- ************* 화요일 ************* -->
+								<div class="col">
+									<c:if test="${restaurant.restaurantTimes[1].restaurantDayOff eq 'true'}">
+										화요일 휴무
+									</c:if>
+									<c:if test="${restaurant.restaurantTimes[1].restaurantDayOff eq 'false'}">
+										화요일 | ${restaurant.restaurantTimes[1].restaurantOpen} ~ ${restaurant.restaurantTimes[1].restaurantClose}
+										<c:if test="${empty restaurant.restaurantTimes[1].restaurantBreak}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[1].restaurantBreak}">
+											, break at ${restaurant.restaurantTimes[1].restaurantBreak}
+										</c:if>
+										<c:if test="${empty restaurant.restaurantTimes[1].restaurantLastOrder}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[1].restaurantLastOrder}">
+											, LastOrder Time is ${restaurant.restaurantTimes[1].restaurantLastOrder}
+										</c:if>
+									</c:if>
+								</div>
+								
+								<!-- ************* 수요일 ************* -->
+								<div class="col">
+									<c:if test="${restaurant.restaurantTimes[2].restaurantDayOff eq 'true'}">
+										수요일 휴무
+									</c:if>
+									<c:if test="${restaurant.restaurantTimes[2].restaurantDayOff eq 'false'}">
+										수요일 | ${restaurant.restaurantTimes[2].restaurantOpen} ~ ${restaurant.restaurantTimes[2].restaurantClose}
+										<c:if test="${empty restaurant.restaurantTimes[2].restaurantBreak}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[2].restaurantBreak}">
+											, break at ${restaurant.restaurantTimes[2].restaurantBreak}
+										</c:if>
+										<c:if test="${empty restaurant.restaurantTimes[2].restaurantLastOrder}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[2].restaurantLastOrder}">
+											, LastOrder Time is ${restaurant.restaurantTimes[2].restaurantLastOrder}
+										</c:if>
+									</c:if>
+								</div>
+								
+								<!-- ************* 목요일 ************* -->
+								<div class="col">
+									<c:if test="${restaurant.restaurantTimes[3].restaurantDayOff eq 'true'}">
+										목요일 휴무
+									</c:if>
+									<c:if test="${restaurant.restaurantTimes[3].restaurantDayOff eq 'false'}">
+										목요일 | ${restaurant.restaurantTimes[3].restaurantOpen} ~ ${restaurant.restaurantTimes[3].restaurantClose}
+										<c:if test="${empty restaurant.restaurantTimes[3].restaurantBreak}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[3].restaurantBreak}">
+											, break at ${restaurant.restaurantTimes[3].restaurantBreak}
+										</c:if>
+										<c:if test="${empty restaurant.restaurantTimes[3].restaurantLastOrder}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[3].restaurantLastOrder}">
+											, LastOrder Time is ${restaurant.restaurantTimes[3].restaurantLastOrder}
+										</c:if>
+									</c:if>
+								</div>
+								
+								<!-- ************* 금요일 ************* -->
+								<div class="col">
+									<c:if test="${restaurant.restaurantTimes[4].restaurantDayOff eq 'true'}">
+										금요일 휴무
+									</c:if>
+									<c:if test="${restaurant.restaurantTimes[4].restaurantDayOff eq 'false'}">
+										금요일 | ${restaurant.restaurantTimes[4].restaurantOpen} ~ ${restaurant.restaurantTimes[4].restaurantClose}
+										<c:if test="${empty restaurant.restaurantTimes[4].restaurantBreak}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[4].restaurantBreak}">
+											, break at ${restaurant.restaurantTimes[4].restaurantBreak}
+										</c:if>
+										<c:if test="${empty restaurant.restaurantTimes[4].restaurantLastOrder}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[4].restaurantLastOrder}">
+											, LastOrder Time is ${restaurant.restaurantTimes[4].restaurantLastOrder}
+										</c:if>
+									</c:if>
+								</div>
+								
+								<!-- ************* 토요일 ************* -->
+								<div class="col">
+									<c:if test="${restaurant.restaurantTimes[5].restaurantDayOff eq 'true'}">
+										토요일 휴무
+									</c:if>
+									<c:if test="${restaurant.restaurantTimes[5].restaurantDayOff eq 'false'}">
+										토요일 | ${restaurant.restaurantTimes[5].restaurantOpen} ~ ${restaurant.restaurantTimes[5].restaurantClose}
+										<c:if test="${empty restaurant.restaurantTimes[5].restaurantBreak}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[5].restaurantBreak}">
+											, break at ${restaurant.restaurantTimes[5].restaurantBreak}
+										</c:if>
+										<c:if test="${empty restaurant.restaurantTimes[5].restaurantLastOrder}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[5].restaurantLastOrder}">
+											, LastOrder Time is ${restaurant.restaurantTimes[5].restaurantLastOrder}
+										</c:if>
+									</c:if>
+								</div>
+								
+								<!-- ************* 일요일 ************* -->
+								<div class="col">
+									<c:if test="${restaurant.restaurantTimes[6].restaurantDayOff eq 'true'}">
+										일요일 휴무
+									</c:if>
+									<c:if test="${restaurant.restaurantTimes[6].restaurantDayOff eq 'false'}">
+										일요일 | ${restaurant.restaurantTimes[6].restaurantOpen} ~ ${restaurant.restaurantTimes[6].restaurantClose}
+										<c:if test="${empty restaurant.restaurantTimes[6].restaurantBreak}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[6].restaurantBreak}">
+											, break at ${restaurant.restaurantTimes[6].restaurantBreak}
+										</c:if>
+										<c:if test="${empty restaurant.restaurantTimes[6].restaurantLastOrder}">
+											
+										</c:if>
+										<c:if test="${!empty restaurant.restaurantTimes[6].restaurantLastOrder}">
+											, LastOrder Time is ${restaurant.restaurantTimes[6].restaurantLastOrder}
+										</c:if>
+									</c:if>
+								</div>
+								
 								</div>
 							</div><br>
 							
 							<div class="row">
 						  		<div class="col-xs-4 col-md-2"><strong>음식점 사진</strong></div>
-								<div class="col-xs-8 col-md-4">${restaurant.restaurantImage}</div>
+								<div class="col-xs-8 col-md-4">
+								<c:set var="i" value="0" />
+								<c:forEach var="imgs" items="${restaurant.restaurantImage}">
+									<div><img alt="../resources/images/uploadImages/${imgs}" /></div>
+								</c:forEach>
+								</div>
 							</div><hr>
 						
 						</form><br>

@@ -152,27 +152,27 @@ public class CommonUtil {
 		
 		String typeName = "";
 		
-		if(reservationStatus == 1) {
+		if(reservationStatus == 0) {
 			typeName = "결제완료";
 			
 			return typeName;
 			
-		} else if(reservationStatus == 2) {
+		} else if(reservationStatus == 1) {
 			typeName = "방문완료";
 			
 			return typeName;
 			
-		} else if(reservationStatus == 3) {
+		} else if(reservationStatus == 2) {
 			typeName = "미방문";
 			
 			return typeName;
 			
-		} else if(reservationStatus == 4) {
+		} else if(reservationStatus == 3) {
 			typeName = "예약 취소";
 			
 			return typeName;
 		
-		} else if(reservationStatus == 5) {
+		} else if(reservationStatus == 4) {
 			typeName = "예약 거절";
 			
 			return typeName;

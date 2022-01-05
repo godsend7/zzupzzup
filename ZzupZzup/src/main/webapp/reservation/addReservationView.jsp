@@ -117,6 +117,8 @@
 	              msg += '상점 거래ID : ' + rsp.merchant_uid;
 	              msg += '결제 금액 : ' + rsp.paid_amount;
 	              msg += '카드 승인번호 : ' + rsp.apply_num;
+	              $("#payMethod").val(rsp.imp_uid);
+	  			console.log("I'mport 번호::::"+$("#payMethod").val());
 	              alert('결제가 완료되었습니다.');
 	              addReservation();
 	          } else {
@@ -135,7 +137,7 @@
 		            data : $("#addReservation").serialize(),
 		            dataType : "html",
 		            success : function(){
-		                alert("제발 성공.....");
+		                alert("결제가 완료되었습니다.");
 		                $(".listReservationModal").trigger('click');
 		            }
 		        });
@@ -274,15 +276,14 @@
 						<h3>예약하기</h3>
 					
 						<form id="addReservation">
-						
-								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="1">
-								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="1">
-<%-- 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
-								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}"> --%>
+								<input type="hidden" id="payMethod" name="payMethod" value="${reservation.payMethod}">
+								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
+								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}">
+								<%-- <input type="hidden" id="reservationDate" name="reservationDate" value="${reservation.reservationDate}"> --%>
 								
 								<input type="hidden" id="member.memberId" name="member.memberId" value="${reservation.member.memberId}">
 								<%-- <input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" value="${reservation.reservationNo}"> --%>
-								<input type="hidden" id="restaurantNo" name="restaurantNo" value="${reservation.restaurant.restaurantNo}">
+							
 							
 							<div class="row gtr-uniform">
 								<div class="col-6 col-12-xsmall">
@@ -313,14 +314,14 @@
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantType">음식 종류</label> 
-									<p>${reservation.restaurant.menuType}</p>
+									<p>${reservation.restaurant.returnMenuType}</p>
 									<input id="menuType" type="hidden" name="menuType" value="${reservation.restaurant.menuType}">
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="memberCount">예약 인원 수</label> 
-									<p>${reservation.memberCount} 명</p>
-									<input id="memberCount" type="hidden" name="memberCount" value="${reservation.memberCount}">
+									<p>${reservation.chat.readyCount} 명</p>
+									<input id="memberCount" type="hidden" name="memberCount" value="${reservation.chat.readyCount}">
 								</div>
 								
 								<!-- Break -->

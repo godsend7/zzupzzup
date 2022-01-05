@@ -163,15 +163,13 @@
 			chat_no, 
 			chat_member_id, 
 			<if test="readyCheck != null">ready_check,</if>
-			<if test="chatLeaderCheck != null">chat_leader_check,</if>
-			<if test="inOutCheck != null">in_out_check</if>
+			<if test="chatLeaderCheck != null">chat_leader_check</if>
 		)
 		VALUES ( 
 			#{chatNo}, 
 			#{member.memberId}, 
 			<if test="readyCheck != null">#{readyCheck},</if>
-			<if test="chatLeaderCheck != null">#{chatLeaderCheck},</if>
-			<if test="inOutCheck != null">#{inOutCheck}</if>
+			<if test="chatLeaderCheck != null">#{chatLeaderCheck}</if>
 		)		
 	</insert>
 	

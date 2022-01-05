@@ -23,7 +23,11 @@
 	$(function() {
 
 		console.log("getReservationView.jsp");
-		
+		//console.log(${reservation.reservationDate});
+		///날짜 초 자르는 부분 ///
+		//var fixed = "${reservation.fixedDate}";
+		//var fixedDateSlice = fixed.slice(0,-5);
+		//$(".fixedDate").find("p").text(fixedDateSlice);
 		//////////이전페이지////////////////
 		
 	   	 $(".reset").on("click" , function() {
@@ -54,7 +58,7 @@
 				console.log("${reservation.reservationNo}");
 				console.log("${reservation.reservationStatus}");
 				 $.ajax({
-					url : "/reservation/json/updateReservation/${reservation.reservationNo}/3",
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/2",
 					method : "GET",
 					dataType : "json",
 					headers : {
@@ -79,7 +83,7 @@
 				console.log("${reservation.reservationNo}");
 				console.log("${reservation.reservationStatus}");
 				 $.ajax({
-					url : "/reservation/json/updateReservation/${reservation.reservationNo}/2",
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/1",
 					method : "GET",
 					dataType : "json",
 					headers : {
@@ -99,8 +103,32 @@
 					
 	   	/////////////////////////ajax//////////////////////////
 	   	
-	   		$("#reservationRejectionModal").on("click", function() {
+	   		$(".reservationRejectionModal").on("click", function() {
 				console.log("#reservationRejectionModal");
+				console.log("${reservation.reservationNo}");
+				console.log("${reservation.reservationStatus}");
+				 $.ajax({
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/3",
+					method : "GET",
+					dataType : "json",
+					headers : {
+						"Accept" : "application/json",
+						"contentType" : "application/json; charset=utf-8"
+					},
+					success : function(data){
+						console.log("바꾸기 성공");
+						$('#reservationRejectionModal').modal("hide");
+						alert("예약 취소 및 선결제 시 환불이 완료되었습니다.(선결제시 환불이 동시에 진행됩니다.를 쓰기) 예약/주문 취소 메세지가 가게에 전송됩니다.");
+						
+					},
+					error : function(e) {
+						alert(e.responseText);
+					}
+				}); 
+			});
+	   	//////////////////////////////////////////////////////////////////
+	   		$(".cancelUseModal").on("click", function() {
+				console.log("#cancelUseModal");
 				console.log("${reservation.reservationNo}");
 				console.log("${reservation.reservationStatus}");
 				 $.ajax({
@@ -113,8 +141,8 @@
 					},
 					success : function(data){
 						console.log("바꾸기 성공");
-						$('#reservationRejectionModal').modal("hide");
-						alert("예약 취소가 완료되었습니다. 예약/주문 취소 메세지가 가게에 전송되었습니다.");
+						$('#cancelUseModal').modal("hide");
+						alert("예약 거절 및 선결제 시 환불이 완료되었습니다. 예약 거절 메세지가 해당 고객에게 전송됩니다.");
 						
 					},
 					error : function(e) {
@@ -122,6 +150,36 @@
 					}
 				}); 
 			});
+	   	
+	   	////////////////////////////////////////////////////////////////////////
+	   	/* Iamport 환불시스템*/
+		   /*  function cancelPay() {
+		        alert("환불완료!!!!!!!!")
+		        var payMethod = $("input[name='payMethod']").val();
+		        jQuery.ajax({
+		            url: "/reservation/json/getReservation/" + payMethod, // 예: http://www.myservice.com/payments/cancel
+		            type: "GET",
+		            dataType: "json",
+		            headers: {
+		                "Accept": "application/json",
+		                "Content-Type": "application/json"
+		            },
+		            success: function (JSONData, status) {
+		
+		            	console.log("바꾸기 성공");
+						$('#cancelUseModal').modal("hide");
+						alert("예약 거절~~~~~");
+		            }
+		
+		        });
+		    } */
+	   	
+	   	
+	   	
+	   	
+	   	
+	   	
+	   	////////////////////////////////////////////////////////////////////
 	  
 	});
 </script>
@@ -147,14 +205,11 @@
 					
 						<form id="getReservation">
 						
-								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="1">
-								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="1">
+							<!-- 	<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="1">
+								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="1"> -->
 <%-- 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
 								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}"> --%>
-								
-								<%-- <input type="hidden" id="member.memberId" name="member.memberId" value="${reservation.member.memberId}"> --%>
-								<%-- <input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" value="${reservation.reservationNo}"> --%>
-								<%-- <input type="hidden" id="restaurantNo" name="restaurantNo" value="${reservation.restaurant.restaurantNo}"> --%>
+				
 							
 							<div class="row gtr-uniform">
 								<div class="col-6 col-12-xsmall">
@@ -292,30 +347,31 @@
 								data-target="#getReservationModal"/ style="visibility: hidden;">
 							<!-- end -->
 						
-						
-							<!-- S:Modal -->
-							<!-- Modal -->
-							<div class="modal fade" id="rejectionModal" tabindex="-1" role="dialog"
-								aria-labelledby="rejectionModalLabel" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										
-										<div class="modal-body">
-												
-											<h6 class="h6 mb-6 font-weight-normal">해당 고객의 예약을 거절하시겠습니까?</h6>
-												
-											<input class="btn btn-lg cancel" id="cancel"
-													type="button" value="취소" />
-													
-											<input class="btn btn-lg btn-primary confirm" id="confirm"
-													type="button" value="확인" />	
+							 <!-- 업주 예약 거절 Modal -->
+								<div class="modal fade" id="rejectionModal" tabindex="-1"
+									aria-labelledby="rejectionModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5>예약 거절</h5>
+												<button type="button" class="close secondary"
+													data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											
+											<div class="modal-body">해당 고객의 예약을 거절하시겠습니까?</div>
+											
+											<div class="modal-footer">
+												<button type="button" class="button small secondary cancel"
+													data-dismiss="modal">취소</button>
+												<button type="button" class="button small primary confirm" id="confirm" 
+													name="reservationStatus">확인</button>	
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<!-- E:Modal -->
-							
-							
+							 
 							<!-- 거절사유 Modal -->
 								<div class="modal fade" id="cancelUseModal" tabindex="-1" 
 									aria-labelledby="cancelUseModalLabel" aria-hidden="true">
@@ -409,7 +465,7 @@
 											예약을 취소하시겠습니까?</div>
 											
 											<div class="modal-footer">
-												<button type="button" class="button small secondary"
+												<button type="button" class="button small secondary" id="userClose"
 													data-dismiss="modal">취소</button>
 												<button type="button" class="button small primary userConfirm" id="userConfirm" 
 													name="reservationStatus">확인</button>	

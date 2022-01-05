@@ -46,6 +46,9 @@ public interface ChatService {
 	// Update
 	public int deleteChatMember(ChatMember chatMember) throws Exception;
 	
+	// Update
+	public int deleteAllChatMember(ChatMember chatMember) throws Exception;
+	
 	// update
 	public int updateReadyCheck(ChatMember chatMember) throws Exception;
 	
