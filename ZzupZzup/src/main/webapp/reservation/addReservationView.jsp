@@ -68,19 +68,18 @@
 				return;
 			}
 			
+			$("#totalPrice").val(order_price_total);
+			console.log("totalPrice~~~"+$("#totalPrice").val());
+			
 			if(payment == "payment1"){
 				console.log("ㅎ히히");
 				requestPay();
 				return;
 			}else if(payment == "payment2"){
 				console.log("후후후");
-				$(".listReservationModal").trigger('click');
+				addReservation();
 				return
 			};
-			
-			$("#totalPrice").val(order_price_total);
-			console.log("totalPrice~~~"+$("#totalPrice").val());
-			
 		}
 		
 		$("input[value='결제하기']").on("click", function() {
@@ -94,8 +93,6 @@
 				fncAddReservation("payment2");
 			};
 		});
-		//////////////////////////////////////////
-		
 		/////////아임포트 function//////////////////
 		var IMP = window.IMP; // 생략가능
 	    IMP.init('imp30711347');
@@ -121,8 +118,7 @@
 	              msg += '결제 금액 : ' + rsp.paid_amount;
 	              msg += '카드 승인번호 : ' + rsp.apply_num;
 	              alert('결제가 완료되었습니다.');
-	              fncAddReservation();  //form 경로 넣어줌
-	              $(".listReservationModal").trigger('click'); //class는 . 아이디는 #
+	              addReservation();
 	          } else {
 	        	  var msg = '결제에 실패하였습니다.';
 	              msg += '에러내용 : ' + rsp.error_msg;
@@ -130,45 +126,22 @@
 	          }
 	      });
 	    }
-	    
-/* 	    function ajax(){
-	    	  
-	    	 
-	        var listReservation= $("form[name=listReservationPage]").serialize() ;
-	 
-	        $.ajax({
-	            type : 'post',
-	            url : '/reservation/json/listReservation',
-	            data : listReservation,
-	            dataType : 'json',
-	            error: function(xhr, status, error){
-	                alert(error);
-	            },
-	            success : function(json){
-	                alert(json)
-	            }
-	        });
-	  
-	    } */
-	    
-	    $(".listReservationPage").on("click" , function() {
-	    	 var listReservation= $("form[name=listReservationPage]").serialize() ;
-	    	 
+
+	    function addReservation() {
+	    	console.log("addReservation");
 		        $.ajax({
 		            type : 'post',
 		            url : '/reservation/addReservation',
-		            data : listReservation,
-		            error: function(xhr, status, error){
-		                alert(error);
-		            },
-		            success : function(json){
-		                alert(json)
+		            data : $("#addReservation").serialize(),
+		            dataType : "html",
+		            success : function(){
+		                alert("결제가 완료되었습니다.");
+		                $(".listReservationModal").trigger('click');
 		            }
 		        });
 	    	console.log("success");
-		});
-	     
-	    
+		}
+		
 		/////////아임포트 function//////////////////
 		
 		//////////이전페이지////////////////
@@ -185,7 +158,6 @@
 		
 		//////////모달 이동////////////////
 	    $("#listReservationPage").on("click" , function() {
-	    	//self.location = "/reservation/listReservation"
 	    	$("#addReservation").attr("method" , "POST").attr("action" , "/reservation/listReservation").submit();
 		});
 		//////////모달 이동////////////////
@@ -196,14 +168,7 @@
 			console.log( $("#orderName").val()); 
 			console.log( $("#orderName option:checked").text()); 
 			console.log($("#orderCount").val());
-			//console.log($("#price").val());
-			
-	    	/* $(".order").append("<input type='hidden' name='order["+ orderCount +"].menuTitle' value='"+ 
-	    			$("#orderName option:checked").text() + "'>");
-	    	$(".order").append("<input type='hidden' name='order["+ orderCount +"].orderCount' value='"+ $("#orderCount").val() + "'>");
-	    	$(".order").append("<input type='hidden' name='order["+ orderCount +"].menuPrice' value='"+ $("#orderName").val() + "'>"); */
-	    	
-	    	//
+	
 	    	var menu_order_list = "";
 	    	menu_order_list += "<div class='row nbsp'>";
 	    	menu_order_list += "<div class='col-md-3'>선택 메뉴 : <input type='text' name='order["+ orderCount +"].menuTitle' id='menuTitle' value='"+ 
@@ -212,8 +177,6 @@
 			menu_order_list += "<div class='col-md-3'>메뉴 가격 : <input type='text' name='order["+ orderCount +"].menuPrice' id='menuPrice' value='"+ $("#orderName").val() + "'></div>";
 			menu_order_list += "<div class='col-md-2'><input type='button' id='resetCheck' name='resetCheck' value='취소' class= 'button small primary'></div>";
 			menu_order_list += "</div>";
-			
-			//console.log(menu_order_list);
 			
 			$(".orderresult").append(menu_order_list);
 			
@@ -312,14 +275,13 @@
 					
 						<form id="addReservation">
 						
-								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="1">
-								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="1">
-<%-- 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
-								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}"> --%>
+								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
+								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}">
+								<%-- <input type="hidden" id="reservationDate" name="reservationDate" value="${reservation.reservationDate}"> --%>
 								
 								<input type="hidden" id="member.memberId" name="member.memberId" value="${reservation.member.memberId}">
 								<%-- <input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" value="${reservation.reservationNo}"> --%>
-								<input type="hidden" id="restaurantNo" name="restaurantNo" value="${reservation.restaurant.restaurantNo}">
+							
 							
 							<div class="row gtr-uniform">
 								<div class="col-6 col-12-xsmall">
@@ -350,14 +312,14 @@
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantType">음식 종류</label> 
-									<p>${reservation.restaurant.menuType}</p>
+									<p>${reservation.restaurant.returnMenuType}</p>
 									<input id="menuType" type="hidden" name="menuType" value="${reservation.restaurant.menuType}">
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="memberCount">예약 인원 수</label> 
-									<p>${reservation.memberCount} 명</p>
-									<input id="memberCount" type="hidden" name="memberCount" value="${reservation.memberCount}">
+									<p>${reservation.chat.readyCount} 명</p>
+									<input id="memberCount" type="hidden" name="memberCount" value="${reservation.chat.readyCount}">
 								</div>
 								
 								<!-- Break -->
@@ -443,21 +405,6 @@
 									<label for="huPayment">방문 결제</label>
 								</div>
 								
-								<!-- Break -->
-							
-								
-								<script type="text/javascript"></script>
-							 
-							 
-					
-								
-								<script>
-								
-								
-							    </script>
-								
-								<!-- Break -->
-								
 								<div class="col-12">
 									<ul class="actions">
 										<li><input type="button" value="결제하기" class="primary payment1 payment-btn"/></li>
@@ -465,7 +412,7 @@
 									</ul>
 								</div>
 							</div>
-							
+							</form>
 							
 							<!-- Button trigger modal -->
 							<input type="button" value="페이지 이동" class="btn btn-primary listReservationModal" id="" data-toggle="modal"

@@ -5,8 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,11 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.domain.Member;
-import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.member.MemberService;
 
 @Controller
@@ -97,7 +92,7 @@ public class MemberController {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : POST");
 		
-		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
+		String temp = request.getServletContext().getRealPath("/resources/images");
 		String profileImage = uploadFile(uploadfile, temp);
 		
 		member.setMemberRole(memberRole);
@@ -117,8 +112,10 @@ public class MemberController {
 		
 		if(member.getMemberRole().equals("owner")) {
 			//member domain과 같이 음식점 등록으로 페이지 넘기기
-			//request.setAttribute("addOwner", member);
-			return "redirect:/restaurant/addRestaurant?memberId="+member.getMemberId();
+			request.setAttribute("member", member);
+			//return "redirect:/restaurant/addRestaurant?memberId="+member.getMemberId()+"&memberName="+member.getMemberName();
+			
+			return "forward:/restaurant/addRestaurantView.jsp";
 		} else {
 			return "redirect:/";
 		}
@@ -133,6 +130,8 @@ public class MemberController {
 		Member memberIdSet = new Member();
 		memberIdSet.setMemberId(memberId);
 		Member member = memberService.getMember(memberIdSet);
+		
+		System.out.println("!!!! "+member.getMemberPhone());
 		
 		model.addAttribute("member", member);
 		
@@ -155,17 +154,31 @@ public class MemberController {
 		
 	}
 	
-	public void updateUser() {
+	@RequestMapping(value="updateMember", method=RequestMethod.GET)
+	public String updateMember(@RequestParam("memberId") String memberId, HttpServletRequest request) throws Exception {
 		
+		System.out.println("/member/updateMember : GET");
+		
+		Member memberIdSet = new Member();
+		memberIdSet.setMemberId(memberId);
+		Member member = memberService.getMember(memberIdSet);
+		
+		request.setAttribute("member", member);
+		
+		return "forward:/member/updateMemberView.jsp";
 	}
 	
 	public void updateOwner() {
 		
 	}
 	
-	public void calculateActivityScore() {
+	public void deleteMember() {
 		
 	}
+	
+//	public void calculateActivityScore() {
+//		
+//	}
 	
 	public void calculateMannerScore() {
 		

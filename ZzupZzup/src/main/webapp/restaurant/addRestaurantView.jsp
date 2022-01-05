@@ -23,6 +23,9 @@
 	<!-- 지도(위도, 경도)를 사용하기 위해 key 설정 -->
 	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=86fc1389540999ea4a3cdaa2a9ca1cc1&libraries=services"></script>
 	
+	<link href="//cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">  
+	<script src="//cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+	
 	<script>
 		//음식점의 위도와 경도를 가져오기 위해 선언
 		var geocoder = new daum.maps.services.Geocoder();
@@ -61,12 +64,10 @@
 		             		var result = results[0];
 			            	//console.log(result.y);
 			            	//console.log(result.x);
-			            	$("input[name='latitude']").val(result.x);
-			            	$("input[name='longitude']").val(result.y);
+			            	$("input[name='latitude']").val(result.y);
+			            	$("input[name='longitude']").val(result.x);
 						}	
 		            });
-	                
-	                
 	                
 	                $("#streetAddress").val(roadAddr);
 	                $("#areaAddress").val(data.jibunAddress);
@@ -104,6 +105,7 @@
 	    }
 		
 		$(function(){
+			//console.log("${param.memberId}");
 			// RESTAURANT_NAME AUTOCOMPLETE
 			var autoComplete = [];			
 			
@@ -186,6 +188,7 @@
 	</script>
 
 	<script type="text/javascript">
+	
 		var index = 1;
 		
 		function fncAddRestaurant(){
@@ -196,6 +199,9 @@
 			var areaAddress = $("input[name='areaAddress']").val();
 			var restAddress = $("input[name='restAddress']").val();
 			var menuType = $("select[name='menuType']").val();
+			var menuTitle = $("input[name='restaurantMenus[0].menuTitle']").val();
+			var menuPrice = $("input[name='restaurantMenus[0].menuPrice']").val();
+			var ownerImage = $("input[id='ownerImage']").val();
 			/* var restaurantImage = $("input[name='restaurantImage[0].restaurantImage']").val(); */
 			
 			console.log(restaurantName);
@@ -227,11 +233,28 @@
 			} */
 			
 			if(menuType == null || menuType.length<1){
-				alert("음식 종류를 선책해주세요");
+				alert("음식 종류를 선택해주세요");
 				return;
 			}
+			
+			if(menuTitle == null || menuTitle.length<1){
+				alert("메뉴명은 최소 한가지 입력해 주셔야 합니다.");
+				return;
+			}
+			
+			if(menuPrice == null || menuPrice.length<1){
+				alert("메뉴가격은 최소 한가지 입력해 주셔야 합니다.");
+				return;
+			}
+			
+			if(ownerImage == null || ownerImage.length<1){
+				alert("사업자 등록증 이미지는 필수로 첨부해주셔야 합니다.");
+				return;
+			}
+			
+			alert("등록 요청이 완료되었습니다. 관리자의 심사 후 승인 시 정식으로 등록됩니다.");
 		
-			$("#restaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").attr("enctype", "multipart/form-data").submit();
+			$("#addRestaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").attr("enctype", "multipart/form-data").submit();
 			
 		}
 		
@@ -243,7 +266,7 @@
 					fncAddRestaurant();
 				});
 				
-				// 주속 검색 버튼 실행
+				// 주소 검색 버튼 실행
 				$( "#button2" ).on("click" , function() {
 					daumPostcode();
 				});
@@ -317,13 +340,13 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="">	
+				<section id="restaurant">	
 
 <div class="container">
 
 	<h2>음식점 등록하기</h2><hr>
 	
-	<form class="form-horizontal" id="restaurant">
+	<form class="form-horizontal" id="addRestaurant">
 	
 	<input type="hidden" name="member.memberId" value="${member.memberId}">
 	<input type="hidden" name="member.memberName" value="${member.memberName}">
@@ -335,6 +358,13 @@
 			<p class="fromAutocomplete"></p>
 		</div>
 	</div>
+	
+	<div class="form-group">
+		<div class="col-sm-4">
+			<label for="ownerImage">사업자 등록증 이미지</label>
+			<input type="file" name="file" id="ownerImage">
+		</div>	
+	</div><br>
 		
 	<div class="form-group">
 		<label for="restaurantTel" class="col-sm-offset-1 col-sm-3 control-label">음식점 전화번호</label>
@@ -349,7 +379,7 @@
 			<input type="text" class="form-control" id="streetAddress" name="streetAddress" placeholder="음식점 도로명주소" readonly="readonly">
 			<input type="text" class="form-control" id="areaAddress" name="areaAddress" placeholder="음식점 지번주소" readonly="readonly">
 			<input type="text" class="form-control" id="restAddress" name="restAddress" placeholder="음식점 상세주소" readonly="readonly">
-			<button type="button" class="normal btn-sm" id="button2">주소찾기</button>
+			<button type="button" class="normal btn-sm" id="button2" style="text-align:right;">주소찾기</button>
 		</div>
 	</div>
 	
@@ -424,7 +454,12 @@
 			<span class="badge badge-secondary" id="hideButton">숨기기</span>
 		</label>
 		
-		<div id="workingForms" style="display: none;">
+		<div id="workingForms" style="display: none;"><br>
+		
+		<div id="toggleButton">주차가능여부 &nbsp;&nbsp;
+			<input type="checkbox" name="parkable" id="parkable" data-toggle="toggle" data-size="sm" value="true" checked>
+		</div><br>
+		
 		<!-- ######################### 월요일 ######################### -->
 		<div id="working1">
 			<div>음식점 운영요일 &nbsp;
@@ -726,7 +761,7 @@
 	
 	<div class="col-sm-4">
 		<label for="restaurantImage">음식점 이미지</label>
-		<input type="file" id="file" name="file" multiple="multiple">
+		<input type="file" id="file" name="multiFile" multiple="multiple">
 		
 		<!-- <input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
 		<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">

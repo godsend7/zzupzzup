@@ -18,10 +18,12 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
 	$(function() {
-		console.log("getMember.jsp");
+		console.log("updateMemberView.jsp");
+		var memberRole = ${sessionScope.member.memberRole};
+		var checkBlacklist = $("#regBlacklist").prop("checked");
 		
 		$("#updateMember").on("click", function() {
-			location.href = "/member/updateMember?memberId=${member.memberId}";
+			location.href = "/member/updateMember";
 		})
 	});
 </script>
@@ -148,7 +150,7 @@
 														style="font-weight: bold">${member.memberName}</span>
 												</div>
 												<div class="col-6">
-													<label for="memberId">아이디</label> <span id="memberId"
+													<label for="email">이메일</label> <span id="email"
 														style="font-weight: bold">${member.memberId}</span>
 												</div>
 											</div>

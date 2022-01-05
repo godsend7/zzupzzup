@@ -23,69 +23,18 @@
 	$(function() {
 
 		console.log("getReservationView.jsp");
-		
-		////////////////////////////////////==> 유효성 체크
-		var reservation_status = 0;
-		reservation_status ="<input type='text' name='reservationStatus["+ reservation_status +"].orderCount' id='reservationStatus' value='3'></div>";
-		
-	     $(".no").on("click" , function() {
-	    	 reservation_status
-		}); 
+		//console.log(${reservation.reservationDate});
+		///날짜 초 자르는 부분 ///
+		//var fixed = "${reservation.fixedDate}";
+		//var fixedDateSlice = fixed.slice(0,-5);
+		//$(".fixedDate").find("p").text(fixedDateSlice);
 		//////////이전페이지////////////////
-		
-		
-	   //console.log(reviewNo);
-	    	function reservationStatusFunction() {
-				var reservationStaus = $("#reservationStaus").val();
-				$.ajax({
-					type : "GET",
-					url : "/reservation/json/getReservation",
-					data : {
-						"reservationStaus" : reservationStatus
-					},
-					success : function(result) {
-						
-							if (result==1) {
-								$("#reservationStaus").text("결제완료");
-							} 
-							
-							else if (result==2) {
-								$("#reservationStaus").text("방문완료");	
-							}
-							 else if (result==3) {
-							$("#reservationStaus").text("미방문");	
-							}
-							
-							 else if (result==4) {
-							$("#reservationStaus").text("예약 취소");	
-							}
-							
-							 else if (result==5) {
-							$("#reservationStaus").text("예약 거절");	
-							}
-							
-							}
-						})
-			}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 	   	 $(".reset").on("click" , function() {
 	    	self.location = "/reservation/listReservation"
 		}); 
 		
 		//////////모달 이동////////////////
-	    /* $(".yes").on("click" , function() {
-	    	self.location = "/reservation/getReservation"
-		}); */
 		//////////모달 이동////////////////
 		
 		//////////모달 이동////////////////
@@ -102,7 +51,105 @@
 				self.location = "/main.jsp"
 			});  */
 	   	
-	   	/////////////////////////최종가격//////////////////////////
+	   	/////////////////////////ajax//////////////////////////
+	 
+			$(".no").on("click", function() {
+				console.log(".no");
+				console.log("${reservation.reservationNo}");
+				console.log("${reservation.reservationStatus}");
+				 $.ajax({
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/2",
+					method : "GET",
+					dataType : "json",
+					headers : {
+						"Accept" : "application/json",
+						"contentType" : "application/json; charset=utf-8"
+					},
+					success : function(data){
+						console.log("바꾸기 성공");
+						//$("input[value='3']").val('미방문');
+						$('#getReservationModal').modal("hide");
+					},
+					error : function(e) {
+						alert(e.responseText);
+					}
+				}); 
+			});
+					
+	   	/////////////////////////ajax//////////////////////////
+	   	
+	   		$(".yes").on("click", function() {
+				console.log(".yes");
+				console.log("${reservation.reservationNo}");
+				console.log("${reservation.reservationStatus}");
+				 $.ajax({
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/1",
+					method : "GET",
+					dataType : "json",
+					headers : {
+						"Accept" : "application/json",
+						"contentType" : "application/json; charset=utf-8"
+					},
+					success : function(data){
+						console.log("바꾸기 성공");
+						//$("input[value='2']").val('방문완료');
+						$('#getReservationModal').modal("hide");
+					},
+					error : function(e) {
+						alert(e.responseText);
+					}
+				}); 
+			});
+					
+	   	/////////////////////////ajax//////////////////////////
+	   	
+	   		$(".reservationRejectionModal").on("click", function() {
+				console.log("#reservationRejectionModal");
+				console.log("${reservation.reservationNo}");
+				console.log("${reservation.reservationStatus}");
+				 $.ajax({
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/3",
+					method : "GET",
+					dataType : "json",
+					headers : {
+						"Accept" : "application/json",
+						"contentType" : "application/json; charset=utf-8"
+					},
+					success : function(data){
+						console.log("바꾸기 성공");
+						$('#reservationRejectionModal').modal("hide");
+						alert("예약 취소가 완료되었습니다. 예약/주문 취소 메세지가 가게에 전송되었습니다.");
+						
+					},
+					error : function(e) {
+						alert(e.responseText);
+					}
+				}); 
+			});
+	   	//////////////////////////////////////////////////////////////////
+	   		$(".cancelUseModal").on("click", function() {
+				console.log("#cancelUseModal");
+				console.log("${reservation.reservationNo}");
+				console.log("${reservation.reservationStatus}");
+				 $.ajax({
+					url : "/reservation/json/updateReservation/${reservation.reservationNo}/4",
+					method : "GET",
+					dataType : "json",
+					headers : {
+						"Accept" : "application/json",
+						"contentType" : "application/json; charset=utf-8"
+					},
+					success : function(data){
+						console.log("바꾸기 성공");
+						$('#cancelUseModal').modal("hide");
+						alert("예약 거절~~~~~");
+						
+					},
+					error : function(e) {
+						alert(e.responseText);
+					}
+				}); 
+			});
 	  
 	});
 </script>
@@ -128,14 +175,11 @@
 					
 						<form id="getReservation">
 						
-								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="1">
-								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="1">
+							<!-- 	<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="1">
+								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="1"> -->
 <%-- 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
 								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}"> --%>
-								
-								<%-- <input type="hidden" id="member.memberId" name="member.memberId" value="${reservation.member.memberId}"> --%>
-								<%-- <input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" value="${reservation.reservationNo}"> --%>
-								<%-- <input type="hidden" id="restaurantNo" name="restaurantNo" value="${reservation.restaurant.restaurantNo}"> --%>
+				
 							
 							<div class="row gtr-uniform">
 								<div class="col-6 col-12-xsmall">
@@ -176,7 +220,7 @@
 									<label for="memberCount">예약 인원 수</label> 
 									<p>${reservation.memberCount} 명</p>
 								</div>
-					<!-- ///////////////////get 추가///////////////////////// -->			
+									
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantType">방문 확정 전</label>
 									<p>${reservation.planDate} ${reservation.planTime}</p>
@@ -184,12 +228,6 @@
 								
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->
 								
-								<%-- <c:if test="${reservation.member.reservationStatus == false}">
-									<input type="button" value="예약 거절" class="button small primary stretched-link" id="admin-modal" data-toggle="modal"
-									data-target="#getReservationModal"/></p>
-								</c:if>	 --%>
-								
-								<%-- <c:if test="${reservation.member.memberRole == 'owner'}"> --%>
 									<p><input type="button" value="방문 확정" name= "reservationStatus" class="button small primary stretched-link" id="reservationStatus-modal" data-toggle="modal"
 									data-target="#getReservationModal"/></p>
 									
@@ -198,14 +236,18 @@
 									
 									<p><input type="button" value="예약 취소" name= "reservationCancel" class="button small primary stretched-link" id="reservationCancel-modal" data-toggle="modal"
 									data-target="#reservationRejectionModal"/></p>
-								<%-- </c:if>	 --%>
+									
+								<!-- //////////////////////////////////////////////////////// -->	
+									<p><input type="button" value="거절 사유" name= "cancelUse" class="button small primary stretched-link" id="cancelUse-modal" data-toggle="modal"
+									data-target="#cancelUseModal"/></p>
+								
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->	
 									<!-- Button trigger modal --> 
 								</div>
 								
 								<div class="col-6 col-12-xsmall fixedDate">
 									<label for=""fixedDate"">방문 확정 후</label> 
-									<p>${reservation.fixedDate}</p>
+									<p>${reservation.fixedDate} ${reservation.returnStatus}</p>
 									<input id="fixedDate" name="fixedDate" type="hidden" value="1">
 									
 									
@@ -265,70 +307,145 @@
 								
 								<div class="col-12">
 									<ul class="actions">
-										<!-- <li><input type="button" value="결제하기" class="primary payment1 payment-btn"/></li> -->
 										<li><input type="reset" value="이전 페이지" class="normal reset" /></li>
 									</ul>
 								</div>
 							</div>
 			
-						<!-- Button trigger modal -->
+							<!-- Button trigger modal -->
 							<input type="button" value="페이지 이동" class="btn btn-primary getReservationModal" id="" data-toggle="modal"
 								data-target="#getReservationModal"/ style="visibility: hidden;">
-							
-							<!-- Modal -->
-							<div class="modal fade" id="getReservationModal" tabindex="-1" role="dialog"
-								aria-labelledby="getReservationModalLabel" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										
-										<div class="modal-body">
-											<form class="form-signin">
-												
-												<h6 class="h6 mb-6 font-weight-normal">해당 고객이 음식점을 방문하였습니까?</h6>
-												
-												</div>
-												<input class="btn btn-lg no" id="no"
-													type="button" value="아니오" />
-													
-												<input class="btn btn-lg btn-primary yes" id="yes"
-													type="button" value="예" />	
-													
-												<input class="btn btn-lg btn-primary close" id="close"
-													type="button" value="닫기" />		
-												
-											</form>
-										</div>
-										
-						</form>
-						<!-- end -->
+							<!-- end -->
 						
-						<!-- Button trigger modal 예약 거절 -->
-							<input type="button" value=" " class="btn btn-primary rejectionModal" id="" data-toggle="modal"
-								data-target="#rejectionModal"/ style="visibility: hidden;">
-							
-							<!-- Modal -->
-							<div class="modal fade" id="rejectionModal" tabindex="-1" role="dialog"
-								aria-labelledby="rejectionModalLabel" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										
-										<div class="modal-body">
-											<form class="form-signin">
-												
-												<h6 class="h6 mb-6 font-weight-normal">취소 사유를 말씀해주세요	</h6>
-												
-												</div>
-												<input class="btn btn-lg cancel" id="cancel"
-													type="button" value="취소" />
-													
-												<input class="btn btn-lg btn-primary confirm" id="confirm"
-													type="button" value="확인" />	
-												
-											</form>
+							 <!-- 업주 예약 거절 Modal -->
+								<div class="modal fade" id="rejectionModal" tabindex="-1"
+									aria-labelledby="rejectionModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5>예약 거절</h5>
+												<button type="button" class="close secondary"
+													data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											
+											<div class="modal-body">해당 고객의 예약을 거절하시겠습니까?</div>
+											
+											<div class="modal-footer">
+												<button type="button" class="button small secondary cancel"
+													data-dismiss="modal">취소</button>
+												<button type="button" class="button small primary confirm" id="confirm" 
+													name="reservationStatus">확인</button>	
+											</div>
 										</div>
-										
-						</form>
-						<!-- end -->
+									</div>
+								</div>
+							 
+							<!-- 거절사유 Modal -->
+								<div class="modal fade" id="cancelUseModal" tabindex="-1" 
+									aria-labelledby="cancelUseModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">예약 거절 사유를 입력해주세요</h5>
+												<button type="button" class="close secondary"
+													data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											
+											<div class="modal-body">
+											
+											<!-- 라디오 -->
+											<div class="col-12-small">
+												<input type="radio" id="reservationCancelReason1" name="reservationCancelReason" value="1"
+													checked> <label for="reservationCancelReason1">동일 시간대에 이미 해당 예약이 존재합니다.</label>
+											</div>
+											<div class="col-12-small">
+												<input type="radio" id="reservationCancelReason2" name="reservationCancelReason" value="2"> 
+												<label for="reservationCancelReason2">가게 휴무일 입니다.</label>
+											</div>
+											<div class="col-12-small">
+												<input type="radio" id="reservationCancelReason3" name="reservationCancelReason" value="3"> 
+												<label for="reservationCancelReason3">재고 소진으로 예약이 불가능한 메뉴입니다.</label>
+											</div>
+											<!-- text -->
+											<div class="col-12">
+												<label for="reservationCancelDetail">기타 내용 작성</label>
+												<textarea name="reservationCancelDetail" id="reservationCancelDetail"
+													placeholder="100자 이내로 작성해주세요" rows="6"></textarea>
+											</div>
+											<!-- Break -->
+											
+											</div>
+											<!-- 라디오 End -->
+											<div class="modal-footer">
+												<button type="button" class="button small secondary cancelUse"
+													data-dismiss="modal">취소</button>
+												<button type="button" class="button small primary cancelConfirm">확인</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							
+							<!-- 방문확정 Modal -->
+								<div class="modal fade" id="getReservationModal" tabindex="-1"
+									aria-labelledby="getReservationModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5>방문 확정</h5>
+												<button type="button" class="close secondary"
+													data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											
+											<div class="modal-body">해당 고객이 음식점을 방문하였습니까?</div>
+											<div class="modal-footer">
+												<button type="button" class="button small secondary" id="close" 
+													data-dismiss="modal">취소</button>
+													
+												<button type="button" class="button small primary no" id="no" value="3"
+													name="reservationStatus">아니오</button>		
+												<button type="button" class="button small primary yes" id="yes" value="2"
+													name="reservationStatus">예</button>	
+											</div>
+										</div>
+									</div>
+								</div>
+							
+						
+					<!-- /////////////////////////////////////////////////////////////////////////////////////////// -->
+						<!-- 유저 Modal -->
+								<div class="modal fade" id="reservationRejectionModal" tabindex="-1"
+									aria-labelledby="reservationRejectionModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5>예약 취소</h5>
+												<button type="button" class="close secondary"
+													data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											
+											<div class="modal-body">예약 취소는 방문 예정시간 하루 전까지 취소가 가능합니다. 
+											예약을 취소하시겠습니까?</div>
+											
+											<div class="modal-footer">
+												<button type="button" class="button small secondary" id="userClose"
+													data-dismiss="modal">취소</button>
+												<button type="button" class="button small primary userConfirm" id="userConfirm" 
+													name="reservationStatus">확인</button>	
+											</div>
+										</div>
+									</div>
+								</div>
+						
+						
+						
 					
 					</div>
 					

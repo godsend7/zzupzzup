@@ -35,7 +35,7 @@ CREATE TABLE `member` (
     `age_range` VARCHAR(6),
     `birth_year` INT,
     `gender` VARCHAR(6),
-    `profile_image` VARCHAR(50) NOT NULL DEFAULT 'defaultImage.jpg',
+    `profile_image` VARCHAR(50) NOT NULL DEFAULT 'defaultImage.png',
     `nickname` VARCHAR(10),
     `status_message` VARCHAR(100) DEFAULT '',
     `activity_score` INT NOT NULL DEFAULT 0,
@@ -65,16 +65,16 @@ CREATE TABLE `restaurant` (
     `restaurant_text` VARCHAR(100),
     `reservation_status` BOOLEAN DEFAULT 1,
     `parkable` BOOLEAN,
-    `request_date` DATE,
-    `judge_status` BOOLEAN,
-    `judge_date` DATE,
+    `request_date` DATETIME DEFAULT NOW(),
+    `judge_status` INT DEFAULT 1,
+    `judge_date` DATETIME,
     `restaurant_name` VARCHAR(50) NOT NULL,
     `restaurant_tel` VARCHAR(15) NOT NULL,
     `street_address` VARCHAR(50) NOT NULL,
     `area_address` VARCHAR(50) NOT NULL,
     `rest_address` VARCHAR(20),
     `menu_type` INT NOT NULL,
-    `restaurant_reg_date` DATE,
+    `restaurant_reg_date` DATETIME,
     `latitude` VARCHAR(50),
     `longitude` VARCHAR(50),
     PRIMARY KEY (`restaurant_no`),
@@ -196,7 +196,7 @@ CREATE TABLE `reservation` (
     `member_count` INT NOT NULL,
     `reservation_status` INT NOT NULL,
     `fixed_status` BOOLEAN NOT NULL,
-    `reservation_date` DATE NOT NULL,
+    `reservation_date` DATETIME NOT NULL,
     `total_price` INT NOT NULL,
     `pay_option` INT NOT NULL,
     `pay_method` INT,
@@ -341,6 +341,8 @@ INSERT INTO member(member_id, member_role, password, member_name, member_phone, 
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test2@test.com', 'user', '1234', '조영주2', '010-0000-0001','1', '20대', 'male', 'test2', '-', '0', '0', now());
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test1@test.com', 'user', '1234', '조영주3', '010-0000-0002','1', '30대', 'female', 'test1', '-', '0', '0', now());
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test3@test.com', 'user', '1234', '조영주4', '010-0000-0003','1', '40대', 'male', 'test3', '-', '0', '0', now());
+INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test4@test.com', 'user', '1234', '조영주5', '010-0000-0004','1', '50대', 'female', 'test4', '-', '0', '0', now());
+INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('test5@test.com', 'user', '1234', '조영주6', '010-0000-0005','1', '60대', 'male', 'test5', '-', '0', '0', now());
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('owner1@test.com', 'owner', '1234', '조영주5', '010-0000-0400','1', '50대', 'female', 'owner1', '-', '0', '0', now());
 INSERT INTO member(member_id, member_role, password, member_name, member_phone, login_type, age_range, gender, nickname, status_message, activity_score, manner_score, reg_date) VALUES ('owner2@test.com', 'owner', '1234', '조영주6', '010-0000-0500','1', '60대', 'female', 'owner2', '-', '0', '0', now());
 -- restaurant
@@ -365,7 +367,7 @@ VALUES('1', '짜장면', '3500', '0');
 -- chat
 INSERT INTO CHAT (chat_leader_id, restaurant_no, chat_title, chat_text, chat_gender, age_type) VALUES ('hihi@a.com',1,'쩝쩝친구 구해유','소개한다',1,'1,2,3');
 -- chat_member
-INSERT INTO chat_member (chat_no, chat_member_id) VALUES (1,'hihi@a.com');
+INSERT INTO chat_member (chat_no, chat_member_id, ready_check, chat_leader_check) VALUES (1,'hihi@a.com',1,1);
 -- chat_log
 INSERT INTO chat_log (chat_no, chat_contents, chat_time) VALUES (1,'하이하이','2021-01-01');
 -- rating

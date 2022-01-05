@@ -15,7 +15,8 @@
 <!--  ///////////////////////// CSS ////////////////////////// -->
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
-<script src="http://localhost:1000/socket.io/socket.io.js"></script>
+<!-- <script src="http://localhost:3000/socket.io/socket.io.js"></script> -->
+<script src="http://18.191.246.235:3000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 	$(function() {
 		console.log("getChatEntrance.jsp");
@@ -23,7 +24,8 @@
 		let MY_USER_ID = "";
 		
 		//페이지 접속시 socket.io 접속
-		const socket = io.connect('http://localhost:3000', {
+		/* const socket = io.connect('http://localhost:3000', { */
+		const socket = io.connect('http://18.191.246.235:3000', {
 			cors: { origin: '*' }
 		});
 		
@@ -160,12 +162,69 @@
 			console.log(time);
 			return time;
 		}
+		
+		//============= "예약하기" Event 처리 ============
+		$("#chatReservationBtn").on("click", function() {
+			console.log("예약하기");
+			let chatNo = "${chat.chatNo }";
+			location.href="/chat/getChatReservation?chatNo="+chatNo;
+		});
+		
+		//============= "모임참여 체크하기" Event 처리 ============
+		$("body").on("click", "input[value='모임참여 체크하기']", function() {
+			console.log("모임참여 체크하기");
+			$.ajax({
+				url : "/chat/json/updateReadyCheck/chatNo=${chat.chatNo}&readyCheck=true",
+				method : "GET",
+				dataType : "json",
+				headers : {
+					"Accept" : "application/json",
+					"contentType" : "application/json; charset=utf-8"
+				},
+				success : function(JSONData){
+					console.log("바꾸기 성공");
+					$("input[value='모임참여 체크하기']").val('모임참여 해제하기');
+					$('#chatReservationOkModal').modal('show');
+					
+				},
+				error : function(e) {
+					alert(e.responseText);
+				}
+			});
+		});
+			
+		//============= "모임참여 해제하기" Event 처리 ============
+		$("body").on("click", "input[value='모임참여 해제하기']", function() {
+			console.log("모임참여 해제하기");
+			$.ajax({
+				url : "/chat/json/updateReadyCheck/chatNo=${chat.chatNo}&readyCheck=false",
+				method : "GET",
+				dataType : "json",
+				headers : {
+					"Accept" : "application/json",
+					"contentType" : "application/json; charset=utf-8"
+				},
+				success : function(JSONData){
+					console.log("바꾸기 성공");
+					$("input[value='모임참여 해제하기']").val('모임참여 체크하기');
+					$('#chatReservationCancleModal').modal('show');
+				},
+				error : function(e) {
+					alert(e.responseText);
+				}
+			});
+		});
+		
+		//============= "나가기" Event 처리 ============
+		$("#chatOutBtn").on("click", function() {
+			console.log("나가기 클릭");
+			location.href="/chat/deleteChatMember?chatNo=${chat.chatNo}";
+		});
 	});
 </script>
 </head>
 
 <body class="is-preload">
-
 	<!-- S:Wrapper -->
 	<div id="wrapper">
 
@@ -185,8 +244,6 @@
 							<input type="hidden" id="nickname" value="${member.nickname }"/>
 							<input type="hidden" id="chatNo" value="${chat.chatNo }"/>
 							<input type="hidden" id="restaurantNo" value="${chat.chatRestaurant.restaurantNo }"/>
-							
-						
 						
 							<div class="chat-contents d-flex flex-column">
 								<div class="chat-header d-flex flex-row align-items-center">
@@ -235,7 +292,7 @@
 								<div class="chat-header d-flex flex-row align-items-center">
 									<h3 class="flex-fill">참여자 목록<small>(<b>3</b>/10)</small></h3>
 									<div class="chat-header-util">
-										<input type="button" class="button small secondary" value="나가기" />
+										<input type="button" class="button small secondary" data-toggle="modal" data-target="#chatLeaderOuteModal" value="나가기" />
 										<div class="dropdown-parent">
 											<a href="" class="svg-btn chat-info-button dropdown-parent" title="채팅방,음식점 정보보기"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></a>
 											<div class="dropdown-box">
@@ -262,23 +319,142 @@
 									</ul>
 								</div>
 								<div class="chat-footer">
-									<input type="button" class="button small" value='모임참여 체크하기'/>
-									<input type="button" class="button primary small" value="예약하기"/>
+									<c:choose>
+										<c:when test="${chat.chatLeaderId.memberId == member.memberId }">
+										<c:choose>
+											<c:when test="${chat.chatState == 1 || chat.chatState == 2}">
+											<input type="button" class="button primary small" data-toggle="modal" data-target="#chatReservationModal" value="예약하기"/>
+											</c:when>
+											<c:otherwise>
+											<input type="button" class="button primary small" disabled value="예약완료"/>
+											</c:otherwise>
+										</c:choose>
+											
+										</c:when>
+										<c:otherwise>
+										<c:choose>
+											<c:when test="${chat.chatState == 1 || chat.chatState == 2}">
+											<input type="button" class="button small" value='${chatMember.readyCheck == true ? "모임참여 해제하기" : "모임참여 체크하기"}'/>
+											</c:when>
+											<c:otherwise>
+											<input type="button" class="button small" disabled value='모임참여 체크불가'/>
+											</c:otherwise>
+										</c:choose>
+										</c:otherwise>
+									</c:choose>
+									
 								</div>
 							</div>
 							
 						</div>
 						<!-- E:chatting -->
-
+						
+						<!-- S:Modal -->
+						<!-- 예약진행 모달 -->
+						<div class="modal fade" id="chatReservationModal" tabindex="-1" aria-labelledby="chatReservationModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header justify-content-end">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          <span aria-hidden="true">&times;</span>
+								        </button>
+									</div>
+									<div class="modal-body">
+										<p>예약을 진행하시겠습니까?</p>
+										<span>모임 참여 유저 </span>
+										<ul class="chat">
+										<c:set var="i" value="0" />
+										<c:forEach var="chatMember" items="${chatMemberList}">
+											<c:set var="i" value="${ i+1 }" />
+											<li>${chatMember.member.nickname }</li>
+										</c:forEach>
+										</ul>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="button secondary small" data-dismiss="modal">아니오</button>
+										<button type="button" class="button primary small" id="chatReservationBtn">예</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- 모임확정 모달 -->
+						<div class="modal fade" id="chatReservationOkModal" tabindex="-1" aria-labelledby="chatReservationOkModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content">
+									<div class="modal-header justify-content-end">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          <span aria-hidden="true">&times;</span>
+								        </button>
+									</div>
+									<div class="modal-body">
+										모임참여가 확정되었습니다.
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="button primary small fit" data-dismiss="modal">확인</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- 모임 취소 모달 -->
+						<div class="modal fade" id="chatReservationCancleModal" tabindex="-1" aria-labelledby="chatReservationCancleModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content">
+									<div class="modal-header justify-content-end">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          <span aria-hidden="true">&times;</span>
+								        </button>
+									</div>
+									<div class="modal-body">
+										모임참여가 취소되었습니다.
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="button primary small fit" data-dismiss="modal">확인</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- E:Modal -->
+						
+						<!-- 나가기 모달 -->
+						<div class="modal fade" id="chatLeaderOuteModal" tabindex="-1" aria-labelledby="chatLeaderOuteModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content">
+									<div class="modal-header justify-content-end">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          <span aria-hidden="true">&times;</span>
+								        </button>
+									</div>
+									<div class="modal-body">
+										<c:choose>
+											<c:when test="${chat.chatLeaderId.memberId == member.memberId }">
+												방장이 나가면 채팅방이 폭파됩니다.<br/>채팅방을 나가시겠습니까?
+											</c:when>
+											<c:otherwise>
+												채팅방을 나가시겠습니까?
+											</c:otherwise>
+										</c:choose>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="button secondary small" data-dismiss="modal">아니오</button>
+										<button type="button" class="button primary small" id="chatOutBtn">예</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- E:Modal -->
+						
 					</div>
 				</section>
 			</div>
 		</div>
 		<!-- E:Main -->
-
+		
 		<!-- Sidebar -->
 		<jsp:include page="/layout/sidebar.jsp" />
 	</div>
 	<!-- E:Wrapper -->
+	
 </body>
 </html>

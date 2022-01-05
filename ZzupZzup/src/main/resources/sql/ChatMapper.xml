@@ -19,13 +19,24 @@
 		<result property="chatShowStatus" column="chat_show_status" jdbcType="BOOLEAN"/>
 		<result property="chatAge" column="age_type" jdbcType="VARCHAR"/>
 		<result property="reportCount" column="report_count" jdbcType="INTEGER"/>
+		<result property="readyCount" column="ready_count" jdbcType="INTEGER"/>
+		<collection property="chatMember" column="chat_no" javaType="java.util.ArrayList" ofType="chatMember" select="listChatMember">
+			<id property="chatMemberNo" column="chat_member_no"/>
+			<result property="chatNo" column="chat_no" jdbcType="INTEGER"/>
+			<result property="member.memberId" column="chat_member_id" jdbcType="VARCHAR"/>
+			<result property="readyCheck" column="ready_check" jdbcType="BOOLEAN"/>
+			<result property="chatLeaderCheck" column="chat_leader_check" jdbcType="BOOLEAN"/>
+			<result property="inOutCheck" column="in_out_check" jdbcType="BOOLEAN"/>
+		</collection>
 	</resultMap>
 	
 	<resultMap id="chatMemberSelectMap" type="chatMember">
 		<result property="chatNo" column="chat_no" jdbcType="INTEGER"/>
 		<result property="member.memberId" column="chat_member_id" jdbcType="VARCHAR"/>
+		<result property="member.nickname" column="nickname" jdbcType="VARCHAR"/>
 		<result property="readyCheck" column="ready_check" jdbcType="BOOLEAN"/>
 		<result property="chatLeaderCheck" column="chat_leader_check" jdbcType="BOOLEAN"/>
+		<result property="inOutCheck" column="in_out_check" jdbcType="BOOLEAN"/>
 	</resultMap>
 	
 	
@@ -53,13 +64,14 @@
 	
 	<!-- SQL : SELECT ONE -->
 	<select id="getChat" parameterType="int" resultMap="chatSelectMap">		
-		SELECT c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(rp.chat_no) report_count, count(*) chat_member_count
+		SELECT c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(rp.chat_no) report_count, count(*) chat_member_count, (SELECT count(*) from chat_member where chat_no = #{chatNo} and ready_check = 1) ready_count
 		FROM chat c
 		LEFT OUTER JOIN report rp ON ( c.chat_no = rp.chat_no)
 		LEFT OUTER JOIN chat_member cm ON ( c.chat_no = cm.chat_no)
 		WHERE c.chat_no = #{chatNo}
-		GROUP BY c.chat_no
+		GROUP BY c.chat_no;
 	</select>
+	
 	
 	<!-- SQL : UPDATE -->
 	<update id="updateChat" parameterType="chat">
@@ -147,7 +159,7 @@
 	
 	<!-- SQL : INSERT -->
 	<insert id="addChatMember" parameterType="chatMember">
-		INSERT IGNORE INTO chat_member (
+		INSERT INTO chat_member (
 			chat_no, 
 			chat_member_id, 
 			<if test="readyCheck != null">ready_check,</if>
@@ -170,103 +182,64 @@
 			ORDER BY chat_member_no
 	</select>
 	
-	<!-- SQL : DELETE -->
-	<delete id="deleteChatMember">
-		DELETE FROM chat_member WHERE chat_member_id = #{member.memberId} and chat_no = #{chatNo};
-	</delete>
+	<!-- SQL : SELECT ALL -->
+	<select id="listReservationChatMember" parameterType="map" resultMap="chatMemberSelectMap">
+		<!-- <bind name="searchKeywords" value="'%' + searchKeyword + '%'" /> -->
+		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check, in_out_check
+			FROM chat_member
+			WHERE chat_no = #{chatNo} AND ready_check = 1
+	</select>
+	
+	<!-- SQL : SELECT ONE -->
+	<select id="getChatMember" parameterType="map" resultMap="chatMemberSelectMap">		
+		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check, in_out_check 
+		FROM chat_member
+		WHERE chat_no = #{chatNo} AND chat_member_id = #{memberId}
+	</select>
+	
+	<!-- SQL : UPDATE -->
+	<update id="updateChatMember" parameterType="chatMember">
+		UPDATE chat_member
+		<set>
+			in_out_check = #{inOutCheck}
+		</set>
+		WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
+	</update>
+	
+	<!-- SQL : UPDATE -->
+	<update id="deleteAllChatMember" parameterType="chatMember">
+		UPDATE chat_member
+		<set>
+			in_out_check = #{inOutCheck}
+		</set>
+		WHERE chat_no = #{chatNo};
+	</update>
+	
+	<!-- SQL : UPDATE -->
+	<update id="deleteChatMember" parameterType="chatMember">
+		UPDATE chat_member
+		<set>
+			in_out_check = #{inOutCheck}
+		</set>
+		WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
+	</update>
 	
 	<!-- SQL : update -->
 	<delete id="updateReadyCheck" parameterType="chatMember">
 		UPDATE chat_member
 		<set>
-			<if test="readyCheck == true">ready_check = TRUE</if>
-			<if test="readyCheck == false">ready_check = FALSE</if>
+			ready_check = #{readyCheck}
 		</set>
 		 WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
 	</delete>
 	
 	<!-- SQL : SELECT ALL -->
 	<select id="listReadyCheckMember" parameterType="map" resultMap="chatMemberSelectMap">
-		<!-- <bind name="searchKeywords" value="'%' + searchKeyword + '%'" /> -->
-		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check 
-			FROM chat_member
-			WHERE chat_no = #{chatNo} and ready_check = 1
+		SELECT c.chat_member_no, c.chat_no, c.chat_member_id, m.nickname, c.ready_check, c.chat_leader_check 
+			FROM chat_member c, member m
+			WHERE chat_no = #{chatNo} and c.ready_check = 1 and c.chat_member_id = m.member_id
 			ORDER BY chat_member_no
 	</select>
-	
-	
-	<!--
-	SELECT c.chat_no, c.chat_leader_id, c.chat_title, c.chat_image, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, c.restaurant_no, r.restaurant_name, r.street_address, r.area_address FROM chat c, restaurant r WHERE c.restaurant_no = r.restaurant_no
-	
-	SELECT * FROM (
-		SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM, c.chat_no, c.chat_leader_id, c.chat_title, c.chat_image, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, c.restaurant_no, r.restaurant_name, r.street_address, r.area_address FROM chat c, restaurant r, (SELECT @ROWNUM := 0) rn WHERE c.restaurant_no = r.restaurant_no ORDER BY c.chat_reg_date ASC ) SUB ORDER BY ROWNUM DESC;
-		
-	SELECT *
-	FROM (SELECT c.chat_no, c.chat_leader_id, c.chat_title, c.chat_image, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, c.restaurant_no, r.restaurant_name, r.street_address, r.area_address FROM chat c, restaurant r
-			WHERE c.restaurant_no = r.restaurant_no
-			ORDER BY c.chat_no LIMIT 0, 8 ) AS c
-	
-	-->
-	
-	
-	<!-- SELECT * 
-		FROM ( SELECT c.chat_no, c.chat_leader_id, c.chat_title, c.chat_image, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, c.restaurant_no, r.restaurant_name, r.street_address, r.area_address 
-				FROM chat c, restaurant r
-				LEFT JOIN member m ON c.chat_leader_id = m.member_id 
-				WHERE c.restaurant_no = r.restaurant_no
-				ORDER BY c.chat_no LIMIT #{search.startRowNum}, #{search.endRowNum}) AS c -->
-	
-	
-	<!-- SELECT (SELECT COUNT(*) FROM chat WHERE chat_no = 1) + (SELECT COUNT(*) FROM chat_member WHERE chat_no = 1) AS cnt;
-	
-	SELECT (SELECT COUNT(*) FROM chat_member WHERE chat_no = 1) AS cnt; -->
-	
-	
-	<!-- 참여자수 보기 -->
-	<!-- SELECT
-		c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(*) chat_member_count
-		FROM chat c
-		LEFT OUTER JOIN chat_member cm ON ( c.chat_no = cm.chat_no)
-		WHERE c.chat_no IN (1) -->
-	
-	
-	
-	<!-- SELECT * 
-		FROM ( SELECT c.chat_no, c.chat_title, c.chat_text, c.chat_image, c.chat_state, c.chat_show_status, c.restaurant_no, count(*) report_count
-				FROM chat c
-				LEFT OUTER JOIN report rp ON ( c.chat_no = rp.chat_no)
-				WHERE c.chat_no IN (1)
-				ORDER BY c.chat_no LIMIT 0, 8) AS c
-	
-	SELECT *
-	FROM ( SELECT chat_no, chat_title, chat_text, chat_image, chat_state, chat_show_status, restaurant_no, report_count
-			FROM chat LEFT OUTER JOIN(SELECT chat_no, count(*) report_count FROM report GROUP BY chat_no) report_count
-			ON chat.chat_no = report_count.chat_no) -->
-	
-	<!-- SELECT c.chat_no, c.chat_title
-	FROM chat c
-	LEFT OUTER JOIN (SELECT count(*) report_count
-						FROM report
-						GROUP BY chat_no) AS rp (c.chat_no = rp.chat_no)
-	GROUP by c.chat_no;
-	
-	SELECT *
-	FROM ( SELECT c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(rp.chat_no) report_count
-		FROM chat c
-		LEFT OUTER JOIN report rp ON ( c.chat_no = rp.chat_no)
-		GROUP BY c.chat_no
-		ORDER BY c.chat_no LIMIT 0, 8) AS c
-	
-	
-	SELECT count(chat_no) FROM report; -->
-	
-	<!-- SELECT c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(rp.chat_no) report_count
-		FROM chat c
-		LEFT OUTER JOIN report rp ON ( c.chat_no = rp.chat_no)
-		WHERE c.chat_no = 1
-		GROUP BY c.chat_no -->
-	
-	
 	
 	
 </mapper> 

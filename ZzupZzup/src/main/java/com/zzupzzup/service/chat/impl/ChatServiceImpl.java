@@ -96,18 +96,28 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public int updateChatState(Chat chat) throws Exception {
-		return chatDao.updateChatState(chat);
+	public int updateChatState(int chatNo, int chatState) throws Exception {
+		return chatDao.updateChatState(chatNo, chatState);
 	}
 
 	@Override
 	public Chat getChatRecord(int chatNo) throws Exception {
 		return chatDao.getChatRecord(chatNo);
 	}
+	
+	@Override
+	public int updateChatMember(ChatMember chatMember) throws Exception {
+		return chatDao.updateChatMember(chatMember);
+	}
 
 	@Override
 	public int deleteChatMember(ChatMember chatMember) throws Exception {
 		return chatDao.deleteChatMember(chatMember);
+	}
+	
+	@Override
+	public int deleteAllChatMember(ChatMember chatMember) throws Exception {
+		return chatDao.deleteAllChatMember(chatMember);
 	}
 	
 	@Override
@@ -121,13 +131,8 @@ public class ChatServiceImpl implements ChatService {
 	}
 	
 	@Override
-	public Map<String, Object> getChatMember(int chatNo, Member memberId) throws Exception {
-		List<ChatMember> list = chatDao.getChatMember(chatNo, memberId);
-		
-		Map<String, Object> map= new HashMap<String, Object>();
-		map.put("list", list);
-		
-		return map;
+	public ChatMember getChatMember(int chatNo, String memberId) throws Exception {
+		return chatDao.getChatMember(chatNo, memberId);
 	}
 
 	@Override
@@ -147,17 +152,11 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public Map<String, Object> listReadyCheckMember(Search search, int chatNo) throws Exception {
+	public Map<String, Object> listReadyCheckMember(int chatNo) throws Exception {
 		Map<String, Object> map = new HashMap<String,Object>();
-		map.put("search", search);
-		//map.put("searchCondition", search.getSearchCondition() );
-		//map.put("searchKeyword",  search.getSearchKeyword() );
-		//map.put("endRowNum",  search.getEndRowNum() );
-		//map.put("startRowNum",  search.getStartRowNum() );
 		map.put("chatNo", chatNo);
 		
 		map.put("list", chatDao.listReadyCheckMember(map));
-		map.put("totalCount", chatDao.getTotalCount(search));
 		
 		return map;
 	}
@@ -176,5 +175,7 @@ public class ChatServiceImpl implements ChatService {
 		
 		return map;
 	}
+
+	
 
 }

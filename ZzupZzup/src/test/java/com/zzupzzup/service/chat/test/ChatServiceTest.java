@@ -210,7 +210,7 @@ public class ChatServiceTest {
 		Chat chat = chatService.getChat(1);
 		System.out.println("chat update state before : " + chat);
 		chat.setChatState(4);
-		chatService.updateChatState(chat);
+		chatService.updateChatState(chat.getChatNo(), 2);
 		
 		chat = chatService.getChat(1);
 		System.out.println("chat update state after : " + chat);
@@ -333,7 +333,7 @@ public class ChatServiceTest {
 		
 		System.out.println("search : " + search);
 		
-		Map<String, Object> map = chatService.listReadyCheckMember(search, chatMember.getChatNo());
+		Map<String, Object> map = chatService.listReadyCheckMember(chatMember.getChatNo());
 		System.out.println("===================================");
 		System.out.println("testListChat map : " + map);
 		System.out.println("===================================");

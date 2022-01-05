@@ -29,7 +29,7 @@ public interface ChatService {
 	public int deleteChat(Chat chat) throws Exception;
 	
 	// Update
-	public int updateChatState(Chat chat) throws Exception;
+	public int updateChatState(int chatNo, int chatState) throws Exception;
 	
 	// Select One
 	public Chat getChatRecord(int chatNo) throws Exception;
@@ -38,19 +38,25 @@ public interface ChatService {
 	public int addChatMember(ChatMember chatMember) throws Exception;
 	
 	// Select One
-	public Map<String, Object> getChatMember(int chatNo, Member memberId) throws Exception;
+	public ChatMember getChatMember(int chatNo, String memberId) throws Exception;
 	
-	// Delete
+	// Update
+	public int updateChatMember(ChatMember chatMember) throws Exception;
+	
+	// Update
 	public int deleteChatMember(ChatMember chatMember) throws Exception;
+	
+	// Update
+	public int deleteAllChatMember(ChatMember chatMember) throws Exception;
 	
 	// update
 	public int updateReadyCheck(ChatMember chatMember) throws Exception;
 	
-	// Select One
+	// Select List
 	public Map<String, Object> listChatMember(Search search, int chatNo) throws Exception;
 	
-	// Select One
-	public Map<String, Object> listReadyCheckMember(Search search, int chatNo) throws Exception;
+	// Select List
+	public Map<String, Object> listReadyCheckMember(int chatNo) throws Exception;
 
 	
 	//임시 음식점 찾기

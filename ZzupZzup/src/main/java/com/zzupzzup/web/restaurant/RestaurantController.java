@@ -1,6 +1,10 @@
 package com.zzupzzup.web.restaurant;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +17,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,7 +63,7 @@ public class RestaurantController {
 	
 	///Method
 	@RequestMapping(value="addRestaurant", method=RequestMethod.GET)
-	public String addRestaurant(@RequestParam("memberId") String memberId) throws Exception {
+	public String addRestaurant() throws Exception {
 		
 		System.out.println("/restaurant/addRestaurant : GET");
 		//System.out.println("memberId : "+memberId);
@@ -70,14 +76,21 @@ public class RestaurantController {
 			@ModelAttribute("restaurantMenus") Restaurant restaurantMenus,
 			@ModelAttribute("restaurantTimes") Restaurant restaurantTimes,
 			/*@ModelAttribute("restaurantImage") Restaurant restaurantImage*/
+			@RequestParam(value="file", required = false) MultipartFile uploadOwnerFile,
 			MultipartHttpServletRequest uploadFile,
 			HttpServletRequest request) throws Exception {
 			
 		System.out.println("/restaurant/addRestaurant : POST");
 		
 		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
-		
 		uploadFilePath(uploadFile, empty, restaurant);
+		
+		System.out.println("ooooooooooooooo : " + uploadOwnerFile);
+		
+		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/owner");
+		String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
+		
+		restaurant.setOwnerImage(ownerImage);
 		
 		if(restaurantService.addRestaurant(restaurant) == 1) {
 			System.out.println("INSERT RESTAURANT SUCCESS");
@@ -116,6 +129,30 @@ public class RestaurantController {
 		return "forward:/restaurant/getRestaurant.jsp";
 	}
 	
+	@RequestMapping(value="getRequestRestaurant", method=RequestMethod.GET)
+	public String getRequestRestaurant(@RequestParam("restaurantNo") int restaurantNo, Model model) throws Exception {
+		
+		System.out.println("/restaurant/getRequestRestaurant : GET");
+		
+		Restaurant restaurant = restaurantService.getRestaurant(restaurantNo);
+		
+		model.addAttribute("restaurant", restaurant);
+		
+		return "forward:/restaurant/getRequestRestaurant.jsp";
+	}
+	
+	@RequestMapping(value="updateRestaurant", method=RequestMethod.GET)
+	public String updateRestaurant(@RequestParam("restaurantNo") int restaurantNo, HttpSession session) throws Exception {
+		
+		System.out.println("/restaurant/updateRestaurant : GET");
+		
+		Restaurant restaurant = restaurantService.getRestaurant(restaurantNo);
+		
+		session.setAttribute("restaurant", restaurant);
+		
+		return "forward:/restaurant/updateRestaurant.jsp";
+	}
+	
 	@RequestMapping(value="updateRestaurant", method=RequestMethod.POST)
 	public String updateRestaurant(@ModelAttribute("restaurant") Restaurant restaurant, HttpSession session) throws Exception {
 		
@@ -132,8 +169,6 @@ public class RestaurantController {
 		
 		return "redirect:/restaurant/getRestaurant?restaurantNo=" + restaurant.getRestaurantNo();
 	}
-	
-	
 	
 	@RequestMapping(value="listRestaurant")
 	public String listRestaurant(@ModelAttribute("search") Search search, Model model, HttpServletRequest request) throws Exception {
@@ -163,10 +198,64 @@ public class RestaurantController {
 		
 	}
 	
+	@RequestMapping(value="listRequestRestaurant")
+	public String listRequestRestaurant(@ModelAttribute("search") Search search, Model model, HttpServletRequest request) throws Exception {
+		
+		System.out.println("/restaurant/listRequestRestaurant : SERVICE");
+		
+		if(search.getCurrentPage() == 0){
+			search.setCurrentPage(1);
+		}
+		
+		if(request.getParameter("page") != null) {
+			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+		}
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = restaurantService.listRestaurant(search);
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("search", search);
+		model.addAttribute("totalCount", map.get("totalCount"));
+		model.addAttribute("resultPage", resultPage);
+		
+		return "forward:/restaurant/listRequestRestaurant.jsp";
+		
+	}
+	
+	@RequestMapping(value="judgeRestaurant")
+	public String judgeRestaurant(@ModelAttribute Restaurant restaurant) throws Exception {
+		
+		System.out.println("/restaurant/judgeRestaurant : POST");
+		
+		System.out.println("CHECK POINT : " + restaurant);
+		
+		restaurantService.judgeRestaurant(restaurant);
+		
+		return "redirect:/";
+		
+	}
+	
+	@RequestMapping(value="deleteRestaurant", method=RequestMethod.GET)
+	public String deleteRestaurant(@RequestParam("restaurantNo") int restaurantNo) throws Exception {
+		
+		System.out.println("/restaurant/listRestaurant : GET");
+		
+		System.out.println("DELETE TO : " + restaurantNo);
+		
+		restaurantService.deleteRestaurant(restaurantNo);
+		
+		System.out.println("SUCCESS OF DELETE RESTAURANT");
+		
+		return "redirect:/restaurant/listRestaurant";
+	}
 	
 	private void uploadFilePath(MultipartHttpServletRequest uploadFile, String empty, Restaurant restaurant) {
 		
-		List<MultipartFile> fileList = uploadFile.getFiles("file");
+		List<MultipartFile> fileList = uploadFile.getFiles("multiFile");
 		
 		List<String> resImg = new ArrayList<String>();
 		
@@ -190,9 +279,26 @@ public class RestaurantController {
 					e.printStackTrace();
 				}
 			}
+		}	
+	}
+	
+	private String uploadOwnerImg(MultipartFile uploadOwnerFile, String vacant) {
+		
+		System.out.println("gggggggggggggggg : " + uploadOwnerFile.getOriginalFilename());
+		
+		String ownerInfo = uploadOwnerFile.getOriginalFilename();
+		
+		System.out.println("ownerInfo : " + ownerInfo);
+		
+		Path checkpoint = Paths.get(vacant, File.separator + StringUtils.cleanPath(ownerInfo));
+		
+		try {
+			Files.copy(uploadOwnerFile.getInputStream(), checkpoint, StandardCopyOption.REPLACE_EXISTING);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
-		
+		return ownerInfo;
 	}
 	
 	

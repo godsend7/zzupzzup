@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.chat.ChatService;
@@ -150,5 +152,26 @@ public class ChatRestController {
         return map;
     }
 	
+	@RequestMapping(value="json/updateReadyCheck/chatNo={chatNo}&readyCheck={readyCheck}", method=RequestMethod.GET)
+	public Map updateReadyCheck(@PathVariable int chatNo, @PathVariable boolean readyCheck, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		System.out.println("/chat/json/updateReadyCheck : GET");
+		
+		Member member = (Member)session.getAttribute("member");
+		
+		ChatMember chatMember = new ChatMember();
+		chatMember.setChatNo(chatNo);
+		chatMember.setMember(member);
+		chatMember.setReadyCheck(readyCheck);
+		
+		System.out.println("UpdateReadyCheck chatMember : " + chatMember);
+		
+		chatService.updateReadyCheck(chatMember);
+		
+		Map map = new HashMap();
+		map.put("chatMember", chatMember);
+		return map;
+	}
 
+	
+	
 }

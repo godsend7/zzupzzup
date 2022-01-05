@@ -27,9 +27,15 @@
 				
 				<!-- profile image start -->
 				<div class="col-md" align="center">
-					<img
-						src="/resources/images/uploadImages/${member.profileImage}"
-						class="avatar-img rounded-circle" width="150" /> <br />
+					<c:if test="${member.profileImage == 'defaultImage.png'}">
+						<img src="/resources/images/${member.profileImage}"
+						class="avatar-img rounded-circle" width="150" height="150" />
+					</c:if>
+					<c:if test="${member.profileImage != 'defaultImage.png'}">
+						<img src="/resources/images/uploadImages/${member.profileImage}"
+						class="avatar-img rounded-circle" width="150" height="150"/>
+					</c:if>
+					<br />
 					<div class="d-flex justify-content-center">
 						<div class="col-md">
 							<h4>
@@ -37,8 +43,11 @@
 								<span class="badge badge-pill badge-dark"
 									style="color:#fff;background-color:#f56a6a;display:inline-block;padding: .25em .4em;padding-right: .6em;
 									padding-left: .6em;line-height: 1;">${member.memberRank}</span>&nbsp;
+								${member.nickname}
 							</c:if>
-							${member.nickname}
+							<c:if test="${sessionScope.member.memberRole != 'user'}">
+								${member.memberName}
+							</c:if>
 							</h4>
 						</div>
 					</div>
@@ -56,7 +65,7 @@
 							<li><a href="#">내 활동 점수 적립 내역</a></li>
 							<li><a href="#">내가 작성한 리뷰 내역</a></li>
 							<li><a href="#">내가 작성한 게시판 내역</a></li>
-							<li><a href="/reservation/listReservation?memberId=hihi@a.com">예약 및 결제 내역</a></li>
+							<li><a href="/reservation/listReservation?memberId=${reservation.member.memberId}">예약 및 결제 내역</a></li>
 							<li><a href="#">내가 좋아요 누른 리뷰 내역</a></li>
 							<li><a href="#">내가 좋아요 누른 게시물 내역</a></li>
 							<li><a href="#">나의 신고/제보 접수 내역</a></li>
@@ -70,7 +79,7 @@
 					<li><a href="/community/listCommunity">나만의 작고 소중한 맛집</a></li>
 					<li><a href="/restaurant/addRestaurant?memberId=${member.memberId}">test-음식점등록</a></li>
 					<li><a href="/review/addReview?reservationNo=1">test-리뷰</a></li>
-					<li><a href="/reservation/addReservation?chatNo=1">test-예약</a></li>
+					<li><a href="/reservation/addReservation?chatNo=${reservation.chat.chatNo}">test-예약</a></li>
 				<c:if test="${sessionScope.member.memberRole == 'owner'}">	
 					<li><a href="/reservation/listReservation?restaurantNo=1">test-예약</a></li>
 				</c:if>		
@@ -82,7 +91,7 @@
 						<ul>
 							<li><a href="/member/listMember">회원 목록 조회</a></li>
 							<li><a href="/restaurant/listRestaurant">등록된 전체 음식점 목록</a></li>
-							<li><a href="/restaurant/listRequestRestaurant.jsp">등록 요청 음식점 목록</a></li>
+							<li><a href="/restaurant/listRequestRestaurant">등록 요청 음식점 목록</a></li>
 						</ul>
 					</li>
 					</c:if>
