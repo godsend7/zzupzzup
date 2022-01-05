@@ -39,6 +39,10 @@ textarea {
 	margin-right: 10px;
 }
 
+#hashtagBox span {
+	margin-right: 5px;
+}
+
 .divBox .review-info-bottom a {
  	position: absolute; 
  	bottom: 5px;
@@ -92,9 +96,9 @@ textarea {
 	margin:auto;
 	padding : 5px;
 	width: 300px;
-	height: 500px;
+	height: 250px;
 	text-align: center;
-	line-height: 500px;
+	line-height: 250px;
 }
 
 .carousel-item .imgBox:after {
