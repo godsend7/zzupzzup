@@ -364,7 +364,7 @@
 									<br/>
 									<div class="row">
 										<div class="col">
-											<label for="stateMessage">성별</label>
+											<label for="gender">성별</label>
 												<input class="form-check-input" type="radio" name="gender" id="gender1" value="male" checked>
 												<label class="form-check-label" for="gender1">
 												    남
@@ -377,7 +377,7 @@
 												style="color: red; font-weight: bold"></span>
 										</div>
 										<div class="col">
-											<label for="stateMessage">연령대</label>
+											<label for="ageRange">연령대</label>
 												<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대" checked>
 												<label class="form-check-label" for="ageRange1">
 												    10대

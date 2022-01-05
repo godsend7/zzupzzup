@@ -92,7 +92,7 @@ public class MemberController {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : POST");
 		
-		String temp = request.getServletContext().getRealPath("/resources/images");
+		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		String profileImage = uploadFile(uploadfile, temp);
 		
 		member.setMemberRole(memberRole);
@@ -131,8 +131,6 @@ public class MemberController {
 		memberIdSet.setMemberId(memberId);
 		Member member = memberService.getMember(memberIdSet);
 		
-		System.out.println("!!!! "+member.getMemberPhone());
-		
 		model.addAttribute("member", member);
 		
 		return "forward:/member/getMember.jsp";
@@ -168,8 +166,27 @@ public class MemberController {
 		return "forward:/member/updateMemberView.jsp";
 	}
 	
-	public void updateOwner() {
+	@RequestMapping(value="updateMember", method=RequestMethod.POST)
+	public String updateMember(@RequestParam("memberId") String memberId, @ModelAttribute("member") Member member,
+			HttpServletRequest request, HttpSession session,
+			@RequestParam(value="file", required = false) MultipartFile uploadfile) throws Exception {
 		
+		System.out.println("/member/updateMember : POST");
+		
+		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
+		
+		String profileImage = uploadFile(uploadfile, temp);
+		member.setProfileImage(profileImage);
+		
+		memberService.updateMember(member);
+		System.out.println("memberPhone => "+member.getMemberPhone());
+		
+		String sessionId = ((Member)session.getAttribute("member")).getMemberId();
+		if(sessionId.equals(member.getMemberId())){
+			session.setAttribute("member", member);
+		}
+		
+		return "redirect:/member/getMember?memberId="+member.getMemberId();
 	}
 	
 	public void deleteMember() {
@@ -185,6 +202,7 @@ public class MemberController {
 	}
 	
 	private String uploadFile(MultipartFile uploadfile, String temp) {
+		System.out.println(":: uploadfile.getOriginalFilename() => " + uploadfile);
 		System.out.println(":: uploadfile.getOriginalFilename() => " + uploadfile.getOriginalFilename());
 		System.out.println(":: uploadfile.getSize() => " + uploadfile.getSize());
 			

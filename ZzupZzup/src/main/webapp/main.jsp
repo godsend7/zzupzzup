@@ -155,7 +155,7 @@
 			contentString = '<div style="padding:10px; width:280px;"><b>' + arrayLayout[i].restaurantName + menuType +
 							'<br>'+ mainMenu +
 							'<br>'+ arrayLayout[i].streetADDR +
-							'<br>'+ arrayLayout[i].areaADDR +
+							/* '<br>'+ arrayLayout[i].areaADDR + */
 							'<br>'+ arrayLayout[i].restaurantTel;
 							
 							 

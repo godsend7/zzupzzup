@@ -19,13 +19,36 @@
 <script type="text/javascript">
 	$(function() {
 		console.log("updateMemberView.jsp");
-		var memberRole = ${sessionScope.member.memberRole};
-		var checkBlacklist = $("#regBlacklist").prop("checked");
+		console.log("${member.profileImage}");
+		/* var memberRole = ${sessionScope.member.memberRole};
+		var checkBlacklist = $("#regBlacklist").prop("checked"); */
 		
-		$("#updateMember").on("click", function() {
-			location.href = "/member/updateMember";
+		$("#updateMember-complete").on("click", function() {
+			//location.href = "/member/updateMember";
+			$("#updateMember").attr("method","POST").attr("action","/member/updateMember?memberId=${member.memberId}").submit();
 		})
+		
 	});
+	
+	$(function() {
+		//인증번호 전송
+		$("input[value='인증번호 전송']").on("click", function() {
+			var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
+			$.ajax({
+				type : "GET",
+				url : "/member/json/sendCertificatedNum",
+				data : {
+					"phoneNum" : phoneNum
+				},
+				success : function(result) {
+					alert("인증번호가 발송되었습니다.");
+					globalVariable = result;
+				}
+			})
+		});
+		
+	});
+	
 </script>
 </head>
 
@@ -41,40 +64,33 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="getMember">
+				<section id="updateMember-section">
 					<div class="container">
 						<div class="row justify-content-center">
 							<div class="col-12 col-lg-10 col-xl-8 mx-auto">
-								<h2 class="h3 mb-4 page-title">내 정보 조회</h2>
+								<h2 class="h3 mb-4 page-title">내 정보 수정</h2>
 								<div class="my-4">
-									<form id="getMember">
+									<form id="updateMember">
+									<input type="hidden" id="member-id-hidden" value="${param.memberId}"/>
+									<%-- <input type="hidden" id="profile-image-hidden" value="${member.profileImage}"/> --%>
 										<div class="row mt-5 align-items-center">
-											<div class="col-md-3 mb-5">
+											<div class="col-md-3 mb-5" id="edit-profileImage">
 												<div class="col-md" align="center">
-													<c:if test="${member.profileImage == 'defaultImage.png'}">
-														<img
-															src="/resources/images/${member.profileImage}"
-															class="avatar-img rounded-circle" width="150" height="150"/>
-													</c:if>
-													<c:if test="${member.profileImage != 'defaultImage.png'}">
-														<img
-															src="/resources/images/uploadImages/${member.profileImage}"
-															class="avatar-img rounded-circle" width="150" height="150"/>
-													</c:if>
-													<br />
-													<c:if test="${sessionScope.member.memberRole == 'user'}">
-														<span
-															id="mannerScore" style="font-weight: bold">
-															<svg
-																xmlns="http://www.w3.org/2000/svg" width="10" height="10"
-																fill="#b01025" class="bi bi-heart-fill"
-																viewBox="0 0 16 16">
-															  <path fill-rule="evenodd"
-																	d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
-																	/>
-															</svg> ${member.mannerScore}
-														</span>
-													</c:if>
+													<!-- profileImage 도윤님 src start -->
+														<input class="file-drag-input" type="file" id="fileDragInput" name="fileDragInput" value="${member.profileImage}">
+														<input type="hidden" id="profileImage" name="profileImage" value="${member.profileImage}">
+													<div class="file-view mt-4">
+														<c:if test="${member.profileImage == 'defaultImage.png'}">
+															<img src="/resources/images/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
+														</c:if>
+														<c:if test="${member.profileImage != 'defaultImage.png'}">
+															<img src="/resources/images/uploadImages/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
+														</c:if>
+													</div>
+													<div style="margin-top:10px;margin-left:5px;">
+														<span class="file-drag-btn">프로필 편집</span>
+													</div>
+													<!-- profileImage 도윤님 src end -->
 												</div>
 											</div>
 											<!-- memberRole user일 때 프로필 이미지 옆 공간 -->
@@ -89,8 +105,9 @@
 														</div>
 													</div>
 													<div class="row mb-4">
-														<div class="col-md-7">
-															<p class="text-muted">${member.statusMessage}</p>
+														<div class="col-md-11">
+															<textarea class="form-control" id="stateMessage" name="stateMessage"
+															placeholder="100자 이내로 자유롭게 기술해주세요." rows="3">${member.statusMessage}</textarea>
 														</div>
 													</div>
 												</div>
@@ -116,7 +133,7 @@
 														<h4 class="mb-1">
 															전화번호
 														</h4>
-														${member.memberPhone}
+														<input type="text" id="memberPhone" value="${member.memberPhone}"/>
 													</div>
 												</div>
 											</c:if>
@@ -138,11 +155,8 @@
 												</div>
 											</c:if>
 										</div>
-										<c:if test="${sessionScope.member.memberRole != 'admin'}">
-											<a href="#" style="float:right;color:#bfbfbf">회원탈퇴</a>
-											<br/>
-											<hr class="my-4" />
-										</c:if>
+										<br/>
+										<hr class="my-4" />
 										<c:if test="${sessionScope.member.memberRole == 'user'}">
 											<div class="form-row">
 												<div class="col-6">
@@ -150,32 +164,234 @@
 														style="font-weight: bold">${member.memberName}</span>
 												</div>
 												<div class="col-6">
-													<label for="email">이메일</label> <span id="email"
+													<label for="memberId">아이디</label> <span id="memberId"
 														style="font-weight: bold">${member.memberId}</span>
 												</div>
 											</div>
 											<br />
 											<div class="form-row">
-												<div class="col-6">
-													<label for="memberPhone">전화번호</label> <span id="memberPhone"
-														style="font-weight: bold">${member.memberPhone}</span>
+												<c:if test="${member.loginType == '1'}">
+													<div class="col-md-6">
+														<label for="password">비밀번호</label> <input type="password"
+															class="form-control" id="password" name="password"
+															minlength="8" maxlength="15"
+															placeholder="8-15자 이내로 입력해주세요." required>
+													</div>
+													<div class="col-md-6">
+														<label for="checkPassword">비밀번호 확인</label> <input
+														type="password" class="form-control" id="checkPassword"
+														minlength="8" maxlength="15"
+														placeholder="비밀번호를 다시 입력해주세요." required>
+													</div>
+												</c:if>
+											</div>
+											<br />
+											<div class="form-row">
+												<div class="col-md-6">
+													<label for="memberPhone">전화번호</label>
+													<input type="text" id="memberPhone1" name="memberPhone1" value="${member.memberPhone.substring(0, 3)}" maxlength="3"/>
+													<input type="text" id="memberPhone2" name="memberPhone2" value="${member.memberPhone.substring(4, 8)}" maxlength="4"/>
+													<input type="text" id="memberPhone3" name="memberPhone3" value="${member.memberPhone.substring(9)}" maxlength="4"/>
+													<input type="button" value="인증번호 전송" style="float:right"/>
+												</div>
+												<div class="col-md-6">
+													<label for="certificeatedNum">인증번호</label>
+													<input type="text" id="certificeatedNum" maxlength="6"/>
 												</div>
 											</div>
 											<br />
 											<div class="form-row">
 												<div class="col-6">
-													<label for="ageRange">연령대</label> <span id="ageRange"
-														style="font-weight: bold">${member.ageRange}</span>
+													<label for="ageRange">연령대</label>
+													<!-- ageRange checked 확인 start -->
+													<c:if test="${member.ageRange == '10대'}">
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대" checked>
+														<label class="form-check-label" for="ageRange1">
+														    10대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange2" value="20대">
+														<label class="form-check-label" for="ageRange2">
+														    20대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange3" value="30대">
+														<label class="form-check-label" for="ageRange3">
+														    30대
+														</label>
+														<br/><br/>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange4" value="40대">
+														<label class="form-check-label" for="ageRange4">
+														    40대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange5" value="50대">
+														<label class="form-check-label" for="ageRange5">
+														    50대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange6" value="60대 이상">
+														<label class="form-check-label" for="ageRange6">
+														    60대 이상
+														</label>
+													</c:if>
+													<c:if test="${member.ageRange == '20대'}">
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대">
+														<label class="form-check-label" for="ageRange1">
+														    10대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange2" value="20대" checked>
+														<label class="form-check-label" for="ageRange2">
+														    20대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange3" value="30대">
+														<label class="form-check-label" for="ageRange3">
+														    30대
+														</label>
+														<br/><br/>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange4" value="40대">
+														<label class="form-check-label" for="ageRange4">
+														    40대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange5" value="50대">
+														<label class="form-check-label" for="ageRange5">
+														    50대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange6" value="60대 이상">
+														<label class="form-check-label" for="ageRange6">
+														    60대 이상
+														</label>
+													</c:if>
+													<c:if test="${member.ageRange == '30대'}">
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대">
+														<label class="form-check-label" for="ageRange1">
+														    10대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange2" value="20대">
+														<label class="form-check-label" for="ageRange2">
+														    20대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange3" value="30대" checked>
+														<label class="form-check-label" for="ageRange3">
+														    30대
+														</label>
+														<br/><br/>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange4" value="40대">
+														<label class="form-check-label" for="ageRange4">
+														    40대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange5" value="50대">
+														<label class="form-check-label" for="ageRange5">
+														    50대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange6" value="60대 이상">
+														<label class="form-check-label" for="ageRange6">
+														    60대 이상
+														</label>
+													</c:if>
+													<c:if test="${member.ageRange == '40대'}">
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대">
+														<label class="form-check-label" for="ageRange1">
+														    10대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange2" value="20대">
+														<label class="form-check-label" for="ageRange2">
+														    20대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange3" value="30대">
+														<label class="form-check-label" for="ageRange3">
+														    30대
+														</label>
+														<br/><br/>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange4" value="40대" checked>
+														<label class="form-check-label" for="ageRange4">
+														    40대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange5" value="50대">
+														<label class="form-check-label" for="ageRange5">
+														    50대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange6" value="60대 이상">
+														<label class="form-check-label" for="ageRange6">
+														    60대 이상
+														</label>
+													</c:if>
+													<c:if test="${member.ageRange == '50대'}">
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대">
+														<label class="form-check-label" for="ageRange1">
+														    10대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange2" value="20대">
+														<label class="form-check-label" for="ageRange2">
+														    20대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange3" value="30대">
+														<label class="form-check-label" for="ageRange3">
+														    30대
+														</label>
+														<br/><br/>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange4" value="40대">
+														<label class="form-check-label" for="ageRange4">
+														    40대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange5" value="50대" checked>
+														<label class="form-check-label" for="ageRange5">
+														    50대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange6" value="60대 이상">
+														<label class="form-check-label" for="ageRange6">
+														    60대 이상
+														</label>
+													</c:if>
+													<c:if test="${member.ageRange == '60대 이상'}">
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대">
+														<label class="form-check-label" for="ageRange1">
+														    10대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange2" value="20대">
+														<label class="form-check-label" for="ageRange2">
+														    20대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange3" value="30대">
+														<label class="form-check-label" for="ageRange3">
+														    30대
+														</label>
+														<br/><br/>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange4" value="40대">
+														<label class="form-check-label" for="ageRange4">
+														    40대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange5" value="50대">
+														<label class="form-check-label" for="ageRange5">
+														    50대
+														</label>
+														<input class="form-check-input" type="radio" name="ageRange" id="ageRange6" value="60대 이상" checked>
+														<label class="form-check-label" for="ageRange6">
+														    60대 이상
+														</label>
+													</c:if>
+													<!-- ageRange checked 확인 end -->
 												</div>
 												<div class="col-6">
-													<label for="gender">성별</label> <span id="gender"
-														style="font-weight: bold"> <c:if
-															test="${member.gender == 'male'}">
-													남자
-													</c:if> <c:if test="${member.gender == 'female'}">
-													여자
+													<!-- gender checked 확인 start -->
+													<c:if test="${member.gender == 'male'}">
+														<label for="gender">성별</label>
+														<input class="form-check-input" type="radio" name="gender" id="gender1" value="male" checked>
+														<label class="form-check-label" for="gender1">
+														    남
+														</label>
+														<input class="form-check-input" type="radio" name="gender" id="gender2" value="female">
+														<label class="form-check-label" for="gender2">
+														    여
+														</label>
 													</c:if>
-													</span>
+													<c:if test="${member.gender == 'female'}">
+														<label for="gender">성별</label>
+														<input class="form-check-input" type="radio" name="gender" id="gender1" value="male">
+														<label class="form-check-label" for="gender1">
+														    남
+														</label>
+														<input class="form-check-input" type="radio" name="gender" id="gender2" value="female" checked>
+														<label class="form-check-label" for="gender2">
+														    여
+														</label>
+													</c:if>
 												</div>
 											</div>
 										</c:if>
@@ -248,7 +464,7 @@
 											</div>
 										</c:if>
 										<hr class="my-4" />
-										<input type="button" style="float: right" id="updateMember"
+										<input type="button" style="float: right" id="updateMember-complete"
 											class="btn btn-primary" value="수정" />
 									</form>
 								</div>

@@ -44,7 +44,7 @@ public class ReportServiceTest {
 		
 		report.setMemberId("hihi@a.com");
 		//report.setReportReviewNo(1);
-		report.setReportChatNo(1);
+		//report.setReportChatNo(1);
 		//report.setReportMemberId("user02@zzupzzup.com");
 		//report.setReportRestaurantNo(2);;
 		report.setReportCategory(1);
