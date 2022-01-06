@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.siot.IamportRestClient.IamportClient;
@@ -53,13 +54,11 @@ public class ReservationRestController {
 	int pageSize;
 	
 	public ReservationRestController() {
-		// TODO Auto-generated constructor stub
 		System.out.println(this.getClass());
 	}
 
 	@RequestMapping(value = "json/updateReservation/{reservationNo}/{reservationStatus}", method = RequestMethod.GET)
-	public int updateReservation(@PathVariable("reservationNo") int reservationNo, @PathVariable("reservationStatus") int reservationStatus, /*@PathVariable("reservationCancelReason") 
-		int reservationCancelReason ,*/HttpSession session) throws Exception {
+	public int updateReservation(@PathVariable("reservationNo") int reservationNo, @PathVariable("reservationStatus") int reservationStatus, HttpSession session) throws Exception {
 		
 		System.out.println("/reservation/json/getReservation : GET");
 		
@@ -74,38 +73,19 @@ public class ReservationRestController {
 		
 		System.out.println("getReservation reservation : " + reservation);
 		
-
-		
 		return reservationService.updateReservation(reservation);
 	}
 	
-	//reservationCancelReason을 어떻게 rest로 동시에 넣어줘야될지 모르겠음...
 	@RequestMapping(value = "json/reservationCancel", method = RequestMethod.POST)
-	//public int reservationCancel(@RequestParam("reservationNo") int reservationNo, @RequestParam("reservationCancelReason") int reservationCancelReason,HttpSession session) throws Exception {
 	public int reservationCancel(@RequestBody Reservation reservation, HttpServletRequest httpServletRequest, HttpSession session) throws Exception {
 		
 		System.out.println("/reservation/json/reservationCancel : GET");
 		
 		Member member = (Member) session.getAttribute("member");
-		
-		//Reservation reservation = new Reservation();
-		
 		reservation.setMember(member);
-		//reservation.setReservationNo(reservationNo);
-		//reservation.setReservationCancelReason(reservationCancelReason);
-		
-		System.out.println("getReservation reservation : " + reservation);
-		
-
 		
 		return reservationService.updateReservation(reservation);
 	}	
-	
-	
-	
-	
-	
-	
 	
 	@RequestMapping( value="json/addReservation", method=RequestMethod.POST )
 	public int addReservation ( @RequestBody Reservation reservation, HttpServletRequest httpServletRequest) throws Exception {

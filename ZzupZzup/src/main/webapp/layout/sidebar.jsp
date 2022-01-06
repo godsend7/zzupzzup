@@ -3,6 +3,41 @@
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<%-- <!-- 실시간 시간 정보 DATA -->
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%
+	Date nowTime = new Date();
+	SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일 a hh:mm:ss");
+%>
+<!-- 실시간 시간 정보 DATA --> --%>
+
+<!-- 실시간 시간 정보 DATA2  -->
+<script type="text/javascript">
+    function showClock()
+    {
+        var currentDate = new Date();
+        var divClock=document.getElementById("divClock");
+        var apm = currentDate.getHours();
+        
+        if(apm<12) {
+            apm="오전 ";
+        } else {
+            apm="오후 ";
+        }
+        
+        var msg = apm +(currentDate.getHours()-12)+"시 ";
+        msg += currentDate.getMinutes() + "분 ";
+        msg += currentDate.getSeconds() + "초";
+        
+        divClock.innerText=msg;
+        
+        setTimeout(showClock,1000);
+    }
+</script>
+<!-- 실시간 시간 정보 DATA2  -->
+
+<body onload="showClock()">
 <!-- S:Sidebar -->
 <div id="sidebar" class="inactive">
 	<div class="inner">
@@ -16,7 +51,7 @@
 		<!-- Menu -->
 		<nav id="menu">
 			<header class="major">
-				<h2>Welcome to ZZUPZZUPDUCE_101</h2>
+				<h2><strong>Welcome to ZZUPZZUPDUCE_101</strong></h2>
 			</header>
 			<ul>
 
@@ -27,12 +62,12 @@
 				
 				<!-- profile image start -->
 				<div class="col-md" align="center">
-					<c:if test="${member.profileImage == 'defaultImage.png'}">
-						<img src="/resources/images/${member.profileImage}"
+					<c:if test="${sessionScope.member.profileImage == 'defaultImage.png'}">
+						<img src="/resources/images/${sessionScope.member.profileImage}"
 						class="rounded-circle" width="150" height="150" />
 					</c:if>
-					<c:if test="${member.profileImage != 'defaultImage.png'}">
-						<img src="/resources/images/uploadImages/${member.profileImage}"
+					<c:if test="${sessionScope.member.profileImage != 'defaultImage.png'}">
+						<img src="/resources/images/uploadImages/${sessionScope.member.profileImage}"
 						class="rounded-circle" width="150" height="150"/>
 					</c:if>
 					<br />
@@ -42,11 +77,11 @@
 							<c:if test="${sessionScope.member.memberRole == 'user'}">
 								<span class="badge badge-pill badge-dark"
 									style="color:#fff;background-color:#f56a6a;display:inline-block;padding: .25em .4em;padding-right: .6em;
-									padding-left: .6em;line-height: 1;">${member.memberRank}</span>&nbsp;
-								${member.nickname}
+									padding-left: .6em;line-height: 1;">${sessionScope.member.memberRank}</span>&nbsp;
+								${sessionScope.member.nickname}
 							</c:if>
 							<c:if test="${sessionScope.member.memberRole != 'user'}">
-								${member.memberName}
+								${sessionScope.member.memberName}
 							</c:if>
 							</h4>
 						</div>
@@ -117,14 +152,18 @@
 		<!-- Section -->
 		<section>
 			<header class="major">
-				<h2>mom's touch</h2>
+				<h2><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-alarm" viewBox="0 0 16 16">
+				  <path d="M8.5 5.5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9V5.5z"/>
+				  <path d="M6.5 0a.5.5 0 0 0 0 1H7v1.07a7.001 7.001 0 0 0-3.273 12.474l-.602.602a.5.5 0 0 0 .707.708l.746-.746A6.97 6.97 0 0 0 8 16a6.97 6.97 0 0 0 3.422-.892l.746.746a.5.5 0 0 0 .707-.708l-.601-.602A7.001 7.001 0 0 0 9 2.07V1h.5a.5.5 0 0 0 0-1h-3zm1.038 3.018a6.093 6.093 0 0 1 .924 0 6 6 0 1 1-.924 0zM0 3.5c0 .753.333 1.429.86 1.887A8.035 8.035 0 0 1 4.387 1.86 2.5 2.5 0 0 0 0 3.5zM13.5 1c-.753 0-1.429.333-1.887.86a8.035 8.035 0 0 1 3.527 3.527A2.5 2.5 0 0 0 13.5 1z"/>
+				</svg> 현재 시간</h2>
 			</header>
-			<p>종각역 4번출구 전방 30미터 이내 2층</p>
-			<ul class="contact">
+			<%-- <p><%= sf.format(nowTime) %></p> --%>
+			<ul class="contact" style="display:none">
 				<li class="icon solid fa-envelope"><a href="#">ebeaver@hanmail.net</a></li>
 				<li class="icon solid fa-phone">010-4444-4444</li>
 				<li class="icon solid fa-home">서울시 종로구 종로 69 서울YMCA</li>
 			</ul>
+			<div id="divClock" class="clock"></div>
 		</section>
 
 		<!-- Footer -->
@@ -139,3 +178,4 @@
 <!-- S: Login Modal -->
 <jsp:include page="/member/loginView.jsp" />
 <!-- E: Login Modal -->
+</body>

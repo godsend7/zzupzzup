@@ -89,6 +89,7 @@ public class ReservationController {
 	}
 	
 	@RequestMapping( value="addReservation", method=RequestMethod.POST )
+	@ResponseBody
 	public int addReservation ( @ModelAttribute("reservation") Reservation reservation, Model model ) throws Exception {
 
 		System.out.println("/reservation/addReservation : POST");

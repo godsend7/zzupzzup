@@ -24,6 +24,14 @@
 		$("#updateMember").on("click", function() {
 			self.location = "/member/updateMember?memberId=${member.memberId}";
 		})
+		
+		$("#back").on("click", function() {
+			history.go(-1);
+		})
+		
+		$("#list").on("click", function() {
+			self.location = "/member/listMember";
+		})
 	});
 </script>
 </head>
@@ -46,7 +54,7 @@
 							<div class="col-12 col-lg-10 col-xl-8 mx-auto">
 								<h2 class="h3 mb-4 page-title">내 정보 조회</h2>
 								<div class="my-4">
-									<form id="getMember-complete">
+									<form id="getMember">
 										<div class="row mt-5 align-items-center">
 											<div class="col-md-3 mb-5">
 												<div class="col-md" align="center">
@@ -248,25 +256,42 @@
 											<div class="form-row col-md-12">
 												<div class="col-md-6">
 													<label for="blacklistDate">블랙리스트</label>
-													<span id="blacklistDate"
+													<c:if test="${! empty member.blacklistDate}">
+														<span id="blacklistDate"
 														style="font-weight: bold">${member.blacklistDate}</span>
+													</c:if>
+													<c:if test="${empty member.blacklistDate}">
+														<span id="blacklistDate"
+														style="font-weight: bold">X</span>
+													</c:if>
 												</div>
-												<div class="checkbox mb-12">
+												<!-- <div class="checkbox mb-12">
 													<input type="checkbox" class="custom-control-input" id="checkBlacklist" value="" style="float:right;"/> 
 													<label for="checkBlacklist">블랙리스트 설정/해제하기</label>
-												</div>
-											</c:if>
-											<c:if test="${! empty member.deleteDate}">
+												</div> -->
 												<div class="col-md-6">
-													<br/>
-													<label for="deleteDate">탈퇴일</label> <span id="deleteDate"
-														style="font-weight: bold">${member.deleteDate}</span>
+													<label for="deleteDate">탈퇴일</label>
+													<c:if test="${! empty member.deleteDate}">
+														<span id="deleteDate"
+															style="font-weight: bold">${member.deleteDate}</span>
+													</c:if>
+													<c:if test="${empty member.deleteDate}">
+														<span id="deleteDate"
+															style="font-weight: bold">X</span>
+													</c:if>
 												</div>
-											</c:if>
 											</div>
+										</c:if>
 										<hr class="my-4" />
-										<input type="button" style="float: right" id="updateMember"
-											class="btn btn-primary" value="수정" />
+										<div align="center">
+											<c:if test="${sessionScope.member.memberRole != 'admin'}">
+												<input type="button" id="back" class="btn btn-primary" value="이전" />
+											</c:if>
+											<c:if test="${sessionScope.member.memberRole == 'admin'}">
+												<input type="button" id="list" class="btn btn-primary" value="목록" />
+											</c:if>
+											<input type="button" id="updateMember" class="btn btn-primary" value="수정" />
+										</div>
 									</form>
 								</div>
 							</div>
