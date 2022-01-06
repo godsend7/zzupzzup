@@ -26,6 +26,11 @@
 				history.go(-1);
 			});
 			
+			// 수정하기 버튼
+			$("button.btn.btn-info").on("click", function() {
+				self.location = "/restaurant/updateRestaurant?restaurantNo=${restaurant.restaurantNo}"
+			});
+			
 			// 삭제하기 버튼
 			$("button.btn.btn-link").on("click", function() {
 				if(confirm('정말로 삭제하시겠습니까? 확실해요??')) {
@@ -105,13 +110,13 @@
 						  </c:if>	
 					  </div>
 					  <button class="carousel-control-prev btn-outline-link" type="button" id="car_prev" data-target="#carouselExampleFade" data-slide="prev"
-					  style="border: none; outline: none; box-shadow: none; height: 600px;">
-					    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					  style="border: none; outline: none; box-shadow: none; height: 600px; background-color:transparent;">
+					    <span class="carousel-control-prev-icon" aria-hidden="true" style="width: 50px; height: 50px;"></span>
 					    <span class="sr-only">Previous</span>
 					  </button>
 					  <button class="carousel-control-next btn-outline-link" type="button" id="car_next" data-target="#carouselExampleFade" data-slide="next"
-					  style="border: none; outline: none; box-shadow: none; height: 600px;">
-					    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+					  style="border: none; outline: none; box-shadow: none; height: 600px; background-color:transparent;">
+					    <span class="carousel-control-next-icon" aria-hidden="true" style="width: 50px; height: 50px;"></span>
 					    <span class="sr-only">Next</span>
 					  </button>
 					</div><br><br>
@@ -308,14 +313,25 @@
 		  					<strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket" viewBox="0 0 16 16">
   							<path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"/>
   							</svg> 음식점 메뉴</strong></div>
-						<div class="col-xs-8 col-md-4">${restaurant.restaurantMenus[0].menuTitle} ${restaurant.restaurantMenus[0].menuPrice}원 &nbsp;
+  							<div class="col-xs-8 col-md-4">
+							<c:set var="i" value="0"/>
+							<c:forEach var="menus" items="${restaurant.restaurantMenus}">
+								<div>
+								${menus.menuTitle} &nbsp; ${menus.menuPrice}원 &nbsp;
+								<c:if test="${menus.mainMenuStatus}">
+									<span class="badge badge-success">메인메뉴</span>
+								</c:if>
+								</div>
+							</c:forEach>
+							</div>
+						<%-- <div class="col-xs-8 col-md-4">${restaurant.restaurantMenus[0].menuTitle} ${restaurant.restaurantMenus[0].menuPrice}원 &nbsp;
 							<c:if test="${restaurant.restaurantMenus[0].mainMenuStatus eq 'true'}">
 								<span class="badge badge-success">메인메뉴</span>
 							</c:if>
 							<c:if test="${restaurant.restaurantMenus[0].mainMenuStatus eq 'false'}">
 								
 							</c:if>
-						</div>
+						</div> --%>
 					</div><br><br>
 					
 					<div class="row">
@@ -336,8 +352,24 @@
 					</div><br><hr>
 					
 					<div class="text-center">
-						<button type="button" class="btn btn-link">삭제하기</button>
-						<button type="button" class="btn btn-warning">목록으로</button>
+						
+						<button type="button" class="btn btn-link">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+  						<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+  						<path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+						</svg> 삭제하기</button>
+						
+						<button type="button" class="btn btn-info">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bug" viewBox="0 0 16 16">
+  						<path d="M4.355.522a.5.5 0 0 1 .623.333l.291.956A4.979 4.979 0 0 1 8 1c1.007 0 1.946.298 2.731.811l.29-.956a.5.5 0 1 1 .957.29l-.41 1.352A4.985 4.985 0 0 1 13 6h.5a.5.5 0 0 0 .5-.5V5a.5.5 0 0 1 1 0v.5A1.5 1.5 0 0 1 13.5 7H13v1h1.5a.5.5 0 0 1 0 1H13v1h.5a1.5 1.5 0 0 1 1.5 1.5v.5a.5.5 0 1 1-1 0v-.5a.5.5 0 0 0-.5-.5H13a5 5 0 0 1-10 0h-.5a.5.5 0 0 0-.5.5v.5a.5.5 0 1 1-1 0v-.5A1.5 1.5 0 0 1 2.5 10H3V9H1.5a.5.5 0 0 1 0-1H3V7h-.5A1.5 1.5 0 0 1 1 5.5V5a.5.5 0 0 1 1 0v.5a.5.5 0 0 0 .5.5H3c0-1.364.547-2.601 1.432-3.503l-.41-1.352a.5.5 0 0 1 .333-.623zM4 7v4a4 4 0 0 0 3.5 3.97V7H4zm4.5 0v7.97A4 4 0 0 0 12 11V7H8.5zM12 6a3.989 3.989 0 0 0-1.334-2.982A3.983 3.983 0 0 0 8 2a3.983 3.983 0 0 0-2.667 1.018A3.989 3.989 0 0 0 4 6h8z"/>
+						</svg> 수정하기</button>
+						
+						<button type="button" class="btn btn-warning">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+  						<path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+  						<path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+						</svg> 목록으로</button>
+						
 					</div>
 					
 					</div>
