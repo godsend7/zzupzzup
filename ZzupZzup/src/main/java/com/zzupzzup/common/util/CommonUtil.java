@@ -184,6 +184,42 @@ public class CommonUtil {
 		
 	}
 	
+	public static String reservationCancelReason(int reservationCancelReason) {
+		
+		String typeName = "";
+		
+		if(reservationCancelReason == 0) {
+			typeName = "";
+			
+			return typeName;
+			
+		} else if(reservationCancelReason == 1) {
+			typeName = "동일 시간대에 이미 해당 예약이 존재합니다.";
+			
+			return typeName;
+			
+		} else if(reservationCancelReason == 2) {
+			typeName = "가게 휴무일 입니다.";
+			
+			return typeName;
+			
+		} else if(reservationCancelReason == 3) {
+			typeName = "재고 소진으로 예약이 불가능한 메뉴입니다.";
+			
+			return typeName;
+			
+		} else if(reservationCancelReason == 4) {
+			typeName = "";
+			
+			return typeName;	
+	
+		} else {
+			
+			return null;
+		}
+		
+	}
+	
 	public static String payOption(int payOption) {
 		
 		String typeName = "";

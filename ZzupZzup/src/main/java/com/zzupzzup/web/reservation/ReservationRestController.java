@@ -77,7 +77,35 @@ public class ReservationRestController {
 
 		
 		return reservationService.updateReservation(reservation);
+	}
+	
+	//reservationCancelReason을 어떻게 rest로 동시에 넣어줘야될지 모르겠음...
+	@RequestMapping(value = "json/reservationCancel", method = RequestMethod.POST)
+	//public int reservationCancel(@RequestParam("reservationNo") int reservationNo, @RequestParam("reservationCancelReason") int reservationCancelReason,HttpSession session) throws Exception {
+	public int reservationCancel(@RequestBody Reservation reservation, HttpServletRequest httpServletRequest, HttpSession session) throws Exception {
+		
+		System.out.println("/reservation/json/reservationCancel : GET");
+		
+		Member member = (Member) session.getAttribute("member");
+		
+		//Reservation reservation = new Reservation();
+		
+		reservation.setMember(member);
+		//reservation.setReservationNo(reservationNo);
+		//reservation.setReservationCancelReason(reservationCancelReason);
+		
+		System.out.println("getReservation reservation : " + reservation);
+		
+
+		
+		return reservationService.updateReservation(reservation);
 	}	
+	
+	
+	
+	
+	
+	
 	
 	@RequestMapping( value="json/addReservation", method=RequestMethod.POST )
 	public int addReservation ( @RequestBody Reservation reservation, HttpServletRequest httpServletRequest) throws Exception {

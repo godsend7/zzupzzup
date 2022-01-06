@@ -322,7 +322,7 @@
 					obj.loadend(data);
 				}
 				saveName = JSON.parse(data).saveName;
-				$fileDragView.html("<img src='/resources/images/uploadImages/chat/"+saveName+"'/>");
+				$fileDragView.html("<a href='' class='cvf_delete_image'><img src='/resources/images/uploadImages/chat/"+saveName+"'/></a>");
 				console.log("saveName : " + saveName);
 				$chatImage.val(saveName);
 				
@@ -373,7 +373,7 @@
 		}
 		
 		//사진 클릭시 첨부 이미지 삭제
-		$("body").on("click", ".file-drag-view img", function(){
+		$("body").on("click", ".file-drag-view a", function(){
 			console.log("이미지에 마우스 올렸다");
 			$chatImage.val('');
 			$(this).remove();

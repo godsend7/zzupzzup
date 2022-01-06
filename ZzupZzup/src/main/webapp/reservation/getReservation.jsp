@@ -13,8 +13,6 @@
 <!-- <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script> -->
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
-/* .nbsp > span {margin-right:100px;} 
-.nbsp input { border: none;  } */
 
 </style>
 
@@ -23,7 +21,9 @@
 	$(function() {
 
 		console.log("getReservationView.jsp");
-		//console.log(${reservation.reservationDate});
+		console.log(${reservation.reservationCancelReason});
+		
+		
 		///날짜 초 자르는 부분 ///
 		//var fixed = "${reservation.fixedDate}";
 		//var fixedDateSlice = fixed.slice(0,-5);
@@ -103,7 +103,7 @@
 					
 	   	/////////////////////////ajax//////////////////////////
 	   	
-	   		$(".reservationRejectionModal").on("click", function() {
+	   		$("#userConfirm").on("click", function() {
 				console.log("#reservationRejectionModal");
 				console.log("${reservation.reservationNo}");
 				console.log("${reservation.reservationStatus}");
@@ -151,6 +151,41 @@
 				}); 
 			});
 	   	
+	   	//예약거절 파트/////////////////////////////////////////////////////////////////////
+	   		//$("#cancelConfirm").on("click", function() {
+	   		function fncCancelConfirm() {	
+				console.log("#cancelConfirm");
+				console.log("${reservation.reservationNo}");
+				console.log("${reservation.reservationCancelReason}");
+				
+				var cancelReason = $("input[name='reservationCancelReason']:checked").val();
+			
+				$.ajax({
+					//url : "/reservation/json/updateReservation/${reservation.reservationNo}/${reservation.reservationCancelReason}/",
+					url : "/reservation/json/reservationCancel",
+					type : "POST",
+					dataType: "html",
+					contentType : "application/json; charset=utf-8",
+					data : JSON.stringify({
+						reservationNo : ${reservation.reservationNo},
+						reservationCancelReason : cancelReason
+					}),
+					success : function(data){
+						console.log("바꾸기 성공");
+						$('#cancelConfirm').modal("hide");
+						alert("거절사유가 완료되었습니다.");
+						
+					},
+					error : function(e) {
+						alert(e.responseText);
+					} 
+				});
+			} 
+	   	
+	   		$("#cancelConfirm").on("click", function() {
+				fncCancelConfirm();
+			});
+			
 	   	////////////////////////////////////////////////////////////////////////
 	   	/* Iamport 환불시스템*/
 		    $(".payRefund-modal").on("click", function() {
@@ -209,7 +244,8 @@
 						<h3>예약 정보</h3>
 					
 						<form id="getReservation">
-						
+							<%-- <input type="hidden" id="reservationNo" name="reservationNo" value="${reservation.reservationNo}">
+							<input type="hidden" id="reservationCancelReason" name="reservationCancelReason" value="${reservation.reservationCancelReason}"> --%>
 							<!-- 	<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="1">
 								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="1"> -->
 <%-- 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
@@ -229,8 +265,11 @@
 							
 							
 								<div class="col-12">
-									<label for="nickname">NickName</label> 
-									<p>${reservation.member.nickname}</p>
+									<label for="nickname">예약자 NickName</label> 
+									<%-- <p>${reservation.member.nickname}</p> --%>
+									<p><c:forEach var="chatMember" items="${chatMemberList}" varStatus="status">
+											<c:out value = "${chatMember.member.nickname} ${status.last ? '' : '/'}"/>
+										</c:forEach></p>
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
@@ -294,6 +333,11 @@
 								<div class="col-12">
 									<label for="reservationStatus">예약 및 결제 현황</label>
 									<p>${reservation.returnStatus}</p>
+								</div>
+								
+								<div class="col-12">
+									<label for="reservationStatus">예약 거절 사유</label>
+									<p>${reservation.returnReservationCancelReason} ${reservation.reservationCancelDetail}</p>
 								</div>
 								
 								
@@ -395,22 +439,24 @@
 											
 											<div class="modal-body">
 											
+											<form class="cancelUse">
 											<!-- 라디오 -->
 											<div class="col-12-small">
-												<input type="radio" id="reservationCancelReason1" name="reservationCancelReason" value="1"
+												<input type="radio" id="reservationCancelReason1" name="reservationCancelReason" class="reservationCancelReason" value="1"
 													checked> <label for="reservationCancelReason1">동일 시간대에 이미 해당 예약이 존재합니다.</label>
 											</div>
 											<div class="col-12-small">
-												<input type="radio" id="reservationCancelReason2" name="reservationCancelReason" value="2"> 
+												<input type="radio" id="reservationCancelReason2" name="reservationCancelReason" class="reservationCancelReason" value="2"> 
 												<label for="reservationCancelReason2">가게 휴무일 입니다.</label>
 											</div>
 											<div class="col-12-small">
-												<input type="radio" id="reservationCancelReason3" name="reservationCancelReason" value="3"> 
+												<input type="radio" id="reservationCancelReason3" name="reservationCancelReason" class="reservationCancelReason" value="3"> 
 												<label for="reservationCancelReason3">재고 소진으로 예약이 불가능한 메뉴입니다.</label>
 											</div>
 											<!-- text -->
-											<div class="col-12">
-												<label for="reservationCancelDetail">기타 내용 작성</label>
+											<div class="col-12-small">
+											<input type="radio" id="reservationCancelReason4" name="reservationCancelReason" class="reservationCancelReason" value="4"> 
+												<label for="reservationCancelReason4">기타 내용 작성</label>
 												<textarea name="reservationCancelDetail" id="reservationCancelDetail"
 													placeholder="100자 이내로 작성해주세요" rows="6"></textarea>
 											</div>
@@ -421,8 +467,9 @@
 											<div class="modal-footer">
 												<button type="button" class="button small secondary cancelUse"
 													data-dismiss="modal">취소</button>
-												<button type="button" class="button small primary cancelConfirm">확인</button>
+												<button type="button" class="button small primary cancelConfirm" id="cancelConfirm">확인</button>
 											</div>
+											</form>
 										</div>
 									</div>
 								</div>
