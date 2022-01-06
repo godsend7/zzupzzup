@@ -93,10 +93,21 @@
 			hashTagCount++;
 		});
 		
+		var hashtag_list = [];
+		
 		$("#hashTagBox").on("click", "span", function(e) {
 			e.stopPropagation();
 			
 			$(this).remove();
+			
+			var no = $(this).children().val();
+			console.log(no);
+		 	for (var i = 0; i < hashtag_list.length; i++) {
+				if (hashtag_list[i] == no) {
+					hashtag_list.splice(i, 1);
+					break;
+				}
+			} 
 			
 			if ($("#hashTagBox").children().length == 0) {
 				hashTagCount = 0;
@@ -118,20 +129,31 @@
 						"keyWord" : $("#hashTagAuto").val()
 					},
 					success : function(data, status) {
-						/* var arrayLayout = new Array();
-						var arrayLayout2 = new Array();
 						
-						$.each(data, function(index, item) {
-							console.log(item.hashTag);
-							arrayLayout.push(item.hashTag);
-							arrayLayout2.push(item.hashTagNo);
-						}); */
+						var array = Array.prototype.slice.call(data);
+						var hashArry = [];
+						
+						for (var i = 0; i < hashtag_list.length; i++) {
+							for (let hashTag of array) {
+								var check = false;
+								
+								if (hashtag_list[i] == hashTag.hashTagNo) {
+									hashArry.push(hashTag);
+									break;
+								}
+							}
+						}
+						
+						//중복된 해시태그 제외 출력 (차집합)
+						let difference = array.filter(x => !hashArry.includes(x));
+						
+						console.log(difference);
 						
 						response(
-							$.map(data, function(item) {
+							$.map(difference, function(item) {
                                 return {
-                                    label: item.hashTag,
-                                    value: item.hashTagNo
+                                	value: item.hashTagNo,
+                                    label: item.hashTag
                                 }
                             })
 						);//response 
@@ -144,8 +166,11 @@
 	 										+ hashTagCount + "].hashTagNo' value='" + ui.item.value + "'></span>");
 				hashTagCount++;
 				
-				$("#hashTagAuto").text('');
+				hashtag_list.push(ui.item.value);
+				
 				$("#hashTagAuto").val('');
+				
+				return false;
 	 		}
 		});
 	}
@@ -306,7 +331,7 @@
 			 		//console.log(item);
 			 	});
 				
-				//$("#review").attr("method", "POST").attr("action" , "/review/addReview").attr("enctype", "multipart/form-data").attr("accept-charset","UTF-8").submit();
+				$("#review").attr("method", "POST").attr("action" , "/review/addReview").attr("enctype", "multipart/form-data").attr("accept-charset","UTF-8").submit();
 		    },
 		    error:function(e){
 				console.log("실패");
