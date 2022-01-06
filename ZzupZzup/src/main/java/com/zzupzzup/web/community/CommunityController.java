@@ -93,13 +93,18 @@ public class CommunityController {
 			memberService.calculateActivityScore(community.getMember().getMemberId());
 		}
 		
-		for(RestaurantTime rt : restaurantTimes.getRestaurantTimes()) {
-			System.out.println(rt);
+		System.out.println("null이라며~~~ : " + restaurantTimes);
+		
+		if(restaurantTimes.getRestaurantTimes() != null) {
+			for(RestaurantTime rt : restaurantTimes.getRestaurantTimes()) {
+				System.out.println(rt);
+			}
 		}
 		
 		System.out.println("ADD_COMMUNITY : " + community);
 		
-		return "redirect:/community/listCommunity.jsp";
+		// .jsp 붙히지 말것!
+		return "redirect:/community/listCommunity";
 	}
 	
 	@RequestMapping(value="getCommunity", method=RequestMethod.GET)
