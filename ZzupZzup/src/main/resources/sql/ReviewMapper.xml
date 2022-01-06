@@ -13,9 +13,9 @@
 		<result property="reservation.reservationNo"		column="reservation_no" 		jdbcType="INTEGER" />
 		<result property="restaurant.restaurantNo"			column="restaurant_no" 			jdbcType="INTEGER" />
 		<result property="reviewNo" 						column="review_no" 				jdbcType="INTEGER" />
-		<result property="scopeClean" 						column="scope_taste" 			jdbcType="INTEGER" />
-		<result property="scopeTaste" 						column="scope_kind" 			jdbcType="INTEGER" />
-		<result property="scopeKind" 						column="scope_clean" 			jdbcType="INTEGER" />
+		<result property="scopeClean" 						column="scope_clean" 			jdbcType="INTEGER" />
+		<result property="scopeTaste" 						column="scope_taste" 			jdbcType="INTEGER" />
+		<result property="scopeKind" 						column="scope_kind" 			jdbcType="INTEGER" />
 		<result property="reviewDetail" 					column="review_detail" 			jdbcType="VARCHAR"  />
 		<result property="reviewRegDate" 					column="review_reg_date" 		jdbcType="DATE" />
 		<result property="avgScope" 						column="avg_scope" 				jdbcType="DECIMAL" />
@@ -71,7 +71,9 @@
 		INTO IMAGE(review_no, image) 
 		VALUES
 		<foreach collection="reviewImage" item="item" separator=",">	
-			 (#{reviewNo}, #{item})
+			<if test="item != null">
+				(#{reviewNo}, #{item})
+			 </if>
   		</foreach>
 	</insert>
 	<!-- REVIEW INSERT END -->
