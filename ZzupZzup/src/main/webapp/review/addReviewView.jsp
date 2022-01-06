@@ -377,7 +377,7 @@
 									</c:forEach> <br>
 					 				방문 확정일 : ${review.reservation.fixedDate}</p>
 					 			</div>
-							 
+							 	
 							 	<div class="col-md-4 star-box">
 							 		<label for="scopeClean" class="starLabel">청결해요</label>
 									<div class="star-in">
@@ -415,6 +415,7 @@
 								</div>
 								
 								<div class="col-12">
+								<br>
 									<label for="fileDragInput">리뷰 이미지</label>
 									<div class="file-drag-area">
 										<span class="file-drag-btn">파일 선택</span> <span
@@ -427,6 +428,8 @@
 									<div class="imageUploadBox">
 									</div>
 								</div>
+								
+								<br>
 								
 								<!-- Break -->
 								<div class="col-12">

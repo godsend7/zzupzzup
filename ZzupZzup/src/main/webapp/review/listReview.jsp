@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE HTML>
 
 <html>
@@ -14,6 +14,29 @@
 
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
+.review-top-box {
+	display: flex;
+	justify-content: space-between;
+}
+
+label {
+	margin: 0px;
+	
+}
+
+.listStarBox .star-in {
+	padding-left: 10px;
+	padding-top: 3px;
+}
+
+.reviewTitle h2 {
+	margin-right: 15px;
+	float: left;
+}
+
+.reviewTitle .star-in {
+	padding-top: 6px;
+}
 
 </style>
 
@@ -36,25 +59,6 @@
 	
 	$(function() {
 		
-		/* function fncHeartChange(result, likeCount, items) {
-			if (result === "add") {
-				console.log("heartChange add");
-				console.log(items);
-				console.log(items.closest("div").find(".reviewCount").text());
-				$(this).closest("div").find(".reviewCount").text(likeCount);
-				
-				$(this).attr('class','reviewLike check'); 
-				
-			} else {
-				console.log("heartChange delete");
-				console.log(items);
-				console.log(items.closest("div").find(".reviewCount").text());
-				$(this).closest("div").find(".reviewCount").text(likeCount);
-				
-				$(this).attr('class','reviewLike'); 
-			}
-		} */
-		
 		$(".reviewLike").on("click", function() {
 			if (${member.memberId == null}) {
 				alert("로그인이 필요한 서비스입니다.");
@@ -64,10 +68,6 @@
 			if (${member.memberRole != "user"}) {
 				return;
 			}
-			
-			/* console.log($(this));
-			console.log($(this).closest("div"));
-			console.log($(this).closest("div").find("input[name='reviewNo']").val()); */
 			
 			if ($(this).hasClass("check") === true) {
 				var likeCount = $(this).closest("div").find("span").text();
@@ -117,8 +117,46 @@
 						<!-- 내용 들어가는 부분 -->
 						
 						<!-- start:Form -->
-						<h3 id="reviewTitle">리뷰 리스트</h3>
-					
+						<c:choose>
+							<c:when test="${empty param.restaurantNo}">
+								<h2>Review List</h2>
+							</c:when>
+							<c:otherwise>
+								<div class="row table-list mb-2 review-top-box">
+									<div class="reviewTitle">
+										<h2>Review Total</h2>
+										<div class="star-in">
+											<fmt:parseNumber var="star" value="${avgTotalScope}" integerOnly="true"/>
+											<c:forEach var="i" begin="1" end="${star}">
+												<span class="star-modal on"></span>
+											</c:forEach>
+										</div>
+										<div>
+											<span>(${avgTotalScope} 점)</span>
+										</div>
+									</div>
+									
+									<div>
+										<c:if test="${member.memberRole eq 'user'}">
+											<a href="/reservation/listReservation?memberId=${member.memberId}" class="button svg-btn">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+	 											 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+	 											 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+											</svg>작성하기
+											</a>
+										</c:if>
+									</div>
+									
+									
+								</div>
+								<div class="row table-list mb-2" style="margin-left: 0px;">
+									
+									<a href="" class="button normal icon solid fa-filter"> 필터</a></div>
+								<br>
+							</c:otherwise>
+						</c:choose>
+						
+						
 						<form id="review">
 							<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 							<%-- <input type="hidden" id="restaurantNo" name="restaurantNo" value="${param.restaurantNo}"/> --%>
@@ -144,14 +182,65 @@
 															</i>
 														</div>
 													</c:if>
-													<div>
-														<span class="star_span">평점 ${review.avgScope}</span>
-														<span class="star_span">청결해요 ${review.scopeClean}</span>  
-														<span class="star_span">맛있어요 ${review.scopeTaste}</span>  
-														<span class="star_span">친절해요 ${review.scopeKind}</span>
+													<div class="row listStarBox">
+														<label for="scopeAvg" class="label listLabel">평점</label>
+														<div class="star-in">
+															<fmt:parseNumber var="star" value="${review.avgScope}" integerOnly="true"/>
+															<c:set var="notStar" value="${5 - star}"/>
+															<c:forEach var="i" begin="1" end="${star}">
+																<span class="star-small on"></span>
+															</c:forEach>
+															
+															<c:forEach var="i" begin="1" end="${notStar}">
+																<span class="star-small"></span>
+															</c:forEach>
+														</div>
+														
+														<label for="scopeClean" class="label">청결해요</label>
+														<div class="star-in">
+															<fmt:parseNumber var="star" value="${review.scopeClean}" integerOnly="true"/>
+															<c:set var="notStar" value="${5 - star}"/>
+															<c:forEach var="i" begin="1" end="${star}">
+																<span class="star-small on"></span>
+															</c:forEach>
+															
+															<c:forEach var="i" begin="1" end="${notStar}">
+																<span class="star-small"></span>
+															</c:forEach>
+														</div>
+														
+														<label for="scopeTaste" class="label">맛있어요</label>
+														<div class="star-in">
+															<fmt:parseNumber var="star" value="${review.scopeTaste}" integerOnly="true"/>
+															<c:set var="notStar" value="${5 - star}"/>
+															<c:forEach var="i" begin="1" end="${star}">
+																<span class="star-small on"></span>
+															</c:forEach>
+															
+															<c:forEach var="i" begin="1" end="${notStar}">
+																<span class="star-small"></span>
+															</c:forEach>
+														</div>
+														
+														<label for="scopeKind" class="label">친절해요</label>
+														<div class="star-in">
+															<fmt:parseNumber var="star" value="${review.scopeKind}" integerOnly="true"/>
+															<c:set var="notStar" value="${5 - star}"/>
+															<c:forEach var="i" begin="1" end="${star}">
+																<span class="star-small on"></span>
+															</c:forEach>
+															
+															<c:forEach var="i" begin="1" end="${notStar}">
+																<span class="star-small"></span>
+															</c:forEach>
+														</div>
 													</div>
 													
-													<h3 class="mb-0"><span>${review.member.memberRank}</span> ${review.member.nickname}</h3>
+													<h3 class="mb-0">
+														<span class="badge badge-pill badge-primary">
+															${review.member.memberRank}
+														</span>&nbsp; ${review.member.nickname}
+													</h3>
 													
 													<p class="card-text mb-auto">${review.reviewDetail}</p>
 													<div class="mb-1 text-muted">
