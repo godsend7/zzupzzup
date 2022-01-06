@@ -67,10 +67,10 @@
 						<span class="badge badge-info" id="plus">예약 및 결제 가능</span>
 					</c:if>
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-8">
 							<h1 class="text-warning">${restaurant.restaurantName}&nbsp;<small style="color:gray;">${restaurant.returnMenuType}</small></h1>
 						</div>
-						<div class="col-md-6" style="text-align:right;">
+						<div class="col-md-4" style="text-align:right;">
 							<button type="button" class="btn btn-outline-link btn-sm" style="border: none; outline: none; box-shadow: none;">
                 			<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-bookmark-star" viewBox="0 0 16 16">
   							<path d="M7.84 4.1a.178.178 0 0 1 .32 0l.634 1.285a.178.178 0 0 0 .134.098l1.42.206c.145.021.204.2.098.303L9.42 6.993a.178.178 0 0 0-.051.158l.242 1.414a.178.178 0 0 1-.258.187l-1.27-.668a.178.178 0 0 0-.165 0l-1.27.668a.178.178 0 0 1-.257-.187l.242-1.414a.178.178 0 0 0-.05-.158l-1.03-1.001a.178.178 0 0 1 .098-.303l1.42-.206a.178.178 0 0 0 .134-.098L7.84 4.1z"/>
@@ -100,15 +100,17 @@
 						  </c:if>	
 						  <c:if test="${empty restaurant.restaurantImage}">
 						  	<div class="carousel-item active">
-						  		<img src="/resources/images/uploadImages/default.jpg" height="600" class="d-block w-100">
+						  		<img src="/resources/images/uploadImages/default.jpg"   class="d-block w-100">
 						  	</div>
 						  </c:if>	
 					  </div>
-					  <button class="carousel-control-prev" type="button" id="car_prev" data-target="#carouselExampleFade" data-slide="prev">
+					  <button class="carousel-control-prev btn-outline-link" type="button" id="car_prev" data-target="#carouselExampleFade" data-slide="prev"
+					  style="border: none; outline: none; box-shadow: none; height: 600px;">
 					    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
 					    <span class="sr-only">Previous</span>
 					  </button>
-					  <button class="carousel-control-next" type="button" id="car_next" data-target="#carouselExampleFade" data-slide="next">
+					  <button class="carousel-control-next btn-outline-link" type="button" id="car_next" data-target="#carouselExampleFade" data-slide="next"
+					  style="border: none; outline: none; box-shadow: none; height: 600px;">
 					    <span class="carousel-control-next-icon" aria-hidden="true"></span>
 					    <span class="sr-only">Next</span>
 					  </button>
@@ -146,7 +148,7 @@
 							</svg> 영업시간</strong></div>
 		  				<div class="col-xs-8 col-md-10">
 		  					<!-- ************* 월요일 ************* -->
-		  					<div class="col">
+		  					<div class="col" style="padding-left: 0px;">
 								<c:if test="${restaurant.restaurantTimes[0].restaurantDayOff eq 'true'}">
 									월요일 휴무
 								</c:if>
@@ -168,7 +170,7 @@
 							</div>
 							
 							<!-- ************* 화요일 ************* -->
-							<div class="col">
+							<div class="col" style="padding-left: 0px;">
 								<c:if test="${restaurant.restaurantTimes[1].restaurantDayOff eq 'true'}">
 									화요일 휴무
 								</c:if>
@@ -190,7 +192,7 @@
 							</div>
 							
 							<!-- ************* 수요일 ************* -->
-							<div class="col">
+							<div class="col" style="padding-left: 0px;">
 								<c:if test="${restaurant.restaurantTimes[2].restaurantDayOff eq 'true'}">
 									수요일 휴무
 								</c:if>
@@ -212,7 +214,7 @@
 							</div>
 							
 							<!-- ************* 목요일 ************* -->
-							<div class="col">
+							<div class="col" style="padding-left: 0px;">
 								<c:if test="${restaurant.restaurantTimes[3].restaurantDayOff eq 'true'}">
 									목요일 휴무
 								</c:if>
@@ -234,7 +236,7 @@
 							</div>
 							
 							<!-- ************* 금요일 ************* -->
-							<div class="col">
+							<div class="col" style="padding-left: 0px;">
 								<c:if test="${restaurant.restaurantTimes[4].restaurantDayOff eq 'true'}">
 									금요일 휴무
 								</c:if>
@@ -256,7 +258,7 @@
 							</div>
 							
 							<!-- ************* 토요일 ************* -->
-							<div class="col">
+							<div class="col" style="padding-left: 0px;">
 								<c:if test="${restaurant.restaurantTimes[5].restaurantDayOff eq 'true'}">
 									토요일 휴무
 								</c:if>
@@ -278,7 +280,7 @@
 							</div>
 							
 							<!-- ************* 일요일 ************* -->
-							<div class="col">
+							<div class="col" style="padding-left: 0px;">
 								<c:if test="${restaurant.restaurantTimes[6].restaurantDayOff eq 'true'}">
 									일요일 휴무
 								</c:if>

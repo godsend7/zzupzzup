@@ -27,7 +27,8 @@
 
 	$(function() {
 		console.log("listChat.jsp");
-
+		let chatMemberList = [];
+		
 		//============= "검색"  Event  처리 =============
 		$(".search-btn").on("click", function() {
 			fncGetList(1);
@@ -54,13 +55,42 @@
 				success : function(JSONData, status) {
 					let chatImg = JSONData.chatImage;
 					let chatState = JSONData.chatState;
+					let chatGender = genderReverseCng(JSONData.chatGender);
+					let chatAge = JSONData.chatAge;
 					let chatRegDate = JSONData.chatRegDate;
 					let regdate = new Date(chatRegDate);
 					let showStatus = "";
+					let chatMember = JSONData.chatMember;
+					chatMemberList = [];
+					
+					//채팅방에 유저 있는지 체크
+					chatMember.map((o,i) => {
+						o.index = i;
+						if(o.inOutCheck){
+							//console.log("채팅 멤버");
+							chatMemberList.push(o.member.memberId);
+						}
+						//console.log(o.member.memberId);
+						//return o;
+					});
+					
+					//연령대 문구 변환
+					let chatAgeList = "";
+					chatAge = chatAge.split(",");
+					$.each(chatAge, function(index, item){
+						chatAgeList += ageReverseCng(item);
+						if(chatAge.length != index+1){
+							chatAgeList += ', ';
+						}
+					});
+					
+					//console.log(chatMemberList);
+					//console.log(JSONData.chatMember);
+					
 					if(JSONData.chatShowStatus == false){
 						showStatus = "<i class='fa fa-eye-slash' aria-hidden='true'></i>";
 					}
-					chatRegDate = regdate.getFullYear()+"-"+(regdate.getMonth()+1)+"-"+regdate.getDate();
+					chatRegDate = regdate.getFullYear()+"-"+("0" + (regdate.getMonth()+1)).slice(-2)+"-"+("0"+regdate.getDate()).slice(-2);
 					if(chatState == 1){
 						chatState = "<span class='badge badge-success chat-state'>모집중</span>";
 					}else if(chatState == 2){
@@ -74,7 +104,7 @@
 						'<div class="get-chat-info mb-3">'
 						+'<div class="d-flex justify-content-between">'
 						+'<div><span class="badge badge-secondary chat-no">'+JSONData.chatNo+'</span></div>'
-						+'<div><span class="badge badge-success chat-state">'+chatState+'</span></div>'
+						+'<div id="getChatState">'+chatState+'</div>'
 						+'</div>'
 						+'<div class="d-flex justify-content-between">'
 						+'<h3 class="card-title mb-2">'+JSONData.chatTitle+'</h3>'
@@ -88,18 +118,20 @@
 						+'</div>'
 						+'<div class="d-flex justify-content-between">'
 						+'<div>참가가능한 성별</div>'
-						+'<div>'+JSONData.chatGender+'</div>'
+						+'<div id="getChatGender">'+chatGender+'</div>'
+						+'<input type="hidden" name="chatGender" id="chatGender"  value="'+JSONData.chatGender+'">'
 						+'</div>'
 						+'<div class="d-flex justify-content-between">'
 						+'<div>참가가능한 연령대</div>'
-						+'<div>'+JSONData.chatAge+'</div>'
+						+'<div id="getChatAge">'+chatAgeList+'</div>'
+						+'<input type="hidden" name="chatAge" id="chatAge" value="'+JSONData.chatAge+'">'
 						+'</div>'
 						+'<div class="d-flex justify-content-between">'
 						+'<div>개설일</div>'
 						+'<div>'+chatRegDate+'</div>'
 						+'</div>'
 						+'<div class="d-flex justify-content-between">'
-						+'<div>'+showStatus+ ' ' +JSONData.reportCount+' 회</div>'
+						+'<div>'+showStatus+ ' <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>' +JSONData.reportCount+' 회</div>'
 						+'</div>'
 						+'</div>'
 						+'<div class="get-chat-user-info mb-3">'
@@ -107,6 +139,7 @@
 						+'<img src="/resources/images/common/'+JSONData.chatLeaderId.profileImage+'">'
 						+'<div class="dropdown-parent">'
 						+'<a href="">'+JSONData.chatLeaderId.nickname+'</a>'
+						+'<input type="hidden" id="chatLeaderId" name="chatLeaderId" value="'+JSONData.chatLeaderId.memberId+'">'
 						+'</div>'
 						+'<span class="badge badge-info gender">'+JSONData.chatLeaderId.gender+'</span>'
 						+'<span class="badge badge-warning age">'+JSONData.chatLeaderId.ageRange+'</span>'
@@ -124,11 +157,11 @@
 					+"<input type='button' class='button small secondary' data-dismiss='modal' value='닫기' />"
 					+"<input type='button' data-target="+JSONData.chatNo+" class='button small primary' value='입장하기'>"
 					$(".get-chat-con").html(displayValueBd);
-					$(".modal-footer").html(displayValueFt);
+					$("#getChatModal .modal-footer").html(displayValueFt);
 					if(chatImg == 'chatimg.jpg'){
-						$(".modal-body").css("background-image", "url(/resources/images/sub/"+chatImg+")");
+						$("#getChatModal .modal-body").css("background-image", "url(/resources/images/sub/"+chatImg+")");
 					}else{
-						$(".modal-body").css("background-image", "url(/resources/images/uploadImages/chat/"+chatImg+")");
+						$("#getChatModal .modal-body").css("background-image", "url(/resources/images/uploadImages/chat/"+chatImg+")");
 					}
 				},
 				error : function(request, status, error) {
@@ -154,11 +187,135 @@
 				
 		//============= "입장하기" Event 처리 ============
 		$("body").on("click", "input[value='입장하기']", function(){
-			console.log("입장하기");
+			console.log("${member}");
+			
+			//채팅방 상태
+			const chatState = $(this).parents(".modal-content").find("#getChatState").children("span").text();
+			//채팅방 성별
+			const chatGender = $(this).parents(".modal-content").find("#chatGender").val();
+			//채팅방 연령대
+			const chatAge = $(this).parents(".modal-content").find("#chatAge").val();
+			//채팅방 개설자 아이디 현재 쓰이지 않음
+			const chatLeaderId = $(this).parents(".modal-content").find("#chatLeaderId").val();
+			//입장하는 사람 아이디
+			const chatMemberId = "${member.memberId}";
+			//입장하는 사람 성별
+			let chatMemberGender = "${member.gender}";
+			//입장하는 사람 연령대
+			let chatMemberAge = "${member.ageRange}";
+						
+			chatMemberGender = genderCng(chatMemberGender);
+			chatMemberAge = ageCng(chatMemberAge);
+			
+			//console.log("바뀐 성별 : " + chatMemberGender);
+			//console.log("바뀐 나이 : " + chatMemberAge);
+			//console.log(chatMemberList);
+			
+			//채팅 멤버 체크 플래그			
+			let flag = false;
+			//현재 들어가있는 채팅 멤버는 필터링 되면 안됨
+			$.each(chatMemberList, function(index, item){
+				if(item == chatMemberId){
+					flag = true;
+				}
+			});
+			
+			//참여가능 연령대 배열로 변경
+			let chatAgeArr = chatAge.split(",");
+			//참여가능 연령대와 유저 연령대가 맞는지 체크 플래그
+			let ageFlag = false;
+			$.each(chatAgeArr, function(index, item){
+				if(item != chatMemberAge){
+					ageFlag = true;
+				}
+			});
+			
+			// 현재 참여중이 아닌 유저 필터링
+			if(!flag){
+				//모집중이 아닌 채팅방은 들어갈 수 없다.
+				if(chatState != "모집중"){
+					$('#chatStateModal').modal('show');
+					return;
+				}
+				//성별 무관이 아닐때 채팅방 성별과 유저 성별 필터링
+				if(chatGender != 3 ){
+					if(chatGender != chatMemberGender){
+						$('#chatGenderModal').modal('show');
+						return;
+					}
+				}
+				//연령대 무관이 아닐 때 채팅방 연령대와 유저 연령대 필터링
+				if(chatAge != 7 ){
+					if(ageFlag){
+						$('#chatAgeModal').modal('show');
+						return;
+					}
+				}
+			}
+			
 			let chatNo = $(this).attr("data-target");
 			location.href="/chat/getChatEntrance?chatNo="+chatNo;
 		});
-			
+		
+		//젠더 데이터 값 변경
+		function genderCng(gender){
+			switch(gender){				
+				case 'female':
+					return 2;
+				case 'male':
+					return 1;
+			}
+		}
+		
+		//젠더 데이터 값 변경
+		function genderReverseCng(gender){
+			switch(gender){				
+				case 2:
+					return '여자';
+				case 1:
+					return '남자';
+				default :
+					return '성별 무관';
+			}
+		}
+		
+		//연령대 데이터 값 변경
+		function ageCng(age){
+			switch(age){
+				case '10대':
+					return 1;
+				case '20대':
+					return 2;
+				case '30대':
+					return 3;
+				case '40대':
+					return 4;
+				case '50대':
+					return 5;
+				case '60대 이상':
+					return 6;
+			}
+		}
+		
+		//연령대 데이터 값 변경
+		function ageReverseCng(age){
+			switch(age){
+				case '1':
+					return '10대';
+				case '2':
+					return '20대';
+				case '3':
+					return '30대';
+				case '4':
+					return '40대';
+				case '5':
+					return '50대';
+				case '6':
+					return '60대 이상';
+				case '7':
+					return '연령대 무관'
+			}
+		}
 			
 			
 	});
@@ -227,8 +384,18 @@
 									<c:set var="i" value="${ i+1 }" />
 									<div class="col-md-6">
 										<div class="card mb-4 shadow-sm chat-state${chat.chatState}">
-											<div class="card-head">
-												<span class="badge badge-secondary chat-no">${chat.chatNo }</span>
+											<div class="card-head d-flex">
+												<span class="badge badge-secondary chat-no mr-1">${chat.chatNo }</span>
+												<c:if test="${chat.chatLeaderId.memberId == member.memberId }">
+												<span class="badge badge-secondary mr-1">개설자</span>
+												</c:if>
+												<c:set var="i" value="0" />
+												<c:forEach var="chatMember" items="${chat.chatMember}">
+												<c:set var="i" value="${ i+1 }" />
+													<c:if test="${member.memberId == chatMember.member.memberId && chatMember.member.memberId != chat.chatLeaderId.memberId && chatMember.inOutCheck == true}">
+													<span class="badge badge-secondary mr-1">참가중</span>
+													</c:if>
+												</c:forEach>
 												<c:choose>
 													<c:when test="${chat.chatState=='1'}">
 														<span class="badge badge-success chat-state">모집중</span>
@@ -268,9 +435,13 @@
 															<p class="card-text text-right">${chat.chatRestaurant.streetAddress}</p>
 														</div>
 														<div class="btn-group">
-															<c:if test="${chat.chatState == 4}">
+															<c:set var="i" value="0" />
+															<c:forEach var="chatMember" items="${chat.chatMember}">
+															<c:set var="i" value="${ i+1 }" />
+																<c:if test="${member.memberId == chatMember.member.memberId && chat.chatState == 4 && chatMember.inOutCheck == true && chatMember.readyCheck == true}">
 																<a href="/rating/addRating?chatNo=${chat.chatNo}" class="button small primary">평가하기</a> 
-															</c:if>
+																</c:if>
+															</c:forEach>
 															<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal">참여하기</a>
 														</div>
 													</div>
@@ -288,6 +459,7 @@
 							<!-- E:Infinity page -->
 
 							<!-- S:Modal -->
+							<!-- 채팅 정보자세히 보기 모달 -->
 							<div class="modal fade" id="getChatModal" tabindex="-1"
 								aria-labelledby="getChatModalLabel" aria-hidden="true">
 								<div class="modal-dialog">
@@ -304,6 +476,63 @@
 										</div>
 										<div class="modal-footer">
 											
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- 모임중에만 입장 모달 -->
+							<div class="modal fade" id="chatStateModal" tabindex="-1" aria-labelledby="chatStateModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-sm">
+									<div class="modal-content">
+										<div class="modal-header justify-content-end">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+										</div>
+										<div class="modal-body">
+											채팅방 상태가 모집중일 때만 입장 가능합니다.
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="button primary small fit" data-dismiss="modal">확인</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- 성별 다를때 모달 -->
+							<div class="modal fade" id="chatGenderModal" tabindex="-1" aria-labelledby="chatGenderModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-sm">
+									<div class="modal-content">
+										<div class="modal-header justify-content-end">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+										</div>
+										<div class="modal-body">
+											참여가능 성별에 맞지 않아 입장할 수 없습니다.
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="button primary small fit" data-dismiss="modal">확인</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- 연령대 다를때 모달 -->
+							<div class="modal fade" id="chatAgeModal" tabindex="-1" aria-labelledby="chatAgeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-sm">
+									<div class="modal-content">
+										<div class="modal-header justify-content-end">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+										</div>
+										<div class="modal-body">
+											참여가능 연령대에 맞지 않아 입장할 수 없습니다.
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="button primary small fit" data-dismiss="modal">확인</button>
 										</div>
 									</div>
 								</div>

@@ -64,10 +64,10 @@
 	
 	<!-- SQL : SELECT ONE -->
 	<select id="getChat" parameterType="int" resultMap="chatSelectMap">		
-		SELECT c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(rp.chat_no) report_count, count(*) chat_member_count, (SELECT count(*) from chat_member where chat_no = #{chatNo} and ready_check = 1) ready_count
+		SELECT c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(rp.chat_no) report_count, count(*) chat_member_count, (SELECT count(*) from chat_member where chat_no = #{chatNo} AND ready_check = 1) ready_count
 		FROM chat c
 		LEFT OUTER JOIN report rp ON ( c.chat_no = rp.chat_no)
-		LEFT OUTER JOIN chat_member cm ON ( c.chat_no = cm.chat_no)
+		LEFT OUTER JOIN chat_member cm ON ( c.chat_no = cm.chat_no AND in_out_check = 1)
 		WHERE c.chat_no = #{chatNo}
 		GROUP BY c.chat_no;
 	</select>
@@ -102,7 +102,7 @@
 		FROM chat c
 		LEFT OUTER JOIN report rp ON ( c.chat_no = rp.chat_no)
 		GROUP BY c.chat_no
-		ORDER BY c.chat_no DESC LIMIT 0, 8) AS c
+		ORDER BY c.chat_no DESC LIMIT #{search.startRowNum}, #{search.pageSize}) AS c
 	</select>
 	
 	<!-- SQL : SELECT ROW COUNT -->
@@ -135,7 +135,7 @@
 		SELECT
 		c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(*) chat_member_count
 		FROM chat c
-		LEFT OUTER JOIN chat_member cm ON ( c.chat_no = cm.chat_no)
+		LEFT OUTER JOIN chat_member cm ON ( c.chat_no = cm.chat_no )
 		WHERE c.chat_no IN (#{chatNo})
 	</select>
 	
@@ -176,7 +176,7 @@
 	<!-- SQL : SELECT ALL -->
 	<select id="listChatMember" parameterType="map" resultMap="chatMemberSelectMap">
 		<!-- <bind name="searchKeywords" value="'%' + searchKeyword + '%'" /> -->
-		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check 
+		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check, in_out_check 
 			FROM chat_member
 			WHERE chat_no = #{chatNo}
 			ORDER BY chat_member_no
@@ -187,7 +187,7 @@
 		<!-- <bind name="searchKeywords" value="'%' + searchKeyword + '%'" /> -->
 		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check, in_out_check
 			FROM chat_member
-			WHERE chat_no = #{chatNo} AND ready_check = 1
+			WHERE chat_no = #{chatNo} AND ready_check = 1 AND in_out_check = 1
 	</select>
 	
 	<!-- SQL : SELECT ONE -->
@@ -235,7 +235,7 @@
 	
 	<!-- SQL : SELECT ALL -->
 	<select id="listReadyCheckMember" parameterType="map" resultMap="chatMemberSelectMap">
-		SELECT c.chat_member_no, c.chat_no, c.chat_member_id, m.nickname, c.ready_check, c.chat_leader_check 
+		SELECT c.chat_member_no, c.chat_no, c.chat_member_id, m.nickname, c.ready_check, c.chat_leader_check, c.in_out_check 
 			FROM chat_member c, member m
 			WHERE chat_no = #{chatNo} and c.ready_check = 1 and c.chat_member_id = m.member_id
 			ORDER BY chat_member_no

@@ -1,9 +1,14 @@
 package com.zzupzzup.web.review;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.domain.HashTag;
 import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Member;
@@ -119,5 +127,51 @@ public class ReviewRestController {
 		}
 
 		return reviewService.getReview(reviewNo);
+	}
+	
+	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
+	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		System.out.println("/chat/json/addDragFile : POST");
+		
+		List<MultipartFile> fileList =  multipartRequest.getFiles("uploadFile");
+	
+		System.out.println("이미지 확인 :: " + fileList);
+		
+		List<String> reviewImage = new ArrayList<String>();
+		
+	    String filePath = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH+"review");
+	    
+	    System.out.println("filePath : " + filePath);
+	    
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    
+	    for (MultipartFile mf : fileList) {
+			//image가 존재한다면(image의 name이 공백이 아닐경우)
+			if (!mf.getOriginalFilename().equals("")) {
+				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
+				System.out.println(":: 파일 사이즈 => " + mf.getSize());
+	
+				try {
+					String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
+					
+					File file = new File(filePath + "/" + saveName);
+					mf.transferTo(file);
+									
+					System.out.println(":: 저장할 이름 => " + saveName);
+					 
+					reviewImage.add(saveName);
+				
+					System.out.println("업로드 성공");
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println("업로드 없음");
+					e.printStackTrace();
+					//saveName = "notFile.png";
+				}
+			}
+		}
+	     
+	    return reviewImage;
 	}
 }

@@ -192,22 +192,42 @@
 												</div>
 												<!-- 등록된 음식점 수 띄우기 -->
 												<c:if test="${restaurant.member.memberId == member.memberId}">
+													<c:set var="i" value="0" />
 													<c:forEach var="restaurant" items="${list}">
-														<div class="col-12">
-															<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-																<div class="col p-4 d-flex flex-column position-static">
-																	<c:if test="${restaurant.reservationStatus = true}">
+														
+													<div class="col-md-12">
+														<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+															<div class="col p-4 d-flex flex-column position-static">
+															
+																<c:if test="${!empty restaurant.restaurantRegDate}">
+																	<div style="text-align: right;"><span class="badge badge-success">요청 승인된 음식점</span></div>
+																	<c:if test="${restaurant.reservationStatus}">
 																		<div style="text-align: right;"><span class="badge badge-info">예약 및 결제 가능</span></div>
 																	</c:if>
-																	<!-- <a style="text-align: right;"><strong class="d-inline-block mb-2 text-primary">불량음식점</strong></a> -->
-																	<h2 class="mb-0">${restaurant.restaurantName}&nbsp;<small style="color:gray;">${restaurant.returnMenuType}</small></h2><hr>
-																	<div class="mb-1 text-muted"><strong>대표자명</strong> | ${restaurant.member.memberName}</div>
-																	<div class="mb-1 text-muted"><strong>주소</strong> | ${restaurant.streetAddress}</div>
-																	<div class="mb-1 text-muted"><strong>전화번호</strong> | ${restaurant.restaurantTel}</div>
+																</c:if>
+																
+																<c:if test="${!empty restaurant.judgeDate}">
+																	<div style="text-align: right;"><span class="badge badge-danger">요청 거절된 음식점</span></div>
+																</c:if>
+															
+																<!-- <a style="text-align: right;"><strong class="d-inline-block mb-2 text-primary">불량음식점</strong></a> -->
+																<h2 class="mb-0">${restaurant.restaurantName}&nbsp;<small style="color:gray;">${restaurant.returnMenuType}</small></h2><hr>
+																<div class="mb-1 text-muted"><strong>대표자명</strong> | ${restaurant.member.memberName}</div>
+																<div class="mb-1 text-muted"><strong>주소</strong> | ${restaurant.streetAddress}</div>
+																<div class="mb-1 text-muted"><strong>전화번호</strong> | ${restaurant.restaurantTel}</div>
+																<c:if test="${!empty restaurant.restaurantRegDate}">
 																	<a href="/restaurant/getRestaurant?restaurantNo=${restaurant.restaurantNo}" style="text-align: right;" class="stretched-link" id="restinfo">상세보기</a>
-																</div>
+																</c:if>
+																<c:if test="${!empty restaurant.judgeDate}">
+																	<p style="text-align: right;">자세한 내용은 고객센터(
+																	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-headset" viewBox="0 0 16 16">
+																	<path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
+																	</svg> 010-4444-4444 )로 문의하시기 바랍니다.</p>
+																</c:if>
 															</div>
 														</div>
+													</div>
+													
 													</c:forEach>
 												</c:if>
 											</div>
