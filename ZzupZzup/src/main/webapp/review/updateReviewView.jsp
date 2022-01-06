@@ -331,22 +331,24 @@
 	
 	$(function() {
 		//특정 이미지 삭제
-		$('body').on('click', 'a.cvf_delete_image', function(e) {
-			console.log("이미지 삭제");
-			e.preventDefault();
-			$(this).remove();
-			
-            var file = $(this).children().attr("data-file");
-			console.log(file);
-			for (var i = 0; i < sel_files.length; i++) {
-				if (sel_files[i].name == file) {
-					sel_files.splice(i, 1);
-					break;
+		if (${member.memberRole != "admin"}) {
+			$('body').on('click', 'a.cvf_delete_image', function(e) {
+				console.log("이미지 삭제");
+				e.preventDefault();
+				$(this).remove();
+				
+	            var file = $(this).children().attr("data-file");
+				console.log(file);
+				for (var i = 0; i < sel_files.length; i++) {
+					if (sel_files[i].name == file) {
+						sel_files.splice(i, 1);
+						break;
+					}
 				}
-			}
-			
-			console.log(sel_files);
-		});
+				
+				console.log(sel_files);
+			});
+		}
 	});
 	
 </script>
@@ -426,7 +428,7 @@
 									<c:when test="${member.memberRole eq 'admin'}">
 										<div class="col-12">
 											<label for="fileDragInput">리뷰 이미지</label>
-											<div class="file-drag-view mt-4">
+											<div class="file-drag-view">
 												<c:forEach var="image" items="${review.reviewImage}">
 													<a class='cvf_delete_image' id='img_id_${status.index}'>
 														<img src="/resources/images/uploadImages/review/${image}">
