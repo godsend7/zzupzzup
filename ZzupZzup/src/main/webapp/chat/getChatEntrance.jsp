@@ -15,37 +15,77 @@
 <!--  ///////////////////////// CSS ////////////////////////// -->
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
-<!-- <script src="http://localhost:3000/socket.io/socket.io.js"></script> -->
-<script src="http://18.191.246.235:3000/socket.io/socket.io.js"></script>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<!-- <script src="http://18.191.246.235:3000/socket.io/socket.io.js"></script> -->
 <script type="text/javascript">
 	$(function() {
 		console.log("getChatEntrance.jsp");
 		
+		const chatNo = $("#chaNo");
+		const memberId = $("#memberId");
+		const nickname = $("#nickname");
+		const gender = $("#gender");
+		const ageRange = $("#ageRange");
+		const profileImage = $("#profileImage");
+		const chatList = $(".chatting-list");
+		const chatInput = $(".chatting-input");
+		const sendButton = $(".send-button");
+		const displayContainer = $(".display-container");
+		const userList = $(".user-list");
+		
+		const memberInfo = {
+
+			chatNo : chatNo.val(),
+			memberId : memberId.val(),
+			nickname : nickname.val(),
+			gender : gender.val(),
+			ageRange : ageRange.val(),
+			profileImage : profileImage.val()
+		}
+		
 		let MY_USER_ID = "";
 		
+		//페이지 로딩시 접속된 애들 가져오기
+		memList();
+		
+		//showCollections();
+		
 		//페이지 접속시 socket.io 접속
-		/* const socket = io.connect('http://localhost:3000', { */
-		const socket = io.connect('http://18.191.246.235:3000', {
+		const socket = io.connect('http://localhost:3000', {
+		/* const socket = io.connect('http://18.191.246.235:3000', { */
 			cors: { origin: '*' }
 		});
 		
-		//페이지 접속시 현재 아이디 node 서버로 보내거나 로그인 안했으면 guest라고 보냄
-		socket.emit({
-			"name":"${member.nickname}",
-			"profileImg":"${member.profileImage}",
-			"age":"${memner.ageRange}",
-			"gender":"${member.gender}"
+		//socket.emit("name", "${member.nickname}" || "guest");
+		
+		//접속시 접속 유저 정보를 보냄
+		socket.emit('new_user', memberInfo);
+		
+		//시스템 문구 출력되는 부분
+		socket.on('update', (data) => {
+			console.log(data.message);
+			
+			const item = new makeSysemPost(data.message);
+			item.makeLi();
+			displayContainer.scrollTop(chatList.height());
+			
+			//나갔다 들어올 때 멤버 확인 리스트 출력
+			setTimeout(function() { 
+				memList();
+			}, 500);
 		});
 		
+		
+		
 		//서버로 보낸 내 아이디 다시 받아옴
-		socket.on("send_user_id", (data) => {
+		/* socket.on("send_user_id", (data) => {
 			MY_USER_ID = data.user_id;
 			sendMyName(data.user_name);
 			//alert(MY_USER_ID);
-		});
+		}); */
 		
 		//전체 사용자 정보 가져옴
-		socket.on("all_users", (data) => {				
+		/* socket.on("all_users", (data) => {				
 			var All_USER = data;
 			console.log(All_USER);
 			console.log(All_USER.length);
@@ -54,49 +94,56 @@
 				$(".user-list").append("<li>"+element.user_name+"</li>");
 	        });
 			
-		});
+		}); */
 		
-		function sendMyName(send_user_name){
+		/* function sendMyName(send_user_name){
 			let data = {"name":send_user_name, "user_id":MY_USER_ID};
 			socket.emit("connect_name", data);
-		}
-		
-		const nickname = $("#nickname");
-		const chatList = $(".chatting-list");
-		const chatInput = $(".chatting-input");
-		const sendButton = $(".send-button");
-		const displayContainer = $(".display-container");
-		
-		chatInput.on("keypress", (e) => {
-			if(e.keyCode === 13){
-				send()
-			}
-		});
-		
-		function send(){
-			const param = {
-				room: 1,
-				name: nickname.val(),
-				msg: chatInput.val(),
-				time: new Date(),
-			}
-			
-			socket.emit("send_msg", param);
-			$(".chatting-input").val("");
-		}
-		
-		sendButton.on("click", function(){
-			send()
-		});
+		} */
 		
 		socket.on("send_msg", (data) => {
 			console.log(data);
-			const { name, msg, time } = data;
-			const item = new LiModel(name, msg, time);
+			const { message, memberInfo, regDate } = data;
+			const item = new makeClientPost(message, memberInfo, regDate);
 			item.makeLi();
 			console.log("con scroll" + chatList.height());
 			displayContainer.scrollTop(chatList.height());
 		});
+		
+		
+		chatInput.on("keypress", (e) => {
+			if(e.keyCode === 13){
+				messageSend()
+			}
+		});
+		
+		/* function send(){
+			const param = {
+				room: 1,
+				name: nickname.val(),
+				msg: chatInput.val()
+			}
+			
+			socket.emit("send_msg", param);
+			$(".chatting-input").val("");
+		} */
+		
+		sendButton.on("click", function(){
+			messageSend()
+		});
+		
+		function messageSend(){
+			
+			socket.emit("send_msg", {
+				type: "send",
+				msgType: "client",
+				message: chatInput.val(),
+				regDate: new Date(),
+				memberInfo
+			});
+			//보낸후 적힌 메세지 지우기
+			chatInput.val("");
+		}
 
 		function LiModel(name, msg, time) {
 			
@@ -109,7 +156,66 @@
 			}
 		}
 		
-		showCollections();
+		function makeSysemPost(message){
+			this.makeLi = () => {
+				console.log(name, message);
+				const $li = $("<li class='system'></li>");
+				const dom = "<div class='chat-message'>"+message+"</div>";
+				$li.html(dom).appendTo(chatList);
+			}
+		}
+		
+		function makeClientPost(message, memberInfo, regDate){
+			this.makeLi = () => {
+				console.log(message, memberInfo, regDate);
+				const $li = $("<li></li>");
+				$li.addClass(nickname.val() == memberInfo.nickname ? "sent" : "received");
+				const dom = '<div class="chatProfile"><img src="/resources/images/common/'+memberInfo.profileImage+'"/><b>'+memberInfo.nickname+'</b><small>'+regDate+'</small></div><div class="chat-message">'+message+'</div>';
+				$li.html(dom).appendTo(chatList);
+			}
+		}
+		
+		// 참가자 리스트에 뿌려질 리스트 가져오기
+		function memList(){
+			$.ajax({
+				url: "/chat/json/listChatMember/chatNo=${chat.chatNo}",
+				method: "GET",
+				dataType: "json",
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+				success : function(JSONData, status) {
+					console.log(JSONData);
+					let dom = "";
+					console.log(JSONData.list);
+					$.each(JSONData.list, function(index, item){
+						let mem_profile_img = item.member.profileImage;
+						let mem_gender = item.member.gender;
+						console.log(mem_profile_img);
+						console.log(mem_gender);
+						// 업로드된 프로필 이미지라면 경로 변경
+						mem_profile_img != "defaultImage.png" ? mem_profile_img = "uploadImages/"+mem_profile_img : "";
+						// 성별 한글 변환
+						if(mem_gender == "male"){
+							mem_gender = "남자";
+						}else if(mem_gender == "female"){
+							mem_gender = "여자";
+						}
+						console.log(mem_profile_img);
+					
+						dom += '<li class="chatProfile d-flex flex-row align-items-center"><img src="/resources/images/common/'+mem_profile_img+'"><div class="dropdown-parent"><a href="" class="member_dropdown" data-target="'+item.member.memberId+'">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
+						console.log(item.member);
+					});
+					userList.html(dom);
+				},
+				error : function(request, status, error) {
+					alert("code:" + request.status + "\n" + "message:"
+							+ request.responseText + "\n" + "error:"
+							+ error);
+				}
+			});
+		}
 		
 		function showCollections(){
 			$.ajax({
@@ -240,10 +346,13 @@
 
 						<!-- S:chatting -->
 						<div class="d-flex flex-row chat-container">
-							<input type="hidden" id="memberId" value="${member.memberId }"/>
-							<input type="hidden" id="nickname" value="${member.nickname }"/>
-							<input type="hidden" id="chatNo" value="${chat.chatNo }"/>
-							<input type="hidden" id="restaurantNo" value="${chat.chatRestaurant.restaurantNo }"/>
+							<input type="hidden" id="memberId" value="${member.memberId}"/>
+							<input type="hidden" id="nickname" value="${member.nickname}"/>
+							<input type="hidden" id="gender" value="${member.gender}"/>
+							<input type="hidden" id="ageRange" value="${member.ageRange}"/>
+							<input type="hidden" id="profileImage" value="${member.profileImage}"/>
+							<input type="hidden" id="chatNo" value="${chat.chatNo}"/>
+							<input type="hidden" id="restaurantNo" value="${chat.chatRestaurant.restaurantNo}"/>
 						
 							<div class="chat-contents d-flex flex-column">
 								<div class="chat-header d-flex flex-row align-items-center">
@@ -267,6 +376,11 @@
 	                 								채팅 메세지 메세지
 	                 							</div>
 	                 						</li>
+	                 						<li class="system">
+	                 							<div class="chat-message">
+	                 								닉네임 님이 입장하셨습니다.
+	                 							</div>
+	                 						</li>
 	                 						<li class="received">
 	                 							<div class="chatProfile">
 	                 								<img src="/resources/images/common/defaultImage.jpg"/>
@@ -282,7 +396,7 @@
 								</div>
 								<div class="chat-footer">	
 	             					<div class="input-container">
-	             						<textarea rows="2" placeholder="보낼 메세지 입력"></textarea>
+	             						<textarea rows="2" class="chatting-input" placeholder="보낼 메세지 입력" wrap="off"></textarea>
 	             						<input type="button" class="send-button warning" value="보내기" />
 	             					</div>
 								</div>

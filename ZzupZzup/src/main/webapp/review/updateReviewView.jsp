@@ -27,7 +27,8 @@
 	
 	//hashTag id 초기화
 	var hashTagCount = ${fn:length(review.hashTag)};
-	//console.log(${review.scopeTaste});
+	//해시태그 리스트 초기화
+	var hashtag_list = [];
 	
 	//이미지 정보를 담을 배열
  	var sel_files = [];
@@ -63,13 +64,20 @@
 		//$("#review").attr("method", "POST").attr("action" , "/review/updateReview").attr("enctype", "multipart/form-data").attr("accept-charset","UTF-8").submit();
 	} 
 	
+	
+	
 	window.onload = function() {
 		<c:forEach var="image" items="${review.reviewImage}" varStatus="status">
 		<c:set var="fileName" value="${fn:split(image, '_')}"/>
 			sel_files.push( {name : "${fileName[1]}" });
 		</c:forEach>
 	
-		console.log(sel_files);
+		//console.log(sel_files);
+		
+		for (var i = 0; i < $("#hashTagBox").children().length; i++) {
+			hashtag_list.push(parseInt($("#hashTagBox").children("span:eq("+(i)+")").find("input").attr("value")));
+		}
+		console.log(hashtag_list);
 		
 		for (var i = 0; i < ${review.scopeClean}; i++) {
 	  		$(".starClean").eq(i).addClass("on");
@@ -119,21 +127,20 @@
 				
 				$(this).remove();
 				
+				var no = $(this).children().val();
+				console.log(no);
+			 	for (var i = 0; i < hashtag_list.length; i++) {
+					if (hashtag_list[i] == no) {
+						hashtag_list.splice(i, 1);
+						break;
+					}
+				} 
+				
 				if ($("#hashTagBox").children().length == 0) {
 					hashTagCount = 0;
 				}
 			});
 		}
-		
-		
-		$("#updateBtn").on("click", function() {
-			/* console.log("button"); */
-			fncUpdateReview();
-		});
-		
-		$("#cancelBtn").on("click", function() {
-			window.history.back();
-		});
 		
 			
 		$("#hashTagAuto").autocomplete({
@@ -150,17 +157,28 @@
 						"keyWord" : $("#hashTagAuto").val()
 					},
 					success : function(data, status) {
-						/* var arrayLayout = new Array();
-						var arrayLayout2 = new Array();
 						
-						$.each(data, function(index, item) {
-							console.log(item.hashTag);
-							arrayLayout.push(item.hashTag);
-							arrayLayout2.push(item.hashTagNo);
-						}); */
+						var array = Array.prototype.slice.call(data);
+						var hashArry = [];
+						
+						for (var i = 0; i < hashtag_list.length; i++) {
+							for (let hashTag of array) {
+								var check = false;
+								
+								if (hashtag_list[i] == hashTag.hashTagNo) {
+									hashArry.push(hashTag);
+									break;
+								}
+							}
+						}
+						
+						//중복된 해시태그 제외 출력 (차집합)
+						let difference = array.filter(x => !hashArry.includes(x));
+						
+						console.log(difference);
 						
 						response(
-							$.map(data, function(item) {
+							$.map(difference, function(item) {
                                 return {
                                     label: item.hashTag,
                                     value: item.hashTagNo
@@ -176,9 +194,21 @@
 	 										+ hashTagCount + "].hashTagNo' value='" + ui.item.value + "'></span>");
 				hashTagCount++;
 				
-				$("#hashTagAuto").text('');
+				hashtag_list.push(ui.item.value);
+				
 				$("#hashTagAuto").val('');
+				
+				return false;
 	 		}
+		});
+		
+		$("#updateBtn").on("click", function() {
+			/* console.log("button"); */
+			fncUpdateReview();
+		});
+		
+		$("#cancelBtn").on("click", function() {
+			window.history.back();
 		});
 	}
 	

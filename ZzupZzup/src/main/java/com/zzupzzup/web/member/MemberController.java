@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -174,11 +173,13 @@ public class MemberController {
 		System.out.println("/member/updateMember : POST");
 		
 		System.out.println("1111 :: " + member);
+		System.out.println("2222 :: " + uploadfile.getOriginalFilename());
 		
 		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		String profileImage = uploadFile(uploadfile, temp, member.getProfileImage());
-		member.setProfileImage(profileImage);
 		
+		
+		member.setProfileImage(profileImage);
 		
 		memberService.updateMember(member);
 		
@@ -203,7 +204,7 @@ public class MemberController {
 		
 	}
 	
-	private String uploadFile(MultipartFile uploadfile, String temp, String originImg) {
+	private String uploadFile(MultipartFile uploadfile, String temp, String originImg) throws Exception {
 		
 		System.out.println(":: uploadfile.getOriginalFilename() => " + uploadfile.getOriginalFilename());
 		System.out.println(":: uploadfile.getSize() => " + uploadfile.getSize());

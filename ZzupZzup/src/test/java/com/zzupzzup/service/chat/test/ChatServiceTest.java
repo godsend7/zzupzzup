@@ -269,7 +269,7 @@ public class ChatServiceTest {
 		
 		System.out.println("search : " + search);
 		
-		Map<String, Object> map = chatService.listChatMember(search, chatMember.getChatNo());
+		Map<String, Object> map = chatService.listChatMember(chatMember.getChatNo());
 		System.out.println("===================================");
 		System.out.println("testListChat map : " + map);
 		System.out.println("===================================");
