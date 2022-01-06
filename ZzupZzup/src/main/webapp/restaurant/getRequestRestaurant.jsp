@@ -388,6 +388,18 @@
 							</div><br><br>
 							
 							<div class="row">
+								<div class="col-xs-4 col-md-2"><strong>사업자 등록증</strong></div>
+								<div class="col-xs-8 col-md-4">
+									<img class="img" src="/resources/images/uploadImages/owner/${restaurant.ownerImage}" width="100px" height="150px" 
+									style="border: 1px solid pink; border-radius: 0.5em;" />
+									<div class="modal">
+									  <span class="imgClose">&times;</span>
+									  <img class="modal_content" id="originalImg">
+									</div>
+								</div>
+							</div><br><br>
+							
+							<div class="row">
 						  		<div class="col-xs-4 col-md-2"><strong>음식점 사진</strong></div>
 								<div class="col-xs-8 col-md-10 row" style="border: 1px solid pink; border-radius: 0.5em; padding-left: 0;">
 									<c:set var="i" value="0" />
