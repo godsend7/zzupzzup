@@ -199,7 +199,7 @@ CREATE TABLE `reservation` (
     `reservation_date` DATETIME NOT NULL,
     `total_price` INT NOT NULL,
     `pay_option` INT NOT NULL,
-    `pay_method` INT,
+    `pay_method` VARCHAR(50),
     `cancel_date` DATETIME,
     `reservation_cancel_type` INT,
     `reservation_cancel_detail` VARCHAR(100),

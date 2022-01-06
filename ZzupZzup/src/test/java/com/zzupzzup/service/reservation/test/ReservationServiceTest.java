@@ -94,7 +94,7 @@ public class ReservationServiceTest {
 		reservation.setFixedStatus(false); // 방문 확정 여부
 		reservation.setTotalPrice(10000); // 주문 메뉴 총 가격
 		reservation.setPayOption(2); //결제 방법 (선결제, 방문결제)
-		reservation.setPayMethod(1); // 결제 수단
+		reservation.setPayMethod("아임포트~~"); // 결제 수단
 		reservation.setReservationCancelReason(2); // 예약 및 결제 취소 유형
 		reservation.setReservationCancelDetail("재고가 없네용~^^^^"); // 예약 및 결제 취소 상세 내용
 		reservation.setRefundStatus(false); // 환불 여부

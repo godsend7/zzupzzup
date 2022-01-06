@@ -15,7 +15,7 @@ public class Reservation {
 	private int reservationNo;
 	private String reservationNumber;
 	private int payOption;
-	private int payMethod;
+	private String payMethod; //api 환불
 	private String planTime;
 	private Date planDate;
 	private String fixedTime;
@@ -86,11 +86,11 @@ public class Reservation {
 		this.payOption = payOption;
 	}
 
-	public int getPayMethod() {
+	public String getPayMethod() {
 		return payMethod;
 	}
 
-	public void setPayMethod(int payMethod) {
+	public void setPayMethod(String payMethod) {
 		this.payMethod = payMethod;
 	}
 

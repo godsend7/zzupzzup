@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Chat;
-import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.chat.ChatDAO;
 

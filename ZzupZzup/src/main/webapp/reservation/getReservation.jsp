@@ -118,7 +118,7 @@
 					success : function(data){
 						console.log("바꾸기 성공");
 						$('#reservationRejectionModal').modal("hide");
-						alert("예약 취소가 완료되었습니다. 예약/주문 취소 메세지가 가게에 전송되었습니다.");
+						alert("예약 취소 및 선결제 시 환불이 완료되었습니다.(선결제시 환불이 동시에 진행됩니다.를 쓰기) 예약/주문 취소 메세지가 가게에 전송됩니다.");
 						
 					},
 					error : function(e) {
@@ -142,7 +142,7 @@
 					success : function(data){
 						console.log("바꾸기 성공");
 						$('#cancelUseModal').modal("hide");
-						alert("예약 거절~~~~~");
+						alert("예약 거절 및 선결제 시 환불이 완료되었습니다. 예약 거절 메세지가 해당 고객에게 전송됩니다.");
 						
 					},
 					error : function(e) {
@@ -150,6 +150,41 @@
 					}
 				}); 
 			});
+	   	
+	   	////////////////////////////////////////////////////////////////////////
+	   	/* Iamport 환불시스템*/
+		    $(".payRefund-modal").on("click", function() {
+		    	
+		    	console.log("#payRefundModal");	
+		    	console.log("${reservation.payMethod}");
+		        alert("환불완료!!!!!!!!")
+		        var payMethod = $("input[name='payMethod']").val();
+		        jQuery.ajax({
+		            url: "/reservation/json/payRefund/${reservation.reservationNo}/${reservation.payMethod}/", // 예: http://www.myservice.com/payments/cancel
+		            type: "GET",
+		            dataType: "json",
+		            headers: {
+		                "Accept": "application/json",
+		                "Content-Type": "application/json"
+		            },
+		            success: function (JSONData, status) {
+		
+		            	console.log("바꾸기 성공");
+						$('#payRefundModal').modal("hide");
+						alert("결제환불 성공!!!!!");
+		            },
+		            error : function(e) {
+						alert(e.responseText);
+					}
+				}); 
+			});
+	   	
+	   	
+	   	
+	   	
+	   	
+	   	
+	   	////////////////////////////////////////////////////////////////////
 	  
 	});
 </script>
@@ -240,6 +275,9 @@
 								<!-- //////////////////////////////////////////////////////// -->	
 									<p><input type="button" value="거절 사유" name= "cancelUse" class="button small primary stretched-link" id="cancelUse-modal" data-toggle="modal"
 									data-target="#cancelUseModal"/></p>
+									
+									<p><input type="button" value="결제 환불" name= "payRefund" class="button small primary stretched-link payRefund-modal" id="payRefund-modal" data-toggle="modal"
+									data-target="#payRefundModal"/></p>
 								
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->	
 									<!-- Button trigger modal --> 

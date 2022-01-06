@@ -534,8 +534,8 @@
 								<!-- Break -->
 								<div class="col-12">
 									<ul class="actions justify-content-center">
-										<li><input type="submit" value="채팅방 등록" class="primary" /></li>
 										<li><input type="reset" value="취소" class="normal" /></li>
+										<li><input type="submit" value="채팅방 등록" class="primary" /></li>
 									</ul>
 								</div>
 							</div>

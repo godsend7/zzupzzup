@@ -26,8 +26,7 @@
 	
 		
 		console.log("addReservationView.jsp");
-		
-		 
+		console.log("챗 멤버리스트:::"+${reservation.chat.chatMember});
 		////////////////////////////////////==> 유효성 체크
 		function fncAddReservation(payment) {
 			
@@ -117,6 +116,8 @@
 	              msg += '상점 거래ID : ' + rsp.merchant_uid;
 	              msg += '결제 금액 : ' + rsp.paid_amount;
 	              msg += '카드 승인번호 : ' + rsp.apply_num;
+	              $("#payMethod").val(rsp.imp_uid);
+	  				console.log("I'mport 번호::::"+$("#payMethod").val());
 	              alert('결제가 완료되었습니다.');
 	              addReservation();
 	          } else {
@@ -274,12 +275,11 @@
 						<h3>예약하기</h3>
 					
 						<form id="addReservation">
-						
+								<input type="hidden" id="payMethod" name="payMethod" value="${reservation.payMethod}">
 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
 								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}">
 								<%-- <input type="hidden" id="reservationDate" name="reservationDate" value="${reservation.reservationDate}"> --%>
 								
-								<input type="hidden" id="member.memberId" name="member.memberId" value="${reservation.member.memberId}">
 								<%-- <input type="hidden" id="reservation.reservationNo" name="reservation.reservationNo" value="${reservation.reservationNo}"> --%>
 							
 							
@@ -287,10 +287,26 @@
 								<div class="col-6 col-12-xsmall">
 									<label for="nickname">NickName</label> 
 									<p>${reservation.member.nickname}</p>
-									<input id="nickname" type="hidden" name="nickname" value="${reservation.member.nickname}">
+									<input id="member.memberId" type="hidden" name="member.memberId" value="${reservation.member.memberId}">
 								</div>
+								"${chatMemberList}"
+								<%-- <c:set var="i" value="0"/>
+								<c:forEach var="chatMember" items="">
+									${reserevation.chat }
+								</c:forEach> --%>
+								<%-- <div class="col-6 col-12-xsmall">
+									<label for="nickname">NickName</label> 
+									<c:forEach var="member" items="${reservation.member.nickname}">
+										<c:out value="${member.nickname}"/>
+									<p>${reservation.member.nickname}</p>
+									</c:forEach>
+									<input id="nickname" type="hidden" name="nickname" value="${reservation.member.nickname}">
+									
+								</div> --%>
+								
+								
 								<div class="col-6 col-12-xsmall">
-									<label for="restaurantName">음식점 명</label> 
+									<label for="restaurantName">음식점 명ㅇㅇㅇ</label> 
 									<p>${reservation.restaurant.restaurantName}</p>
 									<input id="restaurantName" type="hidden" name="restaurantName" value="${reservation.restaurant.restaurantName}">
 								</div>
@@ -380,10 +396,10 @@
 					      			<input type="time" id="planTime" name="planTime">
 								</div>
 								
-								<%-- <div class="col-6 col-12-xsmall">
+								<div class="col-6 col-12-xsmall">
 									<label for="restaurantTimes">음식점 영업 시간</label> 
 									<p>${reservation.restaurant.restaurantTimes}</p>
-								</div> --%>
+								</div>
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="demo-memberCount"></label> 

@@ -22,6 +22,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.siot.IamportRestClient.IamportClient;
+import com.siot.IamportRestClient.request.CancelData;
+import com.siot.IamportRestClient.response.IamportResponse;
+import com.siot.IamportRestClient.response.Payment;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.reservation.ReservationService;
@@ -87,4 +91,49 @@ public class ReservationRestController {
 		return reservationService.addReservation(reservation);
 	
 	}
+	
+		///////////////////////////////////환불////////////////////////////////////////
+		
+		IamportClient client;
+		
+		public void setup() throws Exception {
+		String api_key = "1022196707048541";
+		String api_secret = "244054838c37987389b0bfc481e1281b3a67bb77a3102c1a21c6c8494a3e9c330ae9d261d8571a97";
+		
+		client = new IamportClient(api_key, api_secret);
+		}
+		
+		public void testGetToken() throws Exception {
+		String token = String.valueOf(client.getAuth());
+		System.out.println("token : " + token);
+		}
+		
+		@RequestMapping(value = "/json/payRefund/{reservationNo}/{payMethod}", method = RequestMethod.GET)
+		public Map payRefund(@PathVariable int reservationNo ,@PathVariable String payMethod ) throws Exception {
+		// 이미 취소된 거래 imp_uid
+		System.out.println("testCancelPaymentByImpUid --- Start!---");
+		
+		Reservation reservation = new Reservation();
+		
+		reservation.setReservationNo(reservationNo);
+		reservation.setPayMethod(payMethod);
+		
+		Map<String, Object> map =  new HashMap<String,Object>();
+		
+		setup();
+		testGetToken();
+		setup();
+		//Order order = orderService.getFlightOrder(orderId);
+		
+		CancelData cancel = new CancelData(payMethod, true);
+		System.out.println("imp_uid : " + payMethod);
+		IamportResponse<Payment> cancelpayment = client.cancelPaymentByImpUid(cancel);
+		System.out.println(cancelpayment.getMessage());
+		System.out.println("testCancelPaymentByImpUid --- End!---");
+		
+		return map;
+		}
+		
+		///////////////////////////////환불 끝///////////////////////////////////////////////
+	
 }
