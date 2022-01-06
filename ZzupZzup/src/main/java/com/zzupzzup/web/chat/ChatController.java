@@ -288,6 +288,14 @@ public class ChatController {
 		//Business Logic
 		//예약 넘어갈 때 채팅 상태 인원확정으로 업데이트
 		chatService.updateChatState(chatNo, 2);
+		
+		Chat chat = chatService.getChat(chatNo);
+		
+		Map<String, Object> map = chatService.listReadyCheckMember(chat.getChatNo());
+		
+		List<ChatMember> chatMemberList = (List<ChatMember>)map.get("list");
+		
+		request.setAttribute("chatMemberList", chatMemberList);
 	
 		return "forward:/reservation/addReservation?chatNo="+chatNo;
 	}

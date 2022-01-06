@@ -67,26 +67,25 @@
 					chatMember.map((o,i) => {
 						o.index = i;
 						if(o.inOutCheck){
-							console.log("트루야~");
+							//console.log("채팅 멤버");
 							chatMemberList.push(o.member.memberId);
 						}
-						console.log(o.member.memberId);
+						//console.log(o.member.memberId);
 						//return o;
 					});
 					
-					let chatAgeList = [];
-					chatAgeList = chatAge.split(",");
-					console.log("fdisowe" + chatAgeList);
-					$.each(chatAgeList, function(index, item){
-						console.log(item);
-						chatAgeList.push(ageReverseCng(item));
-						console.log("qwer"+chatAgeList);
+					//연령대 문구 변환
+					let chatAgeList = "";
+					chatAge = chatAge.split(",");
+					$.each(chatAge, function(index, item){
+						chatAgeList += ageReverseCng(item);
+						if(chatAge.length != index+1){
+							chatAgeList += ', ';
+						}
 					});
 					
-					console.log("dkqkqkqk" + chatAgeList);
-					
-					console.log(chatMemberList);
-					console.log(JSONData.chatMember);
+					//console.log(chatMemberList);
+					//console.log(JSONData.chatMember);
 					
 					if(JSONData.chatShowStatus == false){
 						showStatus = "<i class='fa fa-eye-slash' aria-hidden='true'></i>";
@@ -124,7 +123,7 @@
 						+'</div>'
 						+'<div class="d-flex justify-content-between">'
 						+'<div>참가가능한 연령대</div>'
-						+'<div id="getChatAge">'+JSONData.chatAge+'</div>'
+						+'<div id="getChatAge">'+chatAgeList+'</div>'
 						+'<input type="hidden" name="chatAge" id="chatAge" value="'+JSONData.chatAge+'">'
 						+'</div>'
 						+'<div class="d-flex justify-content-between">'
@@ -189,8 +188,6 @@
 		//============= "입장하기" Event 처리 ============
 		$("body").on("click", "input[value='입장하기']", function(){
 			console.log("${member}");
-			console.log("${member.gender}");
-			console.log("${chat}");
 			
 			//채팅방 상태
 			const chatState = $(this).parents(".modal-content").find("#getChatState").children("span").text();
@@ -210,16 +207,12 @@
 			chatMemberGender = genderCng(chatMemberGender);
 			chatMemberAge = ageCng(chatMemberAge);
 			
-			console.log("바뀐 성별 : " + chatMemberGender);
-			console.log("바뀐 나이 : " + chatMemberAge);
-			console.log(chatMemberList);
+			//console.log("바뀐 성별 : " + chatMemberGender);
+			//console.log("바뀐 나이 : " + chatMemberAge);
+			//console.log(chatMemberList);
 			
-			let chatAgeArr = chatAge.split(",");
-			
-			console.log("배열로 바꿨나? : " + chatAgeArr.length);
-			
+			//채팅 멤버 체크 플래그			
 			let flag = false;
-			
 			//현재 들어가있는 채팅 멤버는 필터링 되면 안됨
 			$.each(chatMemberList, function(index, item){
 				if(item == chatMemberId){
@@ -227,6 +220,9 @@
 				}
 			});
 			
+			//참여가능 연령대 배열로 변경
+			let chatAgeArr = chatAge.split(",");
+			//참여가능 연령대와 유저 연령대가 맞는지 체크 플래그
 			let ageFlag = false;
 			$.each(chatAgeArr, function(index, item){
 				if(item != chatMemberAge){
@@ -234,9 +230,9 @@
 				}
 			});
 			
-			console.log(chatState, chatGender, chatAge);
-			console.log("플래그는 ? :" + flag);
+			// 현재 참여중이 아닌 유저 필터링
 			if(!flag){
+				//모집중이 아닌 채팅방은 들어갈 수 없다.
 				if(chatState != "모집중"){
 					$('#chatStateModal').modal('show');
 					return;
@@ -257,8 +253,6 @@
 				}
 			}
 			
-			
-			
 			let chatNo = $(this).attr("data-target");
 			location.href="/chat/getChatEntrance?chatNo="+chatNo;
 		});
@@ -272,6 +266,7 @@
 					return 1;
 			}
 		}
+		
 		//젠더 데이터 값 변경
 		function genderReverseCng(gender){
 			switch(gender){				
@@ -305,19 +300,19 @@
 		//연령대 데이터 값 변경
 		function ageReverseCng(age){
 			switch(age){
-				case 1:
+				case '1':
 					return '10대';
-				case 2:
+				case '2':
 					return '20대';
-				case 3:
+				case '3':
 					return '30대';
-				case 4:
+				case '4':
 					return '40대';
-				case 5:
+				case '5':
 					return '50대';
-				case 6:
+				case '6':
 					return '60대 이상';
-				case 7:
+				case '7':
 					return '연령대 무관'
 			}
 		}
@@ -390,15 +385,15 @@
 									<div class="col-md-6">
 										<div class="card mb-4 shadow-sm chat-state${chat.chatState}">
 											<div class="card-head d-flex">
-												<span class="badge badge-secondary chat-no">${chat.chatNo }</span>
+												<span class="badge badge-secondary chat-no mr-1">${chat.chatNo }</span>
 												<c:if test="${chat.chatLeaderId.memberId == member.memberId }">
-												<span class="badge badge-secondary">개설자</span>
+												<span class="badge badge-secondary mr-1">개설자</span>
 												</c:if>
 												<c:set var="i" value="0" />
 												<c:forEach var="chatMember" items="${chat.chatMember}">
 												<c:set var="i" value="${ i+1 }" />
 													<c:if test="${member.memberId == chatMember.member.memberId && chatMember.member.memberId != chat.chatLeaderId.memberId && chatMember.inOutCheck == true}">
-													<span class="badge badge-secondary">참가중</span>
+													<span class="badge badge-secondary mr-1">참가중</span>
 													</c:if>
 												</c:forEach>
 												<c:choose>
