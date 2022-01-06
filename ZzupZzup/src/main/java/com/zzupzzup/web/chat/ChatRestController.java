@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -175,6 +176,18 @@ public class ChatRestController {
 		
 		Map map = new HashMap();
 		map.put("chatMember", chatMember);
+		return map;
+	}
+	
+	@RequestMapping(value="json/listChatMember/chatNo={chatNo}", method=RequestMethod.GET)
+	public Map listChatMember(@PathVariable int chatNo, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		System.out.println("/chat/json/listChatMember : GET");
+		
+		ChatMember chatMember = new ChatMember();
+		chatMember.setChatNo(chatNo);
+		
+		Map<String, Object> map = chatService.listChatMember(chatNo);
+		
 		return map;
 	}
 	
