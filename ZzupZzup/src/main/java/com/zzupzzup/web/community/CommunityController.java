@@ -80,6 +80,7 @@ public class CommunityController {
 			
 			System.out.println("write by : " + community.getMember());
 			memberService.addActivityScore(community.getMember().getMemberId(), 3, 10);
+			memberService.calculateActivityScore(community.getMember().getMemberId());
 		}
 		
 		for(RestaurantTime rt : restaurantTimes.getRestaurantTimes()) {

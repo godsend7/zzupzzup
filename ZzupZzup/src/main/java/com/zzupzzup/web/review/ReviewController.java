@@ -90,11 +90,11 @@ public class ReviewController {
 				
 		System.out.println("review/addReview : POST");
 		
-		String temDir = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH);
+		String temDir = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH+"review");
 		
 		uploadFilePath(uploadfile, temDir, review);
 		
-		System.out.println(review);
+		System.out.println("데이터 확인 :: " + review);
 		
 		if(reviewService.addReview(review) == 1) {
 			System.out.println("review insert success");
@@ -191,15 +191,17 @@ public class ReviewController {
 	private void uploadFilePath(MultipartHttpServletRequest uploadfile, String temDir, Review review) {
 		
 		//file의 name을 가지고 있는 input tag 가져오기
-		List<MultipartFile> fileList = uploadfile.getFiles("file");
+		List<MultipartFile> fileList = uploadfile.getFiles("uploadFile");
+		
+		System.out.println(fileList);
 		
 		List<String> reviewImage = new ArrayList<String>();
 		
 		for (MultipartFile mf : fileList) {
 			//image가 존재한다면(image의 name이 공백이 아닐경우)
 			if (!mf.getOriginalFilename().equals("")) {
-//				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
-//				System.out.println(":: 파일 사이즈 => " + mf.getSize());
+				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
+				System.out.println(":: 파일 사이즈 => " + mf.getSize());
 	
 				try {
 					String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
@@ -207,7 +209,7 @@ public class ReviewController {
 					File file = new File(temDir + "/" + saveName);
 					mf.transferTo(file);
 									
-					//System.out.println(":: 저장할 이름 => " + saveName);
+					System.out.println(":: 저장할 이름 => " + saveName);
 					 
 					reviewImage.add(saveName);
 					review.setReviewImage(reviewImage);

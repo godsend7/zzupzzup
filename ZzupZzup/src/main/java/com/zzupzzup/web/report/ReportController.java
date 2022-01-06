@@ -21,6 +21,7 @@ import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Report;
+import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.report.ReportService;
 
 @Controller
@@ -30,6 +31,10 @@ public class ReportController {
 	@Autowired
 	@Qualifier("reportServiceImpl")
 	private ReportService reportService;
+	
+	@Autowired
+	@Qualifier("memberServiceImpl")
+	private MemberService memberService;
 
 	@Value("#{commonProperties['pageUnit']?: 3}")
 	int pageUnit;
@@ -47,7 +52,14 @@ public class ReportController {
 		
 		System.out.println("report/addReport : POST");
 		
-		reportService.addReport(report);
+		int result = reportService.addReport(report);
+		
+		if (report.getReportCategory() == 5 && result == 1) {
+			System.out.println("restaurant Report insert success");
+			//리뷰 작성 성공 시 활동점수 추가 
+			memberService.addActivityScore(report.getMemberId(), 4, 5); //리뷰 작성 시 5
+			memberService.calculateActivityScore(report.getMemberId());
+		}
 		
 		return "redirect:/report/listReport?reportCategory="+report.getReportCategory();
 	}

@@ -189,6 +189,7 @@
 							</c:when>
 							<c:otherwise>
 								무한스크롤 필요
+								<jsp:include page="../common/pageNavigator.jsp"/>
 							</c:otherwise>
 						</c:choose>
 					</div>
