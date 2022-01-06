@@ -285,28 +285,15 @@
 							
 							<div class="row gtr-uniform">
 								<div class="col-6 col-12-xsmall">
-									<label for="nickname">NickName</label> 
-									<p>${reservation.member.nickname}</p>
-									<input id="member.memberId" type="hidden" name="member.memberId" value="${reservation.member.memberId}">
+									<label for="nickname">예약자 NickName</label> 
+									<%-- <p>${reservation.member.nickname}</p> 닉네임하나만 불러올때 --%>
+									<p><c:forEach var="chatMember" items="${chatMemberList}" varStatus="status">
+											<c:out value = "${chatMember.member.nickname} ${status.last ? '' : '/'}"/>
+										</c:forEach></p>
+									<input type="hidden" id="member.memberId" name="member.memberId" value="${reservation.chat.chatLeaderId.memberId}">
 								</div>
-								"${chatMemberList}"
-								<%-- <c:set var="i" value="0"/>
-								<c:forEach var="chatMember" items="">
-									${reserevation.chat }
-								</c:forEach> --%>
-								<%-- <div class="col-6 col-12-xsmall">
-									<label for="nickname">NickName</label> 
-									<c:forEach var="member" items="${reservation.member.nickname}">
-										<c:out value="${member.nickname}"/>
-									<p>${reservation.member.nickname}</p>
-									</c:forEach>
-									<input id="nickname" type="hidden" name="nickname" value="${reservation.member.nickname}">
-									
-								</div> --%>
-								
-								
 								<div class="col-6 col-12-xsmall">
-									<label for="restaurantName">음식점 명ㅇㅇㅇ</label> 
+									<label for="restaurantName">음식점 명</label> 
 									<p>${reservation.restaurant.restaurantName}</p>
 									<input id="restaurantName" type="hidden" name="restaurantName" value="${reservation.restaurant.restaurantName}">
 								</div>

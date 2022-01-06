@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -88,12 +87,12 @@ public class MemberController {
 	@RequestMapping(value="addMember/{memberRole}/{loginType}", method=RequestMethod.POST)
 	public String addMember(@PathVariable String memberRole, @PathVariable int loginType,
 				@ModelAttribute("member") Member member, HttpServletRequest request,
-				@RequestParam(value="file", required = false) MultipartFile uploadfile) throws Exception {
+				@RequestParam(value="fileInput", required = false) MultipartFile uploadfile) throws Exception {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : POST");
 		
 		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
-		String profileImage = uploadFile(uploadfile, temp);
+		String profileImage = uploadFile(uploadfile, temp, member.getProfileImage());
 		
 		member.setMemberRole(memberRole);
 		member.setProfileImage(profileImage);
@@ -123,15 +122,16 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="getMember", method=RequestMethod.GET)
-	public String getMember(@RequestParam("memberId") String memberId, Model model) throws Exception {
+	public String getMember(@RequestParam("memberId") String memberId, HttpServletRequest request) throws Exception {
 		
 		System.out.println("/member/getMember : GET");
 		
 		Member memberIdSet = new Member();
 		memberIdSet.setMemberId(memberId);
 		Member member = memberService.getMember(memberIdSet);
+		System.out.println("getMember - "+member);
 		
-		model.addAttribute("member", member);
+		request.setAttribute("member", member);
 		
 		return "forward:/member/getMember.jsp";
 	}
@@ -166,24 +166,27 @@ public class MemberController {
 		return "forward:/member/updateMemberView.jsp";
 	}
 	
-	@RequestMapping(value="updateMember", method=RequestMethod.POST)
-	public String updateMember(@RequestParam("memberId") String memberId, @ModelAttribute("member") Member member,
-			HttpServletRequest request, HttpSession session,
-			@RequestParam(value="file", required = false) MultipartFile uploadfile) throws Exception {
+	@RequestMapping(value="updateMember/{memberRole}", method=RequestMethod.POST)
+	public String updateMember(@PathVariable String memberRole, @ModelAttribute("member") Member member, HttpServletRequest request, HttpSession session,
+			@RequestParam(value="fileInput", required = false) MultipartFile uploadfile) throws Exception {
 		
 		System.out.println("/member/updateMember : POST");
 		
-		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
+		System.out.println("1111 :: " + member);
+		System.out.println("2222 :: " + uploadfile.getOriginalFilename());
 		
-		String profileImage = uploadFile(uploadfile, temp);
+		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
+		String profileImage = uploadFile(uploadfile, temp, member.getProfileImage());
+		
+		
 		member.setProfileImage(profileImage);
 		
 		memberService.updateMember(member);
-		System.out.println("memberPhone => "+member.getMemberPhone());
 		
 		String sessionId = ((Member)session.getAttribute("member")).getMemberId();
 		if(sessionId.equals(member.getMemberId())){
 			session.setAttribute("member", member);
+			System.out.println("session value = "+session.getAttribute("member"));
 		}
 		
 		return "redirect:/member/getMember?memberId="+member.getMemberId();
@@ -201,8 +204,8 @@ public class MemberController {
 		
 	}
 	
-	private String uploadFile(MultipartFile uploadfile, String temp) {
-		System.out.println(":: uploadfile.getOriginalFilename() => " + uploadfile);
+	private String uploadFile(MultipartFile uploadfile, String temp, String originImg) throws Exception {
+		
 		System.out.println(":: uploadfile.getOriginalFilename() => " + uploadfile.getOriginalFilename());
 		System.out.println(":: uploadfile.getSize() => " + uploadfile.getSize());
 			
@@ -217,7 +220,12 @@ public class MemberController {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			saveName = "defaultImage.png";
+
+			if(originImg.equals("defaultImage.png")) {
+				saveName = "defaultImage.png";
+			} else {
+				saveName = originImg;
+			}
 		}
 		
 		return saveName;

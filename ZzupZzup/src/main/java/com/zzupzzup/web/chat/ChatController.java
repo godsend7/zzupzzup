@@ -324,7 +324,7 @@ public class ChatController {
 			//개설자로 들어갔을 때
 			//채팅방 전체 인원 나감
 			System.out.println("개설자야");
-			chatMember.setChatNo(chat.getChatNo());
+			chatMember.setChatNo(chatNo);
 			chatMember.setInOutCheck(false);
 			
 			chatService.deleteAllChatMember(chatMember);
@@ -335,7 +335,7 @@ public class ChatController {
 			//채팅방에서 나감
 			System.out.println("참가자야");
 			System.out.println(memberId);
-			chatMember.setChatNo(chat.getChatNo());
+			chatMember.setChatNo(chatNo);
 			chatMember.setMember(member);
 			chatMember.setInOutCheck(false);
 			

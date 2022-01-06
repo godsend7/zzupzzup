@@ -102,15 +102,13 @@ public class ReservationController {
 //==================================================================================================
 	//질문
 	@RequestMapping( value="getReservation", method=RequestMethod.GET )
-	public String getReservation( @RequestParam("reservationNo") int reservationNo , Model model ) throws Exception {
+	public String getReservation( @RequestParam("reservationNo") int reservationNo , Model model, HttpServletRequest request ) throws Exception {
 		
 		System.out.println("/reservation/getReseration : GET");
 		//Business Logic
 		Reservation reservation = reservationService.getReservation(reservationNo);
 		// Model 과 View 연결
-		model.addAttribute("reservation", reservation);
-		
-		
+
 		Member member = new Member();
 		Chat chat = new Chat();
 		

@@ -1,6 +1,10 @@
 package com.zzupzzup.web.community;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -66,29 +71,40 @@ public class CommunityController {
 	@RequestMapping(value="addCommunity", method=RequestMethod.POST)
 	public String addCommunity(@ModelAttribute("community") Community community, 
 			@ModelAttribute("restaurantTimes") Community restaurantTimes, 
+			@RequestParam(value="file", required = false) MultipartFile uploadReceiptFile, 
 			MultipartHttpServletRequest uploadFile, 
 			HttpServletRequest request) throws Exception {
 		
 		System.out.println("/community/addCommunity : POST");
 		
 		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
-		
 		uploadFilePath(uploadFile, empty, community);
+		
+		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
+		String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
+		
+		community.setReceiptImage(receiptImage);
 		
 		if(communityService.addCommunity(community) == 1) {
 			System.out.println("POST UPLOAD SUCCESS");
 			
 			System.out.println("write by : " + community.getMember());
 			memberService.addActivityScore(community.getMember().getMemberId(), 3, 10);
+			memberService.calculateActivityScore(community.getMember().getMemberId());
 		}
 		
-		for(RestaurantTime rt : restaurantTimes.getRestaurantTimes()) {
-			System.out.println(rt);
+		System.out.println("null이라며~~~ : " + restaurantTimes);
+		
+		if(restaurantTimes.getRestaurantTimes() != null) {
+			for(RestaurantTime rt : restaurantTimes.getRestaurantTimes()) {
+				System.out.println(rt);
+			}
 		}
 		
-		System.out.println(community);
+		System.out.println("ADD_COMMUNITY : " + community);
 		
-		return "redirect:/community/listCommunity.jsp";
+		// .jsp 붙히지 말것!
+		return "redirect:/community/listCommunity";
 	}
 	
 	@RequestMapping(value="getCommunity", method=RequestMethod.GET)
@@ -186,7 +202,7 @@ public class CommunityController {
 	
 	private void uploadFilePath(MultipartHttpServletRequest uploadFile, String empty, Community community) {
 		
-		List<MultipartFile> fileList = uploadFile.getFiles("file");
+		List<MultipartFile> fileList = uploadFile.getFiles("multiFile");
 		
 		List<String> cnImg = new ArrayList<String>();
 		
@@ -213,6 +229,23 @@ public class CommunityController {
 			}
 		}
 		
+	}
+	
+	private String uploadReceiptImg(MultipartFile uploadReceiptFile, String vacant) {
+		
+		String realReceipt = uploadReceiptFile.getOriginalFilename();
+		
+		System.out.println("" + realReceipt);
+		
+		Path checkpoint = Paths.get(vacant, File.separator + StringUtils.cleanPath(realReceipt));
+		
+		try {
+			Files.copy(uploadReceiptFile.getInputStream(), checkpoint, StandardCopyOption.REPLACE_EXISTING);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return realReceipt;
 	}
 	
 	
