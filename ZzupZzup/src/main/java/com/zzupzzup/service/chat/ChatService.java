@@ -51,7 +51,7 @@ public interface ChatService {
 	public int updateReadyCheck(ChatMember chatMember) throws Exception;
 	
 	// Select List
-	public Map<String, Object> listChatMember(Search search, int chatNo) throws Exception;
+	public Map<String, Object> listChatMember(int chatNo) throws Exception;
 	
 	// Select List
 	public Map<String, Object> listReadyCheckMember(int chatNo) throws Exception;

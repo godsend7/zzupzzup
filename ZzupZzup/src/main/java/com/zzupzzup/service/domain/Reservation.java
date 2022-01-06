@@ -229,6 +229,10 @@ public class Reservation {
 	public String getReturnPayOption() {
 		return CommonUtil.payOption(payOption);
 	}
+	
+	public String getReturnReservationCancelReason() {
+		return CommonUtil.reservationCancelReason(reservationCancelReason);
+	}
 
 	@Override
 	public String toString() {

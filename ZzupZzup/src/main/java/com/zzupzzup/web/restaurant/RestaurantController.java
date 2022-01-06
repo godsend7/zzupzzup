@@ -19,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -85,7 +84,7 @@ public class RestaurantController {
 		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		uploadFilePath(uploadFile, empty, restaurant);
 		
-		System.out.println("ooooooooooooooo : " + uploadOwnerFile);
+		//System.out.println("debugging point1 : " + uploadOwnerFile);
 		
 		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/owner");
 		String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
@@ -284,11 +283,11 @@ public class RestaurantController {
 	
 	private String uploadOwnerImg(MultipartFile uploadOwnerFile, String vacant) {
 		
-		System.out.println("gggggggggggggggg : " + uploadOwnerFile.getOriginalFilename());
+		//System.out.println("CHECK POINT 1 : " + uploadOwnerFile.getOriginalFilename());
 		
 		String ownerInfo = uploadOwnerFile.getOriginalFilename();
 		
-		System.out.println("ownerInfo : " + ownerInfo);
+		//System.out.println("ownerInfo : " + ownerInfo);
 		
 		Path checkpoint = Paths.get(vacant, File.separator + StringUtils.cleanPath(ownerInfo));
 		
