@@ -24,6 +24,10 @@
 			<id property="chatMemberNo" column="chat_member_no"/>
 			<result property="chatNo" column="chat_no" jdbcType="INTEGER"/>
 			<result property="member.memberId" column="chat_member_id" jdbcType="VARCHAR"/>
+			<result property="member.nickname" column="nickname" jdbcType="VARCHAR"/>
+			<result property="member.gender" column="gender" jdbcType="VARCHAR"/>
+			<result property="member.ageRange" column="age_range" jdbcType="VARCHAR"/>
+			<result property="member.profileImage" column="profile_image" jdbcType="VARCHAR"/>
 			<result property="readyCheck" column="ready_check" jdbcType="BOOLEAN"/>
 			<result property="chatLeaderCheck" column="chat_leader_check" jdbcType="BOOLEAN"/>
 			<result property="inOutCheck" column="in_out_check" jdbcType="BOOLEAN"/>
@@ -34,6 +38,9 @@
 		<result property="chatNo" column="chat_no" jdbcType="INTEGER"/>
 		<result property="member.memberId" column="chat_member_id" jdbcType="VARCHAR"/>
 		<result property="member.nickname" column="nickname" jdbcType="VARCHAR"/>
+		<result property="member.gender" column="gender" jdbcType="VARCHAR"/>
+		<result property="member.ageRange" column="age_range" jdbcType="VARCHAR"/>
+		<result property="member.profileImage" column="profile_image" jdbcType="VARCHAR"/>
 		<result property="readyCheck" column="ready_check" jdbcType="BOOLEAN"/>
 		<result property="chatLeaderCheck" column="chat_leader_check" jdbcType="BOOLEAN"/>
 		<result property="inOutCheck" column="in_out_check" jdbcType="BOOLEAN"/>
@@ -176,9 +183,9 @@
 	<!-- SQL : SELECT ALL -->
 	<select id="listChatMember" parameterType="map" resultMap="chatMemberSelectMap">
 		<!-- <bind name="searchKeywords" value="'%' + searchKeyword + '%'" /> -->
-		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check, in_out_check 
-			FROM chat_member
-			WHERE chat_no = #{chatNo}
+		SELECT c.chat_member_no, c.chat_no, c.chat_member_id, c.ready_check, c.chat_leader_check, c.in_out_check, m.nickname, m.gender, m.age_range, m.profile_image
+			FROM chat_member c, member m
+			WHERE chat_no = #{chatNo} AND in_out_check = 1 AND c.chat_member_id = m.member_id
 			ORDER BY chat_member_no
 	</select>
 	
