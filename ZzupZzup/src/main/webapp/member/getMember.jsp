@@ -46,7 +46,7 @@
 							<div class="col-12 col-lg-10 col-xl-8 mx-auto">
 								<h2 class="h3 mb-4 page-title">내 정보 조회</h2>
 								<div class="my-4">
-									<form id="getMember">
+									<form id="getMember-complete">
 										<div class="row mt-5 align-items-center">
 											<div class="col-md-3 mb-5">
 												<div class="col-md" align="center">
@@ -252,13 +252,13 @@
 														style="font-weight: bold">${member.blacklistDate}</span>
 												</div>
 												<div class="checkbox mb-12">
-													<br/>
-													<input type="checkbox" class="custom-control-input" id="regBlacklist" value="" style="float:right;"/> 
-													<label for="regBlacklist">블랙리스트 설정/해제하기</label>
+													<input type="checkbox" class="custom-control-input" id="checkBlacklist" value="" style="float:right;"/> 
+													<label for="checkBlacklist">블랙리스트 설정/해제하기</label>
 												</div>
 											</c:if>
 											<c:if test="${! empty member.deleteDate}">
 												<div class="col-md-6">
+													<br/>
 													<label for="deleteDate">탈퇴일</label> <span id="deleteDate"
 														style="font-weight: bold">${member.deleteDate}</span>
 												</div>

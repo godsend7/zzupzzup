@@ -88,7 +88,7 @@ public class MemberController {
 	@RequestMapping(value="addMember/{memberRole}/{loginType}", method=RequestMethod.POST)
 	public String addMember(@PathVariable String memberRole, @PathVariable int loginType,
 				@ModelAttribute("member") Member member, HttpServletRequest request,
-				@RequestParam(value="file", required = false) MultipartFile uploadfile) throws Exception {
+				@RequestParam(value="fileInput", required = false) MultipartFile uploadfile) throws Exception {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : POST");
 		
