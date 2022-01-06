@@ -3,41 +3,7 @@
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<%-- <!-- 실시간 시간 정보 DATA -->
-<%@ page import="java.util.Date" %>
-<%@ page import="java.text.SimpleDateFormat" %>
-<%
-	Date nowTime = new Date();
-	SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일 a hh:mm:ss");
-%>
-<!-- 실시간 시간 정보 DATA --> --%>
-
-<!-- 실시간 시간 정보 DATA2  -->
-<script type="text/javascript">
-    function showClock()
-    {
-        var currentDate = new Date();
-        var divClock=document.getElementById("divClock");
-        var apm = currentDate.getHours();
-        
-        if(apm<12) {
-            apm="오전 ";
-        } else {
-            apm="오후 ";
-        }
-        
-        var msg = apm +(currentDate.getHours()-12)+"시 ";
-        msg += currentDate.getMinutes() + "분 ";
-        msg += currentDate.getSeconds() + "초";
-        
-        divClock.innerText=msg;
-        
-        setTimeout(showClock,1000);
-    }
-</script>
-<!-- 실시간 시간 정보 DATA2  -->
-
-<body onload="showClock()">
+<body>
 <!-- S:Sidebar -->
 <div id="sidebar" class="inactive">
 	<div class="inner">

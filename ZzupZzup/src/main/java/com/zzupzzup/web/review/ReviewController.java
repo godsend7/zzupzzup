@@ -177,7 +177,54 @@ public class ReviewController {
 		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
 		model.addAttribute("resultPage", resultPage);
 		
-		return "forward:/review/listReview.jsp";
+		if (restaurantNo != null) {
+			return "forward:/review/listReview.jsp";
+		} 
+		
+		return "forward:/review/listMyReview.jsp";
+	}
+	
+	@RequestMapping("listMyLikeReview")
+	public String listMyLikeReview(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
+		
+		System.out.println("review/listMyLikeReview : Service");
+		
+		Member member = (Member) session.getAttribute("member");
+		
+		List<Mark> listLike = null;
+		
+		String memberId = null;
+		
+		if (member != null && member.getMemberRole().equals("user")) {
+			memberId = member.getMemberId();
+			listLike = reviewService.listLike(memberId);
+		}
+		
+		
+		System.out.println(member);
+		
+		
+		if (search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+		
+		System.out.println(search.getCurrentPage() + ":: currentPage");
+		
+		search.setPageSize(pageSize);
+		
+		
+		Map<String, Object> map = reviewService.listMyLikeReview(search, memberId);
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("listLike", listLike);
+		model.addAttribute("search", search);
+		model.addAttribute("totalCount", map.get("totalCount"));
+		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
+		model.addAttribute("resultPage", resultPage);
+		
+		return "forward:/review/listMyReview.jsp";
 	}
 	
 	@RequestMapping(value="deleteReview", method=RequestMethod.GET)

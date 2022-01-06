@@ -144,10 +144,6 @@
 		   	 	console.log("3 ::" + $(".reportModal").attr("data-id"));
 			}
 		}); 
-    	
-    	$('#reviewModal').on('hidden.bs.modal', function () {
-           	location.reload();
-    	});
     });
     
     function imageOutPut(item, index) {
@@ -191,9 +187,13 @@
 			$("#carouselExampleIndicators").carousel("next");
 		});
 		
-		$(".reportModal").on("click", function(){
+		/* $(".reportModal").on("click", function(){
 			$("#reviewModal").modal("hide");
-		});
+		}); */
+		
+		$('#reviewModal').on('hidden.bs.modal', function () {
+			location.reload();
+    	});
     });
 </script>
 
