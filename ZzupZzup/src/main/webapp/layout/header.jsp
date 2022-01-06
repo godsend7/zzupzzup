@@ -3,7 +3,24 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!-- start:Header -->
+<!-- CSS -->
+<style>
+.button.login {
+	/* appearance: none; */
+	background-color: #f56a6a;
+	color: #f8f9fa !important;
+	/* box-shadow: none; */
+}
+
+.button.logout {
+	/* appearance: none; */
+	background-color: #f56a6a;
+	color: #f8f9fa !important;
+	/* box-shadow: none; */
+}
+</style>
+
+<!-- start: Header -->
 <header id="header">
 
 	<a href="/" class="logo">
@@ -16,14 +33,21 @@
 	<ul class="icons">
 		<c:if test="${ empty member}">
 			<!-- Button trigger modal -->
-			<input type="button" value="로그인" class="button"
-				data-toggle="modal" data-target="#loginModal" />
+			<button type="button" class="button login" data-toggle="modal" data-target="#loginModal" style="padding-left: 15px; padding-right: 15px;">
+				<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-door-closed-fill" viewBox="0 0 16 16">
+  					<path d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+				</svg> LOGIN
+			</button>
 		</c:if>
 		<c:if test="${ ! empty member}">
-			<input type="button" value="로그아웃" class="button" id="logout" />
+			<button type="button" class="button logout" id="logout" style="padding-left: 15px; padding-right: 15px;">
+				<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-door-open-fill" viewBox="0 0 16 16">
+  					<path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15H1.5zM11 2h.5a.5.5 0 0 1 .5.5V15h-1V2zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z"/>
+				</svg> LOGOUT
+			</button>
 		</c:if>
 	</ul>
 
 
 </header>
-<!-- end:Header -->
+<!-- end: Header -->
