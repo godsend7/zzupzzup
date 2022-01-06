@@ -32,10 +32,10 @@ public class Member {
 	private String memberRank;					//등급(쩝린이, 쩝쩝학사, 쩝쩝석사, 쩝쩝박사)
 	private int accumulAllScore;				//총 활동점수
 	private int mannerAllScore;					//총 매너점수
-	private Timestamp regDate;						//가입일
+	private Timestamp regDate;					//가입일
 	private boolean eliminated;					//탈퇴 여부
-	private Timestamp deleteDate;					//탈퇴일
-	private Timestamp blacklistDate;					//블랙리스트 등록일
+	private Timestamp deleteDate;				//탈퇴일
+	private Timestamp blacklistDate;			//블랙리스트 등록일
 	private int reportCount;					//신고 횟수
 	private String certificatedNum;				//인증번호
 	private int loginType;						//로그인 유형(일반, 카카오, 네이버)
@@ -98,7 +98,7 @@ public class Member {
 	}
 
 	public String getMemberPhone() {
-		if( memberPhone == null) {
+		if(memberPhone == null || (memberPhone1 != null && memberPhone2 != null && memberPhone3 != null)) {
 			return CommonUtil.returnTelNum(memberPhone1, memberPhone2, memberPhone3);
 		} else {
 			return memberPhone;
@@ -326,6 +326,13 @@ public class Member {
 	}
 
 	public boolean isRegBlacklist() {
+		
+		if(blacklistDate == null) {
+			regBlacklist = false;
+		} else {
+			regBlacklist = true;
+		}
+		
 		return regBlacklist;
 	}
 
@@ -349,20 +356,20 @@ public class Member {
 		this.accumulType = accumulType;
 	}
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return "Member [ memberId : "+memberId+", password : "+password+", nickname : "+nickname+", memberRole : "+memberRole+", memberName : "+memberName+", memberPhone : "+memberPhone+", ageRange : "+ageRange+", gender : "+gender+", age : "+age+", profileImage : "+profileImage+", statusMessage : "+statusMessage+", pushNickname : "+pushNickname
-				+", deleteReason : "+deleteReason+", accumulDate : "+accumulDate+", accumulContents : "+accumulContents+", accumulScore : "+accumulScore+", mannerScore : "+mannerScore+", memberRank : "+memberRank+", accumulAllScore : "+accumulAllScore+", mannerAllScore : "+mannerAllScore+", regDate : "+regDate+", eliminated : "+eliminated+", deleteDate : "+deleteDate
-				+", blacklistDate : "+blacklistDate+", reportCount : "+reportCount+", certificatedNum : "+certificatedNum+", loginType : "+loginType+", deleteType : "+deleteType+", regRestaurantCount : "+regRestaurantCount+", regBlacklist : "+regBlacklist+", accumulType : "+accumulType+" ]";
-	}
-
 	public boolean isLoginCheck() {
 		return loginCheck;
 	}
 
 	public void setLoginCheck(boolean loginCheck) {
 		this.loginCheck = loginCheck;
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Member [ memberId : "+memberId+", password : "+password+", nickname : "+nickname+", memberRole : "+memberRole+", memberName : "+memberName+", memberPhone : "+memberPhone+"("+memberPhone1+", "+memberPhone2+", "+memberPhone3+"), ageRange : "+ageRange+", gender : "+gender+", age : "+age+", profileImage : "+profileImage+", statusMessage : "+statusMessage+", pushNickname : "+pushNickname
+				+", deleteReason : "+deleteReason+", accumulDate : "+accumulDate+", accumulContents : "+accumulContents+", accumulScore : "+accumulScore+", mannerScore : "+mannerScore+", memberRank : "+memberRank+", accumulAllScore : "+accumulAllScore+", mannerAllScore : "+mannerAllScore+", regDate : "+regDate+", eliminated : "+eliminated+", deleteDate : "+deleteDate
+				+", blacklistDate : "+blacklistDate+", reportCount : "+reportCount+", certificatedNum : "+certificatedNum+", loginType : "+loginType+", deleteType : "+deleteType+", regRestaurantCount : "+regRestaurantCount+", regBlacklist : "+regBlacklist+", accumulType : "+accumulType+" ]";
 	}
 	
 }
