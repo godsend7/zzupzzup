@@ -4,23 +4,28 @@ import java.io.File;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.maven.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.google.gson.Gson;
 import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
@@ -173,6 +178,21 @@ public class ChatRestController {
 		map.put("chatMember", chatMember);
 		return map;
 	}
+	
+	@RequestMapping(value="json/listChatMember/chatNo={chatNo}", method=RequestMethod.GET)
+	public Map listChatMember(@PathVariable int chatNo, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		System.out.println("/chat/json/listChatMember : GET");
+		
+		ChatMember chatMember = new ChatMember();
+		chatMember.setChatNo(chatNo);
+		
+		Map<String, Object> map = chatService.listChatMember(chatNo);
+		
+		return map;
+	}
+	
+	
+	
 
 	
 	

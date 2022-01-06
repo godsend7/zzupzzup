@@ -49,21 +49,34 @@
 .chat-body { padding: 20px; flex: 12; }
 .chat-contents .chat-body { background-color: #f3f3f3; }
 .chat-body .display-container { overflow-y: auto; height: 400px; }
+.chat-body .display-container::-webkit-scrollbar {
+	width: 6px;
+}
+.chat-body .display-container::-webkit-scrollbar-thumb {
+	height: 20%;
+	background-color: #bbb;
+	border-radius: 10px;
+}
+.chat-body .display-container::-webkit-scrollbar-track {
+	background-color: #d9d9d9;
+}
 .chat-body ul { margin: 0; list-style: none; padding: 0; }
 .chat-body ul.chatting-list li { padding: 10px; display: flex; justify-content: flex-start; align-items: flex-end; flex-direction: column; }
-.chat-body ul.chatting-list li.sent { align-items: flex-start; }
+.chat-body ul.chatting-list li.received { align-items: flex-start; }
+.chat-body ul.chatting-list li.system { align-items: center; }
 .chat-body ul.chatting-list li .chatProfile { display: flex; flex-direction: row; align-items: center; }
-.chat-body ul.chatting-list li.received .chatProfile { flex-direction: row-reverse; }
-.chat-body ul.chatting-list li .chat-message { width: 80%; border-radius: 10px; padding: 15px; background-color: #eee; margin-top: 7px; background-color: #dee9ff; }
-.chat-body ul.chatting-list li.received .chat-message { background-color: #fff9de; }
+.chat-body ul.chatting-list li.sent .chatProfile { flex-direction: row-reverse; }
+.chat-body ul.chatting-list li .chat-message { width: 75%; border-radius: 10px; padding: 15px; background-color: #eee; margin-top: 7px; background-color: #dee9ff; }
+.chat-body ul.chatting-list li.sent .chat-message { background-color: #fff9de; }
+.chat-body ul.chatting-list li.system .chat-message { width: 50%; margin-top: 17px; background-color: #e5e5e5; text-align: center; }
 .chatProfile > * { margin-right: 10px; }
 .chatProfile img { width: 35px; height: 35px; border-radius: 50%; overflow: hidden; }
 
-.chat-body .user-list li { position: relative; }
+.chat-body .user-list li { position: relative; margin-bottom: 10px; }
 
 .chat-footer { text-align: right; border-top: 1px solid #e8e5dd; }
 .input-container { padding: 15px; }
-.input-container textarea { background-color: transparent; border: none; }
+.input-container textarea { background-color: transparent; border: none; overflow-x: hidden; overflow-y: auto; white-space: pre-wrap; }
 .input-container textarea:focus { border: none; box-shadow: none; }
 .input-container .send-button { margin-top: 10px; }
 

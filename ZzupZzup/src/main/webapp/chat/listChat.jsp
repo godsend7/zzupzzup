@@ -225,9 +225,10 @@
 			//참여가능 연령대와 유저 연령대가 맞는지 체크 플래그
 			let ageFlag = false;
 			$.each(chatAgeArr, function(index, item){
-				if(item != chatMemberAge){
+				if(item == chatMemberAge){
 					ageFlag = true;
 				}
+				
 			});
 			
 			// 현재 참여중이 아닌 유저 필터링
@@ -246,7 +247,7 @@
 				}
 				//연령대 무관이 아닐 때 채팅방 연령대와 유저 연령대 필터링
 				if(chatAge != 7 ){
-					if(ageFlag){
+					if(!ageFlag){
 						$('#chatAgeModal').modal('show');
 						return;
 					}
@@ -292,7 +293,7 @@
 					return 4;
 				case '50대':
 					return 5;
-				case '60대 이상':
+				case '60대':
 					return 6;
 			}
 		}
@@ -316,6 +317,20 @@
 					return '연령대 무관'
 			}
 		}
+		/* let page = 1;
+		//==> 페이징 스크롤
+		$(function(){
+			getList(page);
+			page ++;
+		});
+		
+		$(window).scroll(function(){
+			if($(window).srollTop() + 200 >= $(document).height() - $(window).height()){
+				getList(page);
+				page++;
+			}
+		}); */
+		
 			
 			
 	});
@@ -428,7 +443,7 @@
 														${chat.reportCount } 회</i>
 												</div>
 												<h4 class="card-title">${chat.chatTitle}</h4>
-												<h5 class="card-text mb-2 text-muted">${chat.chatText}</h4>
+												<h5 class="card-text mb-2 text-muted">${chat.chatText}</h5>
 													<div class="d-flex justify-content-between align-items-end">
 														<div>
 															<p class="card-text text-right">${chat.chatRestaurant.restaurantName}</p>

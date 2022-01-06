@@ -72,22 +72,22 @@
 		UPDATE zzupzzup.MEMBER
 		<set>
 			PASSWORD = #{password},
+			GENDER = #{gender},
+			AGE_RANGE = #{ageRange},
 			MEMBER_PHONE = #{memberPhone},
-			PROFILE_IMAGE = #{profileImage}
+			PROFILE_IMAGE = #{profileImage},
+			STATUS_MESSAGE = #{statusMessage},
+			BLACKLIST_REG_DATE =
+			<if test="regBlacklist">
+				NOW()
+			</if>
+			<if test="!regBlacklist">
+				NULL
+			</if>
 			<if test="deleteDate != '' and deleteType != '' and deleteReason != ''">
 				, DELETE_DATE = #{deleteDate},
 				DELETE_TYPE = #{deleteType},
 				DELETE_DETAIL = #{deleteReason}
-			</if>
-			<if test="memberRole == 'user'">
-				, STATUS_MESSAGE = #{statusMessage},
-				BLACKLIST_REG_DATE =
-				<if test="regBlacklist">
-					NOW()
-				</if>
-				<if test="!regBlacklist">
-					NULL
-				</if>
 			</if>
 		</set>
 		WHERE MEMBER_ID = #{memberId}

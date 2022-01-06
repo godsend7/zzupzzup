@@ -9,26 +9,55 @@
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	margin: 0;
+	text-align: center;
 }
 
 .star {
-	background: url(/resources/images/star.png);
+	background: url(/resources/images/sub/star.png);
 	display:inline-block;
 	width: 36px; height: 33px;
 	background-size: contain;
 	cursor: pointer;
 }
 
+.star-modal {
+	background: url(/resources/images/sub/list_star.png);
+	display:inline-block;
+	width: 30px; height: 28px;
+	background-size: contain;
+	cursor: pointer;
+}
+
+.star-small {
+	background: url(/resources/images/sub/list_star.png);
+	display:inline-block;
+	width: 18px; height: 16px;
+	background-size: contain;
+	cursor: pointer;
+}
+
 .star.on {
-	background-image: url(/resources/images/star_on.png);
+	background-image: url(/resources/images/sub/star_on.png);
+}
+
+.star-modal.on {
+	background-image: url(/resources/images/sub/list_star_on.png);
+}
+
+.star-small.on {
+	background-image: url(/resources/images/sub/list_star_on.png);
 }
 
 @media screen and (max-width: 480px){
 	.star { width: 32px; height: 30px; white-space: nowrap;}
+	.star-modal { width: 24px; height: 22px; white-space: nowrap;}
+	.star-small { width: 14px; height: 12px; white-space: nowrap;}
 }
 
 @media screen and (max-width: 1200px){
 	.star { width: 32px; height: 30px;}
+	.star-modal { width: 24px; height: 22px;}
+	.star-small { width: 18px; height: 16px;}
 }
 
 textarea {
@@ -79,14 +108,14 @@ textarea {
 }
 
 .starBox .col-md-4 .label {
-	font-size: 1.0em;
+	font-size: 1.1em;
 	text-align: center;
 }
 
-.starBox .col-md-4 .star_p {
+/* .starBox .col-md-4 .star_p {
 	font-size: 1.0em;
 	text-align: center;
-}
+} */
 
 .carousel-item {
 	background: #dee2e6;
