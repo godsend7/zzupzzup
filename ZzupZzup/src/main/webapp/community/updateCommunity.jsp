@@ -148,8 +148,8 @@
 							<!-- <input type="text" name="restaurantTimes[0].restaurantDay" placeholder="음식점 운영요일"> -->
 							<div>
 								<input type="radio" id="monday" name="restaurantTimes[0].restaurantDay" value="1" 
-								 ${!empty community.restaurantTimes[0].restaurantDay && community.restaurantTimes[0].restaurantDay == "1" ? "checked" : ""}>
-								 <label for="monday">월</label>
+								${!empty community.restaurantTimes[0].restaurantDay && community.restaurantTimes[0].restaurantDay == "1" ? "checked" : ""}>
+								<label for="monday">월</label>
 								<input type="radio" id="tuesday" name="restaurantTimes[0].restaurantDay" value="2" 
 								${!empty community.restaurantTimes[0].restaurantDay && community.restaurantTimes[0].restaurantDay == "2" ? "checked" : ""}>
 								<label for="tuesday">화</label>

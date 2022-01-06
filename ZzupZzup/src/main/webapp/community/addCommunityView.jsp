@@ -154,16 +154,21 @@
 		}
 		
 		window.onload = function(){
-			// 등록 버튼 실행
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			$(function() {
-				//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+				// 등록 버튼 실행
 				$( "#button1" ).on("click" , function() {
 					fncAddCommunity();
+				});
+				
+				// 이전으로 버튼 실행
+				$( "#button3" ).on("click" , function() {
+					history.go(-1);
 				});
 			});
 			
 			$(function() {
-				//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+				// 주소 검색 버튼 실행
 				$( "#button2" ).on("click" , function() {
 					daumPostcode();
 				});
@@ -186,6 +191,7 @@
 				
 				<section id="">
 				
+				
 				<div class="container">
 				
 					<h2>게시물 등록하기</h2><hr>
@@ -202,6 +208,7 @@
 					<input type="hidden" class="form-control" id="member.memberId" name="member.memberId" value="${member.memberId}">
 					<input type="hidden" class="form-control" id="member.nickname" name="member.nickname" value="${member.nickname}">
 					
+					<!-- INPUT BLOCKS START -->
 					<div class="form-group">
 						<label for="postTitle" class="col-sm-offset-1 col-sm-3 control-label">게시물 제목</label>
 						<div class="col-sm-12">
@@ -216,7 +223,12 @@
 							<textarea id="postText" name="postText" placeholder="게시물 소개글" rows="3" style="resize: none; height: 50em;"></textarea>
 							<!-- <input type="text" class="form-control" id="postText" name="postText" placeholder="게시물 소개글"> -->
 						</div>
-					</div><hr>
+					</div><br>
+					
+					<div class="col-sm-4">
+						<label for="postImage">게시물 이미지</label>
+						<input type="file" id="file" name="multiFile" multiple="multiple">
+					</div><br><hr>
 					
 					<div class="form-group">
 						<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>
@@ -238,9 +250,15 @@
 							<input type="text" class="form-control" id="streetAddress" name="streetAddress" placeholder="음식점 도로명주소" readonly="readonly">
 							<input type="text" class="form-control" id="areaAddress" name="areaAddress" placeholder="음식점 지번주소" readonly="readonly">
 							<input type="text" class="form-control" id="restAddress" name="restAddress" placeholder="음식점 상세주소" readonly="readonly">
-							<button type="button" class="normal btn-sm" id="button2">주소찾기</button>
+							<button type="button" class="normal btn-sm" id="button2" style="height: 35px;">
+								<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+	  							<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+							</svg> 주소찾기</button>
 						</div>
-					</div>
+					</div><br>
+					
+					<input type="hidden" name="latitude" value="">
+					<input type="hidden" name="longitude" value="">
 					
 					<!-- <div class="form-group">
 						<label for="streetAddress" class="col-sm-offset-1 col-sm-3 control-label">음식점 도로명주소</label>
@@ -278,67 +296,41 @@
 						</div>
 					</div><br>
 					
-					<div class="form-group">
-						<label for="mainMenuTitle" class="col-sm-offset-1 col-sm-3 control-label">음식점 메인메뉴 이름</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" id="mainMenuTitle" name="mainMenuTitle" placeholder="음식점 메인메뉴 이름">
+					<div class="col-md-12">
+						<label for="mainMenu">이 집의 대표메뉴</label>
+						<div class="row" id="mainMenu">
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="mainMenuTitle" name="mainMenuTitle" placeholder="메뉴 이름">
+							</div>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="mainMenuPrice" name="mainMenuPrice" placeholder="메뉴 가격">
+							</div>
 						</div>
-					</div>
-					
-					<div class="form-group">
-						<label for="mainMenuPrice" class="col-sm-offset-1 col-sm-3 control-label">음식점 메인메뉴 가격</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" id="mainMenuPrice" name="mainMenuPrice" placeholder="음식점 메인메뉴 가격">
-						</div>
-					</div><hr>
-					
-					<div class="col-sm-8">
-						<label>음식점 운영요일</label>
-						<!-- <input type="text" name="restaurantTimes[0].restaurantDay" placeholder="음식점 운영요일"> -->
-						<div>
-							<input type="radio" id="monday" name="restaurantTimes[0].restaurantDay" value="1" checked> <label for="monday">월</label>
-							<input type="radio" id="tuesday" name="restaurantTimes[0].restaurantDay" value="2"> <label for="tuesday">화</label>
-							<input type="radio" id="wednesday" name="restaurantTimes[0].restaurantDay" value="3"> <label for="wednesday">수</label>
-							<input type="radio" id="thursday" name="restaurantTimes[0].restaurantDay" value="4"> <label for="thursday">목</label>
-							<input type="radio" id="friday" name="restaurantTimes[0].restaurantDay" value="5"> <label for="friday">금</label>
-							<input type="radio" id="saturday" name="restaurantTimes[0].restaurantDay" value="6"> <label for="saturday">토</label>
-							<input type="radio" id="sunday" name="restaurantTimes[0].restaurantDay" value="7"> <label for="sunday">일</label>
-					    	<input type="checkbox" id="dayoff" name="restaurantMenus[0].restaurantDayOff" value="1"> <label for="dayoff">휴무일</label>
-					    </div>
 					</div><br>
 					
-					<div class="col-sm-4">
-						<label>음식점 운영시간</label>
+					<div class="form-group">
+						<div class="col-sm-4">
+							<label for="receiptImage">영수증 이미지</label>
+							<input type="file" name="file" id="receiptImage">
+						</div>	
+					</div><br><hr>
+					<!-- INPUT BLOCKS FINISH -->
+						
+					<div class="text-center">
+						<button type="button" class="btn btn-outline-warning btn-sm" id="button3">
+			                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply-all" viewBox="0 0 16 16">
+			  					<path d="M8.098 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.74 8.74 0 0 0-1.921-.306 7.404 7.404 0 0 0-.798.008h-.013l-.005.001h-.001L8.8 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L4.114 8.254a.502.502 0 0 0-.042-.028.147.147 0 0 1 0-.252.497.497 0 0 0 .042-.028l3.984-2.933zM9.3 10.386c.068 0 .143.003.223.006.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96v-.667z"/>
+			  					<path d="M5.232 4.293a.5.5 0 0 0-.7-.106L.54 7.127a1.147 1.147 0 0 0 0 1.946l3.994 2.94a.5.5 0 1 0 .593-.805L1.114 8.254a.503.503 0 0 0-.042-.028.147.147 0 0 1 0-.252.5.5 0 0 0 .042-.028l4.012-2.954a.5.5 0 0 0 .106-.699z"/>
+							</svg> 이전으로
+						</button> &nbsp;
+						
+						<button type="button" class="btn btn-outline-danger btn-sm" id="button1">
+			                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+							  <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+							  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+							</svg> 등록하기
+			  			</button>
 					</div>
-					<div class="col-8 row">
-					    <div class="col">오픈시간
-					    	<label for="time"></label>
-					    	<input type="time" id="time" name="restaurantTimes[0].restaurantOpen">
-					    </div>
-					    <div class="col">마감시간
-					    	<label for="time"></label>
-					    	<input type="time" id="time" name="restaurantTimes[0].restaurantClose">
-					    </div>
-					    <div class="col">브레이크타임
-					    	<label for="time"></label>
-					    	<input type="time" id="time" name="restaurantTimes[0].restaurantBreak">
-					    </div>
-					    <div class="col">라스트오더
-					    	<label for="time"></label>
-					    	<input type="time" id="time" name="restaurantTimes[0].restaurantLastOrder">
-					    </div>
-					</div><br>
-					
-					<div class="col-sm-4">
-						<label for="postImage">음식점 이미지</label>
-						<input type="file" id="file" name="file" multiple="multiple">
-					</div><br><br><hr>
-					
-					<!-- <div class="form-group"> -->
-						<div class="text-center">
-							<button type="button" class="btn btn-warning" id="button1">등 &nbsp;록</button>
-						</div>
-					<!-- </div> -->
 					
 					</form>
 					
