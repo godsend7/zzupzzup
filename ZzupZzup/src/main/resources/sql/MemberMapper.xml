@@ -73,10 +73,12 @@
 		<set>
 			PASSWORD = #{password},
 			MEMBER_PHONE = #{memberPhone},
-			PROFILE_IMAGE = #{profileImage},
-			DELETE_DATE = #{deleteDate},
-			DELETE_TYPE = #{deleteType},
-			DELETE_DETAIL = #{deleteReason}
+			PROFILE_IMAGE = #{profileImage}
+			<if test="deleteDate != '' and deleteType != '' and deleteReason != ''">
+				, DELETE_DATE = #{deleteDate},
+				DELETE_TYPE = #{deleteType},
+				DELETE_DETAIL = #{deleteReason}
+			</if>
 			<if test="memberRole == 'user'">
 				, STATUS_MESSAGE = #{statusMessage},
 				BLACKLIST_REG_DATE =

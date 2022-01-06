@@ -365,7 +365,7 @@
 			<input type="file" name="file" id="ownerImage">
 		</div>	
 	</div><br>
-		
+	
 	<div class="form-group">
 		<label for="restaurantTel" class="col-sm-offset-1 col-sm-3 control-label">음식점 전화번호</label>
 		<div class="col-sm-4">
@@ -379,9 +379,12 @@
 			<input type="text" class="form-control" id="streetAddress" name="streetAddress" placeholder="음식점 도로명주소" readonly="readonly">
 			<input type="text" class="form-control" id="areaAddress" name="areaAddress" placeholder="음식점 지번주소" readonly="readonly">
 			<input type="text" class="form-control" id="restAddress" name="restAddress" placeholder="음식점 상세주소" readonly="readonly">
-			<button type="button" class="normal btn-sm" id="button2" style="text-align:right;">주소찾기</button>
+			<button type="button" class="normal btn-sm" id="button2" style="height: 35px;">
+				<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+	  			<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+			</svg> 주소찾기</button>
 		</div>
-	</div>
+	</div><br>
 	
 	<input type="hidden" name="latitude" value="">
 	<input type="hidden" name="longitude" value="">
@@ -450,8 +453,8 @@
 	
 	<div class="col-sm-8 restaurant-info">
 		<label for="working">음식점 운영정보 &nbsp;
-			<span class="badge badge-danger" id="showButton">보기</span>
-			<span class="badge badge-secondary" id="hideButton">숨기기</span>
+			<span class="badge badge-info" id="showButton">보기</span>
+			<span class="badge badge-danger" id="hideButton">숨기기</span>
 		</label>
 		
 		<div id="workingForms" style="display: none;"><br>

@@ -84,9 +84,10 @@
 				} */
 				
 				//좋아요
+				$("#reviewLike").removeClass('check'); 
 				$.each(data.listLike, function(index, item) {
 					if(data.list.reviewNo == item.reviewNo) {
-						$("#reviewLike").attr('class','reviewLike check'); 
+						$("#reviewLike").addClass('check'); 
 					}
 				});
 				/* <c:forEach var="like" items="${listLike}">
@@ -96,14 +97,13 @@
 				</c:forEach> */
 				
 				$(".footerBox").empty();
+				$(".footer2").empty();
 				if (${member.memberRole eq "user"} && ("${member.memberId}" == data.list.member.memberId)) {
-					console.log("user");
-					var footer = "<div><input type='button' class='normal' id='reviewDelete' value='삭제'></input> "
+					var footer = "<div class='footer2'><input type='button' class='normal' id='reviewDelete' value='삭제'></input> "
 								+ "<input type='button' class='primary' id='reviewUpdate' value='수정'></input></div>";
 					
-					$(".modal-footer").append(footer);
+					$(".review-modal-footer").append(footer);
 				} else if (${member.memberRole eq "admin"}) {
-					console.log("admin");
 					var footer = "<div class='modal-footer'>" 
 						+ "<input type='button' class='primary' id='reviewUpdate' value='수정'></input>"
 						+ "</div>";
@@ -153,7 +153,7 @@
     			+ "<text x='50%' y='50%' fill='#444' dy='.3em'>" + item + "</text></svg> "
     			+ "</div>";  */
     			
-    	image += "<div class='imgBox'> <img src='/resources/images/uploadImages/" + item + "'> </div>"
+    	image += "<div class='imgBox'> <img src='/resources/images/uploadImages/review/" + item + "'> </div>"
     	/* var image = "<div class='carousel-item'> <svg class='bd-placeholder-img bd-placeholder-img-lg d-block w-100' " 
     				+ "width='100%' height='400' xmlns='http://www.w3.org/2000/svg'	role='img' aria-label='Placeholder: Third slide' "
     				+ "preserveAspectRatio='xMidYMid slice' focusable='false'> <rect width='100%' height='100%' fill='#555'></rect> "
@@ -268,8 +268,8 @@
 			</div>
 			<c:if test="${!empty member && member.memberRole eq 'user'}">
 				<div class="modal-footer review-modal-footer">
-					<div>
-						<input type='button' class='danger reportModal' value='신고' data-toggle="modal" data-target="#reportModal"></input>
+					<div> 
+						<input type='button' class='danger reportModal' value='신고' data-toggle='modal' data-target='#reportModal'></input>
 					</div>
 			    </div>
 			</c:if>

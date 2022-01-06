@@ -173,7 +173,7 @@
 		var nickname = $("#nickname").val();
 		var gender = $("#input[name=genders]:checked").val();
 		var ageRange = $("#input[name=ageRanges]:checked").val();
-		console.log("Member [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+", 닉네임 : "+nickname+", 성별 : "+gender+", 연령대 : "+ageRange+"]");
+		console.log("Member [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+", 닉네임 : "+nickname+", 성별 : "+gender+", 연령대 : "+ageRange+" // "+$("#input[name=genders]:checked")+", "+$("#input[name=ageRanges]:checked")+" ]");
 		
 		if(${param.loginType == '1'} || name.length < 1 || id.length < 1 || pwd.length < 1 || checkPwd.length < 1 || phoneNum.length < 1 || nickname.length < 1) {
 			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
@@ -201,6 +201,21 @@
 		}
 
 	}
+	
+	//changed image preview function
+	function readURL(input) {
+        if (input.files && input.files[0]) {
+        var reader = new FileReader();
+		
+        reader.onload = function (e) {
+                $("#profileImage").attr("src", e.target.result);
+            }
+
+		reader.readAsDataURL(input.files[0]);
+		console.log(input.files[0].name);
+		
+        }
+    }
 
 	//jQuery navigation
 	$(function() {
@@ -241,6 +256,12 @@
 		$("input[value='취소']").on("click", function() {
 			location.href = "/";
 		})
+		
+		//changed image preview
+		 $("#fileInput").on("change", function(){
+            readURL(this);
+        });
+		
 	});
 </script>
 </head>
@@ -342,8 +363,19 @@
 								<hr class="mb-4">
 								<div class="row">
 									<div class="col">
-										<label class="form-label" for="profileImage">프로필 이미지</label>
-										<input type="file" class="form-control" id="profileImage" name="file"/>
+										<div class="file-view mt-4" align="center">
+											<c:if test="${member.profileImage == 'defaultImage.png' || member.profileImage == null}">
+												<img id="profileImage" src="/resources/images/defaultImage.png" class="rounded-circle" width="150" height="150"/>
+												<input type="hidden" name=profileImage value="defaultImage.png" />
+											</c:if>
+											<c:if test="${member.profileImage != 'defaultImage.png' && member.profileImage != null}">
+												<img id="profileImage" src="/resources/images/uploadImages/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
+											</c:if>
+										</div>
+										<div style="margin-top:10px;margin-left:5px;" align="center">
+											<span class="file-drag-btn">이미지 변경</span>
+											<input class="file-drag-input" type="file" id="fileInput" name="fileInput" value="${member.profileImage}">
+										</div>
 									</div>
 									<br/>
 									<c:if test="${param.memberRole == 'user'}">
@@ -355,7 +387,7 @@
 												id="checkNicknameMsg" style="color: red; font-weight: bold"></span>
 											<br/>
 											<label for="stateMessage">자기소개 및 특이사항</label>
-											<textarea class="form-control" id="stateMessage" name="stateMessage"
+											<textarea class="form-control" id="statusMessage" name="statusMessage"
 												placeholder="100자 이내로 자유롭게 기술해주세요." rows="3"></textarea>
 										</div>
 									</c:if>

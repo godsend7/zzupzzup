@@ -1,5 +1,6 @@
 package com.zzupzzup.web.reservation;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.chat.ChatService;
@@ -61,31 +64,31 @@ public class ReservationController {
 	
 	
 	@RequestMapping( value="addReservation", method=RequestMethod.GET )
-	public String addReservation(@RequestParam("chatNo") int chatNo, Model model) throws Exception{
+	public String addReservation(@RequestParam("chatNo") int chatNo, Model model, HttpServletRequest request) throws Exception{
 	
 		System.out.println("/reservation/addReservation : GET");
 		
 		Reservation reservation = new Reservation();
 		Member member = new Member();
+		Chat chat = new Chat();
 	
 		reservation.setChat(chatService.getChat(chatNo));
 		reservation.setRestaurant(restaurantService.getRestaurant(reservation.getChat().getChatRestaurant().getRestaurantNo()));
-		System.out.println("dfsfsdffsd"+reservation.getChat().getChatLeaderId());
+		System.out.println("addReservation ChatLeaderId::"+reservation.getChat().getChatLeaderId());
 		
 		
 		member = memberService.getMember(reservation.getChat().getChatLeaderId());
 		reservation.setMember(member);
 		
-		System.out.println(member+"member~~~~~~~");
+		System.out.println("addReservation member::"+member);
+		System.out.println("addReservation reservation::"+reservation);
 		
-		System.out.println(reservation);
 		model.addAttribute("reservation", reservation);
 		
 		return "forward:/reservation/addReservationView.jsp";
 	}
 	
 	@RequestMapping( value="addReservation", method=RequestMethod.POST )
-	@ResponseBody
 	public int addReservation ( @ModelAttribute("reservation") Reservation reservation, Model model ) throws Exception {
 
 		System.out.println("/reservation/addReservation : POST");
@@ -99,15 +102,13 @@ public class ReservationController {
 //==================================================================================================
 	//질문
 	@RequestMapping( value="getReservation", method=RequestMethod.GET )
-	public String getReservation( @RequestParam("reservationNo") int reservationNo , Model model ) throws Exception {
+	public String getReservation( @RequestParam("reservationNo") int reservationNo , Model model, HttpServletRequest request ) throws Exception {
 		
 		System.out.println("/reservation/getReseration : GET");
 		//Business Logic
 		Reservation reservation = reservationService.getReservation(reservationNo);
 		// Model 과 View 연결
-		model.addAttribute("reservation", reservation);
-		
-		
+
 		Member member = new Member();
 		Chat chat = new Chat();
 		
@@ -116,15 +117,15 @@ public class ReservationController {
 		
 		reservation.setChat(chat);
 		reservation.setRestaurant(restaurantService.getRestaurant(reservation.getChat().getChatRestaurant().getRestaurantNo()));
-		System.out.println("dfsfsdffsd"+reservation.getChat().getChatLeaderId());
+		System.out.println("getReservation.getChatLederId::"+reservation.getChat().getChatLeaderId());
 		
 		
 		member = memberService.getMember(reservation.getChat().getChatLeaderId());
 		reservation.setMember(member);
 		
-		System.out.println(member+"member~~~~~~~");
+		System.out.println("getMember:::"+member);
 		
-		System.out.println(reservation);
+		System.out.println("getReservation:::"+reservation);
 		model.addAttribute("reservation", reservation);
 		
 		return "forward:/reservation/getReservation.jsp";
@@ -159,11 +160,6 @@ public class ReservationController {
 		String memberId = null;
 		
 		
-		
-		System.out.println(restaurantNo+"::restaurantNo~~~~~");
-		System.out.println(member+"::member~~~~~");
-	
-		
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
 		}
@@ -180,6 +176,8 @@ public class ReservationController {
 		} else {
 			map = reservationService.listMyReservation(search, member, restaurantNo);
 			System.out.println("listMyReservation");
+			System.out.println("::listReservation memberId"+member);
+			System.out.println("::listReservation restaurantNo::"+restaurantNo);
 		}
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
