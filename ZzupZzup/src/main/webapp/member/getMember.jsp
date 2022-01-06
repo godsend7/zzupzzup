@@ -19,9 +19,10 @@
 <script type="text/javascript">
 	$(function() {
 		console.log("getMember.jsp");
+		console.log("${sessionScope.member}");
 		
 		$("#updateMember").on("click", function() {
-			location.href = "/member/updateMember?memberId=${member.memberId}";
+			self.location = "/member/updateMember?memberId=${member.memberId}";
 		})
 	});
 </script>
@@ -225,26 +226,24 @@
 											</div>
 											<br/>
 											<div class="form-row col-md-12">
-												<c:if test="${! empty member.deleteDate}">
-													<div class="col-md-6">
-														<label for="deleteDate">탈퇴일</label> <span id="deleteDate"
-															style="font-weight: bold">${member.deleteDate}</span>
-													</div>
-												</c:if>
-												<c:if test="${! empty member.blacklistDate}">
-													<div class="col-md-6">
-														<label for="blacklistDate">블랙리스트</label>
-														<span id="blacklistDate"
-															style="font-weight: bold">${member.blacklistDate}</span>
-													</div>
-													<div class="checkbox mb-12">
-														<br/>
-														<input type="checkbox" class="custom-control-input" id="regBlacklist" value="" style="float:right;"/> 
-														<label for="regBlacklist">블랙리스트 설정/해제하기</label>
-													</div>
-												</c:if>
+												<div class="col-md-6">
+													<label for="blacklistDate">블랙리스트</label>
+													<span id="blacklistDate"
+														style="font-weight: bold">${member.blacklistDate}</span>
+												</div>
+												<div class="checkbox mb-12">
+													<br/>
+													<input type="checkbox" class="custom-control-input" id="regBlacklist" value="" style="float:right;"/> 
+													<label for="regBlacklist">블랙리스트 설정/해제하기</label>
+												</div>
+											</c:if>
+											<c:if test="${! empty member.deleteDate}">
+												<div class="col-md-6">
+													<label for="deleteDate">탈퇴일</label> <span id="deleteDate"
+														style="font-weight: bold">${member.deleteDate}</span>
+												</div>
+											</c:if>
 											</div>
-										</c:if>
 										<hr class="my-4" />
 										<input type="button" style="float: right" id="updateMember"
 											class="btn btn-primary" value="수정" />

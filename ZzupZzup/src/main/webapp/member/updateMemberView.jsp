@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-getMember</title>
+<title>ZZUPZZUP-updateMember</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
@@ -17,15 +17,16 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
+	
 	$(function() {
 		console.log("updateMemberView.jsp");
 		console.log("${member.profileImage}");
-		/* var memberRole = ${sessionScope.member.memberRole};
-		var checkBlacklist = $("#regBlacklist").prop("checked"); */
 		
-		$("#updateMember-complete").on("click", function() {
+		$("#updateMember-submit").on("click", function() {
 			//location.href = "/member/updateMember";
-			$("#updateMember").attr("method","POST").attr("action","/member/updateMember?memberId=${member.memberId}").submit();
+			readURL(this);
+			$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember/${member.memberRole}").submit();
+			
 		})
 		
 	});
@@ -47,7 +48,27 @@
 			})
 		});
 		
+		//changed image preview
+		 $("#fileInput").on("change", function(){
+             readURL(this);
+         });
+		
 	});
+	
+	//changed image preview function
+	function readURL(input) {
+        if (input.files && input.files[0]) {
+        var reader = new FileReader();
+		
+        reader.onload = function (e) {
+                $("#profileImage").attr("src", e.target.result);
+            }
+
+		reader.readAsDataURL(input.files[0]);
+		console.log(input.files[0].name);
+		
+        }
+    }
 	
 </script>
 </head>
@@ -64,31 +85,33 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="updateMember-section">
+				<section id="updateMember">
 					<div class="container">
 						<div class="row justify-content-center">
 							<div class="col-12 col-lg-10 col-xl-8 mx-auto">
 								<h2 class="h3 mb-4 page-title">내 정보 수정</h2>
 								<div class="my-4">
-									<form id="updateMember">
-									<input type="hidden" id="member-id-hidden" value="${param.memberId}"/>
-									<%-- <input type="hidden" id="profile-image-hidden" value="${member.profileImage}"/> --%>
+									<form id="updateMember-complete" enctype="multipart/form-data">
+									<input type="hidden" name="memberName" value="${member.memberName}"/>
+									<input type="hidden" name="memberId" value="${member.memberId}"/>
+									<input type="hidden" name="nickname" value="${member.nickname}"/>
+									<input type="hidden" name="profileImage" value="${member.profileImage}"/>
+									<input type="hidden" name="memberRole" value="${member.memberRole}"/>
 										<div class="row mt-5 align-items-center">
 											<div class="col-md-3 mb-5" id="edit-profileImage">
 												<div class="col-md" align="center">
 													<!-- profileImage 도윤님 src start -->
-														<input class="file-drag-input" type="file" id="fileDragInput" name="fileDragInput" value="${member.profileImage}">
-														<input type="hidden" id="profileImage" name="profileImage" value="${member.profileImage}">
 													<div class="file-view mt-4">
 														<c:if test="${member.profileImage == 'defaultImage.png'}">
-															<img src="/resources/images/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
+															<img id="profileImage" src="/resources/images/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
 														</c:if>
 														<c:if test="${member.profileImage != 'defaultImage.png'}">
-															<img src="/resources/images/uploadImages/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
+															<img id="profileImage" src="/resources/images/uploadImages/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
 														</c:if>
 													</div>
 													<div style="margin-top:10px;margin-left:5px;">
-														<span class="file-drag-btn">프로필 편집</span>
+														<span class="file-drag-btn">이미지 변경</span>
+														<input class="file-drag-input" type="file" id="fileInput" name="fileInput" value="${member.profileImage}">
 													</div>
 													<!-- profileImage 도윤님 src end -->
 												</div>
@@ -106,7 +129,7 @@
 													</div>
 													<div class="row mb-4">
 														<div class="col-md-11">
-															<textarea class="form-control" id="stateMessage" name="stateMessage"
+															<textarea class="form-control" id="statusMessage" name="statusMessage"
 															placeholder="100자 이내로 자유롭게 기술해주세요." rows="3">${member.statusMessage}</textarea>
 														</div>
 													</div>
@@ -115,25 +138,46 @@
 											<!-- memberRole owner일 때 프로필 이미지 옆 공간 -->
 											<c:if test="${sessionScope.member.memberRole == 'owner'}">
 												<div class="col-md-9" style="vertical-align:middle;margin-bottom: 55px;">
-													<div class="col-md-7">
+													<div class="row col-md-12">
 														<h4 class="mb-1">
-															이름
+															이름&nbsp;&nbsp;
 														</h4>
 														${member.memberName}
 													</div>
 													<br/>
-													<div class="col-md-7">
+													<div class="row col-md-12">
 														<h4 class="mb-1">
-															아이디
+															아이디&nbsp;&nbsp;
 														</h4>
 														${member.memberId}
 													</div>
 													<br/>
-													<div class="col-md-7">
-														<h4 class="mb-1">
-															전화번호
-														</h4>
-														<input type="text" id="memberPhone" value="${member.memberPhone}"/>
+													<div class="row col-md-12">
+														<div class="col-md-6">
+															<label for="memberPhone">전화번호</label>
+															<input type="text" id="memberPhone1" name="memberPhone1" value="${member.memberPhone.substring(0, 3)}" maxlength="3"/>
+															<input type="text" id="memberPhone2" name="memberPhone2" value="${member.memberPhone.substring(4, 8)}" maxlength="4"/>
+															<input type="text" id="memberPhone3" name="memberPhone3" value="${member.memberPhone.substring(9)}" maxlength="4"/>
+															<input type="button" value="인증번호 전송" style="float:right"/>
+														</div>
+														<div class="col-md-6">
+															<label for="certificeatedNum">인증번호</label>
+															<input type="text" id="certificeatedNum" maxlength="6"/>
+														</div>
+													</div>
+												</div>
+												<div class="row col-md-12">
+													<div class="col-md-6">
+														<label for="password">비밀번호</label> <input type="password"
+															class="form-control" id="password" name="password"
+															minlength="8" maxlength="15"
+															placeholder="8-15자 이내로 입력해주세요." required>
+													</div>
+													<div class="col-md-6">
+														<label for="checkPassword">비밀번호 확인</label> <input
+														type="password" class="form-control" id="checkPassword"
+														minlength="8" maxlength="15"
+														placeholder="비밀번호를 다시 입력해주세요." required>
 													</div>
 												</div>
 											</c:if>
@@ -464,7 +508,7 @@
 											</div>
 										</c:if>
 										<hr class="my-4" />
-										<input type="button" style="float: right" id="updateMember-complete"
+										<input type="button" style="float: right" id="updateMember-submit"
 											class="btn btn-primary" value="수정" />
 									</form>
 								</div>

@@ -146,9 +146,9 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int updateMember(Member member) throws Exception {
 		// TODO Auto-generated method stub
-		memberDao.updateMember(member);
 		
-		return 1;
+		
+		return memberDao.updateMember(member);
 	}
 
 //	@Override
