@@ -32,15 +32,6 @@
 	//이미지 정보를 담을 배열
  	var sel_files = [];
 	
-	
-	<c:forEach var="image" items="${review.reviewImage}">
-		<c:set var="fileName" value="${fn:split(image, '_')}"/>
-		sel_files.push( {name : "${fileName[1]}" });
-	</c:forEach>
-	
-	console.log(sel_files);
-	
-	
 	function fncUpdateReview() {
 		console.log("fncUpdateReview");
 		//alert("선택하지 않은 평점이 존재합니다!");
@@ -73,6 +64,13 @@
 	} 
 	
 	window.onload = function() {
+		<c:forEach var="image" items="${review.reviewImage}" varStatus="status">
+		<c:set var="fileName" value="${fn:split(image, '_')}"/>
+			sel_files.push( {name : "${fileName[1]}" });
+		</c:forEach>
+	
+		console.log(sel_files);
+		
 		for (var i = 0; i < ${review.scopeClean}; i++) {
 	  		$(".starClean").eq(i).addClass("on");
 		}
@@ -427,14 +425,14 @@
 								<c:choose>
 									<c:when test="${member.memberRole eq 'admin'}">
 										<div class="col-12">
-											<label for="reviewImage">리뷰 이미지</label>
-											<ul>
-												<c:forEach var="reviewImage" items="${review.reviewImage}">
-													<li>
-														<img src="/resources/images/uploadImages/${reviewImage}"/>
-													</li>
+											<label for="fileDragInput">리뷰 이미지</label>
+											<div class="file-drag-view mt-4">
+												<c:forEach var="image" items="${review.reviewImage}">
+													<a class='cvf_delete_image' id='img_id_${status.index}'>
+														<img src="/resources/images/uploadImages/review/${image}">
+													</a>
 												</c:forEach>
-											</ul>
+											</div>
 										</div>
 										
 										<!-- Break -->
@@ -466,6 +464,7 @@
 													<c:set var="fileName" value="${fn:split(image, '_')}"/>
 													<a class='cvf_delete_image' id='img_id_${status.index}'>
 														<img src="/resources/images/uploadImages/review/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'>
+														<input type='hidden' name='reviewImage[${status.index}]' value='${image}'>
 													</a>
 												</c:forEach>
 											</div>

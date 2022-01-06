@@ -129,92 +129,49 @@ public class ReviewRestController {
 		return reviewService.getReview(reviewNo);
 	}
 	
-//	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
-//	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		
-//		System.out.println("/chat/json/addDragFile : POST");
-//		
-//		List<MultipartFile> fileList =  multipartRequest.getFiles("uploadFile");
-//	
-//		System.out.println(fileList);
-//		
-//		List<String> reviewImage = new ArrayList<String>();
-//		
-//	    String filePath = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH+"review");
-//	    
-//	    System.out.println("filePath : " + filePath);
-//	    
-//	    Map<String, Object> map = new HashMap<String, Object>();
-//	    
-//	    for (MultipartFile mf : fileList) {
-//			//image가 존재한다면(image의 name이 공백이 아닐경우)
-//			if (!mf.getOriginalFilename().equals("")) {
-//				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
-//				System.out.println(":: 파일 사이즈 => " + mf.getSize());
-//	
-//				try {
-//					String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
-//					
-//					File file = new File(filePath + "/" + saveName);
-//					mf.transferTo(file);
-//									
-//					System.out.println(":: 저장할 이름 => " + saveName);
-//					 
-//					reviewImage.add(saveName);
-//				
-//					System.out.println("업로드 성공");
-//				} catch (Exception e) {
-//					// TODO: handle exception
-//					System.out.println("업로드 없음");
-//					e.printStackTrace();
-//					//saveName = "notFile.png";
-//				}
-//			}
-//		}
-//	     
-//	    return reviewImage;
-//	}
-	
 	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
 	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		System.out.println("/chat/json/addDragFile : POST");
 		
-		Iterator<String> itr =  multipartRequest.getFileNames();
-
+		List<MultipartFile> fileList =  multipartRequest.getFiles("uploadFile");
+	
+		System.out.println("이미지 확인 :: " + fileList);
+		
 		List<String> reviewImage = new ArrayList<String>();
 		
-        String filePath = request.getServletContext().getRealPath("/resources/images/uploadImages/review");
-        
-        System.out.println("filePath : " + filePath);
-        
-        while (itr.hasNext()) { //받은 파일들을 모두 돌린다.
-            System.out.println(itr);
-            MultipartFile mf = multipartRequest.getFile(itr.next());
-     
-            String originalFileName = mf.getOriginalFilename(); //파일명
-            
-            String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename()); //저장되는 파일명
-     
-            String fileFullPath = filePath+"/"+saveName; //파일 전체 경로
-            
-            reviewImage.add(saveName);
-     
-            try {
-                //파일 저장
-                mf.transferTo(new File(fileFullPath)); //파일저장 실제로는 service에서 처리
-                
-                System.out.println("originalFilename => "+originalFileName);
-                System.out.println("saveName => "+saveName);
-                System.out.println("fileFullPath => "+fileFullPath);
-     
-            } catch (Exception e) {
-                System.out.println("postTempFile_ERROR======>"+fileFullPath);
-                e.printStackTrace();
-            }
-                         
-       }
-         
-        return reviewImage;
-    }
+	    String filePath = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH+"review");
+	    
+	    System.out.println("filePath : " + filePath);
+	    
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    
+	    for (MultipartFile mf : fileList) {
+			//image가 존재한다면(image의 name이 공백이 아닐경우)
+			if (!mf.getOriginalFilename().equals("")) {
+				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
+				System.out.println(":: 파일 사이즈 => " + mf.getSize());
+	
+				try {
+					String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
+					
+					File file = new File(filePath + "/" + saveName);
+					mf.transferTo(file);
+									
+					System.out.println(":: 저장할 이름 => " + saveName);
+					 
+					reviewImage.add(saveName);
+				
+					System.out.println("업로드 성공");
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println("업로드 없음");
+					e.printStackTrace();
+					//saveName = "notFile.png";
+				}
+			}
+		}
+	     
+	    return reviewImage;
+	}
 }
