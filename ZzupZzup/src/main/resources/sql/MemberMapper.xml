@@ -107,6 +107,7 @@
 				) COUNT_REP
 			ON COUNT_REP.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
 		) MEMBER_LIST
+		WHERE MEMBER_ROLE = 'user'
 		ORDER BY MEMBER_LIST.MEMBER_ID LIMIT #{search.startRowNum}, #{search.pageSize}
 	</select>
 	
@@ -123,6 +124,7 @@
 				) COUNT_RES
 			ON COUNT_RES.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
 		) MEMBER_LIST
+		WHERE MEMBER_ROLE = 'owner'
 		ORDER BY MEMBER_LIST.MEMBER_ID LIMIT #{search.startRowNum}, #{search.pageSize}
 	</select>
 	
