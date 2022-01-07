@@ -20,7 +20,6 @@
 	
 	$(function() {
 		console.log("updateMemberView.jsp");
-		console.log("${member.profileImage}");
 		
 		$("#updateMember-submit").on("click", function() {
 			//location.href = "/member/updateMember";
@@ -116,6 +115,12 @@
 									<input type="hidden" name="profileImage" value="${member.profileImage}"/>
 									<input type="hidden" name="memberPhone" value="${member.memberPhone}"/>
 									<input type="hidden" name="memberRole" value="${member.memberRole}"/>
+									<c:if test="${sessionScope.member.memberRole == 'admin'}">
+										<input type="hidden" name="password" value="${member.password}">
+										<input type="hidden" name="ageRange" value="${member.ageRange}">
+										<input type="hidden" name="gender" value="${member.gender}">
+										<input type="hidden" name="statusMessage" value="${member.statusMessage}">
+									</c:if>
 										<div class="row mt-5 align-items-center">
 											<div class="col-md-3 mb-5" id="edit-profileImage">
 												<div class="col-md" align="center">
@@ -510,13 +515,13 @@
 											<div class="form-row col-md-12">
 												<div class="col-md-6">
 													<label for="blacklistDate">블랙리스트</label>
-													<c:if test="${member.regBlacklist}">
+													<c:if test="${! empty member.blacklistDate}">
 														<input type="radio" class="custom-control-input" id="checkBlacklist1" name="regBlacklist" value="true" checked> 
 														<label for="checkBlacklist1">블랙리스트 등록</label>
 														<input type="radio" class="custom-control-input" id="checkBlacklist0" name="regBlacklist" value="false"> 
 														<label for="checkBlacklist0">블랙리스트 해제</label>
 													</c:if>
-													<c:if test="${!member.regBlacklist}">
+													<c:if test="${empty member.blacklistDate}">
 														<input type="radio" class="custom-control-input" id="checkBlacklist1" name="regBlacklist" value="true"> 
 														<label for="checkBlacklist1">블랙리스트 등록</label>
 														<input type="radio" class="custom-control-input" id="checkBlacklist0" name="regBlacklist" value="false" checked> 
