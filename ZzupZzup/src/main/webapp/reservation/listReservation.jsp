@@ -91,7 +91,7 @@
 										<div class="col-6 col-12-xsmall">
 										<label for="nickname">참여자 NickName1111</label> 
 										<p>${member.nickname}</p>
-										${reservation.chat.chatLeaderId} 예약자 닉네임이아니라 로그인한 사람닉네임이 나옴 썅~~~~ 
+										${reservation.chat.chatLeaderId}
 										</div>
 										
 										<div class="col-6 col-12-xsmall">
