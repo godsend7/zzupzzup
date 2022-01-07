@@ -61,13 +61,32 @@
 		
 		//시스템 문구 출력되는 부분
 		socket.on('update', (data) => {
-			console.log(data.message);
 			
 			const item = new makeSysemPost(data.message);
 			item.makeLi();
 			displayContainer.scrollTop(chatList.height());
 			
 			//나갔다 들어올 때 멤버 확인 리스트 출력
+			setTimeout(function() { 
+				memList();
+			}, 500);
+			
+			//접속중인 사람 구별 클래스 붙임
+			setTimeout(function() { 
+			console.log(data.memberId);
+			console.log(memberId.val());
+			if(data.memberId == memberId.val()){
+				console.log("접속한 살마");
+				
+				let onMember = $("a[data-target='"+data.memberId+"']");
+				console.log(onMember);
+				$("a[data-target='"+data.memberId+"']").parents(".chatProfile").addClass("connected");
+			}
+			}, 1000);
+		});
+		
+		socket.on('disconnect', (data) => {
+			console.log(data.message);
 			setTimeout(function() { 
 				memList();
 			}, 500);
@@ -192,8 +211,9 @@
 							mem_gender = "여자";
 						}
 						//console.log(mem_profile_img);
-					
-						dom += '<li class="chatProfile d-flex flex-row align-items-center"><img src="/resources/images/common/'+mem_profile_img+'"><div class="dropdown-parent"><a href="" class="member_dropdown" data-target="'+item.member.memberId+'">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
+						console.log("Ddddd" + "${chat.chatLeaderId.nickname}");
+						const chatLeaderClass = "${chat.chatLeaderId.memberId}" == item.member.memberId ? "chat-leader":"";
+						dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+'"><img src="/resources/images/common/'+mem_profile_img+'"><div class="dropdown-parent"><a href="" class="member_dropdown" data-target="'+item.member.memberId+'">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
 						console.log(item.member);
 					});
 					userList.html(dom);
@@ -261,6 +281,32 @@
 		}
 		
 		//============= "예약하기" Event 처리 ============
+		$("#chatReservationBefore").on("click", function() {
+			console.log("예약한 애들 불러오기");
+			$.ajax({
+				url : "/chat/json/listReadyCheckMember/chatNo=${chat.chatNo}",
+				method : "GET",
+				dataType : "json",
+				headers : {
+					"Accept" : "application/json",
+					"contentType" : "application/json; charset=utf-8"
+				},
+				success : function(JSONData){
+					console.log(JSONData);
+					let dom ='';
+					$.each(JSONData.list, function(index, item){
+						console.log(item.member.nickname);
+						dom += "<li>"+item.member.nickname+"</li>"
+					});
+					$(".chat-member-list").html(dom);
+				},
+				error : function(e) {
+					alert(e.responseText);
+				}
+			})
+		});
+		
+		//============= "예약하기 모달 예" Event 처리 ============
 		$("#chatReservationBtn").on("click", function() {
 			console.log("예약하기");
 			let chatNo = "${chat.chatNo }";
@@ -446,7 +492,7 @@
 										<c:when test="${chat.chatLeaderId.memberId == member.memberId }">
 										<c:choose>
 											<c:when test="${chat.chatState == 1 || chat.chatState == 2}">
-											<input type="button" class="button primary small" data-toggle="modal" data-target="#chatReservationModal" value="예약하기"/>
+											<input type="button" id="chatReservationBefore" class="button primary small" data-toggle="modal" data-target="#chatReservationModal" value="예약하기"/>
 											</c:when>
 											<c:otherwise>
 											<input type="button" class="button primary small" disabled value="예약완료"/>
@@ -486,11 +532,9 @@
 										<p>예약을 진행하시겠습니까?</p>
 										<span>모임 참여 유저 </span>
 										<ul class="chat-member-list bg-light p-2 rounded">
-										<c:set var="i" value="0" />
-										<c:forEach var="chatMember" items="${chatMemberList}">
-											<c:set var="i" value="${ i+1 }" />
+										<%-- <c:forEach var="chatMember" items="${chatMemberList}">
 											<li>${chatMember.member.nickname }</li>
-										</c:forEach>
+										</c:forEach> --%>
 										</ul>
 									</div>
 									<div class="modal-footer">
