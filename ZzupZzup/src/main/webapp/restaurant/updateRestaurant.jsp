@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
 
 <!DOCTYPE HTML>
 
@@ -104,11 +105,10 @@
 	    }).open();
 	}
 	
-</script>
 
-<script type="text/javascript">
 	
-	var index = 1;
+	
+	
 	
 	function fncUpdateRestaurant(){
 		
@@ -173,17 +173,25 @@
 		
 		alert("음식점 등록 정보가 수정되었습니다.");
 	
-		$("#updateRestaurant").attr("method" , "POST").attr("action" , "/restaurant/updateRestaurant").attr("enctype", "multipart/form-data").submit();
+		$("#updateRestaurant").attr("method" , "POST").attr("action" , "/restaurant/updateRestaurant?restaurantNo=${restaurant.restaurantNo}").attr("enctype", "multipart/form-data").submit();
 		
 	} // fncUpdateRestaurant() FINISH
 	
 	
 	window.onload = function(){
+		var index = ${fn:length(restaurant.restaurantMenus)};
+		console.log(index);
 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 		$(function() {
-			// 등록 버튼 실행
-			$( "#button1" ).on("click" , function() {
-				fncAddRestaurant();
+			// 정보 수정 버튼 실행
+			$( "#dataUpdate" ).on("click" , function() {
+				fncUpdateRestaurant();
+			});
+			
+			// 등록 재요청 버튼 실행
+			$( "#redemand" ).on("click" , function() {
+				alert('등록 심사 재요청이 완료되었습니다.\n심사 결과는 마이페이지에서 확인 가능합니다.');
+				$("#updateRestaurant").attr("method" , "POST").attr("action" , "/restaurant/updateRestaurant?restaurantNo=${restaurant.restaurantNo}").attr("enctype", "multipart/form-data").submit();
 			});
 			
 			// 주소 검색 버튼 실행
@@ -199,6 +207,7 @@
 		
 		$(function() {
 			$( "#plus" ).on("click" , function() {
+				index++;
 				var menu = /* '<div><br><input type="text" name="txt" value="test[' + index + ']">'
 						+ '<input type="button" class="btnRemove" value="Remove"><br></div>'; */
 						
@@ -217,17 +226,21 @@
 						
 				$("#inputMenu").parent().append (menu);
 				
-				index++;
 				
-				$('.remove').on('click', function () { 
-	                   $(this).prev().remove ();
-	                   $(this).next ().remove ();
-	                   console.log($(this));
-	                   
-	                   $(this).parents(".menuBox").remove ();
-	               });
 				
 			});
+			
+			/* $('.savedMenus').on('click', function () { 
+                $(this).remove ();
+            }); */
+			$('body').on('click', '.remove', function () { 
+                $(this).prev().remove ();
+                $(this).next ().remove ();
+                console.log($(this));
+                
+                $(this).parents(".menuBox").remove ();
+         });
+			
 		});
 		
 		$(function() {
@@ -244,6 +257,7 @@
 		
 		
 	} // window.onload FINISH
+	
 </script>
 
 
@@ -271,6 +285,10 @@
 						
 						<input type="hidden" name="member.memberId" value="${member.memberId}">
 						<input type="hidden" name="member.memberName" value="${member.memberName}">
+						<c:if test="${!empty restaurant.judgeDate}">
+							<input type="hidden" name="restaurant.judgeStatus" value="1">
+						</c:if>
+						
 						
 						<div class="form-group">
 							<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>
@@ -338,11 +356,13 @@
 							</div>
 						</div><br>
 						
+						
+						
 						<div class="col-md-12">
 							<label for="inputMenu">음식점 메뉴 &nbsp;
 								<span class="badge badge-success" id="plus">추가하기</span>
 							</label>
-							<div class="row" id="inputMenu">
+							<%-- <div class="row" id="menuBox">
 								<div class="col-md-4">
 									<input type="text" class="form-control" id="menuTitle" name="restaurantMenus[0].menuTitle" placeholder="음식점 메뉴이름" value="${restaurant.restaurantMenus[0].menuTitle}">
 								</div>
@@ -352,10 +372,27 @@
 								<div class="col-md-4">	
 									<!-- <input type="text" class="form-control" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" placeholder="대표메뉴 여부"> -->
 									<input type="checkbox" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" value="1" 
-									${!empty restaurant.restaurantMenus[0].mainMenuStatus && restaurant.restaurantMenus[0].mainMenuStatus == "1" ? "checked" : ""}>
+									${!empty restaurant.restaurantMenus[0].mainMenuStatus && restaurant.restaurantMenus[0].mainMenuStatus ? "checked" : ""}>
 									<label for="mainMenuStatus">메인메뉴</label>
 								</div>
-							</div>
+							</div> --%>
+							<c:set var="i" value="1"/>
+							<c:forEach var="menus" items="${restaurant.restaurantMenus}" varStatus="status" >
+								<div class="row menuBox" id="inputMenu">
+									<div class="col-md-4">
+										<input type="text" class="form-control" id="menuTitle" name="restaurantMenus[${status.index}].menuTitle" placeholder="음식점 메뉴이름" value="${menus.menuTitle}">
+									</div>
+									<div class="col-md-4">
+										<input type="text" class="form-control" id="menuPrice" name="restaurantMenus[${status.index}].menuPrice" placeholder="음식점 메뉴가격" value="${menus.menuPrice}">
+									</div>
+									<div class="col-md-4">	
+										<!-- <input type="text" class="form-control" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" placeholder="대표메뉴 여부"> -->
+										<input type="checkbox" id="mainMenuStatus" name="restaurantMenus[${status.index}].mainMenuStatus" value="1" ${!empty menus.mainMenuStatus && menus.mainMenuStatus ? "checked" : ""}>
+										<label for="mainMenuStatus">메인메뉴</label>
+										<c:if test="${status.index != 0}"><span class="badge badge-primary remove">X</span></c:if>
+									</div>
+								</div>
+							</c:forEach>
 						</div><br>
 						
 						<div class="col-sm-8 restaurant-info">
@@ -367,7 +404,8 @@
 							<div id="workingForms" style="display: none;"><br>
 							
 							<div id="toggleButton">주차가능여부 &nbsp;&nbsp;
-								<input type="checkbox" name="parkable" id="parkable" data-toggle="toggle" data-size="sm" value="true" checked>
+								<input type="checkbox" name="parkable" id="parkable" data-toggle="toggle" data-size="sm" value="true" 
+								${!empty restaurant.parkable && restaurant.parkable ? "checked" : ""}>
 							</div><br>
 							
 							<!-- ######################### 월요일 ######################### -->
@@ -381,7 +419,7 @@
 									<input type="radio" id="saturday" name="restaurantTimes[0].restaurantDay" value="6" onclick="return(false);"> <label for="saturday">토</label>
 									<input type="radio" id="sunday" name="restaurantTimes[0].restaurantDay" value="7" onclick="return(false);"> <label for="sunday">일</label>
 							    	<input type="checkbox" id="dayoff" name="restaurantTimes[0].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[0].restaurantDayOff && restaurant.restaurantTimes[0].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[0].restaurantDayOff && restaurant.restaurantTimes[0].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff">휴무일</label>
 							    </div>
 							    
@@ -416,7 +454,7 @@
 									<input type="radio" id="saturday1" name="restaurantTimes[1].restaurantDay" value="6" onclick="return(false);"> <label for="saturday1">토</label>
 									<input type="radio" id="sunday1" name="restaurantTimes[1].restaurantDay" value="7" onclick="return(false);"> <label for="sunday1">일</label>
 							    	<input type="checkbox" id="dayoff1" name="restaurantTimes[1].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[1].restaurantDayOff && restaurant.restaurantTimes[1].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[1].restaurantDayOff && restaurant.restaurantTimes[1].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff1">휴무일</label>
 							    </div>
 							    
@@ -451,7 +489,7 @@
 									<input type="radio" id="saturday2" name="restaurantTimes[2].restaurantDay" value="6" onclick="return(false);"> <label for="saturday2">토</label>
 									<input type="radio" id="sunday2" name="restaurantTimes[2].restaurantDay" value="7" onclick="return(false);"> <label for="sunday2">일</label>
 							    	<input type="checkbox" id="dayoff2" name="restaurantTimes[2].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[2].restaurantDayOff && restaurant.restaurantTimes[2].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[2].restaurantDayOff && restaurant.restaurantTimes[2].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff2">휴무일</label>
 							    </div>
 							    
@@ -486,7 +524,7 @@
 									<input type="radio" id="saturday3" name="restaurantTimes[3].restaurantDay" value="6" onclick="return(false);"> <label for="saturday3">토</label>
 									<input type="radio" id="sunday3" name="restaurantTimes[3].restaurantDay" value="7" onclick="return(false);"> <label for="sunday3">일</label>
 							    	<input type="checkbox" id="dayoff3" name="restaurantTimes[3].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[3].restaurantDayOff && restaurant.restaurantTimes[3].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[3].restaurantDayOff && restaurant.restaurantTimes[3].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff3">휴무일</label>
 							    </div>
 							    
@@ -521,7 +559,7 @@
 									<input type="radio" id="saturday4" name="restaurantTimes[4].restaurantDay" value="6" onclick="return(false);"> <label for="saturday4">토</label>
 									<input type="radio" id="sunday4" name="restaurantTimes[4].restaurantDay" value="7" onclick="return(false);"> <label for="sunday4">일</label>
 							    	<input type="checkbox" id="dayoff4" name="restaurantTimes[4].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[4].restaurantDayOff && restaurant.restaurantTimes[4].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[4].restaurantDayOff && restaurant.restaurantTimes[4].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff4">휴무일</label>
 							    </div>
 							    
@@ -556,7 +594,7 @@
 									<input type="radio" id="saturday5" name="restaurantTimes[5].restaurantDay" value="6" onclick="return(false);" checked> <label for="saturday5">토</label>
 									<input type="radio" id="sunday5" name="restaurantTimes[5].restaurantDay" value="7" onclick="return(false);"> <label for="sunday5">일</label>
 							    	<input type="checkbox" id="dayoff5" name="restaurantTimes[5].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[5].restaurantDayOff && restaurant.restaurantTimes[5].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[5].restaurantDayOff && restaurant.restaurantTimes[5].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff5">휴무일</label>
 							    </div>
 							    
@@ -591,7 +629,7 @@
 									<input type="radio" id="saturday6" name="restaurantTimes[6].restaurantDay" value="6" onclick="return(false);"> <label for="saturday6">토</label>
 									<input type="radio" id="sunday6" name="restaurantTimes[6].restaurantDay" value="7" onclick="return(false);" checked> <label for="sunday6">일</label>
 							    	<input type="checkbox" id="dayoff6" name="restaurantTimes[6].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[6].restaurantDayOff && restaurant.restaurantTimes[6].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[6].restaurantDayOff && restaurant.restaurantTimes[6].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff6">휴무일</label>
 							    </div>
 							    
@@ -644,12 +682,23 @@
 								</svg> 이전으로
 							</button> &nbsp;
 							
-							<button type="button" class="btn btn-outline-primary btn-sm" id="button3">
-				                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-  								<path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
-  								<path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
-								</svg> 재등록하기
-							</button> &nbsp;
+							<c:if test="${restaurant.judgeStatus == '3'}">
+								<button type="button" class="btn btn-outline-primary btn-sm" id="redemand">
+					                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+	  								<path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+	  								<path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+									</svg> 재등록하기
+								</button> &nbsp;	
+							</c:if>
+							
+							<c:if test="${restaurant.judgeStatus == '2'}">
+								<button type="button" class="btn btn-outline-danger btn-sm" id="dataUpdate">
+					                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+					  					<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+					  					<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+					  				</svg> 수정하기
+					  			</button>
+							</c:if>
 							
 						</div>
 

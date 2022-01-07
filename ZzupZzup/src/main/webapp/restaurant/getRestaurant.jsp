@@ -105,7 +105,7 @@
 						  </c:if>	
 						  <c:if test="${empty restaurant.restaurantImage}">
 						  	<div class="carousel-item active">
-						  		<img src="/resources/images/uploadImages/default.jpg"   class="d-block w-100">
+						  		<img src="/resources/images/uploadImages/default.png" height="600" class="d-block w-100">
 						  	</div>
 						  </c:if>	
 					  </div>
