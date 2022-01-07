@@ -166,3 +166,24 @@ textarea {
 .review-modal-footer #reviewUpdate {
 	margin-left:auto;
 }
+
+.listStarBox .star-in {
+	padding-left: 10px;
+	padding-top: 3px;
+}
+
+.reviewTitle h2 {
+	margin-right: 15px;
+	float: left;
+}
+
+.reviewTitle .star-in {
+	padding-top: 6px;
+	margin-right: 5px;
+	float: left;
+}
+
+.review-top-box {
+	display: flex;
+	justify-content: space-between;
+}
