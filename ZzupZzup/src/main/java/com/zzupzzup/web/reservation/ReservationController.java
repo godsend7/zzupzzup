@@ -150,6 +150,50 @@ public class ReservationController {
 
 //==================================================================================================	
 	
+//	@RequestMapping(value="listReservation")
+//	public String listReservation(HttpServletRequest request, @ModelAttribute Search search, Model model, HttpSession session) throws Exception {
+//		
+//		System.out.println("/reservation/listReservation");
+//		
+//		String restaurantNo = request.getParameter("restaurantNo");
+//		Member member = (Member) session.getAttribute("member");
+//		
+//		String memberId = null;
+//		
+//		
+//		if (search.getCurrentPage() == 0) {
+//			search.setCurrentPage(1);
+//		}
+//		
+//		System.out.println(search.getCurrentPage() + ":: currentPage");
+//		
+//		search.setPageSize(pageSize);
+//		
+//		Map<String, Object> map = null;
+//		
+//		if (member != null && member.getMemberRole().equals("admin")) {
+//			map = reservationService.listReservation(search, restaurantNo);
+//			System.out.println("listReservation admin");
+//		} else {
+//			map = reservationService.listMyReservation(search, member, restaurantNo);
+//			System.out.println("listMyReservation");
+//			System.out.println("::listReservation memberId"+member);
+//			System.out.println("::listReservation restaurantNo::"+restaurantNo);
+//		}
+//		
+//		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+//		
+//		model.addAttribute("list", map.get("list"));
+//		model.addAttribute("search", search);
+//		model.addAttribute("totalCount", map.get("totalCount"));
+//		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
+//		model.addAttribute("resultPage", resultPage);
+//		
+//		return "forward:/reservation/listReservation.jsp";	
+//	}
+	
+	/////관리자일때
+	
 	@RequestMapping(value="listReservation")
 	public String listReservation(HttpServletRequest request, @ModelAttribute Search search, Model model, HttpSession session) throws Exception {
 		
@@ -159,7 +203,6 @@ public class ReservationController {
 		Member member = (Member) session.getAttribute("member");
 		
 		String memberId = null;
-		
 		
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
@@ -171,14 +214,50 @@ public class ReservationController {
 		
 		Map<String, Object> map = null;
 		
-		if (member != null && member.getMemberRole().equals("admin")) {
-			map = reservationService.listReservation(search, restaurantNo);
+		if (member != null && !member.getMemberRole().equals("owner")) {
+			map = reservationService.listReservation(search, member,restaurantNo);
 			System.out.println("listReservation admin");
-		} else {
+		} 
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("search", search);
+		model.addAttribute("totalCount", map.get("totalCount"));
+		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
+		model.addAttribute("resultPage", resultPage);
+		
+		return "forward:/reservation/listReservation.jsp";	
+	}
+	
+	
+//==================================================================================================
+	
+	@RequestMapping(value="listMyReservation")
+	public String listMyReservation(HttpServletRequest request, @ModelAttribute Search search, Model model, HttpSession session) throws Exception {
+		
+		System.out.println("/reservation/listMyReservation");
+		
+		String restaurantNo = request.getParameter("restaurantNo");
+		Member member = (Member) session.getAttribute("member");
+		
+		String memberId = null;
+		
+		if (search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+		
+		System.out.println(search.getCurrentPage() + ":: currentPage");
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = null;
+		
+		if (member != null && member.getMemberRole().equals("owner")) {
 			map = reservationService.listMyReservation(search, member, restaurantNo);
 			System.out.println("listMyReservation");
-			System.out.println("::listReservation memberId"+member);
-			System.out.println("::listReservation restaurantNo::"+restaurantNo);
+			System.out.println("::listMyReservation memberId"+member);
+			System.out.println("::listMyReservation restaurantNo::"+restaurantNo);
 		}
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);

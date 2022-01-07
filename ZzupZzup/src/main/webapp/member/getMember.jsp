@@ -30,7 +30,12 @@
 		})
 		
 		$("#list").on("click", function() {
-			self.location = "/member/listMember";
+			if(${member.memberRole == 'user'}) {
+				self.location = "/member/listUser";	
+			} else if(${member.memberRole == 'owner'}) {
+				self.location = "/member/listOwner";
+			}
+			
 		})
 	});
 </script>
@@ -254,17 +259,19 @@
 											</div>
 											<br/>
 											<div class="form-row col-md-12">
-												<div class="col-md-6">
-													<label for="blacklistDate">블랙리스트</label>
-													<c:if test="${! empty member.blacklistDate}">
-														<span id="blacklistDate"
-														style="font-weight: bold">${member.blacklistDate}</span>
-													</c:if>
-													<c:if test="${empty member.blacklistDate}">
-														<span id="blacklistDate"
-														style="font-weight: bold">X</span>
-													</c:if>
-												</div>
+												<c:if test="${member.memberRole == 'user'}">
+													<div class="col-md-6">
+														<label for="blacklistDate">블랙리스트</label>
+														<c:if test="${! empty member.blacklistDate}">
+															<span id="blacklistDate"
+															style="font-weight: bold">${member.blacklistDate}</span>
+														</c:if>
+														<c:if test="${empty member.blacklistDate}">
+															<span id="blacklistDate"
+															style="font-weight: bold">X</span>
+														</c:if>
+													</div>
+												</c:if>
 												<!-- <div class="checkbox mb-12">
 													<input type="checkbox" class="custom-control-input" id="checkBlacklist" value="" style="float:right;"/> 
 													<label for="checkBlacklist">블랙리스트 설정/해제하기</label>

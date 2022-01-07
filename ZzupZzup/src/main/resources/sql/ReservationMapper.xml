@@ -80,7 +80,7 @@
 	 
 	 <!-- =========관리자======== -->
 	
-	<select id="listReservation"	parameterType="map"	resultMap="reservationSelectMap">
+	<!-- <select id="listReservation"	parameterType="map"	resultMap="reservationSelectMap">
 		
 		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.PLAN_TIME, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname, ch.CHAT_MEMBER_ID
 			FROM RESERVATION AS r
@@ -89,12 +89,13 @@
 			                 WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)
 			LEFT OUTER JOIN reservation_order AS ro ON (r.reservation_no = ro.reservation_no)
 			ORDER BY RESERVATION_NO LIMIT #{search.startRowNum}, #{search.pageSize}		
-	 </select>
+	 </select> -->
 	
-	 <!-- =========유저,업주======== -->
-	 <select id="listMyReservation"	parameterType="map"	resultMap="reservationSelectMap">
+	  <!-- =========관리자, 유저 하는중======== -->
+	
+	<select id="listReservation"	parameterType="map"	resultMap="reservationSelectMap">
 		
-		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.PLAN_TIME, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname
+		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.PLAN_TIME, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname, ch.CHAT_MEMBER_ID
 			FROM RESERVATION AS r
 			LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
 							 FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)
@@ -104,13 +105,25 @@
 				<when test='member.memberRole == "user"'>
 				WHERE ch.chat_member_id = #{member.memberId}
 				</when>
-				<otherwise>
-				WHERE r.RESTAURANT_NO = #{restaurantNo}
-				</otherwise>
 			</choose>
-			ORDER BY RESERVATION_NO LIMIT #{search.startRowNum}, #{search.pageSize}		
+			
+			ORDER BY RESERVATION_NO DESC LIMIT #{search.startRowNum}, #{search.pageSize}		
 	 </select>
-
+	 
+	 <!-- =========유저,업주하는중======== -->
+	 <select id="listMyReservation"	parameterType="map"	resultMap="reservationSelectMap">
+		
+		select *
+			 from reservation re 
+			 Inner Join ( select rt.restaurant_no
+			from restaurant rt, member m
+			where rt.member_id = m.member_id And m.member_id = #{member.memberId}) as tt on (re.restaurant_no = tt.restaurant_no)
+			Inner Join (Select member_id, nickname from member) as rm on (re.booker_id = rm.member_id)
+		
+			ORDER BY  reservation_no DESC LIMIT #{search.startRowNum}, #{search.pageSize}		
+	 </select>
+	
+	<!-- =========유저,업주======== -->
 	 <update id="updateReservation" parameterType="reservation">
 		UPDATE RESERVATION
 	   	<set>
@@ -129,8 +142,6 @@
 	   	</set>
 	   	WHERE reservation_no = #{reservationNo}
 	</update>
-	 
-	 
 	 
 	 
 	 <select id="getTotalCount" parameterType="search" resultType="int">

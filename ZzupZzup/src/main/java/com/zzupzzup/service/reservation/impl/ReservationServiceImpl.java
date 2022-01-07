@@ -45,10 +45,12 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		}
 
 		@Override
-		public Map<String , Object > listReservation(Search search, String restaurantNo) throws Exception {
+		//public Map<String , Object > listReservation(Search search, String restaurantNo) throws Exception {
+		public Map<String , Object > listReservation(Search search, Member member, String restaurantNo) throws Exception {
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("search", search);
+			map.put("member", member);
 			map.put("restaurantNo", restaurantNo);
 			
 			map.put("list", reservationDao.listReservation(map));
