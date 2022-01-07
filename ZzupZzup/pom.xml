@@ -207,6 +207,13 @@
 	    <version>1.18.16</version>
 	    <scope>provided</scope>
 	</dependency>
+	
+	<!-- https://mongodb.github.io/mongo-java-driver/4.2/driver/getting-started/installation/ -->
+	<dependency>
+	    <groupId>org.mongodb</groupId>
+	    <artifactId>mongodb-driver-sync</artifactId>
+	    <version>4.2.2</version>
+	</dependency>
 		
   </dependencies>
 

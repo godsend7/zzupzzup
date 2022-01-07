@@ -61,6 +61,7 @@
 					let regdate = new Date(chatRegDate);
 					let showStatus = "";
 					let chatMember = JSONData.chatMember;
+					let menuType = JSONData.chatRestaurant.menuType;
 					chatMemberList = [];
 					
 					//채팅방에 유저 있는지 체크
@@ -100,6 +101,19 @@
 					}else if(chatState == 4){
 						chatState = "<span class='badge badge-danger chat-state'>모임완료</span>";
 					}
+					
+					if(menuType == 1){
+						menuType = "한식";
+					}else if(menuType == 2){
+						menuType = "중식";
+					}else if(menuType == 3){
+						menuType = "양식";
+					}else if(menuType == 4){
+						menuType = "일식";
+					}else if(menuType == 5){
+						menuType = "카페";
+					}
+					
 					let displayValueBd = 
 						'<div class="get-chat-info mb-3">'
 						+'<div class="d-flex justify-content-between">'
@@ -147,7 +161,7 @@
 						+'<div>'+JSONData.chatLeaderId.statusMessage+'</div>'
 						+'</div>'
 						+'<div clas="get-chat-restaurant-info">'
-						+'<div>'+JSONData.chatRestaurant.restaurantName+' ('+JSONData.chatRestaurant.menuType+')</div>'
+						+'<div>'+JSONData.chatRestaurant.restaurantName+' ('+menuType+')</div>'
 						+'<div>'+JSONData.chatRestaurant.restaurantTel+'</div>'
 						+'<div>'+JSONData.chatRestaurant.streetAddress+'</div>'
 						+'<div>'+JSONData.chatRestaurant.areaAddress+'</div>'
@@ -430,8 +444,7 @@
 												</c:choose>
 											</div>
 											<div class="card-img">
-												<img
-													src="/resources/images/uploadImages/chat/${chat.chatImage}">
+												<img src="/resources/images/uploadImages/chat/${chat.chatImage}">
 											</div>
 											<div class="card-body">
 												<div class="chat-rating-info">
