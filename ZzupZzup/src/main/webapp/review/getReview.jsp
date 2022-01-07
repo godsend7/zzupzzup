@@ -46,10 +46,20 @@
 				
 				$("#reviewCount").text(data.list.likeCount);
 				
+				$(".starClean").removeClass('on'); 
+				for (var i = 0; i < data.list.scopeClean; i++) {
+			  		$(".starClean").eq(i).addClass("on");
+				}
 				
-				$("#scopeClean").text(data.list.scopeClean);
-				$("#scopeTaste").text(data.list.scopeTaste);
-				$("#scopeKind").text(data.list.scopeKind);
+				$(".starTaste").removeClass('on'); 
+				for (var i = 0; i < data.list.scopeTaste; i++) {
+			  		$(".starTaste").eq(i).addClass("on");
+				}
+				
+				$(".starKind").removeClass('on'); 
+				for (var i = 0; i < data.list.scopeKind; i++) {
+			  		$(".starKind").eq(i).addClass("on");
+				}
 				
 				$("#reviewDetail").text(data.list.reviewDetail);
 				
@@ -134,6 +144,10 @@
 		   	 	console.log("3 ::" + $(".reportModal").attr("data-id"));
 			}
 		}); 
+    	
+    	$('#reviewModal').on('hidden.bs.modal', function () {
+           	location.reload();
+    	});
     });
     
     function imageOutPut(item, index) {
@@ -206,9 +220,10 @@
 					</c:if>
 				</div>
 				<!-- <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
-				<h5 class="h6 mb-12 font-weight-normal">
-					<span id="memberRank"></span> <span id="nickname"></span> 
-				</h5>
+				<h3 class="mb-12">
+					<span id="memberRank" class="badge badge-pill badge-primary">
+					</span>&nbsp; <span id="nickname"></span> 
+				</h3>
 				
 				<br/>
 				
@@ -234,15 +249,33 @@
 				<div class="row starBox">
 					<div class="col-md-4">
 						<label for="scopeClean" class="label star_label">청결해요</label>
-						<p id="scopeClean" class="star_p"></p>
+						<div class="star-in">
+							<span class="star-modal starClean"></span>
+							<span class="star-modal starClean"></span>
+							<span class="star-modal starClean"></span>
+							<span class="star-modal starClean"></span>
+							<span class="star-modal starClean"></span>
+						</div>
 					</div>
 					<div class="col-md-4">
 						<label for="scopeTaste" class="label star_label">맛있어요</label>
-						<p id="scopeTaste" class="star_p"></p>
+						<div class="star-in">
+							<span class="star-modal starTaste"></span>
+							<span class="star-modal starTaste"></span>
+							<span class="star-modal starTaste"></span>
+							<span class="star-modal starTaste"></span>
+							<span class="star-modal starTaste"></span>
+						</div>
 					</div>
 					<div class="col-md-4">
 						<label for="scopeKind" class="label star_label">친절해요</label> 
-						<p id="scopeKind" class="star_p"></p>
+						<div class="star-in">
+							<span class="star-modal starKind"></span>
+							<span class="star-modal starKind"></span>
+							<span class="star-modal starKind"></span>
+							<span class="star-modal starKind"></span>
+							<span class="star-modal starKind"></span>
+						</div>
 					</div>
 				</div>
 				
@@ -254,7 +287,7 @@
 				<br/>
 				
 				<label for="hashTag">해시태그</label>
-				<div class="box" id="hashtagBox" >
+				<div class="box" id="hashtagBox">
 				</div>
 				
 				<div class="bottom-like">

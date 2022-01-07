@@ -32,13 +32,8 @@ public class ReviewDAOImpl implements ReviewDAO {
 		
 		//review_no가 생성되었다면(=> review table에 insert되었다면)
 		if (result == 1) {
-			if (review.getHashTag() != null) {
-				sqlSession.insert("ReviewMapper.addHashTag", review);
-			}
-			
-			if (review.getReviewImage() != null) {
-				sqlSession.insert("ReviewMapper.addImage", review);
-			}
+			sqlSession.insert("ReviewMapper.addHashTag", review);
+			sqlSession.insert("ReviewMapper.addImage", review);
 			
 			return 1;
 		} else {
@@ -55,13 +50,8 @@ public class ReviewDAOImpl implements ReviewDAO {
 		
 		//review_no가 업데이트 되었다면
 		if (result == 1) {
-			if (review.getHashTag() != null) {
-				sqlSession.insert("ReviewMapper.addHashTag", review);
-			}
-			
-			if (review.getReviewImage() != null) {
-				sqlSession.insert("ReviewMapper.addImage", review);
-			}
+			sqlSession.insert("ReviewMapper.addHashTag", review);
+			sqlSession.insert("ReviewMapper.addImage", review);
 			
 			return 1;
 		} else {

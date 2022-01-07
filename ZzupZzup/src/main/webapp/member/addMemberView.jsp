@@ -366,7 +366,7 @@
 										<div class="file-view mt-4" align="center">
 											<c:if test="${member.profileImage == 'defaultImage.png' || member.profileImage == null}">
 												<img id="profileImage" src="/resources/images/defaultImage.png" class="rounded-circle" width="150" height="150"/>
-												<input type="hidden" name=profileImage value="defaultImage.png" />
+												<input type="hidden" name="profileImage" value="defaultImage.png" />
 											</c:if>
 											<c:if test="${member.profileImage != 'defaultImage.png' && member.profileImage != null}">
 												<img id="profileImage" src="/resources/images/uploadImages/${member.profileImage}" class="rounded-circle" width="150" height="150"/>

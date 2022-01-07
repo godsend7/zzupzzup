@@ -24,9 +24,27 @@
 		
 		$("#updateMember-submit").on("click", function() {
 			//location.href = "/member/updateMember";
-			readURL(this);
-			$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember/${member.memberRole}").submit();
+			var password = $("#password").val();
+			var checkPwd = $("#checkPassword").val();
+			var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
+			var certificatedNum = $("#certificatedNum").val();
 			
+			console.log(password+", "+checkPwd+", "+phoneNum+", "+certificatedNum);
+			
+			if("${sessionScope.member.memberRole}" != "admin") {
+				if(password != null && checkPwd != null && phoneNum != null && certificatedNum != null) {
+					$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember/${member.memberRole}").submit();
+				} else {
+					alert("누락된 항목 확인 후 다시 시도해주세요.");
+				}	
+			} else {
+				$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember/${member.memberRole}").submit();
+			}
+			
+		})
+		
+		$("#back").on("click", function() {
+			history.go(-1);
 		})
 		
 	});
@@ -96,24 +114,27 @@
 									<input type="hidden" name="memberId" value="${member.memberId}"/>
 									<input type="hidden" name="nickname" value="${member.nickname}"/>
 									<input type="hidden" name="profileImage" value="${member.profileImage}"/>
+									<input type="hidden" name="memberPhone" value="${member.memberPhone}"/>
 									<input type="hidden" name="memberRole" value="${member.memberRole}"/>
 										<div class="row mt-5 align-items-center">
 											<div class="col-md-3 mb-5" id="edit-profileImage">
 												<div class="col-md" align="center">
-													<!-- profileImage 도윤님 src start -->
+													<!-- profileImage 도윤님 src 참고 start -->
 													<div class="file-view mt-4">
 														<c:if test="${member.profileImage == 'defaultImage.png'}">
-															<img id="profileImage" src="/resources/images/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
+															<img id="profileImage" src="/resources/images/defaultImage.png" class="rounded-circle" width="150" height="150"/>
 														</c:if>
-														<c:if test="${member.profileImage != 'defaultImage.png'}">
+														<c:if test="${member.profileImage != 'defaultImage.png' && member.profileImage != null}">
 															<img id="profileImage" src="/resources/images/uploadImages/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
 														</c:if>
 													</div>
-													<div style="margin-top:10px;margin-left:5px;">
-														<span class="file-drag-btn">이미지 변경</span>
-														<input class="file-drag-input" type="file" id="fileInput" name="fileInput" value="${member.profileImage}">
-													</div>
-													<!-- profileImage 도윤님 src end -->
+													<%-- <c:if test="${sessionScope.member.memberRole != 'admin'}"> --%>
+														<div style="margin-top:10px;margin-left:5px;">
+															<span class="file-drag-btn">이미지 변경</span>
+															<input class="file-drag-input" type="file" id="fileInput" name="fileInput" value="${member.profileImage}">
+														</div>
+													<%-- </c:if> --%>
+													<!-- profileImage 도윤님 src 참고 end -->
 												</div>
 											</div>
 											<!-- memberRole user일 때 프로필 이미지 옆 공간 -->
@@ -152,6 +173,9 @@
 														${member.memberId}
 													</div>
 													<br/>
+												</div>
+												<!-- 왜 선 안 그어지지? 이거 수정할 예정 -->
+												<div class="row col-md-12">
 													<div class="row col-md-12">
 														<div class="col-md-6">
 															<label for="memberPhone">전화번호</label>
@@ -161,12 +185,10 @@
 															<input type="button" value="인증번호 전송" style="float:right"/>
 														</div>
 														<div class="col-md-6">
-															<label for="certificeatedNum">인증번호</label>
-															<input type="text" id="certificeatedNum" maxlength="6"/>
+															<label for="certificatedNum">인증번호</label>
+															<input type="text" id="certificatedNum" maxlength="6"/>
 														</div>
 													</div>
-												</div>
-												<div class="row col-md-12">
 													<div class="col-md-6">
 														<label for="password">비밀번호</label> <input type="password"
 															class="form-control" id="password" name="password"
@@ -182,7 +204,7 @@
 												</div>
 											</c:if>
 											<c:if test="${sessionScope.member.memberRole == 'admin'}">
-												<div class="form-row col-md-9" style="margin-bottom:40px">
+												<div class="form-row col-md-9">
 													<div class="col-md-2">
 														<label>이름</label>
 													</div>
@@ -199,7 +221,6 @@
 												</div>
 											</c:if>
 										</div>
-										<br/>
 										<hr class="my-4" />
 										<c:if test="${sessionScope.member.memberRole == 'user'}">
 											<div class="form-row">
@@ -236,11 +257,12 @@
 													<input type="text" id="memberPhone1" name="memberPhone1" value="${member.memberPhone.substring(0, 3)}" maxlength="3"/>
 													<input type="text" id="memberPhone2" name="memberPhone2" value="${member.memberPhone.substring(4, 8)}" maxlength="4"/>
 													<input type="text" id="memberPhone3" name="memberPhone3" value="${member.memberPhone.substring(9)}" maxlength="4"/>
+													
 													<input type="button" value="인증번호 전송" style="float:right"/>
 												</div>
 												<div class="col-md-6">
-													<label for="certificeatedNum">인증번호</label>
-													<input type="text" id="certificeatedNum" maxlength="6"/>
+													<label for="certificatedNum">인증번호</label>
+													<input type="text" id="certificatedNum" maxlength="6"/>
 												</div>
 											</div>
 											<br />
@@ -474,7 +496,6 @@
 											</div>
 										</c:if>
 										<c:if test="${sessionScope.member.memberRole == 'admin'}">
-											<hr class="my-4"/>
 											<div class="form-row col-md-12">
 												<div class="col-md-6">
 													<label for="regDate">가입일</label> <span id="regDate"
@@ -487,29 +508,43 @@
 											</div>
 											<br/>
 											<div class="form-row col-md-12">
-												<c:if test="${! empty member.deleteDate}">
-													<div class="col-md-6">
-														<label for="deleteDate">탈퇴일</label> <span id="deleteDate"
+												<div class="col-md-6">
+													<label for="blacklistDate">블랙리스트</label>
+													<c:if test="${member.regBlacklist}">
+														<input type="radio" class="custom-control-input" id="checkBlacklist1" name="regBlacklist" value="true" checked> 
+														<label for="checkBlacklist1">블랙리스트 등록</label>
+														<input type="radio" class="custom-control-input" id="checkBlacklist0" name="regBlacklist" value="false"> 
+														<label for="checkBlacklist0">블랙리스트 해제</label>
+													</c:if>
+													<c:if test="${!member.regBlacklist}">
+														<input type="radio" class="custom-control-input" id="checkBlacklist1" name="regBlacklist" value="true"> 
+														<label for="checkBlacklist1">블랙리스트 등록</label>
+														<input type="radio" class="custom-control-input" id="checkBlacklist0" name="regBlacklist" value="false" checked> 
+														<label for="checkBlacklist0">블랙리스트 해제</label>
+													</c:if>
+												</div>
+												<!-- <div class="checkbox mb-12">
+													<input type="checkbox" class="custom-control-input" id="checkBlacklist" value="" style="float:right;"/> 
+													<label for="checkBlacklist">블랙리스트 설정/해제하기</label>
+												</div> -->
+												<div class="col-md-6">
+													<label for="deleteDate">탈퇴일</label>
+													<c:if test="${! empty member.deleteDate}">
+														<span id="deleteDate"
 															style="font-weight: bold">${member.deleteDate}</span>
-													</div>
-												</c:if>
-												<c:if test="${! empty member.blacklistDate}">
-													<div class="col-md-6">
-														<label for="blacklistDate">블랙리스트</label>
-														<span id="blacklistDate"
-															style="font-weight: bold">${member.blacklistDate}</span>
-													</div>
-													<div class="checkbox mb-12">
-														<br/>
-														<input type="checkbox" class="custom-control-input" id="regBlacklist" value="" style="float:right;"/> 
-														<label for="regBlacklist">블랙리스트 설정/해제하기</label>
-													</div>
-												</c:if>
+													</c:if>
+													<c:if test="${empty member.deleteDate}">
+														<span id="deleteDate"
+															style="font-weight: bold">X</span>
+													</c:if>
+												</div>
 											</div>
 										</c:if>
 										<hr class="my-4" />
-										<input type="button" style="float: right" id="updateMember-submit"
-											class="btn btn-primary" value="수정" />
+										<div align="center">
+											<input type="button" id="back" class="btn btn-primary" value="이전" />
+											<input type="button" id="updateMember-submit" class="btn btn-primary" value="수정" />
+										</div>
 									</form>
 								</div>
 							</div>
