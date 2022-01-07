@@ -114,7 +114,7 @@
 									<span class="opener">Manage Page</span>
 									<ul>
 										<li><a href="/member/listMember">회원 목록 조회</a></li>
-										<li><a href="/member/getMember?memberId=user01@zzupzzup.com">회원 정보 조회</a></li>
+										<li><a href="/member/getMember?memberId=user05@zzupzzup.com">회원 정보 조회</a></li>
 										<li><a href="/restaurant/listRestaurant">등록된 전체 음식점 목록</a></li>
 										<li><a href="/restaurant/listRequestRestaurant">등록 요청 음식점 목록</a></li>
 									</ul>
