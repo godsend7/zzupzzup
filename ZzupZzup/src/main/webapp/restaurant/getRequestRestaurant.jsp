@@ -177,7 +177,7 @@
 							
 							<div class="row">
 						  		<div class="col-xs-4 col-md-2"><strong>대표자명</strong></div>
-								<div class="col-xs-8 col-md-4">${member.memberName}</div>
+								<div class="col-xs-8 col-md-4">${restaurant.member.memberName}</div>
 							</div><br>
 							
 							<div class="row">
