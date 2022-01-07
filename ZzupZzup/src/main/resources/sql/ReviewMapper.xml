@@ -54,27 +54,32 @@
 	<insert id="addHashTag"	parameterType="review">
 		DELETE FROM HASHTAG_LOG WHERE review_no = #{reviewNo};
 	
-		INSERT
-		INTO HASHTAG_LOG(review_no, hashtag_no) 
-		VALUES
-		<foreach collection="hashTag" item="item" separator=",">	
-			<if test="item.hashTagNo != 0">
-			 	(#{reviewNo}, #{item.hashTagNo})
-			</if>
-  		</foreach>
+		<if test="hashTag != null">
+			INSERT
+			INTO HASHTAG_LOG(review_no, hashtag_no) 
+			VALUES
+			<foreach collection="hashTag" item="item" separator=",">	
+				<if test="item.hashTagNo != 0">
+				 	(#{reviewNo}, #{item.hashTagNo})
+				</if>
+	  		</foreach>
+  		</if>
 	</insert>
 	
 	<insert id="addImage"	parameterType="review">
 		DELETE FROM IMAGE WHERE review_no = #{reviewNo};
 	
-		INSERT
-		INTO IMAGE(review_no, image) 
-		VALUES
-		<foreach collection="reviewImage" item="item" separator=",">	
-			<if test="item != null">
-				(#{reviewNo}, #{item})
-			 </if>
-  		</foreach>
+		<if test="reviewImage != null">
+			INSERT
+			INTO IMAGE(review_no, image) 
+			VALUES
+			
+			<foreach collection="reviewImage" item="item" separator=",">	
+				<if test="item != null">
+					(#{reviewNo}, #{item})
+				 </if>
+	  		</foreach>
+  		</if>
 	</insert>
 	<!-- REVIEW INSERT END -->
 	

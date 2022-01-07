@@ -43,7 +43,10 @@
 		}); */
 		
 		//////////모달 이동////////////////
-		
+		  $(".confirm").on("click" , function() {
+			$('#rejectionModal').modal("hide");
+	    	$("#cancelUseModal").modal('show');
+		});  
 		/////////////////////////getReservation 모달사용//////////////////////////
 		/* $( "body" ).on("click" , ".fixedDate", function() {
 			$("#modal").trigger('click');
@@ -156,24 +159,28 @@
 	   		function fncCancelConfirm() {	
 				console.log("#cancelConfirm");
 				console.log("${reservation.reservationNo}");
-				console.log("${reservation.reservationCancelReason}");
+				console.log("${reservation.reservationCancelDetail}");
 				
 				var cancelReason = $("input[name='reservationCancelReason']:checked").val();
+				//////////
+				//var cancelDetail = $("input[name='reservationCancelDetail']").val();
 			
 				$.ajax({
-					//url : "/reservation/json/updateReservation/${reservation.reservationNo}/${reservation.reservationCancelReason}/",
 					url : "/reservation/json/reservationCancel",
 					type : "POST",
 					dataType: "html",
 					contentType : "application/json; charset=utf-8",
 					data : JSON.stringify({
 						reservationNo : ${reservation.reservationNo},
+						reservationCancelDetail :$("#reservationCancelDetail").val(),
 						reservationCancelReason : cancelReason
+						
 					}),
 					success : function(data){
 						console.log("바꾸기 성공");
-						$('#cancelConfirm').modal("hide");
-						alert("거절사유가 완료되었습니다.");
+						
+						$('#cancelUseModal').modal("hide");
+						
 						
 					},
 					error : function(e) {
@@ -311,12 +318,14 @@
 									<p><input type="button" value="예약 취소" name= "reservationCancel" class="button small primary stretched-link" id="reservationCancel-modal" data-toggle="modal"
 									data-target="#reservationRejectionModal"/></p>
 									
-								<!-- //////////////////////////////////////////////////////// -->	
-									<p><input type="button" value="거절 사유" name= "cancelUse" class="button small primary stretched-link" id="cancelUse-modal" data-toggle="modal"
-									data-target="#cancelUseModal"/></p>
-									
 									<p><input type="button" value="결제 환불" name= "payRefund" class="button small primary stretched-link payRefund-modal" id="payRefund-modal" data-toggle="modal"
 									data-target="#payRefundModal"/></p>
+									
+								<!-- //////////////////////////////////////////////////////// -->	
+									<p><input type="button" value="거절 사유" name= "cancelUse" class="button small primary stretched-link" id="cancelUse-modal" data-toggle="modal"
+									data-target="#cancelUseModal"/ style="visibility: hidden;"></p>
+									
+									
 								
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->	
 									<!-- Button trigger modal --> 
@@ -457,8 +466,8 @@
 											<div class="col-12-small">
 											<input type="radio" id="reservationCancelReason4" name="reservationCancelReason" class="reservationCancelReason" value="4"> 
 												<label for="reservationCancelReason4">기타 내용 작성</label>
-												<textarea name="reservationCancelDetail" id="reservationCancelDetail"
-													placeholder="100자 이내로 작성해주세요" rows="6"></textarea>
+												 <textarea name="reservationCancelDetail" id="reservationCancelDetail"
+													placeholder="100자 이내로 작성해주세요" rows="6"></textarea> 
 											</div>
 											<!-- Break -->
 											
