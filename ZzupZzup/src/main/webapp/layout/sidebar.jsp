@@ -55,85 +55,96 @@
 				<h2><strong>Welcome to ZZUPZZUPDUCE_101</strong></h2>
 			</header>
 			<ul>
-
-				<c:if test="${ empty member}">
-					로그인이 필요한 서비스입니다.
-				</c:if>
 				<c:if test="${ ! empty member}">
-				
-				<!-- profile image start -->
-				<div class="col-md" align="center">
-					<c:if test="${sessionScope.member.profileImage == 'defaultImage.png'}">
-						<img src="/resources/images/${sessionScope.member.profileImage}"
-						class="rounded-circle" width="150" height="150" />
-					</c:if>
-					<c:if test="${sessionScope.member.profileImage != 'defaultImage.png'}">
-						<img src="/resources/images/uploadImages/${sessionScope.member.profileImage}"
-						class="rounded-circle" width="150" height="150"/>
-					</c:if>
-					<br />
-					<div class="d-flex justify-content-center">
-						<div class="col-md">
-							<h4>
-							<c:if test="${sessionScope.member.memberRole == 'user'}">
-								<span class="badge badge-pill badge-dark"
-									style="color:#fff;background-color:#f56a6a;display:inline-block;padding: .25em .4em;padding-right: .6em;
-									padding-left: .6em;line-height: 1;">${sessionScope.member.memberRank}</span>&nbsp;
-								${sessionScope.member.nickname}
-							</c:if>
-							<c:if test="${sessionScope.member.memberRole != 'user'}">
-								${sessionScope.member.memberName}
-							</c:if>
-							</h4>
+					<!-- profile image start -->
+					<div class="col-md" align="center">
+						<c:if test="${sessionScope.member.profileImage == 'defaultImage.png'}">
+							<img src="/resources/images/${sessionScope.member.profileImage}"
+							class="rounded-circle" width="150" height="150" />
+						</c:if>
+						<c:if test="${sessionScope.member.profileImage != 'defaultImage.png'}">
+							<img src="/resources/images/uploadImages/${sessionScope.member.profileImage}"
+							class="rounded-circle" width="150" height="150"/>
+						</c:if>
+						<br />
+						<div class="d-flex justify-content-center">
+							<div class="col-md">
+								<h4>
+								<c:if test="${sessionScope.member.memberRole == 'user'}">
+									<span class="badge badge-pill badge-dark"
+										style="color:#fff;background-color:#f56a6a;display:inline-block;padding: .25em .4em;padding-right: .6em;
+										padding-left: .6em;line-height: 1;">${sessionScope.member.memberRank}</span>&nbsp;
+									${sessionScope.member.nickname}
+								</c:if>
+								<c:if test="${sessionScope.member.memberRole != 'user'}">
+									${sessionScope.member.memberName}
+								</c:if>
+								</h4>
+							</div>
 						</div>
+						<br/>
 					</div>
-					<br/>
-				</div>
-				<!-- profile image end -->
+					<!-- profile image end -->
+				</c:if>
 				
-					<c:if test="${sessionScope.member.memberRole != 'admin'}">
-
-					<li>
-						<span class="opener">MyPage</span>
-						<ul>
-							<li><a href="/member/getMember?memberId=${member.memberId}">내 정보 조회</a></li>
+					<c:choose>
+						<c:when test="${sessionScope.member.memberRole != 'owner'}">
+						<!-- 업주가 아닌 경우 -->
 							<c:if test="${sessionScope.member.memberRole == 'user'}">
-							<li><a href="#">내 활동 점수 적립 내역</a></li>
-							<li><a href="#">내가 작성한 리뷰 내역</a></li>
-							<li><a href="#">내가 작성한 게시판 내역</a></li>
-							<li><a href="/reservation/listReservation?memberId=${reservation.member.memberId}">예약 및 결제 내역</a></li>
-							<li><a href="#">내가 좋아요 누른 리뷰 내역</a></li>
-							<li><a href="#">내가 좋아요 누른 게시물 내역</a></li>
-							<li><a href="#">나의 신고/제보 접수 내역</a></li>
-							<li><a href="#">나의 평가 내역</a></li>
-							<li><a href="#">내가 찜한 음식점 내역</a></li>
+								<li>
+									<span class="opener">MyPage</span>
+									<ul>
+										<li><a href="/member/getMember?memberId=${member.memberId}">내 정보 조회</a></li>
+										<c:if test="${sessionScope.member.memberRole == 'user'}">
+											<li><a href="#">내 활동 점수 적립 내역</a></li>
+											<li><a href="/review/listReview?memberId=${member.memberId}">내가 작성한 리뷰 내역</a></li>
+											<li><a href="#">내가 작성한 게시판 내역</a></li>
+											<li><a href="/reservation/listReservation?memberId=${reservation.member.memberId}">예약 및 결제 내역</a></li>
+											<li><a href="/review/listMyLikeReview?memberId=${member.memberId}">내가 좋아요 누른 리뷰 내역</a></li>
+											<li><a href="#">내가 좋아요 누른 게시물 내역</a></li>
+											<li><a href="/report/listReport?memberId=${member.memberId}">나의 신고/제보 접수 내역</a></li>
+											<li><a href="#">나의 평가 내역</a></li>
+											<li><a href="#">내가 찜한 음식점 내역</a></li>
+										</c:if>
+									</ul>
+								</li>
 							</c:if>
-						</ul>
-					</li>
-					</c:if>
-					<li><a href="/chat/listChat">쩝쩝친구 구하기</a></li>
-					<li><a href="/community/listCommunity">나만의 작고 소중한 맛집</a></li>
-					<li><a href="/restaurant/addRestaurant?memberId=${member.memberId}">test-음식점등록</a></li>
-					<li><a href="/review/addReview?reservationNo=1">test-리뷰</a></li>
-					<li><a href="/reservation/addReservation?chatNo=${reservation.chat.chatNo}">test-예약</a></li>
-				<c:if test="${sessionScope.member.memberRole == 'owner'}">	
-					<li><a href="/reservation/listReservation?restaurantNo=1">test-예약</a></li>
-				</c:if>		
-				</c:if>
-				<c:if test="${ ! empty member}">
-					<c:if test="${sessionScope.member.memberRole == 'admin'}">
-					<li>
-						<span class="opener">ManagePage</span>
-						<ul>
-							<li><a href="/member/listMember">회원 목록 조회</a></li>
-							<li><a href="/member/getMember?memberId=user01@zzupzzup.com">회원 정보 조회</a></li>
-							<li><a href="/restaurant/listRestaurant">등록된 전체 음식점 목록</a></li>
-							<li><a href="/restaurant/listRequestRestaurant">등록 요청 음식점 목록</a></li>
-						</ul>
-					</li>
-					</c:if>
-				</c:if>
-					<li><a href="#">>> 공지사항</a></li>
+							<c:if test="${sessionScope.member.memberRole == 'admin'}">
+								<li>
+									<span class="opener">Manage Page</span>
+									<ul>
+										<li><a href="/member/listMember">회원 목록 조회</a></li>
+										<li><a href="/member/getMember?memberId=user01@zzupzzup.com">회원 정보 조회</a></li>
+										<li><a href="/restaurant/listRestaurant">등록된 전체 음식점 목록</a></li>
+										<li><a href="/restaurant/listRequestRestaurant">등록 요청 음식점 목록</a></li>
+									</ul>
+								</li>
+							</c:if>
+							<li><a href="/chat/listChat">쩝쩝친구 구하기</a></li>
+							<li><a href="/community/listCommunity">나만의 작고 소중한 맛집</a></li>
+							<c:if test="${sessionScope.member.memberRole == 'admin'}">
+								<li>
+									<span class="opener">음식점 관리</span>
+									<ul>
+										<li><a href="#">전체 음식점 내역</a></li>
+										<li><a href="/restaurant/listRequestRestaurant">음식점 등록 요청 내역</a></li>
+										<li><a href="/review/listReview">전체 리뷰 내역</a></li>
+									</ul>
+								</li>
+							</c:if>
+							<li><a href="/restaurant/addRestaurant?memberId=${member.memberId}">test-음식점등록</a></li>
+							<li><a href="/review/addReview?reservationNo=1">test-리뷰작성</a></li>
+							<li><a href="/reservation/addReservation?chatNo=${reservation.chat.chatNo}">test-예약</a></li>
+						</c:when>
+						<c:otherwise>
+							<!--  업주가 보이는 목록 -->
+							<li><a href="/member/getMember?memberId=${member.memberId}">내 정보 조회</a></li>
+							<li><a href="/reservation/listReservation?restaurantNo=1">예약 주문 내역</a></li>
+							<li><a href="/report/listReport?memberId=${member.memberId}">음식점 제보 내역</a></li>
+						</c:otherwise>
+					</c:choose>
+				
+				<li><a href="#">>> 공지사항</a></li>
 			</ul>
 		</nav>
 
