@@ -28,11 +28,14 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
+import com.zzupzzup.service.domain.Mark;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.RestaurantMenu;
 import com.zzupzzup.service.domain.RestaurantTime;
 import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.restaurant.RestaurantService;
+import com.zzupzzup.service.review.ReviewService;
 
 @Controller
 @RequestMapping("/restaurant/*")
@@ -53,6 +56,9 @@ public class RestaurantController {
 	@Qualifier("memberServiceImpl")
 	private MemberService memberService;
 	
+	@Autowired
+	@Qualifier("reviewServiceImpl")
+	private ReviewService reviewService;
 	
 	///Constructor
 	public RestaurantController() {
@@ -117,13 +123,55 @@ public class RestaurantController {
 	}
 	
 	@RequestMapping(value="getRestaurant", method=RequestMethod.GET)
-	public String getRestaurant(@RequestParam("restaurantNo") int restaurantNo, Model model) throws Exception {
+	public String getRestaurant(@RequestParam("restaurantNo") int restaurantNo, @ModelAttribute Search search, Model model, HttpSession session) throws Exception {
 		
 		System.out.println("/restaurant/getRestaurant : GET");
 		
 		Restaurant restaurant = restaurantService.getRestaurant(restaurantNo);
 		
+		System.out.println("review/listReview : Service");
+		
+		//String restaurantNo = request.getParameter("restaurantNo");
+		Member member = (Member) session.getAttribute("member");
+		
+		List<Mark> listLike = null;
+		
+		String memberId = null;
+		
+		if (member != null && member.getMemberRole().equals("user")) {
+			memberId = member.getMemberId();
+			listLike = reviewService.listLike(memberId);
+		}
+		
+		
+		System.out.println(restaurantNo);
+		System.out.println(member);
+		
+		
+		if (search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+		
+		System.out.println(search.getCurrentPage() + ":: currentPage");
+		
+		search.setPageSize(pageSize);
+		
+		
+		Map<String, Object> map = reviewService.listReview(search, Integer.toString(restaurantNo), memberId);
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("listLike", listLike);
+		model.addAttribute("search", search);
+		model.addAttribute("totalCount", map.get("totalCount"));
+		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
+		model.addAttribute("resultPage", resultPage);
+		
+		
 		model.addAttribute("restaurant", restaurant);
+		
+		
 		
 		return "forward:/restaurant/getRestaurant.jsp";
 	}

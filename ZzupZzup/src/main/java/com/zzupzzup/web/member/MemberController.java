@@ -146,11 +146,11 @@ public class MemberController {
 		return "forward:/member/getMember.jsp";
 	}
 
-	@RequestMapping(value="listMember")
-	public String listMember(@ModelAttribute("search") Search search, @ModelAttribute Member member,
+	@RequestMapping(value="listUser")
+	public String listUser(@ModelAttribute("search") Search search, @ModelAttribute("member") Member member,
 			HttpServletRequest request) throws Exception {
 		
-		System.out.println("/member/listMember : GET / POST");
+		System.out.println("/member/listUser : GET / POST");
 		
 		if(search.getCurrentPage() == 0){
 			search.setCurrentPage(1);
@@ -162,19 +162,46 @@ public class MemberController {
 		
 		search.setPageSize(pageSize);
 		
-		Map<String, Object> map = memberService.listMember(search, member);
+		Map<String, Object> map = memberService.listUser(search, member);
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
-		request.setAttribute("listMember", map.get("listMember"));
+		request.setAttribute("listUser", map.get("listUser"));
 		request.setAttribute("search", search);
-		//request.setAttribute("totalCount", map.get("totalCount"));
 		request.setAttribute("member", member);
+		request.setAttribute("totalCount", map.get("totalCount"));
+		request.setAttribute("resultPage", resultPage);
 		
-		return "forward:/member/listMember.jsp";
+		return "forward:/member/listUser.jsp";
 	}
 	
-	public void listOwner() {
+	@RequestMapping(value="listOwner")
+	public String listOwner(@ModelAttribute("search") Search search, @ModelAttribute("member") Member member,
+			HttpServletRequest request) throws Exception {
+
+		System.out.println("/member/listOwner : GET / POST");
+		
+		if(search.getCurrentPage() == 0){
+			search.setCurrentPage(1);
+		}
+		
+		if(request.getParameter("page") != null) {
+			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+		}
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = memberService.listUser(search, member);
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		request.setAttribute("listOwner", map.get("listOwner"));
+		request.setAttribute("search", search);
+		request.setAttribute("member", member);
+		request.setAttribute("totalCount", map.get("totalCount"));
+		request.setAttribute("resultPage", resultPage);
+		
+		return "forward:/member/listOwner.jsp";
 		
 	}
 	

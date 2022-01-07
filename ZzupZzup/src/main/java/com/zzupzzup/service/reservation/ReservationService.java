@@ -16,7 +16,8 @@ public interface ReservationService {
 	public Reservation getReservation(int reservationNo) throws Exception ; //reservationNo를 넣게되면 거기서부터 get/ list에 restaurantNo를 넣어준건 내가 레스토랑이 몇개가있는지 보려고
 
 	// SELECT LIST
-	public Map<String, Object> listReservation(Search search, String restaurantNo) throws Exception ;//관리자가 보는 목록
+	//public Map<String, Object> listReservation(Search search, String restaurantNo) throws Exception ;//관리자가 보는 목록
+	public Map<String, Object> listReservation(Search search, Member memberId, String restaurantNo) throws Exception ;//관리자,유저가 보는 목록
 	
 	// SELECT LIST
 	public Map<String, Object> listMyReservation(Search search, Member memberId, String restaurantNo) throws Exception ;//업주, 유저가 보는 목록. 업주는 레스토랑이 여러개 있을 수있어서 레스토랑no값을 넣어줌	

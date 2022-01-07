@@ -467,7 +467,7 @@
 							<div class="row gtr-uniform">
 								<div class="col-md-12">
 									<c:choose>
-										<c:when test="${chat.chatGender=='1' }">
+										<c:when test="${chat.chatGender=='1'}">
 										<input type="radio" id="male" name="chatGender" value="1" checked>
 										<label for="male">남</label>
 								
@@ -478,7 +478,7 @@
 										<label for="malefemale">성별무관</label>
 										</c:when>
 										
-										<c:when test="${chat.chatGender=='2' }">
+										<c:when test="${chat.chatGender=='2'}">
 										<input type="radio" id="male" name="chatGender" value="1">
 										<label for="male">남</label>
 								
@@ -489,7 +489,7 @@
 										<label for="malefemale">성별무관</label>
 										</c:when>
 										
-										<c:otherwise>
+										<c:when test="${chat.chatGender=='3'}">
 										<input type="radio" id="male" name="chatGender" value="1">
 										<label for="male">남자</label>
 								
@@ -498,7 +498,7 @@
 									
 										<input type="radio" id="malefemale" name="chatGender" value="3" checked>
 										<label for="malefemale">성별무관</label>
-										</c:otherwise>
+										</c:when>
 									</c:choose>
 								</div>
 							</div>
@@ -559,7 +559,7 @@
 							<div class="row gtr-uniform">
 								<!-- Break -->
 								<div class="col-12">
-									<label for="chatShowStatus">채팅방 노출 여부</label>
+									<label>채팅방 노출 여부</label>
 								</div>
 								<div class="col-md-12">
 									<c:choose>
