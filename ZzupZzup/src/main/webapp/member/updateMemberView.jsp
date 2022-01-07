@@ -20,7 +20,6 @@
 	
 	$(function() {
 		console.log("updateMemberView.jsp");
-		console.log("${member.profileImage}");
 		
 		$("#updateMember-submit").on("click", function() {
 			//location.href = "/member/updateMember";
@@ -510,13 +509,13 @@
 											<div class="form-row col-md-12">
 												<div class="col-md-6">
 													<label for="blacklistDate">블랙리스트</label>
-													<c:if test="${member.regBlacklist}">
+													<c:if test="${! empty member.blacklistDate}">
 														<input type="radio" class="custom-control-input" id="checkBlacklist1" name="regBlacklist" value="true" checked> 
 														<label for="checkBlacklist1">블랙리스트 등록</label>
 														<input type="radio" class="custom-control-input" id="checkBlacklist0" name="regBlacklist" value="false"> 
 														<label for="checkBlacklist0">블랙리스트 해제</label>
 													</c:if>
-													<c:if test="${!member.regBlacklist}">
+													<c:if test="${empty member.blacklistDate}">
 														<input type="radio" class="custom-control-input" id="checkBlacklist1" name="regBlacklist" value="true"> 
 														<label for="checkBlacklist1">블랙리스트 등록</label>
 														<input type="radio" class="custom-control-input" id="checkBlacklist0" name="regBlacklist" value="false" checked> 
