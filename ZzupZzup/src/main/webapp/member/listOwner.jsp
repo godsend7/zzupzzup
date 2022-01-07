@@ -52,10 +52,10 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="listOwner">
+				<section id="listOwner-jsp">
 					<div class="container">
 					
-						<!-- 관우님 src start -->
+						<!-- 관우님 src 참고 start -->
 						<h2>업주 목록</h2><hr>
 						<form id="listOwner">
 						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
@@ -86,7 +86,7 @@
 						</c:forEach>
 	
 						</div><br><br><br>
-						<!-- 관우님 src end -->
+						<!-- 관우님 src 참고 end -->
 						
 					<jsp:include page="../common/pageNavigator.jsp"/>
 					

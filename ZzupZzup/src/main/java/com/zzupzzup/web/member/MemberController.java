@@ -26,6 +26,7 @@ import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.member.MemberService;
+import com.zzupzzup.service.restaurant.RestaurantService;
 
 @Controller
 @RequestMapping("/member/*")
@@ -41,6 +42,10 @@ public class MemberController {
 	@Autowired
 	@Qualifier("memberServiceImpl")
 	private MemberService memberService;
+	
+	@Autowired
+	@Qualifier("restaurantServiceImpl")
+	private RestaurantService restaurantService;
 
 	//*Constructor
 	public MemberController() {
@@ -142,6 +147,25 @@ public class MemberController {
 		System.out.println("getMember - "+member);
 		
 		request.setAttribute("member", member);
+		
+		if(member.getMemberRole() == "owner") {
+			Search search = new Search();
+			
+			if(search.getCurrentPage() == 0){
+				search.setCurrentPage(1);
+			}
+			
+			if(request.getParameter("page") != null) {
+				search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+			}
+			
+			search.setPageSize(pageSize);
+			
+			Map<String, Object> myRestaurant = restaurantService.listMyRestaurant(search, member.getMemberId());
+			Page resultPage = new Page(search.getCurrentPage(), ((Integer)myRestaurant.get("totalCount")).intValue(), pageUnit, pageSize);
+			
+			request.setAttribute("myRestaurant", myRestaurant.get("list"));
+		}
 		
 		return "forward:/member/getMember.jsp";
 	}
