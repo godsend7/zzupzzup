@@ -21,7 +21,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 		System.out.println("\n[ LoginCheckInterceptor start........]");
 		
 		HttpSession session = request.getSession(true);
-		Member member = (Member)session.getAttribute("Member");
+		Member member = (Member)session.getAttribute("member");
 		
 		System.out.println("Logon Check :: " + member);
 		
