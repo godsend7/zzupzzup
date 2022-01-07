@@ -38,6 +38,7 @@
 <!-- 실시간 시간 정보 DATA2  -->
 
 <!-- <body onload="showClock()"> -->
+
 <!-- S:Sidebar -->
 <div id="sidebar" class="inactive">
 	<div class="inner">
