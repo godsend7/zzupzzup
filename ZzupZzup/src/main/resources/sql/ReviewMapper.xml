@@ -219,9 +219,9 @@
 	</select>
 	
 	<select id="getTotalAvg" parameterType="String" resultType="double">
-		SELECT truncate(avg(avg_scope),1)
+		SELECT ifnull(truncate(avg(avg_scope),1),0)
 		FROM review
-		WHERE restaurant_no = #{value}
+		WHERE restaurant_no = #{value} AND review_show_status = 1;
 	</select>
 	
 	

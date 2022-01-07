@@ -34,16 +34,17 @@
 	<!-- ■ Annotation 기반의 모든 기능을 사용 할 수 있는 설정
 	          <mvc:annotation-driven /> 사용으로 interceptor 를 직접
 	          DefaultAnnotationHandlerMapping 에 주입 할 수 없으니 
-	       	  아래의 설정방법으로 interceptor 주입
+	       	  아래의 설정방법으로 interceptor 주입-->
    	<mvc:interceptors>
 		
    		<mvc:interceptor>
-			<mvc:mapping path="/user/**"/>
-			<bean class="com.model2.mvc.common.web.LogonCheckInterceptor" />
+			<mvc:mapping path="/**/*"/>
+			<bean class="com.zzupzzup.common.web.LoginCheckInterceptor" />
    		</mvc:interceptor>
 
    	</mvc:interceptors>
    	
+   	<!--
    	:: 본실습에서는 주석처리 : 추후 PJT 시 RestFul 고려 LogonCheckInterceptor 조건 추가할것
    	-->
 
