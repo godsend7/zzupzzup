@@ -191,7 +191,17 @@ public class ChatRestController {
 		return map;
 	}
 	
-	
+	@RequestMapping(value="json/listReadyCheckMember/chatNo={chatNo}", method=RequestMethod.GET)
+	public Map listReadyCheckMember(@PathVariable int chatNo, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		System.out.println("/chat/json/listReadyCheckMember : GET");
+		
+		ChatMember chatMember = new ChatMember();
+		chatMember.setChatNo(chatNo);
+		
+		Map<String, Object> map = chatService.listChatMember(chatNo);
+		
+		return map;
+	}
 	
 
 	
