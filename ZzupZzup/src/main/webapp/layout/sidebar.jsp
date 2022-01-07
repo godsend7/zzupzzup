@@ -129,7 +129,7 @@
 								<li>
 									<span class="opener">음식점 관리</span>
 									<ul>
-										<li><a href="#">전체 음식점 내역</a></li>
+										<li><a href="/restaurant/listRestaurant">등록된 전체 음식점</a></li>
 										<li><a href="/restaurant/listRequestRestaurant">음식점 등록 요청 내역</a></li>
 										<li><a href="/review/listReview">전체 리뷰 내역</a></li>
 									</ul>

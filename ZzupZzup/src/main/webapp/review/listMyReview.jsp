@@ -14,31 +14,6 @@
 
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
-.review-top-box {
-	display: flex;
-	justify-content: space-between;
-}
-
-label {
-	margin: 0px;
-	
-}
-
-.listStarBox .star-in {
-	padding-left: 10px;
-	padding-top: 3px;
-}
-
-.reviewTitle h2 {
-	margin-right: 15px;
-	float: left;
-}
-
-.reviewTitle .star-in {
-	padding-top: 6px;
-	margin-right: 5px;
-	float: left;
-}
 
 </style>
 
@@ -50,10 +25,13 @@ label {
 	    console.log(currentPage);
 	    $("#currentPage").val(currentPage);
 	    
-	    if (${param.restaurantNo == null}) {
+	    var link = window.location.href;
+	    console.log(link);
+	    
+	    if (link.includes('listReview')) {
 	    	$("#review").attr("action","/review/listReview").attr("method", "POST").submit();
-		} else {
-			$("#review").attr("action","/review/listReview?restaurantNo=${param.restaurantNo}").attr("method", "POST").submit();
+		} else if(link.includes('listMyLikeReview')) {
+			$("#review").attr("action","/review/listMyLikeReview").attr("method", "POST").submit();
 		}
 	}
 	
@@ -119,49 +97,10 @@ label {
 						<!-- 내용 들어가는 부분 -->
 						
 						<!-- start:Form -->
-						<c:choose>
-							<c:when test="${empty param.restaurantNo}">
-								<h2>Review List</h2>
-							</c:when>
-							<c:otherwise>
-								<div class="row table-list mb-2 review-top-box">
-									<div class="reviewTitle">
-										<h2>Review Total</h2>
-										<div class="star-in">
-											
-											
-											<c:forEach var="i" begin="1" end="${avgTotalScope+((avgTotalScope%1>0.5)?(1-(avgTotalScope%1))%1:-(avgTotalScope%1))}">
-												<span class="star-modal on"></span>
-											</c:forEach>
-										</div>
-										<div style="margin-top: 10px; float: left;">
-											<span>(${avgTotalScope} 점)</span>
-										</div>
-									</div>
-									
-									
-									<c:if test="${member.memberRole eq 'user'}">
-										<div>
-											<a href="/reservation/listReservation?memberId=${member.memberId}" class="button svg-btn">
-											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-	 											 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-	 											 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-											</svg>작성하기
-											</a>
-										</div>
-									</c:if>
-								</div>
-								<div class="row table-list mb-2" style="margin-left: 0px;">
-									
-									<a href="" class="button normal icon solid fa-filter"> 필터</a></div>
-								<br>
-							</c:otherwise>
-						</c:choose>
-						
+						<h2>Review List</h2>
 						
 						<form id="review">
-							<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
-							<%-- <input type="hidden" id="restaurantNo" name="restaurantNo" value="${param.restaurantNo}"/> --%>
+							<!-- 검색 정렬 조건 -->
 							<input type="hidden" id="currentPage" name="currentPage" value=""/>
 						</form>
 						
@@ -269,20 +208,12 @@ label {
 				 		 			</c:otherwise>
 				 		 		</c:choose>
 							</c:forEach>
-							<ul class='icons'> 
-								<jsp:include page='/review/getReview.jsp'/>
-							</ul>
+							
 						</div>
-						
-						<c:choose>
-							<c:when test="${empty param.restaurantNo}">
-								<jsp:include page="../common/pageNavigator.jsp"/>
-							</c:when>
-							<c:otherwise>
-								무한스크롤 필요
-								<jsp:include page="../common/pageNavigator.jsp"/>
-							</c:otherwise>
-						</c:choose>
+						<ul class='icons'> 
+							<jsp:include page='/review/getReview.jsp'/>
+						</ul>
+						<jsp:include page="../common/pageNavigator.jsp"/>
 					</div>
 				</section>
 				
