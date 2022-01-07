@@ -85,16 +85,14 @@
 									<h2 class="mb-0">${member.nickname}&nbsp;<small style="color:gray;">${member.memberId}</small></h2><hr>
 									<div class="mb-1 text-muted"><strong>이름</strong> | ${member.memberName}</div>
 									<div class="mb-1 text-muted"><strong>가입일</strong> | ${member.regDate}</div>
-									<div class="mb-1 text-muted"><strong>전화번호</strong> | ${member.restaurantTel}</div>
-									<c:if test="${!empty restaurant.restaurantRegDate}">
-										<a href="/restaurant/getRestaurant?restaurantNo=${restaurant.restaurantNo}" style="text-align: right;" class="stretched-link" id="restinfo">상세정보</a>
-									</c:if>
-									<c:if test="${!empty restaurant.judgeDate}">
+									<div class="mb-1 text-muted"><strong>전화번호</strong> | ${member.memberPhone}</div>
+									<a href="/member/getMember?memberId=${member.memberId}" style="text-align: right;" class="stretched-link" id="restinfo">상세정보</a>
+									<%-- <c:if test="${!empty restaurant.judgeDate}">
 										<p style="text-align: right;">자세한 내용은 고객센터(
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-headset" viewBox="0 0 16 16">
 										<path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
 										</svg> 010-4444-4444 )로 문의하시기 바랍니다.</p>
-									</c:if>
+									</c:if> --%>
 								</div>
 							</div>
 						</div>
