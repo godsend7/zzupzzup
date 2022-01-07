@@ -86,7 +86,7 @@
 				
 								<div class="card-body">
 									<h3 class="card-title">${reservation.restaurant.restaurantName}</h3>
-									<h4 class="text-primary card-title">에약번호<a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h4>
+									<h4 class="text-primary card-title">예약번호<a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h4>
 								
 										<div class="col-6 col-12-xsmall">
 										<label for="nickname">참여자 NickName</label> 
@@ -110,7 +110,7 @@
 									  	</div>
 									
 										<div class="col-6 col-12-xsmall">
-										<label for="demo-name">예약 및 결제 현황</label> 
+										<label for="demo-name">예약/결제 현황</label> 
 										<p>${reservation.returnStatus}</p>
 										</div>
 								</div>
