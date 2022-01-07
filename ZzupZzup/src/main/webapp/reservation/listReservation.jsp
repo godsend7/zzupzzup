@@ -89,7 +89,7 @@
 									<h4 class="text-primary card-title">에약번호<a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h4>
 								
 										<div class="col-6 col-12-xsmall">
-										<label for="nickname">참여자 NickName1111</label> 
+										<label for="nickname">참여자 NickName</label> 
 										<p>${member.nickname}</p>
 										${reservation.chat.chatLeaderId}
 										</div>
