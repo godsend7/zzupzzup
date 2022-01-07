@@ -58,6 +58,10 @@ public class ReviewServiceImpl implements ReviewService {
 		map.put("restaurantNo", restaurantNo);
 		map.put("memberId", memberId);
 		
+		System.out.println("listReview의 search 확인 :: " + search);
+		System.out.println("listReview의 search 확인2 :: " + search.getStartRowNum());
+		System.out.println("listReview의 search 확인2 :: " + search.getPageSize());
+		
 		map.put("list", reviewDao.listReview(map));
 		map.put("totalCount", reviewDao.getTotalCount(map));
 		

@@ -170,6 +170,7 @@ textarea {
 .listStarBox .star-in {
 	padding-left: 10px;
 	padding-top: 3px;
+	display: flex;
 }
 
 .reviewTitle h2 {
