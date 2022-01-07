@@ -222,6 +222,8 @@ public class ChatController {
 		Member member = (Member)session.getAttribute("member");
 		System.out.println("getChatEntrance member : " + member);
 		
+		
+		
 		ChatMember chatMember = new ChatMember();
 		ChatMember chatMember2 = new ChatMember();
 		
@@ -233,6 +235,7 @@ public class ChatController {
 		if(chatLeaderId.equals(memberId)) {
 			//개설자로 들어갔을 때
 			//System.out.println("개설자야");
+			chat.setChatLeaderId(member);
 		}else {
 			//참가자로 들어갔을 때
 			//System.out.println("참가자야");

@@ -94,25 +94,27 @@
 	</update>
 
 	<!-- SQL : SELECT LIST -->
-	<select 	id="listMember"	parameterType="map" resultMap="memberSelectMap">
+	<select 	id="listUser"	parameterType="map" resultMap="memberSelectMap">
 		SELECT MEMBER_LIST.*
 		FROM (
-		
-			<if test='member.memberRole == "user"'>
-				SELECT MEMBER_ROLE, NICKNAME, COUNT_REP.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
-				FROM zzupzzup.MEMBER
-			    RIGHT JOIN (
-						SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
-						FROM zzupzzup.REPORT RIGHT JOIN zzupzzup.MEMBER
-						ON zzupzzup.REPORT.CHAT_MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
-						GROUP BY zzupzzup.MEMBER.MEMBER_ID
-					) COUNT_REP
-				ON COUNT_REP.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
-			</if>
-			
-		
-		<if test='member.memberRole == "owner"'>
-			SELECT MEMBER_ROLE, NICKNAME, COUNT_RES.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+			SELECT MEMBER_ROLE, MEMBER_NAME, NICKNAME, COUNT_REP.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+			FROM zzupzzup.MEMBER
+		    RIGHT JOIN (
+					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
+					FROM zzupzzup.REPORT RIGHT JOIN zzupzzup.MEMBER
+					ON zzupzzup.REPORT.CHAT_MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+					GROUP BY zzupzzup.MEMBER.MEMBER_ID
+				) COUNT_REP
+			ON COUNT_REP.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+		) MEMBER_LIST
+		WHERE MEMBER_ROLE = 'user'
+		ORDER BY MEMBER_LIST.MEMBER_ID LIMIT #{search.startRowNum}, #{search.pageSize}
+	</select>
+	
+	<select 	id="listOwner"	parameterType="map" resultMap="memberSelectMap">
+		SELECT MEMBER_LIST.*
+		FROM (
+			SELECT MEMBER_ROLE, MEMBER_NAME, COUNT_RES.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
 			FROM zzupzzup.MEMBER
 		    RIGHT JOIN (
 					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(RESTAURANT_NAME) AS COUNT_RESTAURANT
@@ -121,26 +123,9 @@
 					GROUP BY zzupzzup.MEMBER.MEMBER_ID
 				) COUNT_RES
 			ON COUNT_RES.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
-		</if>
-		
 		) MEMBER_LIST
+		WHERE MEMBER_ROLE = 'owner'
 		ORDER BY MEMBER_LIST.MEMBER_ID LIMIT #{search.startRowNum}, #{search.pageSize}
-	</select>
-	
-	<select 	id="listOwner"	parameterType="search" resultMap="memberSelectMap">
-		SELECT MEMBER_LIST.*
-		FROM (
-			SELECT MEMBER_ROLE, NICKNAME, COUNT_RES.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
-			FROM zzupzzup_test.MEMBER
-		    RIGHT JOIN (
-					SELECT zzupzzup_test.MEMBER.MEMBER_ID, COUNT(RESTAURANT_NAME) AS COUNT_RESTAURANT
-					FROM zzupzzup_test.RESTAURANT RIGHT JOIN zzupzzup_test.MEMBER
-					ON zzupzzup_test.RESTAURANT.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
-					GROUP BY zzupzzup_test.MEMBER.MEMBER_ID
-				) COUNT_RES
-			ON COUNT_RES.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID
-		) MEMBER_LIST
-		WHERE (@ROWNUM:=0) = 0
 	</select>
 	
 	<!-- 
@@ -197,4 +182,21 @@
 		UPDATE zzupzzup.MEMBER
 		SET MANNER_SCORE = MANNER_SCORE + #{accumulScore} WHERE MEMBER_ID = #{memberId};
 	</update>
+	
+	<!-- page count -->
+	<select id="getTotalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM zzupzzup.MEMBER
+		<!-- <choose>
+			<when test="restaurantNo != null">
+		  		WHERE restaurant_no = #{restaurantNo}
+		  	</when>
+		  	<otherwise>
+		  		<if test="memberId != null">
+		  			WHERE member_id = #{memberId}
+		  		</if>
+		  	</otherwise>
+		</choose> --> 
+	</select>
+	
 </mapper>

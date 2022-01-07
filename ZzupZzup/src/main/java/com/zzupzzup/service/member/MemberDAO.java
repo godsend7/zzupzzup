@@ -20,7 +20,9 @@ public interface MemberDAO {
 	
 	public Member getOwner(String memberId) throws Exception;
 	
-	public List<Member> listMember(Map<String, Object> map) throws Exception;
+	public List<Member> listUser(Map<String, Object> map) throws Exception;
+	
+	public List<Member> listOwner(Map<String, Object> map) throws Exception;
 	
 	public int updateMember(Member member) throws Exception;
 	
@@ -31,4 +33,6 @@ public interface MemberDAO {
 	public int updateActivityAllScore(String memberId) throws Exception;
 	
 	public int updateMannerScore(String memberId, int accumulScore) throws Exception;
+	
+	public int getTotalCount(Search search) throws Exception;
 }

@@ -72,7 +72,9 @@
 .chatProfile > * { margin-right: 10px; }
 .chatProfile img { width: 35px; height: 35px; border-radius: 50%; overflow: hidden; }
 
-.chat-body .user-list li { position: relative; margin-bottom: 10px; }
+.chat-body .user-list li { position: relative; margin-bottom: 10px; padding-left: 0px; }
+.chat-body .user-list li.chat-leader:before { content:'방장 표시'; position: absolute; top: -15px; left: 1px; background: url(../images/sub/chat_leader_ico.png) no-repeat center center; width: 32px; height: 32px; font-size: 0; line-height: 0;  }
+.chat-body .user-list li.connected:after { content: '접속자 표시'; position: absolute; top:0; left: 0; width: 10px; height: 10px; border-radius: 50%; background-color: #ff4b4b; border: 2px solid #fff; font-size: 0; line-height: 0; }
 
 .chat-footer { text-align: right; border-top: 1px solid #e8e5dd; }
 .input-container { padding: 15px; }
