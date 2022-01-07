@@ -115,6 +115,12 @@
 									<input type="hidden" name="profileImage" value="${member.profileImage}"/>
 									<input type="hidden" name="memberPhone" value="${member.memberPhone}"/>
 									<input type="hidden" name="memberRole" value="${member.memberRole}"/>
+									<c:if test="${sessionScope.member.memberRole == 'admin'}">
+										<input type="hidden" name="password" value="${member.password}">
+										<input type="hidden" name="ageRange" value="${member.ageRange}">
+										<input type="hidden" name="gender" value="${member.gender}">
+										<input type="hidden" name="statusMessage" value="${member.statusMessage}">
+									</c:if>
 										<div class="row mt-5 align-items-center">
 											<div class="col-md-3 mb-5" id="edit-profileImage">
 												<div class="col-md" align="center">
