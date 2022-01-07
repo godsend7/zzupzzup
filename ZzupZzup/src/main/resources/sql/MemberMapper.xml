@@ -94,10 +94,10 @@
 	</update>
 
 	<!-- SQL : SELECT LIST -->
-	<select 	id="listUser"	parameterType="search" resultMap="memberSelectMap">
+	<select 	id="listUser"	parameterType="map" resultMap="memberSelectMap">
 		SELECT MEMBER_LIST.*
 		FROM (
-			SELECT MEMBER_ROLE, NICKNAME, COUNT_REP.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+			SELECT MEMBER_ROLE, MEMBER_NAME, NICKNAME, COUNT_REP.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
 			FROM zzupzzup.MEMBER
 		    RIGHT JOIN (
 					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
@@ -111,10 +111,10 @@
 		ORDER BY MEMBER_LIST.MEMBER_ID LIMIT #{search.startRowNum}, #{search.pageSize}
 	</select>
 	
-	<select 	id="listOwner"	parameterType="search" resultMap="memberSelectMap">
+	<select 	id="listOwner"	parameterType="map" resultMap="memberSelectMap">
 		SELECT MEMBER_LIST.*
 		FROM (
-			SELECT MEMBER_ROLE, NICKNAME, COUNT_RES.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+			SELECT MEMBER_ROLE, MEMBER_NAME, COUNT_RES.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
 			FROM zzupzzup.MEMBER
 		    RIGHT JOIN (
 					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(RESTAURANT_NAME) AS COUNT_RESTAURANT

@@ -37,9 +37,9 @@ public interface MemberService {
 	
 	//public Member getOwner(String memberId) throws Exception;
 	
-	public Map<String, Object> listUser(Search search) throws Exception;
+	public Map<String, Object> listUser(Search search, Member member) throws Exception;
 	
-	public Map<String, Object> listOwner(Search search) throws Exception;
+	public Map<String, Object> listOwner(Search search, Member member) throws Exception;
 	
 	//public void blacklistUser() throws Exception;
 	

@@ -147,7 +147,7 @@ public class MemberController {
 	}
 
 	@RequestMapping(value="listUser")
-	public String listUser(@ModelAttribute("search") Search search,
+	public String listUser(@ModelAttribute("search") Search search, @ModelAttribute("member") Member member,
 			HttpServletRequest request) throws Exception {
 		
 		System.out.println("/member/listUser : GET / POST");
@@ -162,12 +162,13 @@ public class MemberController {
 		
 		search.setPageSize(pageSize);
 		
-		Map<String, Object> map = memberService.listUser(search);
+		Map<String, Object> map = memberService.listUser(search, member);
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
 		request.setAttribute("listUser", map.get("listUser"));
 		request.setAttribute("search", search);
+		request.setAttribute("member", member);
 		request.setAttribute("totalCount", map.get("totalCount"));
 		request.setAttribute("resultPage", resultPage);
 		
@@ -175,7 +176,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="listOwner")
-	public String listOwner(@ModelAttribute("search") Search search,
+	public String listOwner(@ModelAttribute("search") Search search, @ModelAttribute("member") Member member,
 			HttpServletRequest request) throws Exception {
 
 		System.out.println("/member/listOwner : GET / POST");
@@ -190,12 +191,13 @@ public class MemberController {
 		
 		search.setPageSize(pageSize);
 		
-		Map<String, Object> map = memberService.listUser(search);
+		Map<String, Object> map = memberService.listUser(search, member);
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
 		request.setAttribute("listOwner", map.get("listOwner"));
 		request.setAttribute("search", search);
+		request.setAttribute("member", member);
 		request.setAttribute("totalCount", map.get("totalCount"));
 		request.setAttribute("resultPage", resultPage);
 		
