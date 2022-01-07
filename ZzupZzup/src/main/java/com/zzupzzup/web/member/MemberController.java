@@ -144,28 +144,27 @@ public class MemberController {
 		Member memberIdSet = new Member();
 		memberIdSet.setMemberId(memberId);
 		Member member = memberService.getMember(memberIdSet);
-		System.out.println("getMember - "+member);
 		
 		request.setAttribute("member", member);
 		
-		if(member.getMemberRole() == "owner") {
-			Search search = new Search();
-			
-			if(search.getCurrentPage() == 0){
-				search.setCurrentPage(1);
-			}
-			
-			if(request.getParameter("page") != null) {
-				search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
-			}
-			
-			search.setPageSize(pageSize);
-			
-			Map<String, Object> myRestaurant = restaurantService.listMyRestaurant(search, member.getMemberId());
-			Page resultPage = new Page(search.getCurrentPage(), ((Integer)myRestaurant.get("totalCount")).intValue(), pageUnit, pageSize);
-			
-			request.setAttribute("myRestaurant", myRestaurant.get("list"));
+		//owner의 경우 등록된 음식점 수 노출
+		Search search = new Search();
+		
+		if(search.getCurrentPage() == 0){
+			search.setCurrentPage(1);
 		}
+		
+		if(request.getParameter("page") != null) {
+			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+		}
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> myRestaurant = restaurantService.listMyRestaurant(search, member.getMemberId());
+		//Page resultPage = new Page(search.getCurrentPage(), ((Integer)myRestaurant.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		request.setAttribute("myRestaurant", myRestaurant.get("list"));
+		
 		
 		return "forward:/member/getMember.jsp";
 	}
@@ -215,7 +214,7 @@ public class MemberController {
 		
 		search.setPageSize(pageSize);
 		
-		Map<String, Object> map = memberService.listUser(search, member);
+		Map<String, Object> map = memberService.listOwner(search, member);
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		

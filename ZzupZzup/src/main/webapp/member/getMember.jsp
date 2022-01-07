@@ -236,7 +236,6 @@
 											</div>
 										</c:if>
 										<c:if test="${member.memberRole == 'owner'}">
-											<hr class="my-4" />
 											<div class="form-row">
 												<div class="col-6">
 													<h4 align="left"><strong>등록된 음식점 목록</strong></h4>
@@ -251,10 +250,11 @@
 													</c:if>
 												</div>
 												<!-- 등록된 음식점 수 띄우기 -->
-												<c:if test="${restaurant.member.memberId == member.memberId}">
+												
 													<c:set var="i" value="0" />
 													<c:forEach var="restaurant" items="${myRestaurant}">
-														
+													<c:if test="${restaurant.member.memberId == member.memberId}">
+													<hr class="my-4" />
 													<div class="col-md-12">
 														<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 															<div class="col p-4 d-flex flex-column position-static">
@@ -271,10 +271,10 @@
 																</c:if>
 															
 																<!-- <a style="text-align: right;"><strong class="d-inline-block mb-2 text-primary">불량음식점</strong></a> -->
-																<h2 class="mb-0">${restaurant.restaurantName}&nbsp;<small style="color:gray;">${restaurant.returnMenuType}</small></h2><hr>
-																<div class="mb-1 text-muted"><strong>대표자명</strong> | ${restaurant.member.memberName}</div>
+																
+																<h2 class="mb-0"><a href="#">${restaurant.restaurantName}</a>&nbsp;<small style="color:gray;">${restaurant.returnMenuType}</small></h2>
+																<hr>
 																<div class="mb-1 text-muted"><strong>주소</strong> | ${restaurant.streetAddress}</div>
-																<div class="mb-1 text-muted"><strong>전화번호</strong> | ${restaurant.restaurantTel}</div>
 																<c:if test="${!empty restaurant.restaurantRegDate}">
 																	<a href="/restaurant/getRestaurant?restaurantNo=${restaurant.restaurantNo}" style="text-align: right;" class="stretched-link" id="restinfo">상세보기</a>
 																</c:if>
@@ -287,11 +287,11 @@
 															</div>
 														</div>
 													</div>
-													
+													</c:if>
 													</c:forEach>
 												</c:if>
 											</div>
-										</c:if>
+										
 										<hr class="my-4" />
 										<div align="center">
 											<c:if test="${sessionScope.member.memberRole != 'admin'}">

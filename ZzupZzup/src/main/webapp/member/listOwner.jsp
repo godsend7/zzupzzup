@@ -76,7 +76,8 @@
 									</c:if>
 								
 									<!-- <a style="text-align: right;"><strong class="d-inline-block mb-2 text-primary">불량음식점</strong></a> -->
-									<h2 class="mb-0"><small style="color:gray;">${member.memberId}</small></h2><hr>
+									<h2 class="mb-0"><small style="color:gray;">${member.memberId}</small>
+									<small style="color:gray; float:right">${member.regRestaurantCount}</small></h2><hr>
 									<div class="mb-1 text-muted"><strong>이름</strong> | ${member.memberName}</div>
 									<div class="mb-1 text-muted"><strong>가입일</strong> | ${member.regDate}</div>
 									<a href="/member/getMember?memberId=${member.memberId}" style="text-align: right;" class="stretched-link" id="getMember">상세정보</a>

@@ -153,7 +153,7 @@ public class MemberServiceTest {
 		Member member = new Member();
 		member.setMemberRole("user");
 		if(member.getMemberRole() != null) {
-			Map<String, Object> map = memberService.listMember(search, member);
+			Map<String, Object> map = memberService.listUser(search, member);
 			List<Member> list = (List<Member>)map.get("listMember");
 			
 			for (Member mem : list) {

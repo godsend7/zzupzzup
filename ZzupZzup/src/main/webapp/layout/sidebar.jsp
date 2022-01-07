@@ -77,6 +77,11 @@
 									${sessionScope.member.nickname}
 								</c:if>
 								<c:if test="${sessionScope.member.memberRole != 'user'}">
+									<c:if test="${sessionScope.member.memberRole == 'owner'}">
+										<span class="badge badge-pill badge-dark"
+											style="color:#fff;background-color:#bfbfbf;display:inline-block;padding: .25em .4em;padding-right: .6em;
+											padding-left: .6em;line-height: 1;">업주</span>&nbsp;
+									</c:if>
 									${sessionScope.member.memberName}
 								</c:if>
 								</h4>
