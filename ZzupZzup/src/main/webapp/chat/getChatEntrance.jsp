@@ -15,8 +15,8 @@
 <!--  ///////////////////////// CSS ////////////////////////// -->
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
-<script src="http://localhost:3000/socket.io/socket.io.js"></script>
-<!-- <script src="http://18.191.246.235:3000/socket.io/socket.io.js"></script> -->
+<!-- <script src="http://localhost:3000/socket.io/socket.io.js"></script> -->
+<script src="http://18.191.246.235:3000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 	$(function() {
 		console.log("getChatEntrance.jsp");
@@ -51,8 +51,8 @@
 		showCollections();
 		
 		//페이지 접속시 socket.io 접속
-		const socket = io.connect('http://localhost:3000', {
-		/* const socket = io.connect('http://18.191.246.235:3000', { */
+		/* const socket = io.connect('http://localhost:3000', { */
+		const socket = io.connect('http://18.191.246.235:3000', {
 			cors: { origin: '*' }
 		});
 		
