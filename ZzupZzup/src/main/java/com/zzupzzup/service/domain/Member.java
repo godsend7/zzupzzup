@@ -1,8 +1,6 @@
 package com.zzupzzup.service.domain;
 
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
 
 import com.zzupzzup.common.util.CommonUtil;
 
@@ -327,11 +325,11 @@ public class Member {
 
 	public boolean isRegBlacklist() {
 		
-		if(blacklistDate == null) {
-			regBlacklist = false;
-		} else {
-			regBlacklist = true;
-		}
+//		if(blacklistDate == null) {
+//			regBlacklist = false;
+//		} else {
+//			regBlacklist = true;
+//		}
 		
 		return regBlacklist;
 	}

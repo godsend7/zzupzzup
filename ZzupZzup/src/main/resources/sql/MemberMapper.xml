@@ -98,16 +98,16 @@
 		SELECT MEMBER_LIST.*
 		FROM (
 		
-			<if test='member.memberRole.equals("user")'>
+			<if test='member.memberRole == "user"'>
 				SELECT MEMBER_ROLE, NICKNAME, COUNT_REP.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
-			FROM zzupzzup.MEMBER
-		    RIGHT JOIN (
-					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
-					FROM zzupzzup.REPORT RIGHT JOIN zzupzzup.MEMBER
-					ON zzupzzup.REPORT.CHAT_MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
-					GROUP BY zzupzzup.MEMBER.MEMBER_ID
-				) COUNT_REP
-			ON COUNT_REP.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+				FROM zzupzzup.MEMBER
+			    RIGHT JOIN (
+						SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
+						FROM zzupzzup.REPORT RIGHT JOIN zzupzzup.MEMBER
+						ON zzupzzup.REPORT.CHAT_MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+						GROUP BY zzupzzup.MEMBER.MEMBER_ID
+					) COUNT_REP
+				ON COUNT_REP.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
 			</if>
 			
 		
