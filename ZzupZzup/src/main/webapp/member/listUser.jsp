@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-template</title>
+<title>ZZUPZZUP-listUser</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
@@ -18,20 +18,20 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
 	$(function() {
-		console.log("template.jsp");
+		console.log("listUser.jsp");
 		
 		window.onload = function(){
 			
 			function fncPageNavigation(currentPage) {
 				console.log(currentPage);
 				$("#currentPage").val(currentPage);
-				$("#member").attr("method", "POST").attr("action","/member/listMember").submit();
+				$("#listUser").attr("method", "POST").attr("action","/member/listUser").submit();
 			}
 			
 			// 상세조회 버튼 실행
 			$(function() {
 				//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-				$( "#restinfo" ).on("click" , function() {
+				$( "#getMember" ).on("click" , function() {
 					self.location = "/member/getMember?memberId=${member.memberId}";
 				});
 			});
@@ -56,14 +56,15 @@
 					<div class="container">
 					
 						<!-- 관우님 src start -->
-						<h2>등록된 음식점 목록</h2><hr>
-						<form id="member">
+						<h2>유저 목록</h2><hr>
+						<form id="listUser">
 						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 							<input type="hidden" id="currentPage" name="currentPage" value=""/>
 						</form>
 						
 						<c:set var="i" value="0" />
 						<c:forEach var="member" items="${list}">
+						<c:set var="i" value="${i+1}"/>
 						<%-- <c:if test="${!empty restaurant.restaurantRegDate || !empty restaurant.judgeDate}"> --%>
 							
 						<div class="col-md-12">
@@ -82,11 +83,11 @@
 									</c:if> --%>
 								
 									<!-- <a style="text-align: right;"><strong class="d-inline-block mb-2 text-primary">불량음식점</strong></a> -->
+									<h1 style="float:left">${i}</h1>
 									<h2 class="mb-0">${member.nickname}&nbsp;<small style="color:gray;">${member.memberId}</small></h2><hr>
 									<div class="mb-1 text-muted"><strong>이름</strong> | ${member.memberName}</div>
 									<div class="mb-1 text-muted"><strong>가입일</strong> | ${member.regDate}</div>
-									<div class="mb-1 text-muted"><strong>전화번호</strong> | ${member.memberPhone}</div>
-									<a href="/member/getMember?memberId=${member.memberId}" style="text-align: right;" class="stretched-link" id="restinfo">상세정보</a>
+									<a href="/member/getMember?memberId=${member.memberId}" style="text-align: right;" class="stretched-link" id="getMember">상세정보</a>
 									<%-- <c:if test="${!empty restaurant.judgeDate}">
 										<p style="text-align: right;">자세한 내용은 고객센터(
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-headset" viewBox="0 0 16 16">
@@ -102,8 +103,8 @@
 	
 						</div><br><br><br>
 						<!-- 관우님 src end -->
-
-						<!-- start:Table -->
+<!-- 
+						start:Table
 						<div class="row table-list mb-2">
 							<div class="col-md-12">
 								<div
@@ -162,7 +163,7 @@
 								</div>
 							</div>
 						</div>
-						<!-- end -->
+						end
 
 
 						<ul class="pagination">
@@ -177,7 +178,10 @@
 							<li><a href="#" class="button">Next</a></li>
 						</ul>
 
-					</div>
+					</div> -->
+					
+					<jsp:include page="../common/pageNavigator.jsp"/>
+					
 				</section>
 			</div>
 		</div>

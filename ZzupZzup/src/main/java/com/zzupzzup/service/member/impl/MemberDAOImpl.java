@@ -66,9 +66,17 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 
 	@Override
-	public List<Member> listMember(Map<String, Object> map) throws Exception {
+	public List<Member> listUser(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		List<Member> list = sqlSession.selectList("MemberMapper.listMember",map);
+		List<Member> list = sqlSession.selectList("MemberMapper.listUser",search);
+		
+		return list;
+	}
+	
+	@Override
+	public List<Member> listOwner(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		List<Member> list = sqlSession.selectList("MemberMapper.listOwner",search);
 		
 		return list;
 	}
@@ -118,6 +126,12 @@ public class MemberDAOImpl implements MemberDAO{
 		sqlSession.update("MemberMapper.updateMannerScore", map);
 		
 		return 1;
+	}
+	
+	@Override
+	public int getTotalCount(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("MemberMapper.getTotalCount", search);
 	}
 
 }
