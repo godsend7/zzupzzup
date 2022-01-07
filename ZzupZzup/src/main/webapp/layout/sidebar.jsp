@@ -13,7 +13,7 @@
 <!-- 실시간 시간 정보 DATA --> --%>
 
 <!-- 실시간 시간 정보 DATA2  -->
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     function showClock()
     {
         var currentDate = new Date();
@@ -34,10 +34,10 @@
         
         setTimeout(showClock,1000);
     }
-</script>
+</script> -->
 <!-- 실시간 시간 정보 DATA2  -->
 
-<body onload="showClock()">
+<!-- <body onload="showClock()"> -->
 <!-- S:Sidebar -->
 <div id="sidebar" class="inactive">
 	<div class="inner">
@@ -162,7 +162,7 @@
 				<li class="icon solid fa-phone">010-4444-4444</li>
 				<li class="icon solid fa-home">서울시 종로구 종로 69 서울YMCA</li>
 			</ul>
-			<div id="divClock" class="clock"></div>
+			<!-- <div id="divClock" class="clock"></div> -->
 		</section>
 
 		<!-- Footer -->
@@ -177,4 +177,4 @@
 <!-- S: Login Modal -->
 <jsp:include page="/member/loginView.jsp" />
 <!-- E: Login Modal -->
-</body>
+<!-- </body> -->
