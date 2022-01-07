@@ -308,24 +308,24 @@
 									<!-- Button trigger modal -->
 								
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->
-								
-									<p><input type="button" value="방문 확정" name= "reservationStatus" class="button small primary stretched-link" id="reservationStatus-modal" data-toggle="modal"
+									<c:if test="${member.memberRole == 'owner'}">
+									<p><input type="button" value="방문 확정" name= "reservationStatus" class="button small primary stretched-link " id="reservationStatus-modal" data-toggle="modal"
 									data-target="#getReservationModal"/></p>
 									
 									<p><input type="button" value="예약 거절" name= "reservationRejection" class="button small primary stretched-link" id="reservationRejection-modal" data-toggle="modal"
 									data-target="#rejectionModal"/></p>
 									
+									<p><input type="button" value="거절 사유" name= "cancelUse" class="button small primary stretched-link" id="cancelUse-modal" data-toggle="modal"
+									data-target="#cancelUseModal"/ style="visibility: hidden;"></p>
+									</c:if>
+									
+									<c:if test="${member.memberRole == 'user'}">
 									<p><input type="button" value="예약 취소" name= "reservationCancel" class="button small primary stretched-link" id="reservationCancel-modal" data-toggle="modal"
 									data-target="#reservationRejectionModal"/></p>
 									
 									<p><input type="button" value="결제 환불" name= "payRefund" class="button small primary stretched-link payRefund-modal" id="payRefund-modal" data-toggle="modal"
 									data-target="#payRefundModal"/></p>
-									
-								<!-- //////////////////////////////////////////////////////// -->	
-									<p><input type="button" value="거절 사유" name= "cancelUse" class="button small primary stretched-link" id="cancelUse-modal" data-toggle="modal"
-									data-target="#cancelUseModal"/ style="visibility: hidden;"></p>
-									
-									
+									</c:if>
 								
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->	
 									<!-- Button trigger modal --> 
