@@ -174,11 +174,7 @@ public class ReviewController {
 		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
 		model.addAttribute("resultPage", resultPage);
 		
-		if (restaurantNo != null) {
-			return "forward:/review/listReview.jsp";
-		} 
-		
-		return "forward:/review/listMyReview.jsp";
+		return "forward:/review/listReview.jsp";
 	}
 	
 	@RequestMapping("listMyLikeReview")
@@ -221,7 +217,7 @@ public class ReviewController {
 		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
 		model.addAttribute("resultPage", resultPage);
 		
-		return "forward:/review/listMyReview.jsp";
+		return "forward:/review/listReview.jsp";
 	}
 	
 	@RequestMapping(value="deleteReview", method=RequestMethod.GET)
