@@ -90,7 +90,7 @@
 	 	<if test="memberId != null">
 	 		AND r.member_id = #{memberId}
 	 	</if>
-	 	ORDER BY report_no LIMIT #{search.startRowNum}, #{search.pageSize}
+	 	ORDER BY report_reg_date LIMIT #{search.startRowNum}, #{search.pageSize}
 	 </select>
 	 
 	 <select id="getTotalCount" parameterType="int" resultType="int">

@@ -93,10 +93,10 @@
 										<p>${member.nickname}</p>
 										${reservation.chat.chatLeaderId}
 										</div>
-										
-										<div class="col-6 col-12-xsmall">
+									
+										<div class="col-md-8 planDate">
 										<label for="demo-name">방문 확정 전</label> 
-										<p>${reservation.planDate} ${reservation.planTime}</p>
+										<p>${reservation.planDate}  ${reservation.planTime}</p>
 										</div>
 										
 										<div class="container">

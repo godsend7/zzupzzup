@@ -13,8 +13,12 @@
 <script type="text/javascript">
 	var reviewNo = "";
 	
+	
+	
     $(document).on("click", ".reviewModal", function () { 
     	reviewNo = $(this).data('id'); 
+    	console.log(reviewNo);
+    	
     	$("input[name='reviewNo']").val(reviewNo);
     	
     	$.ajax({
