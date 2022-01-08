@@ -106,107 +106,102 @@
 						
 						<div class="row table-list mb-2">
 				 		 	<c:forEach var="review" items= "${list}">
-				 		 		<c:choose>
-				 		 			<c:when test="${member.memberRole != 'admin' && !review.reviewShowStatus}">
-				 		 			</c:when>
-				 		 			<c:otherwise>
-				 		 				<div class="col-md-12">
-											<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-												<div class="col p-4 d-flex flex-column position-static divBox">
-													<c:if test="${member.memberRole == 'admin'}">
-														<div class="review-report-info">
-															<c:if test="${!review.reviewShowStatus}">
-																<i class="fa fa-eye-slash" aria-hidden="true"></i>
-															</c:if>
-															<i class="fa fa-exclamation-triangle" aria-hidden="true">
-																${review.reportCount} 회
-															</i>
-														</div>
+		 		 				<div class="col-md-12">
+									<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+										<div class="col p-4 d-flex flex-column position-static divBox">
+											<c:if test="${member.memberRole == 'admin'}">
+												<div class="review-report-info">
+													<c:if test="${!review.reviewShowStatus}">
+														<i class="fa fa-eye-slash" aria-hidden="true"></i>
 													</c:if>
-													<div class="row listStarBox">
-														<label for="scopeAvg" class="label listLabel">평점</label>
-														<div class="star-in">
-															<fmt:parseNumber var="star" value="${review.avgScope}" integerOnly="true"/>
-															<c:set var="notStar" value="${5 - star}"/>
-															<c:forEach var="i" begin="1" end="${star}">
-																<span class="star-small on"></span>
-															</c:forEach>
-															
-															<c:forEach var="i" begin="1" end="${notStar}">
-																<span class="star-small"></span>
-															</c:forEach>
-														</div>
-														
-														<label for="scopeClean" class="label">청결해요</label>
-														<div class="star-in">
-															<fmt:parseNumber var="star" value="${review.scopeClean}" integerOnly="true"/>
-															<c:set var="notStar" value="${5 - star}"/>
-															<c:forEach var="i" begin="1" end="${star}">
-																<span class="star-small on"></span>
-															</c:forEach>
-															
-															<c:forEach var="i" begin="1" end="${notStar}">
-																<span class="star-small"></span>
-															</c:forEach>
-														</div>
-														
-														<label for="scopeTaste" class="label">맛있어요</label>
-														<div class="star-in">
-															<fmt:parseNumber var="star" value="${review.scopeTaste}" integerOnly="true"/>
-															<c:set var="notStar" value="${5 - star}"/>
-															<c:forEach var="i" begin="1" end="${star}">
-																<span class="star-small on"></span>
-															</c:forEach>
-															
-															<c:forEach var="i" begin="1" end="${notStar}">
-																<span class="star-small"></span>
-															</c:forEach>
-														</div>
-														
-														<label for="scopeKind" class="label">친절해요</label>
-														<div class="star-in">
-															<fmt:parseNumber var="star" value="${review.scopeKind}" integerOnly="true"/>
-															<c:set var="notStar" value="${5 - star}"/>
-															<c:forEach var="i" begin="1" end="${star}">
-																<span class="star-small on"></span>
-															</c:forEach>
-															
-															<c:forEach var="i" begin="1" end="${notStar}">
-																<span class="star-small"></span>
-															</c:forEach>
-														</div>
-													</div>
+													<i class="fa fa-exclamation-triangle" aria-hidden="true">
+														${review.reportCount} 회
+													</i>
+												</div>
+											</c:if>
+											<p>${review.reviewShowStatus}</p>
+											<div class="row listStarBox">
+												<label for="scopeAvg" class="label listLabel">평점</label>
+												<div class="star-in">
+													<fmt:parseNumber var="star" value="${review.avgScope}" integerOnly="true"/>
+													<c:set var="notStar" value="${5 - star}"/>
+													<c:forEach var="i" begin="1" end="${star}">
+														<span class="star-small on"></span>
+													</c:forEach>
 													
-													<h3 class="mb-0">
-														<span class="badge badge-pill badge-primary">
-															${review.member.memberRank}
-														</span>&nbsp; ${review.member.nickname}
-													</h3>
+													<c:forEach var="i" begin="1" end="${notStar}">
+														<span class="star-small"></span>
+													</c:forEach>
+												</div>
+												
+												<label for="scopeClean" class="label">청결해요</label>
+												<div class="star-in">
+													<fmt:parseNumber var="star" value="${review.scopeClean}" integerOnly="true"/>
+													<c:set var="notStar" value="${5 - star}"/>
+													<c:forEach var="i" begin="1" end="${star}">
+														<span class="star-small on"></span>
+													</c:forEach>
 													
-													<p class="card-text mb-auto">${review.reviewDetail}</p>
-													<div class="mb-1 text-muted">
-														<c:forEach var="hashtag" items="${review.hashTag}">
-															<span class='badge badge-pill badge-secondary'>${hashtag.hashTag}</span>
-														</c:forEach>
-													</div>
-													<br>
+													<c:forEach var="i" begin="1" end="${notStar}">
+														<span class="star-small"></span>
+													</c:forEach>
+												</div>
+												
+												<label for="scopeTaste" class="label">맛있어요</label>
+												<div class="star-in">
+													<fmt:parseNumber var="star" value="${review.scopeTaste}" integerOnly="true"/>
+													<c:set var="notStar" value="${5 - star}"/>
+													<c:forEach var="i" begin="1" end="${star}">
+														<span class="star-small on"></span>
+													</c:forEach>
 													
-													<div class="review-info-bottom">
-														<a href="#reviewModal" class="reviewModal" data-toggle="modal" data-id="${review.reviewNo}">상세보기</a>
-														<div class="review-info-bottom-right">
-															<div class="likeBox">
-																<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill reviewLike <c:forEach var="like" items="${listLike}">${(review.reviewNo == like.reviewNo && !empty member && member.memberId == like.memberId )? ' check' : ''}</c:forEach>" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>			
-																<span class="reviewCount">${review.likeCount}</span>
-																<input type="hidden" name="reviewNo" value="${review.reviewNo}">
-															</div>
-															<span>작성일&nbsp;&nbsp;${review.reviewRegDate}</span>													
-														</div>		
-													</div>										
+													<c:forEach var="i" begin="1" end="${notStar}">
+														<span class="star-small"></span>
+													</c:forEach>
+												</div>
+												
+												<label for="scopeKind" class="label">친절해요</label>
+												<div class="star-in">
+													<fmt:parseNumber var="star" value="${review.scopeKind}" integerOnly="true"/>
+													<c:set var="notStar" value="${5 - star}"/>
+													<c:forEach var="i" begin="1" end="${star}">
+														<span class="star-small on"></span>
+													</c:forEach>
+													
+													<c:forEach var="i" begin="1" end="${notStar}">
+														<span class="star-small"></span>
+													</c:forEach>
 												</div>
 											</div>
+											
+											<h3 class="mb-0">
+												<span class="badge badge-pill badge-primary">
+													${review.member.memberRank}
+												</span>&nbsp; ${review.member.nickname}
+											</h3>
+											
+											<p class="card-text mb-auto">${review.reviewDetail}</p>
+											<div class="mb-1 text-muted">
+												<c:forEach var="hashtag" items="${review.hashTag}">
+													<span class='badge badge-pill badge-secondary'>${hashtag.hashTag}</span>
+												</c:forEach>
+											</div>
+											<br>
+											
+											<div class="review-info-bottom">
+												<a href="#reviewModal" class="reviewModal" data-toggle="modal" data-id="${review.reviewNo}">상세보기</a>
+												<div class="review-info-bottom-right">
+													<div class="likeBox">
+														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill reviewLike <c:forEach var="like" items="${listLike}">${(review.reviewNo == like.reviewNo && !empty member && member.memberId == like.memberId )? ' check' : ''}</c:forEach>" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>			
+														<span class="reviewCount">${review.likeCount}</span>
+														<input type="hidden" name="reviewNo" value="${review.reviewNo}">
+													</div>
+													<span>작성일&nbsp;&nbsp;${review.reviewRegDate}</span>													
+												</div>		
+											</div>										
 										</div>
-				 		 			</c:otherwise>
-				 		 		</c:choose>
+									</div>
+								</div>
 							</c:forEach>
 							
 						</div>
