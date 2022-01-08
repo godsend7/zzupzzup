@@ -276,6 +276,7 @@ public class MemberController {
 		request.setAttribute("search", search);
 		request.setAttribute("totalCount", map.get("totalCount"));
 		request.setAttribute("resultPage", resultPage);
+		request.setAttribute("getMember", memberService.getMember(member));
 		
 		System.out.println("map.get ==> "+map.get("listMyActivityScore"));
 		

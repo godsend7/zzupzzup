@@ -223,7 +223,9 @@ public class MemberServiceImpl implements MemberService{
 	public Map<String, Object> listActivityScore(Search search, String memberId) throws Exception {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("listMyActivityScore", memberDao.listActivityScore(memberId));
+		map.put("search", search);
+		map.put("memberId", memberId);
+		map.put("listMyActivityScore", memberDao.listActivityScore(map));
 		map.put("totalCount", memberDao.getTotalCount(search));
 		return map;
 	}

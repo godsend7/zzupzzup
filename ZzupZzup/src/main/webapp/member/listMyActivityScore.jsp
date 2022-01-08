@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-template</title>
+<title>ZZUPZZUP-listMyActivityScore</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
@@ -17,9 +17,17 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
+
+	function fncPageNavigation(currentPage) {
+		console.log(currentPage);
+		$("#currentPage").val(currentPage);
+		$("#listMyActivityScore").attr("method", "GET").attr("action","/member/listMyActivityScore").submit();
+	}
+	
 	$(function() {
 		console.log("listMyActivityScore.jsp");
-	});
+		
+	})
 </script>
 </head>
 
@@ -43,6 +51,8 @@
 						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 							<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
 						</form>
+						<h4 class="mb-0" style="float:left;">활동점수&nbsp;<small style="color:gray;">${getMember.accumulAllScore}</small></h4>
+						<br/><br/>
 						
 						<c:set var="i" value="0" />
 						<c:forEach var="member" items="${listMyActivityScore}">
@@ -53,10 +63,10 @@
 							<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 								<div class="col p-4 d-flex flex-column position-static">
 									<div class="col-md-12">
-										<h2 class="mb-0">${member.nickname}&nbsp;<small style="color:gray;">${member.memberId}</small></h2><hr>
-										<div class="col-md-4 mb-1 text-muted"><strong>적립 내용</strong> | ${member.accumulContents}</div>
-										<div class="col-md-4 mb-1 text-muted"><strong>점수</strong> | ${member.accumulScore}</div>
-										<div class="col-md-4 mb-1 text-muted"><strong>적립일</strong> | ${member.accumulDate}</div>
+										<%-- <h2 class="mb-0">${member.memberId}&nbsp;<small style="color:gray;">${member.accumulAllScore}</small></h2><hr> --%>
+										<div class="col-md-12 mb-1 text-muted"><strong>적립 내용</strong> | ${member.accumulContents}</div>
+										<div class="col-md-12 mb-1 text-muted"><strong>점수</strong> | ${member.accumulScore}</div>
+										<div class="col-md-12 mb-1 text-muted"><strong>적립일</strong> | ${member.accumulDate}</div>
 									</div>
 								</div>
 							</div>
@@ -69,7 +79,6 @@
 						</div><br><br><br>
 						<!-- 관우님 src end -->
 					 <jsp:include page="../common/pageNavigator.jsp"/>
-						
 					</div>
 				</section>
 			</div>
