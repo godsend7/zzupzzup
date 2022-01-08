@@ -275,20 +275,8 @@ public class ReservationController {
 	   @RequestMapping(value="sendPhoneMessage", method=RequestMethod.POST)
 	   public void sendMessage(@RequestBody String phone, String text) throws Exception{
 	      
-	     // Random rand  = new Random();
 	        
-	      //  String numStr = "";
-	        
-	     //   for(int i=0; i<4; i++) {
-	           
-	      //      String num = Integer.toString(rand.nextInt(10));
-	            
-	      //      numStr += num;
-	      //  }     
-	        
-	       // session.setAttribute(phone, numStr);
-	        
-	        reservationService.sendMessage(phone, text);
+	     //   reservationService.sendMessage(phone, text);
 	   }
 
 }

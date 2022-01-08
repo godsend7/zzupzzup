@@ -27,9 +27,12 @@ import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
+import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
+import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.reservation.ReservationService;
+import com.zzupzzup.service.restaurant.RestaurantService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -143,5 +146,31 @@ public class ReservationRestController {
 		}
 		
 		///////////////////////////////환불 끝///////////////////////////////////////////////
+		//==================================================================================================
+		
+		   @RequestMapping(value="json/sendPhoneMessage", method=RequestMethod.POST)
+		   public void sendMessage(HttpServletRequest httpServletRequest, HttpSession session) throws Exception{
+		      
+			   System.out.println("/reservation/sendPhoneMessage : POST");
+			   Member fromMember = (Member) session.getAttribute("member");//보내는 사람
+			   Member toMember = new Member();
+			   Reservation reservation = new Reservation();
+			   String reservationNumber = "";
+			   
+			   System.out.println("reservation number::: "+httpServletRequest.getParameter("reservationNumber"));
+			   System.out.println("sendPhone::: "+httpServletRequest.getParameter("toMemberPhone"));
+			   System.out.println("nickname::: "+httpServletRequest.getParameter("toNickName"));
+			   System.out.println("nickname::: "+httpServletRequest.getParameter("reservationCancelDetail"));
+			   System.out.println("nickname::: "+httpServletRequest.getParameter("reservationCancelReason"));
+			   
+			   toMember.setMemberPhone(httpServletRequest.getParameter("toMemberPhone"));
+			   toMember.setNickname(httpServletRequest.getParameter("toNickName"));
+			   
+			   reservation.setReservationCancelDetail(httpServletRequest.getParameter("reservationCancelDetail"));
+			   reservation.setReservationCancelReason(Integer.parseInt(httpServletRequest.getParameter("reservationCancelReason")));
+		        System.out.println("nickname::: "+reservation.getReturnReservationCancelReason());
+		       reservationService.sendMessage(reservation, toMember,fromMember, reservationNumber);
+		   }
+
 	
 }
