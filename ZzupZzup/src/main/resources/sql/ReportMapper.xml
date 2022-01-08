@@ -12,8 +12,8 @@
 		<result property="memberId" 						column="member_id" 			jdbcType="VARCHAR" />
 		<result property="reportChat.chatNo" 				column="chat_no" 			jdbcType="INTEGER" />
 		<result property="reportChat.chatTitle"				column="chat_title" 		jdbcType="VARCHAR" />
-		<result property="reportMember.memberId" 			column="chat_member_id" 	jdbcType="VARCHAR" />
-		<result property="reportMember.nickname" 			column="nickname" 			jdbcType="VARCHAR" />
+		<result property="reportChatMember.memberId" 		column="chat_member_id" 	jdbcType="VARCHAR" />
+		<result property="reportChatMember.nickname" 		column="nickname" 			jdbcType="VARCHAR" />
 		<result property="reportReview.reviewNo" 			column="review_no" 			jdbcType="INTEGER" />
 		<result property="reportReview.member.nickname" 	column="nickname" 			jdbcType="VARCHAR" />
 		<result property="reportPost.postNo" 				column="post_no" 			jdbcType="INTEGER" />
@@ -37,7 +37,7 @@
 	 		</when>
 	 		<when test="reportCategory == 2">
 	 			(member_id, chat_member_id, report_type, report_detail, report_category) 
-	 			VALUES(#{memberId}, #{reportMember.memberId}, #{reportType}, #{reportDetail}, #{reportCategory});
+	 			VALUES(#{memberId}, #{reportChatMember.memberId}, #{reportType}, #{reportDetail}, #{reportCategory});
 	 		</when>
 	 		<when test="reportCategory == 3">
 	 			(member_id, review_no, report_type, report_detail, report_category) 

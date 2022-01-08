@@ -134,9 +134,9 @@
 			    								if (!item.reviewShowStatus) {
 				    								append_nod += '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
 												}
-			    								append_nod += '<i class="fa fa-exclamation-triangle" aria-hidden="true">';
-			    								append_nod += item.reportCount + ' 회'; 
-			    								append_nod += '</i> </div>'; 
+			    								append_nod += '<i class="fa fa-exclamation-triangle" aria-hidden="true"> ';
+			    								append_nod += item.reportCount + ' 회 '; 
+			    								append_nod += ' </i> </div>'; 
 			    							}
 			    							
 			    							append_nod += '<div class="row listStarBox">';
