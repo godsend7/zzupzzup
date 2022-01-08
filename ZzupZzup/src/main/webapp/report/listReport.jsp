@@ -10,85 +10,10 @@
 <title>ZZUPZZUP</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
-
+<link rel="stylesheet" href="/resources/css/report.css" />
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
-.divBox .report-info {
-	position: absolute;
-	top: 5px;
-	right: 10px;
-	font-size: 12px;
-}
 
-.report-info-bottom-right {
-	position: absolute;
-	bottom: 5px;
-	right: 10px;
-}
-
-.divBox .report-info-bottom a {
-	position: absolute;
-	bottom: 5px;
-}
-
-.divBox .report-info-bottom span {
-	margin-left: 10px;
-}
-
-h1 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  padding: 1em;
-  font-size: 2em;
-  letter-spacing: .3em;
-  color: #FFFFFF;
-  text-align: center;
-  border-top: 2px solid #E6EE9C;
-  border-bottom: 2px solid #E6EE9C;
-}
-
-.contextmenu {
-  display: none;
-  position: absolute;
-  width: 200px;
-  margin: 0;
-  padding: 0;
-  background: #FFFFFF;
-  border-radius: 5px;
-  list-style: none;
-  box-shadow:
-    0 15px 35px rgba(50,50,90,0.1),
-    0 5px 15px rgba(0,0,0,0.07);
-  overflow: hidden;
-  z-index: 999999;
-}
-
-.contextmenu li {
-  border-left: 3px solid transparent;
-  transition: ease .2s;
-}
-
-.contextmenu li a {
-  display: block;
-  padding: 10px;
-  color: #B0BEC5;
-  text-decoration: none;
-  transition: ease .2s;
-}
-
-.contextmenu li:hover {
-  background: #CE93D8;
-  border-left: 3px solid #9C27B0;
-}
-
-.contextmenu li:hover a {
-  color: #FFFFFF;
-}
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -131,8 +56,6 @@ h1 {
 			        case 3:
 			            fncUpdateReport($(this).find("input[name='reportNo']").val());
 			            break;
-			        default:
-			            alert('You have a strange Mouse!');
 			    }
 			});
 		}
@@ -156,14 +79,6 @@ h1 {
 </head>
 
 <body class="is-preload" oncontextmenu="return false">
-
-	<ul class="contextmenu">
-		<li><a href="#">Simple link</a></li>
-		<li><a href="#">Link to somewhere</a></li>
-		<li><a href="#">Another link</a></li>
-		<li><a href="#">Link to nowhere</a></li>
-		<li><a href="#">Random link</a></li>
-	</ul>
 
 	<!-- S:Wrapper -->
 	<div id="wrapper">
@@ -246,7 +161,24 @@ h1 {
 												<br>
 												
 												<div class="report-info-bottom">
-													<%-- <a href="#reviewModal" class="reviewModal" data-toggle="modal" data-id="${report.reportReview.reviewNo}">상세보기</a> --%>
+													<c:choose>
+														<c:when test="${param.reportCategory == 1}">
+															<a href="#">
+														</c:when>
+														<c:when test="${param.reportCategory == 2}">
+															<a href="/member/getMember?memberId=${report.reportChatMember.memberId}">
+														</c:when>
+														<c:when test="${param.reportCategory == 3}">
+															<a href="#reviewModal" class="reviewModal" data-toggle="modal" data-id="${report.reportReview.reviewNo}">
+														</c:when>
+														<c:when test="${param.reportCategory == 4}">
+															<a href="/community/getCommunity?postNo=${report.reportPost.postNo}">
+														</c:when>
+														<c:when test="${param.reportCategory == 5}">
+															<a href="/restaurant/getRestaurant?restaurantNo=${report.reportRestaurant.restaurantNo}">
+														</c:when>
+													</c:choose>
+													상세보기</a>
 													<div class="report-info-bottom-right">
 														<c:if test="${member.memberRole eq 'admin'}">
 															<span><strong>제보자 아이디 : </strong>${report.memberId}</span>

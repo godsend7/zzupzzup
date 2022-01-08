@@ -52,10 +52,10 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="listOwner">
+				<section id="listOwner-jsp">
 					<div class="container">
 					
-						<!-- 관우님 src start -->
+						<!-- 관우님 src 참고 start -->
 						<h2>업주 목록</h2><hr>
 						<form id="listOwner">
 						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
@@ -76,7 +76,8 @@
 									</c:if>
 								
 									<!-- <a style="text-align: right;"><strong class="d-inline-block mb-2 text-primary">불량음식점</strong></a> -->
-									<h2 class="mb-0"><small style="color:gray;">${member.memberId}</small></h2><hr>
+									<h2 class="mb-0"><small style="color:gray;">${member.memberId}</small>
+									<small style="color:gray; float:right">${member.regRestaurantCount}</small></h2><hr>
 									<div class="mb-1 text-muted"><strong>이름</strong> | ${member.memberName}</div>
 									<div class="mb-1 text-muted"><strong>가입일</strong> | ${member.regDate}</div>
 									<a href="/member/getMember?memberId=${member.memberId}" style="text-align: right;" class="stretched-link" id="getMember">상세정보</a>
@@ -86,7 +87,7 @@
 						</c:forEach>
 	
 						</div><br><br><br>
-						<!-- 관우님 src end -->
+						<!-- 관우님 src 참고 end -->
 						
 					<jsp:include page="../common/pageNavigator.jsp"/>
 					

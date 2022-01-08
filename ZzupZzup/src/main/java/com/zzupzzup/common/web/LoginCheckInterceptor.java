@@ -18,12 +18,12 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		
-		System.out.println("\n[ LoginCheckInterceptor start........]");
+		//System.out.println("\n[ LoginCheckInterceptor start........]");
 		
 		HttpSession session = request.getSession(true);
 		Member member = (Member)session.getAttribute("member");
 		
-		System.out.println("Logon Check :: " + member);
+		//System.out.println("Logon Check :: " + member);
 		
 		if(member == null)  {
 			
@@ -40,8 +40,8 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 			out.print("<script>alert('로그인이 필요합니다!'); location.href='/'; </script>");
 			out.flush();
 			out.close();
-			System.out.println("LoginCheck :: " + uri);
-			System.out.println("[ LoginCheckInterceptor end........]\n");
+			//System.out.println("LoginCheck :: " + uri);
+			//System.out.println("[ LoginCheckInterceptor end........]\n");
 			
 //			if(	uri.indexOf("listChat") != -1 || uri.indexOf("listCommunity") != -1 || uri.indexOf("listNotice") != -1 ){
 //				response.setContentType("text/html; charset=utf-8");
