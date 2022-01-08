@@ -158,7 +158,7 @@
 	</insert>
 	
 	<select id="listActivityScore" parameterType="string" resultMap="memberSelectMap">
-		SELECT ACCUMULATE_TYPE, ACCUMULATE_SCORE, ACCUMULATE_DATE
+		SELECT MEMBER.MEMBER_ID, ACCUMULATE_TYPE, ACCUMULATE_SCORE, ACCUMULATE_DATE
 		FROM zzupzzup.ACTIVITY_SCORE, zzupzzup.MEMBER
 		WHERE zzupzzup.ACTIVITY_SCORE.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID AND zzupzzup.MEMBER.MEMBER_ID = #{memberId}
 	</select>

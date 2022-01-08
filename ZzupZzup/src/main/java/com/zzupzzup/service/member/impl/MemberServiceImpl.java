@@ -220,10 +220,11 @@ public class MemberServiceImpl implements MemberService{
 	}
 	
 	@Override
-	public Map<String, Object> listActivityScore(String memberId) throws Exception {
+	public Map<String, Object> listActivityScore(Search search, String memberId) throws Exception {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("listMyActivityScore", memberDao.listActivityScore(memberId));
+		map.put("totalCount", memberDao.getTotalCount(search));
 		return map;
 	}
 

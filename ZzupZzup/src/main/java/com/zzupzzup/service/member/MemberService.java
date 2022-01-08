@@ -45,7 +45,7 @@ public interface MemberService {
 	
 	public int addActivityScore(String nickname, int accumulType, int accumulScore) throws Exception;
 	
-	public Map<String, Object> listActivityScore(String memberId) throws Exception;
+	public Map<String, Object> listActivityScore(Search search, String memberId) throws Exception;
 	
 	public int calculateActivityScore(String memberId) throws Exception;
 	

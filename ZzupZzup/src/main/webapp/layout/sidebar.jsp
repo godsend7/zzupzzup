@@ -101,7 +101,7 @@
 									<ul>
 										<li><a href="/member/getMember?memberId=${member.memberId}">내 정보 조회</a></li>
 										<c:if test="${sessionScope.member.memberRole == 'user'}">
-											<li><a href="#">내 활동 점수 적립 내역</a></li>
+											<li><a href="/member/listMyActivityScore?memberId=${member.memberId}">내 활동 점수 적립 내역</a></li>
 											<li><a href="/review/listReview">내가 작성한 리뷰 내역</a></li>
 											<li><a href="#">내가 작성한 게시판 내역</a></li>
 											<li><a href="/reservation/listReservation">나의 예약 및 결제 내역</a></li>

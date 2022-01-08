@@ -48,7 +48,7 @@ public class MemberServiceTest {
 	@Value("#{commonProperties['pageSize']?: 2}")
 	int pageSize;
 
-	@Test
+	//@Test
 	public void testAddMember() throws Exception {
 		
 		Member member = new Member();
@@ -248,11 +248,14 @@ public class MemberServiceTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void testListActivityScore() throws Exception {
 		
+		Search search = new Search();
+		search.setCurrentPage(1);
+		search.setPageSize(pageSize);
 		String memberId = "test@test.com";
-		memberService.listActivityScore(memberId).get("listMyActivityScore");
+		memberService.listActivityScore(search, memberId).get("listMyActivityScore");
 
 	}
 	
