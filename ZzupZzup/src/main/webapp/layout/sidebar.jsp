@@ -77,6 +77,11 @@
 									${sessionScope.member.nickname}
 								</c:if>
 								<c:if test="${sessionScope.member.memberRole != 'user'}">
+									<c:if test="${sessionScope.member.memberRole == 'owner'}">
+										<span class="badge badge-pill badge-dark"
+											style="color:#fff;background-color:#bfbfbf;display:inline-block;padding: .25em .4em;padding-right: .6em;
+											padding-left: .6em;line-height: 1;">업주</span>&nbsp;
+									</c:if>
 									${sessionScope.member.memberName}
 								</c:if>
 								</h4>
@@ -96,7 +101,7 @@
 									<ul>
 										<li><a href="/member/getMember?memberId=${member.memberId}">내 정보 조회</a></li>
 										<c:if test="${sessionScope.member.memberRole == 'user'}">
-											<li><a href="#">내 활동 점수 적립 내역</a></li>
+											<li><a href="/member/listMyActivityScore?memberId=${member.memberId}">내 활동 점수 적립 내역</a></li>
 											<li><a href="/review/listReview">내가 작성한 리뷰 내역</a></li>
 											<li><a href="#">내가 작성한 게시판 내역</a></li>
 											<li><a href="/reservation/listReservation">나의 예약 및 결제 내역</a></li>

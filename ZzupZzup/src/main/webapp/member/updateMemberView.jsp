@@ -466,40 +466,6 @@
 												</div>
 											</div>
 										</c:if>
-										<c:if test="${sessionScope.member.memberRole == 'owner'}">
-											<div class="form-row">
-												<div class="col-6">
-													<h4 align="left"><strong>등록된 음식점 목록</strong></h4>
-												</div>
-												<div class="col-6">
-													<a href="/restaurant/addRestaurant">
-														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16" id="addRestaurant-ownerPage" style="float:right;">
-														  <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-														</svg>
-													</a>
-												</div>
-												<!-- 등록된 음식점 수 띄우기 -->
-												<c:if test="${restaurant.member.memberId == member.memberId}">
-													<c:forEach var="restaurant" items="${list}">
-														<div class="col-12">
-															<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-																<div class="col p-4 d-flex flex-column position-static">
-																	<c:if test="${restaurant.reservationStatus = true}">
-																		<div style="text-align: right;"><span class="badge badge-info">예약 및 결제 가능</span></div>
-																	</c:if>
-																	<!-- <a style="text-align: right;"><strong class="d-inline-block mb-2 text-primary">불량음식점</strong></a> -->
-																	<h2 class="mb-0">${restaurant.restaurantName}&nbsp;<small style="color:gray;">${restaurant.returnMenuType}</small></h2><hr>
-																	<div class="mb-1 text-muted"><strong>대표자명</strong> | ${restaurant.member.memberName}</div>
-																	<div class="mb-1 text-muted"><strong>주소</strong> | ${restaurant.streetAddress}</div>
-																	<div class="mb-1 text-muted"><strong>전화번호</strong> | ${restaurant.restaurantTel}</div>
-																	<a href="/restaurant/getRestaurant?restaurantNo=${restaurant.restaurantNo}" style="text-align: right;" class="stretched-link" id="restinfo">상세보기</a>
-																</div>
-															</div>
-														</div>
-													</c:forEach>
-												</c:if>
-											</div>
-										</c:if>
 										<c:if test="${sessionScope.member.memberRole == 'admin'}">
 											<div class="form-row col-md-12">
 												<div class="col-md-6">

@@ -203,7 +203,7 @@ public class Member {
 	}
 
 	public String getAccumulContents() {
-		return accumulContents;
+		return CommonUtil.returnAccumulTypeToContents(accumulType);
 	}
 
 	public void setAccumulContents(String accumulContents) {
