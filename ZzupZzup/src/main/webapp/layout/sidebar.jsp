@@ -138,6 +138,7 @@
 										<li><a href="/review/listReview">전체 리뷰 내역</a></li>
 									</ul>
 								</li>
+								<li><a href="/report/listReport">신고/제보 관리</a></li>
 							</c:if>
 							<li><a href="/restaurant/addRestaurant?memberId=${member.memberId}">test-음식점등록</a></li>
 							<li><a href="/review/addReview?reservationNo=1">test-리뷰작성</a></li>

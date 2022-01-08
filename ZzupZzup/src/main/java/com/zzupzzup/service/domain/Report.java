@@ -12,7 +12,7 @@ public class Report {
 	private int reportCategory;
 	private String memberId;
 	private Chat reportChat;
-	private Member reportMember;
+	private Member reportChatMember;
 	private Review reportReview;
 	private Community reportPost;
 	private Restaurant reportRestaurant;
@@ -64,11 +64,11 @@ public class Report {
 	}
 
 	public Member getReportChatMember() {
-		return reportMember;
+		return reportChatMember;
 	}
 
-	public void setReportChatMember(Member reportMember) {
-		this.reportMember = reportMember;
+	public void setReportChatMember(Member reportChatMember) {
+		this.reportChatMember = reportChatMember;
 	}
 
 	public Review getReportReview() {
@@ -131,9 +131,9 @@ public class Report {
 		if (reportChat != null) {
 			toReportTitle = reportChat.getChatTitle();
 			return toReport = Integer.toString(reportChat.getChatNo());
-		} else if (reportMember != null) {
-			toReportTitle = reportMember.getNickname();
-			return toReport = reportMember.getMemberId();
+		} else if (reportChatMember != null) {
+			toReportTitle = reportChatMember.getNickname();
+			return toReport = reportChatMember.getMemberId();
 		} else if (reportReview != null) {
 			toReportTitle = reportReview.getMember().getNickname();
 			return toReport = Integer.toString(reportReview.getReviewNo());
@@ -155,9 +155,9 @@ public class Report {
 			reportChat.setChatNo(Integer.parseInt(toReport));
 			System.out.println(reportChat.getChatNo());
 		} else if (reportCategory == 2) {
-			reportMember = new Member();
-			reportMember.setMemberId(toReport);
-			System.out.println(reportMember.getMemberId());
+			reportChatMember = new Member();
+			reportChatMember.setMemberId(toReport);
+			System.out.println(reportChatMember.getMemberId());
 		} else if (reportCategory == 3) {
 			reportReview = new Review();
 			reportReview.setReviewNo(Integer.parseInt(toReport));
@@ -184,7 +184,7 @@ public class Report {
 	@Override
 	public String toString() {
 		return "Report [reportNo=" + reportNo + ", reportCategory=" + reportCategory + ", memberId=" + memberId
-				+ ", reportChat=" + reportChat + ", reportChatMember=" + reportMember + ", reportReview="
+				+ ", reportChat=" + reportChat + ", reportChatMember=" + reportChatMember + ", reportReview="
 				+ reportReview + ", reportPost=" + reportPost + ", reportRestaurant=" + reportRestaurant
 				+ ", reportRegDate=" + reportRegDate + ", reportType=" + reportType + ", reportDetail=" + reportDetail
 				+ ", reportCheck=" + reportCheck + ", toReport=" + toReport + "]";
