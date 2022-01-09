@@ -112,9 +112,9 @@ public class ChatController {
 		
 		// Business logic
 		Map<String, Object> map = chatService.listChat(search);
-		System.out.println("===================================");
-		System.out.println("listChat map : " + map);
-		System.out.println("===================================");
+		//System.out.println("===================================");
+		//System.out.println("listChat map : " + map);
+		//System.out.println("===================================");
 		
 		List<Chat> list = (List<Chat>)map.get("list");
 		//System.out.println("list : " + list);
@@ -349,6 +349,26 @@ public class ChatController {
 		return "redirect:/chat/listChat";
 	}
 	
+	@RequestMapping(value="getChatRecord", method=RequestMethod.GET)
+	public String getChatRecord( HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		
+		System.out.println("/chat/getChatEntrance : GET");
+		
+		Integer chatNo = Integer.parseInt(request.getParameter("chatNo"));
+		System.out.println("getChatRecord chatNo : " + chatNo);
+		
+		//Business Logic
+		Chat chat = chatService.getChat(chatNo);
+		System.out.println("getChatEntrance chat : " + chat);
+		
+		Member member = (Member)session.getAttribute("member");
+		System.out.println("getChatEntrance member : " + member);
+		
+		request.setAttribute("chat", chat);
+		request.setAttribute("member", member);
+		
+		return "forward:/chat/getChatRecord.jsp";
+	}
 	
 	
 	
