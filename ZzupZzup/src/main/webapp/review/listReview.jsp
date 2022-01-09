@@ -36,11 +36,11 @@
 		}
 	}
 	
-	
-	
+	//좋아요 기능 구현 function
 	$(function() {
-		
+		//하트 모양을 클릭 시 이벤트 발생
 		$(".reviewLike").on("click", function() {
+			//로그인 및 유저 확인
 			if (${member.memberId == null}) {
 				alert("로그인이 필요한 서비스입니다.");
 				return;
@@ -50,20 +50,26 @@
 				return;
 			}
 			
+			//클릭 한 객체의 class에 check가 있다면 하트 누른 상태이므로 삭제 이벤트 발생
 			if ($(this).hasClass("check") === true) {
+				//해당 하트를 감싸고 있는 div를 찾은 후 span(좋아요 수)에 등록된 text 찾아 저장
 				var likeCount = $(this).closest("div").find("span").text();
 				
+				//삭제 ajax 실행
 				$.ajax({
 					url : "/review/json/deleteLike/"+$(this).closest("div").find("input[name='reviewNo']").val(),
 					method : "GET",
-					context : this,
+					context : this, //ajax에서 $(this)를 사용하기 위해서 필요
 					success : function(data, status) {
 						
+						//json/deleteLike에서 return받은 getReview의 data안에 좋아요 수 받아와 text 변경
 						$(this).closest("div").find("span").text(data.likeCount);
+						//클릭 한 객체의 class를 reviewLike로 변경 (하트 check 여부를 판단)
 						$(this).attr('class','reviewLike');
 					}
 				});	
-			} else {
+			} else { //클릭 한 객체의 class에 check가 없다면 하트를 누르지 않은 상태이므로 등록 이벤트 발생
+ 				
 				var likeCount = $(this).closest("div").find("span").text();
 				
 				$.ajax({
@@ -207,6 +213,7 @@
 												<a href="#reviewModal" class="reviewModal" data-toggle="modal" data-id="${review.reviewNo}">상세보기</a>
 												<div class="review-info-bottom-right">
 													<div class="likeBox">
+														<!-- listReview 조회하면서 likeList(좋아요 목록)를 가져와 내가 작성한 리뷰인지 check -->
 														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill reviewLike <c:forEach var="like" items="${listLike}">${(review.reviewNo == like.reviewNo && !empty member && member.memberId == like.memberId )? ' check' : ''}</c:forEach>" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>			
 														<span class="reviewCount">${review.likeCount}</span>
 														<input type="hidden" name="reviewNo" value="${review.reviewNo}">

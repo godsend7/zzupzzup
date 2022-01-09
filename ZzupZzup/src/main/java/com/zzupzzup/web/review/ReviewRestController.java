@@ -122,10 +122,12 @@ public class ReviewRestController {
 		
 		System.out.println("/review/json/deleteLike : GET");
 		
+		//session에 저장된 member 정보 가져오기
 		Member member = (Member) session.getAttribute("member");
 		
 		System.out.println(member);
 		
+		//로그인 되었다면
 		if (member != null) {
 			reviewService.deleteLike(member.getMemberId(), reviewNo);
 		}
