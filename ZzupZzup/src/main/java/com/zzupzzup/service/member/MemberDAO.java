@@ -28,7 +28,7 @@ public interface MemberDAO {
 	
 	public int addActivityScore(String memberId, int accumulType, int accumulScore) throws Exception;
 	
-	public List<Member> listActivityScore(String memberId) throws Exception;
+	public List<Member> listActivityScore(Map<String, Object> map) throws Exception;
 	
 	public int updateActivityAllScore(String memberId) throws Exception;
 	

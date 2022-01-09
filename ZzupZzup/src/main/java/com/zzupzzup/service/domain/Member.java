@@ -41,7 +41,10 @@ public class Member {
 	private int regRestaurantCount;				//업주의 경우에 상세조회에서 표시될 음식점 수
 	private boolean regBlacklist;				//블랙리스트 등록 여부 확인
 	private int accumulType;					//활동점수 적립 유형
-	private boolean loginCheck;
+	private boolean loginCheck;					//로그인 여부 체크(인데 안 써서 지워질 예정)
+	//kakao login으로 추가된 field
+	private String accessToken;					//kakao login 시 부여되는 토큰 값
+	private String clientId;					//kakao login 시 부여되는 유저 고유 아이디
 
 	//*Constructor
 	public Member() {
@@ -362,12 +365,20 @@ public class Member {
 		this.loginCheck = loginCheck;
 	}
 	
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "Member [ memberId : "+memberId+", password : "+password+", nickname : "+nickname+", memberRole : "+memberRole+", memberName : "+memberName+", memberPhone : "+memberPhone+"("+memberPhone1+", "+memberPhone2+", "+memberPhone3+"), ageRange : "+ageRange+", gender : "+gender+", age : "+age+", profileImage : "+profileImage+", statusMessage : "+statusMessage+", pushNickname : "+pushNickname
 				+", deleteReason : "+deleteReason+", accumulDate : "+accumulDate+", accumulContents : "+accumulContents+", accumulScore : "+accumulScore+", mannerScore : "+mannerScore+", memberRank : "+memberRank+", accumulAllScore : "+accumulAllScore+", mannerAllScore : "+mannerAllScore+", regDate : "+regDate+", eliminated : "+eliminated+", deleteDate : "+deleteDate
-				+", blacklistDate : "+blacklistDate+", reportCount : "+reportCount+", certificatedNum : "+certificatedNum+", loginType : "+loginType+", deleteType : "+deleteType+", regRestaurantCount : "+regRestaurantCount+", regBlacklist : "+regBlacklist+", accumulType : "+accumulType+" ]";
+				+", blacklistDate : "+blacklistDate+", reportCount : "+reportCount+", certificatedNum : "+certificatedNum+", loginType : "+loginType+", deleteType : "+deleteType+", regRestaurantCount : "+regRestaurantCount+", regBlacklist : "+regBlacklist+", accumulType : "+accumulType+", accessToken : "+accessToken+" ]";
 	}
 	
 }
