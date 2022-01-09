@@ -188,10 +188,116 @@
 			});
 		});
 		
+		//============= "평가하기" Event 처리 ============
+		$("a.button:contains(평가하기)").on("click", function(e) {
+			e.preventDefault();
+			let url = $(this).attr("href");
+			$.ajax({
+				url : url,
+				method : "GET",
+				dataType : "json",
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+				success : function(JSONData, status) {
+					console.log("평가하기 가져온 데이터 :"+ JSONData);
+					let dom ='<form id="addRating"><input type="hidden" name="ratingFromId" value="${member.memberId}"/><input type="hidden" name="chatNo" value="'+JSONData.list[0].chatNo+'"/>';
+					let i = 0;
+					$.each(JSONData.list, function(index, item){
+						console.log(item);
+						if("${member.memberId}" != item.member.memberId){
+							dom += '<dl>'
+								+'<dt>'+item.member.nickname+'<input type="hidden" name="ratingToId" value="'+item.member.memberId+'"/></dt>'
+								+'<dd class="d-flex flex-column">'
+								+'<input type="radio" id="bad'+i+'" name="ratingType['+i+']" value=1 checked>'
+								+'<label for="bad'+i+'">별로에요</label>'
+								+'<input type="radio" id="good'+i+'" name="ratingType['+i+']" value=2>'
+								+'<label for="good'+i+'">좋아요</label>'
+								+'<input type="radio" id="best'+i+'" name="ratingType['+i+']" value=3>'
+								+'<label for="best'+i+'">최고에요</label>'
+								+'</dd>'
+								+'</dl>';
+							i++;
+						}
+						//console.log(dom);
+					});
+					dom +='</form>';
+					$("#chatRatingModal").find(".modal-body").html(dom);
+				},
+				error : function(request, status, error) {
+					alert("code:" + request.status + "\n" + "message:"
+							+ request.responseText + "\n" + "error:"
+							+ error);
+				}
+			});
+		});
+		
+		//============= "평가하기" Event 처리 ============
+		$("button:contains(평가)").on("click", function(e) {
+			console.log("제출 클릭");
+			
+			let ratingFlag = false;
+			
+			$('#ratingGoModal').modal('show');
+			
+		});
+		
+		//============= "평가하기 예" Event 처리 ============
+		$("#ratingGo").on("click", function(e) {
+		
+			let url = "/rating/json/addRating";
+			let ratingArr = [];
+			let ratingDataObj = {};
+			
+			for( let i=0; i<$("#addRating dl").length; i++ ){
+				let ratingToId = $("#addRating dl").eq(i).find("input[name=ratingToId]").val();
+				let ratingType = $("input[name='ratingType["+i+"]']:checked").val();
+				
+				ratingDataObj.chatNo = $("input[name=chatNo]").val();
+				ratingDataObj.ratingFromId = $("input[name=ratingFromId]").val();
+				ratingDataObj.ratingToId = ratingToId;
+				ratingDataObj.ratingType = ratingType;
+				
+				ratingArr.push(ratingDataObj);
+				
+				ratingDataObj = {};
+			}
+			
+			//console.log(ratingArr);
+			let jsonData = JSON.stringify(ratingArr);
+			//console.log({ratingArrObj : jsonData});
+			
+			$.ajax({
+				url : url,
+				type : "POST",
+				traditional: true,
+				data: JSON.stringify ({
+					ratingArrObj : jsonData
+				}),
+				contentType: "application/json",
+				dataType : "JSON",
+				success : function(JSONData, status) {
+					console.log("success");
+					$("#ratingGoModal").modal('hide');
+					$("#chatRatingModal").modal('hide');
+					$("#chatRatingModal").find(".modal-body").html("");
+					$("#ratingEndModal").modal('show');
+					$("a.button:contains(평가하기)").remove();
+				},
+				error : function(request, status, error) {
+					alert("code:" + request.status + "\n" + "message:"
+							+ request.responseText + "\n" + "error:"
+							+ error);
+				}
+			});
+		});
+		
+		
 		//============= "대화기록보기" Event 처리 ============
 		$("body").on("click", "input[value='대화기록보기']", function(){
-			console.log("대화기록보기");
-			
+			let chatNo = $(this).attr("data-target");
+			location.href="/chat/getChatRecord?chatNo="+chatNo;
 		});
 			
 		//============= "수정하기" Event 처리 ============
@@ -410,9 +516,7 @@
 						<div class="container">
 							<div class="row thumb-list">
 
-								<c:set var="i" value="0" />
 								<c:forEach var="chat" items="${list}">
-									<c:set var="i" value="${ i+1 }" />
 									<div class="col-md-6">
 										<div class="card mb-4 shadow-sm chat-state${chat.chatState}">
 											<div class="card-head d-flex">
@@ -465,13 +569,11 @@
 															<p class="card-text text-right">${chat.chatRestaurant.streetAddress}</p>
 														</div>
 														<div class="btn-group">
-															<c:set var="i" value="0" />
-															<c:forEach var="chatMember" items="${chat.chatMember}">
-															<c:set var="i" value="${ i+1 }" />
-																<c:if test="${member.memberId == chatMember.member.memberId && chat.chatState == 4 && chatMember.inOutCheck == true && chatMember.readyCheck == true}">
-																<a href="/rating/addRating?chatNo=${chat.chatNo}" class="button small primary">평가하기</a> 
-																</c:if>
-															</c:forEach>
+															<%-- <c:forEach var="chatMember" items="${chat.chatMember}">
+																<c:if test="${member.memberId == chatMember.member.memberId && chat.chatState == 4 && chatMember.inOutCheck == true && chatMember.readyCheck == true}"> --%>
+																<a href="/chat/json/listReadyCheckMember/chatNo=${chat.chatNo}" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a> 
+																<%-- </c:if>
+															</c:forEach> --%>
 															<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal">참여하기</a>
 														</div>
 													</div>
@@ -560,6 +662,67 @@
 										</div>
 										<div class="modal-body">
 											참여가능 연령대에 맞지 않아 입장할 수 없습니다.
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="button primary small fit" data-dismiss="modal">확인</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- 쩝쩝친구 평가 모달-->
+							<div class="modal fade" id="chatRatingModal" tabindex="-1" aria-labelledby="chatRatingModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-sm modal-dialog-scrollable">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="getChatModalLabel">쩝쩝친구 평가하기</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+										</div>
+										<div class="modal-body">
+											
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="button small" data-dismiss="modal">닫기</button>
+											<button type="button" class="button primary small">평가</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- 평가진행 모달 -->
+							<div class="modal fade" id="ratingGoModal" tabindex="-1" aria-labelledby="ratingGoModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-sm">
+									<div class="modal-content">
+										<div class="modal-header justify-content-end">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+										</div>
+										<div class="modal-body">
+											평가를 진행하시겠습니까?</br/>
+											평가가 이루어지면 수정할 수 없습니다.
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="button small" data-dismiss="modal">아니오</button>
+											<button type="button" id="ratingGo" class="button primary small">확인</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- 평가완료 모달 -->
+							<div class="modal fade" id="ratingEndModal" tabindex="-1" aria-labelledby="ratingEndModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-sm">
+									<div class="modal-content">
+										<div class="modal-header justify-content-end">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+										</div>
+										<div class="modal-body">
+											평가가 완료되었습니다.
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="button primary small fit" data-dismiss="modal">확인</button>
