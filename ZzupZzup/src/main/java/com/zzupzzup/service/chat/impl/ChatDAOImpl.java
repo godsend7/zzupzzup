@@ -180,15 +180,5 @@ public class ChatDAOImpl implements ChatDAO {
 		return list;
 	}
 
-	@Override
-	public List<Restaurant> listRestaurantName(Map<String, Object> map) {
-		System.out.println("chatDaoImpl listRestaurantName map : " + map);
-		
-		List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listRestaurantName", map);
-		
-		return list;
-	}
-
-	
 
 }
