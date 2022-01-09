@@ -197,6 +197,6 @@
 <!--  E:Sidebar -->
 
 <!-- S: Login Modal -->
-<jsp:include page="/member/loginView.jsp" />
+<jsp:include page="/member/modal-archive.jsp" />
 <!-- E: Login Modal -->
 <!-- </body> -->

@@ -33,6 +33,8 @@ public class Reservation {
 	private int orderTotal; //주문메뉴 총수량
 	private List<Order> order;
 	
+	private String reviewNo; //리뷰 작성 여부 확인
+	
 	//Constructor
 	public Reservation() {
 	}
@@ -234,6 +236,14 @@ public class Reservation {
 		return CommonUtil.reservationCancelReason(reservationCancelReason);
 	}
 
+	public String getReviewNo() {
+		return reviewNo;
+	}
+
+	public void setReviewNo(String reviewNo) {
+		this.reviewNo = reviewNo;
+	}
+
 	@Override
 	public String toString() {
 		return "Reservation [chat=" + chat + ", restaurant=" + restaurant + ", member=" + member + ", reservationNo="
@@ -244,8 +254,6 @@ public class Reservation {
 				+ ", reservationCancelReason=" + reservationCancelReason + ", reservationCancelDetail="
 				+ reservationCancelDetail + ", refundStatus=" + refundStatus + ", reservationCancelDate="
 				+ reservationCancelDate + ", totalPrice=" + totalPrice + ", orderCount=" + orderCount + ", orderTotal="
-				+ orderTotal + ", order=" + order + "]";
+				+ orderTotal + ", order=" + order + ", reviewNo=" + reviewNo + "]";
 	}
-	
-	
 }

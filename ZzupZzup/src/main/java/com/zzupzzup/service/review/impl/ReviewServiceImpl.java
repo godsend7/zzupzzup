@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.HashTag;
 import com.zzupzzup.service.domain.Mark;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.review.ReviewDAO;
 import com.zzupzzup.service.review.ReviewService;
@@ -51,12 +52,12 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public Map<String, Object> listReview(Search search, String restaurantNo, String memberId) throws Exception {
+	public Map<String, Object> listReview(Search search, String restaurantNo, Member member) throws Exception {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
 		map.put("restaurantNo", restaurantNo);
-		map.put("memberId", memberId);
+		map.put("member", member);
 		
 		System.out.println("listReview의 search 확인 :: " + search);
 		System.out.println("listReview의 search 확인2 :: " + search.getStartRowNum());
@@ -73,14 +74,14 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public Map<String, Object> listMyLikeReview(Search search, String memberId) throws Exception {
+	public Map<String, Object> listMyLikeReview(Search search, Member member) throws Exception {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
-		map.put("memberId", memberId);
+		map.put("member", member);
 		
 		map.put("list", reviewDao.listMyLikeReview(map));
-		map.put("totalCount", reviewDao.getTotalCount(map));
+		map.put("totalCount", reviewDao.getLikeTotalCount(member.getMemberId()));
 		
 		return map;
 	}

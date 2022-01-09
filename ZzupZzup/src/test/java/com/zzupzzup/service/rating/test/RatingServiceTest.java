@@ -16,6 +16,7 @@ import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.chat.ChatService;
 import com.zzupzzup.service.domain.Chat;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Rating;
 import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.rating.RatingService;
@@ -55,6 +56,12 @@ public class RatingServiceTest {
 		Rating rating = new Rating();
 		Chat chat  = new Chat();
 		ChatMember chatMember = new ChatMember();
+		
+		Member toMember = new Member();
+		Member fromMember = new Member();
+		
+		toMember.setMemberId("user01@zzupzzup.com");
+		fromMember.setMemberId("hihi@a.com");
 		/*
 		Search search = new Search();
 		search.setCurrentPage(1);
@@ -81,14 +88,14 @@ public class RatingServiceTest {
 		*/
 		
 		rating.setChatNo(10);
-		rating.setRatingFromId("hihi@a.com");
-		rating.setRatingToId("user01@zzupzzup.com");
+		rating.setRatingFromId(fromMember);
+		rating.setRatingToId(toMember);
 		rating.setRatingScore(1);
 		rating.setRatingType(1);
 		
 		ratingService.addRating(rating);
 		
-		memberService.calculateMannerScore(rating.getRatingToId(), rating.getRatingScore());
+		memberService.calculateMannerScore(rating.getRatingToId().getMemberId(), rating.getRatingScore());
 	}
 	
 	//@Test

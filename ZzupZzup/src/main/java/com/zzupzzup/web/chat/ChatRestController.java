@@ -104,7 +104,7 @@ public class ChatRestController {
 		search.setSearchKeyword(decText);
 		
 		//Business Logic
-		Map<String, Object> map = chatService.listRestaurantName(search);
+		Map<String, Object> map = restaurantService.listRestaurantName(search);
 		
 		Restaurant restaurant = new Restaurant();
 		
@@ -198,12 +198,12 @@ public class ChatRestController {
 		ChatMember chatMember = new ChatMember();
 		chatMember.setChatNo(chatNo);
 		
-		Map<String, Object> map = chatService.listChatMember(chatNo);
+		Map<String, Object> map = chatService.listReadyCheckMember(chatNo);
 		
 		return map;
 	}
 	
-
+	
 	
 	
 }

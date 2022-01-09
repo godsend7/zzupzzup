@@ -31,7 +31,7 @@
 		
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			$( "#getMember" ).on("click" , function() {
-				self.location = "/member/getMember?memberId="+${member.memberId};
+				self.location = "/member/getMember?memberId=${member.memberId}";
 			});
 	
 	});

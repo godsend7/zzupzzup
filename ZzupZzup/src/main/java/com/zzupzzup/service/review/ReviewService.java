@@ -6,6 +6,7 @@ import java.util.Map;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.HashTag;
 import com.zzupzzup.service.domain.Mark;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Review;
 
 public interface ReviewService {
@@ -18,9 +19,9 @@ public interface ReviewService {
 	
 	public Review getReview(int reviewNo) throws Exception;
 	
-	public Map<String, Object> listReview(Search search, String restaurantNo, String memberId) throws Exception; //restaurantNo가 null이라면 관리자가 전체 리뷰 확인
+	public Map<String, Object> listReview(Search search, String restaurantNo, Member member) throws Exception; //restaurantNo가 null이라면 관리자가 전체 리뷰 확인
 	
-	public Map<String, Object> listMyLikeReview(Search search, String memberId) throws Exception;
+	public Map<String, Object> listMyLikeReview(Search search, Member member) throws Exception;
 	
 	public List<HashTag> listHashTag(String search) throws Exception;
 	

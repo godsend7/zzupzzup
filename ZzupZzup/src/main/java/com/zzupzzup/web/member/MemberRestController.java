@@ -71,7 +71,26 @@ public class MemberRestController {
 		
 	}
 	
-	public void kakaoLogin() {
+	@RequestMapping(value="json/kakaoLogin", method=RequestMethod.POST)
+	public Member kakaoLogin(@RequestBody Member member, HttpSession session) throws Exception {
+		
+		System.out.println("/member/json/kakaoLogin : POST");
+		System.out.println("::"+member.getMemberId());
+		
+		Member mb = memberService.getMember(member);
+		
+
+		if(mb != null){
+			session.setAttribute("member", mb);
+			System.out.println(mb.getMemberId()+" 님 카카오 로그인");
+			
+			return mb;
+			
+		} else {
+			System.out.println("회원 등록이 필요한 아이디");
+			//session.setAttribute("kakaoMember", mb)
+			return null;
+		}
 		
 	}
 	

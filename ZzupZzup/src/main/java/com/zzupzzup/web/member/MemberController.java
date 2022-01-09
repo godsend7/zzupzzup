@@ -66,9 +66,14 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="addMember/{memberRole}/{loginType}", method=RequestMethod.GET)
-	public String addMember(@PathVariable String memberRole, @PathVariable String loginType) throws Exception {
+	public String addMember(@PathVariable String memberRole, @PathVariable String loginType, Member member, HttpSession session) throws Exception {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : GET");
+		
+		if(member.getMemberId() != null && member.getGender() != null && member.getAgeRange() != null) {
+			System.out.println("[SNS Login] memberId : "+member.getMemberId()+", gender : "+member.getGender()+", ageRange : "+member.getAgeRange());
+			session.setAttribute("snsMember", member);
+		}
 		
 		return "forward:/member/addMemberView.jsp?memberRole="+memberRole+"&loginType="+loginType;
 //		return "redirect:/member/addMember/"+memberRole+"/"+loginType;
@@ -276,6 +281,7 @@ public class MemberController {
 		request.setAttribute("search", search);
 		request.setAttribute("totalCount", map.get("totalCount"));
 		request.setAttribute("resultPage", resultPage);
+		request.setAttribute("getMember", memberService.getMember(member));
 		
 		System.out.println("map.get ==> "+map.get("listMyActivityScore"));
 		

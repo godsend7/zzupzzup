@@ -122,10 +122,12 @@ public class ReviewRestController {
 		
 		System.out.println("/review/json/deleteLike : GET");
 		
+		//session에 저장된 member 정보 가져오기
 		Member member = (Member) session.getAttribute("member");
 		
 		System.out.println(member);
 		
+		//로그인 되었다면
 		if (member != null) {
 			reviewService.deleteLike(member.getMemberId(), reviewNo);
 		}
@@ -144,16 +146,13 @@ public class ReviewRestController {
 		
 		List<Mark> listLike = null;
 		
-		String memberId = null;
-		
 		if (member != null && member.getMemberRole().equals("user")) {
-			memberId = member.getMemberId();
-			listLike = reviewService.listLike(memberId);
+			listLike = reviewService.listLike(member.getMemberId());
 		}
 		
 		
 		System.out.println(restaurantNo);
-		//System.out.println(member);
+		System.out.println(member);
 		
 		Search search = new Search();
 		search.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
@@ -163,7 +162,7 @@ public class ReviewRestController {
 		
 		map.put("search", search);	
 		
-		Map<String, Object> resultMap = reviewService.listReview(search, restaurantNo, null);
+		Map<String, Object> resultMap = reviewService.listReview(search, restaurantNo, member);
 		
 		List<Review> review = (List<Review>) resultMap.get("list");
 		

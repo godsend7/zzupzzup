@@ -127,48 +127,54 @@
 	
 	
 	<select id="listReview" parameterType="map" resultMap="reviewSelectMap">
-		SELECT *
-		FROM (SELECT r.member_id, r.reservation_no, r.restaurant_no, r.review_detail, r.review_reg_date, 
-					r.review_show_status, r.scope_taste, r.scope_kind, r.scope_clean, r.avg_scope, COUNT_REP.*
-			  FROM review AS r 
-			  RIGHT OUTER JOIN (SELECT rev.REVIEW_NO, COUNT(rep.REVIEW_NO) AS report_count
-								  FROM REPORT as rep RIGHT OUTER JOIN REVIEW as rev
-								    ON rep.REVIEW_NO = rev.REVIEW_NO 
-								 GROUP BY rev.REVIEW_NO
-							   ) AS COUNT_REP ON COUNT_REP.REVIEW_NO = r.REVIEW_NO
-			 <choose>
+        SELECT *
+		FROM (SELECT r.review_no, r.member_id, r.reservation_no, r.restaurant_no, r.review_detail, r.review_reg_date, 
+					r.review_show_status, r.scope_taste, r.scope_kind, r.scope_clean, r.avg_scope, rep.report_count
+			  FROM review AS r LEFT Outer join(select review_no, COUNT(review_no) AS report_count
+												 from report
+                                                 GROUP BY review_no) as rep on (rep.review_no = r.review_no)
+			  <choose>
 		  	  	<when test="restaurantNo != null">
 		  			WHERE r.restaurant_no = #{restaurantNo}
+		  			<choose>
+			 			<when test='member != null and member.memberRole == "admin"'>
+			 			</when>
+			 			<otherwise>
+			 				AND review_show_status = 1
+			 			</otherwise>
+		 			</choose>
 		  		</when>
 		  		<otherwise>
-		  			<if test="memberId != null">
-		  				WHERE r.member_id = #{memberId}
+		  			<if test='member != null and member.memberRole != "admin"'>
+		  				WHERE r.member_id = #{member.memberId}
 		  			</if>
 		  		</otherwise>
-		  	  </choose>   
-			  ORDER BY r.review_no limit #{search.startRowNum}, #{search.pageSize}) AS r
+		  	  </choose>
+			  ORDER BY r.review_no DESC limit #{search.startRowNum}, #{search.pageSize})AS re
 		LEFT OUTER JOIN (SELECT image, review_no
-						 FROM image) AS i ON (r.review_no = i.review_no)
+						 FROM image) AS i ON (re.review_no = i.review_no)
 		LEFT OUTER JOIN (SELECT hl.HASHTAG_no, h.hashtag, review_no 
 						 FROM HASHTAG_LOG as hl, HASHTAG as h
-           				 WHERE hl.hashtag_no = h.hashtag_no) AS hh ON(r.review_no = hh.review_no)
+           				 WHERE hl.hashtag_no = h.hashtag_no) AS hh ON(re.review_no = hh.review_no)
         INNER JOIN (SELECT member_id, nickname, profile_image
-        			FROM Member) AS m ON (r.member_id = m.member_id);
+        			FROM Member) AS m ON (re.member_id = m.member_id);
 	</select>
 	
 	<select id="listMyLikeReview" parameterType="map" resultMap="reviewSelectMap">
-        SELECT * 
-		FROM review r 
-        INNER JOIN (SELECT review_no
-							FROM MARK
-                            where member_id = #{memberId} and review_no IS NOT NULL
-                            ORDER BY mark_no limit #{search.startRowNum}, #{search.pageSize})
-                            as m on (r.review_no = m.review_no)
+        SELECT *
+		FROM (SELECT r.review_no, r.member_id, r.reservation_no, r.restaurant_no, r.review_detail, r.review_reg_date, 
+					r.review_show_status, r.scope_taste, r.scope_kind, r.scope_clean, r.avg_scope, M.MARK_NO
+			  FROM review AS r Inner join(select review_no, mark_no, member_id
+												 from MARK where member_id = #{member.memberId}) as m on (m.review_no = r.review_no)
+			  where r.review_show_status = 1
+			  ORDER BY M.mark_no DESC limit 0, 8)AS re
 		LEFT OUTER JOIN (SELECT image, review_no
-					FROM image) AS i ON (r.review_no = i.review_no)
+						 FROM image) AS i ON (re.review_no = i.review_no)
 		LEFT OUTER JOIN (SELECT hl.HASHTAG_no, h.hashtag, review_no 
-			FROM HASHTAG_LOG as hl, HASHTAG as h
-            WHERE hl.hashtag_no = h.hashtag_no) as hh on(r.review_no = hh.review_no);
+						 FROM HASHTAG_LOG as hl, HASHTAG as h
+           				 WHERE hl.hashtag_no = h.hashtag_no) AS hh ON(re.review_no = hh.review_no)
+        INNER JOIN (SELECT member_id, nickname, profile_image
+        			FROM Member) AS m ON (re.member_id = m.member_id);
 	</select>  
 
 	<select id="listHashTag" parameterType="String" resultMap="hashTagSelectMap">
@@ -177,7 +183,7 @@
 		WHERE HASHTAG Like CONCAT('%',#{value},'%')
 	</select>
 	
-	<select id="getLikeCount" parameterType="int" resultType="int">
+	<select id="getLikeReviewCount" parameterType="int" resultType="int">
 		SELECT count(review_no)
 		FROM MARK
 		WHERE review_no = #{value};
@@ -209,13 +215,29 @@
 		<choose>
 			<when test="restaurantNo != null">
 		  		WHERE restaurant_no = #{restaurantNo}
+		  		<choose>
+		 			<when test='member != null and member.memberRole == "admin"'>
+		 			</when>
+		 			<otherwise>
+		 				AND review_show_status = 1
+		 			</otherwise>
+		 		</choose>
 		  	</when>
 		  	<otherwise>
-		  		<if test="memberId != null">
-		  			WHERE member_id = #{memberId}
+		  		<if test='member != null and member.memberRole != "admin"'>
+		  			WHERE member_id = #{member.memberId}
 		  		</if>
 		  	</otherwise>
-		</choose>   
+		</choose>
+	</select>
+	
+	<select id="getLikeTotalCount" parameterType="string" resultType="int">
+		SELECT count(*)
+		FROM review r INNER JOIN (SELECT review_no
+								  FROM MARK
+								  WHERE member_id = #{value} and review_no IS NOT NULL
+								  ORDER BY mark_no) as m on (r.review_no = m.review_no)
+		where r.review_show_status = 1;
 	</select>
 	
 	<select id="getTotalAvg" parameterType="String" resultType="double">
