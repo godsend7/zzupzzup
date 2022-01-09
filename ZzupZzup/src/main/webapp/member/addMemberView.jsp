@@ -171,13 +171,13 @@
 		var checkPwd = $("#checkPassword").val();
 		var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
 		var nickname = $("#nickname").val();
-		var gender = $("#input[name=genders]:checked").val();
-		var ageRange = $("#input[name=ageRanges]:checked").val();
-		console.log("Member [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+", 닉네임 : "+nickname+", 성별 : "+gender+", 연령대 : "+ageRange+" // "+$("#input[name=genders]:checked")+", "+$("#input[name=ageRanges]:checked")+" ]");
+		var gender = $("input[name=gender]:checked").val();
+		var ageRange = $("input[name=ageRange]:checked").val();
+		console.log("Member [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+", 닉네임 : "+nickname+", 성별 : "+gender+", 연령대 : "+ageRange+" // "+$("input[name=genders]:checked")+", "+$("input[name=ageRanges]:checked")+" ]");
 		
-		if(${param.loginType == '1'} || name.length < 1 || id.length < 1 || pwd.length < 1 || checkPwd.length < 1 || phoneNum.length < 1 || nickname.length < 1) {
+		if(${param.loginType == '1'} && (name.length > 1 || id.length > 1 || pwd.length > 8 || checkPwd.length > 1 || phoneNum.length > 1 || nickname.length > 1)) {	//일반 회원가입
 			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
-		} else if(${param.loginType != '1'}) {
+		} else if(${param.loginType != '1'} && (name.length > 1 || id.length > 1 || phoneNum.length > 1 || nickname.length > 1)) {	//SNS(카카오) 회원가입
 			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
 		} else {
 			alert("누락된 항목 확인 후 다시 진행해주세요.");
@@ -291,13 +291,13 @@
 										<label for="memberName">이름</label> <input type="text"
 											onkeyup="fncCheckAccountForm();" name="memberName" maxlength="9"
 											class="form-control" id="memberName"
-											value="" required><span id="checkNameMsg"
+											required><span id="checkNameMsg"
 											style="color: red; font-weight: bold"></span>
 										<br/>
 										<label for="memberId">아이디</label> <input type="text"
 											class="form-control" id="memberId" name="memberId"
 											onkeyup="fncCheckAccountForm();idCheckFunction();"
-											placeholder="example@zzupzzup.com"
+											placeholder="example@zzupzzup.com" value="${sessionScope.snsMember.memberId != null ? snsMember.memberId : '' }"
 											required>&nbsp;<span id="checkIdMsg"
 											style="color: red; font-weight: bold"></span>
 											<br/>
@@ -307,14 +307,14 @@
 											<label for="password">비밀번호</label> <input type="password"
 													class="form-control" id="password" name="password"
 													onkeyup="fncCheckAccountForm();" minlength="8" maxlength="15"
-													placeholder="8-15자 이내로 입력해주세요." required><span
+													placeholder="8-15자 이내로 입력해주세요."><span
 													id="checkPwdMsg" style="color: red; font-weight: bold"></span>
 												<!-- <h5>알파벳 대소문자, 숫자, 특수문자(~, !, @, #, $, %, ^, &, *, \, /)를
 													조합하여 비밀번호를 구성하세요.</h5> -->
 											<label for="checkPassword">비밀번호 확인</label> <input
 												type="password" class="form-control" id="checkPassword"
 												onkeyup="fncCheckAccountForm();pwdCheckFunction();" minlength="8" maxlength="15"
-												placeholder="비밀번호를 다시 입력해주세요." required>
+												placeholder="비밀번호를 다시 입력해주세요.">
 											<span id="checkSamePwdMsg"
 												style="color: red; font-weight: bold"></span>
 										</c:if>
@@ -397,6 +397,7 @@
 									<div class="row">
 										<div class="col">
 											<label for="gender">성별</label>
+											<c:if test="${snsMember.gender == 'male' || snsMember == null}">
 												<input class="form-check-input" type="radio" name="gender" id="gender1" value="male" checked>
 												<label class="form-check-label" for="gender1">
 												    남
@@ -405,11 +406,21 @@
 												<label class="form-check-label" for="gender2">
 												    여
 												</label>
-												<span id="checkGenderMsg"
-												style="color: red; font-weight: bold"></span>
+											</c:if>
+											<c:if test="${snsMember.gender == 'female'}">
+												<input class="form-check-input" type="radio" name="gender" id="gender1" value="male">
+												<label class="form-check-label" for="gender1">
+												    남
+												</label>
+												<input class="form-check-input" type="radio" name="gender" id="gender2" value="female" checked>
+												<label class="form-check-label" for="gender2">
+												    여
+												</label>
+											</c:if>
 										</div>
 										<div class="col">
 											<label for="ageRange">연령대</label>
+											<c:if test="${snsMember.ageRange == '10대' || snsMember == null}">
 												<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대" checked>
 												<label class="form-check-label" for="ageRange1">
 												    10대
@@ -434,8 +445,137 @@
 												<label class="form-check-label" for="ageRange6">
 												    60대 이상
 												</label>
-												<span id="checkAgeRangeMsg"
-												style="color: red; font-weight: bold"></span>
+											</c:if>
+											<c:if test="${snsMember.ageRange == '20대'}">
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대">
+												<label class="form-check-label" for="ageRange1">
+												    10대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange2" value="20대" checked>
+												<label class="form-check-label" for="ageRange2">
+												    20대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange3" value="30대">
+												<label class="form-check-label" for="ageRange3">
+												    30대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange4" value="40대">
+												<label class="form-check-label" for="ageRange4">
+												    40대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange5" value="50대">
+												<label class="form-check-label" for="ageRange5">
+												    50대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange6" value="60대 이상">
+												<label class="form-check-label" for="ageRange6">
+												    60대 이상
+												</label>
+											</c:if>
+											<c:if test="${snsMember.ageRange == '30대'}">
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대">
+												<label class="form-check-label" for="ageRange1">
+												    10대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange2" value="20대">
+												<label class="form-check-label" for="ageRange2">
+												    20대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange3" value="30대" checked>
+												<label class="form-check-label" for="ageRange3">
+												    30대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange4" value="40대">
+												<label class="form-check-label" for="ageRange4">
+												    40대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange5" value="50대">
+												<label class="form-check-label" for="ageRange5">
+												    50대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange6" value="60대 이상">
+												<label class="form-check-label" for="ageRange6">
+												    60대 이상
+												</label>
+											</c:if>
+											<c:if test="${snsMember.ageRange == '40대'}">
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대">
+												<label class="form-check-label" for="ageRange1">
+												    10대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange2" value="20대">
+												<label class="form-check-label" for="ageRange2">
+												    20대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange3" value="30대">
+												<label class="form-check-label" for="ageRange3">
+												    30대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange4" value="40대" checked>
+												<label class="form-check-label" for="ageRange4">
+												    40대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange5" value="50대">
+												<label class="form-check-label" for="ageRange5">
+												    50대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange6" value="60대 이상">
+												<label class="form-check-label" for="ageRange6">
+												    60대 이상
+												</label>
+											</c:if>
+											<c:if test="${snsMember.ageRange == '50대'}">
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대">
+												<label class="form-check-label" for="ageRange1">
+												    10대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange2" value="20대">
+												<label class="form-check-label" for="ageRange2">
+												    20대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange3" value="30대">
+												<label class="form-check-label" for="ageRange3">
+												    30대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange4" value="40대">
+												<label class="form-check-label" for="ageRange4">
+												    40대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange5" value="50대" checked>
+												<label class="form-check-label" for="ageRange5">
+												    50대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange6" value="60대 이상">
+												<label class="form-check-label" for="ageRange6">
+												    60대 이상
+												</label>
+											</c:if>
+											<c:if test="${snsMember.ageRange == '60대 이상'}">
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange1" value="10대">
+												<label class="form-check-label" for="ageRange1">
+												    10대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange2" value="20대">
+												<label class="form-check-label" for="ageRange2">
+												    20대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange3" value="30대">
+												<label class="form-check-label" for="ageRange3">
+												    30대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange4" value="40대">
+												<label class="form-check-label" for="ageRange4">
+												    40대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange5" value="50대">
+												<label class="form-check-label" for="ageRange5">
+												    50대
+												</label>
+												<input class="form-check-input" type="radio" name="ageRange" id="ageRange6" value="60대 이상" checked>
+												<label class="form-check-label" for="ageRange6">
+												    60대 이상
+												</label>
+											</c:if>
 										</div>
 									</div>
 									<br/>
