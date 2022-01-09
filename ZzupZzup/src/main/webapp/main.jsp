@@ -36,7 +36,7 @@
 	});
 	
 	function loadGyeonggidoMap(searchCondition) {
-		$.ajax(
+		/* $.ajax(
 			{
 				url : "https://openapi.gg.go.kr/PlaceThatDoATasteyFoodSt?KEY=0584ed7e427d4676a15a4bf7f91b1597&Type=json&pIndex=1&pSize=1000",
    				type : "GET",
@@ -55,7 +55,7 @@
    							{restaurantName:item.RESTRT_NM, mainMenu:item.REPRSNT_FOOD_NM, latitude:item.REFINE_WGS84_LAT, longitude:item.REFINE_WGS84_LOGT,
    							 streetADDR:item.REFINE_ROADNM_ADDR, areaADDR:item.REFINE_LOTNO_ADDR, restaurantTel:item.TASTFDPLC_TELNO}
    							/* item */
-   						);
+   					/*	);
    					});
    					
    					initMap();
@@ -65,7 +65,39 @@
 				       console.log("실패");
 				    }
 			}
-		)
+		) */
+		
+		$.ajax({
+					url : "/map/json/gyeonggidoRestAPI",
+	   				type : "GET",
+	   				dataType : "json",
+	   				success : function(data, status) {
+	   					
+	   					
+	   					//alert( "JSON.stringify(JSONData) : \n"+JSON.stringify(data) );
+	   					console.log(JSON.stringify(data));
+	   					//alert(status);
+						//alert("data : \n"+data);
+						
+	   					//var obj = JSON.parse(data);
+	   					console.log(data.PlaceThatDoATasteyFoodSt[1].row);
+	   					
+	   					/* $.each(data.PlaceThatDoATasteyFoodSt[1].row, function(index, item){ 
+	   						arrayLayout.push(
+	   							{restaurantName:item.RESTRT_NM, mainMenu:item.REPRSNT_FOOD_NM, latitude:item.REFINE_WGS84_LAT, longitude:item.REFINE_WGS84_LOGT,
+	   							 streetADDR:item.REFINE_ROADNM_ADDR, areaADDR:item.REFINE_LOTNO_ADDR, restaurantTel:item.TASTFDPLC_TELNO}
+	   							/* item /
+	   					); */
+   					
+   					
+   					initMap();
+					
+   				},
+   				error:function(request,status,error){
+					console.log("실패");
+				}
+			}
+		) 
 	}
 	
 	function loadRestaurantMap(searchCondition) {
@@ -219,15 +251,30 @@
 		} else {
 			alert("위치 정보 사용이 불가능한 웹입니다.");
 		}
-		
-		
 	}
+	
+	
 </script>
+
+<script defer>
+$(function() {
+	console.log("main 실행되나?");
+	function funSearch() {
+		var searchType = $("#searchCondition:checked").val();
+		console.log(searchType);
+	}
+});
+</script>
+
 </head>
 
 <body class="is-preload">
 	<!-- S:Wrapper -->
 	<div id="wrapper">
+
+		<script>
+			console.log("main 실행");
+		</script>
 
 		<!-- S:Main -->
 		<div id="main" class="index">
