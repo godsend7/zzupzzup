@@ -226,7 +226,7 @@ public class RestaurantController {
 		
 		System.out.println("CHECK POINT : " + res);
 		
-		if(res.getJudgeDate() != null) {
+		if(res.getJudgeDate() == null) {
 			return "redirect:/restaurant/getRestaurant?restaurantNo=" + restaurant.getRestaurantNo();
 		} else {
 			return "forward:/restaurant/addRestaurant?restaurantNo=" + restaurant.getRestaurantNo();

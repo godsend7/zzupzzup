@@ -498,6 +498,7 @@
 					$("#addRestaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").attr("enctype", "multipart/form-data").attr("accept-charset","UTF-8").submit();
 				 	
 			    },
+			    
 			    error:function(e){
 					console.log("이미지 업로드 실패");
 			    }
