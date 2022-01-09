@@ -217,7 +217,7 @@ public class ReservationServiceTest {
 	
 			SendMessage sendMessage = new SendMessage();
 			
-			sendMessage.sendMessage("010-3023-5823","유희주 coolsms 명의 내놔~~~~~~~~");
+			//sendMessage.sendMessage("010-3023-5823","유희주 coolsms 명의 내놔~~~~~~~~");
 			//for문을 돌리는 member.getMemerphone 위에값을 list에 넣어서 넣기
 		
 		}

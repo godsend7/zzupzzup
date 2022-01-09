@@ -22,6 +22,7 @@
 
 		console.log("getReservationView.jsp");
 		//console.log(${reservation.reservationCancelReason});
+		//concole.log("restaurantNo::"+${reservation.restaurant.restaurantNo});	
 		
 		
 		///날짜 초 자르는 부분 ///
@@ -142,7 +143,7 @@
 	   		//$("#cancelConfirm").on("click", function() {
 	   		function fncCancelConfirm() {	
 				console.log("#cancelConfirm");
-				console.log("${reservation.reservationNo}");
+				 console.log("${reservation.reservationNo}");
 				console.log("${reservation.reservationCancelDetail}");
 				
 				var cancelReason = $("input[name='reservationCancelReason']:checked").val();
@@ -170,11 +171,12 @@
 					error : function(e) {
 						alert(e.responseText);
 					} 
-				});
+				}); 
 			} 
 	   	
 	   		$("#cancelConfirm").on("click", function() {
-				fncCancelConfirm();
+				//fncCancelConfirm();
+				fncMesseage();
 			});
 			
 	   	////////////////////////////////////////////////////////////////////////
@@ -205,7 +207,50 @@
 				}); 
 			});
 	   	
+	////////////////////////////////////////////////////////////////////////////////////////////////
+		    function fncMesseage() {	
+				console.log("#SendMesseage");
+				 var cancelReason = $("input[name='reservationCancelReason']:checked").val();
+				
+				$.ajax({
+					url : "/reservation/json/sendPhoneMessage",
+					type : "POST",
+					dataType: "json",
+					data : {
+						reservationNo : ${reservation.reservationNo},
+						reservationNumber : ${reservation.reservationNumber},
+						reservationCancelDetail :$("#reservationCancelDetail").val(),
+						reservationCancelReason : cancelReason,
+						/* memberPhone : ${member.memberPhone}, */
+						fromMemberPhone : "${member.memberPhone}",
+						toMemberPhone : "${reservation.member.memberPhone}",
+						restaurantNo : ${reservation.restaurant.restaurantNo},
+						toNickName : "${reservation.member.nickname}"
+						/* memberId : "${member.memberId}" */
+						
+					},
+					success : function(data){
+						alert("메세지 성공!!!!!");
+						console.log("메세지 데이터보내기 성공");
+						
+					},
+					error : function(e) {
+						alert(e.responseText);
+					} 
+				}); 
+			} 
 	   	
+	
+	   	/* 	$("#cancelConfirm").on("click", function() {
+	   			fncMesseage();
+			});
+	   		
+	   		$("#userConfirm").on("click", function() {
+	   			fncMesseage();
+			}); */
+	
+	
+	
 	});
 </script>
 </head>

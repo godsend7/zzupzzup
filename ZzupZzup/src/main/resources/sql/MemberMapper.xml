@@ -114,7 +114,7 @@
 	<select 	id="listOwner"	parameterType="map" resultMap="memberSelectMap">
 		SELECT MEMBER_LIST.*
 		FROM (
-			SELECT MEMBER_ROLE, MEMBER_NAME, COUNT_RES.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+			SELECT MEMBER_ROLE, MEMBER_NAME, COUNT_RES.*, REG_DATE, DELETE_DATE
 			FROM zzupzzup.MEMBER
 		    RIGHT JOIN (
 					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(RESTAURANT_NAME) AS COUNT_RESTAURANT
@@ -157,14 +157,15 @@
 		VALUES(#{memberId}, #{accumulType}, #{accumulScore})
 	</insert>
 	
-	<select id="listActivityScore" parameterType="string" resultMap="memberSelectMap">
-		SELECT ACCUMULATE_TYPE, ACCUMULATE_SCORE, ACCUMULATE_DATE
+	<select id="listActivityScore" parameterType="map" resultMap="memberSelectMap">
+		SELECT MEMBER.MEMBER_ID, ACCUMULATE_TYPE, ACCUMULATE_SCORE, ACCUMULATE_DATE
 		FROM zzupzzup.ACTIVITY_SCORE, zzupzzup.MEMBER
 		WHERE zzupzzup.ACTIVITY_SCORE.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID AND zzupzzup.MEMBER.MEMBER_ID = #{memberId}
+		ORDER BY ACCUMULATE_DATE DESC LIMIT #{search.startRowNum}, #{search.pageSize}
 	</select>
 	
 	<update 	id="updateActivityAllScore"	parameterType="string">
-		UPDATE zzupzzup.MEMBER
+		<!-- UPDATE zzupzzup.MEMBER
 		INNER JOIN (
 		SELECT zzupzzup.MEMBER.MEMBER_ID, SUM(zzupzzup.ACTIVITY_SCORE.ACCUMULATE_SCORE) AS ACTIVITY_SCORE
 		FROM zzupzzup.ACTIVITY_SCORE, zzupzzup.MEMBER
@@ -173,7 +174,18 @@
 		) MEMBER_INFO
 		ON zzupzzup.MEMBER.MEMBER_ID = MEMBER_INFO.MEMBER_ID
 		SET zzupzzup.MEMBER.ACTIVITY_SCORE = MEMBER_INFO.ACTIVITY_SCORE
-		WHERE zzupzzup.MEMBER.MEMBER_ID = #{memberId};
+		WHERE zzupzzup.MEMBER.MEMBER_ID = #{memberId}; -->
+		
+		UPDATE zzupzzup.MEMBER
+		INNER JOIN (
+			SELECT zzupzzup.MEMBER.MEMBER_ID, SUM(zzupzzup.ACTIVITY_SCORE.ACCUMULATE_SCORE) ACTIVITY_SCORE
+			FROM zzupzzup.MEMBER, zzupzzup.ACTIVITY_SCORE
+			WHERE zzupzzup.MEMBER.MEMBER_ID = zzupzzup.ACTIVITY_SCORE.MEMBER_ID
+			GROUP BY zzupzzup.MEMBER.MEMBER_ID
+	    ) MEMBER_INFO
+	    ON zzupzzup.MEMBER.MEMBER_ID = MEMBER_INFO.MEMBER_ID
+	SET zzupzzup.MEMBER.ACTIVITY_SCORE = MEMBER_INFO.ACTIVITY_SCORE
+	WHERE zzupzzup.MEMBER.MEMBER_ID = #{memberId};
 	</update>
 	
 	 

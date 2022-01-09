@@ -180,7 +180,7 @@ public class ReviewServiceTest {
 		//내가 작성한 리뷰 출력 
 		String memberId = "hihi@a.com";
 		
-		Map<String, Object> map = reviewService.listReview(search, restaurantNo, memberId);
+		Map<String, Object> map = reviewService.listReview(search, restaurantNo, null);
 		
 		List<Review> list = (List<Review>) map.get("list");
 		
@@ -205,7 +205,7 @@ public class ReviewServiceTest {
 		
 		String memberId = "user02@zzupzzup.com";
 			
-		Map<String, Object> map = reviewService.listMyLikeReview(search, memberId);
+		Map<String, Object> map = reviewService.listMyLikeReview(search, null);
 			
 		List<Review> list = (List<Review>) map.get("list");
 			

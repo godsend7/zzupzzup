@@ -131,16 +131,12 @@ public class RestaurantController {
 		
 		System.out.println("review/listReview : Service");
 		
-		//String restaurantNo = request.getParameter("restaurantNo");
 		Member member = (Member) session.getAttribute("member");
 		
 		List<Mark> listLike = null;
 		
-		String memberId = null;
-		
 		if (member != null && member.getMemberRole().equals("user")) {
-			memberId = member.getMemberId();
-			listLike = reviewService.listLike(memberId);
+			listLike = reviewService.listLike(member.getMemberId());
 		}
 		
 		
@@ -157,7 +153,7 @@ public class RestaurantController {
 		search.setPageSize(pageSize);
 		
 		
-		Map<String, Object> map = reviewService.listReview(search, Integer.toString(restaurantNo), memberId);
+		Map<String, Object> map = reviewService.listReview(search, Integer.toString(restaurantNo), member);
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		

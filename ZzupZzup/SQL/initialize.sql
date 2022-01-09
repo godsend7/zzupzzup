@@ -1,4 +1,4 @@
--- 테이블 초기화
+''-- 테이블 초기화
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `member`;
 DROP TABLE IF EXISTS `activity_score`;
@@ -161,15 +161,6 @@ CREATE TABLE `chat_member` (
     UNIQUE KEY (`chat_no`, `chat_member_id`)
 );
 
-CREATE TABLE `chat_log` (
-    `chat_log_no` INT NOT NULL AUTO_INCREMENT,
-    `chat_no` INT NOT NULL,
-    `chat_contents` VARCHAR(400) NOT NULL,
-    `chat_time` DATE NOT NULL,
-    PRIMARY KEY (`chat_log_no`),
-    FOREIGN KEY (`chat_no`) REFERENCES `chat`(`chat_no`)
-);
-
 CREATE TABLE `rating` (
     `rating_no` INT NOT NULL AUTO_INCREMENT,
     `chat_no` INT NOT NULL,
@@ -181,7 +172,8 @@ CREATE TABLE `rating` (
     PRIMARY KEY (`rating_no`),
     FOREIGN KEY (`rating_to_id`) REFERENCES `member`(`member_id`),
     FOREIGN KEY (`chat_no`) REFERENCES `chat`(`chat_no`),
-    FOREIGN KEY (`rating_from_id`) REFERENCES `member`(`member_id`)
+    FOREIGN KEY (`rating_from_id`) REFERENCES `member`(`member_id`),
+    UNIQUE KEY (`chat_no`, `rating_to_id`, `rating_from_id`)
 );
 
 CREATE TABLE `reservation` (
@@ -382,10 +374,6 @@ VALUES('3', '땅콩막걸리', '3500', '0');
 INSERT INTO CHAT (chat_leader_id, restaurant_no, chat_title, chat_text, chat_gender, age_type) VALUES ('hihi@a.com',1,'쩝쩝친구 구해유','소개한다',1,'1,2,3');
 -- chat_member
 INSERT INTO chat_member (chat_no, chat_member_id, ready_check, chat_leader_check) VALUES (1,'hihi@a.com',1,1);
--- chat_log
-INSERT INTO chat_log (chat_no, chat_contents, chat_time) VALUES (1,'하이하이','2021-01-01');
--- rating
-INSERT INTO rating (chat_no, rating_to_id, rating_from_id, rating_score, rating_type) VALUES (1,'hihi@a.com', 'user01@zzupzzup.com', 1, 1);
 -- reservation
 INSERT INTO reservation(reservation_number, restaurant_no, chat_no, booker_id, plan_date, plan_time, fixed_date,
 member_count, reservation_status, fixed_status, reservation_date, total_price, pay_option, pay_method, 
@@ -413,5 +401,10 @@ VALUES('hihi@a.com', 1, 10);
 INSERT
 INTO REVIEW(member_id, reservation_no, restaurant_no, review_detail, scope_taste, scope_kind, scope_clean, avg_scope)
 VALUES ( 'hihi@a.com', 1, 1, '하이하이', 1, 1, 1, 1);
+
+
+
+drop table rating;
+
 
 commit;

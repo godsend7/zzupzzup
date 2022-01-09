@@ -57,8 +57,5 @@ public interface ChatService {
 	public Map<String, Object> listReadyCheckMember(int chatNo) throws Exception;
 
 	
-	//임시 음식점 찾기
-	// Select List
-	public Map<String, Object> listRestaurantName(Search search) throws Exception;
 		
 }

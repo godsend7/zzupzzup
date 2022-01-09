@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-template</title>
+<title>ZZUPZZUP-listMyActivityScore</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
@@ -17,9 +17,17 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
+
+	function fncPageNavigation(currentPage) {
+		console.log(currentPage);
+		$("#currentPage").val(currentPage);
+		$("#listMyActivityScore").attr("method", "GET").attr("action","/member/listMyActivityScore").submit();
+	}
+	
 	$(function() {
-		console.log("template.jsp");
-	});
+		console.log("listMyActivityScore.jsp");
+		
+	})
 </script>
 </head>
 
@@ -35,162 +43,42 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<!-- start:해당 부분은 지우고 아래 container안에 작성 -->
-				<div class="row">
-					<div class="col-12">
-						<ul style="display: flex; list-style: none;">
-							<li><a href="/ui-template/basic-template.jsp">기본 템플릿</a></li>
-							<li><a href="/ui-template/button.jsp">버튼</a></li>
-							<li><a href="/ui-template/form.jsp">등록양식</a></li>
-							<li><a href="/ui-template/form-view.jsp">등록양식 결과</a></li>
-							<li><a href="/ui-template/thumbnail.jsp">썸네일리스트</a></li>
-							<li><a href="/ui-template/list.jsp">일반리스트</a></li>
-							<li><a href="/ui-template/carousel.jsp">슬라이드</a></li>
-							<li><a href="/ui-template/table.jsp">테이블</a></li>
-							<li><a href="/ui-template/etc-ui.jsp">기타ui</a></li>
-						</ul>
-					</div>
-				</div>
-				<!-- end -->
-
-				<section id="">
+				<section id="list-my-activity-score">
 					<div class="container">
 
-						<!-- start:Table -->
-						<div class="row table-list mb-2">
-							<div class="col-md-6">
-								<div
-									class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-									<div class="col p-4 d-flex flex-column position-static">
-										<strong class="d-inline-block mb-2 text-primary">World</strong>
-										<h3 class="mb-0">Featured post</h3>
-										<div class="mb-1 text-muted">Nov 12</div>
-										<p class="card-text mb-auto">This is a wider card with
-											supporting text below as a natural lead-in to additional
-											content.</p>
-										<a href="#" class="stretched-link">Continue reading</a>
-									</div>
-
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div
-									class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-									<div class="col p-4 d-flex flex-column position-static">
-										<strong class="d-inline-block mb-2 text-success">Design</strong>
-										<h3 class="mb-0">Post title</h3>
-										<div class="mb-1 text-muted">Nov 11</div>
-										<p class="mb-auto">This is a wider card with supporting
-											text below as a natural lead-in to additional content.</p>
-										<a href="#" class="stretched-link">Continue reading</a>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div
-									class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-									<div class="col p-4 d-flex flex-column position-static">
-										<strong class="d-inline-block mb-2 text-primary">World</strong>
-										<h3 class="mb-0">Featured post</h3>
-										<div class="mb-1 text-muted">Nov 12</div>
-										<p class="card-text mb-auto">This is a wider card with
-											supporting text below as a natural lead-in to additional
-											content.</p>
-										<a href="#" class="stretched-link">Continue reading</a>
-									</div>
-
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div
-									class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-									<div class="col p-4 d-flex flex-column position-static">
-										<strong class="d-inline-block mb-2 text-success">Design</strong>
-										<h3 class="mb-0">Post title</h3>
-										<div class="mb-1 text-muted">Nov 11</div>
-										<p class="mb-auto">This is a wider card with supporting
-											text below as a natural lead-in to additional content.</p>
-										<a href="#" class="stretched-link">Continue reading</a>
+						<h2>내 활동점수 적립 내역</h2><hr>
+						<form id="listMyActivityScore">
+						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
+							<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
+						</form>
+						<h4 class="mb-0" style="float:left;">활동점수&nbsp;<small style="color:gray;">${getMember.accumulAllScore}</small></h4>
+						<br/><br/>
+						
+						<c:set var="i" value="0" />
+						<c:forEach var="member" items="${listMyActivityScore}">
+						
+						<%-- <c:if test="${!empty restaurant.restaurantRegDate || !empty restaurant.judgeDate}"> --%>
+							
+						<div class="col-md-12">
+							<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+								<div class="col p-4 d-flex flex-column position-static">
+									<div class="col-md-12">
+										<%-- <h2 class="mb-0">${member.memberId}&nbsp;<small style="color:gray;">${member.accumulAllScore}</small></h2><hr> --%>
+										<div class="col-md-12 mb-1 text-muted"><strong>적립 내용</strong> | ${member.accumulContents}</div>
+										<div class="col-md-12 mb-1 text-muted"><strong>점수</strong> | ${member.accumulScore}</div>
+										<div class="col-md-12 mb-1 text-muted"><strong>적립일</strong> | ${member.accumulDate}</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<!-- end -->
-
-						<!-- start:Table -->
-						<div class="row table-list mb-2">
-							<div class="col-md-12">
-								<div
-									class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-									<div class="col p-4 d-flex flex-column position-static">
-										<strong class="d-inline-block mb-2 text-primary">World</strong>
-										<h3 class="mb-0">Featured post</h3>
-										<div class="mb-1 text-muted">Nov 12</div>
-										<p class="card-text mb-auto">This is a wider card with
-											supporting text below as a natural lead-in to additional
-											content.</p>
-										<a href="#" class="stretched-link">Continue reading</a>
-									</div>
-
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div
-									class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-									<div class="col p-4 d-flex flex-column position-static">
-										<strong class="d-inline-block mb-2 text-success">Design</strong>
-										<h3 class="mb-0">Post title</h3>
-										<div class="mb-1 text-muted">Nov 11</div>
-										<p class="mb-auto">This is a wider card with supporting
-											text below as a natural lead-in to additional content.</p>
-										<a href="#" class="stretched-link">Continue reading</a>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div
-									class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-									<div class="col p-4 d-flex flex-column position-static">
-										<strong class="d-inline-block mb-2 text-primary">World</strong>
-										<h3 class="mb-0">Featured post</h3>
-										<div class="mb-1 text-muted">Nov 12</div>
-										<p class="card-text mb-auto">This is a wider card with
-											supporting text below as a natural lead-in to additional
-											content.</p>
-										<a href="#" class="stretched-link">Continue reading</a>
-									</div>
-
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div
-									class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-									<div class="col p-4 d-flex flex-column position-static">
-										<strong class="d-inline-block mb-2 text-success">Design</strong>
-										<h3 class="mb-0">Post title</h3>
-										<div class="mb-1 text-muted">Nov 11</div>
-										<p class="mb-auto">This is a wider card with supporting
-											text below as a natural lead-in to additional content.</p>
-										<a href="#" class="stretched-link">Continue reading</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- end -->
-
-
-						<ul class="pagination">
-							<li><span class="button disabled">Prev</span></li>
-							<li><a href="#" class="page active">1</a></li>
-							<li><a href="#" class="page">2</a></li>
-							<li><a href="#" class="page">3</a></li>
-							<li><span>&hellip;</span></li>
-							<li><a href="#" class="page">8</a></li>
-							<li><a href="#" class="page">9</a></li>
-							<li><a href="#" class="page">10</a></li>
-							<li><a href="#" class="button">Next</a></li>
-						</ul>
-
+						</c:forEach>
+						<c:if test="${listMyActivityScore == '[]'}">
+							<h4 align="center">활동점수 적립 내역이 없습니다.</h4>
+						</c:if>
+	
+						</div><br><br><br>
+						<!-- 관우님 src end -->
+					 <jsp:include page="../common/pageNavigator.jsp"/>
 					</div>
 				</section>
 			</div>

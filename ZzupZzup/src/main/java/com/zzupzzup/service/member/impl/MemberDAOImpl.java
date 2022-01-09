@@ -102,9 +102,9 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 	
 	@Override
-	public List<Member> listActivityScore(String memberId) throws Exception {
+	public List<Member> listActivityScore(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
-		List<Member> list = sqlSession.selectList("MemberMapper.listActivityScore",memberId);
+		List<Member> list = sqlSession.selectList("MemberMapper.listActivityScore",map);
 		return list;
 	}
 	

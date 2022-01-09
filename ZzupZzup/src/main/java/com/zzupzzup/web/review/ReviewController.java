@@ -145,13 +145,10 @@ public class ReviewController {
 		
 		List<Mark> listLike = null;
 		
-		String memberId = null;
-		
 		if (member != null && member.getMemberRole().equals("user")) {
-			memberId = member.getMemberId();
-			listLike = reviewService.listLike(memberId);
+			restaurantNo = null;
+			listLike = reviewService.listLike(member.getMemberId());
 		}
-		
 		
 		System.out.println(restaurantNo);
 		System.out.println(member);
@@ -166,7 +163,7 @@ public class ReviewController {
 		search.setPageSize(pageSize);
 		
 		
-		Map<String, Object> map = reviewService.listReview(search, restaurantNo, memberId);
+		Map<String, Object> map = reviewService.listReview(search, restaurantNo, member);
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
@@ -177,11 +174,7 @@ public class ReviewController {
 		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
 		model.addAttribute("resultPage", resultPage);
 		
-		if (restaurantNo != null) {
-			return "forward:/review/listReview.jsp";
-		} 
-		
-		return "forward:/review/listMyReview.jsp";
+		return "forward:/review/listReview.jsp";
 	}
 	
 	@RequestMapping("listMyLikeReview")
@@ -193,16 +186,9 @@ public class ReviewController {
 		
 		List<Mark> listLike = null;
 		
-		String memberId = null;
-		
 		if (member != null && member.getMemberRole().equals("user")) {
-			memberId = member.getMemberId();
-			listLike = reviewService.listLike(memberId);
+			listLike = reviewService.listLike(member.getMemberId());
 		}
-		
-		
-		System.out.println(member);
-		
 		
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
@@ -213,9 +199,16 @@ public class ReviewController {
 		search.setPageSize(pageSize);
 		
 		
-		Map<String, Object> map = reviewService.listMyLikeReview(search, memberId);
+		Map<String, Object> map = reviewService.listMyLikeReview(search, member);
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		List<Review> list = (List<Review>) map.get("list");
+		
+		for (Review r : list) {
+			System.out.println(r);
+		}
+		
 		
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("listLike", listLike);
@@ -224,7 +217,7 @@ public class ReviewController {
 		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
 		model.addAttribute("resultPage", resultPage);
 		
-		return "forward:/review/listMyReview.jsp";
+		return "forward:/review/listReview.jsp";
 	}
 	
 	@RequestMapping(value="deleteReview", method=RequestMethod.GET)

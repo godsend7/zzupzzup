@@ -17,25 +17,23 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
+
+	function fncPageNavigation(currentPage) {
+		console.log(currentPage);
+		$("#currentPage").val(currentPage);
+		$("#listUser").attr("method", "POST").attr("action","/member/listUser").submit();
+	}
+	
 	$(function() {
 		console.log("listUser.jsp");
 		
-		window.onload = function(){
-			
-			function fncPageNavigation(currentPage) {
-				console.log(currentPage);
-				$("#currentPage").val(currentPage);
-				$("#listUser").attr("method", "POST").attr("action","/member/listUser").submit();
-			}
-			
-			// 상세조회 버튼 실행
-			$(function() {
-				//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-				$( "#getMember" ).on("click" , function() {
-					self.location = "/member/getMember?memberId=${member.memberId}";
-				});
+		 // 상세조회 버튼 실행
+		
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+			$( "#getMember" ).on("click" , function() {
+				self.location = "/member/getMember?memberId=${member.memberId}";
 			});
-		}
+	
 	});
 </script>
 </head>
@@ -52,12 +50,12 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="listUser">
+				<section id="listUser-jsp">
 					<div class="container">
 					
 						<!-- 관우님 src start -->
 						<h2>유저 목록</h2><hr>
-						<form id="listUser">
+						<form id="listUser" name="listUser">
 						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 							<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
 						</form>
@@ -102,9 +100,7 @@
 	
 						</div><br><br><br>
 						<!-- 관우님 src end -->
-						
-					<jsp:include page="../common/pageNavigator.jsp"/>
-					
+					 <jsp:include page="../common/pageNavigator.jsp"/>
 				</section>
 			</div>
 		</div>
