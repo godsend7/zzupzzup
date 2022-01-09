@@ -571,7 +571,7 @@
 					
 					</div>
 					<hr>
-					<jsp:include page="/review/listReview.jsp"></jsp:include>
+					<jsp:include page="/review/restaurantReview.jsp"></jsp:include>
 				</section>
 			</div>
 		</div>

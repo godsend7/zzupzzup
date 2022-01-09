@@ -70,10 +70,9 @@
 						
 					<!-- start:Form -->
 					<form id="reservation">
-							<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
-							<input type="hidden" id="currentPage" name="currentPage" value=""/>
-						</form>		
-							
+						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
+						<input type="hidden" id="currentPage" name="currentPage" value=""/>
+					</form>
 							
 					<div class="row thumb-list">
 						<c:set var="i" value="0" />
@@ -105,7 +104,15 @@
 									    <label for="demo-name">방문 확정 후(승인)</label> 
 										<p>${reservation.fixedDate} </div>
 									    <div class="col-6 col-md-4">
-									    <a href="#" class="button small primary stretched-link rivewWrite" name = "rivewWrite" id ="rivewWrite">리뷰 쓰기</a></div>
+									    <c:choose>
+									    	<c:when test="${reservation.reviewNo != null}">
+									    		<a href="#reviewModal" class="button small primary reviewModal" data-toggle="modal" data-id="${reservation.reviewNo}">리뷰 보기</a>
+									    	</c:when>
+									    	<c:otherwise>
+									    		<a href="/review/addReview?reservationNo=${reservation.reservationNo}" class="button small primary stretched-link rivewWrite" name = "rivewWrite" id ="rivewWrite">리뷰 쓰기</a>
+									    	</c:otherwise>
+									    </c:choose>
+									    </div>
 									  	</div> 
 									  	</div>
 									
@@ -118,7 +125,9 @@
 							
 						</div>
 						</c:forEach>
-						
+						<ul class='icons'> 
+							<jsp:include page='/review/getReview.jsp'/>
+						</ul>
 		
 				
 				
@@ -130,6 +139,7 @@
 					<jsp:include page="../common/pageNavigator.jsp"/>
 						무한스크롤 필요
 
+					</div>
 					</div>
 				</section>
 			</div>

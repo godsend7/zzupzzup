@@ -96,17 +96,13 @@
 
 						if (JSONData.list == null || JSONData.list == undefined || JSONData.list == "" || JSONData.list.length == 0) {
 							//alert("자료가 없음");
-							$(".find-restaurant-txt")
-									.text("");
-							$(".find-restaurant-txt")
-									.text(
-											"선택할 수 있는 음식점이 없습니다.");
+							$(".find-restaurant-txt").text("");
+							$(".find-restaurant-txt").text("선택할 수 있는 음식점이 없습니다.");
 						} else {
 							$(".find-restaurant-txt").text("");
-							console.log(JSONData);
+							//console.log(JSONData);
 							response(
 								$.map(JSONData.list, function(item) {
-
 									autoResArr = {
 										"restaurantNo" : item.restaurantNo,
 										"restaurantName" : item.restaurantName,
@@ -115,13 +111,18 @@
 										"restaurantAAddr" : item.areaAddress
 									};
 
-									/* console.log(item.restaurantName);
+									/* console.log(item.restaurantNo)
+									console.log(item.restaurantName);
 									console.log(item.restaurantTel);
 									console.log(item.streetAddress);
 									console.log(item.areaAddress); */
 
 									return {
-										label : item.restaurantName
+										value : item.restaurantName,
+										no : item.restaurantNo,
+										tel : item.restaurantTel,
+										sAddr : item.streetAddress,
+										aAddr : item.areaAddress,
 									}
 								})
 							);
@@ -134,14 +135,30 @@
 				});
 			},
 			minLength : 1,
-			select : function(event, ui) {
-				//log( "Selected: " + ui.item.value + " aka " + ui.item.id );
-			}
+			select: function(event, ui) {
+	            $("#restaurantNo").val(ui.item.no);
+				$("#restaurantTel").val(ui.item.tel);
+				$("#streetAddress").val(ui.item.sAddr);
+				$("#areaAddress").val(ui.item.aAddr);
+	        },
+	        focus: function(event, ui) {
+	            $("#restaurantNo").val(ui.item.no);
+				$("#restaurantTel").val(ui.item.tel);
+				$("#streetAddress").val(ui.item.sAddr);
+				$("#areaAddress").val(ui.item.aAddr);
+	        },
+	        autoFocus: true,
+	        disable: true,
+	        close:function(e){
+	        	console.log(e);
+	        }
 		});
 
 		//autocomplete 목록 클릭 했을 때 값 들어가기
 		$("body").on("click", ".ui-menu-item-wrapper", function() {
+			/* console.log("==============");
 			console.log(autoResArr);
+			console.log($(this).autoResArr);
 			let restaurantNo = autoResArr.restaurantNo;
 			let restaurantName = autoResArr.restaurantName;
 			let restaurantTel = autoResArr.restaurantTel;
@@ -151,23 +168,34 @@
 			$("#restaurantNo").val(restaurantNo);
 			$("#restaurantTel").val(restaurantTel);
 			$("#streetAddress").val(restaurantSAddr);
-			$("#areaAddress").val(restaurantAAddr);
+			$("#areaAddress").val(restaurantAAddr); */
+			
+			//$("#restaurantName").attr("disabled","disabled");
 		});
 		//autocomplete 목록 엔터 했을 때 값 들어가기
 		$("body").on("keydown", "#restaurantName", function(e) {
-			if(e.keyCode == 13){
-				console.log(autoResArr);
-				let restaurantNo = autoResArr.restaurantNo;
+			if(e.keyCode == 8){
+				//console.log("지운다");
+				/* console.log("1  ==  "+autoResArr.restaurantNo);
+				console.log("2  ==  "+autoResArr.restaurantName);
+				console.log("3  ==  "+autoResArr.restaurantTel);
+				console.log("4  ==  "+autoResArr.restaurantSAddr);
+				console.log("4  ==  "+autoResArr.restaurantAAddr); */
+				/* let restaurantNo = autoResArr.restaurantNo;
 				let restaurantName = autoResArr.restaurantName;
 				let restaurantTel = autoResArr.restaurantTel;
 				let restaurantSAddr = autoResArr.restaurantSAddr;
-				let restaurantAAddr = autoResArr.restaurantAAddr;
+				let restaurantAAddr = autoResArr.restaurantAAddr;*/
 	
-				$("#restaurantNo").val(restaurantNo);
-				$("#restaurantTel").val(restaurantTel);
-				$("#streetAddress").val(restaurantSAddr);
-				$("#areaAddress").val(restaurantAAddr);
+				$("#restaurantNo").val("");
+				$("#restaurantTel").val("");
+				$("#streetAddress").val("");
+				$("#areaAddress").val("");
+				$("#restaurantName").val("");
+				
+				//$("#restaurantName").attr("disabled","disabled");
 			}
+			
 		});
 
 		//==>연령대 무관 클릭시 나머지 연령대 체크 해제

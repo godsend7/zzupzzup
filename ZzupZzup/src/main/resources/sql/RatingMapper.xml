@@ -9,8 +9,8 @@
 		<result property="ratingNo" column="rating_no" jdbcType="INTEGER"/>
 		<result property="chatNo" column="chat_no" jdbcType="INTEGER"/>
 		<result property="ratingScore" column="rating_score" jdbcType="INTEGER"/>
-		<result property="ratingFromId" column="rating_from_id" jdbcType="VARCHAR"/>
-		<result property="ratingToId" column="rating_to_id" jdbcType="VARCHAR"/>
+		<result property="ratingFromId.memberId" column="rating_from_id" jdbcType="VARCHAR"/>
+		<result property="ratingToId.memberId" column="rating_to_id" jdbcType="VARCHAR"/>
 		<result property="ratingType" column="rating_type" jdbcType="INTEGER"/>
 		<result property="ratingRegDate" column="rating_reg_date" jdbcType="DATE"/>
 	</resultMap>
@@ -20,14 +20,14 @@
 		INSERT INTO rating (
 			chat_no, rating_to_id, rating_from_id, rating_score, rating_type
 		) VALUES (
-			#{chatNo}, #{ratingToId}, #{ratingFromId}, #{ratingScore}, #{ratingType}
+			#{chatNo}, #{ratingToId.memberId}, #{ratingFromId.memberId}, #{ratingScore}, #{ratingType}
 		)
 	</insert>
 	
 	<!-- SQL : SELECT ALL -->
 	<select id="listRating" parameterType="map" resultMap="ratingSelectMap">
 		SELECT *
-		FROM ( SELECT r.rating_no, r.chat_no, r.rating_to_id, r.rating_from_id, r.rating_score, r.rating_type
+		FROM ( SELECT r.rating_no, r.chat_no, r.rating_to_id, r.rating_from_id, r.rating_score, r.rating_type, r.rating_reg_date
 				FROM rating r, chat c
 				WHERE r.chat_no = c.chat_no
 				ORDER BY r.chat_no LIMIT #{search.startRowNum}, #{search.endRowNum}) AS r

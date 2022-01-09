@@ -155,20 +155,7 @@ public class ChatServiceImpl implements ChatService {
 		return map;
 	}
 
-	@Override
-	public Map<String, Object> listRestaurantName(Search search) throws Exception {
-		System.out.println("chatServiceImpl listRestaurantName " );
-		System.out.println("search : " + search);
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("search", search);
-		
-		System.out.println("map : " + map);
-		
-		map.put("list", chatDao.listRestaurantName(map));
-		
-		return map;
-	}
+	
 
 	
 

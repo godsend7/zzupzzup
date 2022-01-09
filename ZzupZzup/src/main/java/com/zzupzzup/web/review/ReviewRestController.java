@@ -144,16 +144,13 @@ public class ReviewRestController {
 		
 		List<Mark> listLike = null;
 		
-		String memberId = null;
-		
 		if (member != null && member.getMemberRole().equals("user")) {
-			memberId = member.getMemberId();
-			listLike = reviewService.listLike(memberId);
+			listLike = reviewService.listLike(member.getMemberId());
 		}
 		
 		
 		System.out.println(restaurantNo);
-		//System.out.println(member);
+		System.out.println(member);
 		
 		Search search = new Search();
 		search.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
@@ -163,7 +160,7 @@ public class ReviewRestController {
 		
 		map.put("search", search);	
 		
-		Map<String, Object> resultMap = reviewService.listReview(search, restaurantNo, null);
+		Map<String, Object> resultMap = reviewService.listReview(search, restaurantNo, member);
 		
 		List<Review> review = (List<Review>) resultMap.get("list");
 		

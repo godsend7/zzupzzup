@@ -9,8 +9,8 @@ public class Rating {
 	private int chatNo; //채팅방no
 	private int ratingScore; //평가 점수
 	private String ratingValue; //평가 내용
-	private String ratingFromId; //평가한 사람 아이디
-	private String ratingToId; //평가받은 사람 아이디
+	private Member ratingFromId; //평가한 사람 아이디
+	private Member ratingToId; //평가받은 사람 아이디
 	private int ratingType;
 	private Date ratingRegDate;
 
@@ -52,19 +52,19 @@ public class Rating {
 		this.ratingValue = ratingValue;
 	}
 
-	public String getRatingFromId() {
+	public Member getRatingFromId() {
 		return ratingFromId;
 	}
 
-	public void setRatingFromId(String ratingFromId) {
+	public void setRatingFromId(Member ratingFromId) {
 		this.ratingFromId = ratingFromId;
 	}
 	
-	public String getRatingToId() {
+	public Member getRatingToId() {
 		return ratingToId;
 	}
 
-	public void setRatingToId(String ratingToId) {
+	public void setRatingToId(Member ratingToId) {
 		this.ratingToId = ratingToId;
 	}
 	

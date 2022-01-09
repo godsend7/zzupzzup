@@ -128,6 +128,12 @@ public class ReviewDAOImpl implements ReviewDAO {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("ReviewMapper.getTotalCount", map);
 	}
+	
+	@Override
+	public int getLikeTotalCount(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("ReviewMapper.getLikeTotalCount", memberId);
+	}
 
 	@Override
 	public double getTotalAvg(String restaurantNo) throws Exception {
@@ -138,6 +144,6 @@ public class ReviewDAOImpl implements ReviewDAO {
 	@Override
 	public int getLikeCount(int reviewNo) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne("ReviewMapper.getLikeCount", reviewNo);
+		return sqlSession.selectOne("ReviewMapper.getLikeReviewCount", reviewNo);
 	}
 }
