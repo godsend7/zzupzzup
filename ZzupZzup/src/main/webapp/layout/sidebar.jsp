@@ -77,6 +77,11 @@
 									${sessionScope.member.nickname}
 								</c:if>
 								<c:if test="${sessionScope.member.memberRole != 'user'}">
+									<c:if test="${sessionScope.member.memberRole == 'owner'}">
+										<span class="badge badge-pill badge-dark"
+											style="color:#fff;background-color:#bfbfbf;display:inline-block;padding: .25em .4em;padding-right: .6em;
+											padding-left: .6em;line-height: 1;">업주</span>&nbsp;
+									</c:if>
 									${sessionScope.member.memberName}
 								</c:if>
 								</h4>
@@ -96,10 +101,10 @@
 									<ul>
 										<li><a href="/member/getMember?memberId=${member.memberId}">내 정보 조회</a></li>
 										<c:if test="${sessionScope.member.memberRole == 'user'}">
-											<li><a href="#">내 활동 점수 적립 내역</a></li>
+											<li><a href="/member/listMyActivityScore?memberId=${member.memberId}">내 활동 점수 적립 내역</a></li>
 											<li><a href="/review/listReview">내가 작성한 리뷰 내역</a></li>
 											<li><a href="#">내가 작성한 게시판 내역</a></li>
-											<li><a href="/reservation/listReservation?memberId=${reservation.member.memberId}">예약 및 결제 내역</a></li>
+											<li><a href="/reservation/listReservation">나의 예약 및 결제 내역</a></li>
 											<li><a href="/review/listMyLikeReview">내가 좋아요 누른 리뷰 내역</a></li>
 											<li><a href="#">내가 좋아요 누른 게시물 내역</a></li>
 											<li><a href="/report/listReport?memberId=${member.memberId}">나의 신고/제보 접수 내역</a></li>
@@ -116,8 +121,7 @@
 										<li><a href="/member/listUser">유저 목록 조회</a></li>
 										<li><a href="/member/listOwner">업주 목록 조회</a></li>
 										<li><a href="/member/getMember?memberId=user05@zzupzzup.com">회원 정보 조회</a></li>
-										<li><a href="/reservation/listReservation?memberId=${reservation.member.memberId}">회원 예약 및 결제 내역</a></li>
-										<li><a href="/reservation/listReservation?restaurantNo=${reservation.restaurant.restaurantNo}">업주 예약 주문 내역</a></li>
+										<li><a href="/reservation/listReservation">예약/주문 및 결제 내역</a></li>
 										<li><a href="/restaurant/listRestaurant">등록된 전체 음식점 목록</a></li>
 										<li><a href="/restaurant/listRequestRestaurant">등록 요청 음식점 목록</a></li>
 									</ul>
@@ -134,6 +138,7 @@
 										<li><a href="/review/listReview">전체 리뷰 내역</a></li>
 									</ul>
 								</li>
+								<li><a href="/report/listReport">신고/제보 관리</a></li>
 							</c:if>
 							<li><a href="/restaurant/addRestaurant?memberId=${member.memberId}">test-음식점등록</a></li>
 							<li><a href="/review/addReview?reservationNo=1">test-리뷰작성</a></li>
@@ -141,7 +146,7 @@
 						<c:otherwise>
 							<!--  업주가 보이는 목록 -->
 							<li><a href="/member/getMember?memberId=${member.memberId}">내 정보 조회</a></li>
-							<li><a href="/reservation/listReservation">예약 주문 내역</a></li>
+							<li><a href="/reservation/listMyReservation">예약 주문 내역</a></li>
 							<li><a href="/report/listReport?memberId=${member.memberId}">음식점 제보 내역</a></li>
 						</c:otherwise>
 					</c:choose>

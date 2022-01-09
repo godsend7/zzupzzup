@@ -21,7 +21,8 @@
 	$(function() {
 
 		console.log("getReservationView.jsp");
-		console.log(${reservation.reservationCancelReason});
+		//console.log(${reservation.reservationCancelReason});
+		//concole.log("restaurantNo::"+${reservation.restaurant.restaurantNo});	
 		
 		
 		///날짜 초 자르는 부분 ///
@@ -33,33 +34,17 @@
 	   	 $(".reset").on("click" , function() {
 	    	self.location = "/reservation/listReservation"
 		}); 
-		
-		//////////모달 이동////////////////
-		//////////모달 이동////////////////
-		
-		//////////모달 이동////////////////
-	    /* $(".close").on("click" , function() {
-	    	self.location = "/"
-		}); */
-		
+	
 		//////////모달 이동////////////////
 		  $(".confirm").on("click" , function() {
 			$('#rejectionModal').modal("hide");
 	    	$("#cancelUseModal").modal('show');
 		});  
-		/////////////////////////getReservation 모달사용//////////////////////////
-		/* $( "body" ).on("click" , ".fixedDate", function() {
-			$("#modal").trigger('click');
-			$(".yes").on("click" , function() {
-				self.location = "/main.jsp"
-			});  */
-	   	
+		
 	   	/////////////////////////ajax//////////////////////////
 	 
 			$(".no").on("click", function() {
 				console.log(".no");
-				console.log("${reservation.reservationNo}");
-				console.log("${reservation.reservationStatus}");
 				 $.ajax({
 					url : "/reservation/json/updateReservation/${reservation.reservationNo}/2",
 					method : "GET",
@@ -69,9 +54,10 @@
 						"contentType" : "application/json; charset=utf-8"
 					},
 					success : function(data){
-						console.log("바꾸기 성공");
+						console.log(data+"data 나오는 부분 미완료");
 						//$("input[value='3']").val('미방문');
 						$('#getReservationModal').modal("hide");
+						history.go(0);
 					},
 					error : function(e) {
 						alert(e.responseText);
@@ -83,8 +69,6 @@
 	   	
 	   		$(".yes").on("click", function() {
 				console.log(".yes");
-				console.log("${reservation.reservationNo}");
-				console.log("${reservation.reservationStatus}");
 				 $.ajax({
 					url : "/reservation/json/updateReservation/${reservation.reservationNo}/1",
 					method : "GET",
@@ -94,9 +78,10 @@
 						"contentType" : "application/json; charset=utf-8"
 					},
 					success : function(data){
-						console.log("바꾸기 성공");
-						//$("input[value='2']").val('방문완료');
+						console.log(data+"data 나오는 부분 방문완료");
 						$('#getReservationModal').modal("hide");
+						history.go(0);
+						
 					},
 					error : function(e) {
 						alert(e.responseText);
@@ -158,7 +143,7 @@
 	   		//$("#cancelConfirm").on("click", function() {
 	   		function fncCancelConfirm() {	
 				console.log("#cancelConfirm");
-				console.log("${reservation.reservationNo}");
+				 console.log("${reservation.reservationNo}");
 				console.log("${reservation.reservationCancelDetail}");
 				
 				var cancelReason = $("input[name='reservationCancelReason']:checked").val();
@@ -186,11 +171,12 @@
 					error : function(e) {
 						alert(e.responseText);
 					} 
-				});
+				}); 
 			} 
 	   	
 	   		$("#cancelConfirm").on("click", function() {
-				fncCancelConfirm();
+				//fncCancelConfirm();
+				fncMesseage();
 			});
 			
 	   	////////////////////////////////////////////////////////////////////////
@@ -221,13 +207,50 @@
 				}); 
 			});
 	   	
+	////////////////////////////////////////////////////////////////////////////////////////////////
+		    function fncMesseage() {	
+				console.log("#SendMesseage");
+				 var cancelReason = $("input[name='reservationCancelReason']:checked").val();
+				
+				$.ajax({
+					url : "/reservation/json/sendPhoneMessage",
+					type : "POST",
+					dataType: "json",
+					data : {
+						reservationNo : ${reservation.reservationNo},
+						reservationNumber : ${reservation.reservationNumber},
+						reservationCancelDetail :$("#reservationCancelDetail").val(),
+						reservationCancelReason : cancelReason,
+						/* memberPhone : ${member.memberPhone}, */
+						fromMemberPhone : "${member.memberPhone}",
+						toMemberPhone : "${reservation.member.memberPhone}",
+						restaurantNo : ${reservation.restaurant.restaurantNo},
+						toNickName : "${reservation.member.nickname}"
+						/* memberId : "${member.memberId}" */
+						
+					},
+					success : function(data){
+						alert("메세지 성공!!!!!");
+						console.log("메세지 데이터보내기 성공");
+						
+					},
+					error : function(e) {
+						alert(e.responseText);
+					} 
+				}); 
+			} 
 	   	
-	   	
-	   	
-	   	
-	   	
-	   	////////////////////////////////////////////////////////////////////
-	  
+	
+	   	/* 	$("#cancelConfirm").on("click", function() {
+	   			fncMesseage();
+			});
+	   		
+	   		$("#userConfirm").on("click", function() {
+	   			fncMesseage();
+			}); */
+	
+	
+	
 	});
 </script>
 </head>
@@ -251,14 +274,7 @@
 						<h3>예약 정보</h3>
 					
 						<form id="getReservation">
-							<%-- <input type="hidden" id="reservationNo" name="reservationNo" value="${reservation.reservationNo}">
-							<input type="hidden" id="reservationCancelReason" name="reservationCancelReason" value="${reservation.reservationCancelReason}"> --%>
-							<!-- 	<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="1">
-								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="1"> -->
-<%-- 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
-								<input type="hidden" id="restaurant.restaurantNo" name="restaurant.restaurantNo" value="${reservation.restaurant.restaurantNo}"> --%>
-				
-							
+						
 							<div class="row gtr-uniform">
 								<div class="col-6 col-12-xsmall">
 									<label for="reservationNumber">예약 번호</label> 
@@ -304,32 +320,38 @@
 									
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantType">방문 확정 전</label>
-									<p>${reservation.planDate} ${reservation.planTime}</p>
+									<span>${reservation.planDate} ${reservation.planTime}</span>
 									<!-- Button trigger modal -->
 								
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->
-									<c:if test="${member.memberRole == 'owner'}">
-									<p><input type="button" value="방문 확정" name= "reservationStatus" class="button small primary stretched-link " id="reservationStatus-modal" data-toggle="modal"
-									data-target="#getReservationModal"/></p>
+									<c:choose> 
+										<c:when test="${member.memberRole == 'owner'}">
+											<c:if test="${reservation.reservationStatus != 1 && reservation.reservationStatus != 2}">
+											<input type="button" value="방문 확정" name= "reservationStatus" class="button small primary stretched-link " id="reservationStatus-modal" data-toggle="modal"
+											data-target="#getReservationModal"/>
+											</c:if>
+										<input type="button" value="예약 거절" name= "reservationRejection" class="button small primary stretched-link" id="reservationRejection-modal" data-toggle="modal"
+										data-target="#rejectionModal"/>
+										
+										<input type="button" value="거절 사유" name= "cancelUse" class="button small primary stretched-link" id="cancelUse-modal" data-toggle="modal"
+										data-target="#cancelUseModal"/ style="visibility: hidden;">
+										</c:when>
+									</c:choose>
 									
-									<p><input type="button" value="예약 거절" name= "reservationRejection" class="button small primary stretched-link" id="reservationRejection-modal" data-toggle="modal"
-									data-target="#rejectionModal"/></p>
-									
-									<p><input type="button" value="거절 사유" name= "cancelUse" class="button small primary stretched-link" id="cancelUse-modal" data-toggle="modal"
-									data-target="#cancelUseModal"/ style="visibility: hidden;"></p>
-									</c:if>
-									
-									<c:if test="${member.memberRole == 'user'}">
-									<p><input type="button" value="예약 취소" name= "reservationCancel" class="button small primary stretched-link" id="reservationCancel-modal" data-toggle="modal"
-									data-target="#reservationRejectionModal"/></p>
-									
-									<p><input type="button" value="결제 환불" name= "payRefund" class="button small primary stretched-link payRefund-modal" id="payRefund-modal" data-toggle="modal"
-									data-target="#payRefundModal"/></p>
-									</c:if>
-								
+									<c:choose>
+										<c:when test="${member.memberRole == 'user'}">
+										<input type="button" value="예약 취소" name= "reservationCancel" class="button small primary stretched-link" id="reservationCancel-modal" data-toggle="modal"
+										data-target="#reservationRejectionModal"/>
+										<c:if test="${reservation.payOption == 2}">
+										<input type="button" value="결제 환불" name= "payRefund" class="button small primary stretched-link payRefund-modal" id="payRefund-modal" data-toggle="modal"
+										data-target="#payRefundModal"/>
+										</c:if>
+										</c:when>	
+									</c:choose>
+								</div>
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->	
 									<!-- Button trigger modal --> 
-								</div>
+								
 								
 								<div class="col-6 col-12-xsmall fixedDate">
 									<label for=""fixedDate"">방문 확정 후</label> 
@@ -382,17 +404,6 @@
 									<div class="orderTotal"></div>
 									<p>${reservation.returnPayOption}</p>
 								</div>
-								
-								
-								<script type="text/javascript"></script>
-							 
-							 
-					
-								
-								<script>
-								
-								
-							    </script>
 								
 								<!-- Break -->
 								
@@ -538,9 +549,6 @@
 									</div>
 								</div>
 						
-						
-						
-					
 					</div>
 					
 				</section>

@@ -135,6 +135,11 @@ public class ReservationServiceTest {
 		public void testListReservation() throws Exception {
 			Search search = new Search();
 			
+			Member member = new Member();
+			member.setMemberId("hihi@a.com");
+			member.setMemberRole("user");
+			
+			
 			search.setCurrentPage(3);		
 			search.setPageSize(pageSize);
 			
@@ -144,7 +149,7 @@ public class ReservationServiceTest {
 			String memberId = "hihi@a.com";
 			
 			
-			Map<String, Object> map = reservationService.listReservation(search, restaurantNo);
+			Map<String, Object> map = reservationService.listReservation(search,  member, restaurantNo);
 			
 			List<Reservation> list = (List<Reservation>) map.get("list");
 			
@@ -165,8 +170,8 @@ public class ReservationServiceTest {
 			Search search = new Search();
 			
 			Member member = new Member();
-			member.setMemberId("hihi@a.com");
-			member.setMemberRole("user");
+			member.setMemberId("owner01@zzupzzup.com");
+			member.setMemberRole("owner");
 			
 			//String memberId = "user";
 			String restaurantNo = null;
@@ -212,7 +217,7 @@ public class ReservationServiceTest {
 	
 			SendMessage sendMessage = new SendMessage();
 			
-			sendMessage.sendMessage("010-3023-5823","유희주 coolsms 명의 내놔~~~~~~~~");
+			//sendMessage.sendMessage("010-3023-5823","유희주 coolsms 명의 내놔~~~~~~~~");
 			//for문을 돌리는 member.getMemerphone 위에값을 list에 넣어서 넣기
 		
 		}

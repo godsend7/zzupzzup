@@ -51,6 +51,201 @@
 	}
 	
 </script>
+
+<!--  ///////////////////////// review Script ////////////////////////// -->
+<script type="text/javascript">
+
+	$(function() {
+		$(".reviewModal").on("click", function() {
+			console.log("reviewModal click");
+			if (${empty member}) {
+				alert("로그인이 필요한 서비스입니다.");
+				$("#reviewModal").on('show.bs.modal', function(e) {
+					e.preventDefault();
+				});
+			} 
+		});
+		
+		$("body").on("click", '.reviewLike', function() {
+			if (${member.memberId == null}) {
+				alert("로그인이 필요한 서비스입니다.");
+				return;
+			}
+			
+			if (${member.memberRole != "user"}) {
+				return;
+			}
+			
+			if ($(this).hasClass("check") === true) {
+				var likeCount = $(this).closest("div").find("span").text();
+				
+				$.ajax({
+					url : "/review/json/deleteLike/"+$(this).closest("div").find("input[name='reviewNo']").val(),
+					method : "GET",
+					context : this,
+					success : function(data, status) {
+						
+						$(this).closest("div").find("span").text(data.likeCount);
+						$(this).attr('class','reviewLike');
+					}
+				});	
+			} else {
+				var likeCount = $(this).closest("div").find("span").text();
+				
+				$.ajax({
+					url : "/review/json/addLike/"+$(this).closest("div").find("input[name='reviewNo']").val(),
+					method : "GET",
+					context : this, //ajax에서 $(this)를 사용하기 위해서 필요
+					success : function(data, status) {
+						
+						$(this).closest("div").find("span").text(data.likeCount);
+						$(this).attr('class','reviewLike check'); 
+					}
+				});
+			}
+		});
+		
+		var count = 2;
+		if (${!empty list}) {
+		    window.onscroll = function() {
+		    	if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+		    		if (${!empty member}) {
+			    		$("#currentPage").val(count);
+			    		$.ajax(
+			    			{
+			    				url : "/review/json/listReview",
+			    				type : "POST",
+			    				dataType : "json",
+								data : {
+									currentPage : $("#currentPage").val(),
+									restaurantNo : ${param.restaurantNo}
+								},
+								success : function(data) {
+			    					
+			    					var append_nod = "";
+			    					$.each(data.list, function(index, item) {
+			    						if (${member.memberRole != 'admin'} && !item.reviewShowStatus) {
+			    						} else {
+			    							append_nod += '<div class="col-md-12">';
+			    							append_nod += '<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">';
+			    							append_nod += '<div class="col p-4 d-flex flex-column position-static divBox">';
+			    							if (${member.memberRole == 'admin'}) {
+			    								append_nod += '<div class="review-report-info">';
+			    								if (!item.reviewShowStatus) {
+				    								append_nod += '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+												}
+			    								append_nod += '<i class="fa fa-exclamation-triangle" aria-hidden="true"> ';
+			    								append_nod += item.reportCount + ' 회 '; 
+			    								append_nod += ' </i> </div>'; 
+			    							}
+			    							
+			    							append_nod += '<div class="row listStarBox">';
+				    						append_nod += '<label for="scopeAvg" class="label listLabel">평점</label>';
+				    						append_nod += '<div class="star-in">';
+				    						
+				    						for (var i = 0; i < Math.round(item.avgScope); i++) {
+				    							append_nod += '<span class="star-small on"></span>';
+											}
+				    						
+				    						for (var i = 0; i < 5 - Math.round(item.avgScope); i++) {
+				    							append_nod += '<span class="star-small"></span>';
+											}
+				    					
+				    						
+				    						append_nod += '</div>';
+				    						append_nod += '<label for="scopeClean" class="label">청결해요</label>';
+				    						append_nod += '<div class="star-in">';
+				    						
+				    						for (var i = 0; i < Math.round(item.scopeClean); i++) {
+				    							append_nod += '<span class="star-small on"></span>';
+											}
+				    						
+				    						for (var i = 0; i < 5 - Math.round(item.scopeClean); i++) {
+				    							append_nod += '<span class="star-small"></span>';
+											}
+				    						
+				    						append_nod += '</div>';
+				    						append_nod += '<label for="scopeTaste" class="label">맛있어요</label>';
+				    						append_nod += '<div class="star-in">';
+				    						
+				    						for (var i = 0; i < Math.round(item.scopeTaste); i++) {
+				    							append_nod += '<span class="star-small on"></span>';
+											}
+				    						
+				    						for (var i = 0; i < 5 - Math.round(item.scopeTaste); i++) {
+				    							append_nod += '<span class="star-small"></span>';
+											}
+				    						
+				    						append_nod += '</div>';
+				    						append_nod += '<label for="scopeKind" class="label">친절해요</label>';
+				    						append_nod += '<div class="star-in">';
+				    						
+				    						for (var i = 0; i < Math.round(item.scopeKind); i++) {
+				    							append_nod += '<span class="star-small on"></span>';
+											}
+				    						
+				    						for (var i = 0; i < 5 - Math.round(item.scopeKind); i++) {
+				    							append_nod += '<span class="star-small"></span>';
+											}
+				    						
+				    						append_nod += '</div></div>';
+				    						
+				    						append_nod += '<h3 class="mb-0">';
+				    						append_nod += '<span class="badge badge-pill badge-primary">';
+				    						append_nod += item.member.memberRank + '</span>';
+				    						append_nod += '  ' + item.member.nickname;
+				    						append_nod += '</h3>';
+				    						append_nod += '<p class="card-text mb-auto">' + item.reviewDetail + '</p>';
+				    						append_nod += '<div class="mb-1 text-muted">';
+				    						
+				    						console.log(item.hashTag);
+				    						
+				    						$.each(item.hashTag, function(index, hash) {
+				    							append_nod += '<span class="badge badge-pill badge-secondary">' + hash.hashTag + '</span>';
+				    						});
+				    						
+				    						append_nod += '</div><br>';
+				    						append_nod += '<div class="review-info-bottom">';
+				    						append_nod += '<a href="#reviewModal" class="reviewModal" data-toggle="modal" data-id="'+item.reviewNo + '"> 상세보기</a>';
+				    						append_nod += '<div class="review-info-bottom-right">';
+				    						append_nod += '<div class="likeBox">';
+				    						append_nod += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill reviewLike ';
+				    						
+				    						$.each(data.listLike, function(index, like) {
+				    							if ((item.reviewNo == like.reviewNo) && "${member.memberId}" == like.memberId) {
+				    								append_nod += ' check';
+				    								console.log("내꺼");
+				    							} 
+				    						});
+				    						
+				    						append_nod += '" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>';
+				    						append_nod += '<span class="reviewCount">' + item.likeCount + '</span>';
+				    						append_nod += '<input type="hidden" name="reviewNo" value="' + item.reviewNo + '">';
+				    						append_nod += '</div>';
+				    						append_nod += '<span>작성일&nbsp;&nbsp;'+item.reviewRegDate+'</span>';
+				    						append_nod += '</div></div></div></div></div>';
+			    						}
+			    					});
+			    					
+			    					$('.reviewListBox').append(append_nod); 
+			    					count++;
+								},
+								error:function(request,status,error){
+							       console.log("실패");
+							    }
+	
+			    		}); 
+		    		} else {
+						alert("더 많은 리뷰를 확인하기 위해서 로그인해주세요!");
+					}
+				}
+			} 
+			
+		}
+		
+	});
+</script>
+
 </head>
 
 <body class="is-preload">
@@ -349,7 +544,7 @@
   						<path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4zM11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
 						</svg> 음식점 등록일</strong></div>
 						<div class="col-xs-8 col-md-4">${restaurant.restaurantRegDate}</div>
-					</div><br><hr>
+					</div><br>
 					
 					<div class="text-center">
 						
@@ -375,6 +570,8 @@
 					</div>
 					
 					</div>
+					<hr>
+					<jsp:include page="/review/listReview.jsp"></jsp:include>
 				</section>
 			</div>
 		</div>

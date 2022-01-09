@@ -26,6 +26,7 @@ import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.member.MemberService;
+import com.zzupzzup.service.restaurant.RestaurantService;
 
 @Controller
 @RequestMapping("/member/*")
@@ -41,6 +42,10 @@ public class MemberController {
 	@Autowired
 	@Qualifier("memberServiceImpl")
 	private MemberService memberService;
+	
+	@Autowired
+	@Qualifier("restaurantServiceImpl")
+	private RestaurantService restaurantService;
 
 	//*Constructor
 	public MemberController() {
@@ -49,30 +54,6 @@ public class MemberController {
 	}
 
 	//*Method
-//	@RequestMapping( value="login", method=RequestMethod.GET )
-//	public String login() throws Exception{
-//		
-//		System.out.println("/member/login : GET");
-//
-//		return "redirect:/member/loginView.jsp";
-//	}
-	
-//	@RequestMapping( value="login", method=RequestMethod.POST )
-//	public String login(@ModelAttribute("member") Member member , HttpSession session) throws Exception{
-//		
-//		System.out.println("/member/login : POST");
-//		//Business Logic
-//		Member mb = new Member();
-//		mb.setMemberId(member.getMemberId());
-//		memberService.getMember(mb);
-//		
-//		if( member.getPassword().equals(mb.getPassword())){
-//			session.setAttribute("mb", mb);
-//		}
-//		
-//		return "redirect:/main.jsp";
-//	}
-	
 	@RequestMapping( value="logout", method=RequestMethod.GET )
 	public String logout(HttpSession session) {
 		
@@ -139,18 +120,11 @@ public class MemberController {
 		Member memberIdSet = new Member();
 		memberIdSet.setMemberId(memberId);
 		Member member = memberService.getMember(memberIdSet);
-		System.out.println("getMember - "+member);
 		
 		request.setAttribute("member", member);
 		
-		return "forward:/member/getMember.jsp";
-	}
-
-	@RequestMapping(value="listMember")
-	public String listMember(@ModelAttribute("search") Search search, @ModelAttribute Member member,
-			HttpServletRequest request) throws Exception {
-		
-		System.out.println("/member/listMember : GET / POST");
+		//owner의 경우 등록된 음식점 수 노출
+		Search search = new Search();
 		
 		if(search.getCurrentPage() == 0){
 			search.setCurrentPage(1);
@@ -162,19 +136,71 @@ public class MemberController {
 		
 		search.setPageSize(pageSize);
 		
-		Map<String, Object> map = memberService.listMember(search, member);
+		Map<String, Object> myRestaurant = restaurantService.listMyRestaurant(search, member.getMemberId());
+		//Page resultPage = new Page(search.getCurrentPage(), ((Integer)myRestaurant.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		request.setAttribute("myRestaurant", myRestaurant.get("list"));
+		
+		
+		return "forward:/member/getMember.jsp";
+	}
+
+	@RequestMapping(value="listUser")
+	public String listUser(@ModelAttribute("search") Search search, @ModelAttribute("member") Member member,
+			HttpServletRequest request) throws Exception {
+		
+		System.out.println("/member/listUser : GET / POST");
+		
+		if(search.getCurrentPage() == 0){
+			search.setCurrentPage(1);
+		}
+		
+		if(request.getParameter("page") != null) {
+			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+		}
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = memberService.listUser(search, member);
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
-		request.setAttribute("listMember", map.get("listMember"));
+		request.setAttribute("listUser", map.get("listUser"));
 		request.setAttribute("search", search);
-		//request.setAttribute("totalCount", map.get("totalCount"));
 		request.setAttribute("member", member);
+		request.setAttribute("totalCount", map.get("totalCount"));
+		request.setAttribute("resultPage", resultPage);
 		
-		return "forward:/member/listMember.jsp";
+		return "forward:/member/listUser.jsp";
 	}
 	
-	public void listOwner() {
+	@RequestMapping(value="listOwner")
+	public String listOwner(@ModelAttribute("search") Search search, @ModelAttribute("member") Member member,
+			HttpServletRequest request) throws Exception {
+
+		System.out.println("/member/listOwner : GET / POST");
+		
+		if(search.getCurrentPage() == 0){
+			search.setCurrentPage(1);
+		}
+		
+		if(request.getParameter("page") != null) {
+			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+		}
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = memberService.listOwner(search, member);
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		request.setAttribute("listOwner", map.get("listOwner"));
+		request.setAttribute("search", search);
+		request.setAttribute("member", member);
+		request.setAttribute("totalCount", map.get("totalCount"));
+		request.setAttribute("resultPage", resultPage);
+		
+		return "forward:/member/listOwner.jsp";
 		
 	}
 	
@@ -226,9 +252,36 @@ public class MemberController {
 		
 	}
 	
-//	public void calculateActivityScore() {
-//		
-//	}
+	@RequestMapping(value="listMyActivityScore", method=RequestMethod.GET)
+	public String listMyActivityScore(@RequestParam("memberId") String memberId, @ModelAttribute("search") Search search, @ModelAttribute("member") Member member,
+			HttpServletRequest request) throws Exception {
+		
+		System.out.println("/member/listMyActivityScore : GET");
+		
+		if(search.getCurrentPage() == 0){
+			search.setCurrentPage(1);
+		}
+		
+		if(request.getParameter("page") != null) {
+			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+		}
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = memberService.listActivityScore(search, memberId);
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		request.setAttribute("listMyActivityScore", map.get("listMyActivityScore"));
+		request.setAttribute("search", search);
+		request.setAttribute("totalCount", map.get("totalCount"));
+		request.setAttribute("resultPage", resultPage);
+		
+		System.out.println("map.get ==> "+map.get("listMyActivityScore"));
+		
+		return "forward:/member/listMyActivityScore.jsp";
+		
+	}
 	
 	public void calculateMannerScore() {
 		
