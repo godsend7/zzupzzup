@@ -267,7 +267,7 @@
 	</select>
 	
 	<!-- main Map -->
-	<select id="listMainRestaurant" resultMap="restaurantSelectMap">
+	<select id="listMainRestaurant" parameterType="search" resultMap="restaurantSelectMap">
 		SELECT *
 		FROM RESTAURANT AS rt
 		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
@@ -275,7 +275,18 @@
 		LEFT OUTER JOIN (SELECT MENU_TITLE, RESTAURANT_NO 
 						 FROM MENU
 						 WHERE MAIN_MENU_STATUS = 1) AS m ON (rt.RESTAURANT_NO = m.RESTAURANT_NO)
-		WHERE rt.RESTAURANT_REG_DATE IS NOT NULL;           
+		WHERE rt.RESTAURANT_REG_DATE IS NOT NULL
+		<if test='!"".equals(searchKeyword)'>
+			<bind name="searchKeywords" value="'%' + searchKeyword + '%'" />
+			<if test="searchCondition == 0">
+				AND rt.restaurant_name LIKE #{searchKeywords};       
+			</if>
+			<if test="searchCondition == 1">
+				AND rt.street_address LIKE #{searchKeywords};       
+			</if>
+		</if>
+		
+		     
 	</select>
 	
 </mapper>

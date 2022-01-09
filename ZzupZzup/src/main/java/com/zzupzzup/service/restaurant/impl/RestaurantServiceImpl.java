@@ -153,9 +153,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 
 	@Override
-	public List<Restaurant> listMainRestaurant() throws Exception {
+	public List<Restaurant> listMainRestaurant(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		return restaurantDAO.listMainRestaurant();
+		return restaurantDAO.listMainRestaurant(search);
 	}
 
 }

@@ -135,9 +135,9 @@
 									<ul>
 										<li><a href="/restaurant/listRestaurant">등록된 전체 음식점</a></li>
 										<li><a href="/restaurant/listRequestRestaurant">음식점 등록 요청 내역</a></li>
-										<li><a href="/review/listReview">전체 리뷰 내역</a></li>
 									</ul>
 								</li>
+								<li><a href="/review/listReview">전체 리뷰 관리</a></li>
 								<li><a href="/report/listReport">신고/제보 관리</a></li>
 							</c:if>
 							<li><a href="/restaurant/addRestaurant?memberId=${member.memberId}">test-음식점등록</a></li>

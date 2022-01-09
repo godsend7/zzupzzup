@@ -40,7 +40,7 @@
 		console.log("header 실행");
 	</script>
 	<%-- <c:if test = "${fn:contains(path, '')}"> --%>
-		<form class="col-12 col-lg-auto mb-3 mb-lg-0">
+		<form class="col-12 col-lg-auto mb-3 mb-lg-0" id="mapSearch">
 			<div class="col-md-12 col-sm-12 d-flex">
 			<div>
 				<select id="searchCondition" name="searchCondition">
@@ -54,7 +54,7 @@
 	    		<input type="search" id="searchKeyword" class="form-control" placeholder="${path}" aria-label="Search" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
 	    	</div>
 	    	<div>
-	    		<a href="javascript:funSearch()" class="button primary icon solid fa-search search-btn"></a>
+	    		<a href="javascript:searchMap();" class="button primary icon solid fa-search search-btn"></a>
 	    	</div>
 	    	</div>
 	    </form>
