@@ -70,6 +70,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 		// TODO Auto-generated method stub
 		Review review = sqlSession.selectOne("ReviewMapper.getReview", reviewNo);
 		
+		//해당 review의 좋아요 수 조회
 		review.setLikeCount(getLikeCount(review.getReviewNo()));
 				
 		return review;
