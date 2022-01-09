@@ -124,12 +124,15 @@ public class MemberServiceImpl implements MemberService{
         try {
             JSONObject obj = (JSONObject) coolsms.send(params);
             System.out.println(obj.toString());
+            
+            return 1;
         } catch (CoolsmsException e) {
             System.out.println(e.getMessage());
             System.out.println(e.getCode());
+            
+            return 0;
         }
         
-        return 1;
 	}
 
 //	@Override
