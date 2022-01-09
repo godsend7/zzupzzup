@@ -68,6 +68,9 @@ public class RatingController {
 		//System.out.println("===================================");
 		//System.out.println("listChat map : " + map);
 		//System.out.println("===================================");
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer) map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println("resultPage : " + resultPage);
 
 		List<Rating> list = (List<Rating>) map.get("list");
 
@@ -87,10 +90,6 @@ public class RatingController {
 			r.setRatingFromId(FromMember);
 		}
 		
-		Page resultPage = new Page(search.getCurrentPage(), ((Integer) map.get("totalCount")).intValue(), pageUnit,
-				pageSize);
-		System.out.println("resultPage : " + resultPage);
-		
 		//System.out.println("===================================");
 		//System.out.println("listChat list : " + list);
 		//System.out.println("===================================");
@@ -98,6 +97,7 @@ public class RatingController {
 		model.addAttribute("list", list);
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
+		request.setAttribute("totalCount", map.get("totalCount"));
 		request.setAttribute("member", member);
 		
 		return "forward:/rating/listRating.jsp";
@@ -106,7 +106,7 @@ public class RatingController {
 	@RequestMapping(value = "listMyRating")
 	public String listMyRating(@ModelAttribute("search") Search search, Model model, HttpServletRequest request,	HttpSession session) throws Exception {
 		System.out.println("/rating/listMyChat : GET / POST");
-		System.out.println("rating/listRating page : " + request.getParameter("page"));
+		System.out.println("rating/listMyRating page : " + request.getParameter("page"));
 
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
@@ -119,7 +119,7 @@ public class RatingController {
 		search.setPageSize(pageSize);
 		
 		Member member = (Member)session.getAttribute("member");
-		System.out.println("listChat member : " + member);
+		System.out.println("listMyChat member : " + member);
 
 		// Business logic
 		Map<String, Object> map = ratingService.listMyRating(search, member.getMemberId());
@@ -147,7 +147,7 @@ public class RatingController {
 		System.out.println("resultPage : " + resultPage);
 		
 		//System.out.println("===================================");
-		//System.out.println("listChat list : " + list);
+		//System.out.println("listMyChat list : " + list);
 		//System.out.println("===================================");
 		
 		model.addAttribute("list", list);
@@ -155,7 +155,7 @@ public class RatingController {
 		model.addAttribute("search", search);
 		request.setAttribute("member", member);
 		
-		return "forward:/rating/listRating.jsp";
+		return "forward:/rating/listMyRating.jsp";
 	}
 
 }

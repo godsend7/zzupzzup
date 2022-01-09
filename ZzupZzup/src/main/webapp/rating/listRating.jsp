@@ -17,12 +17,16 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
+
+	//검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용
+	function fncPageNavigation(currentPage) {
+		console.log(currentPage);
+		$("#currentPage").val(currentPage);
+	   	$("#ratingForm").attr("method", "POST").attr("action", "/rating/listRating").submit();
+	}
+	
 	$(function() {
 		console.log("listRatig.jsp");
-		
-		function fncGetList(currentPage){
-			$("currentPage")
-		}		
 		
 		//============= "참여하기" Event 처리 ============
 		$("a:contains(참여한 채팅방 정보)").on("click", function(e) {
@@ -222,6 +226,11 @@
 
 				<section id="listRating">
 					<div class="container">
+						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
+						<form id="ratingForm" name="ratingForm">
+						전체  ${resultPage.totalCount} 건수, 현재 ${resultPage.currentPage}  페이지
+							<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
+						</form>
 						<!-- start:Table -->
 						<c:forEach var="rating" items="${list}">
 						<div class="row table-list mb-2">
@@ -242,18 +251,9 @@
 						</c:forEach>
 						<!-- end -->
 
-
-						<ul class="pagination">
-							<li><span class="button disabled">Prev</span></li>
-							<li><a href="#" class="page active">1</a></li>
-							<li><a href="#" class="page">2</a></li>
-							<li><a href="#" class="page">3</a></li>
-							<li><span>&hellip;</span></li>
-							<li><a href="#" class="page">8</a></li>
-							<li><a href="#" class="page">9</a></li>
-							<li><a href="#" class="page">10</a></li>
-							<li><a href="#" class="button">Next</a></li>
-						</ul>
+						<!-- PageNavigation Start... -->
+						<jsp:include page="../common/pageNavigator.jsp"/>
+						<!-- PageNavigation End... -->
 						
 						<!-- S:Modal -->
 						<!-- 채팅 정보자세히 보기 모달 -->
