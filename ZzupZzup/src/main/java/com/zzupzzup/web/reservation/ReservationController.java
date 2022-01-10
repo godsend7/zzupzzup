@@ -217,6 +217,8 @@ public class ReservationController {
 		if (member != null && !member.getMemberRole().equals("owner")) {
 			map = reservationService.listReservation(search, member,restaurantNo);
 			System.out.println("listReservation admin");
+
+			System.out.println("listReservationController:::::::::::::::::::::"+map.get("list"));
 		} 
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
@@ -255,6 +257,7 @@ public class ReservationController {
 		
 		if (member != null && member.getMemberRole().equals("owner")) {
 			map = reservationService.listMyReservation(search, member, restaurantNo);
+			System.out.println("listMyReservationController::"+map);
 			System.out.println("listMyReservation");
 			System.out.println("::listMyReservation memberId"+member);
 			System.out.println("::listMyReservation restaurantNo::"+restaurantNo);
