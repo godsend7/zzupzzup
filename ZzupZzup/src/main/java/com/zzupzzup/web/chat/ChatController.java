@@ -104,17 +104,26 @@ public class ChatController {
 			search.setCurrentPage(1);
 		}
 		
+		if(search.getSearchSort() == null || search.getSearchSort() == "") {
+			search.setSearchSort("latest");
+		}
+		
 		if(request.getParameter("page") != null) {
 			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
 		}
 		
 		search.setPageSize(pageSize);
 		
+		Member member = (Member)session.getAttribute("member");
+		
+		
+		
 		// Business logic
-		Map<String, Object> map = chatService.listChat(search);
-		//System.out.println("===================================");
-		//System.out.println("listChat map : " + map);
-		//System.out.println("===================================");
+		Map<String, Object> map = chatService.listChat(search, member.getMemberId());
+		System.out.println("===================================");
+		System.out.println(member.getMemberId());
+		System.out.println("listChat map : " + map);
+		System.out.println("===================================");
 		
 		List<Chat> list = (List<Chat>)map.get("list");
 		//System.out.println("list : " + list);
@@ -127,10 +136,10 @@ public class ChatController {
 		}
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
-		System.out.println("resultPage : " + resultPage);
+		//System.out.println("resultPage : " + resultPage);
 		
-		Member member = (Member)session.getAttribute("member");
-		System.out.println("listChat member : " + member);
+		
+		//System.out.println("listChat member : " + member);
 		
 		// Model and View
 		model.addAttribute("list", list);
