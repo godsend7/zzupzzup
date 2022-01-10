@@ -13,12 +13,50 @@
 
 <!-- naver Map OpenAPI -->
 <script defer type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=7gzdb36t5o"></script>
+<link href="//cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">  
+<script src="//cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
 	.restaurantCheck {
 		display: none;
 	}
+	
+	.filterBox {
+		z-index: 99;
+		position: fixed;
+		cursor: move;
+		width: 250px;
+		height: 110px;
+		right: 20px;
+		top: 250px;
+		padding: 1.0em;
+	}
+	
+	.btn-outline-primary {
+		color: #f56a6a;
+		border-color: #f56a6a;
+	}
+	
+	.btn-outline-primary:hover{
+		color: #f56a6a;
+		border-color: #f56a6a;
+		background-color: f56a6a;
+	}
+	
+	.toggle.btn-outline-primary .toggle-handle {
+		background-color: #f56a6a;
+		border-color: #f56a6a;
+	}
+	
+	.toggle.btn-outline-primary .toggle-handle:hover{
+		color: #f56a6a;
+		border-color: #f56a6a;
+		background-color: f56a6a;
+	}
+	/* .mainMap {
+		position: relative;
+	} */
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -30,12 +68,60 @@
 	//현재위치로 이동
 	//naver.maps.Event.once(map, '')
 	
+	//지도 정보를 담을 객체 선언
+	let markers = new Array();
+	let infowindows = new Array();
+	
+	//화면에 보여줄 map 객체 선언
+	var map;
+	
+	//map search condition
+	var reCheck = false;
+	var parkCheck = false;
+	
 	$(function() {
+		
 		loadGyeonggidoMap();
 		loadRestaurantMap();
+		
+		
+		$( ".filterBox" ).draggable();
+		
+		$(".reservationCheck").on("change",function() {
+			$("#searchKeyword").val('');
+			if($(this).prop("checked") == true){
+				reCheck = true;
+				loadRestaurantMap();
+			} else {
+				reCheck = false;
+				loadGyeonggidoMap();
+				loadRestaurantMap();
+			}
+		});
+		
+		$(".parkableCheck").on("change",function() {
+			$("#searchKeyword").val('');
+			if($(this).prop("checked") == true){
+				parkCheck = true;
+				loadRestaurantMap();
+			} else {
+				parkCheck = false;
+				loadGyeonggidoMap();
+				loadRestaurantMap();
+			}
+		});
+		
+		
+		document.getElementById("mapSearch").addEventListener("keydown", function(evant) {
+			//console.log("keydown");
+			if (evant.keyCode === 13) {
+				evant.preventDefault();
+				document.getElementById("searchButton").click();
+			}
+		});
 	});
 	
-	function loadGyeonggidoMap(searchCondition) {
+	function loadGyeonggidoMap() {
 		/* $.ajax(
 			{
 				url : "https://openapi.gg.go.kr/PlaceThatDoATasteyFoodSt?KEY=0584ed7e427d4676a15a4bf7f91b1597&Type=json&pIndex=1&pSize=1000",
@@ -105,7 +191,7 @@
 		});
 	}
 	
-	function loadRestaurantMap(searchCondition) {
+	function loadRestaurantMap() {
 		
 		$.ajax(
 			{
@@ -129,7 +215,8 @@
    						//console.log(item.location);
    						arrayLayout.push(
 							{restaurantNo:item.restaurantNo, restaurantName:item.restaurantName, menuType:item.returnMenuType, mainMenu:item.restaurantMenus.menuTitle, 
-							 latitude:item.latitude, longitude:item.longitude, streetADDR:item.streetAddress, areaADDR:item.areaAddress, restaurantTel:item.restaurantTel, reservationStatus:item.reservationStatus}
+							 latitude:item.latitude, longitude:item.longitude, streetADDR:item.streetAddress, areaADDR:item.areaAddress, restaurantTel:item.restaurantTel, 
+							 parkable:item.parkable, reservationStatus:item.reservationStatus}
    						); 
    					});
    					
@@ -157,72 +244,32 @@
 			{location:'건대입구역', lat: '37.539922', lng: '127.070609'},
             {location:'어린이대공원역', lat: '37.547263', lng: '127.074181'}
 		); */
+		markers = new Array();
+		infowindows = new Array();
 		
-		let markers = new Array();
-		let infowindows = new Array();
-		
-		
-		
-		var map = new naver.maps.Map('content', {
+		map = new naver.maps.Map('content', {
 	        center: new naver.maps.LatLng(nowLatitude, newLongitude),  //지도 시작 좌표, 현재위치로 변경
 	        zoom: 10
 	    });
-		
+		console.log(parkCheck);
+		console.log(reCheck);
+		//filter 조건에 따른 map 표시
 		for (var i=0; i<arrayLayout.length; i++) {
-			var marker = new naver.maps.Marker({
-		        map: map,
-		        title: arrayLayout[i].restaurantName, //지역구 이름 => 음식점 이름과 같음
-		        position: new naver.maps.LatLng(arrayLayout[i].latitude, arrayLayout[i].longitude)
-		    });
-			
-			var menuType = "";
-			var mainMenu = "";
-			var reservationStatus = "";
-			if (arrayLayout[i].menuType != null) {
-				menuType = "("+arrayLayout[i].menuType+")";	
-			}
-			
-			if (arrayLayout[i].mainMenu != null) {
-				mainMenu = arrayLayout[i].mainMenu;
-			}
-			
-			if (arrayLayout[i].reservationStatus != null) {
-				if (arrayLayout[i].reservationStatus) {
-					reservationStatus = '<span class="badge badge-info">예약 및 결제 가능</span>';
-				} else {
-					reservationStatus = '<span class="badge badge-danger">예약 및 결제 불가능</span>';
+			if(reCheck && parkCheck) {
+				if (arrayLayout[i].reservationStatus && arrayLayout[i].parkable) {
+					selectMap(i);
 				}
-			}
-			
-			var contentString = "";
-			
-			/* if (arrayLayout[i].restaurantNo != null) {
-				contentString = '<div style="padding:10px; width:280px;"><b>' + arrayLayout[i].restaurantName + menuType + ' <a href="/restaurant/getRestaurant?restaurantNo=' + arrayLayout[i].restaurantNo + '" class="button primary small" style="float:right; margin-right:20px;">찜</a>';
+			} else if (reCheck) {
+				if (arrayLayout[i].reservationStatus) {
+					selectMap(i);
+				}
+			} else if (parkCheck) {
+				if (arrayLayout[i].parkable) {
+					selectMap(i);
+				}
 			} else {
-				contentString = '<div style="padding:10px; width:280px;"><b>' + arrayLayout[i].restaurantName + menuType;
-			}  */
-		
-			contentString = '<div style="padding:10px; width:280px;"><b>' + arrayLayout[i].restaurantName + menuType +
-							'<br>'+ mainMenu +
-							'<br>'+ arrayLayout[i].streetADDR +
-							/* '<br>'+ arrayLayout[i].areaADDR + */
-							'<br>'+ arrayLayout[i].restaurantTel;
-							
-							 
-			if (arrayLayout[i].restaurantNo != null) {
-				contentString += '<br><div>'+ reservationStatus + '<a href="/restaurant/getRestaurant?restaurantNo=' + arrayLayout[i].restaurantNo + '" class="button primary small" style="float:right; margin-right:20px;">상세보기</a> </div></div>';
-			}	
-							 
-			//클릭 했을 때 띄어줄 정보 HTML
-			var infowindow = new naver.maps.InfoWindow({
-			    content: contentString,
-			    maxWidth: 300,
-			    borderColor: "#f56a6a",
-			    borderWidth: 5
-			});
-		
-			markers.push(marker); //생성한 마커를 배열에 담기
-			infowindows.push(infowindow); //생성한 정보창을 배열에 담기
+				selectMap(i);
+			}
 		}
 		
 		function getClickHandler(seq) {
@@ -244,6 +291,64 @@
 			naver.maps.Event.addListener(markers[i], "click", getClickHandler(i));
 		}
 	}
+	
+	function selectMap(i){
+		var marker = new naver.maps.Marker({
+	        map: map,
+	        title: arrayLayout[i].restaurantName, //지역구 이름 => 음식점 이름과 같음
+	        position: new naver.maps.LatLng(arrayLayout[i].latitude, arrayLayout[i].longitude)
+	    });
+		
+		var menuType = "";
+		var mainMenu = "";
+		var reservationStatus = "";
+		if (arrayLayout[i].menuType != null) {
+			menuType = "("+arrayLayout[i].menuType+")";	
+		}
+		
+		if (arrayLayout[i].mainMenu != null) {
+			mainMenu = arrayLayout[i].mainMenu;
+		}
+		
+		if (arrayLayout[i].reservationStatus != null) {
+			if (arrayLayout[i].reservationStatus) {
+				reservationStatus = '<span class="badge badge-info">예약 및 결제 가능</span>';
+			} else {
+				reservationStatus = '<span class="badge badge-danger">예약 및 결제 불가능</span>';
+			}
+		}
+		
+		var contentString = "";
+		
+		/* if (arrayLayout[i].restaurantNo != null) {
+			contentString = '<div style="padding:10px; width:280px;"><b>' + arrayLayout[i].restaurantName + menuType + ' <a href="/restaurant/getRestaurant?restaurantNo=' + arrayLayout[i].restaurantNo + '" class="button primary small" style="float:right; margin-right:20px;">찜</a>';
+		} else {
+			contentString = '<div style="padding:10px; width:280px;"><b>' + arrayLayout[i].restaurantName + menuType;
+		}  */
+	
+		contentString = '<div style="padding:10px; width:280px;"><b>' + arrayLayout[i].restaurantName + menuType +
+						'<br>'+ mainMenu +
+						'<br>'+ arrayLayout[i].streetADDR +
+						/* '<br>'+ arrayLayout[i].areaADDR + */
+						'<br>'+ arrayLayout[i].restaurantTel;
+						
+						 
+		if (arrayLayout[i].restaurantNo != null) {
+			contentString += '<br><div>'+ reservationStatus + '<a href="/restaurant/getRestaurant?restaurantNo=' + arrayLayout[i].restaurantNo + '" class="button primary small" style="float:right; margin-right:20px;">상세보기</a> </div></div>';
+		}	
+						 
+		//클릭 했을 때 띄어줄 정보 HTML
+		var infowindow = new naver.maps.InfoWindow({
+		    content: contentString,
+		    maxWidth: 300,
+		    borderColor: "#f56a6a",
+		    borderWidth: 5
+		});
+	
+		markers.push(marker); //생성한 마커를 배열에 담기
+		infowindows.push(infowindow); //생성한 정보창을 배열에 담기
+	}
+	
 	
 	window.onload = function() {
 		var options = {
@@ -279,11 +384,6 @@
 <body class="is-preload">
 	<!-- S:Wrapper -->
 	<div id="wrapper">
-
-		<script>
-			console.log("main 실행");
-		</script>
-
 		<!-- S:Main -->
 		<div id="main" class="index">
 			<div class="inner">
@@ -291,7 +391,19 @@
 				<jsp:include page="/layout/header.jsp" />
 
 				<section id="map">
-					<div class="content" id="content" style="width: 100%; height:100vh;"></div>
+					<div class="content mainMap" id="content" style="width: 100%; height:100vh;">
+					
+					<div class="filterBox ui-widget-content">
+						<!-- <nav class="top_nav" style="background: #f56a6a;">
+							<div style="height: 20px;"></div>
+						</nav> -->
+						<!-- <p><input type="checkbox" checked data-toggle="toggle" data-size="xs"> 예약 가능 여부 </p> -->
+						<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="reservationCheck"> 예약 가능한 가게만 보기 </p>
+						<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="parkableCheck"> 주차 가능한 가게만 보기 </p>
+					</div>
+					
+					</div>
+					
 				</section>
 			</div>
 		</div>
