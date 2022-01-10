@@ -90,8 +90,8 @@
 			});
 					
 	   	/////////////////////////ajax//////////////////////////
-	   	
-	   		$("#userConfirm").on("click", function() {
+	   	function fncUserConfirm() {
+	   		
 				console.log("#reservationRejectionModal");
 				console.log("${reservation.reservationNo}");
 				console.log("${reservation.reservationStatus}");
@@ -113,6 +113,14 @@
 						alert(e.responseText);
 					}
 				}); 
+			
+	   		
+	   	}
+	
+			$("#userConfirm").on("click", function() {
+				fncUserConfirm();
+				fncMesseage();
+				
 			});
 	   	//////////////////////////////////////////////////////////////////
 	   		$(".cancelUseModal").on("click", function() {
@@ -175,7 +183,7 @@
 			} 
 	   	
 	   		$("#cancelConfirm").on("click", function() {
-				//fncCancelConfirm();
+				fncCancelConfirm();
 				fncMesseage();
 			});
 			

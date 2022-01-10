@@ -36,7 +36,7 @@
 	});
 	
 	function loadGyeonggidoMap(searchCondition) {
-		$.ajax(
+		/* $.ajax(
 			{
 				url : "https://openapi.gg.go.kr/PlaceThatDoATasteyFoodSt?KEY=0584ed7e427d4676a15a4bf7f91b1597&Type=json&pIndex=1&pSize=1000",
    				type : "GET",
@@ -55,7 +55,7 @@
    							{restaurantName:item.RESTRT_NM, mainMenu:item.REPRSNT_FOOD_NM, latitude:item.REFINE_WGS84_LAT, longitude:item.REFINE_WGS84_LOGT,
    							 streetADDR:item.REFINE_ROADNM_ADDR, areaADDR:item.REFINE_LOTNO_ADDR, restaurantTel:item.TASTFDPLC_TELNO}
    							/* item */
-   						);
+   					/*	);
    					});
    					
    					initMap();
@@ -65,15 +65,60 @@
 				       console.log("실패");
 				    }
 			}
-		)
+		) */
+		console.log("뭐야 실행된거임?");
+		$.ajax({
+					url : "/map/json/gyeonggidoRestAPI",
+	   				type : "POST",
+	   				dataType : "json",
+	   				contentType: 'application/json',
+	   				data : JSON.stringify({
+	   					searchCondition : $("#searchCondition").val(),
+	   					searchKeyword : $("#searchKeyword").val()
+	   				}),
+	   				success : function(data, status) {
+	   					//alert( "JSON.stringify(JSONData) : \n"+JSON.stringify(data) );
+	   					//console.log(JSON.stringify(data));
+	   					//alert(status);
+						//alert("data : \n"+data);
+						
+	   					//var obj = JSON.parse(data);
+	   					//console.log(data.PlaceThatDoATasteyFoodSt[1].row);
+	   					//console.log(JSON.parse(data));
+	   					$.each(data, function(index, item){ 
+	   						//console.log(item.RESTRT_NM);
+	   						arrayLayout.push(
+	   							{restaurantName:item.RESTRT_NM, mainMenu:item.REPRSNT_FOOD_NM, latitude:item.REFINE_WGS84_LAT, longitude:item.REFINE_WGS84_LOGT,
+	   							 streetADDR:item.REFINE_ROADNM_ADDR, areaADDR:item.REFINE_LOTNO_ADDR, restaurantTel:item.TASTFDPLC_TELNO}
+	   							/* item */
+	   						)
+	   					});
+	   					
+	   				console.log(arrayLayout);
+   					
+   					initMap();
+					
+   				},
+   				error:function(request,status,error){
+					console.log("실패");
+					console.log(request);
+					console.log(error);
+				}
+		});
 	}
 	
 	function loadRestaurantMap(searchCondition) {
+		
 		$.ajax(
 			{
 				url : "/map/json/listRestaurant",
-   				type : "GET",
+				type : "POST",
    				dataType : "json",
+   				contentType: 'application/json',
+   				data : JSON.stringify({
+   					searchCondition : $("#searchCondition").val(),
+   					searchKeyword : $("#searchKeyword").val()
+   				}),
    				success : function(data, status) {
    					//alert( "JSON.stringify(JSONData) : \n"+JSON.stringify(data) );
    					//console.log(JSON.stringify(data));
@@ -100,6 +145,13 @@
 		)
 	}
 	
+	function searchMap() {
+		arrayLayout = new Array();
+		
+		loadGyeonggidoMap();
+		loadRestaurantMap();
+	}
+	
 	function initMap() {
 		/* var arrayLayout = new Array();
 		arrayLayout.push(
@@ -115,7 +167,7 @@
 		
 		var map = new naver.maps.Map('content', {
 	        center: new naver.maps.LatLng(nowLatitude, newLongitude),  //지도 시작 좌표, 현재위치로 변경
-	        zoom: 15
+	        zoom: 10
 	    });
 		
 		for (var i=0; i<arrayLayout.length; i++) {
@@ -219,15 +271,20 @@
 		} else {
 			alert("위치 정보 사용이 불가능한 웹입니다.");
 		}
-		
-		
 	}
+	
+	
 </script>
+
 </head>
 
 <body class="is-preload">
 	<!-- S:Wrapper -->
 	<div id="wrapper">
+
+		<script>
+			console.log("main 실행");
+		</script>
 
 		<!-- S:Main -->
 		<div id="main" class="index">

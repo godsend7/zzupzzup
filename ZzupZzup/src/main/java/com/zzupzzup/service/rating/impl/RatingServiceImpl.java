@@ -37,7 +37,6 @@ public class RatingServiceImpl implements RatingService {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
-		
 		map.put("list", ratingDao.listRating(map));
 		map.put("totalCount", ratingDao.getTotalCount(search));
 		
@@ -51,7 +50,7 @@ public class RatingServiceImpl implements RatingService {
 		map.put("memberId", memberId);
 		
 		map.put("list", ratingDao.listMyRating(map));
-		map.put("totalCount", ratingDao.getTotalCount(search));
+		map.put("totalCount", ratingDao.getMyTotalCount(memberId));
 		
 		return map;
 	}
