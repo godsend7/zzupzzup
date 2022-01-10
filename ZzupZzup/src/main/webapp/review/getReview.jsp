@@ -76,10 +76,15 @@
 				});
 				
 				$("#reviewImage").empty();
-				$.each(data.list.reviewImage, function(index, item) {
-					//console.log(item);
-					imageOutPut(item, index);
-				});
+				if (data.list.reviewImage.length != 0) {
+					$.each(data.list.reviewImage, function(index, item) {
+						//console.log(item);
+						imageOutPut(item, index);
+					});
+				} else {
+					$("#reviewImage").text("등록된 이미지 없습니다.");
+				}
+				
 				
 				//$("#reviewImage").append("</div>");
 				/* var imageControl = "<a class='carousel-control-prev' data-target='#carouselExampleIndicators' data-slide='prev'> "
@@ -231,6 +236,7 @@
 				
 				<br/>
 				
+				<label for="reviewImage">리뷰 이미지</label>
 				<div class="bd-example">
 					<div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-ride="carousel">
 						
@@ -246,10 +252,11 @@
 							<span class="sr-only">Next</span>
 						</a>
 					</div>
-				</div>  
-					
+				</div>
+				
 				<br/>
-					
+				
+				<label for="reviewStar">음식점 평가</label>
 				<div class="row starBox">
 					<div class="col-md-4">
 						<label for="scopeClean" class="label star_label">청결해요</label>

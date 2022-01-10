@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-LISTCOMMUNITY</title>
+<title>나만의 작고 소중한 맛집</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
@@ -38,14 +38,21 @@
 			self.location = "/community/getCommunity?postNo=${community.postNo}";
 		});
 	}); */
-
-	// 게시물 작성하기 버튼 실행
-	$(function() {
-		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-		$("#write").on("click", function() {
-			self.location = "/community/addCommunity";
-		});
-	});
+	
+	window.onload = function(){
+		if(${member.memberRole == 'user'}) {
+			// 게시물 작성하기 버튼 실행
+			$(function() {
+				//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+				$("#write").on("click", function() {
+					self.location = "/community/addCommunity";
+				});
+			});
+		} else {
+			alert("죄송합니다. 업주는 이용할 수 없는 서비스입니다."),
+			self.location = "../main.jsp";
+		}
+	}
 </script>
 </head>
 

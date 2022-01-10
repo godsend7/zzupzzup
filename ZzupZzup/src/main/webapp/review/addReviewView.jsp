@@ -6,7 +6,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP</title>
+<title>Review 작성</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 <link rel="stylesheet" href="/resources/css/review.css" />
@@ -358,8 +358,8 @@
 					<div class="container">
 					
 						<!-- start:Form -->
-						<h3>리뷰 등록</h3>
-					
+						<h2>Review 등록</h2>
+						<br>
 						<form id="review">
 							<div class="row gtr-uniform">
 							
@@ -377,6 +377,11 @@
 									</c:forEach> <br>
 					 				방문 확정일 : ${review.reservation.fixedDate}</p>
 					 			</div>
+							 	
+							 	<div class="col-12">
+							 		<br>
+									<label for="reviewStar">음식점 평가</label>
+								</div>
 							 	
 							 	<div class="col-md-4 star-box">
 							 		<label for="scopeClean" class="starLabel">청결해요</label>
@@ -440,7 +445,7 @@
 								<!-- Break -->
 								<div class="col-12">
 									<label for="hashTag">해시태그 등록</label>
-									<input id="hashTagAuto" type="text"><br>
+									<input id="hashTagAuto" type="text" placeholder="#을 입력하여 해시태그를 등록해보세요."><br>
 									
 									<div class="box" id="hashTagBox">
 										<!-- <span class='badge badge-pill badge-secondary' id="hashtag0">#인스타 맛집  x</span> -->

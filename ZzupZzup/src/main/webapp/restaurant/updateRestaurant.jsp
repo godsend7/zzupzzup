@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
 
 <!DOCTYPE HTML>
 
@@ -26,6 +27,9 @@
 <script src="//cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 
 <script type="text/javascript">
+
+	//이미지 정보를 담을 배열
+	var sel_files = [];
 	
 	//음식점의 위도와 경도를 가져오기 위해 선언
 	var geocoder = new daum.maps.services.Geocoder();
@@ -103,13 +107,7 @@
 	        }
 	    }).open();
 	}
-	
-</script>
 
-<script type="text/javascript">
-	
-	var index = 1;
-	
 	function fncUpdateRestaurant(){
 		
 		var restaurantName = $("input[name='restaurantName']").val();
@@ -171,19 +169,30 @@
 			return;
 		}
 		
-		alert("음식점 등록 정보가 수정되었습니다.");
-	
-		$("#updateRestaurant").attr("method" , "POST").attr("action" , "/restaurant/updateRestaurant").attr("enctype", "multipart/form-data").submit();
+		uploadFiles();
 		
 	} // fncUpdateRestaurant() FINISH
 	
-	
 	window.onload = function(){
+		<c:forEach var="image" items="${restaurant.restaurantImage}" varStatus="status">
+		<c:set var="fileName" value="${fn:split(image, '_')}"/>
+			sel_files.push( {name : "${fileName[1]}" });
+		</c:forEach>
+		
+		var index = ${fn:length(restaurant.restaurantMenus)};
+		console.log(index);
 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 		$(function() {
-			// 등록 버튼 실행
-			$( "#button1" ).on("click" , function() {
-				fncAddRestaurant();
+			// 정보 수정 버튼 실행
+			$( "#dataUpdate" ).on("click" , function() {
+				fncUpdateRestaurant();
+			});
+			
+			// 등록 재요청 버튼 실행
+			$( "#redemand" ).on("click" , function() {
+				fncUpdateRestaurant();
+				/* alert('등록 심사 재요청이 완료되었습니다.\n심사 결과는 마이페이지에서 확인 가능합니다.');
+				$("#updateRestaurant").attr("method" , "POST").attr("action" , "/restaurant/updateRestaurant?restaurantNo=${restaurant.restaurantNo}").attr("enctype", "multipart/form-data").submit(); */
 			});
 			
 			// 주소 검색 버튼 실행
@@ -199,6 +208,7 @@
 		
 		$(function() {
 			$( "#plus" ).on("click" , function() {
+				index++;
 				var menu = /* '<div><br><input type="text" name="txt" value="test[' + index + ']">'
 						+ '<input type="button" class="btnRemove" value="Remove"><br></div>'; */
 						
@@ -214,20 +224,21 @@
 						+ '<span class="badge badge-primary remove">X</span>'
 						+ '</div></div>'
 						
-						
 				$("#inputMenu").parent().append (menu);
 				
-				index++;
-				
-				$('.remove').on('click', function () { 
-	                   $(this).prev().remove ();
-	                   $(this).next ().remove ();
-	                   console.log($(this));
-	                   
-	                   $(this).parents(".menuBox").remove ();
-	               });
-				
 			});
+			
+			/* $('.savedMenus').on('click', function () { 
+                $(this).remove ();
+            }); */
+			$('body').on('click', '.remove', function () { 
+                $(this).prev().remove ();
+                $(this).next ().remove ();
+                console.log($(this));
+                
+                $(this).parents(".menuBox").remove ();
+         	});
+			
 		});
 		
 		$(function() {
@@ -241,12 +252,214 @@
 				$("#workingForms").fadeOut();
 			});
 		});
-		
-		
 	} // window.onload FINISH
+	
+	/* *************** 이미지 업로드 *************** */
+	$(function(){
+		//==> drag 파일 업로드
+		let $fileDragArea = $(".file-drag-area");
+		let $fileDragBtn = $(".file-drag-btn");
+		let $fileDragInput = $(".file-drag-input");
+		let $fileDragMsg = $(".file-drag-msg");
+		let $fileDragView = $(".file-drag-view");
+		let $image = $("#file");
+		
+		//박스 안에 Drag 들어왔을 때
+		$fileDragArea.on("dragenter", function(e){
+			console.log("dragenter");
+			$fileDragArea.addClass('is-active');
+		});
+	
+	
+		//박스 안에 Drag 하고 있을 때
+		$fileDragArea.on("dragover", function(e){
+			console.log("dragover");
+			
+			// 드래그 한 것이 파일인지 아닌지 체크
+			let valid = e.originalEvent.dataTransfer.types.indexOf('Files')>= 0;
+			console.log(valid);
+			
+			if(!valid){
+				$fileDragArea.addClass('is-warning');
+			}else{
+				$fileDragArea.addClass('is-active');
+			}
+		});
+		
+		//박스 밖으로 Drag 나갈 때
+		$fileDragArea.on("dragleave", function(e){
+			console.log("dragleave");
+			$fileDragArea.removeClass('is-active');
+		});
+		
+		//박스 안에서 Drag를 Drop 했을 때
+		$fileDragArea.on("drop", function(e){
+			console.log("drop");
+			$fileDragArea.removeClass('is-active');
+			
+		});
+		
+		// change inner text
+		$fileDragInput.on('change', function(e) {
+			console.log("파일업로드 실행");
+			
+			//이미지 정보들을 초기화
+			sel_files = []; 
+			$(".file-drag-view").empty();
+			
+			var files = e.target.files;
+			var filesArr = Array.prototype.slice.call(files);
+			
+			console.log("이것은 : " + filesArr);
+			
+			var index = 0;
+			filesArr.forEach(function(f) {
+				
+				console.dir(f);
+				
+				//유효성 체크
+				if(!isValid(f)){
+					return;
+				}
+				
+				sel_files.push(f);
+				
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					
+					var html = "<a href='#' class = 'cvf_delete_image' id='img_id_"+index+"'><img src=\""+ e.target.result
+							+ "\" data-file='" + f.name + "' class='selProductFile' title='click to remove'></a>";
+					
+					$(".file-drag-view").append(html);
+					index++;
+				}
+				
+				reader.readAsDataURL(f);
+			});
+			
+			//특정 이미지 삭제
+			$('body').on('click', 'a.cvf_delete_image', function(e) {
+				e.preventDefault();
+				$(this).remove();
+				
+                var file = $(this).children().attr("data-file");
+
+				for (var i = 0; i < sel_files.length; i++) {
+					if (sel_files[i].name == file) {
+						sel_files.splice(i, 1);
+						break;
+					}
+				}
+				
+				console.log(sel_files);
+			});
+		});
+	
+		function isValid(data){
+			
+			//파일인지 유효성 검사
+			if(!data.type.indexOf('file') < 0){
+				alert("파일이 아닙니다.");
+				return false;
+			}
+			
+			//이미지인지 유효성 검사
+			if(data.type.indexOf('image') < 0){
+				alert('이미지 파일만 업로드 가능합니다.');
+				return false;
+			}
+			
+			//파일의 사이즈는 10MB 미만
+			if(data.size >= 1024 * 1024 * 10){
+				alert('10MB 이상인 파일은 업로드할 수 없습니다.');
+				return false;
+			}
+			
+			return true;
+		}
+		
+		//==>취소 클릭시 뒤로 감
+		$("input[value='취소']").on("click", function() {
+			history.back();
+		});
+	});
+	
+	function fileUploadAction() { 
+		console.log("fileUploadAction");
+		$fileDragInput.trigger('click');
+	}
+	
+	function uploadFiles() {
+		var formData = new FormData();
+		for (var i = 0; i < sel_files.length; i++) {
+			console.log(sel_files[i]);
+			formData.append("uploadFile", sel_files[i]);
+		}
+	
+		$.ajax({
+			url : "/restaurant/json/addDragFile",
+			processData : false,
+			contentType : false,
+			method: 'POST',
+			data: formData,
+			success:function(data){
+				console.log(data);
+				
+			 	$.each(data, function(index, item) {
+			 		var imageUpload = "<input type='hidden' name='restaurantImage[" + index + "]' value='"+ item + "'>";
+			 		$(".imageUploadBox").append(imageUpload);
+			 		//console.log(item);
+			 	});
+				
+			 	alert("음식점 등록 정보가 수정되었습니다.");
+				
+				$("#updateRestaurant").attr("method" , "POST").attr("action" , "/restaurant/updateRestaurant?restaurantNo=${restaurant.restaurantNo}").attr("enctype", "multipart/form-data").attr("accept-charset","UTF-8").submit();
+			 	
+		    },
+		    
+		    error:function(e){
+				console.log("이미지 업로드 실패");
+		    }
+		});
+	}
+	/* *************** 이미지 업로드 *************** */
+	
+	$(function() {
+		//특정 이미지 삭제
+		$('body').on('click', 'a.cvf_delete_image', function(e) {
+			console.log("이미지 삭제");
+			e.preventDefault();
+			$(this).remove();
+			
+            var file = $(this).children().attr("data-file");
+			console.log(file);
+			for (var i = 0; i < sel_files.length; i++) {
+				if (sel_files[i].name == file) {
+					sel_files.splice(i, 1);
+					break;
+				}
+			}
+			
+			console.log(sel_files);
+		});
+	});
+	
+	//changed image preview function
+	function readURL(input) {
+        if (input.files && input.files[0]) {
+        var reader = new FileReader();
+		
+        reader.onload = function (e) {
+                $("#ownerImage").attr("src", e.target.result);
+            }
+
+		reader.readAsDataURL(input.files[0]);
+		console.log(input.files[0].name);
+		
+        }
+    }
+	
 </script>
-
-
 
 </head>
 
@@ -271,6 +484,10 @@
 						
 						<input type="hidden" name="member.memberId" value="${member.memberId}">
 						<input type="hidden" name="member.memberName" value="${member.memberName}">
+						<c:if test="${!empty restaurant.judgeDate}">
+							<input type="hidden" name="restaurant.judgeStatus" value="1">
+						</c:if>
+						
 						
 						<div class="form-group">
 							<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>
@@ -282,6 +499,7 @@
 						<div class="form-group">
 							<div class="col-sm-4">
 								<label for="ownerImage">사업자 등록증 이미지</label>
+								<img id="ownerImage" src="/resources/images/uploadImages/owner/${restaurant.ownerImage}" width="100"/>
 								<input type="file" name="file" id="ownerImage" value="${restaurant.ownerImage}">
 							</div>	
 						</div><br>
@@ -338,11 +556,13 @@
 							</div>
 						</div><br>
 						
+						
+						
 						<div class="col-md-12">
 							<label for="inputMenu">음식점 메뉴 &nbsp;
 								<span class="badge badge-success" id="plus">추가하기</span>
 							</label>
-							<div class="row" id="inputMenu">
+							<%-- <div class="row" id="menuBox">
 								<div class="col-md-4">
 									<input type="text" class="form-control" id="menuTitle" name="restaurantMenus[0].menuTitle" placeholder="음식점 메뉴이름" value="${restaurant.restaurantMenus[0].menuTitle}">
 								</div>
@@ -352,10 +572,27 @@
 								<div class="col-md-4">	
 									<!-- <input type="text" class="form-control" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" placeholder="대표메뉴 여부"> -->
 									<input type="checkbox" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" value="1" 
-									${!empty restaurant.restaurantMenus[0].mainMenuStatus && restaurant.restaurantMenus[0].mainMenuStatus == "1" ? "checked" : ""}>
+									${!empty restaurant.restaurantMenus[0].mainMenuStatus && restaurant.restaurantMenus[0].mainMenuStatus ? "checked" : ""}>
 									<label for="mainMenuStatus">메인메뉴</label>
 								</div>
-							</div>
+							</div> --%>
+							<c:set var="i" value="1"/>
+							<c:forEach var="menus" items="${restaurant.restaurantMenus}" varStatus="status" >
+								<div class="row menuBox" id="inputMenu">
+									<div class="col-md-4">
+										<input type="text" class="form-control" id="menuTitle" name="restaurantMenus[${status.index}].menuTitle" placeholder="음식점 메뉴이름" value="${menus.menuTitle}">
+									</div>
+									<div class="col-md-4">
+										<input type="text" class="form-control" id="menuPrice" name="restaurantMenus[${status.index}].menuPrice" placeholder="음식점 메뉴가격" value="${menus.menuPrice}">
+									</div>
+									<div class="col-md-4">	
+										<!-- <input type="text" class="form-control" id="mainMenuStatus" name="restaurantMenus[0].mainMenuStatus" placeholder="대표메뉴 여부"> -->
+										<input type="checkbox" id="mainMenuStatus" name="restaurantMenus[${status.index}].mainMenuStatus" value="1" ${!empty menus.mainMenuStatus && menus.mainMenuStatus ? "checked" : ""}>
+										<label for="mainMenuStatus">메인메뉴</label>
+										<c:if test="${status.index != 0}"><span class="badge badge-primary remove">X</span></c:if>
+									</div>
+								</div>
+							</c:forEach>
 						</div><br>
 						
 						<div class="col-sm-8 restaurant-info">
@@ -367,7 +604,8 @@
 							<div id="workingForms" style="display: none;"><br>
 							
 							<div id="toggleButton">주차가능여부 &nbsp;&nbsp;
-								<input type="checkbox" name="parkable" id="parkable" data-toggle="toggle" data-size="sm" value="true" checked>
+								<input type="checkbox" name="parkable" id="parkable" data-toggle="toggle" data-size="sm" value="true" 
+								${!empty restaurant.parkable && restaurant.parkable ? "checked" : ""}>
 							</div><br>
 							
 							<!-- ######################### 월요일 ######################### -->
@@ -381,7 +619,7 @@
 									<input type="radio" id="saturday" name="restaurantTimes[0].restaurantDay" value="6" onclick="return(false);"> <label for="saturday">토</label>
 									<input type="radio" id="sunday" name="restaurantTimes[0].restaurantDay" value="7" onclick="return(false);"> <label for="sunday">일</label>
 							    	<input type="checkbox" id="dayoff" name="restaurantTimes[0].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[0].restaurantDayOff && restaurant.restaurantTimes[0].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[0].restaurantDayOff && restaurant.restaurantTimes[0].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff">휴무일</label>
 							    </div>
 							    
@@ -416,7 +654,7 @@
 									<input type="radio" id="saturday1" name="restaurantTimes[1].restaurantDay" value="6" onclick="return(false);"> <label for="saturday1">토</label>
 									<input type="radio" id="sunday1" name="restaurantTimes[1].restaurantDay" value="7" onclick="return(false);"> <label for="sunday1">일</label>
 							    	<input type="checkbox" id="dayoff1" name="restaurantTimes[1].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[1].restaurantDayOff && restaurant.restaurantTimes[1].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[1].restaurantDayOff && restaurant.restaurantTimes[1].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff1">휴무일</label>
 							    </div>
 							    
@@ -451,7 +689,7 @@
 									<input type="radio" id="saturday2" name="restaurantTimes[2].restaurantDay" value="6" onclick="return(false);"> <label for="saturday2">토</label>
 									<input type="radio" id="sunday2" name="restaurantTimes[2].restaurantDay" value="7" onclick="return(false);"> <label for="sunday2">일</label>
 							    	<input type="checkbox" id="dayoff2" name="restaurantTimes[2].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[2].restaurantDayOff && restaurant.restaurantTimes[2].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[2].restaurantDayOff && restaurant.restaurantTimes[2].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff2">휴무일</label>
 							    </div>
 							    
@@ -486,7 +724,7 @@
 									<input type="radio" id="saturday3" name="restaurantTimes[3].restaurantDay" value="6" onclick="return(false);"> <label for="saturday3">토</label>
 									<input type="radio" id="sunday3" name="restaurantTimes[3].restaurantDay" value="7" onclick="return(false);"> <label for="sunday3">일</label>
 							    	<input type="checkbox" id="dayoff3" name="restaurantTimes[3].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[3].restaurantDayOff && restaurant.restaurantTimes[3].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[3].restaurantDayOff && restaurant.restaurantTimes[3].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff3">휴무일</label>
 							    </div>
 							    
@@ -521,7 +759,7 @@
 									<input type="radio" id="saturday4" name="restaurantTimes[4].restaurantDay" value="6" onclick="return(false);"> <label for="saturday4">토</label>
 									<input type="radio" id="sunday4" name="restaurantTimes[4].restaurantDay" value="7" onclick="return(false);"> <label for="sunday4">일</label>
 							    	<input type="checkbox" id="dayoff4" name="restaurantTimes[4].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[4].restaurantDayOff && restaurant.restaurantTimes[4].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[4].restaurantDayOff && restaurant.restaurantTimes[4].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff4">휴무일</label>
 							    </div>
 							    
@@ -556,7 +794,7 @@
 									<input type="radio" id="saturday5" name="restaurantTimes[5].restaurantDay" value="6" onclick="return(false);" checked> <label for="saturday5">토</label>
 									<input type="radio" id="sunday5" name="restaurantTimes[5].restaurantDay" value="7" onclick="return(false);"> <label for="sunday5">일</label>
 							    	<input type="checkbox" id="dayoff5" name="restaurantTimes[5].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[5].restaurantDayOff && restaurant.restaurantTimes[5].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[5].restaurantDayOff && restaurant.restaurantTimes[5].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff5">휴무일</label>
 							    </div>
 							    
@@ -591,7 +829,7 @@
 									<input type="radio" id="saturday6" name="restaurantTimes[6].restaurantDay" value="6" onclick="return(false);"> <label for="saturday6">토</label>
 									<input type="radio" id="sunday6" name="restaurantTimes[6].restaurantDay" value="7" onclick="return(false);" checked> <label for="sunday6">일</label>
 							    	<input type="checkbox" id="dayoff6" name="restaurantTimes[6].restaurantDayOff" value="1" 
-							    	${!empty restaurant.restaurantTimes[6].restaurantDayOff && restaurant.restaurantTimes[6].restaurantDayOff == "1" ? "checked" : ""}>
+							    	${!empty restaurant.restaurantTimes[6].restaurantDayOff && restaurant.restaurantTimes[6].restaurantDayOff ? "checked" : ""}>
 							    	<label for="dayoff6">휴무일</label>
 							    </div>
 							    
@@ -619,13 +857,31 @@
 							
 						</div><br>
 						
-						<div class="col-sm-4">
+						<%-- <div class="col-sm-4">
 							<label for="restaurantImage">음식점 이미지</label>
 							<input type="file" id="file" name="file" multiple="multiple" value="${restaurant.restaurantImage}">
 							
 							<!-- <input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
 							<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진">
 							<input type="text" class="form-control" id="restaurantImage" name="restaurantImage[0].restaurantImage" placeholder="음식점 사진"> -->
+						</div><br><br> --%>
+						
+						<div class="col-md-12">
+							<label for="fileDragInput">음식점 이미지</label>
+							<div class="file-drag-area">
+								<span class="file-drag-btn">파일 선택</span>
+								<span class="file-drag-msg">파일을 여기로 드래그 하거나 선택하세요.</span> 
+								<input class="file-drag-input" type="file" id="fileDragInput" name="fileDragInput" multiple="multiple">	
+							</div>
+							<div class="file-drag-view mt-4">
+								<c:forEach var="image" items="${restaurant.restaurantImage}" varStatus="status">
+									<c:set var="fileName" value="${fn:split(image, '_')}"/>
+									<a class='cvf_delete_image' id='img_id_${status.index}'>
+										<img src="/resources/images/uploadImages/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'>
+										<input type='hidden' name='reviewImage[${status.index}]' value='${image}'>
+									</a>
+								</c:forEach></div>
+							<div class="imageUploadBox"></div>
 						</div><br><br>
 						
 						<div class="col-sm-12">
@@ -644,12 +900,23 @@
 								</svg> 이전으로
 							</button> &nbsp;
 							
-							<button type="button" class="btn btn-outline-primary btn-sm" id="button3">
-				                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-  								<path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
-  								<path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
-								</svg> 재등록하기
-							</button> &nbsp;
+							<c:if test="${restaurant.judgeStatus == '3'}">
+								<button type="button" class="btn btn-outline-primary btn-sm" id="redemand">
+					                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+	  								<path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+	  								<path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+									</svg> 재등록하기
+								</button> &nbsp;	
+							</c:if>
+							
+							<c:if test="${restaurant.judgeStatus == '2'}">
+								<button type="button" class="btn btn-outline-danger btn-sm" id="dataUpdate">
+					                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+					  					<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+					  					<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+					  				</svg> 수정하기
+					  			</button>
+							</c:if>
 							
 						</div>
 

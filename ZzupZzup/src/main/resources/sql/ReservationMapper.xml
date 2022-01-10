@@ -26,8 +26,8 @@
 		<result property="reservationCancelReason"   			column="reservation_cancel_type" 	jdbcType="INTEGER"/>
 		<result property="reservationCancelDetail"   			column="reservation_cancel_detail" 	jdbcType="VARCHAR"/>
 		<result property="refundStatus"   						column="refund_status" 				jdbcType="BOOLEAN"/>
-		
-		<collection property="order" resultMap="orderSelectMap"/>		
+		<result property="reviewNo"								column="review_no"					jdbcType="VARCHAR"/>
+ 		<collection property="order" resultMap="orderSelectMap"/>		
 	</resultMap>
 	
 	<resultMap id="orderSelectMap" type="order">
@@ -95,18 +95,18 @@
 	
 	<select id="listReservation"	parameterType="map"	resultMap="reservationSelectMap">
 		
-		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.PLAN_TIME, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname, ch.CHAT_MEMBER_ID
+		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.PLAN_TIME, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname, ch.CHAT_MEMBER_ID, re.review_no
 			FROM RESERVATION AS r
 			LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
 							 FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)
 			                 WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)
 			LEFT OUTER JOIN reservation_order AS ro ON (r.reservation_no = ro.reservation_no)
+			LEFT OUTER JOIN (select review_no, reservation_no from review) as re on (r.reservation_no = re.reservation_no)
 			<choose>
 				<when test='member.memberRole == "user"'>
 				WHERE ch.chat_member_id = #{member.memberId}
 				</when>
 			</choose>
-			
 			ORDER BY RESERVATION_NO DESC LIMIT #{search.startRowNum}, #{search.pageSize}		
 	 </select>
 	 

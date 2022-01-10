@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP</title>
+<title>Review 수정하기</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 <link rel="stylesheet" href="/resources/css/review.css" />

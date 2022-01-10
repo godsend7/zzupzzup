@@ -17,25 +17,21 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
+	
+	function fncPageNavigation(currentPage) {
+		console.log(currentPage);
+		$("#currentPage").val(currentPage);
+		$("#listOwner").attr("method", "POST").attr("action","/member/listOwner").submit();
+	}
+	
 	$(function() {
 		console.log("listOwner.jsp");
 		
-		window.onload = function(){
-			
-			function fncPageNavigation(currentPage) {
-				console.log(currentPage);
-				$("#currentPage").val(currentPage);
-				$("#listOwner").attr("method", "POST").attr("action","/member/listOwner").submit();
-			}
-			
-			// 상세조회 버튼 실행
-			$(function() {
-				//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-				$( "#getMember" ).on("click" , function() {
-					self.location = "/member/getMember?memberId=${member.memberId}";
-				});
-			});
-		}
+		// 상세조회 버튼 실행
+		$( "#getMember" ).on("click" , function() {
+			self.location = "/member/getMember?memberId=${member.memberId}";
+		});
+		
 	});
 </script>
 </head>

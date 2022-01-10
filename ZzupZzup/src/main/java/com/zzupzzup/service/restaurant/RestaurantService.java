@@ -38,5 +38,5 @@ public interface RestaurantService {
 	public Map<String, Object> listRestaurantName(Search search) throws Exception;
 
 	// Select List Main
-	public List<Restaurant> listMainRestaurant() throws Exception;
+	public List<Restaurant> listMainRestaurant(Search search) throws Exception;
 }

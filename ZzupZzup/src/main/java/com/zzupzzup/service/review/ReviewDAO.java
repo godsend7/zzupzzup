@@ -32,6 +32,8 @@ public interface ReviewDAO {
 	
 	public int getTotalCount(Map<String, Object> map) throws Exception; 
 	
+	public int getLikeTotalCount(String memberId) throws Exception; 
+	
 	public double getTotalAvg(String restaurantNo) throws Exception;
 	
 	public int getLikeCount(int reviewNo) throws Exception;

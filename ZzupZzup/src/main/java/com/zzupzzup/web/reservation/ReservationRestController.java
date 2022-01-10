@@ -30,6 +30,7 @@ import com.siot.IamportRestClient.response.Payment;
 import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
+import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.reservation.ReservationService;
 import com.zzupzzup.service.restaurant.RestaurantService;
@@ -49,6 +50,14 @@ public class ReservationRestController {
 	@Autowired
 	@Qualifier("reservationServiceImpl")
 	private ReservationService reservationService;
+	
+	@Autowired
+	@Qualifier("restaurantServiceImpl")
+	private RestaurantService restaurantService;
+	
+	@Autowired
+	@Qualifier("memberServiceImpl")
+	private MemberService memberService;
 	
 	@Value("#{commonProperties['pageUnit']?: 3}")
 	int pageUnit;
@@ -156,19 +165,48 @@ public class ReservationRestController {
 			   Member toMember = new Member();
 			   Reservation reservation = new Reservation();
 			   String reservationNumber = "";
+			   Restaurant restaurant = new Restaurant();
 			   
 			   System.out.println("reservation number::: "+httpServletRequest.getParameter("reservationNumber"));
 			   System.out.println("sendPhone::: "+httpServletRequest.getParameter("toMemberPhone"));
 			   System.out.println("nickname::: "+httpServletRequest.getParameter("toNickName"));
 			   System.out.println("nickname::: "+httpServletRequest.getParameter("reservationCancelDetail"));
 			   System.out.println("nickname::: "+httpServletRequest.getParameter("reservationCancelReason"));
+			   System.out.println("restaurantNo::: "+httpServletRequest.getParameter("restaurantNo"));
+			   System.out.println("restaurantNo::: "+httpServletRequest.getParameter("fromMemberPhone"));
 			   
-			   toMember.setMemberPhone(httpServletRequest.getParameter("toMemberPhone"));
-			   toMember.setNickname(httpServletRequest.getParameter("toNickName"));
 			   
-			   reservation.setReservationCancelDetail(httpServletRequest.getParameter("reservationCancelDetail"));
-			   reservation.setReservationCancelReason(Integer.parseInt(httpServletRequest.getParameter("reservationCancelReason")));
-		        System.out.println("nickname::: "+reservation.getReturnReservationCancelReason());
+			   
+			  
+			   
+			   //from 세션이라고 생각. from은 폰번호만 필요 from에 저장된 세션 내가 로그인한 사람. 내가 업주인지 유저인지 감 from.setmemberrole해서 멤버면 이렇게 유저면 이렇게 실행해라 기재
+			   //to가 보내는 것이라 생각.
+			   if(fromMember.getMemberRole().equals("user")) {
+				   restaurant = restaurantService.getRestaurant(Integer.parseInt(httpServletRequest.getParameter("restaurantNo")));
+				   System.out.println("restraurantNo222::"+restaurant);
+				   restaurant.getMember().getMemberId();
+				
+				   Member member = new Member();
+				   member.setMemberId(restaurant.getMember().getMemberId());
+				   toMember = memberService.getMember(member);
+				   reservation.setReservationNumber(httpServletRequest.getParameter("reservationNumber"));
+				   System.out.println("유저가 예약 취소 진행");
+			   }
+			   else if (fromMember.getMemberRole().equals("owner")) {
+				   toMember.setMemberPhone(httpServletRequest.getParameter("toMemberPhone"));
+				   toMember.setNickname(httpServletRequest.getParameter("toNickName"));
+				   
+				   reservation.setReservationCancelDetail(httpServletRequest.getParameter("reservationCancelDetail"));
+				   reservation.setReservationCancelReason(Integer.parseInt(httpServletRequest.getParameter("reservationCancelReason")));
+			        System.out.println("nickname::: "+reservation.getReturnReservationCancelReason());
+			        
+			        System.out.println("업주가 예약 취소 진행");
+			   }
+			   
+			   System.out.println("toMember 확인 :: " + toMember);
+			   System.out.println("fromMember 확인 :: " + fromMember);
+			   System.out.println("reservation 확인 :: " + reservation.getReservationNumber());
+			  
 		       reservationService.sendMessage(reservation, toMember,fromMember, reservationNumber);
 		   }
 
