@@ -114,6 +114,7 @@ public class MemberRestController {
 		return memberService.checkNicknameDuplication(nickname);
 	}
 	
+	@RequestMapping(value="json/findAccount", method=RequestMethod.POST)
 	public void findId() {
 		
 	}

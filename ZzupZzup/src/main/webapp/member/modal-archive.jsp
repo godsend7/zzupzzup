@@ -133,6 +133,11 @@
 			
 		});
 		
+		//계정 찾기 클릭 시 로그인 모달 닫기
+		$("#findAccountModal-nav").on("click", function() {
+			$("#loginModal").modal("hide");
+		})
+		
 	});
 	
 	//*logout kakao  
@@ -157,7 +162,16 @@
 		    console.log(error);
 		  },
 		});
-	  }  
+	  }
+	
+	function fncPageNavigation(category) {
+		
+	    if (category == null) {
+			category = ${category};
+		}
+	   
+	    $("#report").attr("action","/report/listReport?reportCategory="+category).attr("method", "POST").submit();
+	}
 </script>
 
 
@@ -200,16 +214,17 @@
 					<input
 						class="btn btn-lg btn-primary btn-block" id="naverLogin"
 						type="button" value="네이버 로그인 (구현 예정)" /><br/><br/>
+					<div align="right">
 						회원이 아니신가요? > 
 						<a href="/member/addMember/user/1">유저</a>&nbsp;/
 						<a href="/member/addMember/owner/1">업주</a>
-					<p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
+					</div>
+					<div align="right">
+						<a id="findAccountModal-nav" data-dismiss="#loginModal" data-toggle="modal" data-target="#findAccountModal" href="#findAccount">아이디/비밀번호 찾기 ></a>
+					</div>
+					<!-- <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p> -->
 				</form>
 			</div>
-			<!-- <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-		        <button type="button" class="btn btn-primary"></button>
-		    </div> -->
 		</div>
 	</div>
 </div>
@@ -226,28 +241,17 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">
-				<form class="form-findaccount">
-					<!-- <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
-					<h6 class="h6 mb-6 font-weight-normal">로그인 후 이용하여 주십시오.</h6>
-					<label for="memberId" class="sr-only">Email address</label> <input
-						type="email" id="memberId" name="memberId" class="form-control"
-						placeholder="example@zzupzzup.com" required autofocus> <label
-						for="password" class="sr-only">Password</label> <input
-						type="password" id="password" name="password" class="form-control"
-						placeholder="비밀번호를 입력해주세요." required>
-						<br/>
-					<input class="btn btn-lg btn-primary btn-block" id="login"
-						type="button" value="login" /> 
-					<input
-						class="btn btn-lg btn-primary btn-block" id="kakaoLogin"
-						type="button" value="카카오 로그인 (구현 예정)" /> <input
-						class="btn btn-lg btn-primary btn-block" id="naverLogin"
-						type="button" value="네이버 로그인 (구현 예정)" /><br/><br/>
-						회원이 아니신가요? > 
-						<a href="/member/addMember/user/1">유저</a>&nbsp;/
-						<a href="/member/addMember/owner/1">업주</a>
-					<p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
+			<div class="modal-body" align="center">
+				<form id="findAccount">
+					<ul class="nav nav-tabs findAccount-top-tabs">
+					  	<li class="nav-item">
+					    	<a class="nav-link" href="javascript:fncPageNavigation(1)">아이디 찾기</a>
+					  	</li>
+					  	<li class="nav-item">
+					    	<a class="nav-link" href="javascript:fncPageNavigation(2)">비밀번호 찾기</a>
+					  	</li>
+					</ul>
+					
 				</form>
 			</div>
 			<!-- <div class="modal-footer">
