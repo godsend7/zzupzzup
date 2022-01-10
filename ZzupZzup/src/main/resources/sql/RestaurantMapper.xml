@@ -53,7 +53,12 @@
 		<result property="restaurantBreak" column="RESTAURANT_BREAK" />
 		<result property="restaurantLastOrder" column="RESTAURANT_LAST" />
 		<result property="restaurantDayOff" column="RESTAURANT_DAY_OFF" />
-		
+	</resultMap>
+	
+	<resultMap id="markSelectMap" type="com.zzupzzup.service.domain.Mark">
+		<result property="markNo" column="MARK_NO" jdbcType="INTEGER"/>
+		<result property="memberId" column="MEMBER_ID" jdbcType="VARCHAR"/>
+		<result property="restaurantNo" column="RESTAURANT_NO" jdbcType="INTEGER"/>
 	</resultMap>
 	
 	
@@ -249,6 +254,18 @@
 						 ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
 	</select>
 	
+	<!-- SQL : SELECT -->
+	<select id="getZzimTotalCount" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM RESTAURANT AS rt
+		INNNER JOIN (SELECT RESTAURANT_NO
+					 FROM MARK
+					 WHERE MEMBER_ID = #{value} AND RESTAURANT_NO IS NOT NULL
+					 ORDER BY MARK_NO) AS mk
+					 ON (rt.RESTAURANT_NO = mk.RESTAURANT_NO)
+		WHERE rt.JUDGE_STATUS = 2;
+	</select>
+	
 	
 	<!-- SQL : SELECT -->
 	<select id="getTotalCount" parameterType="search" resultType="int">
@@ -267,7 +284,7 @@
 		WHERE RESTAURANT_NAME LIKE CONCAT('%',#{search.searchKeyword},'%')
 	</select>
 	
-	<!-- main Map -->
+	<!-- ########## MAIN MAP ########## -->
 	<select id="listMainRestaurant" resultMap="restaurantSelectMap">
 		SELECT *
 		FROM RESTAURANT AS rt

@@ -14,6 +14,10 @@
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
 
+.checked {
+ 	fill : green;
+}
+
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -51,43 +55,45 @@
 	}
 	
 	// 찜하기 기능
-	$("#callDibs").on("click", function() {
-		if (${member.memberId == null}) {
-			alert("로그인이 필요한 서비스입니다.");
-			return;
-		}
-		
-		if (${member.memberRole != "user"}) {
-			return;
-		}
-		
-		if ($(this).hasClass("check") === true) {
-			var zzimCount = $(this).closest("div").find("span").text();
+	$(function() {
+		$(".zzim").on("click", function() {
+			if (${member.memberId == null}) {
+				alert("로그인이 필요한 서비스입니다.");
+				return;
+			}
 			
-			$.ajax({
-				url : "/restaurant/json/cancelCallDibs/"+$(this).closest("div").find("input[name='restaurantNo']").val(),
-				method : "GET",
-				context : this,
-				success : function(data, status) {
-					
-					$(this).closest("div").find("span").text(data.likeCount);
-					$(this).attr('class','zzimOff');
-				}
-			});	
-		} else {
-			var zzimCount = $(this).closest("div").find("span").text();
+			if (${member.memberRole != "user"}) {
+				return;
+			}
 			
-			$.ajax({
-				url : "/restaurant/json/checkCallDibs/"+$(this).closest("div").find("input[name='restaurantNo']").val(),
-				method : "GET",
-				context : this, //ajax에서 $(this)를 사용하기 위해서 필요
-				success : function(data, status) {
-					
-					$(this).closest("div").find("span").text(data.likeCount);
-					$(this).attr('class','zzimOn');
-				}
-			});
-		}
+			if ($(this).hasClass("checked") === true) {
+				var zzimCount = $(this).closest("div").find("span").text();
+				
+				$.ajax({
+					url : "/restaurant/json/cancelCallDibs/"+$(this).closest("div").find("input[name='restaurantNo']").val(),
+					method : "GET",
+					context : this, //ajax에서 $(this)를 사용하기 위해서 필요
+					success : function(data, status) {
+						
+						$(this).closest("div").find("span").text(data.likeCount);
+						$(this).attr('class','zzim');
+					}
+				});	
+			} else {
+				var zzimCount = $(this).closest("div").find("span").text();
+				
+				$.ajax({
+					url : "/restaurant/json/checkCallDibs/"+$(this).closest("div").find("input[name='restaurantNo']").val(),
+					method : "GET",
+					context : this, //ajax에서 $(this)를 사용하기 위해서 필요
+					success : function(data, status) {
+						
+						$(this).closest("div").find("span").text(data.likeCount);
+						$(this).attr('class','zzim checked');
+					}
+				});
+			}
+		});
 	});
 	
 </script>
@@ -305,7 +311,7 @@
 					<div class="container">
 					
 					<c:if test="${restaurant.reservationStatus = true}">
-						<span class="badge badge-info" id="plus">예약 및 결제 가능</span>
+						<span class="badge badge-info" id="reservationStatus">예약 및 결제 가능</span>
 					</c:if>
 					<div class="row">
 						<div class="col-md-8">
@@ -313,7 +319,7 @@
 						</div>
 						<div class="col-md-4" style="text-align:right;">
 							<button type="button" id="callDibs" class="btn btn-outline-link btn-sm" style="border: none; outline: none; box-shadow: none;">
-                			<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-bookmark-star zzimOff" viewBox="0 0 16 16">
+                			<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-bookmark-star zzim" viewBox="0 0 16 16">
   							<path d="M7.84 4.1a.178.178 0 0 1 .32 0l.634 1.285a.178.178 0 0 0 .134.098l1.42.206c.145.021.204.2.098.303L9.42 6.993a.178.178 0 0 0-.051.158l.242 1.414a.178.178 0 0 1-.258.187l-1.27-.668a.178.178 0 0 0-.165 0l-1.27.668a.178.178 0 0 1-.257-.187l.242-1.414a.178.178 0 0 0-.05-.158l-1.03-1.001a.178.178 0 0 1 .098-.303l1.42-.206a.178.178 0 0 0 .134-.098L7.84 4.1z"/>
   							<path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
 							</svg></button>
