@@ -13,7 +13,9 @@ import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.SendMessage;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
+import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.reservation.ReservationService;
+import com.zzupzzup.service.restaurant.RestaurantService;
 
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
@@ -50,7 +52,6 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		}
 
 		@Override
-		//public Map<String , Object > listReservation(Search search, String restaurantNo) throws Exception {
 		public Map<String , Object > listReservation(Search search, Member member, String restaurantNo) throws Exception {
 			
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -93,20 +94,23 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		 	String api_key = "NCSNKY0LCPXFSTX8";
 		    String api_secret = "JRFMP2VNN1JPWKAQS7XQSILZ1NI6TKAR";
 		    Message coolsms = new Message(api_key, api_secret);
-		    Member member = new Member();
-		
+		  //  Member member = new Member();
+		    
 		    // 4 params(to, from, type, text) are mandatory. must be filled
 		    HashMap<String, String> map = new HashMap<String, String>();
 		    map.put("to", toMember.getMemberPhone());        
 		    map.put("from", fromMember.getMemberPhone());
 		   // map.put("reservation", reservation);
-		    map.put("reservationNumber", reservationNumber);
+		    //map.put("reservationNumber", reservationNumber);
+		    //map.put("Nickname", fromMember.getNickname());
 			
 			//params.put("from", "010-8256-2987");
 		    
 			if(fromMember.getMemberRole().equals("user")) {
-				map.put("text","예약 번호"+reservation.getReservationNumber()+" "+member.getNickname()+"님이 예약을 취소하셨습니다.");
+				map.put("text","예약 번호"+reservation.getReservationNumber()+" "+fromMember.getNickname()+"님이 예약을 취소하셨습니다.");
 				System.out.println("ownertextMessage::");
+				System.out.println("ownertextMessage1::"+reservation.getReservationNumber());
+				System.out.println("ownertextMessage2::"+fromMember.getNickname());
 			}
 			else if  (fromMember.getMemberRole().equals("owner")){
 				map.put("text", "가게 사정인 "+reservation.getReturnReservationCancelReason()+ " " +
