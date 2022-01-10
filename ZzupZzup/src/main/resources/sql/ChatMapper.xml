@@ -9,6 +9,8 @@
 		<result property="chatNo" column="chat_no" jdbcType="INTEGER"/>
 		<result property="chatLeaderId.memberId" column="chat_leader_id" jdbcType="VARCHAR"/>
 		<result property="chatRestaurant.restaurantNo" column="restaurant_no" jdbcType="INTEGER"/>
+		<result property="chatRestaurant.restaurantName" column="restaurant_name" jdbcType="INTEGER"/>
+		<result property="chatRestaurant.streetAddress" column="street_address" jdbcType="INTEGER"/>
 		<result property="chatTitle" column="chat_title" jdbcType="VARCHAR"/>
 		<result property="chatImage" column="chat_image" jdbcType="VARCHAR"/>
 		<result property="chatText" column="chat_text" jdbcType="VARCHAR"/>
@@ -99,43 +101,90 @@
 	<!-- SQL : SELECT ALL -->
 	<select id="listChat" parameterType="map" resultMap="chatSelectMap">
 		<!-- <bind name="searchKeywords" value="'%' + searchKeyword + '%'" /> -->
-		<!-- SELECT * 
-		FROM ( SELECT c.chat_no, c.chat_title, c.chat_text, c.chat_image, c.chat_state, c.chat_show_status, c.restaurant_no, r.restaurant_name, r.street_address 
-				FROM chat c, restaurant r
-				WHERE c.restaurant_no = r.restaurant_no
-				ORDER BY c.chat_no LIMIT #{search.startRowNum}, #{search.endRowNum}) AS c -->
-	SELECT *
-	FROM ( SELECT c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(rp.chat_no) report_count
-		FROM chat c
-		LEFT OUTER JOIN report rp ON ( c.chat_no = rp.chat_no)
-		GROUP BY c.chat_no
-		ORDER BY c.chat_no DESC LIMIT #{search.startRowNum}, #{search.pageSize}) AS c
+		SELECT *
+		FROM (SELECT c.chat_no, c.chat_leader_id, c.restaurant_no, c.chat_title, c.chat_image, c.chat_text, c.chat_reg_date, c.chat_gender, c.chat_state, c.chat_show_status, c.age_type, count(rp.chat_no) report_count, r.restaurant_name, ANY_VALUE(cm.chat_member_id)
+			FROM chat c
+			LEFT OUTER JOIN report rp ON (c.chat_no = rp.chat_no)
+			LEFT OUTER JOIN restaurant r ON (c.restaurant_no = r.restaurant_no)
+			LEFT OUTER JOIN chat_member cm ON (c.chat_no = cm.chat_no and in_out_check = 1)
+			<where>
+				<if test="search.searchCondition == 0 and search.searchKeyword !='' ">
+				AND UPPER(r.restaurant_name) LIKE CONCAT('%', #{search.searchKeyword}, '%')
+				</if>
+				<if test="search.searchCondition == 1 and search.searchKeyword !='' ">
+				AND UPPER(r.street_address) LIKE CONCAT('%', #{search.searchKeyword}, '%')
+				</if>
+				<!-- 10대 -->
+				<if test="search.searchFilter == 1">
+				AND c.age_type LIKE CONCAT('%', 1, '%')
+				</if>
+				<!-- 20대 -->
+				<if test="search.searchFilter == 2">
+				AND c.age_type LIKE CONCAT('%', 2, '%')
+				</if>
+				<!-- 30대 -->
+				<if test="search.searchFilter == 3">
+				AND c.age_type LIKE CONCAT('%', 3, '%')
+				</if>
+				<!-- 40대 -->
+				<if test="search.searchFilter == 4">
+				AND c.age_type LIKE CONCAT('%', 4, '%')
+				</if>
+				<!-- 50대 -->
+				<if test="search.searchFilter == 5">
+				AND c.age_type LIKE CONCAT('%', 5, '%')
+				</if>
+				<!-- 60대 이상 -->
+				<if test="search.searchFilter == 6">
+				AND c.age_type LIKE CONCAT('%', 6, '%')
+				</if>
+				<!-- 연령대 무관 -->
+				<if test="search.searchFilter == 7">
+				AND c.age_type LIKE CONCAT('%', 7, '%')
+				</if>
+				<!-- 남자 -->
+				<if test="search.searchFilter == 8">
+				AND c.chat_gender = 1
+				</if>
+				<!-- 여자 -->
+				<if test="search.searchFilter == 9">
+				AND c.chat_gender = 2
+				</if>
+				<!-- 성별 무관 -->
+				<if test="search.searchFilter == 10">
+				AND c.chat_gender = 3
+				</if>
+				<!-- 참여중인 채팅방 -->
+				<if test="search.searchFilter == 11">
+				AND cm.chat_member_id = #{memberId}
+				</if>
+			</where>
+			GROUP BY c.chat_no
+			ORDER BY
+			<choose>
+				<when test="search.searchSort == 'latest'"> c.chat_no DESC LIMIT #{search.startRowNum}, #{search.pageSize}</when >
+				<when test="search.searchSort == 'oldest'"> c.chat_no ASC LIMIT #{search.startRowNum}, #{search.pageSize}</when >
+			</choose>
+		) AS c
 	</select>
 	
 	<!-- SQL : SELECT ROW COUNT -->
 	<select id="getTotalCount" parameterType="search" resultType="int">
-		SELECT count(*)
-		FROM chat
-	</select>
-	<!-- <select id="getTotalCount" parameterType="search" resultType="int">
-		<bind name="searchKeywords" value="'%' + _parameter.getSearchKeyword() + '%'" />
 		SELECT COUNT(*)
-		FROM ( SELECT chat_no, chat_title
-			FROM chat
+		FROM chat c, restaurant r
 			<if test="searchCondition != null">
 				<where>
-					<if test="searchCondition == 0 and searchKeyword != '' ">
-						UPPER(chat_no) LIKE UPPER(#{searchKeywords})
+					<if test="searchCondition == 0 and searchKeyword !='' ">
+					c.restaurant_no = r.restaurant_no
+					AND UPPER(r.restaurant_name) LIKE CONCAT('%', #{searchKeyword}, '%')
 					</if>
-					<if test="searchCondition == 1 and searchKeyword != '' ">
-						UPPER(chat_title) LIKE UPPER(#{searchKeywords})
-					</if>
-					<if test="searchCondition == 2 and searchKeyword != '' ">
-						UPPER(chat_title) LIKE UPPER(#{searchKeywords})
+					<if test="searchCondition == 1 and searchKeyword !='' ">
+					c.restaurant_no = r.restaurant_no
+					AND UPPER(r.street_address) LIKE CONCAT('%', #{searchKeyword}, '%')
 					</if>
 				</where>
-			</if> ) countTable
-	</select> -->
+			</if>
+	</select>
 	
 	<!-- SQL : SELECT ONE -->
 	<select id="getChatEntrance" parameterType="int" resultMap="chatSelectMap">

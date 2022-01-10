@@ -64,23 +64,13 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public Map<String, Object> listChat(Search search) throws Exception {
+	public Map<String, Object> listChat(Search search, String memberId) throws Exception {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
-		//map.put("searchCondition", search.getSearchCondition() );
-		//map.put("searchKeyword",  search.getSearchKeyword() );
-		//map.put("endRowNum",  search.getEndRowNum() );
-		//map.put("startRowNum",  search.getStartRowNum() );
-		
+		map.put("memberId", memberId);
 		map.put("list", chatDao.listChat(map));
 		map.put("totalCount", chatDao.getTotalCount(search));
-		//List<Chat> list = chatDao.listChat(search, restaurantNo);
-		//int totalCount = chatDao.getTotalCount(search);
-		
-		//Map<String, Object> map = new HashMap<String,Object>();
-		//map.put("list", list);
-		//map.put("totalCount", new Integer(totalCount));
 		
 		return map;
 	}

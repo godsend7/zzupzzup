@@ -20,5 +20,6 @@ public interface RatingDAO {
 	// Select List
 	public List<Rating> listMyRating(Map<String, Object> map) throws Exception;
 	
-	
+	// Page Row(totalCount) return
+	public int getMyTotalCount(String memberId) throws Exception;
 }

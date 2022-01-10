@@ -34,7 +34,6 @@ public class RatingDAOImpl implements RatingDAO {
 		}else {
 			return 0;
 		}
-		
 	}
 	
 	@Override
@@ -58,6 +57,11 @@ public class RatingDAOImpl implements RatingDAO {
 		List<Rating> list = sqlSession.selectList("RatingMapper.listMyRating", map);
 		
 		return list;
+	}
+
+	@Override
+	public int getMyTotalCount(String memberId) throws Exception {
+		return sqlSession.selectOne("RatingMapper.getMyTotalCount", memberId);
 	}
 
 }
