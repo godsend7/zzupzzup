@@ -12,13 +12,13 @@
 	console.log("Is Kakao SDK inintailized? :: "+Kakao.isInitialized());	// check Kakao SDK initailized
 
 	$(function() {
-		console.log("loginView.jsp");
+		console.log("modal-archive.jsp");
 
 		//login type == 1
 		$("#login").on("click", function() {
 
-			let memberId = $("input[type=email]").val();
-			let password = $("input[type=password]").val();
+			var memberId = $("input[type=email]").val();
+			var password = $("input[type=password]").val();
 
 			console.log("memberId:" + memberId);
 			console.log("password:" + password);
@@ -60,7 +60,7 @@
 		          Kakao.API.request({
 		            url: '/v2/user/me',
 		            success: function(result) {
-		              alert(JSON.stringify("[result] clientId : "+result.id+", memberId : "+result.kakao_account.email+", gender : "+result.kakao_account.gender+", age_range : "+result.kakao_account.age_range+", access_token : "+accessToken+", refresh_token : "+refreshToken));
+		              //alert(JSON.stringify("[result] clientId : "+result.id+", memberId : "+result.kakao_account.email+", gender : "+result.kakao_account.gender+", age_range : "+result.kakao_account.age_range+", access_token : "+accessToken+", refresh_token : "+refreshToken));
 		              
 		              var clientId = result.id;
 		              var memberId = result.kakao_account.email;
@@ -122,6 +122,52 @@
 			
 		});
 		
+		//findAccount
+		$("#findAccount-btn").on("click", function() {
+
+			var memberName = $("#memberName").val();
+			var memberId = $("#memberId").val();
+			var memberPhone = $("#memberPhone1").val()+"-"+$("#memberPhone2").val()+"-"+$("#memberPhone3").val();
+
+			console.log("memberName:" + memberName);
+			console.log("memberId:" + memberId);
+			console.log("memberPhone:" + memberPhone);
+
+			if(memberName != null && (memberId != null || ($("#memberPhone1").val() != null && $("#memberPhone2").val() != null && $("#memberPhone3").val()))) {
+				$.ajax({
+					url : "/member/json/findAccount",
+					method : "POST",
+					contentType : 'application/json',
+					dataType : "json",
+					data : JSON.stringify({
+						"memberName" : memberName,
+						"memberId" : memberId,
+						"memberPhone" : memberPhone
+					}),
+					success : function(data) {
+						if (data != null) {
+							if(memberId != "") {	//비밀번호 찾기
+								alert(data.password);
+								$("#find-check").html("<h4>입력하신 회원님의 메일 주소로 비밀번호 재설정 링크를 발송하였습니다.</h4>");
+								
+							} else if($("#memberPhone1").val() != "" && $("#memberPhone2").val() != "" && $("#memberPhone3").val() != "") {		//아이디 찾기
+								alert(data.memberId+", "+data.loginType);
+								$("#find-check").html("<h4>요청하신 회원님의 ID는 " 
+														+"<strong>["+data.memberId+"]("+data.loginType+")</strong>"
+														+"입니다.</h4>");
+							}
+						}
+					},
+					error : function() {
+						alert("해당하는 정보가 없습니다.");
+					}
+				});	
+			} else {
+				alert("누락된 항목 확인 후 다시 시도하여 주십시오.");
+			}
+			
+		});
+		
 		//logout
 		$("#logout").on("click", function() {
 			if(${member.loginType == 1}){
@@ -136,6 +182,37 @@
 		//계정 찾기 클릭 시 로그인 모달 닫기
 		$("#findAccountModal-nav").on("click", function() {
 			$("#loginModal").modal("hide");
+		})
+		
+		//아이디 찾기 탭 클릭 시 
+		$("#findId").on("click", function() {
+			$("#findId a").attr("class", "nav-link active");
+			$("#findPwd a").attr("class", "nav-link");
+			$("#find-form").html("<div class='col-md-11 form-row' style='margin-left: 20px;margin-top: 10px;'>"
+									+"<label for='memberName' class='col-md-2'>이름</label>"
+									+"<input type='text' id='memberName' name='memberName' class='col-md-9' Placeholder='이름을 입력해주세요.'/>"
+								  +"</div>"
+								  +"<div class='col-md-11 form-row' style='margin-left: 20px;margin-top: 10px;'>"
+									+"<label for='memberPhone' class='col-md-2'>전화번호</label>"
+									+"<input type='text' id='memberPhone1' name='memberPhone1' class='col-md-3' maxlength='3'/>&nbsp;&#45;&nbsp;"
+									+"<input type='text' id='memberPhone2' name='memberPhone2' class='col-md-3' maxlength='4'/>&nbsp;&#45;&nbsp;"
+									+"<input type='text' id='memberPhone3' name='memberPhone3' class='col-md-3' maxlength='4'/>"
+								  +"</div>");
+			$("#find-check").html("");
+		});
+		
+		$("#findPwd").on("click", function() {
+			$("#findId a").attr("class", "nav-link");
+			$("#findPwd a").attr("class", "nav-link active");
+			$("#find-form").html("<div class='col-md-11 form-row' style='margin-left: 20px;margin-top: 10px;'>"
+									+"<label for='memberName' class='col-md-2'>이름</label>"
+									+"<input type='text' id='memberName' name='memberName' class='col-md-9' Placeholder='이름을 입력해주세요.'/>"
+								  +"</div>"
+								  +"<div class='col-md-11 form-row' style='margin-left: 20px;margin-top: 10px;'>"
+									+"<label for='memberId' class='col-md-2'>아이디</label>"
+									+"<input type='text' id='memberId' name='memberId' class='col-md-9' Placeholder='아이디를 입력해주세요.'/>"
+								  +"</div>");
+			$("#find-check").html("");
 		})
 		
 	});
@@ -163,15 +240,6 @@
 		  },
 		});
 	  }
-	
-	function fncPageNavigation(category) {
-		
-	    if (category == null) {
-			category = ${category};
-		}
-	   
-	    $("#report").attr("action","/report/listReport?reportCategory="+category).attr("method", "POST").submit();
-	}
 </script>
 
 
@@ -208,9 +276,6 @@
 					    alt="카카오 로그인 버튼"
 					  />
 					</a>
-					<!-- <input
-						class="btn btn-lg btn-primary btn-block" id="kakaoLogin"
-						type="button" value="카카오 로그인 (구현 예정)" /> -->
 					<input
 						class="btn btn-lg btn-primary btn-block" id="naverLogin"
 						type="button" value="네이버 로그인 (구현 예정)" /><br/><br/>
@@ -220,7 +285,7 @@
 						<a href="/member/addMember/owner/1">업주</a>
 					</div>
 					<div align="right">
-						<a id="findAccountModal-nav" data-dismiss="#loginModal" data-toggle="modal" data-target="#findAccountModal" href="#findAccount">아이디/비밀번호 찾기 ></a>
+						<a id="findAccountModal-nav" data-toggle="modal" data-target="#findAccountModal">아이디/비밀번호 찾기 ></a>
 					</div>
 					<!-- <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p> -->
 				</form>
@@ -241,23 +306,34 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body" align="center">
-				<form id="findAccount">
-					<ul class="nav nav-tabs findAccount-top-tabs">
-					  	<li class="nav-item">
-					    	<a class="nav-link" href="javascript:fncPageNavigation(1)">아이디 찾기</a>
-					  	</li>
-					  	<li class="nav-item">
-					    	<a class="nav-link" href="javascript:fncPageNavigation(2)">비밀번호 찾기</a>
-					  	</li>
-					</ul>
-					
+			<div class="modal-body">
+				<ul class="nav nav-tabs findAccount-top-tabs">
+				  	<li class="nav-item" id="findId">
+				    	<a class="nav-link active" id="findId-tab" href="#">아이디 찾기</a>
+				  	</li>
+				  	<li class="nav-item" id="findPwd">
+				    	<a class="nav-link" id="findPwd-tab" href="#">비밀번호 찾기</a>
+				  	</li>
+				</ul>
+				<form id="form-findAccount">
+					<div id="find-form" style="margin-left: 0px;margin-right: 0px;">
+						<div class="col-md-11 form-row" style="margin-left: 20px;margin-top: 10px;">
+							<label for="memberName" class="col-md-3">이름</label>
+							<input type="text" id="memberName" name="memberName" class="col-md-9" Placeholder="이름을 입력해주세요."/>
+						</div>
+						<div class="col-md-11 form-row" style="margin-left: 20px;margin-top: 10px;">
+							<label for="memberPhone1" class="col-md-3">전화번호</label>
+							<input type="text" id="memberPhone1" name="memberPhone1" class="col-md-2" maxlength="3" value=""/>&nbsp;&#45;&nbsp;
+							<input type="text" id="memberPhone2" name="memberPhone2" class="col-md-3" maxlength="4" value=""/>&nbsp;&#45;&nbsp;
+							<input type="text" id="memberPhone3" name="memberPhone3" class="col-md-3" maxlength="4" value=""/>
+						</div>
+					</div>
 				</form>
+				<div id="find-check" align="center"></div>
 			</div>
-			<!-- <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-		        <button type="button" class="btn btn-primary"></button>
-		    </div> -->
+			<div class="modal-footer">
+		      <input type="button" class="btn btn-primary" id="findAccount-btn" value="확인">
+		    </div>
 		</div>
 	</div>
 </div>
