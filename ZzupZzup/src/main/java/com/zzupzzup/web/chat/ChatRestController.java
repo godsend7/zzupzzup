@@ -215,6 +215,10 @@ public class ChatRestController {
 			search.setCurrentPage(1);
 		}
 		
+		if(search.getSearchSort() == null || search.getSearchSort() == "") {
+			search.setSearchSort("latest");
+		}
+		
 		if(request.getParameter("page") != null) {
 			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
 		}
