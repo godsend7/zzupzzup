@@ -135,7 +135,7 @@ public class MapRestController {
 			JSONObject rowObj = (JSONObject) personArray.get(1); 
 			JSONArray restaurantArray = (JSONArray) rowObj.get("row"); 
 			
-			System.out.println("row? :: " + restaurantArray);
+			//System.out.println("row :: " + restaurantArray);
 			
 			JSONArray newArray = new JSONArray();
 			for(int i=0; i < restaurantArray.size(); i++) { 
@@ -148,24 +148,24 @@ public class MapRestController {
 						//JsonNode json = mapper.readTree((JsonParser) restaurantArray.get(i));
 						newArray.add(personObject);
 						
-						System.out.println("appen!!");
+						//System.out.println("appen!!");
 						//list.add(restaurantArray.get(i).)
 					}
 					
-					System.out.println(personObject.get("RESTRT_NM")); 
-					System.out.println(personObject.get("RESTRT_NM").toString());
+					//System.out.println(personObject.get("RESTRT_NM")); 
+					//System.out.println(personObject.get("RESTRT_NM").toString());
 				} else if ("1".equals(search.getSearchCondition())) {
 					if (personObject.get("REFINE_ROADNM_ADDR").toString().contains(search.getSearchKeyword())) {
 						//String apen = (String) restaurantArray.get(i);
 						//JsonNode json = mapper.readTree((JsonParser) restaurantArray.get(i));
 						newArray.add(personObject);
 						
-						System.out.println("appen!!");
+						//System.out.println("appen!!");
 						//list.add(restaurantArray.get(i).)
 					}
 					
-					System.out.println(personObject.get("SIGUN_NM")); 
-					System.out.println(personObject.get("REFINE_LOTNO_ADDR")); 
+					//System.out.println(personObject.get("SIGUN_NM")); 
+					//System.out.println(personObject.get("REFINE_LOTNO_ADDR")); 
 				}
 			}
 			

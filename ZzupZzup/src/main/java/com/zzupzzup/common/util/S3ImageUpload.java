@@ -46,7 +46,7 @@ public class S3ImageUpload {
 	}
 	
 	//다중 image 업로드
-	public void uploadMultiFile(MultipartFile multipartFile, String s3Path) {
+	public void uploadFile(MultipartFile multipartFile, String s3Path) {
 		
 	    try {
 			// set ObjectMatadata
@@ -67,53 +67,7 @@ public class S3ImageUpload {
 		}
 	}
 	
-	//단일 image 업로드
-	public void uploadFile(MultipartFile image, String s3Path) {
-		try {
-			// set ObjectMatadata
-			byte[] bytes = IOUtils.toByteArray(image.getInputStream());
 
-		    ObjectMetadata objectMetadata = new ObjectMetadata();
-		    objectMetadata.setContentLength(bytes.length);
-		    objectMetadata.setContentType(image.getContentType());
-		
-		    // save in S3
-		    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-		    this.s3Client.putObject(this.bucketName, s3Path.replace(File.separatorChar, '/'), byteArrayInputStream, objectMetadata);
-			  
-		    byteArrayInputStream.close();
-		      
-		}catch(Exception e){
-		    	e.printStackTrace();
-		}
-	}
-
-//    // upload thumbnail image file
-//    public void uploadThumbFile(MultipartHttpServletRequest image, String thumbs3Path) {
-//      try {
-//        // make thumbnail image for s3
-//        BufferedImage bufferImage = ImageIO.read(image.getInputStream());
-//        BufferedImage thumbnailImage = Thumbnails.of(bufferImage).size(400, 333).asBufferedImage();
-//
-//        ByteArrayOutputStream thumbOutput = new ByteArrayOutputStream();
-//        String imageType = image.getContentType();
-//        ImageIO.write(thumbnailImage, imageType.substring(imageType.indexOf("/")+1), thumbOutput);
-//
-//        // set metadata
-//        ObjectMetadata thumbObjectMetadata = new ObjectMetadata();
-//        byte[] thumbBytes = thumbOutput.toByteArray();
-//        thumbObjectMetadata.setContentLength(thumbBytes.length);
-//        thumbObjectMetadata.setContentType(image.getContentType());
-//
-//        // save in s3
-//        InputStream thumbInput = new ByteArrayInputStream(thumbBytes);
-//        this.s3Client.putObject(this.bucketName, thumbs3Path.replace(File.separatorChar, '/'), thumbInput, thumbObjectMetadata);
-//	
-//        thumbInput.close();
-//        thumbOutput.close();
-//    }catch(Exception e){log.error(e.getMessage());}
-//  }
-	
 	// get presigned URL
 	public String getFileURL(String fileName) {
 	  System.out.println("넘어오는 파일명 : "+fileName);

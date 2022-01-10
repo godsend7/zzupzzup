@@ -85,23 +85,6 @@
 					$("#reviewImage").text("등록된 이미지 없습니다.");
 				}
 				
-				
-				//$("#reviewImage").append("</div>");
-				/* var imageControl = "<a class='carousel-control-prev' data-target='#carouselExampleIndicators' data-slide='prev'> "
-								+ "<span class='carousel-control-prev-icon' aria-hidden='true'></span> " 
-								+ "<span class='sr-only'>Previous</span> </a> "
-								+ "<a class='carousel-control-next' data-target='#carouselExampleIndicators' data-slide='next'> "
-								+ "<span class='carousel-control-next-icon' aria-hidden='true'></span>" 
-								+ "<span class='sr-only'>Next</span> </a> </div> </div>";
-								
-				$("#reviewImage").append(imageControl); */
-				
-				/* for ( var item in ${listLike}) {
-					if(${data.reviewNo == item.reviewNo && (!empty member && member.memberId) == item.memberId}) {
-						console.log("내가 선택")
-					}
-				} */
-				
 				//좋아요
 				$("#reviewLike").removeClass('check'); 
 				$.each(data.listLike, function(index, item) {
@@ -109,11 +92,7 @@
 						$("#reviewLike").addClass('check'); 
 					}
 				});
-				/* <c:forEach var="like" items="${listLike}">
-					if(data.reviewNo == "${like.reviewNo}") {
-						$(".reviewLike").attr('class','reviewLike check'); 
-					}
-				</c:forEach> */
+			
 				
 				$(".footerBox").empty();
 				$(".footer2").empty();
@@ -161,24 +140,16 @@
     	var image = "";
     	
     	if (index == 0) {
-    		console.log("active 필요");
+    		//console.log("active 필요");
 			image = "<div class='carousel-item active'>";
 		} else {
-			console.log("active 필요없엉");
+			//console.log("active 필요없엉");
 			image = "<div class='carousel-item'>";
 		}
-    	
-    	/* image += " <svg class='bd-placeholder-img bd-placeholder-img-lg d-block w-100' width='100%' height='400' xmlns='http://www.w3.org/2000/svg' role='img' aria-label='Placeholder: Second slide' preserveAspectRatio='xMidYMid slice' focusable='false'> "
-    			+ "<text x='50%' y='50%' fill='#444' dy='.3em'>" + item + "</text></svg> "
-    			+ "</div>";  */
     			
     	image += "<div class='imgBox'> <img src='/resources/images/uploadImages/review/" + item + "'> </div>"
-    	/* var image = "<div class='carousel-item'> <svg class='bd-placeholder-img bd-placeholder-img-lg d-block w-100' " 
-    				+ "width='100%' height='400' xmlns='http://www.w3.org/2000/svg'	role='img' aria-label='Placeholder: Third slide' "
-    				+ "preserveAspectRatio='xMidYMid slice' focusable='false'> <rect width='100%' height='100%' fill='#555'></rect> "
-    				+ "<text x='50%' y='50%' fill='#333' dy='.3em'>" + item + "</text> </svg>"; */
-		
-    	/* image = "<div class='col-sm-2'> <img src='/resources/images/uploadImages/"+item+"'> </div>"; */
+    	/* image += "<div class='imgBox'> <img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/" + item + "'> </div>" */
+    	
     	
     	$("#reviewImage").append(image);
     } 

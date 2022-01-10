@@ -93,8 +93,6 @@
 	   							/* item */
 	   						)
 	   					});
-	   					
-	   				console.log(arrayLayout);
    					
    					initMap();
 					

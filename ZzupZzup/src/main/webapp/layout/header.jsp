@@ -20,10 +20,6 @@
 }
 </style>
 
-<script>
-	console.log("header 아니면 여기가 먼저??");
-</script>
-
 <!-- start: Header -->
 <header id="header">
 	<!-- 현재 나의 PATH 가져오기 -->
@@ -36,9 +32,6 @@
 		</svg> ZZUPZZUPDUCE_101</strong>
 	</a>
 	
-	<script>
-		console.log("header 실행");
-	</script>
 	<%-- <c:if test = "${fn:contains(path, '')}"> --%>
 		<form class="col-12 col-lg-auto mb-3 mb-lg-0" id="mapSearch">
 			<div class="col-md-12 col-sm-12 d-flex">

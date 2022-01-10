@@ -182,6 +182,8 @@ public class ReviewRestController {
 		return resultMap;
 	}
 	
+	
+	//server Image Upload
 	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
 	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
@@ -228,6 +230,8 @@ public class ReviewRestController {
 	    return reviewImage;
 	}
 	
+	
+	//AWS S3 Image Upload
 //	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
 //	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
 //		
@@ -241,10 +245,6 @@ public class ReviewRestController {
 //		
 //		List<String> reviewImage = new ArrayList<String>();
 //		
-//	    String filePath = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH+"review");
-//	    
-//	    System.out.println("filePath : " + filePath);
-//	    
 //	    Map<String, Object> map = new HashMap<String, Object>();
 //	    
 //	    for (MultipartFile mf : fileList) {
@@ -256,15 +256,18 @@ public class ReviewRestController {
 //				try {
 //					String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
 //					
-//					String s3Path = filePath+"/"+saveName;
+//					String s3Path = "review/"+saveName;
 //					
-//					s3ImageUpload.uploadMultiFile(mf, s3Path);
+//					s3ImageUpload.uploadFile(mf, s3Path);
 //			
 //					System.out.println(":: 저장할 이름 => " + saveName);
 //					 
 //					reviewImage.add(saveName);
 //				
 //					System.out.println("업로드 성공");
+//					
+//					//String test = s3ImageUpload.getFileURL(saveName);
+//					//System.out.println(test);
 //				} catch (Exception e) {
 //					// TODO: handle exception
 //					System.out.println("업로드 없음");
