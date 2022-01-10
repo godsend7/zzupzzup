@@ -30,7 +30,7 @@
 		FROM ( SELECT r.rating_no, r.chat_no, r.rating_to_id, r.rating_from_id, r.rating_score, r.rating_type, r.rating_reg_date
 				FROM rating r, chat c
 				WHERE r.chat_no = c.chat_no
-				ORDER BY r.chat_no LIMIT #{search.startRowNum}, #{search.endRowNum}) AS r
+				ORDER BY r.rating_no DESC LIMIT #{search.startRowNum}, #{search.pageSize}) AS r
 	</select>
 	
 	<!-- SQL : SELECT ROW COUNT -->
@@ -45,7 +45,14 @@
 		FROM ( SELECT r.rating_no, r.chat_no, r.rating_to_id, r.rating_from_id, r.rating_score, r.rating_type
 				FROM rating r, chat c
 				WHERE r.chat_no = c.chat_no and r.rating_from_id = #{memberId}
-				ORDER BY r.chat_no LIMIT #{search.startRowNum}, #{search.endRowNum}) AS r
+				ORDER BY r.chat_no LIMIT #{search.startRowNum}, #{search.pageSize}) AS r
+	</select>
+	
+	<!-- SQL : SELECT ROW COUNT -->
+	<select id="getMyTotalCount" parameterType="String" resultType="int">
+		SELECT count(*)
+		FROM rating r, chat c
+		WHERE r.chat_no = c.chat_no and r.rating_from_id = #{memberId}
 	</select>
 </mapper>
 

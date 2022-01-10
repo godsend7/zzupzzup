@@ -3,6 +3,22 @@
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<<script type="text/javascript">
+
+	var imgArray = new Array();
+	imgArray[0] = "../resources/images/common/ad1.JPG";
+	imgArray[1] = "../resources/images/common/ad2.JPG";
+	imgArray[2] = "../resources/images/common/ad3.JPG";
+	imgArray[3] = "../resources/images/common/ad4.JPG";
+	
+	function showAd() {
+		var imgNum = Math.round(Math.random() * 3);
+		var objImg = document.getElementById("adImgs");
+		objImg.src = imgArray[imgNum];
+	}
+
+</script>
+
 <%-- <!-- 실시간 시간 정보 DATA -->
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
@@ -38,7 +54,7 @@
 <!-- 실시간 시간 정보 DATA2  -->
 
 <!-- <body onload="showClock()"> -->
-
+<body onload = "showAd()">
 <!-- S:Sidebar -->
 <div id="sidebar" class="inactive">
 	<div class="inner">
@@ -135,9 +151,9 @@
 									<ul>
 										<li><a href="/restaurant/listRestaurant">등록된 전체 음식점</a></li>
 										<li><a href="/restaurant/listRequestRestaurant">음식점 등록 요청 내역</a></li>
-										<li><a href="/review/listReview">전체 리뷰 내역</a></li>
 									</ul>
 								</li>
+								<li><a href="/review/listReview">전체 리뷰 관리</a></li>
 								<li><a href="/report/listReport">신고/제보 관리</a></li>
 							</c:if>
 							<li><a href="/restaurant/addRestaurant?memberId=${member.memberId}">test-음식점등록</a></li>
@@ -182,9 +198,10 @@
 				<li class="icon solid fa-home">서울시 종로구 종로 69 서울YMCA</li>
 			</ul>
 			<!-- <div id="divClock" class="clock"></div> -->
-			<a href="https://www.mcdonalds.co.kr/kor/promotion/detail.do?page=1&seq=347&utm_medium=Corp_site&utm_source=Main_cardblock&utm_campaign=1227_Prosperity" target="_black">
+			<!-- <a href="https://www.mcdonalds.co.kr/kor/promotion/detail.do?page=1&seq=347&utm_medium=Corp_site&utm_source=Main_cardblock&utm_campaign=1227_Prosperity" target="_black">
 				<img alt="mcdonald" src="../resources/images/common/ad.JPG" width="100%">
-			</a>
+			</a> -->
+			<img id = "adImgs" width="100%" border="0">
 		</section>
 
 		<!-- Footer -->
@@ -199,4 +216,5 @@
 <!-- S: Login Modal -->
 <jsp:include page="/member/modal-archive.jsp" />
 <!-- E: Login Modal -->
+</body>
 <!-- </body> -->

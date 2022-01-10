@@ -52,7 +52,7 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="getMember">
+				<section id="getMember-jsp">
 					<div class="container">
 						<div class="row justify-content-center">
 							<div class="col-12 col-lg-10 col-xl-8 mx-auto">
@@ -289,9 +289,8 @@
 													</div>
 													</c:if>
 													</c:forEach>
-												</c:if>
-											</div>
-										
+												</div>
+											</c:if>										
 										<hr class="my-4" />
 										<div align="center">
 											<c:if test="${sessionScope.member.memberRole != 'admin'}">

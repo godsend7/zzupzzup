@@ -145,7 +145,7 @@ public class ChatServiceTest {
 		
 		System.out.println("search : " + search);
 		
-		Map<String, Object> map = chatService.listChat(search);
+		Map<String, Object> map = chatService.listChat(search, "user02@zzupzzup.com");
 		System.out.println("===================================");
 		System.out.println("testListChat map : " + map);
 		System.out.println("===================================");
