@@ -400,23 +400,17 @@
 					<div class="container">
 					
 						<!-- start:Form -->
-						<h3>리뷰 등록</h3>
-					
+						<h2>Review 수정</h2>
+						<br>
 						<form id="review">
 							<div class="row gtr-uniform">
 							
 								<input type="hidden" id="reviewNo" name="reviewNo" value="${review.reviewNo}">
 							
-								<%-- <div class="col-12 col-12-xsmall">
-					 				<label for="order">주문 내역</label>
-					 				<p>음식점명 : ${review.restaurant.restaurantName}<br>
-					 				주문한 메뉴 : 
-					 				<c:forEach var="order" items="${review.reservation.order}">
-   										<c:out value="${order.menuTitle}"/>
-   										<c:out value="${order.orderCount}"/>
-									</c:forEach> <br>
-					 				방문 확정일 : ${review.reservation.fixedDate}</p>
-					 			</div> --%>
+								<div class="col-12">
+							 		<br>
+									<label for="reviewStar">음식점 평가</label>
+								</div>
 							 
 							 	<div class="col-md-4 star-box">
 							 		<label for="scopeClean" class="starLabel">청결해요</label>
@@ -457,24 +451,30 @@
 								<c:choose>
 									<c:when test="${member.memberRole eq 'admin'}">
 										<div class="col-12">
+										<br>
 											<label for="fileDragInput">리뷰 이미지</label>
 											<div class="file-drag-view">
 												<c:forEach var="image" items="${review.reviewImage}">
 													<a class='cvf_delete_image' id='img_id_${status.index}'>
 														<img src="/resources/images/uploadImages/review/${image}">
+														<%-- <img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/${image}"> --%>
 													</a>
 												</c:forEach>
 											</div>
 										</div>
 										
+										<br>
+										
 										<!-- Break -->
 										<div class="col-12">
+										<br>
 											<label for="reviewDetail">어떤 점이 좋았나요?</label>
 											<p>${review.reviewDetail}</p>
 										</div>
 										
 										<!-- Break -->
 										<div class="col-12">
+										<br>
 											<label for="hashTag">해시태그</label>
 											<div class="box" id="hashTagBox">
 												<c:forEach var="hashtag" items="${review.hashTag}">
@@ -485,6 +485,7 @@
 									</c:when>
 									<c:otherwise>
 										<div class="col-12">
+										<br>
 											<label for="fileDragInput">리뷰 이미지</label>
 											<div class="file-drag-area">
 												<span class="file-drag-btn">파일 선택</span> 
@@ -496,6 +497,7 @@
 													<c:set var="fileName" value="${fn:split(image, '_')}"/>
 													<a class='cvf_delete_image' id='img_id_${status.index}'>
 														<img src="/resources/images/uploadImages/review/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'>
+														<%-- <img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'> --%>
 														<input type='hidden' name='reviewImage[${status.index}]' value='${image}'>
 													</a>
 												</c:forEach>
@@ -503,17 +505,18 @@
 											<div class="imageUploadBox">
 											</div>
 										</div>
-										
 										<!-- Break -->
 										<div class="col-12">
+										<br>
 											<label for="reviewDetail">어떤 점이 좋았나요?</label>
 											<textarea name="reviewDetail" id="reviewDetail" placeholder="100자 이내로 입력해주세요." maxlength='100' rows="2">${review.reviewDetail}</textarea>
 										</div>
 										
 										<!-- Break -->
 										<div class="col-12">
+										<br>
 											<label for="hashTag">해시태그</label>
-											<input id="hashTagAuto" type="text"><br>
+											<input id="hashTagAuto" type="text" placeholder="#을 입력하여 해시태그를 등록해보세요."><br>
 											
 											<div class="box" id="hashTagBox">
 											<c:set var="i" value="0" />
@@ -532,13 +535,14 @@
 								
 								<!-- Break -->
 								<div class="col-12${member.memberRole eq 'admin' ? '' : ' reviewShowStatus'}">
+								<br>
 									<input type="checkbox" id="reviewShowStatus" name="reviewShowStatus" ${review.reviewShowStatus ? 'checked' : ''}> 
 									<label for="reviewShowStatus">리뷰 노출 여부</label>
 								</div>
 								
 					 	   		<!-- Break -->
 								<div class="col-12">
-									<ul class="actions">
+									<ul class="actions justify-content-center">
 										<li><input type="button" value="취소" class="normal" id="cancelBtn" /></li>
 										<li><input type="button" value="수정" class="primary" id="updateBtn" /></li>
 									</ul>

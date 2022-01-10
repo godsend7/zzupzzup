@@ -295,7 +295,7 @@
 						 FROM MENU
 						 WHERE MAIN_MENU_STATUS = 1) AS m ON (rt.RESTAURANT_NO = m.RESTAURANT_NO)
 		WHERE rt.RESTAURANT_REG_DATE IS NOT NULL
-		<if test='!"".equals(searchKeyword)'>
+		<if test='searchKeyword != null and !"".equals(searchKeyword)'>
 			<bind name="searchKeywords" value="'%' + searchKeyword + '%'" />
 			<if test="searchCondition == 0">
 				AND rt.restaurant_name LIKE #{searchKeywords};       
