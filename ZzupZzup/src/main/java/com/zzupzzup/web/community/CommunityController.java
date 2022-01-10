@@ -93,7 +93,7 @@ public class CommunityController {
 			memberService.calculateActivityScore(community.getMember().getMemberId());
 		}
 		
-		System.out.println("null이라며~~~ : " + restaurantTimes);
+		//System.out.println("null이라며~~~ : " + restaurantTimes);
 		
 		if(restaurantTimes.getRestaurantTimes() != null) {
 			for(RestaurantTime rt : restaurantTimes.getRestaurantTimes()) {

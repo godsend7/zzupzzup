@@ -14,10 +14,56 @@
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
 
+.checked {
+ 	fill : pink;
+}
+
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
+	
+	// 좋아요 기능
+	$(function() {
+		$(".postLike").on("click", function() {
+			if (${member.memberId == null}) {
+				alert("로그인이 필요한 서비스입니다.");
+				return;
+			}
+			
+			if (${member.memberRole != "user"}) {
+				return;
+			}
+			
+			if ($(this).hasClass("checked") === true) {
+				var likeCount = $(this).closest("div").find("span").text();
+				
+				$.ajax({
+					url : "/community/json/deleteLike/"+$(this).closest("div").find("input[name='postNo']").val(),
+					method : "GET",
+					context : this, //ajax에서 $(this)를 사용하기 위해서 필요
+					success : function(data, status) {
+						
+						$(this).closest("div").find("span").text(data.likeCount);
+						$(this).attr('class','postLike');
+					}
+				});	
+			} else {
+				var likeCount = $(this).closest("div").find("span").text();
+				
+				$.ajax({
+					url : "/community/json/addLike/"+$(this).closest("div").find("input[name='postNo']").val(),
+					method : "GET",
+					context : this, //ajax에서 $(this)를 사용하기 위해서 필요
+					success : function(data, status) {
+						
+						$(this).closest("div").find("span").text(data.likeCount);
+						$(this).attr('class','postLike checked');
+					}
+				});
+			}
+		});
+	});
 
 	window.onload = function(){
 		$(function() {
@@ -73,10 +119,22 @@
 				<input type="hidden" class="form-control" id="community.postNo" name="community.postNo" value="${community.postNo}">
 				
 				<div class="container">
-					
+				
+					<c:if test="${!empty community.receiptImage}">
+						<span class="badge badge-success" id="receiptImage">영수증 첨부된 게시물</span>
+					</c:if>
 					<div class="row">
-				       <h2 class=" col">${community.postTitle} &nbsp;
-				       	<small style="color:gray;">by. ${community.member.nickname}</small></h2>
+						<div class="col-md-8">
+							<h2 class="text-info">${community.postTitle} &nbsp;
+							<small style="color:gray;">by. ${community.member.nickname}</small></h2>
+						</div>
+						<div class="col-md-4" style="text-align:right; padding-right: 20px;">
+							<span class="likeCount">${community.likeCount}</span> &nbsp;
+							<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-heart-fill postLike" viewBox="0 0 16 16">
+							  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+							</svg>
+							<input type="hidden" name="postNo" value="${community.postNo}">
+						</div>
 				    </div><hr>
 				    
 				    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
@@ -180,7 +238,7 @@
 					</div><hr> --%>
 					
 					<div class="text-center">
-					<c:if test="${member.memberRole == 'admin' || member.memberRole == 'owner'}">
+					<c:if test="${member.memberRole == 'admin' || community.member.memberId == member.memberId}">
 						<button type="button" class="btn btn-link">삭제하기</button>
 						<button type="button" class="btn btn-primary">수정하기</button>
 					</c:if>

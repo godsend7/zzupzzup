@@ -13,8 +13,10 @@
 		<result property="postTitle"		column="POST_TITLE" 		jdbcType="VARCHAR"/>
 		<result property="postText" 		column="POST_TEXT" 			jdbcType="VARCHAR"/>
 		<result property="streetAddress" 	column="STREET_ADDRESS" 	jdbcType="VARCHAR"/>
-		<result property="restAddress" 		column="REST_ADDRESS" 		jdbcType="VARCHAR"/>
 		<result property="areaAddress" 		column="AREA_ADDRESS" 		jdbcType="VARCHAR"/>
+		<result property="restAddress" 		column="REST_ADDRESS" 		jdbcType="VARCHAR"/>
+		<result property="latitude" 		column="LATITUDE" 			jdbcType="VARCHAR"/>
+		<result property="longitude" 		column="LONGITUDE" 			jdbcType="VARCHAR"/>
 		<result property="restaurantName" 	column="RESTAURANT_NAME" 	jdbcType="VARCHAR"/>
 		<result property="restaurantTel" 	column="RESTAURANT_TEL" 	jdbcType="VARCHAR"/>
 		<result property="receiptImage" 	column="RECEIPT_IMAGE" 		jdbcType="VARCHAR"/>
@@ -33,6 +35,7 @@
 		<collection property="postImage" ofType="String" javaType="list">
 			<result column="image" />
 		</collection>
+		<!-- <collection property="restaurant" resultMap="restaurantSelectMap"></collection> -->
 	
 	</resultMap>
 	
@@ -46,17 +49,21 @@
 		<result property="restaurantBreak" column="RESTAURANT_BREAK" />
 		<result property="restaurantLastOrder" column="RESTAURANT_LAST" />
 		<result property="restaurantDayOff" column="RESTAURANT_DAY_OFF" />
-		
 	</resultMap>
+	
+	<!-- <resultMap id="restaurantSelectMap" type="com.zzupzzup.service.domain.Restaurant">
+		<result property="reservationStatus" column="RESERVATION_STATUS" />
+		<result property="restaurantRegDate" column="RESTAURANT_REG_DATE" />
+	</resultMap> -->
 	
 	
 	<!-- SQL : INSERT -->
 	<insert		id="addCommunity"	parameterType="community" useGeneratedKeys="true" keyProperty="postNo">
 		INSERT
 		INTO COMMUNITY(MEMBER_ID, NICKNAME, POST_TITLE, POST_TEXT, RESTAURANT_NAME, RESTAURANT_TEL,
-		STREET_ADDRESS, AREA_ADDRESS, REST_ADDRESS, MENU_TYPE, RECEIPT_IMAGE, MAIN_MENU_TITLE, MAIN_MENU_PRICE)
+		STREET_ADDRESS, AREA_ADDRESS, REST_ADDRESS, LATITUDE, LONGITUDE, MENU_TYPE, RECEIPT_IMAGE, MAIN_MENU_TITLE, MAIN_MENU_PRICE)
 		VALUES ( #{member.memberId}, #{member.nickname}, #{postTitle}, #{postText}, #{restaurantName}, #{restaurantTel},
-		#{streetAddress}, #{areaAddress}, #{restAddress}, #{menuType}, #{receiptImage}, #{mainMenuTitle}, #{mainMenuPrice})
+		#{streetAddress}, #{areaAddress}, #{restAddress}, #{latitude}, #{longitude}, #{menuType}, #{receiptImage}, #{mainMenuTitle}, #{mainMenuPrice})
 	</insert>
 	
 	<insert 	id="addRestaurantTime"	parameterType="community" >
@@ -110,7 +117,8 @@
 			AREA_ADDRESS = #{areaAddress},
 			MENU_TYPE = #{menuType},
 			MAIN_MENU_TITLE = #{mainMenuTitle},
-			MAIN_MENU_PRICE = #{mainMenuPrice}
+			MAIN_MENU_PRICE = #{mainMenuPrice},
+			RECEIPT_IMAGE = #{receiptImage}
 		</set>
 		WHERE POST_NO = #{postNo}
 	</update>
@@ -201,6 +209,19 @@
 	</select>
 	
 	
+	<!-- SQL : SELECT -->
+	<select id="getLikeTotalCount" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM COMMUNITY cm
+		INNER JOIN (SELECT POST_NO
+					FROM MARK
+					WHERE MEMBER_ID = #{value} AND POST_NO IS NOT NULL
+					ORDER BY MARK_NO) as mk
+					ON (cm.POST_NO = mk.POST_NO)
+		WHERE cm.POST_SHOW_STATUS = 1;
+	</select>
+	
+	
 	<!-- SQL : UPDATE -->
 	<update id="officialCommunity"	parameterType="community">
 		UPDATE COMMUNITY
@@ -210,9 +231,10 @@
 		WHERE POST_NO = #{postNo};
 		
 		INSERT
-		INTO RESTAURANT(RESTAURANT_NAME, RESTAURANT_TEL, RESERVATION_STATUS, STREET_ADDRESS, AREA_ADDRESS, REST_ADDRESS, MENU_TYPE)
-		VALUES (#{restaurantName}, #{restaurantTel}, false, #{streetAddress}, #{areaAddress}, #{restAddress}, #{menuType});
+		INTO RESTAURANT(RESTAURANT_NAME, RESTAURANT_TEL, RESERVATION_STATUS, 
+		STREET_ADDRESS, AREA_ADDRESS, REST_ADDRESS, LATITUDE, LONGITUDE, MENU_TYPE)
+		VALUES (#{restaurantName}, #{restaurantTel}, false, #{streetAddress}, 
+		#{areaAddress}, #{restAddress}, #{latitude}, #{longitude}, #{menuType});
 	</update>
-	
 	
 </mapper>

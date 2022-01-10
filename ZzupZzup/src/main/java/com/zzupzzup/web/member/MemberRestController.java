@@ -114,8 +114,20 @@ public class MemberRestController {
 		return memberService.checkNicknameDuplication(nickname);
 	}
 	
-	public void findId() {
+	@RequestMapping(value="json/findAccount", method=RequestMethod.POST)
+	public Member findAccount(@RequestBody Member member) throws Exception {
 		
+		System.out.println("/member/json/findAccount : POST");
+		System.out.println("memberName : "+member.getMemberName()+", memberId : "+member.getMemberId()+", memberPhone : "+member.getMemberPhone());
+		
+		if(member.getMemberId() == "" || member.getMemberPhone() == "") {
+			Member mb = memberService.getMember(member);
+			if(mb != null) {
+				return mb;
+			}
+		}
+		
+		return null;
 	}
 	
 	@RequestMapping(value="json/sendCertificatedNum", method=RequestMethod.GET)
