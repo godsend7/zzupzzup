@@ -249,7 +249,7 @@ public class CommunityController {
 		
 		String realReceipt = uploadReceiptFile.getOriginalFilename();
 		
-		System.out.println("" + realReceipt);
+		System.out.println("realReceipt : " + realReceipt);
 		
 		Path checkpoint = Paths.get(vacant, File.separator + StringUtils.cleanPath(realReceipt));
 		

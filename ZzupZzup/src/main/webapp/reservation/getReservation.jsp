@@ -265,6 +265,7 @@
 									<label for="restaurantName">음식점 명</label> 
 									<p>${reservation.restaurant.restaurantName}</p>
 								</div>
+								${reservation.member.nickname}43343
 								<div class="col-12">
 									<label for="nickname">예약자 NickName</label> 
 									<%-- <p>${reservation.member.nickname}</p> --%>

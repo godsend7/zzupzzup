@@ -3,9 +3,6 @@ package com.zzupzzup.service.domain;
 import java.sql.Date;
 import java.util.List;
 
-import com.zzupzzup.common.ChatAge;
-import com.zzupzzup.common.ChatMember;
-
 public class Chat {
 	
 	///Field

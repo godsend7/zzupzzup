@@ -13,12 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
-import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Rating;
 import com.zzupzzup.service.member.MemberService;
@@ -78,16 +75,21 @@ public class RatingController {
 		System.out.println("listChat member : " + member);
 		
 		Member toMember = new Member();
-		Member FromMember = new Member();
+		Member fromMember = new Member();
 		
 		for (Rating r : list) {
 			toMember = memberService.getMember(r.getRatingToId());
-			FromMember = memberService.getMember(r.getRatingFromId());
-			//System.out.println("================++++=================");
-			//System.out.println(toMember);
-			//System.out.println("==================++++===============");
+			fromMember = memberService.getMember(r.getRatingFromId());
+			/*
+			 * System.out.println("================++++=================");
+			 * System.out.println(toMember);
+			 * System.out.println("==================++++===============");
+			 * System.out.println("================++++=================");
+			 * System.out.println(fromMember);
+			 * System.out.println("==================++++===============");
+			 */
 			r.setRatingToId(toMember);
-			r.setRatingFromId(FromMember);
+			r.setRatingFromId(fromMember);
 		}
 		
 		//System.out.println("===================================");
@@ -130,16 +132,21 @@ public class RatingController {
 		List<Rating> list = (List<Rating>) map.get("list");
 		
 		Member toMember = new Member();
-		Member FromMember = new Member();
+		Member fromMember = new Member();
 		
 		for (Rating r : list) {
 			toMember = memberService.getMember(r.getRatingToId());
-			FromMember = memberService.getMember(r.getRatingFromId());
-			//System.out.println("================++++=================");
-			//System.out.println(toMember);
-			//System.out.println("==================++++===============");
+			fromMember = memberService.getMember(r.getRatingFromId());
+			/*
+			 * System.out.println("================++++=================");
+			 * System.out.println(toMember);
+			 * System.out.println("==================++++===============");
+			 * System.out.println("================++++=================");
+			 * System.out.println(fromMember);
+			 * System.out.println("==================++++===============");
+			 */
 			r.setRatingToId(toMember);
-			r.setRatingFromId(FromMember);
+			r.setRatingFromId(fromMember);
 		}
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer) map.get("totalCount")).intValue(), pageUnit,
