@@ -263,7 +263,7 @@
 		/* *************** fncAddRestaurant() *************** */
 		
 		
-		window.onload = function(){
+/* 		window.onload = function(){ */
 			/* *************** 버튼 실행 *************** */
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			$(function() {
@@ -334,7 +334,7 @@
 			/* *************** 음식점 운영정보 *************** */
 			
 			
-		} // window.onload FINISH
+/* 		} // window.onload FINISH */
 		
 		/* *************** 이미지 업로드 *************** */
 		$(function(){
