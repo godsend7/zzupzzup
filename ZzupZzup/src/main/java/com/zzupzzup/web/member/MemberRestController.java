@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.domain.Member;
+import com.zzupzzup.service.member.MailService;
 import com.zzupzzup.service.member.MemberService;
 
 
@@ -33,6 +34,10 @@ public class MemberRestController {
 	@Autowired
 	@Qualifier("memberServiceImpl")
 	private MemberService memberService;
+	
+	@Autowired
+	@Qualifier("mailServiceImpl")
+	private MailService mailService;
 	
 	//*Constructor
 	public MemberRestController() {
@@ -120,9 +125,19 @@ public class MemberRestController {
 		System.out.println("/member/json/findAccount : POST");
 		System.out.println("memberName : "+member.getMemberName()+", memberId : "+member.getMemberId()+", memberPhone : "+member.getMemberPhone());
 		
-		if(member.getMemberId() == "" || member.getMemberPhone() == "") {
+		if(member.getMemberId() == null) {
+			Member mb = memberService.getMember(member);
+			System.out.println("야호!");
+			if(mb != null) {
+				System.out.println("야호!!");
+				return mb;
+			}
+		} else if(member.getMemberPhone() == null || member.getMemberPhone() == "" || member.getMemberPhone().contains("undefined") ) {
+			System.out.println("야호!!!");
 			Member mb = memberService.getMember(member);
 			if(mb != null) {
+				System.out.println("야호!!!!");
+				mailService.sendToEmail(mb.getMemberId());
 				return mb;
 			}
 		}
