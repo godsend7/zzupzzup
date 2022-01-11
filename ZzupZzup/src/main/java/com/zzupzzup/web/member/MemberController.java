@@ -268,8 +268,7 @@ public class MemberController {
 		
 		System.out.println("/member/setPassword : POST");
 		
-		Member mb = new Member();
-		mb.setMemberId(member.getMemberId());
+		Member mb = memberService.getMember(member);
 		mb.setPassword(member.getPassword());
 		
 		memberService.updateMember(mb);

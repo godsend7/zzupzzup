@@ -81,7 +81,7 @@
 				
 				<section id="set-password-jsp">
 					<div class="container">
-						<div class="col-md-1">&#32;</div>
+						
 						<form id="set-password" class="col-md-12">
 							<input type="hidden" name="memberId" value="${param.memberId}"/>
 							<h2>비밀번호 재설정</h2><hr/>
@@ -102,7 +102,7 @@
 								<span id="checkSamePwdMsg" style="color: red; font-weight: bold"></span>
 							</div>
 						</form>
-						<div class="col-md-1">&#32;</div>
+						
 					</div>
 				</section>
 			</div>

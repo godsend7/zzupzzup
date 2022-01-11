@@ -127,17 +127,19 @@ public class MemberRestController {
 		
 		if(member.getMemberId() == null) {
 			Member mb = memberService.getMember(member);
-			System.out.println("야호!");
+			//System.out.println("야호!");
 			if(mb != null) {
-				System.out.println("야호!!");
+				//System.out.println("야호!!");
 				return mb;
 			}
 		} else if(member.getMemberPhone() == null || member.getMemberPhone() == "" || member.getMemberPhone().contains("undefined") ) {
-			System.out.println("야호!!!");
+			//System.out.println("야호!!!");
 			Member mb = memberService.getMember(member);
 			if(mb != null) {
-				System.out.println("야호!!!!");
-				mailService.sendToEmail(mb.getMemberId());
+				//System.out.println("야호!!!!");
+				if(mb.getLoginType() == 1) {
+					mailService.sendToEmail(mb.getMemberId());
+				}
 				return mb;
 			}
 		}

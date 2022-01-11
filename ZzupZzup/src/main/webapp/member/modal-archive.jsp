@@ -150,7 +150,11 @@
 						if (data != null) {
 							if(memberId != null) {	//비밀번호 찾기
 								//alert("이거 안 타나?");
-								$("#find-check").html("<h4>입력하신 회원님의 메일 주소로 비밀번호 재설정 링크를 발송하였습니다.</h4>");
+								if(data.loginType == 1) {
+									$("#find-check").html("<h4>입력하신 회원님의 메일 주소로 비밀번호 재설정 링크를 발송하였습니다.</h4>");
+								} else {
+									$("#find-check").html("<h4>SNS 계정으로 가입한 회원은 비밀번호를 재설정할 수 없습니다.</h4>");
+								}
 							} else if($("#memberPhone1").val() != null && $("#memberPhone2").val() != null && $("#memberPhone3").val() != null) {		//아이디 찾기
 								//alert("너도 안 타니?");
 								$("#find-check").html("<h4>요청하신 회원님의 ID는 " 
