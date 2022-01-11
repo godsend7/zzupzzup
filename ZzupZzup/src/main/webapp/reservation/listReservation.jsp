@@ -18,38 +18,57 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
-	 /* 	function fncPageNavigation(currentPage) {
-			   document.getElementById("currentPage").value = currentPage;
-		  document.detailForm.submit(); 
-		  console.log(currentPage);
-		  $("#currentPage").val(currentPage);
-		  $("#reservation").attr("action","/reservation/listReservation").attr("method", "POST").submit();
+	  	
+		
+	  	//////////이전페이지////////////////
+	$(function() {
+			
+		console.log(${reservation.restaurant.restaurantNo}+"레스토랑 안찍혀");
+		
+		function fncPageNavigation(currentPage) {
+			
+			  console.log(currentPage);
+			  $("#currentPage").val(currentPage);
+			  
+			  var link = window.location.href;
+			    console.log(link);
+			    
 		}
-		  */
-			//////////이전페이지////////////////
-			console.log(${reservation.planTime}+"시간 왜 안찍혀");
-			console.log(${chat.chatLeaderId}+"닉네임 왜 안찍혀");
-			console.log(${reservation.member.nickname}+"닉네임 왜 안찍혀333");
-		/*  function fnclistReservation(reservationNo) {
-			 
-			console.log(reservationNo);
+	
+		/* ---------무한스크롤--------	 */
+		var count = 2;
+		if (${!empty list}) {
+	    	window.onscroll = function() {
+	    	if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+	    		if (${!empty member}) {
+		    		$("#currentPage").val(count);
+		    		$.ajax({
+		    				url : "/reservation/json/listReservation",
+		    				type : "POST",
+		    				dataType : "json",
+							data : {
+								currentPage : $("#currentPage").val(),
+								restaurantNo : "${param.restaurantNo}"
+							},
+							success : function(data) {
+		    					/* alert("무한스크롤 성공"); */
+		    					console.log(data);
+		    					
+		    					count++;
+							},
+							error:function(request,status,error){
+						       console.log("실패");
+						    }
 
-			console.log("nickname~~~::"+${reservation.restaurant.restaurantName});
-			$.ajax({
-				url : "/reservation/json/getReservation/"+reservationNo,
-				method : "GET",
-				dataType : "json",
-				success : function(data, status) {
-					console.log(data);
-				}
-			}); 
-		}    */
-		
-		/* $(".reviewWrite").on("click" , function() {
-	    	//self.location = "/review/addReview?reservationNo=${reservation.member.memberId}"
-	    	self.location = "/review/addReview?reservationNo=1"
-		}); */
-		
+		    		}); 
+		    		
+	    		}
+	    	}    
+	    }	
+	
+		}
+	});	  	
+					
 </script>
 </head>
 
@@ -88,9 +107,20 @@
 									<h4 class="text-primary card-title">예약번호<a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h4>
 								
 										<div class="col-6 col-12-xsmall">
-										<label for="nickname">참여자 NickName</label> 
-										<p>${member.nickname}</p>
-										${reservation.chat.chatLeaderId}
+										<label for="nickname">예약자 NickName</label> 
+										<%-- <p>${member.nickname}</p> --%>
+										rtrtr
+										${reservation.member.nickname}
+										<p><c:forEach var="chatMember" items="${chatMemberList}" varStatus="status">
+											<c:out value = "${chatMember.member.nickname} ${status.last ? '' : '/'}"/>
+										</c:forEach></p>
+										</div>
+										
+										<div class="col-6 col-12-xsmall">
+										<label for="orderName">주문 메뉴 명</label> 
+					                <p>	<c:forEach var="order" items="${reservation.order}" varStatus="status">
+					                		<c:out value = "${order.menuTitle} ${status.last ? '' : '/'}"/>
+										</c:forEach> </p>
 										</div>
 									
 										<div class="col-md-8 planDate">
@@ -120,6 +150,15 @@
 										<label for="demo-name">예약/결제 현황</label> 
 										<p>${reservation.returnStatus}</p>
 										</div>
+										
+									<c:choose>
+										<c:when test="${member.memberRole == 'admin'}">	
+										<div class="col-6 col-12-xsmall">
+										<label for="demo-name">업주 아이디</label> 
+										<p>${reservation.member.memberId}</p>
+										</div>
+									</c:when>
+								</c:choose>		
 								</div>
 							</div>
 							
@@ -129,11 +168,9 @@
 							<jsp:include page='/review/getReview.jsp'/>
 						</ul>
 		
-				
-				
 					<div class="col-12 text-center thumb-more">
 						<a href="#" class="icon solid fa fa-plus-circle"></a>
-					</div>
+					</div> 
 					<!-- end -->
 					
 					<jsp:include page="../common/pageNavigator.jsp"/>

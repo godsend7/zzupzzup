@@ -246,7 +246,7 @@ public class Reservation {
 
 	@Override
 	public String toString() {
-		return "Reservation [chat=" + chat + ", restaurant=" + restaurant + ", member=" + member + ", reservationNo="
+		return "Reservation [chat=" + chat + ", restaurant=" + restaurant + ",\n::: member=" + member + ",\n::: reservationNo="
 				+ reservationNo + ", reservationNumber=" + reservationNumber + ", payOption=" + payOption
 				+ ", payMethod=" + payMethod + ", planTime=" + planTime + ", planDate=" + planDate + ", fixedTime="
 				+ fixedTime + ", fixedDate=" + fixedDate + ", memberCount=" + memberCount + ", reservationStatus="

@@ -102,7 +102,9 @@ public class RatingRestController {
 			rating.setRatingScore(ratingScore);
 			  
 			ratingService.addRating(rating);
-			//MemberService.calculateMannerScore(toMember.getMemberId(), ratingScore);
+			memberService.calculateMannerScore(toMember.getMemberId(), ratingScore);
+			//memberService.addActivityScore(toMember.getNickname(), 6, 1)  평가는 6번
+			//memberService.calculateActivityScore(toMember.getMemberId());
 		  }
 		
 		return 1;

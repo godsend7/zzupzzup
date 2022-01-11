@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.google.gson.Gson;
 import com.zzupzzup.common.ChatMember;
+import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.chat.ChatService;
@@ -90,7 +91,7 @@ public class ChatRestController {
 	}
 	
 	@RequestMapping(value="json/listRestaurantAutocomplete/searchKeyword={searchKeyword}", method=RequestMethod.GET)
-	public Map listRestaurantAutocomplete(@ModelAttribute("search") Search search, HttpServletRequest requeste) throws Exception {
+	public Map listRestaurantAutocomplete(@ModelAttribute("search") Search search, HttpServletRequest request) throws Exception {
 		
 		System.out.println("/chat/json/listRestaurantAutocomplete : GET");
 		System.out.println("listRestaurantAutocomplete request menu : " + search.getSearchKeyword());
@@ -193,6 +194,7 @@ public class ChatRestController {
 	
 	@RequestMapping(value="json/listReadyCheckMember/chatNo={chatNo}", method=RequestMethod.GET)
 	public Map listReadyCheckMember(@PathVariable int chatNo, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		
 		System.out.println("/chat/json/listReadyCheckMember : GET");
 		
 		ChatMember chatMember = new ChatMember();
@@ -203,7 +205,54 @@ public class ChatRestController {
 		return map;
 	}
 	
-	
+	@ResponseBody
+	@RequestMapping(value="json/listChat", method=RequestMethod.POST)
+	public List<Chat> listChat(@ModelAttribute("search") Search search, Model model, HttpServletRequest request, HttpSession session) throws Exception {
+		System.out.println("/chat/json/listChat : GET / POST");
+		System.out.println("/chat/listChat page : " + request.getParameter("page"));
+		
+		if(search.getCurrentPage() == 0 ){
+			search.setCurrentPage(1);
+		}
+		
+		if(search.getSearchSort() == null || search.getSearchSort() == "") {
+			search.setSearchSort("latest");
+		}
+		
+		if(request.getParameter("page") != null) {
+			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+		}
+		
+		search.setPageSize(pageSize);
+
+		System.out.println("rest쪽 search 표시" + search);
+
+		Member member = (Member)session.getAttribute("member");
+		
+		Map<String, Object> map = chatService.listChat(search, member.getMemberId());
+		
+		List<Chat> list = (List<Chat>)map.get("list");
+		
+		Restaurant restaurant = new Restaurant();
+		
+		for (Chat c : list) {
+			restaurant = 	restaurantService.getRestaurant(c.getChatRestaurant().getRestaurantNo());
+			c.setChatRestaurant(restaurant);
+		}
+		
+		Page resultPage = new Page(search.getCurrentPage(), 		((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println("resultPage : " + resultPage);
+		
+		System.out.println("listChat member : " + member);
+		
+		// Model and View
+		request.setAttribute("list", list);
+		request.setAttribute("resultPage", resultPage);
+		request.setAttribute("search", search);
+		request.setAttribute("member", member);
+		
+		return list;
+	}
 	
 	
 }
