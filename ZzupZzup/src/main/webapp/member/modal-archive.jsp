@@ -126,14 +126,15 @@
 		$("#findAccount-btn").on("click", function() {
 
 			var memberName = $("#memberName").val();
-			var memberId = $("#memberId").val();
+			var memberId = $("#memberId-find").val();
 			var memberPhone = $("#memberPhone1").val()+"-"+$("#memberPhone2").val()+"-"+$("#memberPhone3").val();
 
 			console.log("memberName:" + memberName);
 			console.log("memberId:" + memberId);
 			console.log("memberPhone:" + memberPhone);
 
-			if(memberName != null && (memberId != null || ($("#memberPhone1").val() != null && $("#memberPhone2").val() != null && $("#memberPhone3").val()))) {
+			if(memberName != "" && (memberId != "" || ($("#memberPhone1").val() != "" && $("#memberPhone2").val() != "" && $("#memberPhone3").val() != ""))) {
+				//alert("들어왔니?");
 				$.ajax({
 					url : "/member/json/findAccount",
 					method : "POST",
@@ -145,21 +146,24 @@
 						"memberPhone" : memberPhone
 					}),
 					success : function(data) {
+						//alert("왜 ... 안 타는데 ...");
 						if (data != null) {
-							if(memberId != "") {	//비밀번호 찾기
-								alert(data.password);
+							if(memberId != null) {	//비밀번호 찾기
+								//alert("이거 안 타나?");
 								$("#find-check").html("<h4>입력하신 회원님의 메일 주소로 비밀번호 재설정 링크를 발송하였습니다.</h4>");
-								
-							} else if($("#memberPhone1").val() != "" && $("#memberPhone2").val() != "" && $("#memberPhone3").val() != "") {		//아이디 찾기
-								alert(data.memberId+", "+data.loginType);
+							} else if($("#memberPhone1").val() != null && $("#memberPhone2").val() != null && $("#memberPhone3").val() != null) {		//아이디 찾기
+								//alert("너도 안 타니?");
 								$("#find-check").html("<h4>요청하신 회원님의 ID는 " 
 														+"<strong>["+data.memberId+"]("+data.loginType+")</strong>"
 														+"입니다.</h4>");
 							}
+						} else {
+							alert("해당하는 정보가 없습니다.");
 						}
 					},
-					error : function() {
-						alert("해당하는 정보가 없습니다.");
+					error: function(request, status, error) {
+						alert("에러만 잘 나고 ...");
+						alert("request : "+request.status+"\n message : "+request.responseText+"\n error : "+error);
 					}
 				});	
 			} else {
@@ -210,7 +214,7 @@
 								  +"</div>"
 								  +"<div class='col-md-11 form-row' style='margin-left: 20px;margin-top: 10px;'>"
 									+"<label for='memberId' class='col-md-2'>아이디</label>"
-									+"<input type='text' id='memberId' name='memberId' class='col-md-9' Placeholder='아이디를 입력해주세요.'/>"
+									+"<input type='text' id='memberId-find' name='memberId' class='col-md-9' Placeholder='아이디를 입력해주세요.'/>"
 								  +"</div>");
 			$("#find-check").html("");
 		})
@@ -268,17 +272,18 @@
 						placeholder="비밀번호를 입력해주세요." required>
 					<br/>
 					<input class="btn btn-lg btn-primary btn-block" id="login"
-						type="button" value="login" /> 
-					<a id="kakaoLogin" href="#">
-					  <img
-					    src="/resources/images/common/kakao_login_medium_wide.png"
-					    width="250"
-					    alt="카카오 로그인 버튼"
-					  />
-					</a>
-					<input
+						type="button" value="login" />
+					<div align="center" style="margin-top:5px;">
+						<a id="kakaoLogin" href="#">
+						  <img
+						    src="/resources/images/common/kakao_login_medium_wide.png"
+						    width="280"
+						    alt="카카오 로그인 버튼" />
+						</a>
+					</div>
+					<!-- <input
 						class="btn btn-lg btn-primary btn-block" id="naverLogin"
-						type="button" value="네이버 로그인 (구현 예정)" /><br/><br/>
+						type="button" value="네이버 로그인 (구현 예정)" /> --><br/><br/>
 					<div align="right">
 						회원이 아니신가요? > 
 						<a href="/member/addMember/user/1">유저</a>&nbsp;/
@@ -323,9 +328,9 @@
 						</div>
 						<div class="col-md-11 form-row" style="margin-left: 20px;margin-top: 10px;">
 							<label for="memberPhone1" class="col-md-3">전화번호</label>
-							<input type="text" id="memberPhone1" name="memberPhone1" class="col-md-2" maxlength="3" value=""/>&nbsp;&#45;&nbsp;
-							<input type="text" id="memberPhone2" name="memberPhone2" class="col-md-3" maxlength="4" value=""/>&nbsp;&#45;&nbsp;
-							<input type="text" id="memberPhone3" name="memberPhone3" class="col-md-3" maxlength="4" value=""/>
+							<input type="text" id="memberPhone1" name="memberPhone1" class="col-md-2" maxlength="3"/>&nbsp;&#45;&nbsp;
+							<input type="text" id="memberPhone2" name="memberPhone2" class="col-md-3" maxlength="4"/>&nbsp;&#45;&nbsp;
+							<input type="text" id="memberPhone3" name="memberPhone3" class="col-md-3" maxlength="4"/>
 						</div>
 					</div>
 				</form>

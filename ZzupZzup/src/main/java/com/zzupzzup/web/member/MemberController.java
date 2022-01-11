@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,7 @@ import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.member.MemberService;
+import com.zzupzzup.service.member.impl.MemberServiceImpl;
 import com.zzupzzup.service.restaurant.RestaurantService;
 
 @Controller
@@ -251,6 +253,28 @@ public class MemberController {
 		}
 		
 		return "redirect:/member/getMember?memberId="+member.getMemberId();
+	}
+	
+	@RequestMapping(value="setPassword", method=RequestMethod.GET)
+	public String setPassword(@RequestParam("memberId") String memberId) throws Exception {
+		
+		System.out.println("/member/setPassword : GET");
+		
+		return "forward:/member/setPassword.jsp";
+	}
+	
+	@RequestMapping(value="setPassword", method=RequestMethod.POST)
+	public String setPassword(Member member) throws Exception {
+		
+		System.out.println("/member/setPassword : POST");
+		
+		Member mb = new Member();
+		mb.setMemberId(member.getMemberId());
+		mb.setPassword(member.getPassword());
+		
+		memberService.updateMember(mb);
+		
+		return "redirect:/";
 	}
 	
 	public void deleteMember() {

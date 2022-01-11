@@ -76,10 +76,9 @@
 							<h4 align="center">활동점수 적립 내역이 없습니다.</h4>
 						</c:if>
 	
-						</div><br><br><br>
-						<!-- 관우님 src end -->
-					 <jsp:include page="../common/pageNavigator.jsp"/>
-					</div>
+					</div><br><br><br>
+					<!-- 관우님 src end -->
+					<jsp:include page="../common/pageNavigator.jsp"/>
 				</section>
 			</div>
 		</div>
