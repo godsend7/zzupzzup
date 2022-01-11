@@ -137,17 +137,24 @@
 								+'<p class="card-text text-right">'+item.chatRestaurant.streetAddress+'</p>'
 								+'</div>'
 								+'<div class="btn-group">';
-								$.each(item.chatMember, function(indexxx, itemmm){
-									if("${member.memberId}" == itemmm.member.memberId && item.chatState == 4 && itemmm.inOutCheck == true && itemmm.readyCheck == true ){
-										dom += '<a href="/chat/json/listReadyCheckMember/chatNo='+item.chatNo+'" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a>';
-									}
-									
-									if("${member.memberId}" == itemmm.member.memberId){
-										dom += '<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>';
-									}else{
+								if(item.chatMember != [] && item.chatMember != null && item.chatMember.length > 0){
+									let isChatMember = false;
+									$.each(item.chatmember, function(indexxx, itemmm){
+										if("${member.memberId}" == itemmm.member.memberId){
+											isChatMember = true;
+										}
+										if("${member.memberId}" == itemmm.member.memberId && item.chatState == 4 && itemmm.inOutCheck == true && itemmm.readyCheck == true ){
+											dom += '<a href="/chat/json/listReadyCheckMember/chatNo='+item.chatNo+'" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a>';
+										}
+									});
+									if(isChatMember == false){
 										dom	+= '<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>';
+									}else{
+										dom += '<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>';
 									}
-								});
+								}else{
+									dom	+= '<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>';
+								}
 								dom += '</div>'
 								+'</div>'
 								+'</div>'
@@ -277,24 +284,17 @@
 					alert("code:" + request.status + "\n" + "message:"
 							+ request.responseText + "\n" + "error:"
 							+ error);
+					
+					let errorMsg = "Duplicate entry";
+					if(request.status == 500 && request.responseText.indexOf(errorMsg) != -1 ){					
+						alert("이미 평가를 하셨습니다");
+						$('#ratingGoModal').modal('hide');
+						$('#chatRatingModal').modal('hide');
+					}
 				}
 			});
 		});
 		
-		
-		//============= "대화기록보기" Event 처리 ============
-		$("body").on("click", "input[value='대화기록보기']", function(){
-			let chatNo = $(this).attr("data-target");
-			location.href="/chat/getChatRecord?chatNo="+chatNo;
-		});
-			
-		//============= "수정하기" Event 처리 ============
-		$("body").on("click", "input[value='수정하기']", function(){
-			console.log("수정하기");
-			let chatNo = $(this).attr("data-target");
-			location.href="/chat/updateChat?chatNo="+chatNo;
-		});
-				
 		//============= "입장하기" Event 처리 ============
 		$("body").on("click", "input[value='입장하기']", function(){
 			console.log("${member}");
@@ -561,29 +561,34 @@
 													</div>
 													<h4 class="card-title">${chat.chatTitle}</h4>
 													<h5 class="card-text mb-2 text-muted">${chat.chatText}</h5>
-														<div class="d-flex justify-content-between align-items-end">
-															<div>
-																<p class="card-text text-right">${chat.chatRestaurant.restaurantName}</p>
-																<p class="card-text text-right">${chat.chatRestaurant.streetAddress}</p>
-															</div>
-															<div class="btn-group">
+													<div class="d-flex justify-content-between align-items-end">
+														<div>
+															<p class="card-text text-right">${chat.chatRestaurant.restaurantName}</p>
+															<p class="card-text text-right">${chat.chatRestaurant.streetAddress}</p>
+														</div>
+														<div class="btn-group">
+															<c:if test="${!empty chat.chatMember}">
+																<c:set var="isChatMember" value="false" />
 																<c:forEach var="chatMember" items="${chat.chatMember}">
+																	<c:if test="${member.memberId == chatMember.member.memberId}">
+																		<c:set var="isChatMember" value="true" />
+																	</c:if>
 																	<c:if test="${member.memberId == chatMember.member.memberId && chat.chatState == 4 && chatMember.inOutCheck == true && chatMember.readyCheck == true}">
 																	<a href="/chat/json/listReadyCheckMember/chatNo=${chat.chatNo}" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a> 
 																	</c:if>
-																	
-																	<c:choose>
-																		<c:when test="${member.memberId == chatMember.member.memberId}">
-																			<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>
-																		</c:when>
-																		<c:when test="${member.memberId != chatMember.member.memberId}">
-																			<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>
-																		</c:when>
-																	</c:choose>
-																	
 																</c:forEach>
-															</div>
+																<c:if test="${isChatMember eq 'false' }">
+																	<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>
+																</c:if>
+																<c:if test="${isChatMember eq 'true' }">
+																	<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>
+																</c:if>
+															</c:if>
+															<c:if test="${empty chat.chatMember}">
+																<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>
+															</c:if>
 														</div>
+													</div>
 												</div>
 											</div>
 										</div>

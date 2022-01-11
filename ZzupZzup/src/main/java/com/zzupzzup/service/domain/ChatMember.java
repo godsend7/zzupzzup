@@ -8,6 +8,7 @@ public class ChatMember {
 	private boolean readyCheck; //모임확정 체크
 	private boolean chatLeaderCheck; //개설자 체크
 	private boolean inOutCheck; //채팅방 참여 체크
+	private boolean forbiddenMember; //강퇴 멤버
 	
 	///Constructor
 	public ChatMember() {
@@ -61,9 +62,20 @@ public class ChatMember {
 		this.inOutCheck = inOutcheck;
 	}
 
+	public boolean isForbiddenMem() {
+		return forbiddenMember;
+	}
+
+	public void setForbiddenMem(boolean forbiddenMem) {
+		this.forbiddenMember = forbiddenMem;
+	}
+
 	@Override
 	public String toString() {
 		return "ChatMember [chatNo=" + chatNo + ", member=" + member + ", readyCheck=" + readyCheck
-				+ ", chatLeaderCheck=" + chatLeaderCheck + ", inOutCheck=" + inOutCheck + "]";
+				+ ", chatLeaderCheck=" + chatLeaderCheck + ", inOutCheck=" + inOutCheck + ", forbiddenMember="
+				+ forbiddenMember + "]";
 	}
+
+	
 }

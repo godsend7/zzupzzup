@@ -373,7 +373,7 @@ VALUES('3', '땅콩막걸리', '3500', '0');
 -- chat
 INSERT INTO CHAT (chat_leader_id, restaurant_no, chat_title, chat_text, chat_gender, age_type) VALUES ('hihi@a.com',1,'쩝쩝친구 구해유','소개한다',1,'1,2,3');
 -- chat_member
-INSERT INTO chat_member (chat_no, chat_member_id, ready_check, chat_leader_check) VALUES (1,'hihi@a.com',1,1);
+INSERT INTO chat_member (chat_no, chat_member_id, ready_check, chat_leader_check) VALUES (1,'hihi@a.com',1,1,1);
 -- reservation
 INSERT INTO reservation(reservation_number, restaurant_no, chat_no, booker_id, plan_date, plan_time, fixed_date,
 member_count, reservation_status, fixed_status, reservation_date, total_price, pay_option, pay_method, 
@@ -401,10 +401,6 @@ VALUES('hihi@a.com', 1, 10);
 INSERT
 INTO REVIEW(member_id, reservation_no, restaurant_no, review_detail, scope_taste, scope_kind, scope_clean, avg_scope)
 VALUES ( 'hihi@a.com', 1, 1, '하이하이', 1, 1, 1, 1);
-
-
-
-drop table rating;
 
 
 commit;

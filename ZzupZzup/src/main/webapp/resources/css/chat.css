@@ -37,7 +37,7 @@
 .chat-header h3 small { font-weight: 300; }
 .chat-header .chat-header-util { white-space: nowrap; text-align: right; }
 .chat-header .chat-header-util > span { margin-left: 10px; }
-.chat-header .svg-btn { display: inline-block; padding: 3px; line-height: 1; border-radius: 3px; transition: all 0.5s; }
+.chat-header .svg-btn { display: inline-block; padding: 5px; line-height: 1; border-radius: 3px; transition: all 0.5s; }
 .chat-header .chat-header-util .svg-btn.chat-info-button { color: #333; }
 .chat-header .chat-header-util .svg-btn.chat-info-button:hover { background-color: #aaa; color: #888; }
 .chat-header .chat-header-util .svg-btn.chat-info-button svg { transition: all 0.5s; }
