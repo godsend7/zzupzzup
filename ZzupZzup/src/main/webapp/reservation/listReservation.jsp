@@ -106,19 +106,20 @@
 									<h4 class="text-primary card-title">예약번호<a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h4>
 								
 										<div class="col-6 col-12-xsmall">
-										<label for="nickname">예약자 NickName</label> 
+										<label for="nickname">예약자 NickName222</label> 
 										<%-- <p>${member.nickname}</p> --%>
 										${reservation.member.nickname}
-										<%-- <p><c:forEach var="member" items="${reservation.member}" varStatus="status">
-											<c:out value = "${member.nickname} ${status.last ? '' : '/'}"/>
-										</c:forEach></p> --%>
+									<p><c:forEach var="chatMember" items="${reservation.chat.chatMember}" varStatus="status">
+											<c:out value = "${chatMember.member.nickname} ${status.last ? '' : '/'}"/>
+											<%-- <c:out value = "${chatMember}"/> --%>
+										</c:forEach></p>
 										</div>
 										
 										<div class="col-6 col-12-xsmall">
 										<label for="orderName">주문 메뉴 명, 수량</label> 
-					               <%--  <p>	<c:forEach var="order" items="${reservation.order}" varStatus="status">
+					              	<p>	<c:forEach var="order" items="${reservation.order}" varStatus="status">
 					                		<c:out value = "${order.menuTitle} - ${order.orderCount} ${status.last ? '' : '/'}"/>
-										</c:forEach> </p> --%>
+										</c:forEach> </p>
 										</div>
 									
 										<div class="col-md-8 planDate">

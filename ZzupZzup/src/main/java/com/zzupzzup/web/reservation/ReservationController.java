@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.chat.ChatService;
