@@ -174,7 +174,7 @@
 	
 	}
 
-	window.onload = function(){
+//	window.onload = function(){
 		
 		<c:forEach var="image" items="${restaurant.restaurantImage}" varStatus="status">
 		<c:set var="fileName" value="${fn:split(image, '_')}"/>
@@ -202,7 +202,7 @@
 			});
 		});
 
-	}
+//	}
 	
 	/* *************** 이미지 업로드 *************** */
 	$(function(){
@@ -391,6 +391,12 @@
 			
 			console.log(sel_files);
 		});
+		
+		//changed image preview
+		$("#fileInput").on("change", function(){
+			readURL(this);
+       	});
+		
 	});
 	
 	//changed image preview function
@@ -549,8 +555,9 @@
 									<div class="col-sm-4">
 										<label for="receiptImage">영수증 이미지</label>
 										<img id="receiptImage" src="/resources/images/uploadImages/receipt/${community.receiptImage}" width="100"/>
-										<input type="file" name="file" id="receiptImage" value="${community.receiptImage}">
-									</div>	
+										<input type="hidden" name="ownerImage"  value="${community.receiptImage}">
+										<input type="file" name="file-drag-input" id="receiptImage" value="${community.receiptImage}">
+									</div>
 								</div><br><hr>
 								
 								<div class="text-center">

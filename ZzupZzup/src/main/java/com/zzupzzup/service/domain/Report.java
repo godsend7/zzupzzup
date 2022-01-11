@@ -3,7 +3,6 @@ package com.zzupzzup.service.domain;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.util.CommonUtil;
 
 public class Report {

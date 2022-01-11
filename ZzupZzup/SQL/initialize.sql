@@ -1,4 +1,4 @@
-''-- 테이블 초기화
+-- 테이블 초기화
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `member`;
 DROP TABLE IF EXISTS `activity_score`;

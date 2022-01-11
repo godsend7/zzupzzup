@@ -164,16 +164,16 @@
 			return;
 		}
 		
-		if(ownerImage == null || ownerImage.length<1){
+		/* if(ownerImage == null || ownerImage.length<1){
 			alert("사업자 등록증 이미지는 필수로 첨부해주셔야 합니다.");
 			return;
-		}
+		} */
 		
 		uploadFiles();
 		
 	} // fncUpdateRestaurant() FINISH
 	
-	window.onload = function(){
+//	window.onload = function(){
 		<c:forEach var="image" items="${restaurant.restaurantImage}" varStatus="status">
 		<c:set var="fileName" value="${fn:split(image, '_')}"/>
 			sel_files.push( {name : "${fileName[1]}" });
@@ -252,7 +252,7 @@
 				$("#workingForms").fadeOut();
 			});
 		});
-	} // window.onload FINISH
+//	} // window.onload FINISH
 	
 	/* *************** 이미지 업로드 *************** */
 	$(function(){
@@ -442,6 +442,12 @@
 			
 			console.log(sel_files);
 		});
+		
+		//changed image preview
+		 $("#fileInput").on("change", function(){
+			 readURL(this);
+		 });
+		
 	});
 	
 	//changed image preview function
@@ -484,8 +490,11 @@
 						
 						<input type="hidden" name="member.memberId" value="${member.memberId}">
 						<input type="hidden" name="member.memberName" value="${member.memberName}">
-						<c:if test="${!empty restaurant.judgeDate}">
-							<input type="hidden" name="restaurant.judgeStatus" value="1">
+						<c:if test="${restaurant.judgeStatus == 3}">
+							<input type="hidden" name="judgeStatus" value="1">
+						</c:if>
+						<c:if test="${restaurant.judgeStatus == 2}">
+							<input type="hidden" name="judgeStatus" value="2">
 						</c:if>
 						
 						
@@ -499,8 +508,9 @@
 						<div class="form-group">
 							<div class="col-sm-4">
 								<label for="ownerImage">사업자 등록증 이미지</label>
-								<img id="ownerImage" src="/resources/images/uploadImages/owner/${restaurant.ownerImage}" width="100"/>
-								<input type="file" name="file" id="ownerImage" value="${restaurant.ownerImage}">
+								<img id="${restaurant.ownerImage}" src="/resources/images/uploadImages/owner/${restaurant.ownerImage}" width="100"/>
+								<input type="hidden" name="ownerImage"  value="${restaurant.ownerImage}">
+								<input type="file" class="file-drag-input" id="ownerImage" value="${restaurant.ownerImage}">
 							</div>	
 						</div><br>
 							
@@ -870,15 +880,17 @@
 							<label for="fileDragInput">음식점 이미지</label>
 							<div class="file-drag-area">
 								<span class="file-drag-btn">파일 선택</span>
-								<span class="file-drag-msg">파일을 여기로 드래그 하거나 선택하세요.</span> 
-								<input class="file-drag-input" type="file" id="fileDragInput" name="fileDragInput" multiple="multiple">	
+								<span class="file-drag-msg">파일을 여기로 드래그 하거나 선택하세요.</span>
+								<%-- <input type="hidden" name="restaurantImage"  value="${restaurant.restaurantImage}"> --%>
+								<input class="file-drag-input" type="file" id="fileDragInput" name="fileDragInput" multiple="multiple">
+									
 							</div>
 							<div class="file-drag-view mt-4">
 								<c:forEach var="image" items="${restaurant.restaurantImage}" varStatus="status">
 									<c:set var="fileName" value="${fn:split(image, '_')}"/>
 									<a class='cvf_delete_image' id='img_id_${status.index}'>
 										<img src="/resources/images/uploadImages/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'>
-										<input type='hidden' name='reviewImage[${status.index}]' value='${image}'>
+										<input type='hidden' name='restaurantImage[${status.index}]' value='${image}'>
 									</a>
 								</c:forEach></div>
 							<div class="imageUploadBox"></div>
@@ -887,8 +899,13 @@
 						<div class="col-sm-12">
 							<label for="restaurantText">음식점 소개글</label>
 							<textarea id="restaurantText" name="restaurantText" placeholder="음식점 소개글" rows="3" style="resize: none; height: 10em;">${restaurant.restaurantText}</textarea>
-						</div><br><hr>
+						</div><br><br>
 						
+						<div class="col-md-12"><strong>예약 및 결제 서비스</strong> &nbsp;&nbsp;
+							<input type="checkbox" name="reservationStatus" id="reservationStatus" checked data-toggle="toggle" data-size="sm" data-onstyle="success" value="true" 
+							${!empty restaurant.reservationStatus && restaurant.reservationStatus ? "checked" : ""}>	
+						</div><br><hr>
+							
 						</form>
 						
 						<div class="text-center">

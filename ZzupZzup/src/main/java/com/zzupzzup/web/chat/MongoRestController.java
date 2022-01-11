@@ -39,7 +39,7 @@ public class MongoRestController {
 		System.out.println(this.getClass() + " MongoDB 연결됨");
 		this.mongoURI = "mongodb+srv://zzupzzup:zzup2022@cluster0.m3cc8.mongodb.net/";
 		this.mongoClient = MongoClients.create(mongoURI);
-		this.database = mongoClient.getDatabase("zzupzzup_local");
+		this.database = mongoClient.getDatabase("zzupzzup");
 	}
 	
 	@RequestMapping(value = "json/getChatCon/{chatNo}", method = RequestMethod.GET)
