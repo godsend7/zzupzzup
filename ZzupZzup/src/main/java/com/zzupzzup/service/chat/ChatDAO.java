@@ -3,10 +3,9 @@ package com.zzupzzup.service.chat;
 import java.util.List;
 import java.util.Map;
 
-import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Chat;
-import com.zzupzzup.service.domain.Restaurant;
+import com.zzupzzup.service.domain.ChatMember;
 
 public interface ChatDAO {
 	
