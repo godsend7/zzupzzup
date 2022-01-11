@@ -12,6 +12,7 @@
 		<result property="restaurant.restaurantNo"   			column="restaurant_no" 				jdbcType="INTEGER"/>
 		<result property="chat.chatNo"   						column="chat_no" 					jdbcType="INTEGER"/>
 		<result property="member.memberId"   					column="booker_id" 					jdbcType="VARCHAR"/>
+		<result property="member.nickname"   					column="nickname" 					jdbcType="VARCHAR"/>
 		<result property="planDate"   							column="plan_date" 					jdbcType="DATE"/>
 		<result property="planTime"   							column="plan_time" 					jdbcType="VARCHAR"/>
 		<result property="fixedDate"   							column="fixed_date" 				jdbcType="DATE"/>
@@ -37,6 +38,16 @@
 		<result property="menuPrice"   							column="menu_price" 				jdbcType="INTEGER"/>
 	</resultMap>
 	
+	<resultMap id="chatMemberSelectMap" type="chatMember">
+		<id property="chatMemberNo" column="chat_member_no" jdbcType="INTEGER"/>
+		<result property="chatNo" column="chat_no" jdbcType="INTEGER"/>
+		<result property="member.memberId" column="chat_member_id" jdbcType="VARCHAR"/>
+		<result property="member.nickname" column="nickname" jdbcType="VARCHAR"/>
+		<result property="readyCheck" column="ready_check" jdbcType="BOOLEAN"/>
+		<result property="chatLeaderCheck" column="chat_leader_check" jdbcType="BOOLEAN"/>
+		<result property="inOutCheck" column="in_out_check" jdbcType="BOOLEAN"/>
+	</resultMap>
+	
 	
 	
 	<!-- SQL : INSERT -->
@@ -45,7 +56,7 @@
 		INTO RESERVATION(reservation_number, restaurant_no, chat_no, booker_id, plan_date, plan_time, member_count, reservation_status, fixed_status, 
 						reservation_date, total_price, pay_option, pay_method, reservation_cancel_type, 
 						reservation_cancel_detail, refund_status)
-		VALUES (CONCAT(DATE_FORMAT(NOW(), "%Y%m%e%H%i%S"),'_',FLOOR(RAND()*1000000000)), #{restaurant.restaurantNo}, #{chat.chatNo}, 
+		VALUES (CONCAT(DATE_FORMAT(NOW(), "%Y%m%e%H%i%S"),FLOOR(RAND()*10000)), #{restaurant.restaurantNo}, #{chat.chatNo}, 
 				#{member.memberId}, #{planDate}, #{planTime},#{memberCount}, 
 				#{reservationStatus}, #{fixedStatus}, NOW(), #{totalPrice}, #{payOption}, #{payMethod},
 				#{reservationCancelReason}, #{reservationCancelDetail}, #{refundStatus});
@@ -58,6 +69,16 @@
 		VALUES 
 		<foreach collection="order" item="item" separator=",">
 			(#{reservationNo}, #{item.menuTitle}, #{item.orderCount}, #{item.menuPrice})
+		</foreach>
+
+	</insert>
+	
+	<insert id="addChatMember" parameterType="reservation">
+	 	INSERT
+		INTO chat_member_no(reservation_no, chat_no, chat_member_id, nickname,ready_check,chat_leader_check,in_out_check)
+		VALUES 
+		<foreach collection="chatMember" item="item" separator=",">
+			(#{reservationNo}, #{item.chatNo}, #{item.member.memberId}, #{item.member.nickname}, #{item.readyCheck}, #{item.chatLeaderCheck}, #{item.inOutCheck})
 		</foreach>
 
 	</insert>

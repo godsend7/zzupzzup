@@ -258,10 +258,12 @@ public class RestaurantController {
 		String empty = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH);
 		uploadFilePath(uploadFile, empty, restaurant);
 		
-		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/owner");
-		String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
+		if (uploadOwnerFile != null) {
+			String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/owner");
+			String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
+			restaurant.setOwnerImage(ownerImage);	
+		}
 		
-		restaurant.setOwnerImage(ownerImage);
 		
 		restaurantService.updateRestaurant(restaurant);
 		
@@ -350,7 +352,7 @@ public class RestaurantController {
 		
 		restaurantService.judgeRestaurant(restaurant);
 		
-		return "redirect:/";
+		return "redirect:/restaurant/listRequestRestaurant";
 		
 	}
 	
@@ -399,7 +401,8 @@ public class RestaurantController {
 	
 	private String uploadOwnerImg(MultipartFile uploadOwnerFile, String vacant) {
 		
-		//System.out.println("CHECK POINT 1 : " + uploadOwnerFile.getOriginalFilename());
+		
+		System.out.println("CHECK POINT 1 : " + uploadOwnerFile.getOriginalFilename());
 		
 		String ownerInfo = uploadOwnerFile.getOriginalFilename();
 		

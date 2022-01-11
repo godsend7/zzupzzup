@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.domain.Member;
+import com.zzupzzup.service.member.MailService;
 import com.zzupzzup.service.member.MemberService;
 
 
@@ -33,6 +34,10 @@ public class MemberRestController {
 	@Autowired
 	@Qualifier("memberServiceImpl")
 	private MemberService memberService;
+	
+	@Autowired
+	@Qualifier("mailServiceImpl")
+	private MailService mailService;
 	
 	//*Constructor
 	public MemberRestController() {
@@ -53,13 +58,17 @@ public class MemberRestController {
 		//Business Logic
 
 		Member mb = memberService.getMember(member);
-		
 
 		if(mb != null && mb.getPassword().equals(member.getPassword())){
-			session.setAttribute("member", mb);
-			System.out.println(mb.getMemberId()+" 님 로그인");
-			
-			return mb;
+			//System.out.println("탈퇴회원 : "+mb.getDeleteReason());
+			if(mb.isEliminated()) {
+				System.out.println("탈퇴회원 : "+mb.getDeleteReason());
+				return mb;
+			} else {
+				session.setAttribute("member", mb);
+				System.out.println(mb.getMemberId()+" 님 로그인");
+				return mb;
+			}
 			
 		} else {
 			
@@ -67,9 +76,9 @@ public class MemberRestController {
 		}
 	}
 	
-	public void selectMemberRole() {
-		
-	}
+//	public void selectMemberRole() {
+//		
+//	}
 	
 	@RequestMapping(value="json/kakaoLogin", method=RequestMethod.POST)
 	public Member kakaoLogin(@RequestBody Member member, HttpSession session) throws Exception {
@@ -94,9 +103,9 @@ public class MemberRestController {
 		
 	}
 	
-	public void naverLogin() {
-		
-	}
+//	public void naverLogin() {
+//		
+//	}
 	
 	@RequestMapping(value="json/checkIdDuplication", method=RequestMethod.POST)
 	public boolean checkIdDuplication(@RequestParam("memberId") String memberId) throws Exception {
@@ -120,9 +129,21 @@ public class MemberRestController {
 		System.out.println("/member/json/findAccount : POST");
 		System.out.println("memberName : "+member.getMemberName()+", memberId : "+member.getMemberId()+", memberPhone : "+member.getMemberPhone());
 		
-		if(member.getMemberId() == "" || member.getMemberPhone() == "") {
+		if(member.getMemberId() == null) {
+			Member mb = memberService.getMember(member);
+			//System.out.println("야호!");
+			if(mb != null) {
+				//System.out.println("야호!!");
+				return mb;
+			}
+		} else if(member.getMemberPhone() == null || member.getMemberPhone() == "" || member.getMemberPhone().contains("undefined") ) {
+			//System.out.println("야호!!!");
 			Member mb = memberService.getMember(member);
 			if(mb != null) {
+				//System.out.println("야호!!!!");
+				if(mb.getLoginType() == 1) {
+					mailService.sendToEmail(mb.getMemberId());
+				}
 				return mb;
 			}
 		}
@@ -159,6 +180,32 @@ public class MemberRestController {
 //		memberService.checkCertificatedNum(inputCertificatedNum, certificatedNum);
 //		
 //	}
+	
+	@RequestMapping(value="json/deleteMember", method=RequestMethod.POST)
+	public Member deleteMember(@RequestBody Member member, HttpSession session) throws Exception {
+		
+		System.out.println("/member/json/deleteMember : POST");
+		System.out.println("memberId : "+member.getMemberId()+", password : "+member.getPassword()+", deleteType : "+member.getDeleteType()+", deleteReason : "+member.getDeleteReason());
+		
+		Member mb = memberService.getMember(member);
+		
+		if(member.getMemberId().equals(mb.getMemberId()) && member.getPassword().equals(mb.getPassword())) {
+			System.out.println("하나");
+			mb.setDeleteType(member.getDeleteType());
+			
+			if(mb.getDeleteReason() == null) {
+				System.out.println("둘");
+				mb.setDeleteReason(member.getDeleteReason());
+			}
+			
+			memberService.updateMember(mb);
+			session.invalidate();
+			
+			return mb;
+		}
+
+		return null;
+	}
 	
 	public void getOtherUser() {
 		

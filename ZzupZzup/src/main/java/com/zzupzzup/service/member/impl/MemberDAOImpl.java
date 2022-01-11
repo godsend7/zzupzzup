@@ -123,9 +123,7 @@ public class MemberDAOImpl implements MemberDAO{
 		map.put("memberId", memberId);
 		map.put("accumulScore", accumulScore);
 		
-		sqlSession.update("MemberMapper.updateMannerScore", map);
-		
-		return 1;
+		return sqlSession.update("MemberMapper.updateMannerScore", map);
 	}
 	
 	@Override

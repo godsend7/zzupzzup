@@ -33,6 +33,8 @@
 		const displayContainer = $(".display-container");
 		const userList = $(".user-list");
 		
+		let onUser =[];
+		
 		// 접속한 유저의 정보
 		const memberInfo = {
 			chatNo : chatNo.val(),
@@ -68,28 +70,50 @@
 			
 			//나갔다 들어올 때 멤버 확인 리스트 출력
 			setTimeout(function() { 
-				memList();
+				memList(data.memberId);
+				
+				console.log(onUser);
+				$.each(onUser, function(index, item){
+					console.log("index?? : " + index);
+					console.log("아아아아아앙 : " + item);
+					$("a[data-target='"+item+"']").parents(".chatProfile").addClass("connected");
+				});
 			}, 500);
 			
 			//접속중인 사람 구별 클래스 붙임
-			setTimeout(function() { 
-			console.log(data.memberId);
-			console.log(memberId.val());
-			if(data.memberId == memberId.val()){
-				console.log("접속한 살마");
-				
-				let onMember = $("a[data-target='"+data.memberId+"']");
-				console.log(onMember);
-				$("a[data-target='"+data.memberId+"']").parents(".chatProfile").addClass("connected");
-			}
-			}, 1000);
+			/* setTimeout(function() { 
+				console.log(data.memberId);
+				console.log(memberId.val());
+				if(data.memberId == memberId.val()){
+					console.log("접속한 살마");
+					
+					let onMember = $("a[data-target='"+data.memberId+"']");
+					//console.log(onMember);
+					//$("a[data-target='"+data.memberId+"']").parents(".chatProfile").addClass("connected");
+				}
+			}, 1000); */
 		});
 		
 		socket.on('disconnect', (data) => {
 			console.log(data.message);
-			setTimeout(function() { 
-				memList();
-			}, 500);
+		});
+		
+		socket.on('on_users', (data) => {
+			onUser = data;
+			console.log("on_user : " + onUser);
+			console.log("length : "+ onUser.length);
+			
+			$.each(onUser, function(index, item){
+				/* console.log("index?? : " + index);
+				console.log("아아아아아앙 : " + item); */
+				$("a[data-target='"+item+"']").parents(".chatProfile").addClass("connected");
+			});
+		
+			/* $.each(ON_USER, function(index, item){
+				console.log("아아아아아앙 : " + item);
+				$("a[data-target='"+item+"']").parents(".chatProfile").addClass("connected");
+			}); */
+			
 		});
 		
 		//서버로 보낸 내 아이디 다시 받아옴
@@ -184,7 +208,11 @@
 		}
 		
 		// 참가자 리스트에 뿌려질 리스트 가져오기
-		function memList(){
+		function memList(memberId){
+			
+			const onMemberId = memberId
+			console.log("멤버 아디 잘 들어오나 확인 : " + onMemberId);
+			
 			$.ajax({
 				url: "/chat/json/listChatMember/chatNo=${chat.chatNo}",
 				method: "GET",
@@ -279,6 +307,20 @@
 			console.log(time);
 			return time;
 		}
+		
+		//============= "참여자 닉네임" Event 처리 =========
+		$("body").on("click", ".member_dropdown", function(e) {
+			e.preventDefault();
+			let dataTarget = $(this).attr("data-target");
+			let dom = '';
+			dom += '<div class="dropdown-box">'
+				+ '<a href="/member/getMember?memberId='+dataTarget+'">프로필 보기</a>'
+				+ '<a href="" class="reportModal" data-target="#reportModal" data-target="#reportModal" data-toggle="modal" data-id="[2,'+dataTarget+']">참여자 신고</a>'
+				+ '<a href="/chat/deleteForbiddenMember?chatNo='+${chat.chatNo}+'&memberId='+dataTarget+'">참여자 강퇴</a>'
+				+ '</div>';
+			$(".dropdown-box").remove();
+			$(this).parent().append(dom);
+		});
 		
 		//============= "예약하기" Event 처리 ============
 		$("#chatReservationBefore").on("click", function() {
@@ -396,7 +438,7 @@
 									<h3 class="flex-fill">${chat.chatTitle}</h3>
 									<div class="chat-header-util flex-fill">
 										<span>${chat.chatRegDate}</span>
-										<span><a href="" class="svg-btn" title="채팅방 신고"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg></a></span>
+										<span><a href="" id="chatReportBtn" class="svg-btn" title="채팅방 신고" data-toggle="modal" data-target="#chatReportModal" ><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg></a></span>
 										<span class="badge badge-success chat-state">
 											<c:choose>
 													<c:when test="${chat.chatState=='1'}">
@@ -465,8 +507,9 @@
 										<div class="dropdown-parent">
 											<a href="" class="svg-btn chat-info-button dropdown-parent" title="채팅방,음식점 정보보기"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></a>
 											<div class="dropdown-box">
-												<a href="">음식점 정보</a>
-												<a href="">채팅방 정보</a>
+												<a href="/restaurant/getRestaurant?restaurantNo=${chat.chatRestaurant.restaurantNo}" target="_blank">음식점 정보</a>
+												<a href="/chat/json/getChat/${chat.chatNo}" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">채팅방 정보</a>
+												<a href="/chat/listChat">채팅방 목록</a>
 											</div>
 										</div>
 									</div>
@@ -480,6 +523,7 @@
 												<div class="dropdown-box">
 													<a href="">프로필 보기</a>
 													<a href="">참여자 신고</a>
+													<a href="">참여자 강퇴</a>
 												</div>
 											</div>
 											<span class="badge badge-info gender">남</span>
@@ -503,10 +547,10 @@
 										<c:otherwise>
 										<c:choose>
 											<c:when test="${chat.chatState == 1 || chat.chatState == 2}">
-											<input type="button" class="button small" value='${chatMember.readyCheck == true ? "모임참여 해제하기" : "모임참여 체크하기"}'/>
+											<input type="button" class="button" value='${chatMember.readyCheck == true ? "모임참여 해제하기" : "모임참여 체크하기"}'/>
 											</c:when>
 											<c:otherwise>
-											<input type="button" class="button small" disabled value='모임참여 체크불가'/>
+											<input type="button" class="button" disabled value='모임참여 체크불가'/>
 											</c:otherwise>
 										</c:choose>
 										</c:otherwise>
@@ -610,6 +654,70 @@
 								</div>
 							</div>
 						</div>
+						
+						<!-- 채팅방 신고모달 -->
+						<div class="modal fade" id="chatReportModal" tabindex="-1" aria-labelledby="chatReportModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content">
+									<div class="modal-header justify-content-end">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          <span aria-hidden="true">&times;</span>
+								        </button>
+									</div>
+									<div class="modal-body">
+										채팅방을 신고하시겠습니까?
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="button secondary small" data-dismiss="modal">아니오</button>
+										<button type="button" class="button primary small reportModal" id="chatReportBtn" data-target='#reportModal' data-toggle='modal' data-id="[1,${chat.chatNo}]">예</button>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- 참여자 신고모달 -->
+						<div class="modal fade" id="memberReportModal" tabindex="-1" aria-labelledby="memberReportModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content">
+									<div class="modal-header justify-content-end">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          <span aria-hidden="true">&times;</span>
+								        </button>
+									</div>
+									<div class="modal-body">
+										참여자를 신고하시겠습니까?
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="button secondary small" data-dismiss="modal">아니오</button>
+										<button type="button" class="button primary small" id="memberReportBtn">예</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- 참여자 강퇴모달 -->
+						<div class="modal fade" id="getOutModal" tabindex="-1" aria-labelledby="getOutModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content">
+									<div class="modal-header justify-content-end">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          <span aria-hidden="true">&times;</span>
+								        </button>
+									</div>
+									<div class="modal-body">
+										참여자를 강퇴시키시겠습니까?
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="button secondary small" data-dismiss="modal">아니오</button>
+										<button type="button" class="button primary small" id="getOutBtn">예</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- 채팅방 정보보기 모달 -->
+						<jsp:include page='/chat/getChatModal.jsp'/>
 						<!-- E:Modal -->
 						
 					</div>
@@ -617,6 +725,10 @@
 			</div>
 		</div>
 		<!-- E:Main -->
+		
+		<ul class='icons'> 
+			<jsp:include page='/report/addReportView.jsp'/>
+		</ul>
 		
 		<!-- Sidebar -->
 		<jsp:include page="/layout/sidebar.jsp" />

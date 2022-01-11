@@ -27,10 +27,14 @@ import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
+import com.zzupzzup.common.Page;
+import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
+import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
 import com.zzupzzup.service.domain.Restaurant;
+import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.reservation.ReservationService;
 import com.zzupzzup.service.restaurant.RestaurantService;
@@ -176,9 +180,6 @@ public class ReservationRestController {
 			   System.out.println("restaurantNo::: "+httpServletRequest.getParameter("fromMemberPhone"));
 			   
 			   
-			   
-			  
-			   
 			   //from 세션이라고 생각. from은 폰번호만 필요 from에 저장된 세션 내가 로그인한 사람. 내가 업주인지 유저인지 감 from.setmemberrole해서 멤버면 이렇게 유저면 이렇게 실행해라 기재
 			   //to가 보내는 것이라 생각.
 			   if(fromMember.getMemberRole().equals("user")) {
@@ -209,6 +210,42 @@ public class ReservationRestController {
 			  
 		       reservationService.sendMessage(reservation, toMember,fromMember, reservationNumber);
 		   }
-
+		   /////////////////////////////////무한 스크롤////////////////////////////////////////
+		   
+		   @RequestMapping("json/listReservation")
+			public Map<String, Object> listReservation(HttpServletRequest request, @RequestParam  Map<String, Object> map, HttpSession session) throws Exception {
+				
+				System.out.println("review/json/listReservation : Service");
+				
+				String restaurantNo = request.getParameter("restaurantNo");
+				System.out.println("json/listReservation :: " + restaurantNo);
+				Member member = (Member) session.getAttribute("member");
+				
+				System.out.println(restaurantNo);
+				System.out.println(member);
+				
+				Search search = new Search();
+				search.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
+				search.setPageSize(pageSize);
+				
+				System.out.println(search.getCurrentPage() + ":: currentPage");
+				
+				map.put("search", search);	
+				
+				Map<String, Object> resultMap = reservationService.listReservation(search, member, restaurantNo);
+				
+				List<Reservation> reservation = (List<Reservation>) resultMap.get("list");
+				
+				for (Reservation r : reservation ) {
+					System.out.println(r);
+				}
+				
+				Page resultPage = new Page(search.getCurrentPage(), ((Integer)resultMap.get("totalCount")).intValue(), pageUnit, pageSize);
+				
+				resultMap.put("resultPage", resultPage);
+				resultMap.put("search", search);
+				
+				return resultMap;
+			}
 	
 }

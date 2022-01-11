@@ -93,7 +93,8 @@
 			<if test="chatText != null">chat_text = #{chatText},</if>
 			<if test="chatGender != null">chat_gender = #{chatGender},</if>
 			<if test="chatAge != null">age_type = #{chatAge},</if>
-			<if test="chatShowStatus != null">chat_show_status = #{chatShowStatus}</if>
+			<if test="chatShowStatus == false">chat_show_status = true</if>
+			<if test="chatShowStatus == true">chat_show_status = false</if>
 		</set>
 		WHERE chat_no = #{chatNo}		
 	</update>

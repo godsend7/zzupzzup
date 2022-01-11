@@ -22,8 +22,7 @@
 	function fncPageNavigation(currentPage) {
 		console.log(currentPage);
 		$("#currentPage").val(currentPage);
-		$("#chatForm").attr("method", "POST").attr("action", "/chat/listChat")
-				.submit();
+		$("#chatForm").attr("method", "POST").attr("action", "/chat/listChat").submit();
 	}
 	
 	$(function() {
@@ -42,7 +41,6 @@
 			$("input:checkbox[value=${search.searchFilter}]").addClass("active");
 		}
 		
-		
 		//============= "검색"  Event  처리 =============
 		$(".search-btn").on("click", function() {
 			fncPageNavigation(1);
@@ -54,8 +52,8 @@
 			window.open("/chat/addChat", "_self");
 		});
 		
-		let count = 2;
 		//============= "무한스크롤"  Event  처리 =============
+		let count = 2;
 		$(window).on("scroll", function(){
 			
 			let scrTop = $(window).scrollTop();
@@ -65,7 +63,7 @@
 			//console.log("top : " + scrTop);
 			//console.log("bottom : " + scrBtm);
 			//console.log("count : " + count);
-			if(scrBtm < 0 ){
+			if(scrBtm <= 0 ){
 				//console.log("바닥이야");
 				//console.log($("#chatForm"));
 				//console.log($("#searchKeyword").val());
@@ -81,11 +79,11 @@
 						
 					},
 					success : function(JSONData, status) {
-						console.log(JSONData);
+						//console.log(JSONData);
 						
 						let dom ='';
 						$.each(JSONData, function(index, item){
-							console.log(item);
+							//console.log(item);
 							if(item.chatLeaderId.memberId == "${member.memberId}"){
 								
 							}
@@ -138,10 +136,26 @@
 								+'<p class="card-text text-right">'+item.chatRestaurant.restaurantName+'</p>'
 								+'<p class="card-text text-right">'+item.chatRestaurant.streetAddress+'</p>'
 								+'</div>'
-								+'<div class="btn-group">'
-								+'<a href="/chat/json/listReadyCheckMember/chatNo='+item.chatNo+'" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a>'
-								+'<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal">참여하기</a>'
-								+'</div>'
+								+'<div class="btn-group">';
+								if(item.chatMember != [] && item.chatMember != null && item.chatMember.length > 0){
+									let isChatMember = false;
+									$.each(item.chatmember, function(indexxx, itemmm){
+										if("${member.memberId}" == itemmm.member.memberId){
+											isChatMember = true;
+										}
+										if("${member.memberId}" == itemmm.member.memberId && item.chatState == 4 && itemmm.inOutCheck == true && itemmm.readyCheck == true ){
+											dom += '<a href="/chat/json/listReadyCheckMember/chatNo='+item.chatNo+'" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a>';
+										}
+									});
+									if(isChatMember == false){
+										dom	+= '<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>';
+									}else{
+										dom += '<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>';
+									}
+								}else{
+									dom	+= '<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>';
+								}
+								dom += '</div>'
 								+'</div>'
 								+'</div>'
 								+'</div>'
@@ -159,160 +173,14 @@
 						}
 					},
 					error : function(request, status, error) {
-						alert("code:" + request.status + "\n" + "message:"
-								+ request.responseText + "\n" + "error:"
-								+ error);
+						let errorMsg = "로그인이 필요합니다!";
+						if(request.status == 200 && request.responseText.indexOf(errorMsg) != -1 ){					
+							alert("로그인이 필요합니다!");
+							location.href='/';
+						}
 					}
 				});
 			}
-		});
-		
-		//============= "참여하기" Event 처리 ============
-		$("body").on("click", "a.button:contains(참여하기)", function(e) {
-			e.preventDefault();
-			let url = $(this).attr("href");
-			$.ajax({
-				url : url,
-				method : "GET",
-				dataType : "json",
-				headers : {
-					"Accept" : "application/json",
-					"Content-Type" : "application/json"
-				},
-				success : function(JSONData, status) {
-					let chatImg = JSONData.chatImage;
-					let chatState = JSONData.chatState;
-					let chatGender = genderReverseCng(JSONData.chatGender);
-					let chatAge = JSONData.chatAge;
-					let chatRegDate = JSONData.chatRegDate;
-					let regdate = new Date(chatRegDate);
-					let showStatus = "";
-					let chatMember = JSONData.chatMember;
-					let menuType = JSONData.chatRestaurant.menuType;
-					chatMemberList = [];
-					
-					//채팅방에 유저 있는지 체크
-					chatMember.map((o,i) => {
-						o.index = i;
-						if(o.inOutCheck){
-							//console.log("채팅 멤버");
-							chatMemberList.push(o.member.memberId);
-						}
-						//console.log(o.member.memberId);
-						//return o;
-					});
-					
-					//연령대 문구 변환
-					let chatAgeList = "";
-					chatAge = chatAge.split(",");
-					$.each(chatAge, function(index, item){
-						chatAgeList += ageReverseCng(item);
-						if(chatAge.length != index+1){
-							chatAgeList += ', ';
-						}
-					});
-					
-					//console.log(chatMemberList);
-					//console.log(JSONData.chatMember);
-					
-					if(JSONData.chatShowStatus == false){
-						showStatus = "<i class='fa fa-eye-slash' aria-hidden='true'></i>";
-					}
-					chatRegDate = regdate.getFullYear()+"-"+("0" + (regdate.getMonth()+1)).slice(-2)+"-"+("0"+regdate.getDate()).slice(-2);
-					if(chatState == 1){
-						chatState = "<span class='badge badge-success chat-state'>모집중</span>";
-					}else if(chatState == 2){
-						chatState = "<span class='badge badge-warning chat-state'>인원확정</span>";
-					}else if(chatState == 3){
-						chatState = "<span class='badge badge-info chat-state'>예약확정</span>";
-					}else if(chatState == 4){
-						chatState = "<span class='badge badge-danger chat-state'>모임완료</span>";
-					}else if(chatState == 5){
-						chatState = "<span class='badge badge-secondary chat-state'>폭파된방</span>";
-					}
-					
-					if(menuType == 1){
-						menuType = "한식";
-					}else if(menuType == 2){
-						menuType = "중식";
-					}else if(menuType == 3){
-						menuType = "양식";
-					}else if(menuType == 4){
-						menuType = "일식";
-					}else if(menuType == 5){
-						menuType = "카페";
-					}
-					
-					let displayValueBd = 
-						'<div class="get-chat-info mb-3">'
-						+'<div class="d-flex justify-content-between">'
-						+'<div><span class="badge badge-secondary chat-no">'+JSONData.chatNo+'</span></div>'
-						+'<div id="getChatState">'+chatState+'</div>'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<h3 class="card-title mb-2">'+JSONData.chatTitle+'</h3>'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<h4 class="card-subtitle mb-2">'+JSONData.chatText+'</h4>'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<div>참가중인 인원수</div>'
-						+'<div>'+JSONData.chatMemberCount+'</div>'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<div>참가가능한 성별</div>'
-						+'<div id="getChatGender">'+chatGender+'</div>'
-						+'<input type="hidden" name="chatGender" id="chatGender"  value="'+JSONData.chatGender+'">'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<div>참가가능한 연령대</div>'
-						+'<div id="getChatAge">'+chatAgeList+'</div>'
-						+'<input type="hidden" name="chatAge" id="chatAge" value="'+JSONData.chatAge+'">'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<div>개설일</div>'
-						+'<div>'+chatRegDate+'</div>'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<div>'+showStatus+ ' <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>' +JSONData.reportCount+' 회</div>'
-						+'</div>'
-						+'</div>'
-						+'<div class="get-chat-user-info mb-3">'
-						+'<div class="chatProfile d-flex flex-row align-items-center">'
-						+'<img src="/resources/images/common/'+JSONData.chatLeaderId.profileImage+'">'
-						+'<div class="dropdown-parent">'
-						+'<a href="">'+JSONData.chatLeaderId.nickname+'</a>'
-						+'<input type="hidden" id="chatLeaderId" name="chatLeaderId" value="'+JSONData.chatLeaderId.memberId+'">'
-						+'</div>'
-						+'<span class="badge badge-info gender">'+JSONData.chatLeaderId.gender+'</span>'
-						+'<span class="badge badge-warning age">'+JSONData.chatLeaderId.ageRange+'</span>'
-						+'</div>'
-						+'<div>'+JSONData.chatLeaderId.statusMessage+'</div>'
-						+'</div>'
-						+'<div clas="get-chat-restaurant-info">'
-						+'<div>'+JSONData.chatRestaurant.restaurantName+' ('+menuType+')</div>'
-						+'<div>'+JSONData.chatRestaurant.restaurantTel+'</div>'
-						+'<div>'+JSONData.chatRestaurant.streetAddress+'</div>'
-						+'<div>'+JSONData.chatRestaurant.areaAddress+'</div>'
-						+'</div>';
-					let displayValueFt = "<input type='button' data-target="+JSONData.chatNo+" class='button small warning' value='대화기록보기'/>"
-					+"<input type='button' data-target="+JSONData.chatNo+" class='button small info' value='수정하기'/>"
-					+"<input type='button' class='button small secondary' data-dismiss='modal' value='닫기' />"
-					+"<input type='button' data-target="+JSONData.chatNo+" class='button small primary' value='입장하기'>"
-					$(".get-chat-con").html(displayValueBd);
-					$("#getChatModal .modal-footer").html(displayValueFt);
-					if(chatImg == 'chatimg.jpg'){
-						$("#getChatModal .modal-body").css("background-image", "url(/resources/images/sub/"+chatImg+")");
-					}else{
-						$("#getChatModal .modal-body").css("background-image", "url(/resources/images/uploadImages/chat/"+chatImg+")");
-					}
-				},
-				error : function(request, status, error) {
-					alert("code:" + request.status + "\n" + "message:"
-							+ request.responseText + "\n" + "error:"
-							+ error);
-				}
-			});
 		});
 		
 		//============= "평가하기" Event 처리 ============
@@ -416,24 +284,17 @@
 					alert("code:" + request.status + "\n" + "message:"
 							+ request.responseText + "\n" + "error:"
 							+ error);
+					
+					let errorMsg = "Duplicate entry";
+					if(request.status == 500 && request.responseText.indexOf(errorMsg) != -1 ){					
+						alert("이미 평가를 하셨습니다");
+						$('#ratingGoModal').modal('hide');
+						$('#chatRatingModal').modal('hide');
+					}
 				}
 			});
 		});
 		
-		
-		//============= "대화기록보기" Event 처리 ============
-		$("body").on("click", "input[value='대화기록보기']", function(){
-			let chatNo = $(this).attr("data-target");
-			location.href="/chat/getChatRecord?chatNo="+chatNo;
-		});
-			
-		//============= "수정하기" Event 처리 ============
-		$("body").on("click", "input[value='수정하기']", function(){
-			console.log("수정하기");
-			let chatNo = $(this).attr("data-target");
-			location.href="/chat/updateChat?chatNo="+chatNo;
-		});
-				
 		//============= "입장하기" Event 처리 ============
 		$("body").on("click", "input[value='입장하기']", function(){
 			console.log("${member}");
@@ -548,18 +409,6 @@
 			}
 		}
 		
-		//젠더 데이터 값 변경
-		function genderReverseCng(gender){
-			switch(gender){				
-				case 2:
-					return '여자';
-				case 1:
-					return '남자';
-				default :
-					return '성별 무관';
-			}
-		}
-		
 		//연령대 데이터 값 변경
 		function ageCng(age){
 			switch(age){
@@ -575,26 +424,6 @@
 					return 5;
 				case '60대':
 					return 6;
-			}
-		}
-		
-		//연령대 데이터 값 변경
-		function ageReverseCng(age){
-			switch(age){
-				case '1':
-					return '10대';
-				case '2':
-					return '20대';
-				case '3':
-					return '30대';
-				case '4':
-					return '40대';
-				case '5':
-					return '50대';
-				case '6':
-					return '60대 이상';
-				case '7':
-					return '연령대 무관'
 			}
 		}
 			
@@ -732,20 +561,34 @@
 													</div>
 													<h4 class="card-title">${chat.chatTitle}</h4>
 													<h5 class="card-text mb-2 text-muted">${chat.chatText}</h5>
-														<div class="d-flex justify-content-between align-items-end">
-															<div>
-																<p class="card-text text-right">${chat.chatRestaurant.restaurantName}</p>
-																<p class="card-text text-right">${chat.chatRestaurant.streetAddress}</p>
-															</div>
-															<div class="btn-group">
-																<%-- <c:forEach var="chatMember" items="${chat.chatMember}">
-																	<c:if test="${member.memberId == chatMember.member.memberId && chat.chatState == 4 && chatMember.inOutCheck == true && chatMember.readyCheck == true}"> --%>
-																	<a href="/chat/json/listReadyCheckMember/chatNo=${chat.chatNo}" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a> 
-																	<%-- </c:if>
-																</c:forEach> --%>
-																<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal">참여하기</a>
-															</div>
+													<div class="d-flex justify-content-between align-items-end">
+														<div>
+															<p class="card-text text-right">${chat.chatRestaurant.restaurantName}</p>
+															<p class="card-text text-right">${chat.chatRestaurant.streetAddress}</p>
 														</div>
+														<div class="btn-group">
+															<c:if test="${!empty chat.chatMember}">
+																<c:set var="isChatMember" value="false" />
+																<c:forEach var="chatMember" items="${chat.chatMember}">
+																	<c:if test="${member.memberId == chatMember.member.memberId}">
+																		<c:set var="isChatMember" value="true" />
+																	</c:if>
+																	<c:if test="${member.memberId == chatMember.member.memberId && chat.chatState == 4 && chatMember.inOutCheck == true && chatMember.readyCheck == true}">
+																	<a href="/chat/json/listReadyCheckMember/chatNo=${chat.chatNo}" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a> 
+																	</c:if>
+																</c:forEach>
+																<c:if test="${isChatMember eq 'false' }">
+																	<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>
+																</c:if>
+																<c:if test="${isChatMember eq 'true' }">
+																	<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>
+																</c:if>
+															</c:if>
+															<c:if test="${empty chat.chatMember}">
+																<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>
+															</c:if>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -755,27 +598,8 @@
 							<!-- E:Thumbnail -->
 
 							<!-- S:Modal -->
-							<!-- 채팅 정보자세히 보기 모달 -->
-							<div class="modal fade" id="getChatModal" tabindex="-1"
-								aria-labelledby="getChatModalLabel" aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title" id="getChatModalLabel">채팅방 정보 상세보기</h5>
-											<button type="button" class="close" data-dismiss="modal"
-												aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-											</button>
-										</div>
-										<div class="modal-body">
-											<div class="get-chat-con"></div>
-										</div>
-										<div class="modal-footer">
-											
-										</div>
-									</div>
-								</div>
-							</div>
+							<!-- 채팅방 정보보기 모달 -->
+							<jsp:include page='/chat/getChatModal.jsp'/>
 							
 							<!-- 모임중에만 입장 모달 -->
 							<div class="modal fade" id="chatStateModal" tabindex="-1" aria-labelledby="chatStateModalLabel" aria-hidden="true">

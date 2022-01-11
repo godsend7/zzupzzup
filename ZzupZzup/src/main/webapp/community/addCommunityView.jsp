@@ -175,27 +175,24 @@
 		
 		}
 		
-		window.onload = function(){
-			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-			$(function() {
-				// 등록 버튼 실행
-				$( "#button1" ).on("click" , function() {
-					fncAddCommunity();
-				});
-				
-				// 이전으로 버튼 실행
-				$( "#button3" ).on("click" , function() {
-					history.go(-1);
-				});
+		$(function() {
+			// 등록 버튼 실행
+			$( "#button1" ).on("click" , function() {
+				fncAddCommunity();
 			});
 			
-			$(function() {
-				// 주소 검색 버튼 실행
-				$( "#button2" ).on("click" , function() {
-					daumPostcode();
-				});
+			// 이전으로 버튼 실행
+			$( "#button3" ).on("click" , function() {
+				history.go(-1);
 			});
-		}
+		});
+		
+		$(function() {
+			// 주소 검색 버튼 실행
+			$( "#button2" ).on("click" , function() {
+				daumPostcode();
+			});
+		});
 		
 		/* *************** 이미지 업로드 *************** */
 		$(function(){

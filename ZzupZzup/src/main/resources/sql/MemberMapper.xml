@@ -54,18 +54,18 @@
 	<!-- SQL : SELECT -->
 	<select 	id="getMember"	parameterType="member" resultMap="memberSelectMap">
 		SELECT
-		MEMBER_ID, PASSWORD, MEMBER_NAME, NICKNAME, MEMBER_ROLE, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, LOGIN_TYPE, REG_DATE, DELETE_DATE, DELETE_TYPE, BLACKLIST_REG_DATE
+		MEMBER_ID, PASSWORD, MEMBER_NAME, NICKNAME, MEMBER_ROLE, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, NICKNAME, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, LOGIN_TYPE, REG_DATE, DELETE_DATE, DELETE_TYPE, DELETE_DETAIL, BLACKLIST_REG_DATE
 		FROM zzupzzup.MEMBER
 		WHERE MEMBER_ID LIKE #{memberId} OR NICKNAME LIKE #{nickname} OR (MEMBER_NAME = #{memberName} AND MEMBER_PHONE = #{memberPhone});
 	</select>
 	
-	<select 	id="getOwner"	parameterType="string" resultMap="memberSelectMap">
+	<!-- <select 	id="getOwner"	parameterType="string" resultMap="memberSelectMap">
 		SELECT 
 		zzupzzup_test.RESTAURANT.MEMBER_ID, zzupzzup_test.RESTAURANT.RESTAURANT_NAME, zzupzzup_test.RESTAURANT.JUDGE_STATUS, zzupzzup_test.RESTAURANT.RESTAURANT_REG_DATE, zzupzzup_test.RESTAURANT.REQUEST_DATE, zzupzzup_test.RESTAURANT.JUDGE_DATE
 		FROM zzupzzup_test.RESTAURANT
 		LEFT JOIN zzupzzup_test.MEMBER
 		ON zzupzzup_test.RESTAURANT.MEMBER_ID = zzupzzup_test.MEMBER.MEMBER_ID AND zzupzzup_test.MEMBER.MEMBER_ROLE = 'owner' AND zzupzzup_test.MEMBER.MEMBER_ID = #{memberId}
-	</select>
+	</select> -->
 	
 	<!-- SQL : UPDATE -->
 	<update 	id="updateMember"	parameterType="member">
@@ -84,8 +84,8 @@
 			<if test="!regBlacklist">
 				NULL
 			</if>
-			<if test="deleteDate != '' and deleteType != '' and deleteReason != ''">
-				, DELETE_DATE = #{deleteDate},
+			<if test="deleteType != ''">
+				, DELETE_DATE = NOW(),
 				DELETE_TYPE = #{deleteType},
 				DELETE_DETAIL = #{deleteReason}
 			</if>
@@ -177,15 +177,15 @@
 		WHERE zzupzzup.MEMBER.MEMBER_ID = #{memberId}; -->
 		
 		UPDATE zzupzzup.MEMBER
-		INNER JOIN (
-			SELECT zzupzzup.MEMBER.MEMBER_ID, SUM(zzupzzup.ACTIVITY_SCORE.ACCUMULATE_SCORE) ACTIVITY_SCORE
-			FROM zzupzzup.MEMBER, zzupzzup.ACTIVITY_SCORE
-			WHERE zzupzzup.MEMBER.MEMBER_ID = zzupzzup.ACTIVITY_SCORE.MEMBER_ID
-			GROUP BY zzupzzup.MEMBER.MEMBER_ID
-	    ) MEMBER_INFO
-	    ON zzupzzup.MEMBER.MEMBER_ID = MEMBER_INFO.MEMBER_ID
-	SET zzupzzup.MEMBER.ACTIVITY_SCORE = MEMBER_INFO.ACTIVITY_SCORE
-	WHERE zzupzzup.MEMBER.MEMBER_ID = #{memberId};
+			INNER JOIN (
+				SELECT zzupzzup.MEMBER.MEMBER_ID, SUM(zzupzzup.ACTIVITY_SCORE.ACCUMULATE_SCORE) ACTIVITY_SCORE
+				FROM zzupzzup.MEMBER, zzupzzup.ACTIVITY_SCORE
+				WHERE zzupzzup.MEMBER.MEMBER_ID = zzupzzup.ACTIVITY_SCORE.MEMBER_ID
+				GROUP BY zzupzzup.MEMBER.MEMBER_ID
+		    ) MEMBER_INFO
+		    ON zzupzzup.MEMBER.MEMBER_ID = MEMBER_INFO.MEMBER_ID
+		SET zzupzzup.MEMBER.ACTIVITY_SCORE = MEMBER_INFO.ACTIVITY_SCORE
+		WHERE zzupzzup.MEMBER.MEMBER_ID = #{memberId};
 	</update>
 	
 	 
