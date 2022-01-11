@@ -3,7 +3,7 @@
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<<script type="text/javascript">
+<script type="text/javascript">
 
 	var imgArray = new Array();
 	imgArray[0] = "../resources/images/common/ad1.JPG";
@@ -54,7 +54,7 @@
 <!-- 실시간 시간 정보 DATA2  -->
 
 <!-- <body onload="showClock()"> -->
-<body onload = "showAd()">
+<body>
 <!-- S:Sidebar -->
 <div id="sidebar" class="inactive">
 	<div class="inner">
@@ -138,26 +138,15 @@
 										<li><a href="/member/listOwner">업주 목록 조회</a></li>
 										<li><a href="/member/getMember?memberId=user05@zzupzzup.com">회원 정보 조회</a></li>
 										<li><a href="/reservation/listReservation">예약/주문 및 결제 내역</a></li>
-										<li><a href="/restaurant/listRestaurant">등록된 전체 음식점 목록</a></li>
-										<li><a href="/restaurant/listRequestRestaurant">등록 요청 음식점 목록</a></li>
+										<li><a href="/restaurant/listRestaurant">등록된 전체 음식점</a></li>
+										<li><a href="/restaurant/listRequestRestaurant">음식점 등록 요청 내역</a></li>
+										<li><a href="/review/listReview">전체 리뷰 관리</a></li>
+										<li><a href="/report/listReport">신고/제보 관리</a></li>
 									</ul>
 								</li>
 							</c:if>
 							<li><a href="/chat/listChat">쩝쩝친구 구하기</a></li>
 							<li><a href="/community/listCommunity">나만의 작고 소중한 맛집</a></li>
-							<c:if test="${sessionScope.member.memberRole == 'admin'}">
-								<li>
-									<span class="opener">음식점 관리</span>
-									<ul>
-										<li><a href="/restaurant/listRestaurant">등록된 전체 음식점</a></li>
-										<li><a href="/restaurant/listRequestRestaurant">음식점 등록 요청 내역</a></li>
-									</ul>
-								</li>
-								<li><a href="/review/listReview">전체 리뷰 관리</a></li>
-								<li><a href="/report/listReport">신고/제보 관리</a></li>
-							</c:if>
-							<li><a href="/restaurant/addRestaurant?memberId=${member.memberId}">test-음식점등록</a></li>
-							<li><a href="/review/addReview?reservationNo=1">test-리뷰작성</a></li>
 						</c:when>
 						<c:otherwise>
 							<!--  업주가 보이는 목록 -->
@@ -166,8 +155,6 @@
 							<li><a href="/report/listReport?memberId=${member.memberId}">음식점 제보 내역</a></li>
 						</c:otherwise>
 					</c:choose>
-				
-				<li><a href="#">>> 공지사항</a></li>
 			</ul>
 		</nav>
 

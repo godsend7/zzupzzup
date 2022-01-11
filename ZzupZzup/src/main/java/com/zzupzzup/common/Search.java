@@ -18,6 +18,8 @@ public class Search {
    private int endRowNum;
    private int startRowNum;
    
+   private int no;
+   
    ///Constructor
    public Search() {
    }
@@ -76,11 +78,22 @@ public class Search {
 		this.searchFilter = searchFilter;
 	}
 	
+	public int getNo() {
+		return no;
+	}
+
+	public void setNo(int no) {
+		this.no = no;
+	}
+
 	@Override
 	public String toString() {
 		return "Search [currentPage=" + currentPage + ", searchCondition=" + searchCondition + ", searchKeyword="
-				+ searchKeyword + ", searchSort=" + searchSort + ", searchFilter=" + searchFilter + ", pageSize=" + pageSize
-				+ ", endRowNum=" + endRowNum + ", startRowNum=" + startRowNum + "]";
+				+ searchKeyword + ", searchSort=" + searchSort + ", searchFilter=" + searchFilter + ", pageSize="
+				+ pageSize + ", endRowNum=" + endRowNum + ", startRowNum=" + startRowNum + ", restaurantNo="
+				+ no + "]";
 	}
+	
+	
 }
 
