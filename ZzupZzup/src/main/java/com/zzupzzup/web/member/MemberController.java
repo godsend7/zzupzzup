@@ -276,9 +276,9 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-	public void deleteMember() {
-		
-	}
+//	public void deleteMember() {
+//		
+//	}
 	
 	@RequestMapping(value="listMyActivityScore", method=RequestMethod.GET)
 	public String listMyActivityScore(@RequestParam("memberId") String memberId, @ModelAttribute("search") Search search, @ModelAttribute("member") Member member,

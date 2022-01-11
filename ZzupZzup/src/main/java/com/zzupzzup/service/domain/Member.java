@@ -189,7 +189,9 @@ public class Member {
 	}
 
 	public String getDeleteReason() {
-		deleteReason = CommonUtil.returnDeleteData(deleteType);
+		if(deleteReason == null) {
+			deleteReason = CommonUtil.returnDeleteData(deleteType);
+		}
 		return deleteReason;
 	}
 
@@ -263,6 +265,13 @@ public class Member {
 	}
 
 	public boolean isEliminated() {
+		
+		if(deleteDate != null && deleteReason != null) {
+			eliminated = true;
+		} else {
+			eliminated = false;
+		}
+		
 		return eliminated;
 	}
 
@@ -327,13 +336,6 @@ public class Member {
 	}
 
 	public boolean isRegBlacklist() {
-		
-//		if(blacklistDate == null) {
-//			regBlacklist = false;
-//		} else {
-//			regBlacklist = true;
-//		}
-		
 		return regBlacklist;
 	}
 

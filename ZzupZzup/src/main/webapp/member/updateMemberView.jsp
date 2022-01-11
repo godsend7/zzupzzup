@@ -156,7 +156,7 @@
 													<div class="row mb-4">
 														<div class="col-md-11">
 															<textarea class="form-control" id="statusMessage" name="statusMessage"
-															placeholder="100자 이내로 자유롭게 기술해주세요." rows="3">${member.statusMessage}</textarea>
+															placeholder="100자 이내로 자유롭게 기술해주세요." style="resize: none;" rows="3">${member.statusMessage}</textarea>
 														</div>
 													</div>
 												</div>
