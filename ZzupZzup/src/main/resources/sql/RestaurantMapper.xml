@@ -137,7 +137,8 @@
 			STREET_ADDRESS = #{streetAddress},
 			AREA_ADDRESS = #{areaAddress},
 			MENU_TYPE = #{menuType},
-			JUDGE_STATUS = #{judgeStatus}
+			JUDGE_STATUS = #{judgeStatus},
+			RESERVATION_STATUS = #{reservationStatus}
 		</set>
 		WHERE RESTAURANT_NO = #{restaurantNo}
 	</update>

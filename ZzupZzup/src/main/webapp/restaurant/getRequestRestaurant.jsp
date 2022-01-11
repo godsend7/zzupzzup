@@ -70,7 +70,7 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
 
-	window.onload = function() {
+	/* window.onload = function() { */
 		$(function() {
 			
 			// '이전으로' 버튼
@@ -137,7 +137,7 @@
 			
 		});
 		
-	}
+//	}
 	
 </script>
 </head>

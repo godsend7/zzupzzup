@@ -40,7 +40,7 @@
 	}); */
 	
 	$(function() {
-		if(${member.memberRole == 'user'}) {
+		if(${member.memberRole == 'user' || member.memberRole == 'admin'}) {
 			// 게시물 작성하기 버튼 실행
 			
 				//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
@@ -103,7 +103,7 @@
 											</a>
 											<div class="card-body">
 												<c:if test="${member.memberRole == 'admin'}">
-													<strong class="d-inline-block mb-2 text-primary">신고누적수: ${community.postReportCount}</strong>
+													<strong class="d-inline-block mb-2 text-primary">신고누적수: ${community.postReportCount}</strong> &nbsp;
 												</c:if>
 												<c:if test="${empty community.receiptImage}">
 													<span class="badge badge-success" style="text-align: right;">영수증 첨부된 게시물</span>

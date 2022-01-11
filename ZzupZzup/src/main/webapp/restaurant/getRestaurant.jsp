@@ -23,11 +23,17 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
 
-	window.onload = function(){
+//	window.onload = function(){
 		$(function() {
 			// 목록으로 버튼
 			$("button.btn.btn-warning").on("click", function() {
-				history.go(-1);
+				if(${member.memberRole == 'owner'}) {
+					self.location = "/member/getMember?memberId=${member.memberId}"
+				} else {
+					self.location = "/restaurant/listRestaurant"
+				}
+				
+				/* history.go(-1); */
 			});
 			
 			// 수정하기 버튼
@@ -42,6 +48,7 @@
 					/* $("#restaurant").attr("method", "POST").attr("action","/restaurant/deleteRestaurant").submit(); */
 				}
 			});
+			
 		});
 		
 		// carousel prev & next
@@ -52,7 +59,7 @@
 		$("#car_next").click(function(){
 			$("#carouselExampleFade").carousel("next");
 		});
-	}
+//	}
 	
 	// 찜하기 기능
 	$(function() {
@@ -93,6 +100,11 @@
 					}
 				});
 			}
+		});
+		
+		// 신고하기 Modal
+		$(".reportModal").on("click", function() {
+			$("#reportModal").modal("show");
 		});
 	});
 	
@@ -317,15 +329,19 @@
 						<div class="col-md-8">
 							<h1 class="text-warning">${restaurant.restaurantName}&nbsp;<small style="color:gray;">${restaurant.returnMenuType}</small></h1>
 						</div>
-						<div class="col-md-4" style="text-align:right;">
-							<button type="button" id="callDibs" class="btn btn-outline-link btn-sm" style="border: none; outline: none; box-shadow: none;">
-                			<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-bookmark-star zzim" viewBox="0 0 16 16">
+						<div class="col-md-4" style="text-align:right; padding-right: 22px;">
+							<!-- <button type="button" id="callDibs" class="btn btn-outline-link btn-sm" style="border: none; outline: none; box-shadow: none;"> -->
+                			<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-bookmark-star zzim" viewBox="0 0 16 16">
   							<path d="M7.84 4.1a.178.178 0 0 1 .32 0l.634 1.285a.178.178 0 0 0 .134.098l1.42.206c.145.021.204.2.098.303L9.42 6.993a.178.178 0 0 0-.051.158l.242 1.414a.178.178 0 0 1-.258.187l-1.27-.668a.178.178 0 0 0-.165 0l-1.27.668a.178.178 0 0 1-.257-.187l.242-1.414a.178.178 0 0 0-.05-.158l-1.03-1.001a.178.178 0 0 1 .098-.303l1.42-.206a.178.178 0 0 0 .134-.098L7.84 4.1z"/>
   							<path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
-							</svg></button>
-							<input type="hidden" name="restaurantNo" value="${restaurant.restaurantNo}">
+							</svg><!-- </button> -->
+							<input type="hidden" name="restaurantNo" value="${restaurant.restaurantNo}">&nbsp;&nbsp;
+							
+							<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="Crimson" class="bi bi-flag-fill reportModal" data-toggle='modal' data-target='#reportModal' viewBox="0 0 16 16" data-id="[5,${restaurant.restaurantNo}]">
+							  <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001"/>
+							</svg>
 						</div>
-					</div><hr>
+					</div><hr style="margin-top: 10px;">
 					
 					<div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
 					  <div class="carousel-inner">
@@ -629,6 +645,12 @@
 		
 		<!-- Sidebar -->
 		<jsp:include page="/layout/sidebar.jsp" />
+		
+		<!-- Report -->
+		<ul class='icons'> 
+			<jsp:include page='/report/addReportView.jsp'/>
+		</ul>
+		
 	</div>
 	<!-- E:Wrapper -->
 </body>

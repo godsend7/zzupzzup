@@ -69,7 +69,7 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
-	window.onload = function() {
+	/* window.onload = function() { */
 		$(function() {
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			$( "#button" ).on("click" , function() {
@@ -111,7 +111,7 @@
 			
 		});
 		
-	}
+//	}
 </script>
 </head>
 
