@@ -268,8 +268,7 @@ public class MemberController {
 		
 		System.out.println("/member/setPassword : POST");
 		
-		Member mb = new Member();
-		mb.setMemberId(member.getMemberId());
+		Member mb = memberService.getMember(member);
 		mb.setPassword(member.getPassword());
 		
 		memberService.updateMember(mb);
@@ -277,9 +276,9 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-	public void deleteMember() {
-		
-	}
+//	public void deleteMember() {
+//		
+//	}
 	
 	@RequestMapping(value="listMyActivityScore", method=RequestMethod.GET)
 	public String listMyActivityScore(@RequestParam("memberId") String memberId, @ModelAttribute("search") Search search, @ModelAttribute("member") Member member,

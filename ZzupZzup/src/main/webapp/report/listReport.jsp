@@ -33,6 +33,7 @@
 	    $("#report").attr("action","/report/listReport?reportCategory="+category).attr("method", "POST").submit();
 	}
 	
+	
 	$(function() {
 		if (${member.memberRole != "owner"}) {
 			if(${category == 1}) {
@@ -74,6 +75,15 @@
 				});
    	    	}
 		}
+		
+		$(".search-sort").on("click", function(e){
+			var sort = $(this).attr("data-sort");
+			console.log(sort);
+			
+			$("input[name='searchSort']").val(sort);
+			
+			fncPageNavigation(1,${param.reportCategory});
+		});
 	});
 </script>
 </head>
@@ -90,13 +100,23 @@
 
 				<section id="listReport">
 					<div class="container">
-						<!-- 내용 들어가는 부분 -->
-						
 						<!-- start:Form -->
-						<!-- <h3 id="reportTitle">신고/제보 리스트</h3> -->
+						<!-- <h2>신고/제보 목록</h2> -->
 						
-						<c:if test="${!empty member}">
 						<form id="report">
+							<div class="row search-box gtr-uniform">
+								<div class="col-md-4 col-sm-12">
+									<div class="dropmenu float-left mr-2">
+										<a href="" class="button normal icon solid fa-sort dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">정렬</a>
+										<div class="dropmenu-list" aria-labelledby="dropmenuList">
+											<a class="dropmenu-item search-sort" href="#" data-sort="latest">최신순 </a>
+											<a class="dropmenu-item search-sort" href="#" data-sort="oldest">오래된 순</a>
+											<input type="hidden" name="searchSort" value="">
+										</div>
+									</div>
+								</div>
+							</div>
+							<br>
 							<ul class="nav nav-tabs report-top-tabs">
 								<c:if test='${member.memberRole != "owner"}'>
 								  	<li class="nav-item">
@@ -195,7 +215,7 @@
 									<jsp:include page='/review/getReview.jsp'/>
 								</ul>
 						</div>
-						</c:if>
+					
 						<jsp:include page="../common/pageNavigator.jsp"/>
 					</div>
 				</section>

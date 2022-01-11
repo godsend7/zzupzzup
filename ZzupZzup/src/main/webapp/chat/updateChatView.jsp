@@ -19,13 +19,14 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
 	$(function() {
+		
 		console.log("updateChatView.jsp");
 		function fncUpdateChat() {
 			
 			//==> 유효성 체크
 			let restaurantName = $("input[name='restaurantName']").val();
 			let chatTitle = $("input[name='chatTitle']").val();
-			let chatGender = $("input[name='chatGender']:checked").length;
+			//let chatGender = $("input[name='chatGender']:checked").length;
 			let chatAge = $("input[name='chatAge']:checked").length;
 			
 			/* console.log("restaurantName : " + restaurantName);
@@ -45,11 +46,11 @@
 				return;
 			}
 			
-			if(chatGender == null || chatGender<1){
+			/* if(chatGender == null || chatGender<1){
 				alert("참여가능 성별은 반드시 선택하여야 합니다.");
 				$("input[name='chatGender']").focus();
 				return;
-			}
+			} */
 			
 			if(chatAge == null || chatAge<1){
 				alert("참여가능 연령대는 반드시 선택하여야 합니다.");
@@ -140,6 +141,10 @@
 			$("#areaAddress").val(restaurantAAddr);
 		});
 		
+		let genderChk = (function(){
+			$("input[name='chatGender'][value='${chat.chatGender}']").prop("checked", true);
+		})();
+		
 		//==>연령대 무관 클릭시 나머지 연령대 체크 해제
 		$("input[name=chatAge]").on("click", function(){
 			//console.log($(this).attr("id"));
@@ -177,7 +182,7 @@
 		$(ageArr).each(function(index){
 			//console.log(index);
 			//console.log(ageArr[index]);
-			$("input[value="+ageArr[index]+"]").prop("checked", true);
+			$("input[name='chatAge'][value="+ageArr[index]+"]").prop("checked", true);
 		});
 		
 		//==> drag 파일 업로드
@@ -380,18 +385,6 @@
 			$fileDragMsg.text("파일을 여기로 드래그 하거나 선택하세요.");
 		});
 		
-		
-		//==> 채팅방 노출여부 체크시
-		$("input[name='chatShowStatus']").change(function(){
-			if($("#chatShowStatus").is(":checked")){
-				console.log("체크한거니?");
-				$("#chatShowStatus").val(false);
-			}else{
-				console.log("체크한거니??");
-				$("#chatShowStatus").val(true);
-			}
-		});
-		
 		//==>취소 클릭시 뒤로 감
 		$("input[value='취소']").on("click", function(){
 			history.back();
@@ -461,45 +454,19 @@
 							<div class="row gtr-uniform">
 								<!-- Break -->
 								<div class="col-12">
-									<label for="chatGender">참여가능 성별</label>
+									<label>참여가능 성별</label>
 								</div>
 							</div>
 							<div class="row gtr-uniform">
 								<div class="col-md-12">
-									<c:choose>
-										<c:when test="${chat.chatGender=='1'}">
-										<input type="radio" id="male" name="chatGender" value="1" checked>
-										<label for="male">남</label>
+									<input type="radio" id="male" name="chatGender" value="1">
+									<label for="male">남</label>
+							
+									<input type="radio" id="female" name="chatGender" value="2">
+									<label for="female">여</label>
 								
-										<input type="radio" id="female" name="chatGender" value="2">
-										<label for="female">여</label>
-									
-										<input type="radio" id="malefemale" name="chatGender" value="3">
-										<label for="malefemale">성별무관</label>
-										</c:when>
-										
-										<c:when test="${chat.chatGender=='2'}">
-										<input type="radio" id="male" name="chatGender" value="1">
-										<label for="male">남</label>
-								
-										<input type="radio" id="female" name="chatGender" value="2" checked>
-										<label for="female">여</label>
-									
-										<input type="radio" id="malefemale" name="chatGender" value="3">
-										<label for="malefemale">성별무관</label>
-										</c:when>
-										
-										<c:when test="${chat.chatGender=='3'}">
-										<input type="radio" id="male" name="chatGender" value="1">
-										<label for="male">남자</label>
-								
-										<input type="radio" id="female" name="chatGender" value="2">
-										<label for="female">여자</label>
-									
-										<input type="radio" id="malefemale" name="chatGender" value="3" checked>
-										<label for="malefemale">성별무관</label>
-										</c:when>
-									</c:choose>
+									<input type="radio" id="malefemale" name="chatGender" value="3">
+									<label for="malefemale">성별무관</label>
 								</div>
 							</div>
 							<div class="row gtr-uniform">
@@ -562,12 +529,13 @@
 									<label>채팅방 노출 여부</label>
 								</div>
 								<div class="col-md-12">
+									<!-- <input type="checkbox" id=chatShowStatus name="chatShowStatus"> -->
 									<c:choose>
-										<c:when test="${chat.chatShowStatus==false }">
-										<input type="checkbox" id=chatShowStatus name="chatShowStatus" checked>
-										</c:when>
 										<c:when test="${chat.chatShowStatus==true }">
-										<input type="checkbox" id=chatShowStatus name="chatShowStatus">
+										<input type="checkbox" id="chatShowStatus" name="chatShowStatus">
+										</c:when>
+										<c:when test="${chat.chatShowStatus==false }">
+										<input type="checkbox" id="chatShowStatus" name="chatShowStatus" checked>
 										</c:when>
 									</c:choose>
 									<label for="chatShowStatus">채팅방 노출하지 않기</label>

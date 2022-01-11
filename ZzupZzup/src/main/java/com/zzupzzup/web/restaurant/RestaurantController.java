@@ -172,6 +172,60 @@ public class RestaurantController {
 		return "forward:/restaurant/getRestaurant.jsp";
 	}
 	
+	@RequestMapping(value="getRestaurant", method=RequestMethod.POST)
+	public String getRestaurant(HttpServletRequest request, @ModelAttribute Search search, Model model, HttpSession session) throws Exception {
+		
+		System.out.println("/restaurant/getRestaurant : POST");
+		
+		String restaurantNo = request.getParameter("restaurantNo");
+		
+		System.out.println("restaurantNo :: " + restaurantNo);
+		
+		System.out.println("review/listReview : Service");
+		
+		Member member = (Member) session.getAttribute("member");
+		
+		System.out.println("getRestaurant :: search :: "  + search);
+		
+		List<Mark> listLike = null;
+		
+		if (member != null && member.getMemberRole().equals("user")) {
+			listLike = reviewService.listLike(member.getMemberId());
+		}
+		
+		
+		System.out.println(restaurantNo);
+		System.out.println(member);
+		
+		
+		if (search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+		
+		System.out.println(search.getCurrentPage() + ":: currentPage");
+		
+		search.setPageSize(pageSize);
+		
+		
+		Map<String, Object> map = reviewService.listReview(search, restaurantNo, member);
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("listLike", listLike);
+		model.addAttribute("search", search);
+		model.addAttribute("totalCount", map.get("totalCount"));
+		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
+		model.addAttribute("resultPage", resultPage);
+		
+		
+		model.addAttribute("restaurant", restaurantService.getRestaurant(Integer.parseInt(restaurantNo)));
+		
+		
+		
+		return "forward:/restaurant/getRestaurant.jsp";
+	}
+	
 	@RequestMapping(value="getRequestRestaurant", method=RequestMethod.GET)
 	public String getRequestRestaurant(@RequestParam("restaurantNo") int restaurantNo, Model model) throws Exception {
 		
@@ -213,18 +267,19 @@ public class RestaurantController {
 		
 		restaurantService.updateRestaurant(restaurant);
 		
-		int sessionNo = restaurant.getRestaurantNo();
-		String sessionNum = Integer.toString(sessionNo);
+//		int sessionNo = restaurant.getRestaurantNo();
+//		String sessionNum = Integer.toString(sessionNo);
+//		
+//		if(sessionNum.equals(restaurant.getRestaurantNo())) {
+//			session.setAttribute("restaurant", restaurant);
+//		}
+//		
+//		Restaurant res = (Restaurant) session.getAttribute("restaurant");
+//		
+//		System.out.println("CHECK POINT : " + res);
+//		if(res.getJudgeDate() == null) {
 		
-		if(sessionNum.equals(restaurant.getRestaurantNo())) {
-			session.setAttribute("restaurant", restaurant);
-		}
-		
-		Restaurant res = (Restaurant) session.getAttribute("restaurant");
-		
-		System.out.println("CHECK POINT : " + res);
-		
-		if(res.getJudgeDate() == null) {
+		if(restaurant.getJudgeDate() == null) {
 			return "redirect:/restaurant/getRestaurant?restaurantNo=" + restaurant.getRestaurantNo();
 		} else {
 			return "forward:/restaurant/addRestaurant?restaurantNo=" + restaurant.getRestaurantNo();

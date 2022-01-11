@@ -21,6 +21,7 @@
 		<result property="avgScope" 						column="avg_scope" 				jdbcType="DECIMAL" />
 		<result property="reviewShowStatus" 				column="review_show_status" 	jdbcType="BOOLEAN" />
 		<result property="reportCount"						column="report_count"			jdbcType="INTEGER" />
+		<result property="likeCount"						column="like_count"				jdbcType="INTEGER" />
 		
 		<!-- <collection property="hashTag" ofType="String" javaType="list">
 			<result column="hashTag"/>
@@ -129,10 +130,13 @@
 	<select id="listReview" parameterType="map" resultMap="reviewSelectMap">
         SELECT *
 		FROM (SELECT r.review_no, r.member_id, r.reservation_no, r.restaurant_no, r.review_detail, r.review_reg_date, 
-					r.review_show_status, r.scope_taste, r.scope_kind, r.scope_clean, r.avg_scope, rep.report_count
+					r.review_show_status, r.scope_taste, r.scope_kind, r.scope_clean, r.avg_scope, rep.report_count, m.like_count
 			  FROM review AS r LEFT Outer join(select review_no, COUNT(review_no) AS report_count
 												 from report
                                                  GROUP BY review_no) as rep on (rep.review_no = r.review_no)
+			  					LEFT Outer join(select review_no, COUNT(review_no) AS like_count
+												 from mark
+                                                 GROUP BY review_no) as m on (m.review_no = r.review_no) 
 			  <choose>
 		  	  	<when test="restaurantNo != null">
 		  			WHERE r.restaurant_no = #{restaurantNo}
@@ -150,7 +154,37 @@
 		  			</if>
 		  		</otherwise>
 		  	  </choose>
-			  ORDER BY r.review_no DESC limit #{search.startRowNum}, #{search.pageSize})AS re
+		  	  <if test="search.searchFilter == 1">
+		  	  	WHERE rep.report_count <![CDATA[>=]]> 5
+		  	  </if>
+		  	  ORDER BY
+		  	  <choose>
+		 		<when test="search.searchSort == 'likeMuchst'">
+	 				m.like_count DESC
+		 		</when>
+		 		<when test="search.searchSort == 'likeLittlest'">
+		 			m.like_count
+		 		</when>
+		 		<when test="search.searchSort == 'reportMuchst'">
+		 			rep.report_count DESC
+		 		</when>
+		 		<when test="search.searchSort == 'reportLittlest'">
+		 			rep.report_count
+		 		</when>
+		 		<when test="search.searchSort == 'avgMuchst'">
+		 			r.avg_scope DESC
+		 		</when>
+		 		<when test="search.searchSort == 'avgLittlest'">
+		 			r.avg_scope
+		 		</when>
+		 		<when test="search.searchSort == 'oldest'">
+		 			r.review_reg_date
+		 		</when>
+		 		<otherwise>
+	 				r.review_reg_date DESC
+		 		</otherwise>
+		  	  </choose>
+			  limit #{search.startRowNum}, #{search.pageSize})AS re
 		LEFT OUTER JOIN (SELECT image, review_no
 						 FROM image) AS i ON (re.review_no = i.review_no)
 		LEFT OUTER JOIN (SELECT hl.HASHTAG_no, h.hashtag, review_no 
@@ -166,8 +200,17 @@
 					r.review_show_status, r.scope_taste, r.scope_kind, r.scope_clean, r.avg_scope, M.MARK_NO
 			  FROM review AS r Inner join(select review_no, mark_no, member_id
 												 from MARK where member_id = #{member.memberId}) as m on (m.review_no = r.review_no)
-			  where r.review_show_status = 1
-			  ORDER BY M.mark_no DESC limit 0, 8)AS re
+			  WHERE r.review_show_status = 1
+			  ORDER BY
+			  <choose>
+		 		<when test="search.searchSort == 'oldest'">
+		 			m.mark_no
+		 		</when>
+		 		<otherwise>
+	 				m.mark_no DESC
+		 		</otherwise>
+		  	  </choose>
+			    limit 0, 8)AS re
 		LEFT OUTER JOIN (SELECT image, review_no
 						 FROM image) AS i ON (re.review_no = i.review_no)
 		LEFT OUTER JOIN (SELECT hl.HASHTAG_no, h.hashtag, review_no 
@@ -210,26 +253,38 @@
 	</delete>
 	
 	<select id="getTotalCount" parameterType="map" resultType="int">
-		SELECT count(*)
-		FROM REVIEW
+		 SELECT Count(*) 
+		 FROM (SELECT r.review_no, r.member_id, r.reservation_no, r.restaurant_no, r.review_detail, r.review_reg_date, 
+					r.review_show_status, r.scope_taste, r.scope_kind, r.scope_clean, r.avg_scope, rep.report_count, m.like_count
+			   FROM review AS r LEFT OUTER JOIN(select review_no, COUNT(review_no) AS report_count
+												 FROM report
+                                                 GROUP BY review_no) as rep on (rep.review_no = r.review_no)
+			  					LEFT OUTER JOIN(select review_no, COUNT(review_no) AS like_count
+												 FROM mark
+                                                 GROUP BY review_no) as m on (r.review_no = m.review_no)
 		<choose>
 			<when test="restaurantNo != null">
-		  		WHERE restaurant_no = #{restaurantNo}
+		  		WHERE r.restaurant_no = #{restaurantNo}
 		  		<choose>
 		 			<when test='member != null and member.memberRole == "admin"'>
 		 			</when>
 		 			<otherwise>
-		 				AND review_show_status = 1
+		 				AND r.review_show_status = 1
 		 			</otherwise>
 		 		</choose>
 		  	</when>
 		  	<otherwise>
 		  		<if test='member != null and member.memberRole != "admin"'>
-		  			WHERE member_id = #{member.memberId}
+		  			WHERE r.member_id = #{member.memberId}
 		  		</if>
 		  	</otherwise>
 		</choose>
+		<if test="search.searchFilter == 1">
+		   	WHERE rep.report_count <![CDATA[>=]]> 5
+		</if>
+		) countTable;
 	</select>
+	
 	
 	<select id="getLikeTotalCount" parameterType="string" resultType="int">
 		SELECT count(*)

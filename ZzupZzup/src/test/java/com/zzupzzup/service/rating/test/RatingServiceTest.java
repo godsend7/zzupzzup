@@ -11,11 +11,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.chat.ChatService;
 import com.zzupzzup.service.domain.Chat;
+import com.zzupzzup.service.domain.ChatMember;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Rating;
 import com.zzupzzup.service.member.MemberService;
