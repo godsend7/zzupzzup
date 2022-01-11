@@ -388,7 +388,7 @@
 											<br/>
 											<label for="stateMessage">자기소개 및 특이사항</label>
 											<textarea class="form-control" id="statusMessage" name="statusMessage"
-												placeholder="100자 이내로 자유롭게 기술해주세요." rows="3"></textarea>
+												placeholder="100자 이내로 자유롭게 기술해주세요." style="resize: none;" rows="3"></textarea>
 										</div>
 									</c:if>
 								</div>

@@ -13,7 +13,7 @@
 
 	$(function() {
 		console.log("modal-archive.jsp");
-
+		
 		//login type == 1
 		$("#login").on("click", function() {
 
@@ -34,8 +34,13 @@
 				}),
 				success : function(data) {
 					if (data != null) {
-						//main.jsp로 이동
-						location.href = "/";
+						
+						if(data.eliminated) {
+							alert("로그인 할 수 없습니다.");
+						} else {
+							//main.jsp로 이동
+							location.href = "/";
+						}
 					}
 				},
 				error : function() {
@@ -150,7 +155,11 @@
 						if (data != null) {
 							if(memberId != null) {	//비밀번호 찾기
 								//alert("이거 안 타나?");
-								$("#find-check").html("<h4>입력하신 회원님의 메일 주소로 비밀번호 재설정 링크를 발송하였습니다.</h4>");
+								if(data.loginType == 1) {
+									$("#find-check").html("<h4>입력하신 회원님의 메일 주소로 비밀번호 재설정 링크를 발송하였습니다.</h4>");
+								} else {
+									$("#find-check").html("<h4>SNS 계정으로 가입한 회원은 비밀번호를 재설정할 수 없습니다.</h4>");
+								}
 							} else if($("#memberPhone1").val() != null && $("#memberPhone2").val() != null && $("#memberPhone3").val() != null) {		//아이디 찾기
 								//alert("너도 안 타니?");
 								$("#find-check").html("<h4>요청하신 회원님의 ID는 " 
@@ -170,6 +179,43 @@
 				alert("누락된 항목 확인 후 다시 시도하여 주십시오.");
 			}
 			
+		});
+		
+		//deleteMember
+		$("#checkPwdForDelete-btn").on("click", function() {
+
+			var memberId = "${sessionScope.member.memberId}";
+			var password = $("#password-forDelete").val();
+			var deleteType = $("input[name=deleteType]:checked").val();
+			var deleteReason = $("textarea[name=deleteReason]").val();
+
+			console.log("memberId:" + memberId);
+			console.log("password:" + password);
+			console.log("deleteType:" + deleteType);
+			console.log("deleteReason:"+deleteReason)
+
+			$.ajax({
+				url : "/member/json/deleteMember",
+				method : "POST",
+				contentType : 'application/json',
+				dataType : "json",
+				data : JSON.stringify({
+					"memberId" : memberId,
+					"password" : password,
+					"deleteType" : deleteType,
+					"deleteReason" : deleteReason
+				}),
+				success : function(data) {
+					if (data != null) {
+						alert("탈퇴 처리가 완료되었습니다. 7일 이내에 로그인 시 계정이 복구됩니다.");
+						location.href = "/";
+					}
+				},
+				error : function(request, status, error) {
+					alert("에러 왜 뜨는데");
+					alert("request : "+request.status+"\n message : "+request.responseText+"\n error : "+error);
+				}
+			});
 		});
 		
 		//logout
@@ -217,7 +263,36 @@
 									+"<input type='text' id='memberId-find' name='memberId' class='col-md-9' Placeholder='아이디를 입력해주세요.'/>"
 								  +"</div>");
 			$("#find-check").html("");
-		})
+		});
+		
+		//1,2,3 체크 시
+		$("#deleteType1").on("change", function() {
+			if($("#deleteType1").prop("checked")) {
+				$("#checked-etc").html("");
+			}
+		});
+		
+		$("#deleteType2").on("change", function() {
+			if($("#deleteType2").prop("checked")) {
+				$("#checked-etc").html("");
+			}
+		});
+		
+		$("#deleteType3").on("change", function() {
+			if($("#deleteType3").prop("checked")) {
+				$("#checked-etc").html("");
+			}
+		});
+		
+		//기타 사유가 체크 되었을 시
+		$("#deleteType4").on("change", function() {
+			if($("#deleteType4").prop("checked")) {
+				$("#checked-etc").html("<h5>기타 사유 입력</h5>"
+										+"<textarea class='form-control' id='deleteReason' name='deleteReason'"
+										+"placeholder='100자 이내로 자유롭게 기술해주세요.' style='resize: none;' rows='3'></textarea>");
+			}
+		});
+		
 		
 	});
 	
@@ -338,6 +413,71 @@
 			</div>
 			<div class="modal-footer">
 		      <input type="button" class="btn btn-primary" id="findAccount-btn" value="확인">
+		    </div>
+		</div>
+	</div>
+</div>
+
+<!-- 회원탈퇴 modal -->
+<div class="modal fade" id="deleteMemberModal" tabindex="-1" role="dialog"
+	aria-labelledby="deleteMemberModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2 class="modal-title" id="deleteMemberModalLabel">회원탈퇴</h2>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="form-deleteMember">
+					<h5>탈퇴 사유</h5>
+					<div class="form-row col-md-12">
+						<input type="radio" class="custom-control-input" id="deleteType1" name="deleteType" value="1" checked> 
+						<label for="deleteType1" class="">더 이상 이 서비스를 이용하고 싶지 않아서</label>
+						<input type="radio" class="custom-control-input" id="deleteType2" name="deleteType" value="2"> 
+						<label for="deleteType2">기존의 타 사이트를 이용하고 있어서</label>
+						<input type="radio" class="custom-control-input" id="deleteType3" name="deleteType" value="3"> 
+						<label for="deleteType3">탈퇴 후 재가입을 위해서</label>
+						<input type="radio" class="custom-control-input" id="deleteType4" name="deleteType" value="4"> 
+						<label for="deleteType4">기타 사유(직접 입력)</label>
+					</div>
+					<div id="checked-etc" class="col-md-12"></div>
+				</form>
+			</div>
+			<div class="modal-footer">
+		      <a id="checkPwdForDeleteModal-nav" data-toggle="modal" data-target="#checkPwdForDeleteModal">
+		      	<input type="button" class="btn btn-primary" id="deleteMember-btn" value="확인">
+		      </a>
+		    </div>
+		</div>
+	</div>
+</div>
+
+<!-- 회원탈퇴 전 비밀번호 확인 modal -->
+<div class="modal fade" id="checkPwdForDeleteModal" tabindex="-1" role="dialog"
+	aria-labelledby="checkPwdForDeleteModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2 class="modal-title" id="checkPwdForDeleteModalLabel">회원탈퇴</h2>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="checkPwdForDelete-form">
+					<div class="col-md-12" align="center">
+						<h4>본인 확인을 위해 비밀번호를 입력하여 주세요.</h4>
+						<br/>
+						<input type="password" name="password" id="password-forDelete" class="col-md-7"/>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+		      <input type="button" class="btn btn-primary" id="checkPwdForDelete-btn" value="확인">
 		    </div>
 		</div>
 	</div>
