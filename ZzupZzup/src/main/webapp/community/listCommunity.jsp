@@ -39,20 +39,20 @@
 		});
 	}); */
 	
-	window.onload = function(){
+	$(function() {
 		if(${member.memberRole == 'user'}) {
 			// 게시물 작성하기 버튼 실행
-			$(function() {
+			
 				//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 				$("#write").on("click", function() {
 					self.location = "/community/addCommunity";
 				});
-			});
+			
 		} else {
 			alert("죄송합니다. 업주는 이용할 수 없는 서비스입니다."),
 			self.location = "../main.jsp";
 		}
-	}
+	});
 </script>
 </head>
 
@@ -93,47 +93,41 @@
 
 									<div class="col-md-4">
 										<div class="card mb-1 shadow-sm">
-											<a href="" class="thumb"> <c:if
-													test="${community.postImage[0] == null}">
-													<img src="/resources/images/uploadImages/default.jpg"
-														height="100%">
-												</c:if> <c:if test="${community.postImage[0] != null}">
-													<img
-														src="/resources/images/uploadImages/${community.postImage[0]}"
-														height="100%">
+											<a href="" class="thumb">
+												<c:if test="${community.postImage[0] == null}">
+													<img src="/resources/images/uploadImages/default.jpg" height="100%">
+												</c:if>
+												<c:if test="${community.postImage[0] != null}">
+													<img src="/resources/images/uploadImages/${community.postImage[0]}" height="100%">
 												</c:if>
 											</a>
 											<div class="card-body">
 												<c:if test="${member.memberRole == 'admin'}">
-													<strong class="d-inline-block mb-2 text-primary">신고누적수:
-														${community.postReportCount}</strong>
+													<strong class="d-inline-block mb-2 text-primary">신고누적수: ${community.postReportCount}</strong>
 												</c:if>
 												<h3 class="card-title">${community.postTitle}</h3>
-												<p>
-													<strong>작성자:</strong> ${community.member.nickname}
-												</p>
+												<p><strong>작성자:</strong> ${community.member.nickname}</p>
 												<p class="card-text restaurant-menu-text">${community.postText}</p>
-												<div
-													class="d-flex justify-content-between align-items-center">
-													<a
-														href="/community/getCommunity?postNo=${community.postNo}"
-														class="button small primary stretched-link">더 보기</a> <small
-														class="text-muted">${community.postRegDate}</small>
+												<div class="d-flex justify-content-between align-items-center">
+												
+													<c:if test="${!empty community.officialDate}">
+														<a href="/community/getCommunity?postNo=${community.postNo}" class="button small primary stretched-link">
+															<span class="badge badge-danger" style="text-align: right;">정식맛집</span>
+														</a>
+													</c:if>
+													<c:if test="${empty community.officialDate}">
+														<a href="/community/getCommunity?postNo=${community.postNo}" class="button small primary stretched-link">더 보기</a>
+													</c:if>
+													<small class="text-muted">${community.postRegDate}</small>
 												</div>
 											</div>
 										</div>
 
-										<button type="button"
-											class="btn btn-outline-danger btn-sm btn-block">
-											<svg xmlns="http://www.w3.org/2000/svg" width="16"
-												height="16" fill="currentColor" class="bi bi-heart-fill"
-												viewBox="0 0 16 16">
-		  										<path fill-rule="evenodd"
-													d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
-											</svg>
-											${community.likeCount}
-										</button>
-										<br> <br>
+										<button type="button" class="btn btn-outline-danger btn-sm btn-block">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+		  										<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+											</svg> ${community.likeCount}
+										</button><br> <br>
 
 									</div>
 								</c:forEach>

@@ -155,6 +155,20 @@ public class CommunityController {
 		return "redirect:/community/getCommunity?postNo=" + community.getPostNo();
 	}
 	
+	@RequestMapping(value="officialCommunity")
+	public String officialCommunity(@RequestParam("postNo") int postNo, @ModelAttribute("community") Community community, HttpSession session) throws Exception {
+		
+		System.out.println("/community/officialCommunity : POST");
+		
+		community = communityService.getCommunity(postNo);
+		
+		communityService.officialCommunity(community);
+		
+		System.out.println("PROMOTIOM COMPLETE");
+		
+		return "redirect:/community/listCommunity";
+	}
+	
 	@RequestMapping(value="listCommunity")
 	public String listCommunity(@ModelAttribute("search") Search search, Model model, HttpServletRequest request) throws Exception {
 		
