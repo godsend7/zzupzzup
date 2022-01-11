@@ -12,26 +12,38 @@
 <jsp:include page="/layout/toolbar.jsp" />
 <link rel="stylesheet" href="/resources/css/chat.css" />
 
+
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
 </style>
-
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
 	//=============    검색 / page 두가지 경우 모두  Event  처리 =============	
-	function fncGetList(currentPage) {
+	function fncPageNavigation(currentPage) {
+		console.log(currentPage);
 		$("#currentPage").val(currentPage);
-		$("form").attr("method", "POST").attr("action", "/chat/listChat")
-				.submit();
+		$("#chatForm").attr("method", "POST").attr("action", "/chat/listChat").submit();
 	}
-
+	
 	$(function() {
 		console.log("listChat.jsp");
 		let chatMemberList = [];
 		
+		//============= 페이지 로딩시 정렬 조건이 있다면 주입 =========
+		if(localStorage.getItem('sortType')){
+			$("input[name=searchSort]").val(localStorage.getItem('sortType'));
+		}
+		
+		//============= 페이지 로딩시 필터 조건이 있다면 표시 ========
+		if("${search.searchFilter}" != null && "${search.searchFilter}" != ""){
+			console.log("필터 조건?? ${search.searchFilter}");
+			$("input:checkbox[value=${search.searchFilter}]").prop("checked", true);
+			$("input:checkbox[value=${search.searchFilter}]").addClass("active");
+		}
+		
 		//============= "검색"  Event  처리 =============
 		$(".search-btn").on("click", function() {
-			fncGetList(1);
+			fncPageNavigation(1);
 		});
 		
 		//============= "작성하기"  Event  처리 =============		
@@ -40,156 +52,132 @@
 			window.open("/chat/addChat", "_self");
 		});
 		
-		//============= "참여하기" Event 처리 ============
-		$("a.button:contains(참여하기)").on("click", function(e) {
-			e.preventDefault();
-			let url = $(this).attr("href");
-			$.ajax({
-				url : url,
-				method : "GET",
-				dataType : "json",
-				headers : {
-					"Accept" : "application/json",
-					"Content-Type" : "application/json"
-				},
-				success : function(JSONData, status) {
-					let chatImg = JSONData.chatImage;
-					let chatState = JSONData.chatState;
-					let chatGender = genderReverseCng(JSONData.chatGender);
-					let chatAge = JSONData.chatAge;
-					let chatRegDate = JSONData.chatRegDate;
-					let regdate = new Date(chatRegDate);
-					let showStatus = "";
-					let chatMember = JSONData.chatMember;
-					let menuType = JSONData.chatRestaurant.menuType;
-					chatMemberList = [];
-					
-					//채팅방에 유저 있는지 체크
-					chatMember.map((o,i) => {
-						o.index = i;
-						if(o.inOutCheck){
-							//console.log("채팅 멤버");
-							chatMemberList.push(o.member.memberId);
+		//============= "무한스크롤"  Event  처리 =============
+		let count = 2;
+		$(window).on("scroll", function(){
+			
+			let scrTop = $(window).scrollTop();
+			let scrBtm = $(document).height() - $(window).height() - $(window).scrollTop();
+			let currentPage = $("#currentPage").val();
+			$("#currentPage").val(count);
+			//console.log("top : " + scrTop);
+			//console.log("bottom : " + scrBtm);
+			//console.log("count : " + count);
+			if(scrBtm <= 0 ){
+				//console.log("바닥이야");
+				//console.log($("#chatForm"));
+				//console.log($("#searchKeyword").val());
+				let queryStr = $("#chatForm").serialize();
+				//console.log(queryStr);
+				
+				$.ajax({
+					url: "/chat/json/listChat",
+					method: "POST",
+					dataType: "json",
+					data: queryStr,
+					beforeSend : function() {
+						
+					},
+					success : function(JSONData, status) {
+						//console.log(JSONData);
+						
+						let dom ='';
+						$.each(JSONData, function(index, item){
+							//console.log(item);
+							if(item.chatLeaderId.memberId == "${member.memberId}"){
+								
+							}
+							
+							dom += '<div class="col-md-6">'
+								+'<div class="card mb-4 shadow-sm chat-state'+item.chatState+'">'
+								+'<div class="card-head d-flex">'
+								+'<span class="badge badge-secondary chat-no mr-1">'+item.chatNo+'</span>';
+								if(item.chatLeaderId.memberId == "${member.memberId}"){
+									dom += '<span class="badge badge-secondary mr-1">개설자</span>';
+								}
+								$.each(item.chatMember, function(indexx, itemm){
+									if("${member.memberId}" == itemm.member.memberId && itemm.member.memberId != item.chatLeaderId.memberId && itemm.inOutCheck == true){
+										dom += '<span class="badge badge-secondary mr-1">참가중</span>';
+									}
+								});
+								switch(item.chatState){
+								case 1:
+									dom += '<span class="badge badge-success chat-state">모집중</span>';
+								break
+								case 2:
+									dom += '<span class="badge badge-warning chat-state">인원확정</span>';
+								break
+								case 3:
+									dom += '<span class="badge badge-info chat-state">예약확정</span>';
+								break
+								case 4:
+									dom += '<span class="badge badge-danger chat-state">모임완료</span>';
+								break
+								case 5:
+									dom += '<span class="badge badge-secondary chat-state">폭파된방</span>';
+								break
+								}
+								dom += '</div>'
+								+'<div class="card-img">'
+								+'<img src="/resources/images/uploadImages/chat/'+item.chatImage+'">'
+								+'</div>'
+								+'<div class="card-body">'
+								+'<div class="chat-rating-info">';
+								if(item.chatShowStatus == false){
+									dom += '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+								}
+								dom += '<i class="fa fa-exclamation-triangle" aria-hidden="true">'
+								+item.reportCount +' 회</i>'
+								+'</div>'
+								+'<h4 class="card-title">'+item.chatTitle+'</h4>'
+								+'<h5 class="card-text mb-2 text-muted">'+item.chatText+'</h5>'
+								+'<div class="d-flex justify-content-between align-items-end">'
+								+'<div>'
+								+'<p class="card-text text-right">'+item.chatRestaurant.restaurantName+'</p>'
+								+'<p class="card-text text-right">'+item.chatRestaurant.streetAddress+'</p>'
+								+'</div>'
+								+'<div class="btn-group">';
+								$.each(item.chatMember, function(indexxx, itemmm){
+									if("${member.memberId}" == itemmm.member.memberId && item.chatState == 4 && itemmm.inOutCheck == true && itemmm.readyCheck == true ){
+										dom += '<a href="/chat/json/listReadyCheckMember/chatNo='+item.chatNo+'" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a>';
+									}
+									
+									if("${member.memberId}" == itemmm.member.memberId){
+										dom += '<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>';
+									}else{
+										dom	+= '<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>';
+									}
+								});
+								dom += '</div>'
+								+'</div>'
+								+'</div>'
+								+'</div>'
+								+'</div>';
+						});
+						$(".thumb-list").append(dom);
+						if(JSONData.length != 0){
+							count++;
+						}else{
+							if(!$("#listChat .alert").length){
+								alert_dom = '<div class="alert alert-danger alert-dismissible" role="alert"><strong>스크롤 중지!</strong> 리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
+								$("#listChat").append(alert_dom);
+								$("#listChat .alert").fadeIn();
+							}
 						}
-						//console.log(o.member.memberId);
-						//return o;
-					});
-					
-					//연령대 문구 변환
-					let chatAgeList = "";
-					chatAge = chatAge.split(",");
-					$.each(chatAge, function(index, item){
-						chatAgeList += ageReverseCng(item);
-						if(chatAge.length != index+1){
-							chatAgeList += ', ';
+					},
+					error : function(request, status, error) {
+						let errorMsg = "로그인이 필요합니다!";
+						if(request.status == 200 && request.responseText.indexOf(errorMsg) != -1 ){					
+							alert("로그인이 필요합니다!");
+							location.href='/';
 						}
-					});
-					
-					//console.log(chatMemberList);
-					//console.log(JSONData.chatMember);
-					
-					if(JSONData.chatShowStatus == false){
-						showStatus = "<i class='fa fa-eye-slash' aria-hidden='true'></i>";
 					}
-					chatRegDate = regdate.getFullYear()+"-"+("0" + (regdate.getMonth()+1)).slice(-2)+"-"+("0"+regdate.getDate()).slice(-2);
-					if(chatState == 1){
-						chatState = "<span class='badge badge-success chat-state'>모집중</span>";
-					}else if(chatState == 2){
-						chatState = "<span class='badge badge-warning chat-state'>인원확정</span>";
-					}else if(chatState == 3){
-						chatState = "<span class='badge badge-info chat-state'>예약확정</span>";
-					}else if(chatState == 4){
-						chatState = "<span class='badge badge-danger chat-state'>모임완료</span>";
-					}else if(chatState == 5){
-						chatState = "<span class='badge badge-secondary chat-state'>폭파된방</span>";
-					}
-					
-					if(menuType == 1){
-						menuType = "한식";
-					}else if(menuType == 2){
-						menuType = "중식";
-					}else if(menuType == 3){
-						menuType = "양식";
-					}else if(menuType == 4){
-						menuType = "일식";
-					}else if(menuType == 5){
-						menuType = "카페";
-					}
-					
-					let displayValueBd = 
-						'<div class="get-chat-info mb-3">'
-						+'<div class="d-flex justify-content-between">'
-						+'<div><span class="badge badge-secondary chat-no">'+JSONData.chatNo+'</span></div>'
-						+'<div id="getChatState">'+chatState+'</div>'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<h3 class="card-title mb-2">'+JSONData.chatTitle+'</h3>'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<h4 class="card-subtitle mb-2">'+JSONData.chatText+'</h4>'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<div>참가중인 인원수</div>'
-						+'<div>'+JSONData.chatMemberCount+'</div>'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<div>참가가능한 성별</div>'
-						+'<div id="getChatGender">'+chatGender+'</div>'
-						+'<input type="hidden" name="chatGender" id="chatGender"  value="'+JSONData.chatGender+'">'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<div>참가가능한 연령대</div>'
-						+'<div id="getChatAge">'+chatAgeList+'</div>'
-						+'<input type="hidden" name="chatAge" id="chatAge" value="'+JSONData.chatAge+'">'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<div>개설일</div>'
-						+'<div>'+chatRegDate+'</div>'
-						+'</div>'
-						+'<div class="d-flex justify-content-between">'
-						+'<div>'+showStatus+ ' <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>' +JSONData.reportCount+' 회</div>'
-						+'</div>'
-						+'</div>'
-						+'<div class="get-chat-user-info mb-3">'
-						+'<div class="chatProfile d-flex flex-row align-items-center">'
-						+'<img src="/resources/images/common/'+JSONData.chatLeaderId.profileImage+'">'
-						+'<div class="dropdown-parent">'
-						+'<a href="">'+JSONData.chatLeaderId.nickname+'</a>'
-						+'<input type="hidden" id="chatLeaderId" name="chatLeaderId" value="'+JSONData.chatLeaderId.memberId+'">'
-						+'</div>'
-						+'<span class="badge badge-info gender">'+JSONData.chatLeaderId.gender+'</span>'
-						+'<span class="badge badge-warning age">'+JSONData.chatLeaderId.ageRange+'</span>'
-						+'</div>'
-						+'<div>'+JSONData.chatLeaderId.statusMessage+'</div>'
-						+'</div>'
-						+'<div clas="get-chat-restaurant-info">'
-						+'<div>'+JSONData.chatRestaurant.restaurantName+' ('+menuType+')</div>'
-						+'<div>'+JSONData.chatRestaurant.restaurantTel+'</div>'
-						+'<div>'+JSONData.chatRestaurant.streetAddress+'</div>'
-						+'<div>'+JSONData.chatRestaurant.areaAddress+'</div>'
-						+'</div>';
-					let displayValueFt = "<input type='button' data-target="+JSONData.chatNo+" class='button small warning' value='대화기록보기'/>"
-					+"<input type='button' data-target="+JSONData.chatNo+" class='button small info' value='수정하기'/>"
-					+"<input type='button' class='button small secondary' data-dismiss='modal' value='닫기' />"
-					+"<input type='button' data-target="+JSONData.chatNo+" class='button small primary' value='입장하기'>"
-					$(".get-chat-con").html(displayValueBd);
-					$("#getChatModal .modal-footer").html(displayValueFt);
-					if(chatImg == 'chatimg.jpg'){
-						$("#getChatModal .modal-body").css("background-image", "url(/resources/images/sub/"+chatImg+")");
-					}else{
-						$("#getChatModal .modal-body").css("background-image", "url(/resources/images/uploadImages/chat/"+chatImg+")");
-					}
-				},
-				error : function(request, status, error) {
-					alert("code:" + request.status + "\n" + "message:"
-							+ request.responseText + "\n" + "error:"
-							+ error);
-				}
-			});
+				});
+			}
 		});
 		
 		//============= "평가하기" Event 처리 ============
-		$("a.button:contains(평가하기)").on("click", function(e) {
+		$("body").on("click", "a.button:contains(평가하기)", function(e) {
 			e.preventDefault();
 			let url = $(this).attr("href");
 			$.ajax({
@@ -234,7 +222,7 @@
 		});
 		
 		//============= "평가하기" Event 처리 ============
-		$("button:contains(평가)").on("click", function(e) {
+		$("body").on("click", "button:contains(평가)", function(e) {
 			console.log("제출 클릭");
 			
 			let ratingFlag = false;
@@ -244,7 +232,7 @@
 		});
 		
 		//============= "평가하기 예" Event 처리 ============
-		$("#ratingGo").on("click", function(e) {
+		$("body").on("click", "#ratingGo", function(e) {
 		
 			let url = "/rating/json/addRating";
 			let ratingArr = [];
@@ -380,6 +368,37 @@
 			location.href="/chat/getChatEntrance?chatNo="+chatNo;
 		});
 		
+		//정렬 클릭
+		$(".search-sort").on("click", function(e){
+			e.preventDefault();
+			let sortType = $(this).attr("data-sort");
+			console.log(sortType);
+			
+			let localStorage = window.localStorage;
+			localStorage.setItem('sortType', sortType);
+			
+			$("input[name=searchSort]").val(localStorage.getItem('sortType'));
+			
+			console.log(localStorage.getItem('sortType'));
+			
+			fncPageNavigation(1);
+		});
+		
+		//필터 클릭
+		$("input:checkbox[name='searchFilter']").on("click", function(e){
+			//console.log("클릭함");
+			let isActive = $(this).hasClass("active");
+			if(isActive){
+				$("input:checkbox[name='searchFilter']").prop("checked", false);
+				$("input:checkbox[name='searchFilter']").removeClass("active");
+			}else{
+				$("input:checkbox[name='searchFilter']").prop("checked", false);
+				$("input:checkbox[name='searchFilter']").removeClass("active");
+				$(this).prop("checked", true);
+				$(this).addClass("active");
+				fncPageNavigation(1);
+			}
+		});
 		//젠더 데이터 값 변경
 		function genderCng(gender){
 			switch(gender){				
@@ -387,18 +406,6 @@
 					return 2;
 				case 'male':
 					return 1;
-			}
-		}
-		
-		//젠더 데이터 값 변경
-		function genderReverseCng(gender){
-			switch(gender){				
-				case 2:
-					return '여자';
-				case 1:
-					return '남자';
-				default :
-					return '성별 무관';
 			}
 		}
 		
@@ -419,41 +426,6 @@
 					return 6;
 			}
 		}
-		
-		//연령대 데이터 값 변경
-		function ageReverseCng(age){
-			switch(age){
-				case '1':
-					return '10대';
-				case '2':
-					return '20대';
-				case '3':
-					return '30대';
-				case '4':
-					return '40대';
-				case '5':
-					return '50대';
-				case '6':
-					return '60대 이상';
-				case '7':
-					return '연령대 무관'
-			}
-		}
-		/* let page = 1;
-		//==> 페이징 스크롤
-		$(function(){
-			getList(page);
-			page ++;
-		});
-		
-		$(window).scroll(function(){
-			if($(window).srollTop() + 200 >= $(document).height() - $(window).height()){
-				getList(page);
-				page++;
-			}
-		}); */
-		
-			
 			
 	});
 </script>
@@ -478,12 +450,36 @@
 						<h3>쩝쩝친구 구하기</h3>
 
 						<!-- S:Search -->
-						<form class="form-inline" name="detailForm">
+						<form id="chatForm" name="chatForm">
 							<div class="container">
 								<div class="row search-box gtr-uniform">
 									<div class="col-md-4 col-sm-12">
-										<a href="" class="button normal icon solid fa-sort"> 정렬</a> <a
-											href="" class="button normal icon solid fa-filter"> 필터</a>
+										
+										<div class="dropmenu float-left mr-2">
+											<a href="" class="button normal icon solid fa-sort dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">정렬</a>
+											<div class="dropmenu-list" aria-labelledby="dropmenuList">
+												<a class="dropmenu-item search-sort" href="#" data-sort="latest">최신순</a>
+												<a class="dropmenu-item search-sort" href="#" data-sort="oldest">오래된 순</a>
+												<input type="hidden" name="searchSort" value="">
+											</div>
+										</div>
+										<div class="dropmenu float-left">
+											<a href="" class="button normal icon solid fa-filter dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">필터</a>
+											
+											<div class="dropmenu-list" aria-labelledby="dropmenuList">
+												<input type="checkbox" id="filterMy" class="search-filter" name="searchFilter" value="11"><label for="filterMy">내가 참여중인 채팅방</label>
+												<input type="checkbox" id="chatAge1" class="search-filter" name="searchFilter" value="1"><label for="chatAge1">10대</label>
+												<input type="checkbox" id="chatAge2" class="search-filter" name="searchFilter" value="2"><label for="chatAge2">20대</label>
+												<input type="checkbox" id="chatAge3" class="search-filter" name="searchFilter" value="3"><label for="chatAge3">30대</label>
+												<input type="checkbox" id="chatAge4 " class="search-filter" name="searchFilter" value="4"><label for="chatAge4">40대</label>
+												<input type="checkbox" id="chatAge5" class="search-filter" name="searchFilter" value="5"><label for="chatAge5">50대</label>
+												<input type="checkbox" id="chatAge6" class="search-filter" name="searchFilter" value="6"><label for="chatAge6">60대 이상</label>
+												<input type="checkbox" id="chatAge7" class="search-filter" name="searchFilter" value="7"><label for="chatAge7">연령대 무관</label>
+												<input type="checkbox" id="male" class="search-filter" name="searchFilter" value="8"><label for="male">남자</label>
+												<input type="checkbox" id="female" class="search-filter" name="searchFilter" value="9"><label for="female">여자</label>
+												<input type="checkbox" id="malefemale" class="search-filter" name="searchFilter" value="10"><label for="malefemale">성별 무관</label>
+											</div>
+										</div>
 									</div>
 									<div class="col-md-6 col-sm-12 d-flex">
 										<select id="searchCondition" name="searchCondition">
@@ -491,15 +487,11 @@
 												${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>음식점명</option>
 											<option value="1"
 												${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>음식점주소</option>
-										</select> <input type="text" id="searchKeyword" name="searchKeyword"
-											placeholder="검색어" autocomplete="off"
-											value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
-										<a href="#"
-											class="button primary icon solid fa-search search-btn"></a>
+										</select> <input type="text" id="searchKeyword" name="searchKeyword" placeholder="검색어" autocomplete="off" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
+										<a href="#" class="button primary icon solid fa-search search-btn"></a>
 
 										<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
-										<input type="hidden" id="currentPage" name="currentPage"
-											value="" />
+										<input type="hidden" id="currentPage" name="currentPage" value="1" />
 									</div>
 									<div class="col-md-2 d-flex justify-content-end">
 										<a href="" class="button svg-btn" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -516,102 +508,93 @@
 						<div class="container">
 							<div class="row thumb-list">
 
-								<c:forEach var="chat" items="${list}">
-									<div class="col-md-6">
-										<div class="card mb-4 shadow-sm chat-state${chat.chatState}">
-											<div class="card-head d-flex">
-												<span class="badge badge-secondary chat-no mr-1">${chat.chatNo }</span>
-												<c:if test="${chat.chatLeaderId.memberId == member.memberId }">
-												<span class="badge badge-secondary mr-1">개설자</span>
-												</c:if>
-												<c:set var="i" value="0" />
-												<c:forEach var="chatMember" items="${chat.chatMember}">
-												<c:set var="i" value="${ i+1 }" />
-													<c:if test="${member.memberId == chatMember.member.memberId && chatMember.member.memberId != chat.chatLeaderId.memberId && chatMember.inOutCheck == true}">
-													<span class="badge badge-secondary mr-1">참가중</span>
+								<c:if test="${empty list }">
+									<div class="col-md-12 text-center">
+										찾으시는 채팅방이 없습니다.
+									</div>
+								</c:if>
+								<c:if test="${!empty list }">
+									<c:forEach var="chat" items="${list}">
+										<div class="col-md-6">
+											<div class="card mb-4 shadow-sm chat-state${chat.chatState}">
+												<div class="card-head d-flex">
+													<span class="badge badge-secondary chat-no mr-1">${chat.chatNo }</span>
+													<c:if test="${chat.chatLeaderId.memberId == member.memberId }">
+													<span class="badge badge-secondary mr-1">개설자</span>
 													</c:if>
-												</c:forEach>
-												<c:choose>
-													<c:when test="${chat.chatState=='1'}">
-														<span class="badge badge-success chat-state">모집중</span>
-													</c:when>
-													<c:when test="${chat.chatState=='2'}">
-														<span class="badge badge-warning chat-state">인원확정</span>
-													</c:when>
-													<c:when test="${chat.chatState=='3'}">
-														<span class="badge badge-info chat-state">예약확정</span>
-													</c:when>
-													<c:when test="${chat.chatState=='4'}">
-														<span class="badge badge-danger chat-state">모임완료</span>
-													</c:when>
-													<c:otherwise>
-														<span class="badge badge-secondary chat-state">폭파된방</span>
-													</c:otherwise>
-												</c:choose>
-											</div>
-											<div class="card-img">
-												<img src="/resources/images/uploadImages/chat/${chat.chatImage}">
-											</div>
-											<div class="card-body">
-												<div class="chat-rating-info">
-													<c:if test="${chat.chatShowStatus == false }">
-														<i class="fa fa-eye-slash" aria-hidden="true"></i>
-													</c:if>
-
-													<i class="fa fa-exclamation-triangle" aria-hidden="true">
-														${chat.reportCount } 회</i>
+													<c:set var="i" value="0" />
+													<c:forEach var="chatMember" items="${chat.chatMember}">
+													<c:set var="i" value="${ i+1 }" />
+														<c:if test="${member.memberId == chatMember.member.memberId && chatMember.member.memberId != chat.chatLeaderId.memberId && chatMember.inOutCheck == true}">
+														<span class="badge badge-secondary mr-1">참가중</span>
+														</c:if>
+													</c:forEach>
+													<c:choose>
+														<c:when test="${chat.chatState=='1'}">
+															<span class="badge badge-success chat-state">모집중</span>
+														</c:when>
+														<c:when test="${chat.chatState=='2'}">
+															<span class="badge badge-warning chat-state">인원확정</span>
+														</c:when>
+														<c:when test="${chat.chatState=='3'}">
+															<span class="badge badge-info chat-state">예약확정</span>
+														</c:when>
+														<c:when test="${chat.chatState=='4'}">
+															<span class="badge badge-danger chat-state">모임완료</span>
+														</c:when>
+														<c:otherwise>
+															<span class="badge badge-secondary chat-state">폭파된방</span>
+														</c:otherwise>
+													</c:choose>
 												</div>
-												<h4 class="card-title">${chat.chatTitle}</h4>
-												<h5 class="card-text mb-2 text-muted">${chat.chatText}</h5>
-													<div class="d-flex justify-content-between align-items-end">
-														<div>
-															<p class="card-text text-right">${chat.chatRestaurant.restaurantName}</p>
-															<p class="card-text text-right">${chat.chatRestaurant.streetAddress}</p>
-														</div>
-														<div class="btn-group">
-															<%-- <c:forEach var="chatMember" items="${chat.chatMember}">
-																<c:if test="${member.memberId == chatMember.member.memberId && chat.chatState == 4 && chatMember.inOutCheck == true && chatMember.readyCheck == true}"> --%>
-																<a href="/chat/json/listReadyCheckMember/chatNo=${chat.chatNo}" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a> 
-																<%-- </c:if>
-															</c:forEach> --%>
-															<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal">참여하기</a>
-														</div>
+												<div class="card-img">
+													<img src="/resources/images/uploadImages/chat/${chat.chatImage}">
+												</div>
+												<div class="card-body">
+													<div class="chat-rating-info">
+														<c:if test="${chat.chatShowStatus == false }">
+															<i class="fa fa-eye-slash" aria-hidden="true"></i>
+														</c:if>
+	
+														<i class="fa fa-exclamation-triangle" aria-hidden="true">
+															${chat.reportCount } 회</i>
 													</div>
+													<h4 class="card-title">${chat.chatTitle}</h4>
+													<h5 class="card-text mb-2 text-muted">${chat.chatText}</h5>
+														<div class="d-flex justify-content-between align-items-end">
+															<div>
+																<p class="card-text text-right">${chat.chatRestaurant.restaurantName}</p>
+																<p class="card-text text-right">${chat.chatRestaurant.streetAddress}</p>
+															</div>
+															<div class="btn-group">
+																<c:forEach var="chatMember" items="${chat.chatMember}">
+																	<c:if test="${member.memberId == chatMember.member.memberId && chat.chatState == 4 && chatMember.inOutCheck == true && chatMember.readyCheck == true}">
+																	<a href="/chat/json/listReadyCheckMember/chatNo=${chat.chatNo}" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a> 
+																	</c:if>
+																	
+																	<c:choose>
+																		<c:when test="${member.memberId == chatMember.member.memberId}">
+																			<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>
+																		</c:when>
+																		<c:when test="${member.memberId != chatMember.member.memberId}">
+																			<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>
+																		</c:when>
+																	</c:choose>
+																	
+																</c:forEach>
+															</div>
+														</div>
+												</div>
 											</div>
 										</div>
-									</div>
-								</c:forEach>
+									</c:forEach>
+								</c:if>
 							</div>
 							<!-- E:Thumbnail -->
 
-							<!-- S:Infinity page -->
-							<div class="col-12 text-center thumb-more">
-								<a href="#" class="icon solid fa fa-plus-circle"></a>
-							</div>
-							<!-- E:Infinity page -->
-
 							<!-- S:Modal -->
-							<!-- 채팅 정보자세히 보기 모달 -->
-							<div class="modal fade" id="getChatModal" tabindex="-1"
-								aria-labelledby="getChatModalLabel" aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title" id="getChatModalLabel">채팅방 정보 상세보기</h5>
-											<button type="button" class="close" data-dismiss="modal"
-												aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-											</button>
-										</div>
-										<div class="modal-body">
-											<div class="get-chat-con"></div>
-										</div>
-										<div class="modal-footer">
-											
-										</div>
-									</div>
-								</div>
-							</div>
+							<!-- 채팅방 정보보기 모달 -->
+							<jsp:include page='/chat/getChatModal.jsp'/>
 							
 							<!-- 모임중에만 입장 모달 -->
 							<div class="modal fade" id="chatStateModal" tabindex="-1" aria-labelledby="chatStateModalLabel" aria-hidden="true">

@@ -263,6 +263,7 @@ button,
     
 /* input */
 input:disabled { background-color: rgba(0,0,0,0.1); }
+input[type="checkbox"] + label, input[type="radio"] + label { color: #333; }
     
 /* Modal */    
  .modal-header .close {
@@ -330,10 +331,10 @@ input:disabled { background-color: rgba(0,0,0,0.1); }
 
 /* dropmenu */
 .dropmenu { position: relative; }
-.dropmenu-list { display: none; position: absolute; top: 100%; left: 0px; min-width: 10rem; padding: 0.5rem 0; margin: 0.125rem 0 0; font-size: 1rem; color: #212529; text-align: left; list-style: none; background-color: #fff; background-clip: padding-box; border: 1px solid rgba(0,0,0,.15); border-radius: 0.25rem; z-index: 1000; }
+.dropmenu-list { display: none; position: absolute; top: 100%; left: 0px; min-width: 12rem; padding: 0.5rem; margin: 0.125rem 0 0; color: #212529; text-align: left; list-style: none; background-color: #fff; background-clip: padding-box; border: 1px solid rgba(0,0,0,.15); border-radius: 0.25rem; z-index: 1000; }
 .dropmenu-list.active { display: block; }
-.dropmenu-item { display: block; width: 100%; padding: 0.25rem 1.5rem; clear: both; font-weight: 400; color: #212529; text-align: inherit; white-space: nowrap; background-color: transparent; border: 0; }
-.dropmenu-list input[type="checkbox"] + label, .dropmenu-list input[type="radio"] + label { padding-left: 20px; font-size: 0.9em; }
+.dropmenu-list .dropmenu-item { display: block; width: 100%; padding: 0.25rem 0.5rem; clear: both; font-weight: 400; color: #212529; text-align: inherit; white-space: nowrap; background-color: transparent; border: 0; }
+.dropmenu-list input[type="checkbox"] + label, .dropmenu-list input[type="radio"] + label { padding-left: 1.2em; padding-right: 0.5em; }
 .dropmenu-list input[type="checkbox"] + label:before, .dropmenu-list input[type="radio"] + label:before { width: 15px; height: 15px; top: 50%; margin-top: -7.5px; line-height: 15px; font-size: 0.7em; }
 
 

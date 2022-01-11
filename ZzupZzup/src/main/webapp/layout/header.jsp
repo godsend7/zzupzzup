@@ -20,14 +20,11 @@
 }
 </style>
 
-<script>
-	console.log("header 아니면 여기가 먼저??");
-</script>
-
 <!-- start: Header -->
 <header id="header">
 	<!-- 현재 나의 PATH 가져오기 -->
-	<c:set var="path" value="${pageContext.request.requestURI}" /> 
+	<%-- <c:set var="path" value="${pageContext.request.requestURI}" />  --%>
+	<c:set var="path" value='${requestScope["javax.servlet.forward.request_uri"]}' />
 	
 	<a href="/" class="logo">
 		<strong><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-piggy-bank" viewBox="0 0 16 16">
@@ -36,10 +33,7 @@
 		</svg> ZZUPZZUPDUCE_101</strong>
 	</a>
 	
-	<script>
-		console.log("header 실행");
-	</script>
-	<%-- <c:if test = "${fn:contains(path, '')}"> --%>
+	<c:if test = "${empty path}">
 		<form class="col-12 col-lg-auto mb-3 mb-lg-0" id="mapSearch">
 			<div class="col-md-12 col-sm-12 d-flex">
 			<div>
@@ -51,14 +45,14 @@
 				</select>
 			</div>
 			<div>
-	    		<input type="search" id="searchKeyword" class="form-control" placeholder="${path}" aria-label="Search" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
+	    		<input type="search" id="searchKeyword" class="form-control" placeholder="검색어를 입력해주세요" aria-label="Search" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
 	    	</div>
 	    	<div>
-	    		<a href="javascript:searchMap();" class="button primary icon solid fa-search search-btn"></a>
+	    		<a href="javascript:searchMap();" class="button primary icon solid fa-search search-btn" id="searchButton"></a>
 	    	</div>
 	    	</div>
 	    </form>
-	<%-- </c:if> --%>
+	</c:if>
 	<ul class="icons">
 		<c:if test="${ empty member}">
 			<!-- Button trigger modal -->

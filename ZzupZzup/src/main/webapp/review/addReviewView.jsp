@@ -438,12 +438,14 @@
 								
 								<!-- Break -->
 								<div class="col-12">
+								<br>
 									<label for="reviewDetail">어떤 점이 좋았나요?</label>
 									<textarea name="reviewDetail" id="reviewDetail" placeholder="100자 이내로 입력해주세요." maxlength='100' rows="2"></textarea>
 								</div>
 								
 								<!-- Break -->
 								<div class="col-12">
+								<br>
 									<label for="hashTag">해시태그 등록</label>
 									<input id="hashTagAuto" type="text" placeholder="#을 입력하여 해시태그를 등록해보세요."><br>
 									

@@ -231,10 +231,10 @@
 		WHERE POST_NO = #{postNo};
 		
 		INSERT
-		INTO RESTAURANT(RESTAURANT_NAME, RESTAURANT_TEL, RESERVATION_STATUS, 
+		INTO RESTAURANT(RESTAURANT_NAME, RESTAURANT_TEL, RESERVATION_STATUS, RESTAURANT_REG_DATE,
 		STREET_ADDRESS, AREA_ADDRESS, REST_ADDRESS, LATITUDE, LONGITUDE, MENU_TYPE)
-		VALUES (#{restaurantName}, #{restaurantTel}, false, #{streetAddress}, 
-		#{areaAddress}, #{restAddress}, #{latitude}, #{longitude}, #{menuType});
+		VALUES (#{restaurantName}, #{restaurantTel}, false, now(), #{streetAddress}, #{areaAddress}, 
+		#{restAddress}, #{latitude}, #{longitude}, #{menuType});
 	</update>
 	
 </mapper>

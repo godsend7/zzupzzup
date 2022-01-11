@@ -17,6 +17,7 @@
 <script defer src="/resources/js/breakpoints.min.js"></script>
 <script defer src="/resources/js/util.js"></script>
 <script defer src="/resources/js/main.js"></script>
+<script defer src="/resources/js/custom.js"></script>
 
 <link rel="stylesheet" href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="/resources/css/main.css" />

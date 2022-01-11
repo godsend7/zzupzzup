@@ -39,7 +39,6 @@ public class ChatDAOImpl implements ChatDAO {
 		}else {
 			return 0;
 		}
-		
 	}
 
 	@Override
