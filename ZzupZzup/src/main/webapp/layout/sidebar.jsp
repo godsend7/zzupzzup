@@ -3,7 +3,7 @@
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<<script type="text/javascript">
+<script type="text/javascript">
 
 	var imgArray = new Array();
 	imgArray[0] = "../resources/images/common/ad1.JPG";
