@@ -241,7 +241,7 @@
 						//console.log(mem_profile_img);
 						console.log("Ddddd" + "${chat.chatLeaderId.nickname}");
 						const chatLeaderClass = "${chat.chatLeaderId.memberId}" == item.member.memberId ? "chat-leader":"";
-						dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+'"><img src="/resources/images/common/'+mem_profile_img+'"><div class="dropdown-parent"><a href="" class="member_dropdown" data-target="'+item.member.memberId+'">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
+						dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+'"><img src="/resources/images/common/'+mem_profile_img+'"><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
 						console.log(item.member);
 					});
 					userList.html(dom);
@@ -313,13 +313,22 @@
 			e.preventDefault();
 			let dataTarget = $(this).attr("data-target");
 			let dom = '';
-			dom += '<div class="dropdown-box">'
-				+ '<a href="/member/getMember?memberId='+dataTarget+'">프로필 보기</a>'
-				+ '<a href="" class="reportModal" data-target="#reportModal" data-target="#reportModal" data-toggle="modal" data-id="[2,'+dataTarget+']">참여자 신고</a>'
-				+ '<a href="/chat/deleteForbiddenMember?chatNo='+${chat.chatNo}+'&memberId='+dataTarget+'">참여자 강퇴</a>'
-				+ '</div>';
-			$(".dropdown-box").remove();
-			$(this).parent().append(dom);
+			dom += '<div class="dropmenu-list">'
+				+ '<a href="/member/getMember?memberId='+dataTarget+'" class="dropmenu-item">프로필 보기</a>'
+				+ '<a href="" class="reportModal dropmenu-item" data-target="#reportModal" data-target="#reportModal" data-toggle="modal" data-id="[2,'+dataTarget+']" class="dropmenu-item">참여자 신고</a>';
+			if("${chat.chatLeaderId.memberId}" == "${member.memberId}" && "${member.memberId}" != dataTarget){
+				dom += '<a href="/chat/deleteForbiddenMember?chatNo='+${chat.chatNo}+'&memberId='+dataTarget+'" class="dropmenu-item" data-target="dataTarget">참여자 강퇴</a>'
+			}
+			
+			dom += '</div>';
+			let isActive = $(this).siblings(".dropmenu-list").hasClass("active");
+			console.log(isActive);
+			if(isActive){
+				$(".user-list .dropmenu-list").remove();
+			}else{
+				$(".user-list .dropmenu-list").remove();
+				$(this).parent().append(dom);
+			}
 		});
 		
 		//============= "예약하기" Event 처리 ============
@@ -504,12 +513,12 @@
 									<h3 class="flex-fill">참여자 목록<small>(<b>${chat.chatMemberCount}</b>/10)</small></h3>
 									<div class="chat-header-util">
 										<input type="button" class="button small secondary" data-toggle="modal" data-target="#chatLeaderOuteModal" value="나가기" />
-										<div class="dropdown-parent">
-											<a href="" class="svg-btn chat-info-button dropdown-parent" title="채팅방,음식점 정보보기"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></a>
-											<div class="dropdown-box">
-												<a href="/restaurant/getRestaurant?restaurantNo=${chat.chatRestaurant.restaurantNo}" target="_blank">음식점 정보</a>
-												<a href="/chat/json/getChat/${chat.chatNo}" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">채팅방 정보</a>
-												<a href="/chat/listChat">채팅방 목록</a>
+										<div class="dropmenu">
+											<a href="" class="svg-btn chat-info-button dropmenu-btn" data-toggle="dropmenu" title="채팅방,음식점 정보보기"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></a>
+											<div class="dropmenu-list" aria-labelledby="dropmenuList">
+												<a href="/restaurant/getRestaurant?restaurantNo=${chat.chatRestaurant.restaurantNo}" class="dropmenu-item" target="_blank">음식점 정보</a>
+												<a href="/chat/json/getChat/${chat.chatNo}" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn" class="dropmenu-item">채팅방 정보</a>
+												<a href="/chat/listChat" class="dropmenu-item">채팅방 목록</a>
 											</div>
 										</div>
 									</div>
