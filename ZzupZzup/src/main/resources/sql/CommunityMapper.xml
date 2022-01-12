@@ -118,7 +118,10 @@
 			MENU_TYPE = #{menuType},
 			MAIN_MENU_TITLE = #{mainMenuTitle},
 			MAIN_MENU_PRICE = #{mainMenuPrice},
-			RECEIPT_IMAGE = #{receiptImage}
+			
+			<if test="receiptImage != null">
+				RECEIPT_IMAGE = #{receiptImage}
+			</if>
 		</set>
 		WHERE POST_NO = #{postNo}
 	</update>
