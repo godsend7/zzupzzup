@@ -3,7 +3,7 @@
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 
 	var imgArray = new Array();
 	imgArray[0] = "../resources/images/common/ad1.JPG";
@@ -17,7 +17,7 @@
 		objImg.src = imgArray[imgNum];
 	}
 
-</script>
+</script> -->
 
 <%-- <!-- 실시간 시간 정보 DATA -->
 <%@ page import="java.util.Date" %>
@@ -54,7 +54,7 @@
 <!-- 실시간 시간 정보 DATA2  -->
 
 <!-- <body onload="showClock()"> -->
-<body>
+<!-- <body> -->
 <!-- S:Sidebar -->
 <div id="sidebar" class="inactive">
 	<div class="inner">
@@ -185,10 +185,10 @@
 				<li class="icon solid fa-home">서울시 종로구 종로 69 서울YMCA</li>
 			</ul>
 			<!-- <div id="divClock" class="clock"></div> -->
-			<!-- <a href="https://www.mcdonalds.co.kr/kor/promotion/detail.do?page=1&seq=347&utm_medium=Corp_site&utm_source=Main_cardblock&utm_campaign=1227_Prosperity" target="_black">
-				<img alt="mcdonald" src="../resources/images/common/ad.JPG" width="100%">
-			</a> -->
-			<img id = "adImgs" width="100%" border="0">
+			<a href="https://www.mcdonalds.co.kr/kor/promotion/detail.do?page=1&seq=347&utm_medium=Corp_site&utm_source=Main_cardblock&utm_campaign=1227_Prosperity" target="_black">
+				<img alt="mcdonald" src="../resources/images/common/ad1.JPG" width="100%">
+			</a>
+			<!-- <img id = "adImgs" width="100%" border="0"> -->
 		</section>
 
 		<!-- Footer -->
@@ -203,5 +203,5 @@
 <!-- S: Login Modal -->
 <jsp:include page="/member/modal-archive.jsp" />
 <!-- E: Login Modal -->
-</body>
+<!-- </body> -->
 <!-- </body> -->
