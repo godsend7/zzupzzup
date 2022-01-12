@@ -244,9 +244,9 @@
 		
 		//logout
 		$("#logout").on("click", function() {
-			if(${member.loginType == 1}){
+			if(${sessionScope.member.loginType == 1}){
 				$(self.location).attr("href", "/member/logout");
-			} else if(${member.loginType == 2}) {
+			} else if(${sessionScope.member.loginType == 2}) {
 				logoutFromKakao();
 				$(self.location).attr("href", "/member/logout");
 			}
