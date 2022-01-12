@@ -139,9 +139,23 @@ public class CommunityController {
 	
 	
 	@RequestMapping(value="updateCommunity", method=RequestMethod.POST)
-	public String updateCommunity(@ModelAttribute("community") Community community, HttpSession session) throws Exception {
+	public String updateCommunity(@ModelAttribute("community") Community community, MultipartHttpServletRequest uploadFile, 
+			@RequestParam(value="file", required = false) MultipartFile uploadReceiptFile, 
+			HttpServletRequest request, HttpSession session) throws Exception {
 		
 		System.out.println("/community/updateCommunity : POST");
+		
+		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
+		uploadFilePath(uploadFile, empty, community);
+		
+		if(uploadReceiptFile != null) {
+			String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
+			String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
+			
+			System.out.println("receiptImage : " + receiptImage);
+			
+			community.setReceiptImage(receiptImage);
+		}
 		
 		communityService.updateCommunity(community);
 		
@@ -164,7 +178,7 @@ public class CommunityController {
 		
 		communityService.officialCommunity(community);
 		
-		System.out.println("PROMOTIOM COMPLETE");
+		System.out.println("PROMOTION COMPLETE");
 		
 		return "redirect:/community/listCommunity";
 	}
@@ -246,6 +260,8 @@ public class CommunityController {
 	}
 	
 	private String uploadReceiptImg(MultipartFile uploadReceiptFile, String vacant) {
+		
+		System.out.println("CHECK POINT : " + uploadReceiptFile.getOriginalFilename());
 		
 		String realReceipt = uploadReceiptFile.getOriginalFilename();
 		
