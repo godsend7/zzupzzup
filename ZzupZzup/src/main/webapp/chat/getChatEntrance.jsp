@@ -315,7 +315,7 @@
 			let dom = '';
 			dom += '<div class="dropdown-box">'
 				+ '<a href="/member/getMember?memberId='+dataTarget+'">프로필 보기</a>'
-				+ '<a href="" class="reportModal" data-target="#reportModal" data-target="#reportModal" data-toggle="modal" data-id="[2,'+dataTarget+']">참여자 신고</a>'
+				+ '<a href="" class="reportModal" data-target="#reportModal" data-target="#reportModal" data-toggle="modal" data-id=\'["2",\"'+dataTarget+'"]\'>참여자 신고</a>'
 				+ '<a href="/chat/deleteForbiddenMember?chatNo='+${chat.chatNo}+'&memberId='+dataTarget+'">참여자 강퇴</a>'
 				+ '</div>';
 			$(".dropdown-box").remove();
