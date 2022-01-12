@@ -135,15 +135,22 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	@Override
 	public List<Restaurant> listRestaurantName(Map<String, Object> map) {
 		System.out.println("restaurantDaoImpl listRestaurantName map : " + map);
-	      
-	      List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listRestaurantName", map);
-	      
-	      return list;
+		
+		List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listRestaurantName", map);
+	    
+		return list;
+	}
+	
+	@Override
+	public List<Restaurant> listReservationRestaurantName(Map<String, Object> map) {
+		
+		List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listReservationRestaurantName", map);
+		
+		return list;
 	}
 
 	@Override
 	public List<Restaurant> listMainRestaurant(Search search) throws Exception {
-		// TODO Auto-generated method stub
 		return sqlSession.selectList("RestaurantMapper.listMainRestaurant", search);
 	}
 
