@@ -160,7 +160,6 @@
 									<ul>
 										<li><a href="/member/listUser">유저 목록 조회</a></li>
 										<li><a href="/member/listOwner">업주 목록 조회</a></li>
-										<li><a href="/member/getMember?memberId=user05@zzupzzup.com">회원 정보 조회</a></li>
 										<li><a href="/reservation/listReservation">예약/주문 및 결제 내역</a></li>
 										<li><a href="/restaurant/listRestaurant">등록된 전체 음식점</a></li>
 										<li><a href="/restaurant/listRequestRestaurant">음식점 등록 요청 내역</a></li>

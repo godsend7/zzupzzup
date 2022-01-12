@@ -14,6 +14,9 @@ public interface ReservationDAO {
 
 	// SELECT ONE
 	public Reservation getReservation(int reservationNo) throws Exception ;
+	
+	// SELECT review list
+	public String reviewCheck(Map<String, Object> map) throws Exception ;
 
 	// SELECT LIST
 	public List<Reservation> listReservation(Map<String, Object> map) throws Exception ;// 내일 질문

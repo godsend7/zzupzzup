@@ -42,11 +42,9 @@
 .chat-header .chat-header-util .svg-btn.chat-info-button:hover { background-color: #aaa; color: #888; }
 .chat-header .chat-header-util .svg-btn.chat-info-button svg { transition: all 0.5s; }
 .chat-header .chat-header-util .svg-btn.chat-info-button:hover svg { color: #888; }
-.dropdown-parent { position: relative; }
-.chat-user .dropdown-parent { display: inline-block; }
-.dropdown-box { position: absolute; top: 50%; left: 0px; background-color: #fff; border: 1px solid #e8e5dd; margin-top: 23px; }
-.dropdown-box > a { padding: 5px 10px; border-bottom: 1px solid #e8e5dd; display: block; white-space: nowrap; }
-.dropdown-box > a:last-child { border-bottom: none; }
+.chat-user .dropmenu { display: inline-block; }
+.chat-user .dropmenu-list { min-width: auto; }
+
 
 .chat-body { padding: 20px; flex: 12; }
 .chat-contents .chat-body { background-color: #f3f3f3; }

@@ -31,6 +31,8 @@
 		$(this).removeData('id');
 		var reportArray = $(this).data('id');
 		//console.log(reportArray);
+		//console.log(reportArray[0]);
+		//console.log(reportArray[1]);
 		reportCategory = reportArray[0];
 		toReport = reportArray[1];
 		

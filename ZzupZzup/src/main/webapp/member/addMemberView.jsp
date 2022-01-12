@@ -19,46 +19,50 @@
 <script src="/resources/js/jquery.min.js"></script>
 <script type="text/javascript">
 	
-	//회원가입 시 확인하는 사항
-	var addMemberFlag;
-	
+	//flag
+	//*addMember global field flag
+	var checkNameFlag;
+	var checkIdFlag;
+	var checkPwdFlag;
+	var checkSamePwdFlag;
+	var checkPhoneFlag;
+	var checkNicknameFlag;
+	var checkCertificatedNumFlag;
+	/* var checkGenderFlag = true;
+	var checkAgeRangeFlag = true; */
+
 	//양식 유효성 확인
 	function fncCheckAccountForm() {
 		var name = $("#memberName").val();
 		var id = $("memberId").val();
 		var pwd = $("#password").val();
 		var checkPwd = $("#checkPassword").val();
-		var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
+		var phoneNum = $("#memberPhone1").val()+"-"+$("#memberPhone2").val()+"-"+$("#memberPhone3").val();
 		var nickname = $("#nickname").val();
-		var gender = $("#input[name=genders]:checked");
-		var ageRange = $("#input[name=ageRanges]:checked");
+		/* var gender = $("#input[name=genders]:checked");
+		var ageRange = $("#input[name=ageRanges]:checked"); */
 		
 		var regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/
-		
-		//flag
-		/* var checkNameFlag = false;
-		var checkIdFlag = false;
-		var checkPwdFlag = false;
-		var checkSamePwdFlag = false;
-		var checkPhoneFlag = false;
-		var checkNicknameFlag = false;
-		var checkGenderFlag = false;
-		var checkAgeRangeFlag = false; */
 
 		//이름이 비었을 때
 		if (name == "" || name.length < 2) {
 			$("#checkNameMsg").text("이름을 입력해주세요.");
+			checkNameFlag = false;
 		} else {
 			$("#checkNameMsg").text("");
+			checkNameFlag = true;
 		}
 		
 		//전화번호가 비었을 때
-		if ($("#memberPhone1").val() != "" || $("#memberPhone2").val() == "" || $("#memberPhone3").val() == "") {
+		if ($("#memberPhone1").val() != "" && $("#memberPhone2").val() == "" && $("#memberPhone3").val() == "") {
 			$("#checkPhoneNumMsg").text("전화번호를 입력해주세요.");
+			checkPhoneFlag = false;
 		} else if (!regPhone.test(phoneNum)) {
 			$("#checkPhoneNumMsg").text("전화번호 형식에 맞춰 다시 입력해주세요.");	//전화번호 형식 확인
+			checkPhoneFlag = false;
 		} else {
 			$("#checkPhoneNumMsg").text("");
+			checkPhoneFlag = true;
 		}
 	}
 
@@ -79,14 +83,18 @@
 					if(emailForm.test(memberId)) {
 						if (result) {
 							$("#checkIdMsg").text("사용할 수 있는 아이디입니다.");	
+							checkIdFlag = true;
 						} else {
 							$("#checkIdMsg").text("이미 사용 중인 아이디입니다. 다른 아이디를 입력해 주세요.");
+							checkIdFlag = false;
 						}
 					} else {
 						$("#checkIdMsg").text("이메일 형식에 맞춰 다시 입력해주세요.");
+						checkIdFlag = false;
 					}	
 				} else {
 					$("#checkIdMsg").text("아이디를 입력해주세요.");
+					checkIdFlag = false;
 				}
 				
 			}
@@ -107,13 +115,17 @@
 				if (nickname.length > 0) {
 					if (result) {
 						$("#checkNicknameMsg").text("사용할 수 있는 닉네임입니다.");
+						checkNicknameFlag = true;
 					} else {
 						$("#checkNicknameMsg").text("이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해 주세요.");
+						checkNicknameFlag = false;
 					}
 				} else if(${param.memberRole == 'owner'} && nickname.length == 0) { 
 					$("#checkNicknameMsg").text("");
+					checkNicknameFlag = true;
 				} else {
 					$("#checkNicknameMsg").text("닉네임을 입력해주세요.");
+					checkNicknameFlag = false;
 				}
 			}
 		})
@@ -128,19 +140,25 @@
 		var pattern1 = /[0-9]/;
 		var pattern2 = /[a-zA-Z]/i;
 		
-		if (pwd == "") {	//비밀번호가 비었을 때
+		if (pwd == "" || pwd == null) {	//비밀번호가 비었을 때
 			$("#checkPwdMsg").text("비밀번호를 입력해주세요.");
+			checkPwdFlag = false;
 		} else {
-			if ( ! pattern1.test(pwd) || ! pattern2.test(pwd) || pwd.length < 8 || pwd.length > 15) {
+			if ( ! pattern1.test(pwd) || ! pattern2.test(pwd) || pwd.length < 8) {
 				$("#checkPwdMsg").text("비밀번호 형식에 맞춰 다시 입력해주세요.");	//비밀번호 형식 확인(알파벳 대소문자, 숫자, 특수문자)
+				checkPwdFlag = false;
 			} else {
+				$("#checkPwdMsg").text("");
 				if (pwd != checkPwd) {
 					$("#checkSamePwdMsg").text("비밀번호가 일치하지 않습니다.");
+					checkPwdFlag = false;
+					checkSamePwdFlag = false;
 				} else {
 					$("#checkSamePwdMsg").text("");
+					checkPwdFlag = true;
+					checkSamePwdFlag = true;
 				}
 			}
-			
 		}
 		
 	}
@@ -156,16 +174,18 @@
 		if (certificatedNum != inputCertificatedNum
 				&& inputCertificatedNum.length != 6) {
 			$("#checkCertificatedNumMsg").text("인증번호가 일치하지 않습니다. 다시 입력해주세요.");
+			checkCertificatedNumFlag = false;
 		} else if(certificatedNum == inputCertificatedNum
 				&& inputCertificatedNum.length == 6) {
 			$("#checkCertificatedNumMsg").text("");
+			checkCertificatedNumFlag = true;
 		}
 		
 	}
 	
 	//유저 회원가입 함수
 	function fncAddUser() {
-		var name = $("#memberName").val();
+		/* var name = $("#memberName").val();
 		var id = $("#memberId").val();
 		var pwd = $("#password").val();
 		var checkPwd = $("#checkPassword").val();
@@ -173,11 +193,19 @@
 		var nickname = $("#nickname").val();
 		var gender = $("input[name=gender]:checked").val();
 		var ageRange = $("input[name=ageRange]:checked").val();
-		console.log("Member [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+", 닉네임 : "+nickname+", 성별 : "+gender+", 연령대 : "+ageRange+" // "+$("input[name=genders]:checked")+", "+$("input[name=ageRanges]:checked")+" ]");
+		console.log("Member [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+", 닉네임 : "+nickname+", 성별 : "+gender+", 연령대 : "+ageRange+" // "+$("input[name=genders]:checked")+", "+$("input[name=ageRanges]:checked")+" ]"); */
 		
-		if(${param.loginType == '1'} && (name.length > 1 || id.length > 1 || pwd.length > 8 || checkPwd.length > 1 || phoneNum.length > 1 || nickname.length > 1)) {	//일반 회원가입
+		/* if(${param.loginType == '1'} && (name.length > 1 || id.length > 1 || pwd.length > 8 || checkPwd.length > 1 || phoneNum.length > 1 || nickname.length > 1)) {	//일반 회원가입
 			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
 		} else if(${param.loginType != '1'} && (name.length > 1 || id.length > 1 || phoneNum.length > 1 || nickname.length > 1)) {	//SNS(카카오) 회원가입
+			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
+		} else {
+			alert("누락된 항목 확인 후 다시 진행해주세요.");
+		} */
+		
+		if(${param.loginType == '1'} && (checkNameFlag && checkIdFlag && checkPwdFlag && checkSamePwdFlag && checkPhoneFlag && checkNicknameFlag && checkCertificatedNumFlag)) {	//일반 회원가입
+			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
+		} else if(${param.loginType != '1'} && (checkNameFlag && checkIdFlag && checkPhoneFlag && checkNicknameFlag && checkCertificatedNumFlag)) {	//SNS(카카오) 회원가입
 			$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
 		} else {
 			alert("누락된 항목 확인 후 다시 진행해주세요.");
@@ -187,7 +215,7 @@
 	
 	//업주 회원가입 함수
 	function fncAddOwner() {
-		var name = $("#memberName").val();
+		/* var name = $("#memberName").val();
 		var id = $("#memberId").val();
 		var pwd = $("#password").val();
 		var checkPwd = $("#checkPassword").val();
@@ -195,6 +223,12 @@
 		console.log("Member [ 이름 : "+name+", 아이디 : "+id+", 비밀번호 : "+pwd+", 전화번호 : "+phoneNum+"]");
 		
 		if(${param.loginType == '1'} || name.length < 1 || id.length < 1 || pwd.length < 1 || checkPwd.length < 1 || phoneNum.length < 1) {
+			$("#addMember-complete").attr("method" , "POST").attr("action" , "/member/addMember/owner/${param.loginType}").submit();			
+		} else {
+			alert("누락된 항목 확인 후 다시 진행해주세요.");
+		} */
+		
+		if(${param.loginType == '1'} && (checkNameFlag && checkIdFlag && checkPwdFlag && checkSamePwdFlag && checkPhoneFlag && checkCertificatedNumFlag)) {
 			$("#addMember-complete").attr("method" , "POST").attr("action" , "/member/addMember/owner/${param.loginType}").submit();			
 		} else {
 			alert("누락된 항목 확인 후 다시 진행해주세요.");
@@ -309,6 +343,7 @@
 													onkeyup="fncCheckAccountForm();" minlength="8" maxlength="15"
 													placeholder="8-15자 이내로 입력해주세요."><span
 													id="checkPwdMsg" style="color: red; font-weight: bold"></span>
+											<br/>
 												<!-- <h5>알파벳 대소문자, 숫자, 특수문자(~, !, @, #, $, %, ^, &, *, \, /)를
 													조합하여 비밀번호를 구성하세요.</h5> -->
 											<label for="checkPassword">비밀번호 확인</label> <input

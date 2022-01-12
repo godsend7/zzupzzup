@@ -116,7 +116,7 @@ public class MemberServiceImpl implements MemberService{
         // 4 params(to, from, type, text) are mandatory. must be filled
         HashMap<String, String> params = new HashMap<String, String>();
 	    params.put("to", phoneNum);
-	    params.put("from", "01030235823");
+	    params.put("from", "01094423919");
 	    params.put("type", "SMS");
 	    params.put("text", "[쩝쩝듀스101] 인증번호 ["+certificatedNum+"]를 입력해주세요.");
 	    params.put("app_version", "test app 1.2"); // application name and version

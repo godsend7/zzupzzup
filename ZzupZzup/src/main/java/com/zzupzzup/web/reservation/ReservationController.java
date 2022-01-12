@@ -228,6 +228,8 @@ public class ReservationController {
 		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
 		model.addAttribute("resultPage", resultPage);
 		
+		model.addAttribute("reviewCheck", map.get("reviewCheck"));
+		
 		return "forward:/reservation/listReservation.jsp";	
 	}
 	
