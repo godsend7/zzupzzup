@@ -424,7 +424,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h2 class="modal-title" id="deleteMemberModalLabel">회원탈퇴</h2>
+				<h2 class="modal-title" id="deleteMemberModalLabel">회원 탈퇴</h2>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -461,7 +461,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h2 class="modal-title" id="checkPwdForDeleteModalLabel">회원탈퇴</h2>
+				<h2 class="modal-title" id="checkPwdForDeleteModalLabel">회원 탈퇴</h2>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -475,6 +475,32 @@
 						<input type="password" name="password" id="password-forDelete" class="col-md-7"/>
 					</div>
 				</form>
+			</div>
+			<div class="modal-footer">
+		      <input type="button" class="btn btn-primary" id="checkPwdForDelete-btn" value="확인">
+		    </div>
+		</div>
+	</div>
+</div>
+
+<!-- 계정 복구 modal -->
+<div class="modal fade" id="recoveryAccountModal" tabindex="-1" role="dialog"
+	aria-labelledby="recoveryAccountModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2 class="modal-title" id="recoveryAccountModalLabel">계정 복구</h2>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="col-md-12" align="center">
+					<h4>본인 확인을 위해 비밀번호를 입력하여 주세요.</h4>
+					<br/>
+					<input type="password" name="password" id="password-forDelete" class="col-md-7"/>
+				</div>
 			</div>
 			<div class="modal-footer">
 		      <input type="button" class="btn btn-primary" id="checkPwdForDelete-btn" value="확인">

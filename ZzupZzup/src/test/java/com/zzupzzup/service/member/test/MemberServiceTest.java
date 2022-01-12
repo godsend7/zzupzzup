@@ -1,5 +1,7 @@
 package com.zzupzzup.service.member.test;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -350,4 +352,35 @@ public class MemberServiceTest {
 		mailService.sendToEmail("y409813@gmail.com");
 	}	
 
+	@Test
+	public void testRecoveryAccount() throws Exception {
+		
+		Member member = new Member();
+		member.setMemberId("default@default.com");
+		Member mb = memberService.getMember(member);
+		
+		String deleteDate = mb.getDeleteDate().toString();
+		String currentDate = LocalDate.now().toString();
+		
+		int deleteDateYear = Integer.parseInt(deleteDate.substring(0, 4));
+		int deleteDateMonth = Integer.parseInt(deleteDate.substring(5, 7));
+		int deleteDateDay = Integer.parseInt(deleteDate.substring(8));
+		int currentDateYear = Integer.parseInt(currentDate.substring(0, 4));
+		int currentDateMonth = Integer.parseInt(currentDate.substring(5, 7));
+		int currentDateDay = Integer.parseInt(currentDate.substring(8));
+		
+		System.out.println("unRegDate : "+deleteDate+", currentDate : "+currentDate);
+		
+		if(currentDateYear == deleteDateYear) {
+			if(currentDateMonth == deleteDateMonth) {
+				if(currentDateDay - deleteDateDay <= 7 || currentDateDay - deleteDateDay >= -7) {
+					System.out.println(currentDateDay - deleteDateDay);
+					mb.setDeleteReason(null);
+					mb.setDeleteDate(null);
+					memberService.updateMember(mb);
+				}
+			}
+		}
+	}
+	
 }

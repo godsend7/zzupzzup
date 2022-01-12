@@ -63,6 +63,7 @@ public class MemberRestController {
 			//System.out.println("탈퇴회원 : "+mb.getDeleteReason());
 			if(mb.isEliminated()) {
 				System.out.println("탈퇴회원 : "+mb.getDeleteReason());
+				
 				return mb;
 			} else {
 				session.setAttribute("member", mb);
@@ -190,11 +191,11 @@ public class MemberRestController {
 		Member mb = memberService.getMember(member);
 		
 		if(member.getMemberId().equals(mb.getMemberId()) && member.getPassword().equals(mb.getPassword())) {
-			System.out.println("하나");
+			//System.out.println("하나");
 			mb.setDeleteType(member.getDeleteType());
 			
 			if(mb.getDeleteReason() == null) {
-				System.out.println("둘");
+				//System.out.println("둘");
 				mb.setDeleteReason(member.getDeleteReason());
 			}
 			

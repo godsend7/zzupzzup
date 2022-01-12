@@ -89,6 +89,11 @@
 				DELETE_TYPE = #{deleteType},
 				DELETE_DETAIL = #{deleteReason}
 			</if>
+			<if test="deleteReason == null and deleteDate == null">
+				, DELETE_DATE = NULL,
+				DELETE_TYPE = NULL,
+				DELETE_DETAIL = NULL
+			</if>
 		</set>
 		WHERE MEMBER_ID = #{memberId}
 	</update>
