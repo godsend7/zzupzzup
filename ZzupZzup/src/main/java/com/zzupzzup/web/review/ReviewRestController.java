@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +32,7 @@ import com.zzupzzup.common.util.S3ImageUpload;
 import com.zzupzzup.service.domain.HashTag;
 import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Member;
+import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.review.ReviewService;
 
@@ -138,13 +140,57 @@ public class ReviewRestController {
 		return reviewService.getReview(reviewNo);
 	}
 	
+//	@RequestMapping("json/listReview")
+//	public Map<String, Object> listReview(HttpServletRequest request, @RequestParam  Map<String, Object> map, HttpSession session) throws Exception {
+//		
+//		System.out.println("review/json/listReview : Service");
+//		
+//		String restaurantNo = request.getParameter("restaurantNo");
+//		System.out.println("json/listReview :: " + restaurantNo);
+//		Member member = (Member) session.getAttribute("member");
+//		
+//		List<Mark> listLike = null;
+//		
+//		if (member != null && member.getMemberRole().equals("user")) {
+//			listLike = reviewService.listLike(member.getMemberId());
+//		}
+//		
+//		
+//		System.out.println(restaurantNo);
+//		System.out.println(member);
+//		
+//		Search search = new Search();
+//		search.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
+//		search.setPageSize(pageSize);
+//		
+//		System.out.println(search.getCurrentPage() + ":: currentPage");
+//		
+//		map.put("search", search);	
+//		
+//		Map<String, Object> resultMap = reviewService.listReview(search, restaurantNo, member);
+//		
+//		List<Review> review = (List<Review>) resultMap.get("list");
+//		
+//		for (Review r : review ) {
+//			System.out.println(r);
+//		}
+//		
+//		Page resultPage = new Page(search.getCurrentPage(), ((Integer)resultMap.get("totalCount")).intValue(), pageUnit, pageSize);
+//		
+//		resultMap.put("listLike", listLike);
+//		resultMap.put("resultPage", resultPage);
+//		resultMap.put("search", search);
+//		
+//		return resultMap;
+//	}
+	
 	@RequestMapping("json/listReview")
-	public Map<String, Object> listReview(HttpServletRequest request, @RequestParam  Map<String, Object> map, HttpSession session) throws Exception {
+	public Map<String, Object> listReview(@RequestBody Search search, HttpSession session) throws Exception {
 		
 		System.out.println("review/json/listReview : Service");
 		
-		String restaurantNo = request.getParameter("restaurantNo");
-		System.out.println("json/listReview :: " + restaurantNo);
+		String restaurantNo = String.valueOf(search.getNo());
+		System.out.println("json/listReview/search :: " + search);
 		Member member = (Member) session.getAttribute("member");
 		
 		List<Mark> listLike = null;
@@ -156,15 +202,10 @@ public class ReviewRestController {
 		
 		System.out.println(restaurantNo);
 		System.out.println(member);
-		
-		Search search = new Search();
-		search.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
+				
 		search.setPageSize(pageSize);
-		
 		System.out.println(search.getCurrentPage() + ":: currentPage");
-		
-		map.put("search", search);	
-		
+	
 		Map<String, Object> resultMap = reviewService.listReview(search, restaurantNo, member);
 		
 		List<Review> review = (List<Review>) resultMap.get("list");

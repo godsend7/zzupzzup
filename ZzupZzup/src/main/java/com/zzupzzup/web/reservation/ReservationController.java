@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.chat.ChatService;
@@ -228,6 +227,8 @@ public class ReservationController {
 		model.addAttribute("totalCount", map.get("totalCount"));
 		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
 		model.addAttribute("resultPage", resultPage);
+		
+		model.addAttribute("reviewCheck", map.get("reviewCheck"));
 		
 		return "forward:/reservation/listReservation.jsp";	
 	}

@@ -51,7 +51,7 @@
 		uploadFiles();
 	} 
 	
-	window.onload = function() {
+	$(function() {
 		$(".starClean").on('click',function(){
 			var idx = $(this).index();
 			scopeClean = idx+1;
@@ -173,7 +173,7 @@
 				return false;
 	 		}
 		});
-	}
+	});
 	
 	$(function(){
 		//==> drag 파일 업로드

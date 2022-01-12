@@ -313,13 +313,13 @@
 			e.preventDefault();
 			let dataTarget = $(this).attr("data-target");
 			let dom = '';
+
 			dom += '<div class="dropmenu-list">'
 				+ '<a href="/member/getMember?memberId='+dataTarget+'" class="dropmenu-item">프로필 보기</a>'
 				+ '<a href="" class="reportModal dropmenu-item" data-target="#reportModal" data-target="#reportModal" data-toggle="modal" data-id="[2,'+dataTarget+']" class="dropmenu-item">참여자 신고</a>';
 			if("${chat.chatLeaderId.memberId}" == "${member.memberId}" && "${member.memberId}" != dataTarget){
 				dom += '<a href="/chat/deleteForbiddenMember?chatNo='+${chat.chatNo}+'&memberId='+dataTarget+'" class="dropmenu-item" data-target="dataTarget">참여자 강퇴</a>'
 			}
-			
 			dom += '</div>';
 			let isActive = $(this).siblings(".dropmenu-list").hasClass("active");
 			console.log(isActive);

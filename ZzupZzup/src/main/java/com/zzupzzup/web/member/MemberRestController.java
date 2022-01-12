@@ -1,6 +1,7 @@
 package com.zzupzzup.web.member;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -55,14 +56,37 @@ public class MemberRestController {
 		
 		System.out.println("/member/json/login : POST");
 		System.out.println("::"+member.getMemberId()+", "+member.getPassword());
+		
 		//Business Logic
-
 		Member mb = memberService.getMember(member);
 
 		if(mb != null && mb.getPassword().equals(member.getPassword())){
 			//System.out.println("탈퇴회원 : "+mb.getDeleteReason());
-			if(mb.isEliminated()) {
+			if(mb.isEliminated() || mb.isRegBlacklist()) {
 				System.out.println("탈퇴회원 : "+mb.getDeleteReason());
+				System.out.println("블랙리스트 : "+mb.getBlacklistDate());
+				
+				if(mb.getDeleteDate() != null && !mb.isRecovered()) {
+					
+					/* 탈퇴 후 7일 이내 재접속 시 진행되는 계정 복구에 필요한 variable */
+					String deleteDate = mb.getDeleteDate().toString();
+					String currentDate = LocalDate.now().toString();
+					
+					System.out.println("deleteDate : "+deleteDate+", currentDate : "+currentDate);
+					
+					int deleteDateYear = Integer.parseInt(deleteDate.substring(0, 4));
+					int deleteDateMonth = Integer.parseInt(deleteDate.substring(5, 7));
+					int deleteDateDay = Integer.parseInt(deleteDate.substring(8));
+					int currentDateYear = Integer.parseInt(currentDate.substring(0, 4));
+					int currentDateMonth = Integer.parseInt(currentDate.substring(5, 7));
+					int currentDateDay = Integer.parseInt(currentDate.substring(8));
+					
+					if(currentDateYear == deleteDateYear && currentDateMonth == deleteDateMonth && (currentDateDay - deleteDateDay <= 7 || currentDateDay - deleteDateDay >= -7)) {
+						System.out.println(currentDateDay - deleteDateDay);
+						mb.setRecovered(true);
+					}
+				}
+				
 				return mb;
 			} else {
 				session.setAttribute("member", mb);
@@ -70,10 +94,9 @@ public class MemberRestController {
 				return mb;
 			}
 			
-		} else {
-			
-			return null;
 		}
+			
+		return null;
 	}
 	
 //	public void selectMemberRole() {
@@ -190,11 +213,11 @@ public class MemberRestController {
 		Member mb = memberService.getMember(member);
 		
 		if(member.getMemberId().equals(mb.getMemberId()) && member.getPassword().equals(mb.getPassword())) {
-			System.out.println("하나");
+			//System.out.println("하나");
 			mb.setDeleteType(member.getDeleteType());
 			
 			if(mb.getDeleteReason() == null) {
-				System.out.println("둘");
+				//System.out.println("둘");
 				mb.setDeleteReason(member.getDeleteReason());
 			}
 			
@@ -205,6 +228,41 @@ public class MemberRestController {
 		}
 
 		return null;
+	}
+	
+	@RequestMapping(value="json/recoveryMember", method=RequestMethod.POST)
+	public Member recoveryMember(@RequestBody Member member, HttpSession session) throws Exception {
+		
+		Member mb = memberService.getMember(member);
+		
+		if(mb.isRecovered()) {
+			
+			/* 탈퇴 후 7일 이내 재접속 시 진행되는 계정 복구에 필요한 variable */
+			String deleteDate = mb.getDeleteDate().toString();
+			String currentDate = LocalDate.now().toString();
+			
+			System.out.println("deleteDate : "+deleteDate+", currentDate : "+currentDate);
+			
+			int deleteDateYear = Integer.parseInt(deleteDate.substring(0, 4));
+			int deleteDateMonth = Integer.parseInt(deleteDate.substring(5, 7));
+			int deleteDateDay = Integer.parseInt(deleteDate.substring(8));
+			int currentDateYear = Integer.parseInt(currentDate.substring(0, 4));
+			int currentDateMonth = Integer.parseInt(currentDate.substring(5, 7));
+			int currentDateDay = Integer.parseInt(currentDate.substring(8));
+			
+			if(currentDateYear == deleteDateYear && currentDateMonth == deleteDateMonth && (currentDateDay - deleteDateDay <= 7 || currentDateDay - deleteDateDay >= -7)) {
+				System.out.println(currentDateDay - deleteDateDay);
+				mb.setDeleteReason(null);
+				memberService.updateMember(mb);
+				mb.setEliminated(false);
+				mb.setRecovered(true);
+				
+				session.setAttribute("member", mb);
+				System.out.println(mb.getMemberId()+" 님 로그인");
+			}
+		}
+		
+		return mb;
 	}
 	
 	public void getOtherUser() {

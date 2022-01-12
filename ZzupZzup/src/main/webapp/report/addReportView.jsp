@@ -31,6 +31,8 @@
 		$(this).removeData('id');
 		var reportArray = $(this).data('id');
 		//console.log(reportArray);
+		//console.log(reportArray[0]);
+		//console.log(reportArray[1]);
 		reportCategory = reportArray[0];
 		toReport = reportArray[1];
 		
@@ -60,7 +62,7 @@
 			$(".reportType3").text("해당 음식점에 일치하지 않는 영수증이 아닙니다.");
 		} else if (reportArray[0] == 5) {
 			console.log("음식점 제보");
-			$(".h5").text("음식점 신고");
+			$(".h5").text("음식점 제보");
 			$(".reportType1").text("일치하지 않는 정보를 제공하고 있습니다.");
 			$(".reportType2").text("영업시간이 다릅니다.");
 			$(".reportType3").text("폐점된 가게입니다.");

@@ -78,7 +78,8 @@
 	
 	$(function() {
 		$("#goToBack").on("click", function() {
-			history.go(-1);
+			self.location = "/community/listCommunity"
+			//history.go(-1);
 		});
 		
 		$("#deleteButton").on("click", function() {
@@ -171,7 +172,7 @@
 							  </c:if>	
 							  <c:if test="${empty community.postImage}">
 							  	<div class="carousel-item active">
-							  		<img src="/resources/images/uploadImages/default.jpg"   class="d-block w-100">
+							  		<img src="/resources/images/uploadImages/default.jpg" height="600" class="d-block w-100">
 							  	</div>
 							  </c:if>	
 						  </div>

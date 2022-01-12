@@ -84,6 +84,19 @@
 				});
 			}
 		});
+		
+		$(".search-sort").on("click", function(e){
+			var sort = $(this).attr("data-sort");
+			console.log(sort);
+			
+			$("input[name='searchSort']").val(sort);
+			
+			fncPageNavigation(1,${param.reportCategory});
+		});
+		
+		$("#reportCount").on("change", function(e){
+			fncPageNavigation(1);
+		});
 	});
 
 </script>
@@ -114,6 +127,37 @@
 						
 						<form id="review">
 							<!-- 검색 정렬 조건 -->
+							<div class="row search-box gtr-uniform">
+								<div class="col-md-4 col-sm-12">
+									<div class="dropmenu float-left mr-2">
+										<a href="" class="button normal icon solid fa-sort dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">정렬</a>
+										<div class="dropmenu-list" aria-labelledby="dropmenuList">
+											<a class="dropmenu-item search-sort" href="#" data-sort="latest">최신순 </a>
+											<a class="dropmenu-item search-sort" href="#" data-sort="oldest">오래된 순</a>
+											<c:if test = "${fn:contains(path, 'listReview')}">
+												<hr class="dropdown-divider">
+												<a class="dropmenu-item search-sort" href="#" data-sort="likeLittlest">좋아요 적은 순</a>
+												<a class="dropmenu-item search-sort" href="#" data-sort="likeMuchst">좋아요 많은 순</a>
+											</c:if>
+											<c:if test='${member.memberRole eq "admin"}'>
+												<hr class="dropdown-divider">
+												<a class="dropmenu-item search-sort" href="#" data-sort="reportLittlest">신고 적은 순</a>
+												<a class="dropmenu-item search-sort" href="#" data-sort="reportMuchst">신고 많은 순</a>
+											</c:if>
+											<input type="hidden" name="searchSort" value="${search.searchSort}">
+										</div>
+									</div>
+									<c:if test='${member.memberRole eq "admin"}'>
+										<div class="dropmenu float-left">
+											<a href="" class="button normal icon solid fa-filter dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">필터</a>
+											<div class="dropmenu-list" aria-labelledby="dropmenuList">
+												<input type="checkbox" id="reportCount" class="search-filter" name="searchFilter" value="1" ${search.searchFilter eq "1" ? "checked" : "" }><label for="reportCount">신고 5회 이상</label>
+											</div>
+										</div>
+									</c:if>
+								</div>
+							</div>
+							
 							<input type="hidden" id="currentPage" name="currentPage" value=""/>
 						</form>
 						
@@ -225,7 +269,6 @@
 									</div>
 								</div>
 							</c:forEach>
-							
 						</div>
 						<ul class='icons'> 
 							<jsp:include page='/review/getReview.jsp'/>
