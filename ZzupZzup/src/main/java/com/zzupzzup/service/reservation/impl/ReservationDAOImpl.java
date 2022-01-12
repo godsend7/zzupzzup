@@ -1,5 +1,6 @@
 package com.zzupzzup.service.reservation.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -76,6 +77,13 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 			
 			List<Reservation> list = sqlSession.selectList("ReservationMapper.listReservation",map);
 			
+			for (int i = 0; i < list.size(); i++) {
+				Map<String, Object> newMap = new HashMap<String, Object>();
+				newMap.put("member", map.get("member"));
+				newMap.put("reservationNo", list.get(i).getReservationNo());
+				list.get(i).setReviewNo(reviewCheck(newMap));
+			}
+			
 			return list;
 		}
 			
@@ -89,6 +97,13 @@ import com.zzupzzup.service.reservation.ReservationDAO;
 		// 게시판 Page 처리를 위한 전체 Row(totalCount)  return
 		public int getTotalCount(Map<String, Object> map) throws Exception {
 			return sqlSession.selectOne("ReservationMapper.getTotalCount", map);
+		}
+
+		//review 작성 check를 위한 dao
+		@Override
+		public String reviewCheck(Map<String, Object> map) throws Exception {
+			// TODO Auto-generated method stub
+			return sqlSession.selectOne("ReservationMapper.listReviewCheck", map);
 		}
 
 

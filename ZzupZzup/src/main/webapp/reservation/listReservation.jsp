@@ -133,8 +133,8 @@
 									    <label for="demo-name">방문 확정 후(승인)</label> 
 										<p>${reservation.fixedDate} </div>
 									    <div class="col-6 col-md-4">
-									    <c:choose>
-									    	<c:when test="${reservation.reviewNo != null}">
+								    	<c:choose>
+									    	<c:when test="${reservation.reviewNo != null }">
 									    		<a href="#reviewModal" class="button small primary reviewModal" data-toggle="modal" data-id="${reservation.reviewNo}">리뷰 보기</a>
 									    	</c:when>
 									    	<c:otherwise>
