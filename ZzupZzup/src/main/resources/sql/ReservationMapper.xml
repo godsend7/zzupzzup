@@ -155,14 +155,16 @@
 	   	<set>
 	   		FIXED_DATE = now(),
 			RESERVATION_STATUS = #{reservationStatus},
+			REFUND_STATUS = #{refundStatus},
 		<choose>
 			<when test='member.memberRole == "user"'>	
-           	CANCEL_DATE = now()
+           	CANCEL_DATE = now(),
+           	
  		  	</when>
  		  	<otherwise>
  		  	FIXED_STATUS = #{fixedStatus},
             RESERVATION_CANCEL_TYPE = #{reservationCancelReason},
-                  RESERVATION_CANCEL_DETAIL = #{reservationCancelDetail}
+            RESERVATION_CANCEL_DETAIL = #{reservationCancelDetail}
  		  	</otherwise>
           </choose>  
 	   	</set>

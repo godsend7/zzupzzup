@@ -23,7 +23,10 @@
 	  	//////////이전페이지////////////////
 	$(function() {
 			
-		console.log(${reservation.restaurant.restaurantNo}+"레스토랑 안찍혀");
+		console.log(${reservation});
+		console.log("${reservation.order}");
+		console.log(${reservation.restaurant});
+		console.log("restaurantdfsfdsNa~~");
 		
 		function fncPageNavigation(currentPage) {
 			
@@ -118,7 +121,7 @@
 										<div class="col-md-8-nickname">
 										<label for="nickname"> 예약자 NickName</label> 
 										<%-- <p>${member.nickname}</p> --%>
-										${reservation.member.nickname}
+										${reservation.restaurant}
 									<p><c:forEach var="chatMember" items="${reservation.chat.chatMember}" varStatus="status">
 											<c:out value = "${chatMember.member.nickname} ${status.last ? '' : '/'}"/>
 											<%-- <c:out value = "${chatMember}"/> --%>
@@ -143,14 +146,17 @@
 									    <label for="demo-name">방문 확정 후(승인)</label> 
 										<p>${reservation.fixedDate} </div>
 									    <div class="col-6 col-md-4">
-								    	<c:choose>
-									    	<c:when test="${reservation.reviewNo != null }">
+									    <c:choose>
+									    	<c:when test="${member.memberRole == 'user' && reservation.reviewNo != null && reservation.reservationStatus==1}">
 									    		<a href="#reviewModal" class="button small primary reviewModal" data-toggle="modal" data-id="${reservation.reviewNo}">리뷰 보기</a>
 									    	</c:when>
-									    	<c:otherwise>
+									    	
+									    	<c:when test="${member.memberRole == 'user' && reservation.reviewNo == null && reservation.reservationStatus==1}">
 									    		<a href="/review/addReview?reservationNo=${reservation.reservationNo}" class="button small primary stretched-link rivewWrite" name = "rivewWrite" id ="rivewWrite">리뷰 쓰기</a>
-									    	</c:otherwise>
+									    	</c:when>
 									    </c:choose>
+									    
+									    
 									    </div>
 									  	</div> 
 									  	</div>
@@ -164,7 +170,7 @@
 										<c:when test="${member.memberRole == 'admin'}">	
 										<div class="col-6 col-12-xsmall">
 										<label for="demo-name">업주 아이디</label> 
-										<p>${reservation.member.memberId}</p>
+										<p>${reservation.restaurant.member.memberId}</p>
 										</div>
 									</c:when>
 								</c:choose>		
