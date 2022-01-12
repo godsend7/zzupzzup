@@ -38,7 +38,13 @@
 	}
 	
 	.thisLocation {
-	
+		z-index: 99;
+		position: absolute;
+		top: 90%; left: 50%;
+		width:120px; height: 35px;
+		margin-left:-65px;
+		line-height: 33px;
+		border-radius: 20em;
 	}
 	
 	.btn-outline-primary {
@@ -131,6 +137,10 @@
 				evant.preventDefault();
 				document.getElementById("searchButton").click();
 			}
+		});
+		
+		$(".thisLocation").on("click", function() {
+			thisLocation();
 		});
 	});
 	
@@ -482,7 +492,12 @@
 						</div>
 					
 						<div>
-							<span class="badge badge-primary thisLocation">현 위치로 이동 </span>
+							<span class="badge badge-primary thisLocation">현 위치로 이동 &nbsp&nbsp&nbsp&nbsp<svg 
+								xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="margin-bottom: 3px;" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+  								<path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+  								<path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+								</svg>
+							</span>
 						</div>
 					
 					</div>
