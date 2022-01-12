@@ -89,10 +89,10 @@
 				DELETE_TYPE = #{deleteType},
 				DELETE_DETAIL = #{deleteReason}
 			</if>
-			<if test="deleteReason == null and deleteDate == null">
+			<if test="deleteReason == null">
 				, DELETE_DATE = NULL,
 				DELETE_TYPE = NULL,
-				DELETE_DETAIL = NULL
+				DELETE_DETAIL = #{deleteReason}
 			</if>
 		</set>
 		WHERE MEMBER_ID = #{memberId}

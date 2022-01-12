@@ -35,16 +35,40 @@
 				success : function(data) {
 					if (data != null) {
 						
-						if(data.eliminated) {
+						if(data.eliminated && !data.recovered) {
 							alert("로그인 할 수 없습니다.");
+						} else if(data.regBlacklist) {
+							alert("블랙리스트로 등록된 계정입니다. 자세한 사항은 이메일(zzupzzup101@gmail.com)로 문의 바랍니다.");
+						} else if(data.recovered) {
+							var confirmRecovery = confirm("계정 복구를 진행하시겠습니까?")
+							$.ajax({
+								url : "/member/json/recoveryMember",
+								method : "POST",
+								contentType : 'application/json',
+								dataType : "json",
+								data : JSON.stringify({
+									"memberId" : memberId,
+									"password" : password,
+									"recovered" : confirmRecovery
+								}),
+								success : function(data) {
+									if(confirmRecovery) {
+										alert("계정 복구가 완료되었습니다.");
+										location.href = "/";
+									} else {
+										//alert("엥 그럼 왜 로그인 함?");
+									}
+								}
+							})
 						} else {
 							//main.jsp로 이동
 							location.href = "/";
 						}
 					}
 				},
-				error : function() {
+				error : function(error) {
 					alert("아이디 또는 비밀번호가 잘못 입력되었습니다. 다시 확인하여 주세요.");
+					alert(JSON.stringify(error));
 				}
 			});
 		});
@@ -475,32 +499,6 @@
 						<input type="password" name="password" id="password-forDelete" class="col-md-7"/>
 					</div>
 				</form>
-			</div>
-			<div class="modal-footer">
-		      <input type="button" class="btn btn-primary" id="checkPwdForDelete-btn" value="확인">
-		    </div>
-		</div>
-	</div>
-</div>
-
-<!-- 계정 복구 modal -->
-<div class="modal fade" id="recoveryAccountModal" tabindex="-1" role="dialog"
-	aria-labelledby="recoveryAccountModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h2 class="modal-title" id="recoveryAccountModalLabel">계정 복구</h2>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="col-md-12" align="center">
-					<h4>본인 확인을 위해 비밀번호를 입력하여 주세요.</h4>
-					<br/>
-					<input type="password" name="password" id="password-forDelete" class="col-md-7"/>
-				</div>
 			</div>
 			<div class="modal-footer">
 		      <input type="button" class="btn btn-primary" id="checkPwdForDelete-btn" value="확인">

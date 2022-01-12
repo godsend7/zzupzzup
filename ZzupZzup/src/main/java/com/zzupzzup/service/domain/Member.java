@@ -41,10 +41,13 @@ public class Member {
 	private int regRestaurantCount;				//업주의 경우에 상세조회에서 표시될 음식점 수
 	private boolean regBlacklist;				//블랙리스트 등록 여부 확인
 	private int accumulType;					//활동점수 적립 유형
+	private boolean recovered;					//계정 복구 가능 여부
+	////안 쓰는 field
 	private boolean loginCheck;					//로그인 여부 체크(인데 안 써서 지워질 예정)
 	//kakao login으로 추가된 field
 	private String accessToken;					//kakao login 시 부여되는 토큰 값
 	private String clientId;					//kakao login 시 부여되는 유저 고유 아이디
+	
 
 	//*Constructor
 	public Member() {
@@ -336,6 +339,9 @@ public class Member {
 	}
 
 	public boolean isRegBlacklist() {
+		if(blacklistDate != null) {
+			regBlacklist = true;
+		}
 		return regBlacklist;
 	}
 
@@ -359,20 +365,12 @@ public class Member {
 		this.accumulType = accumulType;
 	}
 
-	public boolean isLoginCheck() {
-		return loginCheck;
+	public boolean isRecovered() {
+		return recovered;
 	}
 
-	public void setLoginCheck(boolean loginCheck) {
-		this.loginCheck = loginCheck;
-	}
-	
-	public String getAccessToken() {
-		return accessToken;
-	}
-
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
+	public void setRecovered(boolean recovered) {
+		this.recovered = recovered;
 	}
 
 	@Override

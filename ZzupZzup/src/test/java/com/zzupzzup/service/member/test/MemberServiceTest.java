@@ -352,7 +352,7 @@ public class MemberServiceTest {
 		mailService.sendToEmail("y409813@gmail.com");
 	}	
 
-	@Test
+	//@Test
 	public void testRecoveryAccount() throws Exception {
 		
 		Member member = new Member();
@@ -370,16 +370,12 @@ public class MemberServiceTest {
 		int currentDateDay = Integer.parseInt(currentDate.substring(8));
 		
 		System.out.println("unRegDate : "+deleteDate+", currentDate : "+currentDate);
-		
-		if(currentDateYear == deleteDateYear) {
-			if(currentDateMonth == deleteDateMonth) {
-				if(currentDateDay - deleteDateDay <= 7 || currentDateDay - deleteDateDay >= -7) {
-					System.out.println(currentDateDay - deleteDateDay);
-					mb.setDeleteReason(null);
-					mb.setDeleteDate(null);
-					memberService.updateMember(mb);
-				}
-			}
+
+		if(currentDateYear == deleteDateYear && currentDateMonth == deleteDateMonth && (currentDateDay - deleteDateDay <= 7 || currentDateDay - deleteDateDay >= -7)) {
+			System.out.println(currentDateDay - deleteDateDay);
+			mb.setDeleteReason(null);
+			memberService.updateMember(mb);
+			mb.setRecovered(true);
 		}
 	}
 	
