@@ -27,7 +27,8 @@
 		<result property="reservationCancelDetail"   			column="reservation_cancel_detail" 	jdbcType="VARCHAR"/>
 		<result property="refundStatus"   						column="refund_status" 				jdbcType="BOOLEAN"/>
 		<result property="reviewNo"								column="review_no"					jdbcType="VARCHAR"/>
- 		<collection property="order" resultMap="orderSelectMap"/>		
+ 		<collection property="order" resultMap="orderSelectMap"/>
+ 		<collection property="chatMember" resultMap="chatMemberSelectMap"/>	
 	</resultMap>
 	
 	<resultMap id="orderSelectMap" type="order">
@@ -35,6 +36,15 @@
 		<result property="menuTitle"   							column="menu_title" 				jdbcType="VARCHAR"/>
 		<result property="orderCount"   						column="order_count" 				jdbcType="INTEGER"/>
 		<result property="menuPrice"   							column="menu_price" 				jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<resultMap id="chatMemberSelectMap" type="chatMember">
+		<id property="chatNo" column="chat_no" jdbcType="INTEGER"/>
+		<result property="member.memberId" column="chat_member_id" jdbcType="VARCHAR"/>
+		<result property="member.nickname" column="nickname" jdbcType="VARCHAR"/>
+		<result property="readyCheck" column="ready_check" jdbcType="BOOLEAN"/>
+		<result property="chatLeaderCheck" column="chat_leader_check" jdbcType="BOOLEAN"/>
+		<result property="inOutCheck" column="in_out_check" jdbcType="BOOLEAN"/>
 	</resultMap>
 	
 	
@@ -62,17 +72,28 @@
 
 	</insert>
 	
+	<insert id="addChatMember" parameterType="reservation">
+	 	INSERT
+		INTO chat_member_no(reservation_no, chat_no, chat_member_id, nickname,ready_check,chat_leader_check,in_out_check)
+		VALUES 
+		<foreach collection="chatMember" item="item" separator=",">
+			(#{reservationNo}, #{item.member.memberId}, #{item.member.nickname}, #{item.readyCheck}, #{item.chatLeaderCheck}, #{item.inOutCheck})
+		</foreach>
+
+	</insert>
+	
 	
 	
 	<!-- SQL : SELECT ONE -->
 	<!-- ===========상세 목록 조회====== -->
 	<select id="getReservation"	parameterType="int"	resultMap="reservationSelectMap">
-		SELECT * 
-			FROM RESERVATION AS r
-			LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
-							 FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)
-			                 WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)
-			LEFT OUTER JOIN reservation_order AS ro ON (r.reservation_no = ro.reservation_no)
+		select *
+			from reservation as r
+			Left outer join(select c.chat_no, chat.chat_member_id, chat.nickname
+							from chat c Inner join (Select cb.chat_no, cb.chat_member_id, m.nickname
+													from chat_member cb, member m
+			                                        where cb.chat_member_id = m.member_id) as chat on (c.chat_no = chat.chat_no)) as cm on (r.chat_no = cm.chat_no)
+			LEFT OUTER JOIN reservation_order AS ro ON (r.reservation_no = ro.reservation_no)	
 			WHERE r.reservation_no = #{reservationNo}
 	 </select>
 	 
@@ -95,7 +116,7 @@
 	
 	<select id="listReservation"	parameterType="map"	resultMap="reservationSelectMap">
 		
-		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.PLAN_TIME, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname, ch.CHAT_MEMBER_ID, re.review_no
+		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.PLAN_TIME, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname, ch.CHAT_MEMBER_ID, re.review_no, ro.menu_title, ro.order_count
 			FROM RESERVATION AS r
 			LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
 							 FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)

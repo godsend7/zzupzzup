@@ -32,7 +32,6 @@
 </head>
 
 <body class="is-preload">
-
 	<!-- S:Wrapper -->
 	<div id="wrapper">
 
@@ -45,6 +44,9 @@
 
 				<section id="listRating">
 					<div class="container">
+					
+						<h3>평가 내역</h3>
+						
 						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 						<form id="ratingForm" name="ratingForm">
 						전체  ${resultPage.totalCount} 건수, 현재 ${resultPage.currentPage}  페이지
@@ -57,10 +59,10 @@
 								<div
 									class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 									<div class="col p-4 d-flex flex-column position-static">
-										<h3 class=""><a href="/member/getMember?memberId=${rating.ratingToId.memberId} }">${rating.ratingToId.nickname}</a> <small>(${rating.ratingToId.memberRank} / 매너점수 : ${rating.ratingToId.mannerScore}점)</small></h3>
+										<h3 class=""><a href="/member/getMember?memberId=${rating.ratingToId.memberId}">${rating.ratingToId.nickname}</a> <c:if test="${member.memberRole == 'admin'}"><small>(${rating.ratingToId.memberRank} / 매너점수 : ${rating.ratingToId.mannerAllScore}점)</small></c:if></h3>
 										<p class="card-text mb-auto"><a href="/chat/json/getChat/${rating.chatNo}" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">채팅방 정보</a><br/>평가 내용: <c:choose><c:when test="${rating.ratingType==1}">별로에요(-1점)</c:when><c:when test="${rating.ratingType==2}">좋아요(1점)</c:when><c:when test="${rating.ratingType==3}">최고에요(3점)</c:when></c:choose></p>
 										<div class="text-right">
-											<strong class="d-inline-block mr-2"><a href="/member/getMember?memberId=${rating.ratingFromId.memberId}">${rating.ratingFromId.nickname}</a> <small>(${rating.ratingFromId.memberRank} / 매너점수 : ${rating.ratingFromId.mannerScore}점)</small></strong><small>${rating.ratingRegDate}</small>
+											<strong class="d-inline-block mr-2"><a href="/member/getMember?memberId=${rating.ratingFromId.memberId}">${rating.ratingFromId.nickname}</a> <c:if test="${member.memberRole == 'admin'}"><small>(${rating.ratingFromId.memberRank} / 매너점수 : ${rating.ratingFromId.mannerAllScore}점)</small></c:if></strong><small>${rating.ratingRegDate}</small>
 										</div>
 									</div>
 

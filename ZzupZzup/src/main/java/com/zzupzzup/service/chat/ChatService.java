@@ -2,9 +2,9 @@ package com.zzupzzup.service.chat;
 
 import java.util.Map;
 
-import com.zzupzzup.common.ChatMember;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Chat;
+import com.zzupzzup.service.domain.ChatMember;
 
 public interface ChatService {
 	

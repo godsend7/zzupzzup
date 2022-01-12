@@ -268,9 +268,12 @@
 								<div class="col-12">
 									<label for="nickname">예약자 NickName</label> 
 									<%-- <p>${reservation.member.nickname}</p> --%>
-									<p><c:forEach var="chatMember" items="${chatMemberList}" varStatus="status">
+									<%-- ${reservation.chatMember } --%>
+									<p><c:forEach var="chatMember" items="${reservation.chat.chatMember}" varStatus="status">
 											<c:out value = "${chatMember.member.nickname} ${status.last ? '' : '/'}"/>
-										</c:forEach></p>
+											<%-- <c:out value = "${chatMember}"/> --%>
+										</c:forEach>
+									</p>
 								</div>
 								
 								<div class="col-6 col-12-xsmall">

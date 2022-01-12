@@ -112,7 +112,8 @@
 
 <!--  ///////////////////////// review Script ////////////////////////// -->
 <script type="text/javascript">
-
+	var searchSort = null;
+	
 	$(function() {
 		$(".reviewModal").on("click", function() {
 			console.log("reviewModal click");
@@ -165,6 +166,7 @@
 		
 		var count = 2;
 		if (${!empty list}) {
+			console.log(searchSort);
 		    window.onscroll = function() {
 		    	if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 		    		if (${!empty member}) {
@@ -174,10 +176,13 @@
 			    				url : "/review/json/listReview",
 			    				type : "POST",
 			    				dataType : "json",
-								data : {
+			    				contentType: 'application/json',
+								data : JSON.stringify({
 									currentPage : $("#currentPage").val(),
-									restaurantNo : ${param.restaurantNo}
-								},
+									searchSort : $("input[name='searchSort']").val(),
+									searchFilter : $("input[name='searchFilter']:checked").val(),
+									no : ${param.restaurantNo}
+								}),
 								success : function(data) {
 			    					
 			    					var append_nod = "";
@@ -298,9 +303,25 @@
 					}
 				}
 			} 
-			
 		}
 		
+		$(".search-sort").on("click", function(e){
+			var sort = $(this).attr("data-sort");
+			console.log(sort);
+			
+			$("input[name='searchSort']").val(sort);
+			searchSort = $("input[name='searchSort']").val();
+			 $("#currentPage").val(1);
+			
+			$("#review").attr("action","/restaurant/getRestaurant?restaurantNo=${param.restaurantNo}").attr("method", "POST").submit();
+		});
+		
+		//해시태그 검색
+		/* $("#hashtag").on("change", function(e){
+			//fncPageNavigation(1);
+			
+			$("#review").attr("action","/restaurant/getRestaurant?restaurantNo=${param.restaurantNo}").attr("method", "POST").submit();
+		}); */
 	});
 </script>
 <!--  ///////////////////////// review Script ////////////////////////// -->

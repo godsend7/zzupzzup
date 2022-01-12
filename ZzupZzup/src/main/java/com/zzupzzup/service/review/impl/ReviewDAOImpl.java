@@ -81,9 +81,9 @@ public class ReviewDAOImpl implements ReviewDAO {
 		// TODO Auto-generated method stub
 		List<Review> list = sqlSession.selectList("ReviewMapper.listReview", map);
 		
-		for (int i = 0; i < list.size(); i++) {
-			list.get(i).setLikeCount(getLikeCount(list.get(i).getReviewNo()));
-		}
+//		for (int i = 0; i < list.size(); i++) {
+//			list.get(i).setLikeCount(getLikeCount(list.get(i).getReviewNo()));
+//		}
 		
 		return list;
 	}
