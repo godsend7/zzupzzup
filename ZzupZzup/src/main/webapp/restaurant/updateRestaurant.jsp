@@ -204,6 +204,7 @@
 			$( "#button3" ).on("click" , function() {
 				history.go(-1);
 			});
+			
 		});
 		
 		$(function() {
@@ -448,6 +449,12 @@
 			 readURL(this);
 		 });
 		
+		$('#ownerImage').on('change', function(e) {
+			let fileName = $(this).val().split('\\').pop();
+			$("input[name=file]").val(fileName);
+		});
+			
+		
 	});
 	
 	//changed image preview function
@@ -464,6 +471,9 @@
 		
         }
     }
+	
+	
+	
 	
 </script>
 
@@ -509,13 +519,9 @@
 							<div class="col-sm-4">
 								<label for="ownerImage">사업자 등록증 이미지</label>
 								<img id="${restaurant.ownerImage}" src="/resources/images/uploadImages/owner/${restaurant.ownerImage}" width="100"/>
-								<%-- <c:if test="${empty request.ownerImage}"> --%>
-									<input type="hidden" name="ownerImage" value="${restaurant.ownerImage}">
-								<%-- </c:if> --%>
-								<%-- <c:if test="${!empty request.ownerImage}"> --%>
-									<input type="file" class="file" name="ownerImage" id="ownerImage">
-								<%-- </c:if> --%>
-							</div>	
+								<p>등록된 이미지 파일 : ${restaurant.ownerImage}</p>
+								<input type="file" name="file" id="ownerImage" value="${restaurant.ownerImage}">
+							</div>
 						</div><br>
 							
 						<div class="form-group">

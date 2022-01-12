@@ -56,7 +56,7 @@
 						<!-- 관우님 src start -->
 						<h2>유저 목록</h2><hr>
 						<form id="listUser" name="listUser">
-						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
+							<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 							<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
 						</form>
 						
@@ -97,10 +97,9 @@
 							</div>
 						</div>
 						</c:forEach>
-	
-						</div><br><br><br>
-						<!-- 관우님 src end -->
-					 <jsp:include page="../common/pageNavigator.jsp"/>
+					</div><br><br><br>
+					<!-- 관우님 src end -->
+					<jsp:include page="../common/pageNavigator.jsp"/>
 				</section>
 			</div>
 		</div>

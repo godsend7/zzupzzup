@@ -90,7 +90,7 @@ public class RestaurantController {
 		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		uploadFilePath(uploadFile, empty, restaurant);
 		
-		//System.out.println("debugging point1 : " + uploadOwnerFile);
+		System.out.println("debugging point1 : " + uploadOwnerFile);
 		
 		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/owner");
 		String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
@@ -257,6 +257,8 @@ public class RestaurantController {
 		
 		String empty = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH);
 		uploadFilePath(uploadFile, empty, restaurant);
+				
+		System.out.println("debugging point1 : " + uploadOwnerFile);
 		
 		if (uploadOwnerFile != null) {
 			String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/owner");
@@ -405,18 +407,24 @@ public class RestaurantController {
 		
 		String ownerInfo = uploadOwnerFile.getOriginalFilename();
 		
-		//System.out.println("ownerInfo : " + ownerInfo);
+		System.out.println("ownerInfo : " + ownerInfo);
 		
-		Path checkpoint = Paths.get(vacant, File.separator + StringUtils.cleanPath(ownerInfo));
-		
-		try {
-			Files.copy(uploadOwnerFile.getInputStream(), checkpoint, StandardCopyOption.REPLACE_EXISTING);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if(!ownerInfo.equals("")) {
+			
+			Path checkpoint = Paths.get(vacant, File.separator + StringUtils.cleanPath(ownerInfo));
+			
+			try {
+				Files.copy(uploadOwnerFile.getInputStream(), checkpoint, StandardCopyOption.REPLACE_EXISTING);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return ownerInfo;
+			
+		} else {
+			return null;
 		}
 		
-		return ownerInfo;
 	}
-	
 	
 }

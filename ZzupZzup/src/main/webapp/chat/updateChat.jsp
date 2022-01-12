@@ -179,6 +179,7 @@
 									</div>
 								</div>
 							</div>
+							<c:if test="${member.memberRole == 'admin'}">
 							<div class="row gtr-uniform">
 								<!-- Break -->
 								<div class="col-12">
@@ -195,6 +196,7 @@
 									</c:choose>
 								</div>
 							</div>
+							</c:if>
 							<div class="row gtr-uniform">
 								<!-- Break -->
 								<div class="col-12">

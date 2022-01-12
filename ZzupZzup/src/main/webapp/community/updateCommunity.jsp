@@ -8,7 +8,7 @@
 
 <html>
 <head>
-<title>ZZUPZZUP-template</title>
+<title>게시물 수정하기 | ${community.postTitle}</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
@@ -397,6 +397,11 @@
 			readURL(this);
        	});
 		
+		$('#receiptImage').on('change', function(e) {
+			let fileName = $(this).val().split('\\').pop();
+			$("input[name=file]").val(fileName);
+		});
+		
 	});
 	
 	//changed image preview function
@@ -555,8 +560,9 @@
 									<div class="col-sm-4">
 										<label for="receiptImage">영수증 이미지</label>
 										<img id="${community.receiptImage}" src="/resources/images/uploadImages/receipt/${community.receiptImage}" width="100"/>
-										<input type="hidden" name="receiptImage"  value="${community.receiptImage}">
-										<input type="file" name="file-drag-input" id="receiptImage" value="${community.receiptImage}">
+										<%-- <input type="hidden" name="receiptImage"  value="${community.receiptImage}"> --%>
+										<p>등록된 이미지 파일 : ${community.receiptImage}</p>
+										<input type="file" name="file" id="receiptImage" value="${community.receiptImage}">
 									</div>
 								</div><br><hr>
 								
