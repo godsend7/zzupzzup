@@ -51,13 +51,17 @@
 									"password" : password,
 									"recovered" : confirmRecovery
 								}),
-								success : function(data) {
+								success : function(result) {
 									if(confirmRecovery) {
 										alert("계정 복구가 완료되었습니다.");
 										location.href = "/";
 									} else {
 										//alert("엥 그럼 왜 로그인 함?");
+										alert("계정 복구가 취소되었습니다.");
 									}
+								},
+								error : function(error) {
+									alert(JSON.stringify(error));
 								}
 							})
 						} else {

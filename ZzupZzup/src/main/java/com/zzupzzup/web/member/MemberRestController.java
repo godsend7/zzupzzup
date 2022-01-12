@@ -235,7 +235,9 @@ public class MemberRestController {
 		
 		Member mb = memberService.getMember(member);
 		
-		if(mb.isRecovered()) {
+		//System.out.println("member : "+member.isRecovered()+", mb : "+mb.isRecovered());
+		
+		if(member.isRecovered()) {
 			
 			/* 탈퇴 후 7일 이내 재접속 시 진행되는 계정 복구에 필요한 variable */
 			String deleteDate = mb.getDeleteDate().toString();
@@ -252,13 +254,16 @@ public class MemberRestController {
 			
 			if(currentDateYear == deleteDateYear && currentDateMonth == deleteDateMonth && (currentDateDay - deleteDateDay <= 7 || currentDateDay - deleteDateDay >= -7)) {
 				System.out.println(currentDateDay - deleteDateDay);
+				
 				mb.setDeleteReason(null);
+				//mb.setDeleteDate(null);
 				memberService.updateMember(mb);
 				mb.setEliminated(false);
 				mb.setRecovered(true);
 				
 				session.setAttribute("member", mb);
 				System.out.println(mb.getMemberId()+" 님 로그인");
+				
 			}
 		}
 		
