@@ -36,16 +36,46 @@
 		</div>
 	</c:if>
 </div>
-<br>
-<div class="row table-list mb-2" style="margin-left: 0px;">
-	<a href="" class="button normal icon solid fa-filter"> 필터</a>
-</div>
 
 <br>
 
 <form id="review">
 	<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 	<%-- <input type="hidden" id="restaurantNo" name="restaurantNo" value="${param.restaurantNo}"/> --%>
+	<c:if test='${!empty member}'>
+		<div class="row search-box gtr-uniform">
+			<div class="col-md-4 col-sm-12">
+				<div class="dropmenu float-left mr-2">
+					<a href="" class="button normal icon solid fa-sort dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">정렬</a>
+					<div class="dropmenu-list" aria-labelledby="dropmenuList">
+						<a class="dropmenu-item search-sort" href="#" data-sort="latest">최신순 </a>
+						<a class="dropmenu-item search-sort" href="#" data-sort="oldest">오래된 순</a>
+						<hr class="dropdown-divider">
+						<a class="dropmenu-item search-sort" href="#" data-sort="likeLittlest">좋아요 적은 순</a>
+						<a class="dropmenu-item search-sort" href="#" data-sort="likeMuchst">좋아요 많은 순</a>
+						<hr class="dropdown-divider">
+						<a class="dropmenu-item search-sort" href="#" data-sort="avgLittlest">평점 낮은 순</a>
+						<a class="dropmenu-item search-sort" href="#" data-sort="avgMuchst">평점 높은 순</a>
+						<input type="hidden" name="searchSort" value="${search.searchSort}">
+					</div>
+				</div>
+				
+				<%-- <div class="dropmenu float-left">
+					<a href="" class="button normal icon solid fa-filter dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">필터</a>
+					<div class="dropmenu-list" aria-labelledby="dropmenuList">
+						<input type="checkbox" id="hashtag1" class="search-filter" name="searchFilter" value="1" ${search.searchFilter eq "1" ? "checked" : "" }><label for="hashtag1">인스타 맛집</label>
+						<input type="checkbox" id="hashtag2" class="search-filter" name="searchFilter" value="2" ${search.searchFilter eq "2" ? "checked" : "" }><label for="hashtag2">여성이 많이 찾는 맛집</label>
+						<input type="checkbox" id="hashtag3" class="search-filter" name="searchFilter" value="3" ${search.searchFilter eq "3" ? "checked" : "" }><label for="hashtag3">남성이 많이 찾는 맛집</label>
+						<input type="checkbox" id="hashtag4" class="search-filter" name="searchFilter" value="4" ${search.searchFilter eq "4" ? "checked" : "" }><label for="hashtag4">자녀와 함께하기 좋은 맛집</label>
+						<input type="checkbox" id="hashtag5" class="search-filter" name="searchFilter" value="5" ${search.searchFilter eq "5" ? "checked" : "" }><label for="hashtag5">부모님과 함께하기 좋은 맛집</label>
+						<input type="checkbox" id="hashtag6" class="search-filter" name="searchFilter" value="6" ${search.searchFilter eq "6" ? "checked" : "" }><label for="hashtag6">반려견과 함께하기 좋은 맛집</label>
+						<input type="checkbox" id="hashtag7" class="search-filter" name="searchFilter" value="7" ${search.searchFilter eq "7" ? "checked" : "" }><label for="hashtag7">가성비 좋은 맛집</label>
+						<input type="checkbox" id="hashtag8" class="search-filter" name="searchFilter" value="8" ${search.searchFilter eq "8" ? "checked" : "" }><label for="hashtag8">데이트하기 좋은 맛집</label>
+					</div>
+				</div> --%>
+			</div>
+		</div>
+	</c:if>
 	<input type="hidden" id="currentPage" name="currentPage" value=""/>
 </form>
 

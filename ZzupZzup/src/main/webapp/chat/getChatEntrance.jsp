@@ -308,7 +308,19 @@
 			return time;
 		}
 		
-		
+		//============= "참여자 닉네임" Event 처리 =========
+		$("body").on("click", ".member_dropdown", function(e) {
+			e.preventDefault();
+			let dataTarget = $(this).attr("data-target");
+			let dom = '';
+			dom += '<div class="dropdown-box">'
+				+ '<a href="/member/getMember?memberId='+dataTarget+'">프로필 보기</a>'
+				+ '<a href="" class="reportModal" data-target="#reportModal" data-target="#reportModal" data-toggle="modal" data-id="[2,'+dataTarget+']">참여자 신고</a>'
+				+ '<a href="/chat/deleteForbiddenMember?chatNo='+${chat.chatNo}+'&memberId='+dataTarget+'">참여자 강퇴</a>'
+				+ '</div>';
+			$(".dropdown-box").remove();
+			$(this).parent().append(dom);
+		});
 		
 		//============= "예약하기" Event 처리 ============
 		$("#chatReservationBefore").on("click", function() {
@@ -511,6 +523,7 @@
 												<div class="dropdown-box">
 													<a href="">프로필 보기</a>
 													<a href="">참여자 신고</a>
+													<a href="">참여자 강퇴</a>
 												</div>
 											</div>
 											<span class="badge badge-info gender">남</span>
@@ -534,10 +547,10 @@
 										<c:otherwise>
 										<c:choose>
 											<c:when test="${chat.chatState == 1 || chat.chatState == 2}">
-											<input type="button" class="button small" value='${chatMember.readyCheck == true ? "모임참여 해제하기" : "모임참여 체크하기"}'/>
+											<input type="button" class="button" value='${chatMember.readyCheck == true ? "모임참여 해제하기" : "모임참여 체크하기"}'/>
 											</c:when>
 											<c:otherwise>
-											<input type="button" class="button small" disabled value='모임참여 체크불가'/>
+											<input type="button" class="button" disabled value='모임참여 체크불가'/>
 											</c:otherwise>
 										</c:choose>
 										</c:otherwise>

@@ -32,6 +32,7 @@ public class Reservation {
 	private int orderCount; //주문메뉴수량
 	private int orderTotal; //주문메뉴 총수량
 	private List<Order> order;
+	private List<ChatMember> chatMember;
 	
 	private String reviewNo; //리뷰 작성 여부 확인
 	
@@ -244,9 +245,17 @@ public class Reservation {
 		this.reviewNo = reviewNo;
 	}
 
+	public List<ChatMember> getChatMember() {
+		return chatMember;
+	}
+
+	public void setChatMember(List<ChatMember> chatMember) {
+		this.chatMember = chatMember;
+	}
+
 	@Override
 	public String toString() {
-		return "Reservation [chat=" + chat + ", restaurant=" + restaurant + ",\n::: member=" + member + ",\n::: reservationNo="
+		return "Reservation [chat=" + chat + ", restaurant=" + restaurant + ", member=" + member + ", reservationNo="
 				+ reservationNo + ", reservationNumber=" + reservationNumber + ", payOption=" + payOption
 				+ ", payMethod=" + payMethod + ", planTime=" + planTime + ", planDate=" + planDate + ", fixedTime="
 				+ fixedTime + ", fixedDate=" + fixedDate + ", memberCount=" + memberCount + ", reservationStatus="
@@ -254,6 +263,6 @@ public class Reservation {
 				+ ", reservationCancelReason=" + reservationCancelReason + ", reservationCancelDetail="
 				+ reservationCancelDetail + ", refundStatus=" + refundStatus + ", reservationCancelDate="
 				+ reservationCancelDate + ", totalPrice=" + totalPrice + ", orderCount=" + orderCount + ", orderTotal="
-				+ orderTotal + ", order=" + order + ", reviewNo=" + reviewNo + "]";
+				+ orderTotal + ", order=" + order + ", chatMember=" + chatMember + ", reviewNo=" + reviewNo + "]";
 	}
 }

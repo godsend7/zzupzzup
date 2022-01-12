@@ -379,20 +379,51 @@ public class ChatController {
 		return "forward:/chat/getChatRecord.jsp";
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@RequestMapping(value="deleteForbiddenMember", method=RequestMethod.GET)
+	public String deleteForbiddenMember( HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		System.out.println("chat/deleteForbiddenMember : GET");
+		
+		Integer chatNo = Integer.parseInt(request.getParameter("chatNo"));
+		System.out.println("deleteChatMember chatNo : " + chatNo);
+		
+		//Business Logic
+		Chat chat = chatService.getChat(chatNo);
+		System.out.println("getChatEntrance chat : " + chat);
+		
+		Member member = (Member)session.getAttribute("member");
+		System.out.println("getChatEntrance member : " + member);
+		
+		//입장하는 사람이 개설자인지 참여자인지 체크
+		String chatLeaderId = chat.getChatLeaderId().getMemberId();
+		String memberId = member.getMemberId();
+		
+		ChatMember chatMember = new ChatMember();
+		
+		if(chatLeaderId.equals(memberId)) {
+			//개설자로 들어갔을 때
+			//채팅방 전체 인원 나감
+			System.out.println("개설자야");
+			chatMember.setChatNo(chatNo);
+			chatMember.setInOutCheck(false);
+			
+			chatService.deleteAllChatMember(chatMember);
+			
+			chatService.updateChatState(chatNo, 5);
+		}else {
+			//참가자로 들어갔을 때
+			//채팅방에서 나감
+			System.out.println("참가자야");
+			System.out.println(memberId);
+			chatMember.setChatNo(chatNo);
+			chatMember.setMember(member);
+			chatMember.setInOutCheck(false);
+			
+			chatService.deleteChatMember(chatMember);
+			
+		}
+		
+		return "redirect:/chat/listChat";
+	}
 	
 	
 	

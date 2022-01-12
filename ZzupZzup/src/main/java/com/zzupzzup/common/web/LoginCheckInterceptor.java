@@ -30,7 +30,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 			String uri = request.getRequestURI();
 			
 			if (uri.indexOf("favicon") != -1 || uri.indexOf("webjars") != -1 || uri.indexOf("resources") != -1 || uri.indexOf("member") != -1 || uri.indexOf("map") != -1 
-					|| uri.indexOf("getRestaurant") != -1 || uri.indexOf("listReview") != -1 || uri.indexOf("listReview") != -1) {
+					|| uri.indexOf("getRestaurant") != -1 || uri.indexOf("restaurantReview") != -1) {
 				System.out.println("비회원 접근 가능 uri :: " + uri);
 				return true;
 			}
