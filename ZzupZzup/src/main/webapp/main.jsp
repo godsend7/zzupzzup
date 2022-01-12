@@ -26,11 +26,19 @@
 		z-index: 99;
 		position: fixed;
 		cursor: move;
-		width: 250px;
-		height: 110px;
+		width: 20%;
+		height: 17%;
 		right: 20px;
 		top: 250px;
 		padding: 1.0em;
+	}
+	
+	.filterBox p {
+		font-size: 1.0em;
+	}
+	
+	.thisLocation {
+	
 	}
 	
 	.btn-outline-primary {
@@ -74,6 +82,11 @@
 	
 	//화면에 보여줄 map 객체 선언
 	var map;
+	//화면에 보여줄 지도의 기본 크기 설정
+	var mapZoom = 15; 
+	
+	//화면 위치(s,n,w,e) 넣을 객체 선언
+	var bounds;
 	
 	//map search condition
 	var reCheck = false;
@@ -81,8 +94,8 @@
 	
 	$(function() {
 		
-		loadGyeonggidoMap();
 		loadRestaurantMap();
+		loadGyeonggidoMap();
 		
 		
 		$( ".filterBox" ).draggable();
@@ -94,8 +107,8 @@
 				loadRestaurantMap();
 			} else {
 				reCheck = false;
-				loadGyeonggidoMap();
 				loadRestaurantMap();
+				loadGyeonggidoMap();
 			}
 		});
 		
@@ -106,8 +119,8 @@
 				loadRestaurantMap();
 			} else {
 				parkCheck = false;
-				loadGyeonggidoMap();
 				loadRestaurantMap();
+				loadGyeonggidoMap();
 			}
 		});
 		
@@ -122,37 +135,7 @@
 	});
 	
 	function loadGyeonggidoMap() {
-		/* $.ajax(
-			{
-				url : "https://openapi.gg.go.kr/PlaceThatDoATasteyFoodSt?KEY=0584ed7e427d4676a15a4bf7f91b1597&Type=json&pIndex=1&pSize=1000",
-   				type : "GET",
-   				dataType : "json",
-   				success : function(data, status) {
-   					//alert( "JSON.stringify(JSONData) : \n"+JSON.stringify(data) );
-   					//console.log(JSON.stringify(data));
-   					//alert(status);
-					//alert("data : \n"+data);
-					
-   					//var obj = JSON.parse(data);
-   					//console.log(data.PlaceThatDoATasteyFoodSt[1].row);
-   					
-   					$.each(data.PlaceThatDoATasteyFoodSt[1].row, function(index, item){ 
-   						arrayLayout.push(
-   							{restaurantName:item.RESTRT_NM, mainMenu:item.REPRSNT_FOOD_NM, latitude:item.REFINE_WGS84_LAT, longitude:item.REFINE_WGS84_LOGT,
-   							 streetADDR:item.REFINE_ROADNM_ADDR, areaADDR:item.REFINE_LOTNO_ADDR, restaurantTel:item.TASTFDPLC_TELNO}
-   							/* item */
-   					/*	);
-   					});
-   					
-   					initMap();
-					
-   				},
-   				error:function(request,status,error){
-				       console.log("실패");
-				    }
-			}
-		) */
-		console.log("뭐야 실행된거임?");
+		//console.log("뭐야 실행된거임?");
 		$.ajax({
 					url : "/map/json/gyeonggidoRestAPI",
 	   				type : "POST",
@@ -237,22 +220,72 @@
 		loadRestaurantMap();
 	}
 	
+	
 	function initMap() {
-		/* var arrayLayout = new Array();
-		arrayLayout.push(
-			{location:'강남', lat:'37.4959854', lng:'127.066401'},
-			{location:'건대입구역', lat: '37.539922', lng: '127.070609'},
-            {location:'어린이대공원역', lat: '37.547263', lng: '127.074181'}
-		); */
+		
 		markers = new Array();
 		infowindows = new Array();
 		
+		/* if(reCheck || parkCheck) {
+			mapZoom = 10;
+			nowLatitude = arrayLayout[0].latitude;
+			newLongitude = arrayLayout[0].longitude;
+		} else if(!reCheck && !parkCheck) {
+			mapZoom = 15;
+			nowLatitude = arrayLayout[0].latitude;
+			newLongitude = arrayLayout[0].longitude;
+		} 
+		
+		if ($("#searchKeyword").val() != "") {
+			if (Array.isArray(arrayLayout) && arrayLayout.length === 0) {
+				return;
+			}
+			
+			reCheck = false;
+			parkCheck = false;
+			mapZoom = 10;
+			if (Array.isArray(arrayLayout) && arrayLayout.length === 1) {
+				mapZoom = 15;
+			}
+			
+			nowLatitude = arrayLayout[0].latitude;
+			newLongitude = arrayLayout[0].longitude;
+		} */
+		
+		
+		//map.setCenter(location); // 얻은 좌표를 지도의 중심으로 설정합니다.
+	    //map.setZoom(10); // 지도의 줌 레벨을 변경합니다.
+		
+		
+		
+		if((reCheck || parkCheck) || $("#searchKeyword").val() != "") {
+			if (Array.isArray(arrayLayout) && arrayLayout.length === 0) {
+				return;
+			}
+			
+			mapZoom = 12;
+			
+			if (Array.isArray(arrayLayout) && arrayLayout.length === 1) {
+				mapZoom = 15;
+			}
+			
+			nowLatitude = arrayLayout[0].latitude;
+			newLongitude = arrayLayout[0].longitude;
+		}
+		
 		map = new naver.maps.Map('content', {
-	        center: new naver.maps.LatLng(nowLatitude, newLongitude),  //지도 시작 좌표, 현재위치로 변경
-	        zoom: 10
+	        center: new naver.maps.LatLng(nowLatitude, newLongitude),  //지도 시작 좌표
+	        zoom: mapZoom
 	    });
-		console.log(parkCheck);
-		console.log(reCheck);
+		
+		//동서남북 위치
+		bounds = map.getBounds(),
+	    	southWest = bounds.getSW(),
+	    	northEast = bounds.getNE(),
+	    	lngSpan = northEast.lng() - southWest.lng(),
+	   		latSpan = northEast.lat() - southWest.lat();
+		
+		
 		//filter 조건에 따른 map 표시
 		for (var i=0; i<arrayLayout.length; i++) {
 			if(reCheck && parkCheck) {
@@ -290,11 +323,21 @@
 			//console.log(markers[i], getClickHandler(i));
 			naver.maps.Event.addListener(markers[i], "click", getClickHandler(i));
 		}
+		
+		naver.maps.Event.addListener(map, 'idle', function() {
+		    updateMarkers(map, markers);
+		});
 	}
 	
 	function selectMap(i){
+		
+		var position = new naver.maps.LatLng(
+		        southWest.lat() + latSpan * Math.random(),
+		        southWest.lng() + lngSpan * Math.random());
+		
 		var marker = new naver.maps.Marker({
 	        map: map,
+	        position: position,
 	        title: arrayLayout[i].restaurantName, //지역구 이름 => 음식점 이름과 같음
 	        position: new naver.maps.LatLng(arrayLayout[i].latitude, arrayLayout[i].longitude)
 	    });
@@ -349,8 +392,45 @@
 		infowindows.push(infowindow); //생성한 정보창을 배열에 담기
 	}
 	
+	//위치에 따른 마커 hide, show
+	function updateMarkers(map, markers) {
+
+	    var mapBounds = map.getBounds();
+	    var marker, position;
+
+	    for (var i = 0; i < markers.length; i++) {
+
+	        marker = markers[i]
+	        position = marker.getPosition();
+
+	        if (mapBounds.hasLatLng(position)) {
+	            showMarker(map, marker);
+	        } else {
+	            hideMarker(map, marker);
+	        }
+	    }
+	}
+	
+	//marker show
+	function showMarker(map, marker) {
+
+	    if (marker.getMap()) return;
+	    marker.setMap(map);
+	}
+
+	//marker hide
+	function hideMarker(map, marker) {
+
+	    if (!marker.getMap()) return;
+	    marker.setMap(null);
+	}
+	
 	
 	window.onload = function() {
+		thisLocation();
+	}
+	
+	function thisLocation() {
 		var options = {
 			enableHighAccuracy: true,
 			timeout: 5000,
@@ -376,7 +456,6 @@
 		}
 	}
 	
-	
 </script>
 
 </head>
@@ -393,14 +472,18 @@
 				<section id="map">
 					<div class="content mainMap" id="content" style="width: 100%; height:100vh;">
 					
-					<div class="filterBox ui-widget-content">
-						<!-- <nav class="top_nav" style="background: #f56a6a;">
-							<div style="height: 20px;"></div>
-						</nav> -->
-						<!-- <p><input type="checkbox" checked data-toggle="toggle" data-size="xs"> 예약 가능 여부 </p> -->
-						<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="reservationCheck"> 예약 가능한 가게만 보기 </p>
-						<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="parkableCheck"> 주차 가능한 가게만 보기 </p>
-					</div>
+						<div class="filterBox ui-widget-content">
+							<!-- <nav class="top_nav" style="background: #f56a6a;">
+								<div style="height: 20px;"></div>
+							</nav> -->
+							<!-- <p><input type="checkbox" checked data-toggle="toggle" data-size="xs"> 예약 가능 여부 </p> -->
+							<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="reservationCheck"> 예약 가능한 가게만 보기 </p>
+							<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="parkableCheck"> 주차 가능한 가게만 보기 </p>
+						</div>
+					
+						<div>
+							<span class="badge badge-primary thisLocation">현 위치로 이동 </span>
+						</div>
 					
 					</div>
 					
