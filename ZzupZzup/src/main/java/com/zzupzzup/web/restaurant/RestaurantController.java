@@ -346,7 +346,6 @@ public class RestaurantController {
 	
 	private String uploadOwnerImg(MultipartFile uploadOwnerFile, String vacant) {
 		
-		
 		System.out.println("CHECK POINT 1 : " + uploadOwnerFile.getOriginalFilename());
 		
 		String ownerInfo = uploadOwnerFile.getOriginalFilename();

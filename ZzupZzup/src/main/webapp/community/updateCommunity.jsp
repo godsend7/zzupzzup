@@ -176,12 +176,12 @@
 
 //	window.onload = function(){
 		
-		<c:forEach var="image" items="${restaurant.restaurantImage}" varStatus="status">
+		<c:forEach var="image" items="${community.postImage}" varStatus="status">
 		<c:set var="fileName" value="${fn:split(image, '_')}"/>
 			sel_files.push( {name : "${fileName[1]}" });
 		</c:forEach>
 		
-		var index = ${fn:length(restaurant.restaurantMenus)};
+		var index = ${fn:length(community.postImage)};
 		console.log(index);
 		
 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
@@ -467,7 +467,7 @@
 											<c:set var="fileName" value="${fn:split(image, '_')}"/>
 											<a class='cvf_delete_image' id='img_id_${status.index}'>
 												<img src="/resources/images/uploadImages/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'>
-												<input type='hidden' name='reviewImage[${status.index}]' value='${image}'>
+												<input type='hidden' name='postImage[${status.index}]' value='${image}'>
 											</a>
 										</c:forEach></div>
 									<div class="imageUploadBox"></div>
@@ -554,8 +554,8 @@
 								<div class="form-group">
 									<div class="col-sm-4">
 										<label for="receiptImage">영수증 이미지</label>
-										<img id="receiptImage" src="/resources/images/uploadImages/receipt/${community.receiptImage}" width="100"/>
-										<input type="hidden" name="ownerImage"  value="${community.receiptImage}">
+										<img id="${community.receiptImage}" src="/resources/images/uploadImages/receipt/${community.receiptImage}" width="100"/>
+										<input type="hidden" name="receiptImage"  value="${community.receiptImage}">
 										<input type="file" name="file-drag-input" id="receiptImage" value="${community.receiptImage}">
 									</div>
 								</div><br><hr>

@@ -105,10 +105,10 @@
 												<c:if test="${member.memberRole == 'admin'}">
 													<strong class="d-inline-block mb-2 text-primary">신고누적수: ${community.postReportCount}</strong> &nbsp;
 												</c:if>
-												<c:if test="${empty community.receiptImage}">
+												<c:if test="${!empty community.receiptImage}">
 													<span class="badge badge-success" style="text-align: right;">영수증 첨부된 게시물</span>
 												</c:if>
-												<c:if test="${!empty community.receiptImage}">
+												<c:if test="${empty community.receiptImage}">
 													<span class="badge badge-danger" style="text-align: right;">영수증 미첨부된 게시물</span>
 												</c:if>
 												<c:if test="${!empty community.officialDate}">

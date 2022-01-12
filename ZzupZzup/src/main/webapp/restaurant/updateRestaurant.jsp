@@ -509,8 +509,12 @@
 							<div class="col-sm-4">
 								<label for="ownerImage">사업자 등록증 이미지</label>
 								<img id="${restaurant.ownerImage}" src="/resources/images/uploadImages/owner/${restaurant.ownerImage}" width="100"/>
-								<input type="hidden" name="ownerImage"  value="${restaurant.ownerImage}">
-								<input type="file" class="file-drag-input" id="ownerImage" value="${restaurant.ownerImage}">
+								<%-- <c:if test="${empty request.ownerImage}"> --%>
+									<input type="hidden" name="ownerImage" value="${restaurant.ownerImage}">
+								<%-- </c:if> --%>
+								<%-- <c:if test="${!empty request.ownerImage}"> --%>
+									<input type="file" class="file" name="ownerImage" id="ownerImage">
+								<%-- </c:if> --%>
 							</div>	
 						</div><br>
 							
