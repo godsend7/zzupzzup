@@ -38,5 +38,9 @@ public interface RestaurantDAO {
 	
 	public List<Restaurant> listRestaurantName(Map<String, Object> map);
 	
+	public List<Restaurant> listReservationRestaurantName(Map<String, Object> map);
+	
+	// MAIN MAP
 	public List<Restaurant> listMainRestaurant(Search search) throws Exception;
+	
 }

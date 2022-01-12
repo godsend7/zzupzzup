@@ -71,6 +71,17 @@
 				<h2><strong>Welcome to ZZUPZZUPDUCE_101</strong></h2>
 			</header>
 			<ul>
+				<c:if test="${ empty member}">
+					<div style="text-align : center;">
+						<img src="/favicon.ico" width="150" height="150" />
+					</div>
+					<div style="text-align : center; color: hotpink;">
+						더 많은 서비스를 이용하시려면
+					</div>
+					<div style="text-align : center; color: hotpink;">
+						로그인 해주세요
+					</div><br>
+				</c:if>
 				<c:if test="${ ! empty member}">
 					<!-- profile image start -->
 					<div class="col-md" align="center">
@@ -193,7 +204,7 @@
 
 		<!-- Footer -->
 		<footer id="footer">
-			<p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+			<p class="copyright">&copy; ZZUPZZUPDUCE_101. All rights reserved. Demo Images | <a href="https://unsplash.com">Unsplash</a>. Design | <a href="https://html5up.net">HTML5 UP</a>.</p>
 		</footer>
 
 	</div>
