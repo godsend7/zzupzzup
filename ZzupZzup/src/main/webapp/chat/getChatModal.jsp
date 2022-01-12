@@ -113,11 +113,13 @@ $(function() {
 					+'<div class="d-flex justify-content-between">'
 					+'<div>개설일</div>'
 					+'<div>'+chatRegDate+'</div>'
-					+'</div>'
-					+'<div class="d-flex justify-content-between">'
-					+'<div>'+showStatus+ ' <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>' +JSONData.reportCount+' 회</div>'
-					+'</div>'
-					+'</div>'
+					+'</div>';
+					if("${member.memberRole}" == 'admin'){
+						displayValueBd += +'<div class="d-flex justify-content-between">'
+						+'<div>'+showStatus+ ' <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>' +JSONData.reportCount+' 회</div>'
+						+'</div>';
+					};
+					displayValueBd += '</div>'
 					+'<div class="get-chat-user-info mb-3">'
 					+'<div class="chatProfile d-flex flex-row align-items-center">'
 					+'<img src="/resources/images/common/'+JSONData.chatLeaderId.profileImage+'">'

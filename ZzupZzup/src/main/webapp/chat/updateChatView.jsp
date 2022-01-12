@@ -61,6 +61,15 @@
 			//==> submit 기능
 			$("form").attr("method", "POST").attr("action", "/chat/updateChat").submit();
 		}
+		
+		if("${member.memberRole}" == 'admin'){
+			$("input[name=restaurantName]").attr("disabled","disabled");
+			$("input[name=chatTitle]").attr("disabled","disabled");
+			$("input[name=chatGender]").attr("disabled","disabled");
+			$("input[name=chatAge]").attr("disabled","disabled");
+			$("#chatText").attr("disabled","disabled");
+			$("input[name=fileDragInput]").attr("disabled","disabled");
+		}
 
 		//==> Form Submit 처리
 		$("input[value='채팅방 수정']").on("click", function() {
@@ -523,6 +532,7 @@
 									</div>									
 								</div>
 							</div>
+							<c:if test="${member.memberRole == 'admin'}">
 							<div class="row gtr-uniform">
 								<!-- Break -->
 								<div class="col-12">
@@ -541,6 +551,7 @@
 									<label for="chatShowStatus">채팅방 노출하지 않기</label>
 								</div>
 							</div>
+							</c:if>
 							<div class="row gtr-uniform">
 								<!-- Break -->
 								<div class="col-12">

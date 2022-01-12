@@ -121,15 +121,17 @@
 								+'<div class="card-img">'
 								+'<img src="/resources/images/uploadImages/chat/'+item.chatImage+'">'
 								+'</div>'
-								+'<div class="card-body">'
-								+'<div class="chat-rating-info">';
-								if(item.chatShowStatus == false){
-									dom += '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+								+'<div class="card-body">';
+								if("${member.memberRole}" == 'admin'){
+									dom += '<div class="chat-rating-info">';
+									if(item.chatShowStatus == false){
+										dom += '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+									}
+									dom += '<i class="fa fa-exclamation-triangle" aria-hidden="true">'
+									+item.reportCount +' 회</i>'
+									+'</div>';
 								}
-								dom += '<i class="fa fa-exclamation-triangle" aria-hidden="true">'
-								+item.reportCount +' 회</i>'
-								+'</div>'
-								+'<h4 class="card-title">'+item.chatTitle+'</h4>'
+								dom += '<h4 class="card-title">'+item.chatTitle+'</h4>'
 								+'<h5 class="card-text mb-2 text-muted">'+item.chatText+'</h5>'
 								+'<div class="d-flex justify-content-between align-items-end">'
 								+'<div>'
@@ -551,6 +553,7 @@
 													<img src="/resources/images/uploadImages/chat/${chat.chatImage}">
 												</div>
 												<div class="card-body">
+													<c:if test="${member.memberRole == 'admin'}">
 													<div class="chat-rating-info">
 														<c:if test="${chat.chatShowStatus == false }">
 															<i class="fa fa-eye-slash" aria-hidden="true"></i>
@@ -559,6 +562,7 @@
 														<i class="fa fa-exclamation-triangle" aria-hidden="true">
 															${chat.reportCount } 회</i>
 													</div>
+													</c:if>
 													<h4 class="card-title">${chat.chatTitle}</h4>
 													<h5 class="card-text mb-2 text-muted">${chat.chatText}</h5>
 													<div class="d-flex justify-content-between align-items-end">
