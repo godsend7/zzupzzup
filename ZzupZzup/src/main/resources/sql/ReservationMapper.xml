@@ -139,9 +139,10 @@
 			 Inner Join ( select rt.restaurant_no
 			from restaurant rt, member m
 			where rt.member_id = m.member_id And m.member_id = #{member.memberId}) as tt on (re.restaurant_no = tt.restaurant_no)
+			Inner Join (select order_count, menu_title, reservation_no from reservation_order) AS ro ON (re.reservation_no = ro.reservation_no)<!-- 원랜 없었는데 메뉴랑 수량 가져오려고 추가함 -->
 			Inner Join (Select member_id, nickname from member) as rm on (re.booker_id = rm.member_id)
 		
-			ORDER BY  reservation_no DESC LIMIT #{search.startRowNum}, #{search.pageSize}		
+			ORDER BY  re.reservation_no DESC LIMIT #{search.startRowNum}, #{search.pageSize}		
 	 </select>
 	
 	<!-- =========유저,업주======== -->
