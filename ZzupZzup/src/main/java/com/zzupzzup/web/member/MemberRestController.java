@@ -270,8 +270,16 @@ public class MemberRestController {
 		return mb;
 	}
 	
-	public void getOtherUser() {
+	@RequestMapping(value="json/getOtherUser", method=RequestMethod.POST)
+	public Member getOtherUser(@RequestBody Member member, HttpSession session) throws Exception {
 		
+		System.out.println("/member/json/getOtherUser : POST");
+		
+		
+		Member mb = memberService.getMember(member);
+		//session.setAttribute("mb", mb);
+		
+		return mb;
 	}
 
 }
