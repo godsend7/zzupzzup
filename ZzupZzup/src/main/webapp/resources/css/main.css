@@ -92,17 +92,17 @@ body {
 
 /* Type */
 body, input, select, textarea {
-  color: #7f888f;
+  color: #333;
   font-family: "Open Sans","Gowun Dodum", sans-serif;
   font-size: 13pt;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.65; }
   @media screen and (max-width: 1680px) {
     body, input, select, textarea {
       font-size: 11pt; } }
   @media screen and (max-width: 1280px) {
     body, input, select, textarea {
-      font-size: 10pt; } }
+      font-size: 11pt; } }
   @media screen and (max-width: 360px) {
     body, input, select, textarea {
       font-size: 9pt; } }
@@ -2209,7 +2209,7 @@ button,
   user-select: none;
   color: #3d4449;
   font-family: "Roboto Slab","Gowun Dodum", serif;
-  font-weight: 400;
+  font-weight: 600;
   letter-spacing: 0.075em;
   list-style: none;
   margin-bottom: 0;
@@ -2220,8 +2220,8 @@ button,
     color: inherit;
     cursor: pointer;
     display: block;
-    font-size: 0.9em;
-    padding: 0.625em 0; }
+    font-size: 1.1em;
+    padding: 0.5em 0; }
     #menu ul a:hover, #menu ul span:hover {
       color: #f56a6a; }
     #menu ul a.opener, #menu ul span.opener {
@@ -2267,12 +2267,12 @@ button,
   margin: 0.5em 0 0 0;
   padding: 0.5em 0 0 0; }
   #menu > ul > li > ul {
-    color: #9fa3a6;
+    color: #666;
     display: none;
     margin: 0.5em 0 1.5em 0;
     padding-left: 1em; }
     #menu > ul > li > ul a, #menu > ul > li > ul span {
-      font-size: 0.8em; }
+      font-size: 1em; }
     #menu > ul > li > ul > li {
       margin: 0.125em 0 0 0;
       padding: 0.125em 0 0 0; }
@@ -2295,8 +2295,9 @@ button,
 #main #header { padding-top:20px; justify-content: space-between; align-items: center; }
 #main.index #header { position: absolute; top: 0; left: 0; width: 100%; padding-right:70px; padding-left: 120px; border-bottom: none; z-index: 1; }
 	
-#main #header .logo { padding: 10px; font-size: 1.2em; flex:inherit; }
+#main #header .logo { position: relative; padding: 10px; font-size: 1.2em; flex:inherit; }
 #main #header .logo strong { color: #f56a6a; text-shadow: 0 0 4px #fff; }
+#main #header .logo strong:before { content: 'ZZUPZZUPDUCE_101'; display: block; position: absolute; top: 11px; left: 37px; color: rgba(0,0,0,0.8); z-index: -1; }
 
 #main.index > .inner > section { padding: 0px; }
 
