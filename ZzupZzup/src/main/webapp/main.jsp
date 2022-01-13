@@ -25,12 +25,16 @@
 	.filterBox {
 		z-index: 99;
 		position: fixed;
-		cursor: move;
+		cursor: grab;
 		width: 20%;
 		height: 17%;
 		right: 20px;
 		top: 250px;
 		padding: 1.0em;
+	}
+	
+	.filterBox:active {
+		cursor: grabbing;
 	}
 	
 	.filterBox p {
@@ -80,6 +84,13 @@
 		border-color: #f56a6a;
 		background-color: f56a6a;
 	}
+	
+	.directions {
+		z-index: 99;
+		position: absolute;
+		right: 50px;
+		bottom: 50px; 
+	}
 	/* .mainMap {
 		position: relative;
 	} */
@@ -109,6 +120,8 @@
 	//map search condition
 	var reCheck = false;
 	var parkCheck = false;
+	
+	var polylinePath = new Array();
 	
 	$(function() {
 		
@@ -157,10 +170,161 @@
 			map.setCenter(new naver.maps.LatLng(nowLatitude, newLongitude));
 			map.setZoom(15);
 		});
+		
+		$("#direction").on("click", function() {
+			loadDirections();
+			
+		});
+		
+		$("#directionModal").on("shown.bs.modal", function() { 
+			$(".direction-control").autocomplete("option", "appendTo", "#directionModal");
+		});
+
+		$(".direction-control").on("focus" , function() {
+			console.log($(this).attr("id"));
+			$(this).addClass("inputCheck");
+			console.log($(this).attr("class"));
+		});
+		
+		$(".direction-control").on("focusout" , function() {
+			console.log($(this).attr("id"));
+			$(this).removeClass("inputCheck");
+			console.log($(this).attr("class"));
+		});
+		
+		
+		//restaurant Direction autoComplete
+		$(".inputCheck").autocomplete({
+			source: function(request, response) {
+		 		$.ajax({
+		 			url:"/map/json/listRestaurantName",
+	    	  		method : "GET",
+					dataType : "json",
+					headers : {
+						"Accept" : "application/json",
+						"Content-Type" : "application/json"
+					},
+					data : {
+						"keyWord" : $(".inputCheck").val()
+					},
+					success : function(data, status) {
+						
+						console.log(data);
+						/* var array = Array.prototype.slice.call(data);
+						var hashArry = [];
+						
+						for (var i = 0; i < hashtag_list.length; i++) {
+							for (let hashTag of array) {
+								var check = false;
+								
+								if (hashtag_list[i] == hashTag.hashTagNo) {
+									hashArry.push(hashTag);
+									break;
+								}
+							}
+						} */
+						
+						//중복된 해시태그 제외 출력 (차집합)
+						//let difference = array.filter(x => !hashArry.includes(x));
+						
+						//console.log(difference);
+						
+						//label : 화면에 보여지는 텍스트 
+						//value : 실제 text태그에 들어갈 값
+						response(
+							$.map(data, function(item) {
+                                return {
+                                	value: item.streetAddress,
+                                    label: item.restaurantName
+                                }
+                            })
+						);//response 
+					}
+	      		});
+	 		},
+	 		select : function(event, ui) {
+	 			console.log(event);
+	 			console.log(ui);
+				
+				//$("#hashTagAuto").val('');
+				
+				return false;
+	 		} 
+		});
 	});
 	
+	//길찾기 ajax
+	function loadDirections() {
+		/* $.ajax({
+			url : "/map/json/getDirections",
+			type : "GET",
+			dataType : "json",
+			data : {
+				startLat: "37.57041517608028",
+				startLong: "126.98522632662905",
+				goalLat: "37.57122152112966",
+				goalLong: "126.98565886971308"
+			}, beforeSend : function (xhr) {
+				xhr.setRequestHeader("X-NCP-APIGW-API-KEY-ID" , "7gzdb36t5o");
+				xhr.setRequestHeader("X-NCP-APIGW-API-KEY", "mYUAOPlY0TCwBzBjBZhMfMCX7vKouQIWJJDG9kwL");
+			},
+			success : function(data, status) {
+				alert(JSON.stringify(data.route.bbox));
+				console.log(JSON.stringify(data.route.trafast[0].path));
+				
+				$.each (data.route.trafast[0].path, function(index, item){ 
+					//console.log(item[0]);
+					//console.log(item[1]);
+					polylinePath.push(new naver.maps.LatLng(item[1], item[0]));
+				});
+				
+				getDirec();
+			},
+			error : function(request, status, error) {
+				alert(request);
+				alert(error);
+			}
+		}); */
+	}
+	
+	function getDirec() {
+		
+		 var map = new naver.maps.Map('content', {
+		        zoom: 15,
+		        center: new naver.maps.LatLng(nowLatitude, newLongitude)
+		    });
+		
+		var polyline = new naver.maps.Polyline({
+			path: polylinePath,
+	        strokeColor: '#00CA00',
+	        strokeOpacity: 0.8,
+	        strokeWeight: 6,
+	        zIndex: 88,
+	        clickable: true,
+	        map: map
+		});
+		
+		var marker = new naver.maps.Marker({
+		    position: polylinePath[polylinePath.length-1], //마크 표시할 위치 배열의 마지막 위치
+		    map: map
+		});
+		
+		naver.maps.Event.addListener(polyline, "mousedown", function(e) {
+	        polyline.setOptions({
+	            strokeWeight: 20
+	        });
+	    });
+		
+		naver.maps.Event.addListener(polyline, "mouseup", function(e) {
+	        polyline.setOptions({
+	            strokeWeight: 6
+	        });
+	    });
+	}
+	
+	
+	//경기도 맛집 api 화면에 표시
 	function loadGyeonggidoMap() {
-		//console.log("뭐야 실행된거임?");
 		$.ajax({
 					url : "/map/json/gyeonggidoRestAPI",
 	   				type : "POST",
@@ -452,6 +616,7 @@
 	
 	
 	window.onload = function() {
+		//현재 위치 받아오기
 		thisLocation();
 	}
 	
@@ -514,7 +679,9 @@
 								</svg>
 							</span>
 						</div>
-					
+						<div class="directions">
+							<a type="button" class="button secondary" id="direction" data-toggle="modal" data-target="#directionModal" data-backdrop="static">길찾기</a>
+						</div>
 					</div>
 					
 				</section>
@@ -526,6 +693,40 @@
 		<jsp:include page="/layout/sidebar.jsp" />
 	</div>
 	<!-- E:Wrapper -->
+	
+	<div class="modal fade" id="directionModal" tabindex="-1" role="dialog" aria-labelledby="directionModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="directionModalLabel">길 찾기 검색</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        <form>
+	          <div><p>길 안내를 원하는 음식점 이름을 입력해주세요.</p></div>
+	          <div class="form-group">
+	            <label for="start" class="col-form-label">출발지</label>
+	            <input type="text" class="direction-control" id="startInput">
+	            <input type="hidden" name="startLat" value="">
+	            <input type="hidden" name="startLong" value="">
+	          </div>
+	          <div class="form-group">
+	            <label for="goal" class="col-form-label">도착지</label>
+	            <input type="text" class="direction-control" id="goalInput">
+	            <input type="hidden" name="goalLat" value="">
+	            <input type="hidden" name="goalLong" value="">
+	          </div>
+	        </form>
+	      </div>
+	      <div class="modal-footer">
+	        <input type="button" value="취소" class="normal" data-dismiss="modal" />
+			<input type="button" value="검색" class="primary" id="addBtn" />
+	      </div>
+	    </div>
+	  </div>
+	</div>
 </body>
 </html>
 	

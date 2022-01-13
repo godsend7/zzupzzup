@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.domain.Mark;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.RestaurantMenu;
 import com.zzupzzup.service.domain.RestaurantTime;
@@ -34,6 +35,8 @@ public interface RestaurantService {
 	public int checkCallDibs(String memberId, int restaurantNo) throws Exception;
 	
 	public int cancelCallDibs(String memberId, int restaurantNo) throws Exception;
+	
+	public Map<String, Object> listMyCallDibs(Search search, Member member) throws Exception;
 	
 	// Select List
 	public Map<String, Object> listRestaurantName(Search search) throws Exception;

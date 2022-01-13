@@ -86,11 +86,11 @@
 					<!-- profile image start -->
 					<div class="col-md" align="center">
 						<c:if test="${sessionScope.member.profileImage == 'defaultImage.png'}">
-							<img src="/resources/images/${sessionScope.member.profileImage}"
+							<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/${sessionScope.member.profileImage}"
 							class="rounded-circle" width="150" height="150" />
 						</c:if>
 						<c:if test="${sessionScope.member.profileImage != 'defaultImage.png'}">
-							<img src="/resources/images/uploadImages/${sessionScope.member.profileImage}"
+							<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/member/${sessionScope.member.profileImage}"
 							class="rounded-circle" width="150" height="150"/>
 						</c:if>
 						<br />
@@ -139,13 +139,13 @@
 										<c:if test="${sessionScope.member.memberRole == 'user'}">
 											<li><a href="/member/listMyActivityScore?memberId=${member.memberId}">내 활동 점수 적립 내역</a></li>
 											<li><a href="/review/listReview">내가 작성한 리뷰 내역</a></li>
-											<li><a href="#">내가 작성한 게시판 내역</a></li>
+											<li><a href="/community/listMyPost">내가 작성한 게시판 내역</a></li>
 											<li><a href="/reservation/listReservation">나의 예약 및 결제 내역</a></li>
 											<li><a href="/review/listMyLikeReview">내가 좋아요 누른 리뷰 내역</a></li>
-											<li><a href="#">내가 좋아요 누른 게시물 내역</a></li>
-											<li><a href="/report/listReport?memberId=${member.memberId}">나의 신고/제보 접수 내역</a></li>
+											<li><a href="/community/listMyLikePost">내가 좋아요 누른 게시물 내역</a></li>
+											<li><a href="/restaurant/listMyCallDibs">내가 찜한 음식점 내역</a></li>
 											<li><a href="/rating/listMyRating">나의 평가 내역</a></li>
-											<li><a href="#">내가 찜한 음식점 내역</a></li>
+											<li><a href="/report/listReport?memberId=${member.memberId}">나의 신고/제보 접수 내역</a></li>
 										</c:if>
 									</ul>
 								</li>

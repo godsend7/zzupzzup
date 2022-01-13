@@ -136,7 +136,7 @@
 				}); 
 			});
 	   	
-	   	//예약거절 파트/////////////////////////////////////////////////////////////////////
+	   	//업주 예약거절 파트/////////////////////////////////////////////////////////////////////
 	   		function fncCancelConfirm() {	
 				console.log("#cancelConfirm");
 				 console.log("${reservation.reservationNo}");
@@ -311,11 +311,11 @@
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->
 									<c:choose> 
 										<c:when test="${member.memberRole == 'owner'}">
-											<c:if test="${reservation.reservationStatus != 1 && reservation.reservationStatus != 2 && reservation.reservationStatus != 3}">
+											<c:if test="${reservation.reservationStatus != 1 || reservation.reservationStatus != 2 }">
 											<input type="button" value="방문 확정" name= "reservationStatus" class="button small primary stretched-link " id="reservationStatus-modal" data-toggle="modal"
 											data-target="#getReservationModal"/>
 											</c:if>
-											<c:if test="${reservation.reservationStatus != 4}">	
+											<c:if test="${(reservation.reservationStatus != 1 || reservation.reservationStatus != 2 ) && reservation.reservationStatus != 4}">	
 											<input type="button" value="예약 거절" name= "reservationRejection" class="button small primary stretched-link" id="reservationRejection-modal" data-toggle="modal"
 											data-target="#rejectionModal"/>
 											
@@ -353,7 +353,7 @@
 									<p>${reservation.returnStatus} ${reservation.returnRefund}
 									<c:choose>
 										<c:when test="${reservation.payOption == 2}">
-										<c:if test="${reservation.reservationStatus != 3 && reservation.reservationStatus != 4 && reservation.refundStatus != 'true'}">
+										<c:if test="${(reservation.reservationStatus == 3 || reservation.reservationStatus == 4) && member.memberRole != 'admin' && reservation.refundStatus != 'true'}">
 										<input type="button" value="결제 취소" name= "refundStatus" class="button small primary stretched-link refundStatus-modal" id="refundStatus-modal" data-toggle="modal"
 										data-target="#refundStatusModal"/>
 										</c:if>

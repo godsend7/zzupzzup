@@ -159,7 +159,8 @@
 						<div class="row">
 							<div class="col-md-8">
 								<h2 class="text-info">${community.postTitle} &nbsp;
-								<small style="color:gray;">by. ${community.member.nickname}</small></h2>
+								<small style="color:gray;" class="getOtherUserModal" data-toggle='modal' data-target='#getOtherUserModal' data-id="${community.member.memberId}">by. ${community.member.nickname}</small>
+								</h2>
 							</div>
 							<div class="col-md-4" style="text-align:right; padding-right: 20px;">
 								<span class="likeCount">${community.likeCount}</span> &nbsp;
@@ -312,6 +313,9 @@
 		<ul class='icons'>
 			<jsp:include page='/report/addReportView.jsp'/>
 		</ul>
+		
+		<!-- User Profile -->
+		<jsp:include page='/member/modal-archive.jsp'/>
 		
 	</div>
 	<!-- E:Wrapper -->
