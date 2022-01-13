@@ -253,7 +253,7 @@
 				    						
 				    						append_nod += '</div></div>';
 				    						
-				    						append_nod += '<h3 class="mb-0">';
+				    						append_nod += '<h3 class="mb-0 getOtherUserModal"  data-toggle="modal" data-target="#getOtherUserModal" data-id="' + item.member.memberId + '">';
 				    						append_nod += '<span class="badge badge-pill badge-primary">';
 				    						append_nod += item.member.memberRank + '</span>';
 				    						append_nod += '  ' + item.member.nickname;

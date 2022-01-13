@@ -237,7 +237,12 @@
 												</div>
 											</div>
 											
-											<h3 class="mb-0">
+											<c:if test = "${fn:contains(path, 'listMyLikeReview')}">
+												<h3 class="mb-0 getOtherUserModal"  data-toggle="modal" data-target="#getOtherUserModal" data-id="${review.member.memberId}">
+											</c:if>
+											<c:if test = "${fn:contains(path, 'listReview')}">
+												<h3 class="mb-0">
+											</c:if>
 												<span class="badge badge-pill badge-primary">
 													${review.member.memberRank}
 												</span>&nbsp; ${review.member.nickname}

@@ -45,6 +45,7 @@
 				}
 				
 				$("#reviewRegDate").text(data.list.reviewRegDate);
+				$(".getOtherUserModal").attr("data-id", data.list.member.memberId);
 				$("#nickname").text(data.list.member.nickname);
 				$("#memberRank").text(data.list.member.memberRank);
 				
@@ -129,7 +130,7 @@
 		   	 	$(".reportModal").removeAttr("data-id");
 		   	 	//console.log("2 ::" + $(".reportModal").attr("data-id"));
 		   	    $(".reportModal").attr("data-id", dataId);
-		   	 	console.log("3 ::" + $(".reportModal").attr("data-id"));
+		   	 	//console.log("3 ::" + $(".reportModal").attr("data-id"));
 			}
 		}); 
     });
@@ -200,7 +201,7 @@
 					</c:if>
 				</div>
 				<!-- <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
-				<h3 class="mb-12">
+				<h3 class="mb-0 getOtherUserModal"  data-toggle="modal" data-target="#getOtherUserModal">
 					<span id="memberRank" class="badge badge-pill badge-primary">
 					</span>&nbsp; <span id="nickname"></span> 
 				</h3>

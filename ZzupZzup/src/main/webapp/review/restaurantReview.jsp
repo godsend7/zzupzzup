@@ -150,7 +150,7 @@
 								</div>
 							</div>
 							
-							<h3 class="mb-0">
+							<h3 class="mb-0 getOtherUserModal"  data-toggle="modal" data-target="#getOtherUserModal" data-id="${review.member.memberId}">
 								<span class="badge badge-pill badge-primary">
 									${review.member.memberRank}
 								</span>&nbsp; ${review.member.nickname}
