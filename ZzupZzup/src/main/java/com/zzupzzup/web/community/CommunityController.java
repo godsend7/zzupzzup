@@ -30,6 +30,8 @@ import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.community.CommunityService;
 import com.zzupzzup.service.domain.Community;
+import com.zzupzzup.service.domain.Mark;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.RestaurantTime;
 import com.zzupzzup.service.member.MemberService;
 
@@ -108,17 +110,25 @@ public class CommunityController {
 	}
 	
 	@RequestMapping(value="getCommunity", method=RequestMethod.GET)
-	public String getCommunity(@RequestParam("postNo") int postNo, Model model) throws Exception {
+	public String getCommunity(@RequestParam("postNo") int postNo, Model model, HttpSession session) throws Exception {
 		
 		System.out.println("/community/getCommunity : GET");
 		
 //		System.out.println("test section 1 : " + postNo);
 		
 		Community community = communityService.getCommunity(postNo);
+		Member member = (Member)session.getAttribute("member");
+		
+		List<Mark> listLike = null;
+		
+		if(member != null && member.getMemberRole().equals("user")) {
+			listLike = communityService.listLike(member.getMemberId());
+		}
 		
 //		System.out.println("test section 2 : " + postNo);
 		
 		model.addAttribute("community", community);
+		model.addAttribute("listLike", listLike);
 		
 //		System.out.println("test section 3 : " + community);
 		
@@ -213,6 +223,53 @@ public class CommunityController {
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
+		
+		return "forward:/community/listCommunity.jsp";	
+	}
+	
+	@RequestMapping(value="listMyLikePost")
+	public String listMyLikePost(@ModelAttribute("search") Search search, Model model, HttpServletRequest request, HttpSession session) throws Exception {
+		
+		System.out.println("/community/listMyLikePost : SERVICE");
+		
+		Member member = (Member)session.getAttribute("member");
+		List<Mark> listLike = null;
+		
+		if(member != null && member.getMemberRole().equals("user")) {
+			listLike = communityService.listLike(member.getMemberId());
+		}
+		
+		
+		if(search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+		
+		/*
+		 * if(request.getParameter("page") != null) {
+		 * search.setCurrentPage(Integer.parseInt(request.getParameter("page"))); }
+		 */
+		
+		System.out.println("LIST_MY_LIKE_POST :: CurrentPage :: " + search.getCurrentPage());
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = communityService.listMyLikePost(search, member);
+		
+		//pageUnit, pageSize
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println("RESULT PAGE : " + resultPage);
+		
+		List<Community> list = (List<Community>)map.get("list");
+		
+		for(Community cm : list) {
+			System.out.println("LIST_MY_LIKE_POST :: CommunityList :: " + cm);
+		}
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("listLike", listLike);
+		model.addAttribute("search", search);
+		model.addAttribute("totalCount",  map.get("totalCount"));
+		model.addAttribute("resultPage", resultPage);
 		
 		return "forward:/community/listCommunity.jsp";	
 	}

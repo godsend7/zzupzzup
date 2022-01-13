@@ -124,7 +124,8 @@ $(function() {
 					+'<div class="chatProfile d-flex flex-row align-items-center">'
 					+'<img src="/resources/images/common/'+JSONData.chatLeaderId.profileImage+'">'
 					+'<div class="dropdown-parent">'
-					+'<a href="/member/getMember?memberId='+JSONData.chatLeaderId.memberId+'">'+JSONData.chatLeaderId.nickname+'</a>'
+					//+'<a href="/member/getMember?memberId='+JSONData.chatLeaderId.memberId+'">'+JSONData.chatLeaderId.nickname+'</a>'
+					+'<a href="#" class="getOtherUserModal" data-toggle="modal" data-target="#getOtherUserModal" data-id="' + JSONData.chatLeaderId.memberId + '">'+JSONData.chatLeaderId.nickname+'</a>'
 					+'<input type="hidden" id="chatLeaderId" name="chatLeaderId" value="'+JSONData.chatLeaderId.memberId+'">'
 					+'</div>'
 					+'<span class="badge badge-info gender">'+JSONData.chatLeaderId.gender+'</span>'
@@ -142,11 +143,11 @@ $(function() {
 				if("${member.memberRole}" == "admin"){
 					displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small warning' value='대화기록보기'/>"
 				}
-				if("${member.memberRole}" == "admin" || "${member.memberId}" == JSONData.chatLeaderId.memberId){
+				if(("${member.memberRole}" == "admin" || "${member.memberId}" == JSONData.chatLeaderId.memberId) && JSONData.chatState != 5){
 				displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small info' value='수정하기'/>"
 				}
 				displayValueFt += "<input type='button' class='button small secondary' data-dismiss='modal' value='닫기' />";
-				if($('#listChat').length){
+				if($('#listChat').length && JSONData.chatState != 5){
 					displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small primary' value='입장하기'>"
 				}
 				$(".get-chat-con").html(displayValueBd);

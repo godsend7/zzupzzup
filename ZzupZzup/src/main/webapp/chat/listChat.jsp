@@ -584,7 +584,7 @@
 																<c:if test="${isChatMember eq 'false' }">
 																	<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>
 																</c:if>
-																<c:if test="${isChatMember eq 'true' }">
+																<c:if test="${isChatMember eq 'true' && chat.chatState != 5}">
 																	<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>
 																</c:if>
 															</c:if>

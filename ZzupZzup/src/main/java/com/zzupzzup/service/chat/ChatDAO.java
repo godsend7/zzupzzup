@@ -59,5 +59,11 @@ public interface ChatDAO {
 	
 	// Select List
 	public List<ChatMember> listReadyCheckMember(Map<String, Object> map) throws Exception;
+	
+	// Update
+	public int updateConnectedChatMember(ChatMember chatMember) throws Exception;
+	
+	//Update
+	public int updateGetOutChatMember(ChatMember chatMember) throws Exception;
 
 }

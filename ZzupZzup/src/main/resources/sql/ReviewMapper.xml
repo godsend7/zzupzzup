@@ -45,6 +45,39 @@
 	</resultMap>
 	
 	
+	<sql id="selectReview">
+  		SELECT r.review_no, r.member_id, r.reservation_no, r.restaurant_no, r.review_detail, r.review_reg_date, 
+				r.review_show_status, r.scope_taste, r.scope_kind, r.scope_clean, r.avg_scope, rep.report_count, m.like_count
+		FROM review AS r LEFT OUTER JOIN(SELECT review_no, COUNT(review_no) AS report_count
+										 FROM report
+                                         GROUP BY review_no) as rep on (rep.review_no = r.review_no)
+						LEFT OUTER JOIN(SELECT review_no, COUNT(review_no) AS like_count
+										FROM mark
+                                        GROUP BY review_no) as m on (r.review_no = m.review_no)
+		<choose>
+			<when test="restaurantNo != null">
+		  		WHERE r.restaurant_no = #{restaurantNo}
+		  		<choose>
+		 			<when test='member != null and member.memberRole == "admin"'>
+		 			</when>
+		 			<otherwise>
+		 				AND r.review_show_status = 1
+		 			</otherwise>
+		 		</choose>
+		  	</when>
+		  	<otherwise>
+		  		<if test='member != null and member.memberRole != "admin"'>
+		  			WHERE r.member_id = #{member.memberId}
+		  		</if>
+		  	</otherwise>
+		</choose>
+		<if test="search.searchFilter == 1">
+		   	WHERE rep.report_count <![CDATA[>=]]> 5
+		</if>
+	</sql>
+	
+	
+	
 	<!-- REVIEW INSERT START -->
 	<insert id="addReview"	parameterType="review" useGeneratedKeys="true" keyProperty="reviewNo">
 	 	INSERT
@@ -129,34 +162,7 @@
 	
 	<select id="listReview" parameterType="map" resultMap="reviewSelectMap">
         SELECT *
-		FROM (SELECT r.review_no, r.member_id, r.reservation_no, r.restaurant_no, r.review_detail, r.review_reg_date, 
-					r.review_show_status, r.scope_taste, r.scope_kind, r.scope_clean, r.avg_scope, rep.report_count, m.like_count
-			  FROM review AS r LEFT Outer join(select review_no, COUNT(review_no) AS report_count
-												 from report
-                                                 GROUP BY review_no) as rep on (rep.review_no = r.review_no)
-			  					LEFT Outer join(select review_no, COUNT(review_no) AS like_count
-												 from mark
-                                                 GROUP BY review_no) as m on (m.review_no = r.review_no) 
-			  <choose>
-		  	  	<when test="restaurantNo != null">
-		  			WHERE r.restaurant_no = #{restaurantNo}
-		  			<choose>
-			 			<when test='member != null and member.memberRole == "admin"'>
-			 			</when>
-			 			<otherwise>
-			 				AND review_show_status = 1
-			 			</otherwise>
-		 			</choose>
-		  		</when>
-		  		<otherwise>
-		  			<if test='member != null and member.memberRole != "admin"'>
-		  				WHERE r.member_id = #{member.memberId}
-		  			</if>
-		  		</otherwise>
-		  	  </choose>
-		  	  <if test="search.searchFilter == 1">
-		  	  	WHERE rep.report_count <![CDATA[>=]]> 5
-		  	  </if>
+		FROM (<include refid="selectReview"/>
 		  	  ORDER BY
 		  	  <choose>
 		 		<when test="search.searchSort == 'likeMuchst'">
@@ -252,40 +258,13 @@
 		WHERE member_id = #{memberId} AND REVIEW_NO = #{reviewNo};
 	</delete>
 	
+	<!-- listReview 시 필요 -->
 	<select id="getTotalCount" parameterType="map" resultType="int">
 		 SELECT Count(*) 
-		 FROM (SELECT r.review_no, r.member_id, r.reservation_no, r.restaurant_no, r.review_detail, r.review_reg_date, 
-					r.review_show_status, r.scope_taste, r.scope_kind, r.scope_clean, r.avg_scope, rep.report_count, m.like_count
-			   FROM review AS r LEFT OUTER JOIN(select review_no, COUNT(review_no) AS report_count
-												 FROM report
-                                                 GROUP BY review_no) as rep on (rep.review_no = r.review_no)
-			  					LEFT OUTER JOIN(select review_no, COUNT(review_no) AS like_count
-												 FROM mark
-                                                 GROUP BY review_no) as m on (r.review_no = m.review_no)
-		<choose>
-			<when test="restaurantNo != null">
-		  		WHERE r.restaurant_no = #{restaurantNo}
-		  		<choose>
-		 			<when test='member != null and member.memberRole == "admin"'>
-		 			</when>
-		 			<otherwise>
-		 				AND r.review_show_status = 1
-		 			</otherwise>
-		 		</choose>
-		  	</when>
-		  	<otherwise>
-		  		<if test='member != null and member.memberRole != "admin"'>
-		  			WHERE r.member_id = #{member.memberId}
-		  		</if>
-		  	</otherwise>
-		</choose>
-		<if test="search.searchFilter == 1">
-		   	WHERE rep.report_count <![CDATA[>=]]> 5
-		</if>
-		) countTable;
+		 FROM (<include refid="selectReview" />) countTable;
 	</select>
 	
-	
+	<!-- listMyLikeReview 시 필요 -->
 	<select id="getLikeTotalCount" parameterType="string" resultType="int">
 		SELECT count(*)
 		FROM review r INNER JOIN (SELECT review_no

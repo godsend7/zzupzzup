@@ -188,3 +188,7 @@ textarea {
 	display: flex;
 	justify-content: space-between;
 }
+
+.getOtherUserModal {
+	cursor: pointer;
+}

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.Mark;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.RestaurantMenu;
 import com.zzupzzup.service.domain.RestaurantTime;
@@ -103,17 +105,22 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 	
 	@Override
-	public Map<String, Object> listCallDibs(Search search, String memberId) throws Exception {
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("search", search);
-		map.put("memberId", memberId);
-		
-		map.put("list", restaurantDAO.listCallDibs(map));
-		map.put("totalCount", restaurantDAO.getTotalCount(search));
-		
-		return map;
+	public List<Mark> listCallDibs(String memberId) throws Exception {
+		return restaurantDAO.listCallDibs(memberId);
 	}
+	
+//	@Override
+//	public Map<String, Object> listCallDibs(Search search, String memberId) throws Exception {
+//		
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("search", search);
+//		map.put("memberId", memberId);
+//		
+//		map.put("list", restaurantDAO.listCallDibs(map));
+//		map.put("totalCount", restaurantDAO.getTotalCount(search));
+//		
+//		return map;
+//	}
 
 	@Override
 	public int checkCallDibs(String memberId, int restaurantNo) throws Exception {
@@ -135,7 +142,20 @@ public class RestaurantServiceImpl implements RestaurantService {
 		return restaurantDAO.cancelCallDibs(map);
 	}
 
-
+	@Override
+	public Map<String, Object> listMyCallDibs(Search search, Member member) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("member", member);
+		
+		map.put("list", restaurantDAO.listMyCallDibs(map));
+		map.put("totalCount", restaurantDAO.getTotalCount(search));
+		
+		return map;
+	}
+	
+	
 	@Override
 	public Map<String, Object> listRestaurantName(Search search) throws Exception {
 		
@@ -175,6 +195,6 @@ public class RestaurantServiceImpl implements RestaurantService {
 		// TODO Auto-generated method stub
 		return restaurantDAO.listMainRestaurant(search);
 	}
-	
+
 	
 }

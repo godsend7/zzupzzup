@@ -110,20 +110,45 @@ public class MemberRestController {
 		System.out.println("::"+member.getMemberId());
 		
 		Member mb = memberService.getMember(member);
-		
 
-		if(mb != null){
-			session.setAttribute("member", mb);
-			System.out.println(mb.getMemberId()+" 님 카카오 로그인");
+		if(mb != null) {
+			if(mb.isEliminated() || mb.isRegBlacklist()) {
+				System.out.println("탈퇴회원 : "+mb.getDeleteReason());
+				System.out.println("블랙리스트 : "+mb.getBlacklistDate());
+				
+				if(mb.getDeleteDate() != null && !mb.isRecovered()) {
+					
+					/* 탈퇴 후 7일 이내 재접속 시 진행되는 계정 복구에 필요한 variable */
+					String deleteDate = mb.getDeleteDate().toString();
+					String currentDate = LocalDate.now().toString();
+					
+					System.out.println("deleteDate : "+deleteDate+", currentDate : "+currentDate);
+					
+					int deleteDateYear = Integer.parseInt(deleteDate.substring(0, 4));
+					int deleteDateMonth = Integer.parseInt(deleteDate.substring(5, 7));
+					int deleteDateDay = Integer.parseInt(deleteDate.substring(8));
+					int currentDateYear = Integer.parseInt(currentDate.substring(0, 4));
+					int currentDateMonth = Integer.parseInt(currentDate.substring(5, 7));
+					int currentDateDay = Integer.parseInt(currentDate.substring(8));
+					
+					if(currentDateYear == deleteDateYear && currentDateMonth == deleteDateMonth && (currentDateDay - deleteDateDay <= 7 || currentDateDay - deleteDateDay >= -7)) {
+						System.out.println(currentDateDay - deleteDateDay);
+						mb.setRecovered(true);
+					}
+				}
+				
+			} else {
+				session.setAttribute("member", mb);
+				System.out.println(mb.getMemberId()+" 님 카카오 로그인");
+			}
 			
 			return mb;
-			
 		} else {
 			System.out.println("회원 등록이 필요한 아이디");
 			//session.setAttribute("kakaoMember", mb)
-			return null;
 		}
 		
+		return null;
 	}
 	
 //	public void naverLogin() {
@@ -212,19 +237,38 @@ public class MemberRestController {
 		
 		Member mb = memberService.getMember(member);
 		
-		if(member.getMemberId().equals(mb.getMemberId()) && member.getPassword().equals(mb.getPassword())) {
-			//System.out.println("하나");
-			mb.setDeleteType(member.getDeleteType());
+		if(mb.getLoginType() == 1) {
 			
-			if(mb.getDeleteReason() == null) {
-				//System.out.println("둘");
-				mb.setDeleteReason(member.getDeleteReason());
+			if(member.getMemberId().equals(mb.getMemberId()) && member.getPassword().equals(mb.getPassword())) {
+				//System.out.println("하나");
+				mb.setDeleteType(member.getDeleteType());
+				
+				if(mb.getDeleteReason() == null) {
+					//System.out.println("둘");
+					mb.setDeleteReason(member.getDeleteReason());
+				}
+				
+				memberService.updateMember(mb);
+				session.invalidate();
+				
+				return mb;
 			}
-			
-			memberService.updateMember(mb);
-			session.invalidate();
-			
-			return mb;
+		} else if(mb.getLoginType() == 2) {
+		
+			if(member.getMemberId().equals(mb.getMemberId())) {
+				//System.out.println("하나");
+				mb.setDeleteType(member.getDeleteType());
+				
+				if(mb.getDeleteReason() == null) {
+					//System.out.println("둘");
+					mb.setDeleteReason(member.getDeleteReason());
+				}
+				
+				memberService.updateMember(mb);
+				session.invalidate();
+				
+				return mb;
+			}
 		}
 
 		return null;
@@ -270,8 +314,16 @@ public class MemberRestController {
 		return mb;
 	}
 	
-	public void getOtherUser() {
+	@RequestMapping(value="json/getOtherUser", method=RequestMethod.POST)
+	public Member getOtherUser(@RequestBody Member member, HttpSession session) throws Exception {
 		
+		System.out.println("/member/json/getOtherUser : POST");
+		
+		
+		Member mb = memberService.getMember(member);
+		//session.setAttribute("mb", mb);
+		
+		return mb;
 	}
 
 }

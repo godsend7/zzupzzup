@@ -51,6 +51,12 @@
 		<result property="restaurantDayOff" column="RESTAURANT_DAY_OFF" />
 	</resultMap>
 	
+	<resultMap id="markSelectMap" type="com.zzupzzup.service.domain.Mark">
+		<result property="markNo" column="MARK_NO" jdbcType="NUMERIC" />
+		<result property="memberId" column="MEMBER_ID" jdbcType="VARCHAR" />
+		<result property="postNo" column="POST_NO" jdbcType="NUMERIC" />
+	</resultMap>
+	
 	<!-- <resultMap id="restaurantSelectMap" type="com.zzupzzup.service.domain.Restaurant">
 		<result property="reservationStatus" column="RESERVATION_STATUS" />
 		<result property="restaurantRegDate" column="RESTAURANT_REG_DATE" />
@@ -183,7 +189,15 @@
 	
 	
 	<!-- SQL : SELECT LIST -->
-	<select id="listLike" parameterType="map" resultMap="communitySelectMap">
+	<select id="listLike" parameterType="string" resultMap="markSelectMap">
+		SELECT MARK_NO, MEMBER_ID, POST_NO
+		FROM MARK
+		WHERE POST_NO IS NOT NULL
+		<if test="value != null">
+			AND MEMBER_ID = #{value}
+		</if>
+	</select>
+	<!-- <select id="listLike" parameterType="map" resultMap="communitySelectMap">
 		SELECT *
 		FROM COMMUNITY AS cn
 		INNER JOIN (SELECT POST_NO, MARK_NO
@@ -194,6 +208,23 @@
 		LEFT OUTER JOIN (SELECT IMAGE, POST_NO
 						 FROM IMAGE) AS img
 						 ON (cn.POST_NO = img.POST_NO)	
+	</select> -->
+	
+	<!-- SQL : SELECT LIST -->
+	<select id="listMyLikePost" parameterType="map" resultMap="communitySelectMap">
+		SELECT *
+		FROM (SELECT cn.POST_NO, cn.MEMBER_ID, cn.NICKNAME, cn.POST_TITLE, cn.POST_TEXT, 
+			  cn.POST_REG_DATE, cn.POST_SHOW_STATUS, cn.RECEIPT_IMAGE, cn.OFFICIAL_DATE
+			  FROM COMMUNITY AS cn
+			  INNER JOIN (SELECT POST_NO, MARK_NO, MEMBER_ID
+			  			  FROM MARK
+			  			  WHERE MEMBER_ID = #{member.memberId}) AS mk
+			  			  ON (mk.POST_NO = cn.POST_NO)
+			  WHERE cn.POST_SHOW_STATUS = 1			  
+			  ORDER BY cn.POST_NO LIMIT 0, 8) AS cnt
+		LEFT OUTER JOIN (SELECT IMAGE, POST_NO
+						 FROM IMAGE) AS img
+						 ON (cnt.POST_NO = img.POST_NO);
 	</select>
 	
 	
@@ -205,7 +236,7 @@
 	
 	
 	<!-- SQL : SELECT -->
-	<select id="getLikeCount" parameterType="int" resultType="int">
+	<select id="getLikePostCount" parameterType="int" resultType="int">
 		SELECT COUNT(POST_NO)
 		FROM MARK
 		WHERE POST_NO = #{value};

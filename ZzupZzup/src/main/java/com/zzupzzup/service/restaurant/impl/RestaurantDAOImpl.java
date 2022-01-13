@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.RestaurantMenu;
 import com.zzupzzup.service.domain.RestaurantTime;
@@ -114,12 +115,17 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	}
 	
 	@Override
-	public List<Restaurant> listCallDibs(Map<String, Object> map) throws Exception {
-		
-		List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listCallDibs", map);
-		
-		return list;
+	public List<Mark> listCallDibs(String memberId) throws Exception {
+		return sqlSession.selectList("RestaurantMapper.listCallDibs", memberId);
 	}
+	
+//	@Override
+//	public List<Restaurant> listCallDibs(Map<String, Object> map) throws Exception {
+//		
+//		List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listCallDibs", map);
+//		
+//		return list;
+//	}
 	
 	@Override
 	public int checkCallDibs(Map<String, Object> map) throws Exception {
@@ -130,7 +136,14 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	public int cancelCallDibs(Map<String, Object> map) throws Exception {
 		return sqlSession.delete("RestaurantMapper.cancelCallDibs", map);
 	}
-
+	
+	@Override
+	public List<Restaurant> listMyCallDibs(Map<String, Object> map) throws Exception {
+		
+		List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listMyCallDibs", map);
+		
+		return list;
+	}
 
 	@Override
 	public List<Restaurant> listRestaurantName(Map<String, Object> map) {
@@ -154,4 +167,5 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 		return sqlSession.selectList("RestaurantMapper.listMainRestaurant", search);
 	}
 
+	
 }
