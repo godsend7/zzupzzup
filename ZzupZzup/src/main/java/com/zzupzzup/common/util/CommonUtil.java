@@ -190,7 +190,7 @@ public class CommonUtil {
 		String typeName = "";
 		
 		if(reservationStatus == 0) {
-			typeName = "결제완료";
+			typeName = "";
 			
 			return typeName;
 			
@@ -214,6 +214,27 @@ public class CommonUtil {
 			
 			return typeName;
 		
+		} else {
+			
+			return null;
+		}
+		
+	}
+	
+	public static String refundStatus(boolean refundStatus) {
+		
+		String typeName = "";
+		
+		if(refundStatus == false) {
+			typeName = "결제완료";
+			
+			return typeName;
+			
+		} else if(refundStatus == true) {
+			typeName = "결제취소";
+			
+			return typeName;
+			
 		} else {
 			
 			return null;

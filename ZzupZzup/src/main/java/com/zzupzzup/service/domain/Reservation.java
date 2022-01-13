@@ -229,6 +229,10 @@ public class Reservation {
 		return CommonUtil.reservationStatus(reservationStatus);
 	}
 	
+	public String getReturnRefund() {
+		return CommonUtil.refundStatus(refundStatus);
+	}
+	
 	public String getReturnPayOption() {
 		return CommonUtil.payOption(payOption);
 	}
