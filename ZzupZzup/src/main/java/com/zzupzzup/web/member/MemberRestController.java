@@ -111,41 +111,44 @@ public class MemberRestController {
 		
 		Member mb = memberService.getMember(member);
 
-		if(mb != null && (mb.isEliminated() || mb.isRegBlacklist())) {
-			System.out.println("탈퇴회원 : "+mb.getDeleteReason());
-			System.out.println("블랙리스트 : "+mb.getBlacklistDate());
-			
-			if(mb.getDeleteDate() != null && !mb.isRecovered()) {
+		if(mb != null) {
+			if(mb.isEliminated() || mb.isRegBlacklist()) {
+				System.out.println("탈퇴회원 : "+mb.getDeleteReason());
+				System.out.println("블랙리스트 : "+mb.getBlacklistDate());
 				
-				/* 탈퇴 후 7일 이내 재접속 시 진행되는 계정 복구에 필요한 variable */
-				String deleteDate = mb.getDeleteDate().toString();
-				String currentDate = LocalDate.now().toString();
-				
-				System.out.println("deleteDate : "+deleteDate+", currentDate : "+currentDate);
-				
-				int deleteDateYear = Integer.parseInt(deleteDate.substring(0, 4));
-				int deleteDateMonth = Integer.parseInt(deleteDate.substring(5, 7));
-				int deleteDateDay = Integer.parseInt(deleteDate.substring(8));
-				int currentDateYear = Integer.parseInt(currentDate.substring(0, 4));
-				int currentDateMonth = Integer.parseInt(currentDate.substring(5, 7));
-				int currentDateDay = Integer.parseInt(currentDate.substring(8));
-				
-				if(currentDateYear == deleteDateYear && currentDateMonth == deleteDateMonth && (currentDateDay - deleteDateDay <= 7 || currentDateDay - deleteDateDay >= -7)) {
-					System.out.println(currentDateDay - deleteDateDay);
-					mb.setRecovered(true);
+				if(mb.getDeleteDate() != null && !mb.isRecovered()) {
+					
+					/* 탈퇴 후 7일 이내 재접속 시 진행되는 계정 복구에 필요한 variable */
+					String deleteDate = mb.getDeleteDate().toString();
+					String currentDate = LocalDate.now().toString();
+					
+					System.out.println("deleteDate : "+deleteDate+", currentDate : "+currentDate);
+					
+					int deleteDateYear = Integer.parseInt(deleteDate.substring(0, 4));
+					int deleteDateMonth = Integer.parseInt(deleteDate.substring(5, 7));
+					int deleteDateDay = Integer.parseInt(deleteDate.substring(8));
+					int currentDateYear = Integer.parseInt(currentDate.substring(0, 4));
+					int currentDateMonth = Integer.parseInt(currentDate.substring(5, 7));
+					int currentDateDay = Integer.parseInt(currentDate.substring(8));
+					
+					if(currentDateYear == deleteDateYear && currentDateMonth == deleteDateMonth && (currentDateDay - deleteDateDay <= 7 || currentDateDay - deleteDateDay >= -7)) {
+						System.out.println(currentDateDay - deleteDateDay);
+						mb.setRecovered(true);
+					}
 				}
-		}
-		session.setAttribute("member", mb);
-		System.out.println(mb.getMemberId()+" 님 카카오 로그인");
-		
-		return mb;
+				
+			} else {
+				session.setAttribute("member", mb);
+				System.out.println(mb.getMemberId()+" 님 카카오 로그인");
+			}
 			
+			return mb;
 		} else {
 			System.out.println("회원 등록이 필요한 아이디");
 			//session.setAttribute("kakaoMember", mb)
-			return null;
 		}
 		
+		return null;
 	}
 	
 //	public void naverLogin() {
