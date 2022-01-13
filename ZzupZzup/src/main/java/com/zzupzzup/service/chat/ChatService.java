@@ -58,5 +58,8 @@ public interface ChatService {
 
 	// update
 	public int updateConnectedChatMember(ChatMember chatMember) throws Exception;
+	
+	// update
+	public int updateGetOutChatMember(ChatMember chatMember) throws Exception;
 		
 }

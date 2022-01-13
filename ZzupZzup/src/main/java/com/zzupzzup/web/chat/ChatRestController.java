@@ -190,32 +190,6 @@ public class ChatRestController {
 		return map;
 	}
 	
-	@RequestMapping(value="json/updateConnectedChatMember/chatNo={chatNo}&memberId={memberId}&onConnected={onConnected}", method=RequestMethod.GET)
-	public Map updateConnectedChatMember(@PathVariable int chatNo, @PathVariable String memberId, @PathVariable Boolean onConnected, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
-		System.out.println("/chat/json/updateConnectedChatMember : GET");
-		
-		ChatMember chatMember = new ChatMember();
-		Member member = new Member();
-		
-		member.setMemberId(memberId);
-		member = memberService.getMember(member);
-		chatMember.setChatNo(chatNo);
-		chatMember.setMember(member);
-		chatMember.setOnConnected(onConnected);
-		
-		System.out.println("==============================");
-		System.out.println(chatMember);
-		System.out.println("==============================");
-		
-		// Business Losic
-		chatService.updateConnectedChatMember(chatMember);
-		
-		Map map = new HashMap();
-		map.put("chatMember", chatMember);
-		
-		return map;
-	}
-	
 	@RequestMapping(value="json/listReadyCheckMember/chatNo={chatNo}", method=RequestMethod.GET)
 	public Map listReadyCheckMember(@PathVariable int chatNo, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 		
@@ -278,5 +252,58 @@ public class ChatRestController {
 		return list;
 	}
 	
+	@RequestMapping(value="json/updateConnectedChatMember/chatNo={chatNo}&memberId={memberId}&onConnected={onConnected}", method=RequestMethod.GET)
+	public Map updateConnectedChatMember(@PathVariable int chatNo, @PathVariable String memberId, @PathVariable Boolean onConnected, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		System.out.println("/chat/json/updateConnectedChatMember : GET");
+		
+		ChatMember chatMember = new ChatMember();
+		Member member = new Member();
+		
+		member.setMemberId(memberId);
+		member = memberService.getMember(member);
+		chatMember.setChatNo(chatNo);
+		chatMember.setMember(member);
+		chatMember.setOnConnected(onConnected);
+		
+		System.out.println("==============================");
+		System.out.println(chatMember);
+		System.out.println("==============================");
+		
+		// Business Losic
+		chatService.updateConnectedChatMember(chatMember);
+		
+		Map map = new HashMap();
+		map.put("chatMember", chatMember);
+		
+		return map;
+	}
 	
+	@RequestMapping(value="json/updateGetOutChatMember/chatNo={chatNo}&memberId={memberId}&", method=RequestMethod.GET)
+	public Map updateGetOutChatMember(@PathVariable int chatNo,@PathVariable String memberId, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		System.out.println("/chat/json/updateGetOutChatMember : GET");
+		
+		ChatMember chatMember = new ChatMember();
+		Member member = new Member();
+		
+		System.out.println("==============================");
+		System.out.println(memberId);
+		System.out.println(chatNo);
+		
+		member.setMemberId(memberId);
+		chatMember.setChatNo(chatNo);
+		chatMember.setMember(member);
+		chatMember.setForbiddenMember(true);
+		
+		System.out.println("==============================");
+		System.out.println(chatMember);
+		System.out.println("==============================");
+		
+		// Business Logic
+		chatService.updateGetOutChatMember(chatMember);
+		
+		Map map = new HashMap();
+		map.put("chatMember", chatMember);
+		
+		return map;
+	}
 }
