@@ -80,14 +80,13 @@ public class ReservationRestController {
 		
 		Member member = (Member) session.getAttribute("member");
 		
-		Reservation reservation = new Reservation();
+		Reservation reservation = reservationService.getReservation(reservationNo);
 		
 		reservation.setMember(member);
 		reservation.setReservationNo(reservationNo);
 		reservation.setReservationStatus(reservationStatus);
-		//reservation.setReservationCancelReason(reservationCancelReason);
 		
-		System.out.println("getReservation reservation : " + reservation);
+		System.out.println("updateReservation reservation : " + reservation);
 		
 		return reservationService.updateReservation(reservation);
 	}
@@ -139,19 +138,20 @@ public class ReservationRestController {
 			
 			Member member = (Member) session.getAttribute("member");
 			
-			Reservation reservation = new Reservation();
+			Reservation reservation = reservationService.getReservation(reservationNo);
 			
 			reservation.setReservationNo(reservationNo);
 			reservation.setPayMethod(payMethod);
 			reservation.setRefundStatus(true);
 			reservation.setMember(member);
-			
+		
 			Map<String, Object> map =  new HashMap<String,Object>();
 			
 			setup();
 			testGetToken();
 			setup();
-			//Order order = orderService.getFlightOrder(orderId);
+			
+			System.out.println("updateReservation reservation : " + reservation);
 			
 			CancelData cancel = new CancelData(payMethod, true);
 			System.out.println("imp_uid : " + payMethod);

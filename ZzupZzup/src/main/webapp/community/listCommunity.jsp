@@ -86,6 +86,30 @@
 						</div>
 						<hr>
 						<div class="container">
+						
+							<div class="row">
+								
+								<div class="col-md-7">
+									<span class="badge badge-pill badge-secondary">Secondary</span>
+									<span class="badge badge-pill badge-secondary">Secondary</span>
+								</div>
+								
+								<div class="col-md-5 row">
+									<select class="searchCondition my-2 my-md-0" name="searchCondition" style="width: 124px; padding-left: 10px;">
+									  <!-- <option selected>Open this select menu</option> -->
+									  <option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""}>
+									  작성자명</option>
+									  <option value="1" ${!empty search.searchCondition && search.searchCondition == 1 ? "selected" : ""}>
+									  게시물제목</option>
+									</select>
+									
+									<form class="form-inline my-2 my-md-0" style="padding-left: 5px;">
+								      <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+								    </form>
+							    </div>
+							</div><br><br>
+							
+							
 							<div class="row thumb-list">
 
 								<c:set var="i" value="0" />
