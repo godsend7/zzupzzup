@@ -15,7 +15,6 @@ $(function(){
 	$("body").on("click", function(){
 		let isActive = $(".dropmenu-list").hasClass("active");
 		if(isActive){
-			console.log("바디 클릭했을 때 드롭메뉴 켜졌다");
 			$(".dropmenu-list").removeClass("active");
 		}
 	});

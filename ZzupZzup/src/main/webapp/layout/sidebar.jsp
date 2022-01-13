@@ -144,7 +144,7 @@
 											<li><a href="/review/listMyLikeReview">내가 좋아요 누른 리뷰 내역</a></li>
 											<li><a href="#">내가 좋아요 누른 게시물 내역</a></li>
 											<li><a href="/report/listReport?memberId=${member.memberId}">나의 신고/제보 접수 내역</a></li>
-											<li><a href="#">나의 평가 내역</a></li>
+											<li><a href="/rating/listMyRating">나의 평가 내역</a></li>
 											<li><a href="#">내가 찜한 음식점 내역</a></li>
 										</c:if>
 									</ul>
@@ -165,6 +165,7 @@
 										<li><a href="/restaurant/listRequestRestaurant">음식점 등록 요청 내역</a></li>
 										<li><a href="/review/listReview">전체 리뷰 관리</a></li>
 										<li><a href="/report/listReport">신고/제보 관리</a></li>
+										<li><a href="/rating/listRating">평가 관리</a></li>
 									</ul>
 								</li>
 							</c:if>

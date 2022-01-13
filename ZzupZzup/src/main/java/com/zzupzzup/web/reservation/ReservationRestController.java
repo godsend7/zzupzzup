@@ -132,30 +132,34 @@ public class ReservationRestController {
 		System.out.println("token : " + token);
 		}
 		
-		@RequestMapping(value = "/json/payRefund/{reservationNo}/{payMethod}", method = RequestMethod.GET)
-		public Map payRefund(@PathVariable int reservationNo ,@PathVariable String payMethod ) throws Exception {
-		// 이미 취소된 거래 imp_uid
-		System.out.println("testCancelPaymentByImpUid --- Start!---");
-		
-		Reservation reservation = new Reservation();
-		
-		reservation.setReservationNo(reservationNo);
-		reservation.setPayMethod(payMethod);
-		
-		Map<String, Object> map =  new HashMap<String,Object>();
-		
-		setup();
-		testGetToken();
-		setup();
-		//Order order = orderService.getFlightOrder(orderId);
-		
-		CancelData cancel = new CancelData(payMethod, true);
-		System.out.println("imp_uid : " + payMethod);
-		IamportResponse<Payment> cancelpayment = client.cancelPaymentByImpUid(cancel);
-		System.out.println(cancelpayment.getMessage());
-		System.out.println("testCancelPaymentByImpUid --- End!---");
-		
-		return map;
+		@RequestMapping(value = "/json/payRefund/{reservationNo}/{payMethod}/{refundStatus}", method = RequestMethod.GET)
+		public int payRefund(@PathVariable int reservationNo ,@PathVariable String payMethod ,@PathVariable boolean refundStatus, HttpSession session) throws Exception {
+			// 이미 취소된 거래 imp_uid
+			System.out.println("testCancelPaymentByImpUid --- Start!---");
+			
+			Member member = (Member) session.getAttribute("member");
+			
+			Reservation reservation = new Reservation();
+			
+			reservation.setReservationNo(reservationNo);
+			reservation.setPayMethod(payMethod);
+			reservation.setRefundStatus(true);
+			reservation.setMember(member);
+			
+			Map<String, Object> map =  new HashMap<String,Object>();
+			
+			setup();
+			testGetToken();
+			setup();
+			//Order order = orderService.getFlightOrder(orderId);
+			
+			CancelData cancel = new CancelData(payMethod, true);
+			System.out.println("imp_uid : " + payMethod);
+			IamportResponse<Payment> cancelpayment = client.cancelPaymentByImpUid(cancel);
+			System.out.println(cancelpayment.getMessage());
+			System.out.println("testCancelPaymentByImpUid --- End!---");
+			
+			return reservationService.updateReservation(reservation);
 		}
 		
 		///////////////////////////////환불 끝///////////////////////////////////////////////
