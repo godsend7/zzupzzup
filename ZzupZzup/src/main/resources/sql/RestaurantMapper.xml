@@ -56,9 +56,9 @@
 	</resultMap>
 	
 	<resultMap id="markSelectMap" type="com.zzupzzup.service.domain.Mark">
-		<result property="markNo" column="MARK_NO" jdbcType="INTEGER"/>
+		<result property="markNo" column="MARK_NO" jdbcType="NUMERIC"/>
 		<result property="memberId" column="MEMBER_ID" jdbcType="VARCHAR"/>
-		<result property="restaurantNo" column="RESTAURANT_NO" jdbcType="INTEGER"/>
+		<result property="restaurantNo" column="RESTAURANT_NO" jdbcType="NUMERIC"/>
 	</resultMap>
 	
 	
@@ -245,7 +245,16 @@
 	
 	
 	<!-- SQL : SELECT -->
-	<select id="listCallDibs" parameterType="map" resultMap="restaurantSelectMap">
+	<select id="listCallDibs" parameterType="string" resultMap="markSelectMap">
+		SELECT MARK_NO, MEMBER_ID, RESTAURANT_NO
+		FROM MARK
+		WHERE RESTAURANT_NO IS NOT NULL
+		<if test="value != null">
+			AND MEMBER_ID = #{value}
+		</if>
+	</select>
+	<!-- SQL : SELECT -->
+	<!-- <select id="listCallDibs" parameterType="map" resultMap="restaurantSelectMap">
 		SELECT *
 		FROM RESTAURANT AS rt
 		INNER JOIN (SELECT RESTAURANT_NO, MARK_NO
@@ -256,10 +265,10 @@
 		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
 						 FROM IMAGE) AS img
 						 ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
-	</select>
+	</select> -->
 	
 	<!-- SQL : SELECT -->
-	<select id="getZzimTotalCount" parameterType="string" resultType="int">
+	<!-- <select id="getZzimTotalCount" parameterType="string" resultType="int">
 		SELECT COUNT(*)
 		FROM RESTAURANT AS rt
 		INNNER JOIN (SELECT RESTAURANT_NO
@@ -268,6 +277,14 @@
 					 ORDER BY MARK_NO) AS mk
 					 ON (rt.RESTAURANT_NO = mk.RESTAURANT_NO)
 		WHERE rt.JUDGE_STATUS = 2;
+	</select> -->
+	
+	
+	<!-- SQL : SELECT -->
+	<select id="getCallDibsRestaurantCount" parameterType="int" resultType="int">
+		SELECT COUNT(RESTAURANT_NO)
+		FROM MARK
+		WHERE RESTAURANT_NO = #{value};
 	</select>
 	
 	

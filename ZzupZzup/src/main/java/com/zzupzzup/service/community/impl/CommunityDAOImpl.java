@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.community.CommunityDAO;
 import com.zzupzzup.service.domain.Community;
+import com.zzupzzup.service.domain.Mark;
 
 @Repository("communityDaoImpl")
 public class CommunityDAOImpl implements CommunityDAO {
@@ -20,12 +21,12 @@ public class CommunityDAOImpl implements CommunityDAO {
 	@Qualifier("sqlSessionTemplate")
 	private SqlSession sqlSession;
 	
+	
+	///Constructor
 	public void setSqlSession(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}
 	
-	
-	///Constructor
 	public CommunityDAOImpl() {
 		System.out.println(this.getClass());
 	}
@@ -62,7 +63,12 @@ public class CommunityDAOImpl implements CommunityDAO {
 
 	@Override
 	public Community getCommunity(int postNo) throws Exception {
-		return sqlSession.selectOne("CommunityMapper.getCommunity", postNo);
+		Community community = sqlSession.selectOne("CommunityMapper.getCommunity", postNo);
+		
+		//해당 community의 좋아요 수 조회
+		community.setLikeCount(getLikeCount(community.getPostNo()));
+		
+		return community;
 	}
 	
 	
@@ -102,7 +108,7 @@ public class CommunityDAOImpl implements CommunityDAO {
 
 	@Override
 	public int getLikeCount(int postNo) throws Exception {
-		return sqlSession.selectOne("CommunityMapper.getLikeCount", postNo);
+		return sqlSession.selectOne("CommunityMapper.getLikePostCount", postNo);
 	}
 
 
@@ -131,9 +137,22 @@ public class CommunityDAOImpl implements CommunityDAO {
 
 
 	@Override
-	public List<Community> listLike(Map<String, Object> map) throws Exception {
+	public List<Mark> listLike(String memberId) throws Exception {
 		
-		List<Community> list = sqlSession.selectList("CommunityMapper.listLike", map);
+//		List<Community> list = sqlSession.selectList("CommunityMapper.listLike", map);
+		
+//		for (int i = 0; i < list.size(); i++) {
+//			list.get(i).setLikeCount(getLikeCount(list.get(i).getPostNo()));
+//		}
+		
+		return sqlSession.selectList("CommunityMapper.listLike", memberId);
+	}
+
+
+	@Override
+	public List<Community> listMyLikePost(Map<String, Object> map) throws Exception {
+		
+		List<Community> list = sqlSession.selectList("CommunityMapper.listMyLikePost", map);
 		
 		for (int i = 0; i < list.size(); i++) {
 			list.get(i).setLikeCount(getLikeCount(list.get(i).getPostNo()));
@@ -142,17 +161,9 @@ public class CommunityDAOImpl implements CommunityDAO {
 		return list;
 	}
 
-
 	@Override
-	public List<Community> listMyPost(Map<String, Object> map) throws Exception {
-		
-		List<Community> list = sqlSession.selectList("CommunityMapper.listMyPost", map);
-		
-		for (int i = 0; i < list.size(); i++) {
-			list.get(i).setLikeCount(getLikeCount(list.get(i).getPostNo()));
-		}
-		
-		return list;
+	public int getLikeTotalCount(String memberId) throws Exception {
+		return sqlSession.selectOne("CommunityMapper.getLikeTotalCount", memberId);
 	}
 	
 }

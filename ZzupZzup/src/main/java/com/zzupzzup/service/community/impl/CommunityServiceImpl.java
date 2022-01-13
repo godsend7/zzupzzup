@@ -12,6 +12,8 @@ import com.zzupzzup.common.Search;
 import com.zzupzzup.service.community.CommunityDAO;
 import com.zzupzzup.service.community.CommunityService;
 import com.zzupzzup.service.domain.Community;
+import com.zzupzzup.service.domain.Mark;
+import com.zzupzzup.service.domain.Member;
 
 @Service("communityServiceImpl")
 public class CommunityServiceImpl implements CommunityService {
@@ -94,28 +96,28 @@ public class CommunityServiceImpl implements CommunityService {
 
 
 	@Override
-	public Map<String, Object> listLike(Search search, String memberId) throws Exception {
+	public List<Mark> listLike(String memberId) throws Exception {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("search", search);
-		map.put("memberId", memberId);
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("search", search);
+//		map.put("memberId", memberId);
+//		
+//		map.put("list", communityDAO.listLike(map));
+//		map.put("totalCount", communityDAO.getTotalCount(search));
 		
-		map.put("list", communityDAO.listLike(map));
-		map.put("totalCount", communityDAO.getTotalCount(search));
-		
-		return map;
+		return communityDAO.listLike(memberId);
 	}
 
 
 	@Override
-	public Map<String, Object> listMyPost(Search search, String memberId) throws Exception {
+	public Map<String, Object> listMyLikePost(Search search, Member member) throws Exception {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
-		map.put("memberId", memberId);
+		map.put("member", member);
 		
-		map.put("list", communityDAO.listMyPost(map));
-		map.put("totalCount", communityDAO.getTotalCount(search));
+		map.put("list", communityDAO.listMyLikePost(map));
+		map.put("totalCount", communityDAO.getLikeTotalCount(member.getMemberId()));
 		
 		return map;
 	}
