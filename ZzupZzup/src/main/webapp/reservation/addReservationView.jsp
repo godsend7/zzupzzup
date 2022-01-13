@@ -117,7 +117,6 @@
 	              msg += '카드 승인번호 : ' + rsp.apply_num;
 	              $("#payMethod").val(rsp.imp_uid);
 	  				console.log("I'mport 번호::::"+$("#payMethod").val());
-	              alert('결제가 완료되었습니다.');
 	              addReservation();
 	          } else {
 	        	  var msg = '결제에 실패하였습니다.';
