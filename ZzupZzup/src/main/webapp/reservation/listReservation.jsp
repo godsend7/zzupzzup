@@ -118,13 +118,10 @@
 									<h3 class="card-title">${reservation.restaurant.restaurantName}</h3>
 									<h4 class="text-primary card-title">예약번호<a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h4>
 								
-										<div class="col-md-8-nickname">
+										<div class="col-md-8 nickname">
 										<label for="nickname"> 예약자 NickName</label> 
-										<%-- <p>${member.nickname}</p> --%>
-										${reservation.restaurant}
 									<p><c:forEach var="chatMember" items="${reservation.chat.chatMember}" varStatus="status">
 											<c:out value = "${chatMember.member.nickname} ${status.last ? '' : '/'}"/>
-											<%-- <c:out value = "${chatMember}"/> --%>
 										</c:forEach></p>
 										</div>
 										
@@ -144,7 +141,12 @@
 										<div class="row">
 									    <div class="col-md-8 fixedDate">
 									    <label for="demo-name">방문 확정 후(승인)</label> 
-										<p>${reservation.fixedDate} </div>
+									    <c:choose>
+											<c:when test="${reservation.reservationStatus == 1 || reservation.reservationStatus == 2}">
+												<p>${reservation.fixedDate}</p> 
+											</c:when>
+										</c:choose>
+										</div>
 									    <div class="col-6 col-md-4">
 									    <c:choose>
 									    	<c:when test="${member.memberRole == 'user' && reservation.reviewNo != null && reservation.reservationStatus==1}">
@@ -168,8 +170,8 @@
 										
 									<c:choose>
 										<c:when test="${member.memberRole == 'admin'}">	
-										<div class="col-6 col-12-xsmall">
-										<label for="demo-name">업주 아이디</label> 
+										<div class="col-md-12 ownerId">
+										<label for="ownerId">업주 아이디</label> 
 										<p>${reservation.restaurant.member.memberId}</p>
 										</div>
 									</c:when>
