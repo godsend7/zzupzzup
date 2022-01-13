@@ -67,67 +67,45 @@
 		
 		//시스템 문구 출력되는 부분
 		socket.on('update', (data) => {
-			
+			console.log("====update====");
+			console.log(data);
 			const item = new makeSysemPost(data.message);
 			if(data.chatNo == chatNo){
 				item.makeLi();
+				if(data.type == "connect"){
+					updateConnected(data.chatNo,data.memberId, true);
+				}else if(data.type == "disconnect"){
+					updateConnected(data.chatNo,data.memberId, false);
+				}
 			}
 			displayContainer.scrollTop(chatList.height());
 			
 			//나갔다 들어올 때 멤버 확인 리스트 출력
 			setTimeout(function() { 
-				memList(data.memberId, onUser);
-				
-				//console.log(onUser);
-				$.each(onUser, function(index, item){
-					console.log("index?? : " + index);
-					console.log("아아아아아앙 : " + item);
-					$("a[data-target='"+item+"']").parents(".chatProfile").addClass("connected");
-				});
+				memList(data.memberId);
 			}, 500);
 			
-			//접속중인 사람 구별 클래스 붙임
-			/* setTimeout(function() { 
-				console.log(data.memberId);
-				console.log(memberId.val());
-				if(data.memberId == memberId.val()){
-					console.log("접속한 살마");
-					
-					let onMember = $("a[data-target='"+data.memberId+"']");
-					//console.log(onMember);
-					//$("a[data-target='"+data.memberId+"']").parents(".chatProfile").addClass("connected");
-				}
-			}, 1000); */
 		});
 		
 		socket.on('disconnect', (data) => {
-			console.log(data.message);
-			memList(data.memberId, onUser);
-		});
-		
-		socket.on('on_users', (data) => {
-			onUser = data;
-			//console.log("on_user : " + onUser);
-			//console.log("length : "+ onUser.length);
-			
-			$.each(onUser, function(index, item){
-				$("a[data-target='"+item+"']").parents(".chatProfile").addClass("connected");
-			},1000);
-			
-		});
-		
+			console.log(data);
+			updateConnected(data.memberId, false);
+			memList(data.memberId);
+		});;
 		
 		socket.on("send_msg", (data) => {
-			//console.log(data);
 			const { message, memberInfo, regDate } = data;
 			const item = new makeClientPost(message, memberInfo, regDate);
-			if(memberInfo.chatNo == "${chat.chatNo}"){
+			if(data.memberInfo.chatNo == chatNo){
 				item.makeLi();
+				updateConnected(data.memberInfo.chatNo,data.memberInfo.memberId, true);
+				setTimeout(function() { 
+					memList(data.memberInfo.memberId);
+				}, 500);
 			}
 			//console.log("con scroll" + chatList.height());
 			displayContainer.scrollTop(chatList.height());
 		});
-		
 		
 		chatInput.on("keypress", (e) => {
 			if(e.keyCode === 13){
@@ -135,21 +113,11 @@
 			}
 		});
 		
-		/* function send(){
-			const param = {
-				room: 1,
-				name: nickname.val(),
-				msg: chatInput.val()
-			}
-			
-			socket.emit("send_msg", param);
-			$(".chatting-input").val("");
-		} */
-		
 		sendButton.on("click", function(){
 			messageSend();
 		});
 		
+		// 채팅방 폭파
 		socket.on("bomb_msg", (data) => {
 			console.log("폭파왔다.");
 			console.log(data);
@@ -158,14 +126,45 @@
 			}
 		});
 		
-		$("#chatBombBtn").on("click", function(){
-			location.href="/chat/listChat";
+		
+		// 참여자 강퇴
+		socket.on("get_out_msg", (data) => {
+			console.log("강퇴 왔다.");
+			console.log(data);
+			console.log(data.chatNo +"==="+ data.getOutId);
+			console.log(chatNo +"==="+ memberId);
+			
+			if(data.chatNo == chatNo && data.getOutId == memberId){
+				console.log("갸갸갸");
+				$("#outingChat").modal("show");
+				updateGetOutChatMember(data.chatNo,data.getOutId);
+				$("body").on("click", function(e){
+					e.preventDefault();
+					location.href="/chat/listChat";
+				});
+				/* setTimeout(function() { 
+				}, 1000); */
+			}
+		});
+		
+		$("#getOutBtn").on("click", function(){
+			const getOutId = $("input[name=getOutId]").val();
+			getOutMember(getOutId);
 		});
 		
 		// 채팅방 폭파
 		function bombChat(){
 			console.log("폭파시킨다");	
 			socket.emit("bomb_msg", memberInfo);
+		}
+		
+		// 참여자 강퇴
+		function getOutMember(getOutId){
+			console.log(getOutId + "강퇴시킨다.");	
+			socket.emit("get_out_msg", {
+				memberInfo : memberInfo,
+				getOutId : getOutId
+			});
 		}
 		
 		// 메세지 보내기
@@ -205,13 +204,51 @@
 			}
 		}
 		
-		// 참가자 리스트에 뿌려질 리스트 가져오기
-		function memList(memberId, onUser){
-			
-			const onMemberId = memberId
-			//console.log("멤버 아디 잘 들어오나 확인 : " + onMemberId);
-			//console.log(onUser);
-			
+		// 참가자 강퇴 rest
+		function updateGetOutChatMember(chatNo,memberId){
+			$.ajax({
+				url: "/chat/json/updateGetOutChatMember/chatNo="+chatNo+"&memberId="+memberId+"&",
+				method:"GET",
+				dataType: "json",
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+				success: function(JSONData){
+					console.log("success");
+				},
+				error : function(request, status, error) {
+					alert("code:" + request.status + "\n" + "message:"
+							+ request.responseText + "\n" + "error:"
+							+ error);
+				}
+			});
+		}
+		
+		
+		// 참가자 접속 아닌사람 connected 해제
+		function updateConnected(chatNo,memberId,onConnected){
+			$.ajax({
+				url: "/chat/json/updateConnectedChatMember/chatNo="+chatNo+"&memberId="+memberId+"&onConnected="+onConnected,
+				method:"GET",
+				dataType: "json",
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+				success: function(JSONData){
+					console.log("success");
+				},
+				error : function(request, status, error) {
+					alert("code:" + request.status + "\n" + "message:"
+							+ request.responseText + "\n" + "error:"
+							+ error);
+				}
+			});
+		}
+		
+		// 참가자 리스트에 뿌려질 리스트 가져오기 함수
+		function memList(memberId){
 			$.ajax({
 				url: "/chat/json/listChatMember/chatNo=${chat.chatNo}",
 				method: "GET",
@@ -223,8 +260,11 @@
 				success : function(JSONData, status) {
 					//console.log(JSONData);
 					let dom = "";
+					let memberCount = "";
 					//console.log(JSONData.list);
 					$.each(JSONData.list, function(index, item){
+						//console.log(item);
+						memberCount = JSONData.list.length;
 						let mem_profile_img = item.member.profileImage;
 						let mem_gender = item.member.gender;
 						//console.log(mem_profile_img);
@@ -239,17 +279,13 @@
 						}
 						const chatLeaderClass = "${chat.chatLeaderId.memberId}" == item.member.memberId ? "chat-leader":"";
 						// 멤버들중 들어온 애들 루핑
-						let chatConnected = '';
-						$.each(onUser, function(idx, itm){
-							chatConnected = itm == item.member.memberId ? "connected"	: "";					
-									
-						})
+						const chatConnected = item.onConnected == true ? "connected" : ""; 
 						
 						dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+' '+chatConnected+'"><img src="/resources/images/common/'+mem_profile_img+'"><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
-						//console.log(item.member);
-						$(".member_dropdown[data-target='"+onMemberId+"']").addClass("connected");
+						
 					});
 					userList.html(dom);
+					$(".member-count").html(memberCount);
 				},
 				error : function(request, status, error) {
 					alert("code:" + request.status + "\n" + "message:"
@@ -270,20 +306,20 @@
 					"Content-Type": "application/json"
 				},
 				success:function(JSONData, status){
-					//console.log("몽고디비 데이터" + JSONData);
+					console.log("몽고디비 데이터");
+					console.log(JSONData);
 					let dom = "";
 					
 					$.each(JSONData, function(key, value){
 						let timeStemp = new Date(value.regDate);
-						var newTime = timeFormatter(timeStemp);
+						let newTime = timeFormatter(timeStemp);
 						let mem_profile_img = value.chatMemberImg;
 						mem_profile_img != "defaultImage.png" ? mem_profile_img = "uploadImages/"+mem_profile_img : "";
 						const msgType = nickname == value.chatMemberName ? "sent" : "received";
 						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="/resources/images/common/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
 					});
-					//chatList.html(dom);
+					chatList.html(dom);
 					displayContainer.scrollTop(chatList.height());
-					
 				},
 				error:function(e){
 					console.log("err : " + e);
@@ -306,8 +342,17 @@
 			}else{
 				var minutes = date.getMinutes();
 			}
-			var time = hour + ":" + minutes + " " + amPm;
-			//console.log(time);
+			if (date.getMonth()+1 <10){
+				var month = "0"+(date.getMonth()+1);
+			}else{
+				var month = date.getMonth()+1;
+			}
+			if (date.getDate() <10){
+				var day = "0"+date.getDate();
+			}else{
+				var day = date.getDate();
+			}
+			var time = month + "-" + day + " " + hour + ":" + minutes + " " + amPm;
 			return time;
 		}
 		
@@ -320,10 +365,10 @@
 			dom += '<div class="dropmenu-list">'
 				+ '<a href="/member/getMember?memberId='+dataTarget+'" class="dropmenu-item">프로필 보기</a>';
 			if("${member.memberId}" != dataTarget){
-			dom += '<a href="" class="reportModal dropmenu-item" data-target="#reportModal" data-target="#reportModal" data-toggle="modal" data-id=\'["2","'+dataTarget+'"]\' class="dropmenu-item">참여자 신고</a>';
+			dom += '<a href="" class="reportModal dropmenu-item" data-target="#reportModal" data-toggle="modal" data-id=\'["2","'+dataTarget+'"]\' class="dropmenu-item">참여자 신고</a>';
 			}
 			if("${chat.chatLeaderId.memberId}" == "${member.memberId}" && "${member.memberId}" != dataTarget){
-				dom += '<a href="/chat/deleteForbiddenMember?chatNo='+${chat.chatNo}+'&memberId='+dataTarget+'" class="dropmenu-item" data-target="dataTarget">참여자 강퇴</a>'
+				dom += '<a href="" id="getOutNow" class="dropmenu-item" data-target="#getOutModal" data-toggle="modal" data-id="'+dataTarget+'">참여자 강퇴</a>'
 			}
 			dom += '</div>';
 			let isActive = $(this).siblings(".dropmenu-list").hasClass("active");
@@ -383,7 +428,6 @@
 					console.log("바꾸기 성공");
 					$("input[value='모임참여 체크하기']").val('모임참여 해제하기');
 					$('#chatReservationOkModal').modal('show');
-					
 				},
 				error : function(e) {
 					alert(e.responseText);
@@ -416,9 +460,35 @@
 		//============= "나가기" Event 처리 ============
 		$("#chatOutBtn").on("click", function() {
 			console.log("나가기 클릭");
-			bombChat();
+			//방장이 나가면 폭파 함수 실행
+			if(chatLeaderId == memberId){
+				bombChat();
+			}
 			location.href="/chat/deleteChatMember?chatNo=${chat.chatNo}";
 		});
+		
+		//============= "채팅방 폭파" Event 처리 ============
+		$("#chatBombBtn").on("click", function(){
+			location.href="/chat/listChat";
+		});
+		
+		//============= "강퇴하기" Event 처리 ============
+		$("#getOutNow").on("click", function(e){
+			e.preventDefault();
+			console.log("참여자 강퇴 버튼");
+		});	
+		
+		$("body").on("click", "#getOutNow", function(){
+			const getOutId = $(this).attr("data-id");
+			console.log(getOutId);
+			$("input[name=getOutId]").val(getOutId);
+			//getOutMember(getOutId);
+		});
+		
+		$("#getOutBtn").on("click", function(){
+		
+		});
+		
 	});
 </script>
 </head>
@@ -478,31 +548,7 @@
 								<div class="chat-body">
 									<div class="display-container">
 										<ul class="chatting-list">
-	                 						<!-- <li class="sent">
-	                 							<div class="chatProfile">
-	                 								<img src="/resources/images/common/defaultImage.jpg"/>
-	                 								<b>닉네임</b>
-	                 								<small>2021-10-10</small>
-	                 							</div>
-	                 							<div class="chat-message">
-	                 								채팅 메세지 메세지
-	                 							</div>
-	                 						</li>
-	                 						<li class="system">
-	                 							<div class="chat-message">
-	                 								닉네임 님이 입장하셨습니다.
-	                 							</div>
-	                 						</li>
-	                 						<li class="received">
-	                 							<div class="chatProfile">
-	                 								<img src="/resources/images/common/defaultImage.jpg"/>
-	                 								<b>닉네임</b>
-	                 								<small>2021-10-10</small>
-	                 							</div>
-	                 							<div class="chat-message">
-	                 								채팅 메세지 메세지
-	                 							</div>
-	                 						</li> -->
+	                 						
 	             						</ul>
 									</div>
 								</div>
@@ -516,7 +562,7 @@
 							
 							<div class="chat-user d-flex flex-column">
 								<div class="chat-header d-flex flex-row align-items-center">
-									<h3 class="flex-fill">참여자 목록<small>(<b>${chat.chatMemberCount}</b>/10)</small></h3>
+									<h3 class="flex-fill">참여자 목록<small>(<b class="member-count">${chat.chatMemberCount}</b>/10)</small></h3>
 									<div class="chat-header-util">
 										<input type="button" class="button small secondary" data-toggle="modal" data-target="#chatLeaderOuteModal" value="나가기" />
 										<div class="dropmenu">
@@ -531,19 +577,7 @@
 								</div>
 								<div class="chat-body">
 									<ul class="user-list">
-										<!-- <li class="chatProfile d-flex flex-row align-items-center">
-											<img src="/resources/images/common/defaultImage.jpg"/>
-											<div class="dropdown-parent">
-												<a href="" >닉네임</a>
-												<div class="dropdown-box">
-													<a href="">프로필 보기</a>
-													<a href="">참여자 신고</a>
-													<a href="">참여자 강퇴</a>
-												</div>
-											</div>
-											<span class="badge badge-info gender">남</span>
-											<span class="badge badge-warning age">30대</span>
-										</li> -->
+										
 									</ul>
 								</div>
 								<div class="chat-footer">
@@ -591,9 +625,6 @@
 										<p>예약을 진행하시겠습니까?</p>
 										<span>모임 참여 유저 </span>
 										<ul class="chat-member-list bg-light p-2 rounded">
-										<%-- <c:forEach var="chatMember" items="${chatMemberList}">
-											<li>${chatMember.member.nickname }</li>
-										</c:forEach> --%>
 										</ul>
 									</div>
 									<div class="modal-footer">
@@ -670,7 +701,7 @@
 							</div>
 						</div>
 						
-						<!-- 나가기 모달 -->
+						<!-- 채팅방 폭파 모달 -->
 						<div class="modal fade" id="chatBombModal" tabindex="-1" aria-labelledby="chatBombModalLabel" aria-hidden="true">
 							<div class="modal-dialog modal-sm">
 								<div class="modal-content">
@@ -698,7 +729,7 @@
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="button secondary small" data-dismiss="modal">아니오</button>
-										<button type="button" class="button primary small reportModal" id="chatReportBtn" data-target='#reportModal' data-toggle='modal' data-id="[1,${chat.chatNo}]">예</button>
+										<button type="button" class="button primary small reportModal" data-target='#reportModal' data-toggle='modal' data-id="[1,${chat.chatNo}]">예</button>
 										
 									</div>
 								</div>
@@ -735,11 +766,23 @@
 								        </button>
 									</div>
 									<div class="modal-body">
+										<input type="hidden" name="getOutId">
 										참여자를 강퇴시키시겠습니까?
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="button secondary small" data-dismiss="modal">아니오</button>
-										<button type="button" class="button primary small" id="getOutBtn">예</button>
+										<button type="button" class="button primary small" id="getOutBtn" data-target="" data-dismiss="modal">예</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- 강퇴 당하는 모달 -->
+						<div class="modal fade" id="outingChat" tabindex="-1" aria-labelledby="" aria-hidden="true">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content">
+									<div class="modal-body">
+										채팅방에서 강퇴당하셨습니다.
 									</div>
 								</div>
 							</div>

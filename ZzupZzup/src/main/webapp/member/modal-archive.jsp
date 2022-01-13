@@ -3,6 +3,21 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<style>
+	#loginModal #login-view {
+		padding: 10px;
+	}
+
+	#loginModal #login-view a {
+		width:100%;
+	}
+	
+	#loginModal #login-view input {
+		margin-top: 15px;
+		margin-bottom: 15px;
+	}
+</style>
+
 <!-- kakao login api cdn -->
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
@@ -72,7 +87,7 @@
 				},
 				error : function(error) {
 					alert("아이디 또는 비밀번호가 잘못 입력되었습니다. 다시 확인하여 주세요.");
-					alert(JSON.stringify(error));
+					//alert(JSON.stringify(error));
 				}
 			});
 		});
@@ -133,8 +148,38 @@
 		                			}),
 		                			success : function(data) {
 		               					if (data != null) {
-		               						//main.jsp로 이동
-		               						location.href = "/";
+		               						if(data.eliminated && !data.recovered) {
+		            							alert("로그인 할 수 없습니다.");
+		            						} else if(data.regBlacklist) {
+		            							alert("블랙리스트로 등록된 계정입니다. 자세한 사항은 이메일(zzupzzup101@gmail.com)로 문의 바랍니다.");
+		            						} else if(data.recovered) {
+		            							var confirmRecovery = confirm("계정 복구를 진행하시겠습니까?")
+		            							$.ajax({
+		            								url : "/member/json/recoveryMember",
+		            								method : "POST",
+		            								contentType : 'application/json',
+		            								dataType : "json",
+		            								data : JSON.stringify({
+		            									"memberId" : memberId,
+		            									"recovered" : confirmRecovery
+		            								}),
+		            								success : function(result) {
+		            									if(confirmRecovery) {
+		            										alert("계정 복구가 완료되었습니다.");
+		            										location.href = "/";
+		            									} else {
+		            										//alert("엥 그럼 왜 로그인 함?");
+		            										alert("계정 복구가 취소되었습니다.");
+		            									}
+		            								},
+		            								error : function(error) {
+		            									alert(JSON.stringify(error));
+		            								}
+		            							})
+		            						} else {
+		            							//main.jsp로 이동
+		            							location.href = "/";
+		            						}
 		               					}
 		               				}
 		               			});
@@ -216,11 +261,13 @@
 			var password = $("#password-forDelete").val();
 			var deleteType = $("input[name=deleteType]:checked").val();
 			var deleteReason = $("textarea[name=deleteReason]").val();
+			var loginType = "${sessionScope.member.loginType}";
 
 			console.log("memberId:" + memberId);
 			console.log("password:" + password);
 			console.log("deleteType:" + deleteType);
-			console.log("deleteReason:"+deleteReason)
+			console.log("deleteReason:"+deleteReason);
+			console.log("loginType:"+loginType);
 
 			$.ajax({
 				url : "/member/json/deleteMember",
@@ -231,16 +278,21 @@
 					"memberId" : memberId,
 					"password" : password,
 					"deleteType" : deleteType,
-					"deleteReason" : deleteReason
+					"deleteReason" : deleteReason,
+					"loginType" : loginType
 				}),
 				success : function(data) {
-					if (data != null) {
-						alert("탈퇴 처리가 완료되었습니다. 7일 이내에 로그인 시 계정이 복구됩니다.");
+					if (data.loginType == 1) {
+						alert("탈퇴 처리가 완료되었습니다.");
+						location.href = "/";
+					} else if(data.loginType == 2) {
+						alert("되는 건가?");
+						unlinkKakao();
 						location.href = "/";
 					}
 				},
 				error : function(request, status, error) {
-					alert("에러 왜 뜨는데");
+					//alert("에러 왜 뜨는데");
 					alert("request : "+request.status+"\n message : "+request.responseText+"\n error : "+error);
 				}
 			});
@@ -337,15 +389,6 @@
 				}),
 				success : function(data) {
 					if (data != null) {
-						//alert("memberId : "+data.memberId);
-						//console.log(data);
-						//console.log("왜되는거야???")
-						
-						//error 해결하기 위해 추가된 field
-						var defaultImage = "defaultImage.png";
-						var male = "male";
-						var female = "female";
-						
 						$("#get-other-user-modal-body").html("<div class='row mt-5 align-items-center'>"
 									+"<div class='col-md-4 mb-5'>"
 									+"<div align='center' id='get-other-user-profile-image'>"
@@ -419,6 +462,7 @@
 		  url: '/v1/user/unlink',
 		  success: function(response) {
 		    console.log(response);
+		    
 		  },
 		  fail: function(error) {
 		    console.log(error);
@@ -444,7 +488,7 @@
 			<div class="modal-body">
 				<form class="form-signin" id="login-view">
 					<!-- <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
-					<h6 class="h6 mb-6 font-weight-normal">로그인 후 이용하여 주십시오.</h6>
+					<h6 class="h6 mb-6 font-weight-normal" style="margin-bottom: 20px;">로그인 후 이용하여 주십시오.</h6>
 					<label for="memberId" class="sr-only">Email address</label> <input
 						type="email" id="memberId" name="memberId" class="form-control"
 						placeholder="example@zzupzzup.com" required autofocus> <label
@@ -452,8 +496,8 @@
 						type="password" id="password" name="password" class="form-control"
 						placeholder="비밀번호를 입력해주세요." required>
 					<br/>
-					<input class="btn btn-lg btn-primary btn-block" id="login"
-						type="button" value="login" />
+					<a class="button" id="login">login</a>
+					<hr>
 					<div align="center" style="margin-top:5px;">
 						<a id="kakaoLogin" href="#">
 						  <img
@@ -550,12 +594,19 @@
 						<label for="deleteType4">기타 사유(직접 입력)</label>
 					</div>
 					<div id="checked-etc" class="col-md-12"></div>
+					<br/>
+					<h5 align="center"><strong style='color:red;'>탈퇴 후 7일 이내에 접속 시 계정이 복구되며, 탈퇴한 계정은 다시 이용할 수 없습니다.</strong></h5>
 				</form>
 			</div>
 			<div class="modal-footer">
-		      <a id="checkPwdForDeleteModal-nav" data-toggle="modal" data-target="#checkPwdForDeleteModal">
-		      	<input type="button" class="btn btn-primary" id="deleteMember-btn" value="확인">
-		      </a>
+			<c:if test="${member.loginType == 1}">
+				<a id="checkPwdForDeleteModal-nav" data-toggle="modal" data-target="#checkPwdForDeleteModal">
+			      	<input type="button" class="btn btn-primary" id="deleteMember-btn" value="확인">
+			      </a>
+			</c:if>
+		    <c:if test="${member.loginType != 1}">
+				<input type="button" class="btn btn-primary" id="checkPwdForDelete-btn" value="확인">
+			</c:if>  
 		    </div>
 		</div>
 	</div>
