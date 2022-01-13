@@ -388,7 +388,7 @@
 			let dom = '';
 
 			dom += '<div class="dropmenu-list">'
-				+ '<a href="/member/getMember?memberId='+dataTarget+'" class="dropmenu-item">프로필 보기</a>';
+				+ '<a href="#" class="dropmenu-item getOtherUserModal" data-toggle="modal" data-target="#getOtherUserModal" data-id="'+dataTarget+'">프로필 보기</a>';
 			if("${member.memberId}" != dataTarget){
 			dom += '<a href="" class="reportModal dropmenu-item" data-target="#reportModal" data-toggle="modal" data-id=\'["2","'+dataTarget+'"]\' class="dropmenu-item">참여자 신고</a>';
 			}

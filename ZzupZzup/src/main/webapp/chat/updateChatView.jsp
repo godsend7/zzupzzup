@@ -392,7 +392,8 @@
 		}
 		
 		//사진 클릭시 첨부 이미지 삭제
-		$("body").on("click", ".file-drag-view a", function(){
+		$("body").on("click", ".file-drag-view a", function(e){
+			e.preventDefault();
 			console.log("이미지에 마우스 올렸다");
 			$chatImage.val('');
 			$(this).remove();
@@ -534,7 +535,7 @@
 										<c:if test="${chat.chatImage != 'chatimg.jpg' }">
 										<!-- 이미지 경로 변경 -->
 										<%-- <img src="/resources/images/uploadImages/chat/${chat.chatImage }"/> --%>
-										<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/${chat.chatImage }"/>
+										<a href="#"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/${chat.chatImage }"/></a>
 										</c:if>
 									</div>									
 								</div>

@@ -152,9 +152,9 @@
 										}
 									});
 									if(isChatMember == false){
-										dom	+= '<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>';
-									}else{
-										dom += '<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>';
+										dom	+= '<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" data-no="'+item.chatNo+'" data-id="${member.memberId}" id="getChatEntranceBtn">참여하기</a>';
+									}else if(isChatMember == true && item.chatState != 5){
+										dom += '<a href="/chat/getChatEntrance?chatNo='+item.chatNo+'" class="button small primary get-chat-btn">입장하기</a>';
 									}
 								}else{
 									dom	+= '<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>';
@@ -591,14 +591,14 @@
 																	</c:if>
 																</c:forEach>
 																<c:if test="${isChatMember eq 'false' }">
-																	<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>
+																	<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" data-no="${chat.chatNo}" data-id="${member.memberId}" id="getChatEntranceBtn">참여하기</a>
 																</c:if>
 																<c:if test="${isChatMember eq 'true' && chat.chatState != 5}">
 																	<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>
 																</c:if>
 															</c:if>
 															<c:if test="${empty chat.chatMember}">
-																<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>
+																<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" data-no="${chat.chatNo}" data-id="${member.memberId}" id="getChatEntranceBtn">참여하기</a>
 															</c:if>
 														</div>
 													</div>

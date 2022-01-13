@@ -67,7 +67,7 @@ public class ChatRestController {
 	@RequestMapping(value="json/getChat/{chatNo}", method=RequestMethod.GET)
 	public Chat getChat(@PathVariable int chatNo, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 		
-		System.out.println("/chat/json/getProduct : GET");
+		System.out.println("/chat/json/getChat : GET");
 		System.out.println("chatNo : " + chatNo);
 		
 		//Business Logic
@@ -348,6 +348,8 @@ public class ChatRestController {
 		chatMember.setChatNo(chatNo);
 		chatMember.setMember(member);
 		chatMember.setForbiddenMember(true);
+		chatMember.setInOutCheck(false);
+		chatMember.setReadyCheck(false);
 		
 		System.out.println("==============================");
 		System.out.println(chatMember);
@@ -360,5 +362,18 @@ public class ChatRestController {
 		map.put("chatMember", chatMember);
 		
 		return map;
+	}
+	
+	@RequestMapping(value="json/getChatMember/chatNo={chatNo}&memberId={memberId}&", method=RequestMethod.GET)
+	public ChatMember getChatMember(@PathVariable int chatNo, @PathVariable String memberId, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		System.out.println("/chat/json/getChatMember : GET");
+		
+		ChatMember chatMember = new ChatMember();
+		System.out.println("==============================");
+		System.out.println(memberId);
+		System.out.println(chatNo);
+		
+		// Business Logic
+		return chatMember = chatService.getChatMember(chatNo, memberId);
 	}
 }

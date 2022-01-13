@@ -59,7 +59,7 @@
 						let mem_profile_img = value.chatMemberImg;
 						mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img : "member/"+mem_profile_img;
 						const msgType = nickname == value.chatMemberName ? "sent" : "received";
-						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
+						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
 					});
 					chatList.html(dom);
 					displayContainer.scrollTop(chatList.height());
