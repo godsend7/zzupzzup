@@ -150,6 +150,10 @@ public class ChatServiceImpl implements ChatService {
 		return chatDao.updateConnectedChatMember(chatMember);
 	}
 
+	@Override
+	public int updateGetOutChatMember(ChatMember chatMember) throws Exception {
+		return chatDao.updateGetOutChatMember(chatMember);
+	}
 	
 
 	

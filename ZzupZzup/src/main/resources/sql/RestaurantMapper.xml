@@ -267,6 +267,25 @@
 						 ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
 	</select> -->
 	
+	
+	<!-- SQL : SELECT -->
+	<select id="listMyCallDibs" parameterType="map" resultMap="restaurantSelectMap">
+		SELECT *
+		FROM (SELECT rt.RESTAURANT_NO, rt.RESTAURANT_NAME, rt.MENU_TYPE, rt.MEMBER_ID, rt.OWNER_NAME, 
+			  rt.STREET_ADDRESS, rt.RESTAURANT_TEL, rt.RESERVATION_STATUS, rt.RESTAURANT_REG_DATE, 
+			  rt.JUDGE_STATUS, mk.MARK_NO
+			  FROM RESTAURANT AS rt
+			  INNER JOIN (SELECT RESTAURANT_NO, MARK_NO, MEMBER_ID
+			  			  FROM MARK
+			  			  WHERE MEMBER_ID = #{member.memberId}) AS mk
+			  			  ON (mk.RESTAURANT_NO = rt.RESTAURANT_NO)  
+			  ORDER BY rt.RESTAURANT_NO LIMIT 0, 8) AS res
+		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
+						 FROM IMAGE) AS img
+						 ON (res.RESTAURANT_NO = img.RESTAURANT_NO);
+	</select>
+	
+	
 	<!-- SQL : SELECT -->
 	<!-- <select id="getZzimTotalCount" parameterType="string" resultType="int">
 		SELECT COUNT(*)

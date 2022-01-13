@@ -312,5 +312,14 @@
 		WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
 	</update>
 	
+	<!-- SQL : UPDATE -->
+	<update id="updateGetOutChatMember" parameterType="chatMember">
+		UPDATE chat_member
+		<set>
+			forbidden_member = #{forbiddenMember}			
+		</set>
+		WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
+	</update>
+	
 	
 </mapper> 

@@ -62,5 +62,8 @@ public interface ChatDAO {
 	
 	// Update
 	public int updateConnectedChatMember(ChatMember chatMember) throws Exception;
+	
+	//Update
+	public int updateGetOutChatMember(ChatMember chatMember) throws Exception;
 
 }

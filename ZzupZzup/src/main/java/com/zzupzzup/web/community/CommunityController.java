@@ -227,6 +227,53 @@ public class CommunityController {
 		return "forward:/community/listCommunity.jsp";	
 	}
 	
+	@RequestMapping(value="listMyLikePost")
+	public String listMyLikePost(@ModelAttribute("search") Search search, Model model, HttpServletRequest request, HttpSession session) throws Exception {
+		
+		System.out.println("/community/listMyLikePost : SERVICE");
+		
+		Member member = (Member)session.getAttribute("member");
+		List<Mark> listLike = null;
+		
+		if(member != null && member.getMemberRole().equals("user")) {
+			listLike = communityService.listLike(member.getMemberId());
+		}
+		
+		
+		if(search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+		
+		/*
+		 * if(request.getParameter("page") != null) {
+		 * search.setCurrentPage(Integer.parseInt(request.getParameter("page"))); }
+		 */
+		
+		System.out.println("LIST_MY_LIKE_POST :: CurrentPage :: " + search.getCurrentPage());
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = communityService.listMyLikePost(search, member);
+		
+		//pageUnit, pageSize
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println("RESULT PAGE : " + resultPage);
+		
+		List<Community> list = (List<Community>)map.get("list");
+		
+		for(Community cm : list) {
+			System.out.println("LIST_MY_LIKE_POST :: CommunityList :: " + cm);
+		}
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("listLike", listLike);
+		model.addAttribute("search", search);
+		model.addAttribute("totalCount",  map.get("totalCount"));
+		model.addAttribute("resultPage", resultPage);
+		
+		return "forward:/community/listCommunity.jsp";	
+	}
+	
 	@RequestMapping(value="deleteCommunity", method=RequestMethod.GET)
 	public String deleteCommunity(@RequestParam("postNo") int postNo) throws Exception {
 		

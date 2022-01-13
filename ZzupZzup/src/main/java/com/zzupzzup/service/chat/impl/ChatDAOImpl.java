@@ -190,6 +190,20 @@ public class ChatDAOImpl implements ChatDAO {
 			return 0;
 		}
 	}
+	
+	@Override
+	public int updateGetOutChatMember(ChatMember chatMember) throws Exception {
+		System.out.println("chatMember :::::::::::::: " + chatMember);
+		int result = sqlSession.update("ChatMapper.updateGetOutChatMember", chatMember);
+		
+		System.out.println("updateGetOutChatMember" + result);
+		
+		if(result == 1) {
+			return 1;
+		}else {
+			return 0;
+		}
+	}
 
 
 }
