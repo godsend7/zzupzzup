@@ -67,84 +67,51 @@
 		
 		//시스템 문구 출력되는 부분
 		socket.on('update', (data) => {
-			
+			console.log("====update====");
+			console.log(data);
 			const item = new makeSysemPost(data.message);
 			if(data.chatNo == chatNo){
 				item.makeLi();
+				if(data.type == "connect"){
+					updateConnected(data.chatNo,data.memberId, true);
+				}else if(data.type == "disconnect"){
+					updateConnected(data.chatNo,data.memberId, false);
+				}
 			}
 			displayContainer.scrollTop(chatList.height());
 			
 			//나갔다 들어올 때 멤버 확인 리스트 출력
 			setTimeout(function() { 
-				memList(data.memberId, onUser);
-				
-				//console.log(onUser);
-				$.each(onUser, function(index, item){
-					console.log("index?? : " + index);
-					console.log("아아아아아앙 : " + item);
-					$("a[data-target='"+item+"']").parents(".chatProfile").addClass("connected");
-				});
+				memList(data.memberId);
 			}, 500);
 			
-			//접속중인 사람 구별 클래스 붙임
-			/* setTimeout(function() { 
-				console.log(data.memberId);
-				console.log(memberId.val());
-				if(data.memberId == memberId.val()){
-					console.log("접속한 살마");
-					
-					let onMember = $("a[data-target='"+data.memberId+"']");
-					//console.log(onMember);
-					//$("a[data-target='"+data.memberId+"']").parents(".chatProfile").addClass("connected");
-				}
-			}, 1000); */
 		});
 		
 		socket.on('disconnect', (data) => {
-			console.log(data.message);
-			memList(data.memberId, onUser);
-		});
-		
-		socket.on('on_users', (data) => {
-			onUser = data;
-			//console.log("on_user : " + onUser);
-			//console.log("length : "+ onUser.length);
-			
-			$.each(onUser, function(index, item){
-				$("a[data-target='"+item+"']").parents(".chatProfile").addClass("connected");
-			},1000);
-			
-		});
-		
+			console.log(data);
+			updateConnected(data.memberId, false);
+			memList(data.memberId);
+		});;
 		
 		socket.on("send_msg", (data) => {
-			//console.log(data);
 			const { message, memberInfo, regDate } = data;
 			const item = new makeClientPost(message, memberInfo, regDate);
-			if(memberInfo.chatNo == "${chat.chatNo}"){
+			if(data.memberInfo.chatNo == chatNo){
 				item.makeLi();
+				updateConnected(data.memberInfo.chatNo,data.memberInfo.memberId, true);
+				setTimeout(function() { 
+					memList(data.memberInfo.memberId);
+				}, 500);
 			}
 			//console.log("con scroll" + chatList.height());
 			displayContainer.scrollTop(chatList.height());
 		});
-		
 		
 		chatInput.on("keypress", (e) => {
 			if(e.keyCode === 13){
 				messageSend()
 			}
 		});
-		
-		/* function send(){
-			const param = {
-				room: 1,
-				name: nickname.val(),
-				msg: chatInput.val()
-			}
-			
-			socket.emit("send_msg", param);
-			$(".chatting-input").val("");
-		} */
 		
 		sendButton.on("click", function(){
 			messageSend();
@@ -205,10 +172,30 @@
 			}
 		}
 		
+		// 참가자 접속 아닌사람 connected 해제
+		function updateConnected(chatNo,memberId,onConnected){
+			$.ajax({
+				url: "/chat/json/updateConnectedChatMember/chatNo="+chatNo+"&memberId="+memberId+"&onConnected="+onConnected,
+				method:"GET",
+				dataType: "json",
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+				success: function(JSONData){
+					console.log("success");
+				},
+				error : function(request, status, error) {
+					alert("code:" + request.status + "\n" + "message:"
+							+ request.responseText + "\n" + "error:"
+							+ error);
+				}
+			});
+		}
+		
 		// 참가자 리스트에 뿌려질 리스트 가져오기
-		function memList(memberId, onUser){
+		function memList(memberId){
 			
-			const onMemberId = memberId
 			//console.log("멤버 아디 잘 들어오나 확인 : " + onMemberId);
 			//console.log(onUser);
 			
@@ -223,8 +210,12 @@
 				success : function(JSONData, status) {
 					//console.log(JSONData);
 					let dom = "";
+					let memberCount = "";
 					//console.log(JSONData.list);
 					$.each(JSONData.list, function(index, item){
+						//console.log(item);
+						console.log("인덱스" + JSONData.list.length);
+						memberCount = JSONData.list.length;
 						let mem_profile_img = item.member.profileImage;
 						let mem_gender = item.member.gender;
 						//console.log(mem_profile_img);
@@ -239,17 +230,13 @@
 						}
 						const chatLeaderClass = "${chat.chatLeaderId.memberId}" == item.member.memberId ? "chat-leader":"";
 						// 멤버들중 들어온 애들 루핑
-						let chatConnected = '';
-						$.each(onUser, function(idx, itm){
-							chatConnected = itm == item.member.memberId ? "connected"	: "";					
-									
-						})
+						const chatConnected = item.onConnected == true ? "connected" : ""; 
 						
 						dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+' '+chatConnected+'"><img src="/resources/images/common/'+mem_profile_img+'"><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
-						//console.log(item.member);
-						$(".member_dropdown[data-target='"+onMemberId+"']").addClass("connected");
+						
 					});
 					userList.html(dom);
+					$(".member-count").html(memberCount);
 				},
 				error : function(request, status, error) {
 					alert("code:" + request.status + "\n" + "message:"
@@ -270,20 +257,20 @@
 					"Content-Type": "application/json"
 				},
 				success:function(JSONData, status){
-					//console.log("몽고디비 데이터" + JSONData);
+					console.log("몽고디비 데이터");
+					console.log(JSONData);
 					let dom = "";
 					
 					$.each(JSONData, function(key, value){
 						let timeStemp = new Date(value.regDate);
-						var newTime = timeFormatter(timeStemp);
+						let newTime = timeFormatter(timeStemp);
 						let mem_profile_img = value.chatMemberImg;
 						mem_profile_img != "defaultImage.png" ? mem_profile_img = "uploadImages/"+mem_profile_img : "";
 						const msgType = nickname == value.chatMemberName ? "sent" : "received";
 						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="/resources/images/common/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
 					});
-					//chatList.html(dom);
+					chatList.html(dom);
 					displayContainer.scrollTop(chatList.height());
-					
 				},
 				error:function(e){
 					console.log("err : " + e);
@@ -306,8 +293,17 @@
 			}else{
 				var minutes = date.getMinutes();
 			}
-			var time = hour + ":" + minutes + " " + amPm;
-			//console.log(time);
+			if (date.getMonth()+1 <10){
+				var month = "0"+(date.getMonth()+1);
+			}else{
+				var month = date.getMonth()+1;
+			}
+			if (date.getDate() <10){
+				var day = "0"+date.getDate();
+			}else{
+				var day = date.getDate();
+			}
+			var time = month + "-" + day + " " + hour + ":" + minutes + " " + amPm;
 			return time;
 		}
 		
@@ -416,7 +412,9 @@
 		//============= "나가기" Event 처리 ============
 		$("#chatOutBtn").on("click", function() {
 			console.log("나가기 클릭");
-			bombChat();
+			if(chatLeaderId == memberId){
+				bombChat();
+			}
 			location.href="/chat/deleteChatMember?chatNo=${chat.chatNo}";
 		});
 	});
@@ -478,31 +476,7 @@
 								<div class="chat-body">
 									<div class="display-container">
 										<ul class="chatting-list">
-	                 						<!-- <li class="sent">
-	                 							<div class="chatProfile">
-	                 								<img src="/resources/images/common/defaultImage.jpg"/>
-	                 								<b>닉네임</b>
-	                 								<small>2021-10-10</small>
-	                 							</div>
-	                 							<div class="chat-message">
-	                 								채팅 메세지 메세지
-	                 							</div>
-	                 						</li>
-	                 						<li class="system">
-	                 							<div class="chat-message">
-	                 								닉네임 님이 입장하셨습니다.
-	                 							</div>
-	                 						</li>
-	                 						<li class="received">
-	                 							<div class="chatProfile">
-	                 								<img src="/resources/images/common/defaultImage.jpg"/>
-	                 								<b>닉네임</b>
-	                 								<small>2021-10-10</small>
-	                 							</div>
-	                 							<div class="chat-message">
-	                 								채팅 메세지 메세지
-	                 							</div>
-	                 						</li> -->
+	                 						
 	             						</ul>
 									</div>
 								</div>
@@ -516,7 +490,7 @@
 							
 							<div class="chat-user d-flex flex-column">
 								<div class="chat-header d-flex flex-row align-items-center">
-									<h3 class="flex-fill">참여자 목록<small>(<b>${chat.chatMemberCount}</b>/10)</small></h3>
+									<h3 class="flex-fill">참여자 목록<small>(<b class="member-count">${chat.chatMemberCount}</b>/10)</small></h3>
 									<div class="chat-header-util">
 										<input type="button" class="button small secondary" data-toggle="modal" data-target="#chatLeaderOuteModal" value="나가기" />
 										<div class="dropmenu">
@@ -531,19 +505,7 @@
 								</div>
 								<div class="chat-body">
 									<ul class="user-list">
-										<!-- <li class="chatProfile d-flex flex-row align-items-center">
-											<img src="/resources/images/common/defaultImage.jpg"/>
-											<div class="dropdown-parent">
-												<a href="" >닉네임</a>
-												<div class="dropdown-box">
-													<a href="">프로필 보기</a>
-													<a href="">참여자 신고</a>
-													<a href="">참여자 강퇴</a>
-												</div>
-											</div>
-											<span class="badge badge-info gender">남</span>
-											<span class="badge badge-warning age">30대</span>
-										</li> -->
+										
 									</ul>
 								</div>
 								<div class="chat-footer">

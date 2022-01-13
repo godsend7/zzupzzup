@@ -8,6 +8,7 @@ public class ChatMember {
 	private boolean readyCheck; //모임확정 체크
 	private boolean chatLeaderCheck; //개설자 체크
 	private boolean inOutCheck; //채팅방 참여 체크
+	private boolean onConnected; //접속 멤버
 	private boolean forbiddenMember; //강퇴 멤버
 	
 	///Constructor
@@ -61,21 +62,30 @@ public class ChatMember {
 	public void setInOutCheck(boolean inOutcheck) {
 		this.inOutCheck = inOutcheck;
 	}
+	public boolean isOnConnected() {
+		return onConnected;
+	}
 
-	public boolean isForbiddenMem() {
+	public void setOnConnected(boolean onConnected) {
+		this.onConnected = onConnected;
+	}
+
+	public boolean isForbiddenMember() {
 		return forbiddenMember;
 	}
 
-	public void setForbiddenMem(boolean forbiddenMem) {
-		this.forbiddenMember = forbiddenMem;
+	public void setForbiddenMember(boolean forbiddenMember) {
+		this.forbiddenMember = forbiddenMember;
 	}
 
 	@Override
 	public String toString() {
 		return "ChatMember [chatNo=" + chatNo + ", member=" + member + ", readyCheck=" + readyCheck
-				+ ", chatLeaderCheck=" + chatLeaderCheck + ", inOutCheck=" + inOutCheck + ", forbiddenMember="
-				+ forbiddenMember + "]";
+				+ ", chatLeaderCheck=" + chatLeaderCheck + ", inOutCheck=" + inOutCheck + ", onConnected=" + onConnected
+				+ ", forbiddenMember=" + forbiddenMember + "]";
 	}
+
+	
 
 	
 }
