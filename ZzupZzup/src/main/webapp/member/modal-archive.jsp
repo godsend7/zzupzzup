@@ -72,7 +72,7 @@
 				},
 				error : function(error) {
 					alert("아이디 또는 비밀번호가 잘못 입력되었습니다. 다시 확인하여 주세요.");
-					alert(JSON.stringify(error));
+					//alert(JSON.stringify(error));
 				}
 			});
 		});
@@ -235,12 +235,12 @@
 				}),
 				success : function(data) {
 					if (data != null) {
-						alert("탈퇴 처리가 완료되었습니다. 7일 이내에 로그인 시 계정이 복구됩니다.");
+						alert("탈퇴 처리가 완료되었습니다.");
 						location.href = "/";
 					}
 				},
 				error : function(request, status, error) {
-					alert("에러 왜 뜨는데");
+					//alert("에러 왜 뜨는데");
 					alert("request : "+request.status+"\n message : "+request.responseText+"\n error : "+error);
 				}
 			});
@@ -337,15 +337,6 @@
 				}),
 				success : function(data) {
 					if (data != null) {
-						//alert("memberId : "+data.memberId);
-						//console.log(data);
-						//console.log("왜되는거야???")
-						
-						//error 해결하기 위해 추가된 field
-						var defaultImage = "defaultImage.png";
-						var male = "male";
-						var female = "female";
-						
 						$("#get-other-user-modal-body").html("<div class='row mt-5 align-items-center'>"
 									+"<div class='col-md-4 mb-5'>"
 									+"<div align='center' id='get-other-user-profile-image'>"
@@ -419,6 +410,7 @@
 		  url: '/v1/user/unlink',
 		  success: function(response) {
 		    console.log(response);
+		    
 		  },
 		  fail: function(error) {
 		    console.log(error);
@@ -550,6 +542,8 @@
 						<label for="deleteType4">기타 사유(직접 입력)</label>
 					</div>
 					<div id="checked-etc" class="col-md-12"></div>
+					<br/>
+					<h5 align="center"><strong style='color:red;'>탈퇴 후 7일 이내에 접속 시 계정이 복구되며, 탈퇴한 계정은 다시 이용할 수 없습니다.</strong></h5>
 				</form>
 			</div>
 			<div class="modal-footer">
