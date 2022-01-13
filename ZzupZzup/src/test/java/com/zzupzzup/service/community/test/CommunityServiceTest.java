@@ -19,6 +19,7 @@ import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.community.CommunityService;
 import com.zzupzzup.service.domain.Community;
+import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.RestaurantTime;
 
@@ -187,7 +188,8 @@ public class CommunityServiceTest {
 		search.setCurrentPage(1);
 		search.setPageSize(3);
 		
-		Map<String, Object> map = communityService.listMyPost(search, memberId);
+		// 수정 필요!!!
+		Map<String, Object> map = communityService.listMyLikePost(search, null);
 		
 		List<Community> list = (List<Community>) map.get("list");
 		
@@ -245,15 +247,17 @@ public class CommunityServiceTest {
 		
 		String memberId = "hihi@a.com";
 		
-		Map<String, Object> map = communityService.listLike(search, memberId);
+//		Map<String, Object> map = communityService.listLike(search, memberId);		
+//		List<Community> list = (List<Community>) map.get("list");
 		
-		List<Community> list = (List<Community>) map.get("list");
+		List<Mark> map = communityService.listLike(null);	
+//		List<Community> list = (List<Community>) map.get("list");
 		
 		System.out.println("HERE YOUR LIST");
 		
-		for(Community cn : list) {
-			System.out.println(cn);
-		}
+//		for(Community cn : list) {
+//			System.out.println(cn);
+//		}
 		
 	}
 	

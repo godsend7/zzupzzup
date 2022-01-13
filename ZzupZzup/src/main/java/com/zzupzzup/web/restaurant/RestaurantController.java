@@ -128,17 +128,22 @@ public class RestaurantController {
 		System.out.println("/restaurant/getRestaurant : GET");
 		
 		Restaurant restaurant = restaurantService.getRestaurant(restaurantNo);
-		
-		System.out.println("review/listReview : Service");
-		
 		Member member = (Member) session.getAttribute("member");
+		
+		List<Mark> listCallDibs = null;
+		
+		if(member != null && member.getMemberRole().equals("user")) {
+			listCallDibs = restaurantService.listCallDibs(member.getMemberId());
+		}
+		
+		
+		System.out.println("/review/listReview : SERVICE");
 		
 		List<Mark> listLike = null;
 		
 		if (member != null && member.getMemberRole().equals("user")) {
 			listLike = reviewService.listLike(member.getMemberId());
 		}
-		
 		
 		System.out.println(restaurantNo);
 		System.out.println(member);
@@ -148,10 +153,9 @@ public class RestaurantController {
 			search.setCurrentPage(1);
 		}
 		
-		System.out.println(search.getCurrentPage() + ":: currentPage");
+		System.out.println(search.getCurrentPage() + ":: CurrentPage ::");
 		
 		search.setPageSize(pageSize);
-		
 		
 		Map<String, Object> map = reviewService.listReview(search, Integer.toString(restaurantNo), member);
 		
@@ -166,8 +170,7 @@ public class RestaurantController {
 		
 		
 		model.addAttribute("restaurant", restaurant);
-		
-		
+		model.addAttribute("listCallDibs", listCallDibs);
 		
 		return "forward:/restaurant/getRestaurant.jsp";
 	}
