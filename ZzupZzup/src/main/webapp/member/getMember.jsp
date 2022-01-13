@@ -65,12 +65,12 @@
 												<div class="col-md" align="center">
 													<c:if test="${member.profileImage == 'defaultImage.png'}">
 														<img
-															src="/resources/images/${member.profileImage}"
+															src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/defaultImage.png"
 															class="avatar-img rounded-circle" width="150" height="150"/>
 													</c:if>
 													<c:if test="${member.profileImage != 'defaultImage.png'}">
 														<img
-															src="/resources/images/uploadImages/${member.profileImage}"
+															src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/member/${member.profileImage}"
 															class="avatar-img rounded-circle" width="150" height="150"/>
 													</c:if>
 													<br />
@@ -266,7 +266,9 @@
 																		<div style="text-align: right;"><span class="badge badge-info">예약 및 결제 가능</span></div>
 																	</c:if>
 																</c:if>
-																
+																<c:if test="${restaurant.judgeStatus == 1}">
+																	<div style="text-align: right;"><span class="badge badge-warning">심사 대기중</span></div>
+																</c:if>
 																<c:if test="${!empty restaurant.judgeDate}">
 																	<div style="text-align: right;"><span class="badge badge-danger">요청 거절된 음식점</span></div>
 																</c:if>
@@ -279,12 +281,15 @@
 																<c:if test="${!empty restaurant.restaurantRegDate}">
 																	<a href="/restaurant/getRestaurant?restaurantNo=${restaurant.restaurantNo}" style="text-align: right;" class="stretched-link" id="restinfo">상세보기</a>
 																</c:if>
+																<c:if test="${restaurant.judgeStatus == 1}">
+																	<a href="/restaurant/getRequestRestaurant?restaurantNo=${restaurant.restaurantNo}" style="text-align: right;" class="stretched-link" id="restinfo">상세보기</a>
+																</c:if>
 																<c:if test="${!empty restaurant.judgeDate}">
 																	<p style="text-align: right;">자세한 내용은 고객센터(
 																	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-headset" viewBox="0 0 16 16">
 																	<path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
 																	</svg> 010-4444-4444 )로 문의하시기 바랍니다.</p>
-																	<a href="/restaurant/getRestaurant?restaurantNo=${restaurant.restaurantNo}" style="text-align: right;" class="stretched-link" id="editinfo">상세보기</a>
+																	<a href="/restaurant/updateRestaurant?restaurantNo=${restaurant.restaurantNo}" style="text-align: right;" class="stretched-link" id="editinfo">수정하기</a>
 																</c:if>
 															</div>
 														</div>

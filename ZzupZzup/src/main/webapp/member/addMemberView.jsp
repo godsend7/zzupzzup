@@ -30,7 +30,7 @@
 	var checkCertificatedNumFlag;
 	/* var checkGenderFlag = true;
 	var checkAgeRangeFlag = true; */
-
+	
 	//양식 유효성 확인
 	function fncCheckAccountForm() {
 		var name = $("#memberName").val();
@@ -42,7 +42,7 @@
 		/* var gender = $("#input[name=genders]:checked");
 		var ageRange = $("#input[name=ageRanges]:checked"); */
 		
-		var regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/
+		var regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
 
 		//이름이 비었을 때
 		if (name == "" || name.length < 2) {
@@ -70,7 +70,7 @@
 	var emailForm = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 	
 	//아이디 중복 및 유효성 확인
-	function idCheckFunction() {
+	function fncCheckId() {
 		var memberId = $("#memberId").val();
 		$.ajax({
 			type : "POST",
@@ -103,7 +103,7 @@
 	}
 
 	//닉네임 중복확인
-	function nicknameCheckFunction() {
+	function fncCheckNickname() {
 		var nickname = $("#nickname").val();
 		$.ajax({
 			type : "POST",
@@ -133,7 +133,7 @@
 	}
 
 	//비밀번호 일치 확인
-	function pwdCheckFunction() {
+	function fncCheckPwd() {
 		var pwd = $("#password").val();
 		var checkPwd = $("#checkPassword").val();
 
@@ -167,7 +167,7 @@
 	var globalVariable;
 
 	//인증번호 일치 확인
-	function certificatedNumCheckFunction() {
+	function fncCheckCertificatedNum() {
 		var certificatedNum = globalVariable;
 		var inputCertificatedNum = $("#certificatedNum").val();
 		
@@ -256,6 +256,15 @@
 		console.log("addMember.jsp");
 		console.log("${param.memberRole}");
 		
+		$("#addMember-complete").keyup(function() {
+			fncCheckAccountForm();		//이름, 전화번호 유효성 체크
+			fncCheckId();				//아이디 중복 및 유효성 체크
+			fncCheckNickname();			//닉네임 중복 및 유효성 체크
+			fncCheckPwd();				//비밀번호 유효성 체크
+			fncCheckCertificatedNum();	//인증번호 일치 체크
+			
+		});
+		
 		$("a[href='#']").on("click", function() {
 			$("#form-reset").reset();
 		})
@@ -322,15 +331,11 @@
 							<a href="#"><input type="hidden" id="form-reset"/></a><!-- refresh 경우 form reset tag 추가 -->
 								<div class="row">
 									<div class="col">
-										<label for="memberName">이름</label> <input type="text"
-											onkeyup="fncCheckAccountForm();" name="memberName" maxlength="9"
-											class="form-control" id="memberName"
-											required><span id="checkNameMsg"
-											style="color: red; font-weight: bold"></span>
+										<label for="memberName">이름</label> <input type="text" name="memberName" maxlength="9"
+											class="form-control" id="memberName" required>
+										<span id="checkNameMsg" style="color: red; font-weight: bold"></span>
 										<br/>
-										<label for="memberId">아이디</label> <input type="text"
-											class="form-control" id="memberId" name="memberId"
-											onkeyup="fncCheckAccountForm();idCheckFunction();"
+										<label for="memberId">아이디</label> <input type="text" class="form-control" id="memberId" name="memberId"
 											placeholder="example@zzupzzup.com" value="${sessionScope.snsMember.memberId != null ? snsMember.memberId : '' }"
 											required>&nbsp;<span id="checkIdMsg"
 											style="color: red; font-weight: bold"></span>
@@ -338,20 +343,16 @@
 									</div>
 									<div class="col">
 										<c:if test="${param.loginType == '1'}">
-											<label for="password">비밀번호</label> <input type="password"
-													class="form-control" id="password" name="password"
-													onkeyup="fncCheckAccountForm();" minlength="8" maxlength="15"
-													placeholder="8-15자 이내로 입력해주세요."><span
+											<label for="password">비밀번호</label> <input type="password" class="form-control" id="password" name="password"
+													minlength="8" maxlength="15" placeholder="8-15자 이내로 입력해주세요."><span
 													id="checkPwdMsg" style="color: red; font-weight: bold"></span>
 											<br/>
 												<!-- <h5>알파벳 대소문자, 숫자, 특수문자(~, !, @, #, $, %, ^, &, *, \, /)를
 													조합하여 비밀번호를 구성하세요.</h5> -->
 											<label for="checkPassword">비밀번호 확인</label> <input
-												type="password" class="form-control" id="checkPassword"
-												onkeyup="fncCheckAccountForm();pwdCheckFunction();" minlength="8" maxlength="15"
+												type="password" class="form-control" id="checkPassword" maxlength="15"
 												placeholder="비밀번호를 다시 입력해주세요.">
-											<span id="checkSamePwdMsg"
-												style="color: red; font-weight: bold"></span>
+											<span id="checkSamePwdMsg" style="color: red; font-weight: bold"></span>
 										</c:if>
 									</div>
 								</div>
@@ -371,8 +372,7 @@
 											maxlength="4" required>
 									</div>
 									<div class="col">	
-										<input type="text"
-											onkeyup="fncCheckAccountForm();" class="form-control" name="memberPhone3"
+										<input type="text" class="form-control" name="memberPhone3"
 											id="memberPhone3" maxlength="4" required>
 									</div>
 								</div>
@@ -388,11 +388,8 @@
 								<div class="row">
 									<div class="col">
 										<label for="certificeatedNum">인증번호</label>
-										<input type="text" class="form-control" id="certificatedNum"
-										onkeyup="fncCheckAccountForm();certificatedNumCheckFunction();"
-										required>
-										<span id="checkCertificatedNumMsg"
-										style="color: red; font-weight: bold"></span>
+										<input type="text" class="form-control" id="certificatedNum" required>
+										<span id="checkCertificatedNumMsg" style="color: red; font-weight: bold"></span>
 									</div>
 								</div>
 								<hr class="mb-4">
@@ -417,7 +414,6 @@
 										<div class="col">
 											<label for="nickname">닉네임</label> <input type="text"
 												class="form-control" id="nickname" name="nickname"
-												onkeyup="fncCheckAccountForm();nicknameCheckFunction();"
 												placeholder="10자 이내로 입력해주세요." required>&nbsp; <span
 												id="checkNicknameMsg" style="color: red; font-weight: bold"></span>
 											<br/>

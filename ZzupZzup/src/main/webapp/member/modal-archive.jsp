@@ -286,8 +286,8 @@
 						alert("탈퇴 처리가 완료되었습니다.");
 						location.href = "/";
 					} else if(data.loginType == 2) {
-						alert("되는 건가?");
 						unlinkKakao();
+						alert("탈퇴 처리가 완료되었습니다.");
 						location.href = "/";
 					}
 				},
