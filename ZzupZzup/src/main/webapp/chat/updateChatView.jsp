@@ -335,8 +335,13 @@
 				if(obj.loadend) {
 					obj.loadend(data);
 				}
+				//이미지 경로 수정
+				/* saveName = JSON.parse(data).saveName;
+				$fileDragView.html("<a href='javascript:void(0)' class='cvf_delete_image'><img src='/resources/images/uploadImages/chat/"+saveName+"'/></a>");
+				console.log("saveName : " + saveName);
+				$chatImage.val(saveName); */
 				saveName = JSON.parse(data).saveName;
-				$fileDragView.html("<a href='' class='cvf_delete_image'><img src='/resources/images/uploadImages/chat/"+saveName+"'/></a>");
+				$fileDragView.html("<a href='javascript:void(0)' class='cvf_delete_image'><img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/"+saveName+"'/></a>");
 				console.log("saveName : " + saveName);
 				$chatImage.val(saveName);
 				
@@ -527,7 +532,9 @@
 									</div>
 									<div class="file-drag-view mt-4">
 										<c:if test="${chat.chatImage != 'chatimg.jpg' }">
-										<img src="/resources/images/uploadImages/chat/${chat.chatImage }"/>
+										<!-- 이미지 경로 변경 -->
+										<%-- <img src="/resources/images/uploadImages/chat/${chat.chatImage }"/> --%>
+										<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/${chat.chatImage }"/>
 										</c:if>
 									</div>									
 								</div>

@@ -192,7 +192,8 @@
 		}
 		
 		// 채팅 메세지 출력
-		function makeClientPost(message, memberInfo, regDate){
+		// 이미지 경로 변경
+		/* function makeClientPost(message, memberInfo, regDate){
 			this.makeLi = () => {
 				console.log(message, memberInfo, regDate);
 				let mem_profile_img = memberInfo.profileImage;
@@ -200,6 +201,17 @@
 				const $li = $("<li></li>");
 				$li.addClass(nickname == memberInfo.nickname ? "sent" : "received");
 				const dom = '<div class="chatProfile"><img src="/resources/images/common/'+mem_profile_img+'"/><b>'+memberInfo.nickname+'</b><small>'+regDate+'</small></div><div class="chat-message">'+message+'</div>';
+				$li.html(dom).appendTo(chatList);
+			}
+		} */
+		function makeClientPost(message, memberInfo, regDate){
+			this.makeLi = () => {
+				console.log(message, memberInfo, regDate);
+				let mem_profile_img = memberInfo.profileImage;
+				mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img : "member/"+mem_profile_img;
+				const $li = $("<li></li>");
+				$li.addClass(nickname == memberInfo.nickname ? "sent" : "received");
+				const dom = '<div class="chatProfile"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"/><b>'+memberInfo.nickname+'</b><small>'+regDate+'</small></div><div class="chat-message">'+message+'</div>';
 				$li.html(dom).appendTo(chatList);
 			}
 		}
@@ -270,7 +282,9 @@
 						//console.log(mem_profile_img);
 						//console.log(mem_gender);
 						// 업로드된 프로필 이미지라면 경로 변경
-						mem_profile_img != "defaultImage.png" ? mem_profile_img = "uploadImages/"+mem_profile_img : "";
+						// 이미지 경로 변경
+						/* mem_profile_img != "defaultImage.png" ? mem_profile_img = "uploadImages/"+mem_profile_img : ""; */
+						mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img : "member/"+mem_profile_img;
 						// 성별 한글 변환
 						if(mem_gender == "male"){
 							mem_gender = "남자";
@@ -281,7 +295,9 @@
 						// 멤버들중 들어온 애들 루핑
 						const chatConnected = item.onConnected == true ? "connected" : ""; 
 						
-						dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+' '+chatConnected+'"><img src="/resources/images/common/'+mem_profile_img+'"><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
+						//이미지 경로 변경
+						/* dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+' '+chatConnected+'"><img src="/resources/images/common/'+mem_profile_img+'"><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>'; */
+						dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+' '+chatConnected+'"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
 						
 					});
 					userList.html(dom);
@@ -310,13 +326,22 @@
 					console.log(JSONData);
 					let dom = "";
 					
-					$.each(JSONData, function(key, value){
+					// 이미지 경로 변경
+					/* $.each(JSONData, function(key, value){
 						let timeStemp = new Date(value.regDate);
 						let newTime = timeFormatter(timeStemp);
 						let mem_profile_img = value.chatMemberImg;
 						mem_profile_img != "defaultImage.png" ? mem_profile_img = "uploadImages/"+mem_profile_img : "";
 						const msgType = nickname == value.chatMemberName ? "sent" : "received";
 						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="/resources/images/common/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
+					}); */
+					$.each(JSONData, function(key, value){
+						let timeStemp = new Date(value.regDate);
+						let newTime = timeFormatter(timeStemp);
+						let mem_profile_img = value.chatMemberImg;
+						mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img : "member/"+mem_profile_img;
+						const msgType = nickname == value.chatMemberName ? "sent" : "received";
+						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
 					});
 					chatList.html(dom);
 					displayContainer.scrollTop(chatList.height());

@@ -2,6 +2,7 @@ package com.zzupzzup.web.chat;
 
 import java.io.File;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
+import com.zzupzzup.common.util.S3ImageUpload;
 import com.zzupzzup.service.chat.ChatService;
 import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.ChatMember;
@@ -115,48 +117,101 @@ public class ChatRestController {
 		return map;
 	}
 	
+	//기존 이미지 컨트롤
+	/* 
+	 * @RequestMapping(value="json/addDragFile", method=RequestMethod.POST) public
+	 * Map addDragFile(MultipartHttpServletRequest multipartRequest,
+	 * HttpServletRequest request, HttpServletResponse response) throws Exception {
+	 * 
+	 * System.out.println("/chat/json/addDragFile : POST");
+	 * 
+	 * Iterator<String> itr = multipartRequest.getFileNames();
+	 * 
+	 * String filePath =
+	 * request.getServletContext().getRealPath("/resources/images/uploadImages/chat"
+	 * );
+	 * 
+	 * System.out.println("filePath : " + filePath);
+	 * 
+	 * Map<String, Object> map = new HashMap<String, Object>();
+	 * 
+	 * while (itr.hasNext()) { //받은 파일들을 모두 돌린다.
+	 * 
+	 * MultipartFile mf = multipartRequest.getFile(itr.next());
+	 * 
+	 * String originalFileName = mf.getOriginalFilename(); //파일명
+	 * 
+	 * String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS",
+	 * mf.getOriginalFilename()); //저장되는 파일명
+	 * 
+	 * String fileFullPath = filePath+"/"+saveName; //파일 전체 경로
+	 * 
+	 * map.put("saveName", saveName);
+	 * 
+	 * try { //파일 저장 mf.transferTo(new File(fileFullPath)); //파일저장 실제로는 service에서 처리
+	 * 
+	 * System.out.println("originalFilename => "+originalFileName);
+	 * System.out.println("saveName => "+saveName);
+	 * System.out.println("fileFullPath => "+fileFullPath);
+	 * 
+	 * } catch (Exception e) {
+	 * System.out.println("postTempFile_ERROR======>"+fileFullPath);
+	 * e.printStackTrace(); }
+	 * 
+	 * }
+	 * 
+	 * return map; }
+	 */
+	
 	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
 	public Map addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		System.out.println("/chat/json/addDragFile : POST");
+		System.out.println("/review/json/addDragFile : POST");
 		
-		Iterator<String> itr =  multipartRequest.getFileNames();
-
-        String filePath = request.getServletContext().getRealPath("/resources/images/uploadImages/chat");
-        
-        System.out.println("filePath : " + filePath);
-        
-        Map<String, Object> map = new HashMap<String, Object>();
-        
-        while (itr.hasNext()) { //받은 파일들을 모두 돌린다.
-            
-            MultipartFile mf = multipartRequest.getFile(itr.next());
-     
-            String originalFileName = mf.getOriginalFilename(); //파일명
-            
-            String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename()); //저장되는 파일명
-     
-            String fileFullPath = filePath+"/"+saveName; //파일 전체 경로
-            
-            map.put("saveName", saveName);
-     
-            try {
-                //파일 저장
-                mf.transferTo(new File(fileFullPath)); //파일저장 실제로는 service에서 처리
-                
-                System.out.println("originalFilename => "+originalFileName);
-                System.out.println("saveName => "+saveName);
-                System.out.println("fileFullPath => "+fileFullPath);
-     
-            } catch (Exception e) {
-                System.out.println("postTempFile_ERROR======>"+fileFullPath);
-                e.printStackTrace();
-            }
-                         
-       }
-         
-        return map;
-    }
+		S3ImageUpload s3ImageUpload = new S3ImageUpload();
+		
+		List<MultipartFile> fileList =  multipartRequest.getFiles("uploadFile");
+	
+		System.out.println("이미지 확인 :: " + fileList);
+		
+		List<String> reviewImage = new ArrayList<String>();
+		
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    
+	    for (MultipartFile mf : fileList) {
+			//image가 존재한다면(image의 name이 공백이 아닐경우)
+			if (!mf.getOriginalFilename().equals("")) {
+				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
+				System.out.println(":: 파일 사이즈 => " + mf.getSize());
+	
+				try {
+					String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
+					
+					String s3Path = "chat/"+saveName;
+					
+					s3ImageUpload.uploadFile(mf, s3Path);
+			
+					System.out.println(":: 저장할 이름 => " + saveName);
+					 
+					reviewImage.add(saveName);
+					
+					map.put("saveName", saveName);
+				
+					System.out.println("업로드 성공");
+					
+					//String test = s3ImageUpload.getFileURL(saveName);
+					//System.out.println(test);
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println("업로드 없음");
+					e.printStackTrace();
+					//saveName = "notFile.png";
+				}
+			}
+		}
+	     
+	    return map;
+	}
 	
 	@RequestMapping(value="json/updateReadyCheck/chatNo={chatNo}&readyCheck={readyCheck}", method=RequestMethod.GET)
 	public Map updateReadyCheck(@PathVariable int chatNo, @PathVariable boolean readyCheck, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {

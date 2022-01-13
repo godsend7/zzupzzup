@@ -122,7 +122,9 @@ $(function() {
 					displayValueBd += '</div>'
 					+'<div class="get-chat-user-info mb-3">'
 					+'<div class="chatProfile d-flex flex-row align-items-center">'
-					+'<img src="/resources/images/common/'+JSONData.chatLeaderId.profileImage+'">'
+					//이미지 경로 변경
+					/* +'<img src="/resources/images/common/'+JSONData.chatLeaderId.profileImage+'">' */
+					+'<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/'+JSONData.chatLeaderId.profileImage+'">'
 					+'<div class="dropdown-parent">'
 					//+'<a href="/member/getMember?memberId='+JSONData.chatLeaderId.memberId+'">'+JSONData.chatLeaderId.nickname+'</a>'
 					+'<a href="#" class="getOtherUserModal" data-toggle="modal" data-target="#getOtherUserModal" data-id="' + JSONData.chatLeaderId.memberId + '">'+JSONData.chatLeaderId.nickname+'</a>'
@@ -152,10 +154,16 @@ $(function() {
 				}
 				$(".get-chat-con").html(displayValueBd);
 				$("#getChatModal .modal-footer").html(displayValueFt);
-				if(chatImg == 'chatimg.jpg'){
+				//이미지 경로 변경
+				/* if(chatImg == 'chatimg.jpg'){
 					$("#getChatModal .modal-body").css("background-image", "url(/resources/images/sub/"+chatImg+")");
 				}else{
 					$("#getChatModal .modal-body").css("background-image", "url(/resources/images/uploadImages/chat/"+chatImg+")");
+				} */
+				if(chatImg == 'chatimg.jpg'){
+					$("#getChatModal .modal-body").css("background-image", "url(https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/"+chatImg+")");
+				}else{
+					$("#getChatModal .modal-body").css("background-image", "url(https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/"+chatImg+")");
 				}
 			},
 			error : function(request, status, error) {
