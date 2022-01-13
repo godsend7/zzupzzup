@@ -51,13 +51,17 @@
 									"password" : password,
 									"recovered" : confirmRecovery
 								}),
-								success : function(data) {
+								success : function(result) {
 									if(confirmRecovery) {
 										alert("계정 복구가 완료되었습니다.");
 										location.href = "/";
 									} else {
 										//alert("엥 그럼 왜 로그인 함?");
+										alert("계정 복구가 취소되었습니다.");
 									}
+								},
+								error : function(error) {
+									alert(JSON.stringify(error));
 								}
 							})
 						} else {
@@ -244,9 +248,9 @@
 		
 		//logout
 		$("#logout").on("click", function() {
-			if(${member.loginType == 1}){
+			if(${sessionScope.member.loginType == 1}){
 				$(self.location).attr("href", "/member/logout");
-			} else if(${member.loginType == 2}) {
+			} else if(${sessionScope.member.loginType == 2}) {
 				logoutFromKakao();
 				$(self.location).attr("href", "/member/logout");
 			}
@@ -315,6 +319,84 @@
 										+"<textarea class='form-control' id='deleteReason' name='deleteReason'"
 										+"placeholder='100자 이내로 자유롭게 기술해주세요.' style='resize: none;' rows='3'></textarea>");
 			}
+		});
+		
+		//상대 프로필 조회
+		$(document).on("click", ".getOtherUserModal", function () { 
+			console.log($(this).data('id'));
+			
+			var memberId = $(this).data('id');
+			
+			$.ajax({
+				url : "/member/json/getOtherUser",
+				method : "POST",
+				contentType : 'application/json',
+				dataType : "json",
+				data : JSON.stringify({
+					"memberId" : memberId
+				}),
+				success : function(data) {
+					if (data != null) {
+						//alert("memberId : "+data.memberId);
+						//console.log(data);
+						//console.log("왜되는거야???")
+						
+						//error 해결하기 위해 추가된 field
+						var defaultImage = "defaultImage.png";
+						var male = "male";
+						var female = "female";
+						
+						$("#get-other-user-modal-body").html("<div class='row mt-5 align-items-center'>"
+									+"<div class='col-md-4 mb-5'>"
+									+"<div align='center' id='get-other-user-profile-image'>"
+									+"</div></div>"
+									+"<div class='col-md-8'>"
+									+"<div class='row align-items-right'>"
+									+"<div class='col-md-7'>"
+									+"<h4 class='mb-1'>"
+									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;'>"+data.memberRank+"</span>&nbsp;"
+									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;'>"+data.ageRange+"</span>&nbsp;"
+									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;' id='get-other-user-gender'>"
+									+"</span>&nbsp;&nbsp;"+data.nickname+"</h4>"
+									+"</div></div>"
+									+"<div class='row mb-4'>"
+									+"<div class='col-md-7'>"
+									+"<p class='text-muted'>"+data.statusMessage+"</p>"
+									+"</div></div></div></div>");
+						
+						if(data.profileImage == "defaultImage.png") {
+							$("#get-other-user-profile-image").html("<img src='/resources/images/defaultImage.png'"
+																	+"class='avatar-img rounded-circle' width='150' height='150'/>"
+																	+"<br/>"
+																	+"<span id='mannerScore' style='font-weight: bold'>"
+																	+"<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'"
+																	+"fill='#b01025' class='bi bi-heart-fill' viewBox='0 0 16 16'>"
+																  	+"<path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/>"
+																	+"</svg> "+data.mannerAllScore+"</span>");
+						} else {
+							$("#get-other-user-profile-image").html("<img src='/resources/images/uploadImages/"+data.profileImage+"'"
+																	+"class='avatar-img rounded-circle' width='150' height='150'/>"
+																	+"<br/>"
+																	+"<span id='mannerScore' style='font-weight: bold'>"
+																	+"<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'"
+																	+"fill='#b01025' class='bi bi-heart-fill' viewBox='0 0 16 16'>"
+																  	+"<path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/>"
+																	+"</svg> "+data.mannerAllScore+"</span>");
+						}
+						
+						if(data.gender == "male") {
+							$("#get-other-user-gender").text("남자");
+						} else {
+							$("#get-other-user-gender").text("여자");
+						}
+						
+					}
+				},
+				error : function(request, status, error) {
+					//alert("에러 왜 뜨는데");
+					alert("request : "+request.status+"\n message : "+request.responseText+"\n error : "+error);
+				}
+			})
 		});
 		
 		
@@ -502,6 +584,30 @@
 			</div>
 			<div class="modal-footer">
 		      <input type="button" class="btn btn-primary" id="checkPwdForDelete-btn" value="확인">
+		    </div>
+		</div>
+	</div>
+</div>
+
+<!-- 상대 프로필 modal -->
+<div class="modal fade" id="getOtherUserModal" tabindex="-1" role="dialog"
+	aria-labelledby="checkPwdForDeleteModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2 class="modal-title" id="checkPwdForDeleteModalLabel">프로필</h2>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="get-other-user-modal-body">
+				<%-- <form id="getOtherUser-form">
+					<input type="hidden" name="memberId" value="${member.memberId}"/>
+				</form> --%>
+			<!-- <div class="modal-footer">
+		      <input type="button" class="btn btn-primary" id="checkPwdForDelete-btn" value="확인">
+		    </div> -->
 		    </div>
 		</div>
 	</div>

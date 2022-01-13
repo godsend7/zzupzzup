@@ -175,14 +175,17 @@
 			
 	   	////////////////////////////////////////////////////////////////////////
 	   	/* Iamport 환불시스템*/
-		    $(".payRefund-modal").on("click", function() {
+		    $(".refundStatusYes").on("click", function() {
 		    	
 		    	console.log("#payRefundModal");	
 		    	console.log("${reservation.payMethod}");
+		    	console.log("${reservation.refundStatus}");
+		    	console.log("환불 여부~~~~~");
 		        alert("환불완료!!!!!!!!")
 		        var payMethod = $("input[name='payMethod']").val();
+		        var refundStatus = $("input[name='refundStatus']").val();
 		        jQuery.ajax({
-		            url: "/reservation/json/payRefund/${reservation.reservationNo}/${reservation.payMethod}/", // 예: http://www.myservice.com/payments/cancel
+		            url: "/reservation/json/payRefund/${reservation.reservationNo}/${reservation.payMethod}/${reservation.refundStatus}/", // 예: http://www.myservice.com/payments/cancel
 		            type: "GET",
 		            dataType: "json",
 		            headers: {
@@ -191,10 +194,14 @@
 		            },
 		            success: function (JSONData, status) {
 		
-		            	console.log("바꾸기 성공");
-						$('#payRefundModal').modal("hide");
-						alert("결제환불 성공!!!!!");
-						history.go(0);
+		            	console.log(JSONData);
+		            	
+		            	if (JSONData == 1) {
+		            		console.log("바꾸기 성공");
+							$('#refundStatus').modal("hide");
+							alert("결제환불 성공!!!!!");
+							history.go(0);
+						}
 		            },
 		            error : function(e) {
 						alert(e.responseText);
@@ -267,11 +274,8 @@
 								</div>
 								<div class="col-12">
 									<label for="nickname">예약자 NickName</label> 
-									<%-- <p>${reservation.member.nickname}</p> --%>
-									<%-- ${reservation.chatMember } --%>
 									<p><c:forEach var="chatMember" items="${reservation.chat.chatMember}" varStatus="status">
 											<c:out value = "${chatMember.member.nickname} ${status.last ? '' : '/'}"/>
-											<%-- <c:out value = "${chatMember}"/> --%>
 										</c:forEach>
 									</p>
 								</div>
@@ -328,14 +332,7 @@
 										</c:when>
 									</c:choose>	
 									
-									<c:choose>
-										<c:when test="${reservation.payOption == 2}">
-										<c:if test="${reservation.reservationStatus != 3 && reservation.reservationStatus != 4}">
-										<input type="button" value="결제 환불" name= "payRefund" class="button small primary stretched-link payRefund-modal" id="payRefund-modal" data-toggle="modal"
-										data-target="#payRefundModal"/>
-										</c:if>
-										</c:when>
-									</c:choose>		
+									
 									
 								</div>
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->	
@@ -343,16 +340,26 @@
 								
 								
 								<div class="col-6 col-12-xsmall fixedDate">
-									<label for="fixedDate">방문 확정 후</label> 
-									<p>${reservation.fixedDate} ${reservation.returnStatus}</p>
-									<input id="fixedDate" name="fixedDate" type="hidden" value="1">
-									
-									
+								<label for="fixedDate">방문 확정 후</label> 
+									<c:choose>
+										<c:when test="${reservation.reservationStatus == 1 || reservation.reservationStatus == 2}">
+										<p>${reservation.fixedDate} ${reservation.returnStatus}</p>
+										<input id="fixedDate" name="fixedDate" type="hidden" value="">
+										</c:when>
+									</c:choose>	
 								</div>
-								
 								<div class="col-12">
 									<label for="reservationStatus">예약 및 결제 현황</label>
-									<p>${reservation.returnStatus}</p>
+									<p>${reservation.returnStatus} ${reservation.returnRefund}
+									<c:choose>
+										<c:when test="${reservation.payOption == 2}">
+										<c:if test="${reservation.reservationStatus != 3 && reservation.reservationStatus != 4 && reservation.refundStatus != 'true'}">
+										<input type="button" value="결제 취소" name= "refundStatus" class="button small primary stretched-link refundStatus-modal" id="refundStatus-modal" data-toggle="modal"
+										data-target="#refundStatusModal"/>
+										</c:if>
+										</c:when>
+									</c:choose>
+									</p>
 								</div>
 								
 								<div class="col-12">
@@ -499,15 +506,14 @@
 													<span aria-hidden="true">&times;</span>
 												</button>
 											</div>
-											
 											<div class="modal-body">해당 고객이 음식점을 방문하였습니까?</div>
 											<div class="modal-footer">
 												<button type="button" class="button small secondary" id="close" 
 													data-dismiss="modal">취소</button>
 													
-												<button type="button" class="button small primary no" id="no" value="3"
+												<button type="button" class="button small primary no" id="no" value="2"
 													name="reservationStatus">아니오</button>		
-												<button type="button" class="button small primary yes" id="yes" value="2"
+												<button type="button" class="button small primary yes" id="yes" value="1"
 													name="reservationStatus">예</button>	
 											</div>
 										</div>
@@ -539,7 +545,29 @@
 										</div>
 									</div>
 								</div>
-						
+								<!-- 결제취소 Modal -->
+								<div class="modal fade" id="refundStatusModal" tabindex="-1"
+									aria-labelledby="refundStatusModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5>결제 취소</h5>
+												<button type="button" class="close secondary"
+													data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">해당 결제내역을 취소하시겠습니까?</div>
+											<div class="modal-footer">
+												<button type="button" class="button small secondary" id="refundStatusClose" 
+													data-dismiss="modal">취소</button>	
+												<button type="button" class="button small primary refundStatusYes" id="refundStatusYes" value="true"
+													name="refundStatus">예</button>	
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- 결제취소 Modal END -->
 					</div>
 					
 				</section>

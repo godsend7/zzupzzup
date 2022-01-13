@@ -130,7 +130,6 @@
 	<update 	id="updateRestaurant"	parameterType="restaurant" >
 		UPDATE RESTAURANT
 		<set>
-			OWNER_IMAGE = #{ownerImage},
 			RESTAURANT_TEXT = #{restaurantText},
 			RESTAURANT_NAME = #{restaurantName},
 			RESTAURANT_TEL = #{restaurantTel},
@@ -138,7 +137,11 @@
 			AREA_ADDRESS = #{areaAddress},
 			MENU_TYPE = #{menuType},
 			JUDGE_STATUS = #{judgeStatus},
-			RESERVATION_STATUS = #{reservationStatus}
+			RESERVATION_STATUS = #{reservationStatus},
+			
+			<if test="ownerImage != null">
+				OWNER_IMAGE = #{ownerImage}
+			</if>
 		</set>
 		WHERE RESTAURANT_NO = #{restaurantNo}
 	</update>

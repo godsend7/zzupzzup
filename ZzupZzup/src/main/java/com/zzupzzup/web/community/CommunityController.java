@@ -148,23 +148,26 @@ public class CommunityController {
 		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		uploadFilePath(uploadFile, empty, community);
 		
-		if(uploadReceiptFile != null) {
-			String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
-			String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
+		System.out.println("::: uploadReceiptFile1 ::: " + uploadReceiptFile);
+		System.out.println("::: uploadReceiptFile2 ::: " + uploadReceiptFile.getName());
+		System.out.println("::: uploadReceiptFile3 ::: " + uploadReceiptFile.getOriginalFilename());
+		
+		
+		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
+		String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
 			
-			System.out.println("receiptImage : " + receiptImage);
+		System.out.println("receiptImage : " + receiptImage);
 			
-			community.setReceiptImage(receiptImage);
-		}
+		community.setReceiptImage(receiptImage);
 		
 		communityService.updateCommunity(community);
 		
-		int sessionNo = community.getPostNo();
-		String sessionNum = Integer.toString(sessionNo);
-		
-		if(sessionNum.equals(community.getPostNo())) {
-			session.setAttribute("community", community);
-		}
+//		int sessionNo = community.getPostNo();
+//		String sessionNum = Integer.toString(sessionNo);
+//		
+//		if(sessionNum.equals(community.getPostNo())) {
+//			session.setAttribute("community", community);
+//		}
 		
 		return "redirect:/community/getCommunity?postNo=" + community.getPostNo();
 	}
@@ -267,15 +270,21 @@ public class CommunityController {
 		
 		System.out.println("realReceipt : " + realReceipt);
 		
-		Path checkpoint = Paths.get(vacant, File.separator + StringUtils.cleanPath(realReceipt));
-		
-		try {
-			Files.copy(uploadReceiptFile.getInputStream(), checkpoint, StandardCopyOption.REPLACE_EXISTING);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (!realReceipt.equals("")) {
+
+			Path checkpoint = Paths.get(vacant, File.separator + StringUtils.cleanPath(realReceipt));
+			
+			try {
+				Files.copy(uploadReceiptFile.getInputStream(), checkpoint, StandardCopyOption.REPLACE_EXISTING);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return realReceipt;
+			
+		} else {
+			return null;
 		}
-		
-		return realReceipt;
 	}
 	
 	

@@ -113,16 +113,19 @@ $(function() {
 					+'<div class="d-flex justify-content-between">'
 					+'<div>개설일</div>'
 					+'<div>'+chatRegDate+'</div>'
-					+'</div>'
-					+'<div class="d-flex justify-content-between">'
-					+'<div>'+showStatus+ ' <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>' +JSONData.reportCount+' 회</div>'
-					+'</div>'
-					+'</div>'
+					+'</div>';
+					if("${member.memberRole}" == 'admin'){
+						displayValueBd += +'<div class="d-flex justify-content-between">'
+						+'<div>'+showStatus+ ' <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>' +JSONData.reportCount+' 회</div>'
+						+'</div>';
+					};
+					displayValueBd += '</div>'
 					+'<div class="get-chat-user-info mb-3">'
 					+'<div class="chatProfile d-flex flex-row align-items-center">'
 					+'<img src="/resources/images/common/'+JSONData.chatLeaderId.profileImage+'">'
 					+'<div class="dropdown-parent">'
-					+'<a href="/member/getMember?memberId='+JSONData.chatLeaderId.memberId+'">'+JSONData.chatLeaderId.nickname+'</a>'
+					//+'<a href="/member/getMember?memberId='+JSONData.chatLeaderId.memberId+'">'+JSONData.chatLeaderId.nickname+'</a>'
+					+'<a href="#" class="getOtherUserModal" data-toggle="modal" data-target="#getOtherUserModal" data-id="' + JSONData.chatLeaderId.memberId + '">'+JSONData.chatLeaderId.nickname+'</a>'
 					+'<input type="hidden" id="chatLeaderId" name="chatLeaderId" value="'+JSONData.chatLeaderId.memberId+'">'
 					+'</div>'
 					+'<span class="badge badge-info gender">'+JSONData.chatLeaderId.gender+'</span>'
@@ -136,10 +139,15 @@ $(function() {
 					+'<div>'+JSONData.chatRestaurant.streetAddress+'</div>'
 					+'<div>'+JSONData.chatRestaurant.areaAddress+'</div>'
 					+'</div>';
-				let displayValueFt = "<input type='button' data-target="+JSONData.chatNo+" class='button small warning' value='대화기록보기'/>"
-				+"<input type='button' data-target="+JSONData.chatNo+" class='button small info' value='수정하기'/>"
-				+"<input type='button' class='button small secondary' data-dismiss='modal' value='닫기' />";
-				if($('#listChat').length){
+				let displayValueFt = ''
+				if("${member.memberRole}" == "admin"){
+					displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small warning' value='대화기록보기'/>"
+				}
+				if(("${member.memberRole}" == "admin" || "${member.memberId}" == JSONData.chatLeaderId.memberId) && JSONData.chatState != 5){
+				displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small info' value='수정하기'/>"
+				}
+				displayValueFt += "<input type='button' class='button small secondary' data-dismiss='modal' value='닫기' />";
+				if($('#listChat').length && JSONData.chatState != 5){
 					displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small primary' value='입장하기'>"
 				}
 				$(".get-chat-con").html(displayValueBd);
