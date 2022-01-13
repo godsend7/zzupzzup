@@ -3,6 +3,21 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<style>
+	#loginModal #login-view {
+		padding: 10px;
+	}
+
+	#loginModal #login-view a {
+		width:100%;
+	}
+	
+	#loginModal #login-view input {
+		margin-top: 15px;
+		margin-bottom: 15px;
+	}
+</style>
+
 <!-- kakao login api cdn -->
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
@@ -436,7 +451,7 @@
 			<div class="modal-body">
 				<form class="form-signin" id="login-view">
 					<!-- <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
-					<h6 class="h6 mb-6 font-weight-normal">로그인 후 이용하여 주십시오.</h6>
+					<h6 class="h6 mb-6 font-weight-normal" style="margin-bottom: 20px;">로그인 후 이용하여 주십시오.</h6>
 					<label for="memberId" class="sr-only">Email address</label> <input
 						type="email" id="memberId" name="memberId" class="form-control"
 						placeholder="example@zzupzzup.com" required autofocus> <label
@@ -444,8 +459,8 @@
 						type="password" id="password" name="password" class="form-control"
 						placeholder="비밀번호를 입력해주세요." required>
 					<br/>
-					<input class="btn btn-lg btn-primary btn-block" id="login"
-						type="button" value="login" />
+					<a class="button" id="login">login</a>
+					<hr>
 					<div align="center" style="margin-top:5px;">
 						<a id="kakaoLogin" href="#">
 						  <img
