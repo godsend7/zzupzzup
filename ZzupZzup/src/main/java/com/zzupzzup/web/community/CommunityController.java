@@ -30,6 +30,8 @@ import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.community.CommunityService;
 import com.zzupzzup.service.domain.Community;
+import com.zzupzzup.service.domain.Mark;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.RestaurantTime;
 import com.zzupzzup.service.member.MemberService;
 
@@ -108,17 +110,25 @@ public class CommunityController {
 	}
 	
 	@RequestMapping(value="getCommunity", method=RequestMethod.GET)
-	public String getCommunity(@RequestParam("postNo") int postNo, Model model) throws Exception {
+	public String getCommunity(@RequestParam("postNo") int postNo, Model model, HttpSession session) throws Exception {
 		
 		System.out.println("/community/getCommunity : GET");
 		
 //		System.out.println("test section 1 : " + postNo);
 		
 		Community community = communityService.getCommunity(postNo);
+		Member member = (Member)session.getAttribute("member");
+		
+		List<Mark> listLike = null;
+		
+		if(member != null && member.getMemberRole().equals("user")) {
+			listLike = communityService.listLike(member.getMemberId());
+		}
 		
 //		System.out.println("test section 2 : " + postNo);
 		
 		model.addAttribute("community", community);
+		model.addAttribute("listLike", listLike);
 		
 //		System.out.println("test section 3 : " + community);
 		

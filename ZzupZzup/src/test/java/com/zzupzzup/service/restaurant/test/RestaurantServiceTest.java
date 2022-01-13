@@ -253,18 +253,18 @@ public class RestaurantServiceTest {
 		search.setCurrentPage(1);
 		search.setPageSize(pageSize);
 		
-		Map<String, Object> map = restaurantService.listCallDibs(search, memberId);
+//		Map<String, Object> map = restaurantService.listCallDibs(search, memberId);
 		
-		List<Restaurant> list = (List<Restaurant>) map.get("list");
+//		List<Restaurant> list = (List<Restaurant>) map.get("list");
 		
 		System.out.println("HERE YOU ARE");
 		
-		for(Restaurant rt : list) {
-			System.out.println(rt);
-		}
+//		for(Restaurant rt : list) {
+//			System.out.println(rt);
+//		}
 		
-		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
-		System.out.println(resultPage);
+//		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+//		System.out.println(resultPage);
 		
 	}
 	

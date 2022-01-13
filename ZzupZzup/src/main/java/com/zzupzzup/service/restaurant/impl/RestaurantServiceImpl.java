@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.RestaurantMenu;
 import com.zzupzzup.service.domain.RestaurantTime;
@@ -103,17 +104,22 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 	
 	@Override
-	public Map<String, Object> listCallDibs(Search search, String memberId) throws Exception {
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("search", search);
-		map.put("memberId", memberId);
-		
-		map.put("list", restaurantDAO.listCallDibs(map));
-		map.put("totalCount", restaurantDAO.getTotalCount(search));
-		
-		return map;
+	public List<Mark> listCallDibs(String memberId) throws Exception {
+		return restaurantDAO.listCallDibs(memberId);
 	}
+	
+//	@Override
+//	public Map<String, Object> listCallDibs(Search search, String memberId) throws Exception {
+//		
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("search", search);
+//		map.put("memberId", memberId);
+//		
+//		map.put("list", restaurantDAO.listCallDibs(map));
+//		map.put("totalCount", restaurantDAO.getTotalCount(search));
+//		
+//		return map;
+//	}
 
 	@Override
 	public int checkCallDibs(String memberId, int restaurantNo) throws Exception {

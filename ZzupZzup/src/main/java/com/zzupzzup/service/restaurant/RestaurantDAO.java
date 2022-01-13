@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.RestaurantMenu;
 import com.zzupzzup.service.domain.RestaurantTime;
@@ -30,7 +31,7 @@ public interface RestaurantDAO {
 	
 	public int getTotalCount(Search search) throws Exception;
 	
-	public List<Restaurant> listCallDibs(Map<String, Object> map) throws Exception;
+	public List<Mark> listCallDibs(String memberId) throws Exception;
 	
 	public int checkCallDibs(Map<String, Object> map) throws Exception;
 	

@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.service.community.CommunityService;
 import com.zzupzzup.service.domain.Community;
+import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Member;
 
 @RestController
