@@ -91,6 +91,10 @@
 		right: 50px;
 		bottom: 50px; 
 	}
+	
+	.direc-hide {
+		display: none;
+	}
 	/* .mainMap {
 		position: relative;
 	} */
@@ -100,10 +104,9 @@
 <script type="text/javascript">	
 	var arrayLayout = new Array();
 	
+	//default 지도 위치
 	var nowLatitude = "37.5703942";
-	var newLongitude = "126.9832113";
-	//현재위치로 이동
-	//naver.maps.Event.once(map, '')
+	var nowLongitude = "126.9832113";
 	
 	//지도 정보를 담을 객체 선언
 	let markers = new Array();
@@ -114,20 +117,25 @@
 	//화면에 보여줄 지도의 기본 크기 설정
 	var mapZoom = 15; 
 	
-	//화면 위치(s,n,w,e) 넣을 객체 선언
+	//화면 위치(s,n,w,e) 넣을 객체 선언 
+	//=> 지도를 움직일 때 이동한 위치 근처만 마커 표시 
 	var bounds;
 	
 	//map search condition
 	var reCheck = false;
 	var parkCheck = false;
 	
+	//길찾기 시 화면에 경로 표시
 	var polylinePath = new Array();
+	//길찾기 시작 정보
+	var startLocation = new Array();
+	//길찾기 도착 정보
+	var goalLocation = new Array();
+	
 	
 	$(function() {
-		
 		loadRestaurantMap();
 		loadGyeonggidoMap();
-		
 		
 		$( ".filterBox" ).draggable();
 		
@@ -167,20 +175,46 @@
 		$(".thisLocation").on("click", function() {
 			
 			thisLocation();
-			map.setCenter(new naver.maps.LatLng(nowLatitude, newLongitude));
+			map.setCenter(new naver.maps.LatLng(nowLatitude, nowLongitude));
 			map.setZoom(15);
 		});
 		
-		$("#direction").on("click", function() {
+		$("#searchDirec").on("click", function() {
 			loadDirections();
 			
 		});
 		
+		
+		//길찾기 modal 실행될 때 현재위치 가져오기
 		$("#directionModal").on("shown.bs.modal", function() { 
 			$(".direction-control").autocomplete("option", "appendTo", "#directionModal");
+			
+			$.ajax ({
+				url:"/map/json/thisReverseGeoCoding",
+    	  		method : "POST",
+				dataType : "json",
+				contentType: 'application/json',
+				data : JSON.stringify ({
+					thisLat : nowLatitude,
+					thisLong : nowLongitude 
+				}),
+				success : function(data, status) {
+					
+					console.log(data.status.code);
+					if (data.status.code == 0) {
+						console.log(data.results[0].region);
+						
+						$("#startInput").val(data);
+					}
+				}
+			});
+		});
+		
+		$("#none-direction").on("click", function() {
+			location.reload();
 		});
 
-		$(".direction-control").on("focus" , function() {
+		/* $(".direction-control").on("focus" , function() {
 			console.log($(this).attr("id"));
 			$(this).addClass("inputCheck");
 			console.log($(this).attr("class"));
@@ -190,11 +224,26 @@
 			console.log($(this).attr("id"));
 			$(this).removeClass("inputCheck");
 			console.log($(this).attr("class"));
+		}); */
+		
+		/*  $("#startInput").on("focus" , function() {
+			//console.log($(this).attr("id"));
+			$("#goalInput").removeClass("inputCheck");
+			$(this).addClass("inputCheck");
+			//console.log($(this).attr("class"));
 		});
+		
+		$("#goalInput").on("focus" , function() {
+			//console.log($(this).attr("id"));
+			$("#startInput").removeClass("inputCheck");
+			$(this).addClass("inputCheck");
+			//console.log($(this).attr("class"));
+		}); */
+		
 		
 		
 		//restaurant Direction autoComplete
-		$(".inputCheck").autocomplete({
+		$("#startInput, #goalInput").autocomplete({
 			source: function(request, response) {
 		 		$.ajax({
 		 			url:"/map/json/listRestaurantName",
@@ -205,37 +254,20 @@
 						"Content-Type" : "application/json"
 					},
 					data : {
-						"keyWord" : $(".inputCheck").val()
+						"keyWord" : request.term
 					},
 					success : function(data, status) {
 						
 						console.log(data);
-						/* var array = Array.prototype.slice.call(data);
-						var hashArry = [];
-						
-						for (var i = 0; i < hashtag_list.length; i++) {
-							for (let hashTag of array) {
-								var check = false;
-								
-								if (hashtag_list[i] == hashTag.hashTagNo) {
-									hashArry.push(hashTag);
-									break;
-								}
-							}
-						} */
-						
-						//중복된 해시태그 제외 출력 (차집합)
-						//let difference = array.filter(x => !hashArry.includes(x));
-						
-						//console.log(difference);
 						
 						//label : 화면에 보여지는 텍스트 
 						//value : 실제 text태그에 들어갈 값
 						response(
 							$.map(data, function(item) {
                                 return {
-                                	value: item.streetAddress,
-                                    label: item.restaurantName
+                                	value: item.restaurantName + "(" +item.streetAddress + ")",
+                                    label: item.restaurantName + "(" +item.streetAddress + ")",
+                                    id : item
                                 }
                             })
 						);//response 
@@ -243,60 +275,101 @@
 	      		});
 	 		},
 	 		select : function(event, ui) {
-	 			console.log(event);
-	 			console.log(ui);
+	 			//console.log(event);
+	 			//console.log(ui);
 				
+	 			var thisInput = $(this).attr("id");
+	 			
+	 			if (thisInput == "startInput") {
+					//console.log("startInput에 저장");
+					startLocation = ui.item.id;
+					//console.log(startLocation);
+					//console.log(startLocation.restaurantName);
+				} else if (thisInput == "goalInput"){
+					//console.log("goalInput에 저장");
+					goalLocation = ui.item.id;
+					//console.log(goalLocation);
+				}
+	 			
+	 			console.log(ui.item.id);
 				//$("#hashTagAuto").val('');
 				
-				return false;
-	 		} 
+				//return false;
+	 		} ,
+	 		focus : function (event, ui) {
+	 			
+	 			return false;
+	 			//event.preventDefault();
+	 		}
 		});
 	});
 	
 	//길찾기 ajax
 	function loadDirections() {
-		/* $.ajax({
+		console.log(startLocation.latitude);
+		console.log(startLocation.longitude);
+		console.log(goalLocation.latitude);
+		console.log(goalLocation.longitude);
+		
+		$.ajax({
 			url : "/map/json/getDirections",
-			type : "GET",
+			type : "POST",
 			dataType : "json",
-			data : {
-				startLat: "37.57041517608028",
-				startLong: "126.98522632662905",
-				goalLat: "37.57122152112966",
-				goalLong: "126.98565886971308"
-			}, beforeSend : function (xhr) {
+			contentType: 'application/json',
+			data : JSON.stringify ({
+				startLat: startLocation.latitude,
+				startLong: startLocation.longitude,
+				goalLat: goalLocation.latitude,
+				goalLong: goalLocation.longitude
+			}), 
+			/* beforeSend : function (xhr) {
 				xhr.setRequestHeader("X-NCP-APIGW-API-KEY-ID" , "7gzdb36t5o");
 				xhr.setRequestHeader("X-NCP-APIGW-API-KEY", "mYUAOPlY0TCwBzBjBZhMfMCX7vKouQIWJJDG9kwL");
-			},
+			}, */
 			success : function(data, status) {
-				alert(JSON.stringify(data.route.bbox));
-				console.log(JSON.stringify(data.route.trafast[0].path));
-				
-				$.each (data.route.trafast[0].path, function(index, item){ 
-					//console.log(item[0]);
-					//console.log(item[1]);
-					polylinePath.push(new naver.maps.LatLng(item[1], item[0]));
-				});
-				
-				getDirec();
+				//alert(JSON.stringify(data.route.bbox));
+				//console.log(JSON.stringify(data.route.trafast[0].path));
+				if (data.code == 0) {
+					$.each (data.route.trafast[0].path, function(index, item){ 
+						polylinePath.push(new naver.maps.LatLng(item[1], item[0]));
+					});
+					
+					getDirec();
+				} else if (data.code == 1) {
+					alert("출발지와 도착지가 동일합니다.");
+				} else if (data.code == 2) {
+					alert("출발지 또는 도착지가 도로 주변이 아닙니다.");
+				} else if (data.code == 3) {
+					alert("자동차 길찾기 안내를 제공하지 않는 경로입니다.");
+				} else if (data.code == 5) {
+					alert("요청하신 길찾기의 거리가 너무 깁니다!");
+				}				
 			},
 			error : function(request, status, error) {
 				alert(request);
 				alert(error);
 			}
-		}); */
+		});
 	}
 	
+	//길찾기 실행
 	function getDirec() {
 		
-		 var map = new naver.maps.Map('content', {
-		        zoom: 15,
-		        center: new naver.maps.LatLng(nowLatitude, newLongitude)
-		    });
+		//modal 종료
+		$("#directionModal").modal("hide");
+		
+		//button 변경
+		$("#direction").addClass("direc-hide");
+		$("#none-direction").removeClass("direc-hide");
+		
+		map = new naver.maps.Map('content', {
+			zoom: 13,
+		    center: new naver.maps.LatLng(startLocation.latitude, startLocation.longitude)
+		});
 		
 		var polyline = new naver.maps.Polyline({
 			path: polylinePath,
-	        strokeColor: '#00CA00',
+	        strokeColor: '#d16767',
 	        strokeOpacity: 0.8,
 	        strokeWeight: 6,
 	        zIndex: 88,
@@ -309,17 +382,15 @@
 		    map: map
 		});
 		
-		naver.maps.Event.addListener(polyline, "mousedown", function(e) {
-	        polyline.setOptions({
-	            strokeWeight: 20
-	        });
-	    });
+		//클릭 했을 때 띄어줄 정보 HTML
+		var infowindow = new naver.maps.InfoWindow({
+		    content: '<div style="padding:10px; width:280px;"><b>목적지<br>'+goalLocation.restaurantName +'<br>'+goalLocation.streetAddress,
+		    maxWidth: 300,
+		    borderColor: "#f56a6a",
+		    borderWidth: 5
+		});
 		
-		naver.maps.Event.addListener(polyline, "mouseup", function(e) {
-	        polyline.setOptions({
-	            strokeWeight: 6
-	        });
-	    });
+		infowindow.open(map, marker);
 	}
 	
 	
@@ -402,6 +473,7 @@
 		)
 	}
 	
+	//음식점명 or 음식점 주소 검색
 	function searchMap() {
 		arrayLayout = new Array();
 		
@@ -418,11 +490,11 @@
 		/* if(reCheck || parkCheck) {
 			mapZoom = 10;
 			nowLatitude = arrayLayout[0].latitude;
-			newLongitude = arrayLayout[0].longitude;
+			nowLongitude = arrayLayout[0].longitude;
 		} else if(!reCheck && !parkCheck) {
 			mapZoom = 15;
 			nowLatitude = arrayLayout[0].latitude;
-			newLongitude = arrayLayout[0].longitude;
+			nowLongitude = arrayLayout[0].longitude;
 		} 
 		
 		if ($("#searchKeyword").val() != "") {
@@ -438,7 +510,7 @@
 			}
 			
 			nowLatitude = arrayLayout[0].latitude;
-			newLongitude = arrayLayout[0].longitude;
+			nowLongitude = arrayLayout[0].longitude;
 		} */
 		
 		
@@ -459,11 +531,11 @@
 			}
 			
 			nowLatitude = arrayLayout[0].latitude;
-			newLongitude = arrayLayout[0].longitude;
+			nowLongitude = arrayLayout[0].longitude;
 		}
 		
 		map = new naver.maps.Map('content', {
-	        center: new naver.maps.LatLng(nowLatitude, newLongitude),  //지도 시작 좌표
+	        center: new naver.maps.LatLng(nowLatitude, nowLongitude),  //지도 시작 좌표
 	        zoom: mapZoom
 	    });
 		
@@ -552,12 +624,6 @@
 		
 		var contentString = "";
 		
-		/* if (arrayLayout[i].restaurantNo != null) {
-			contentString = '<div style="padding:10px; width:280px;"><b>' + arrayLayout[i].restaurantName + menuType + ' <a href="/restaurant/getRestaurant?restaurantNo=' + arrayLayout[i].restaurantNo + '" class="button primary small" style="float:right; margin-right:20px;">찜</a>';
-		} else {
-			contentString = '<div style="padding:10px; width:280px;"><b>' + arrayLayout[i].restaurantName + menuType;
-		}  */
-	
 		contentString = '<div style="padding:10px; width:280px;"><b>' + arrayLayout[i].restaurantName + menuType +
 						'<br>'+ mainMenu +
 						'<br>'+ arrayLayout[i].streetADDR +
@@ -631,7 +697,9 @@
 			var crd = pos.coords;
 			
 			nowLatitude = crd.latitude;
-			newLongitude = crd.longitude;
+			nowLongitude = crd.longitude;
+			//console.log(crd);
+			//console.log(pos);
 		}
 		
 		function error(err) {
@@ -681,6 +749,7 @@
 						</div>
 						<div class="directions">
 							<a type="button" class="button secondary" id="direction" data-toggle="modal" data-target="#directionModal" data-backdrop="static">길찾기</a>
+							<a type="button" class="button secondary direc-hide" id="none-direction">길찾기 종료</a>
 						</div>
 					</div>
 					
@@ -709,20 +778,16 @@
 	          <div class="form-group">
 	            <label for="start" class="col-form-label">출발지</label>
 	            <input type="text" class="direction-control" id="startInput">
-	            <input type="hidden" name="startLat" value="">
-	            <input type="hidden" name="startLong" value="">
 	          </div>
 	          <div class="form-group">
 	            <label for="goal" class="col-form-label">도착지</label>
 	            <input type="text" class="direction-control" id="goalInput">
-	            <input type="hidden" name="goalLat" value="">
-	            <input type="hidden" name="goalLong" value="">
 	          </div>
 	        </form>
 	      </div>
 	      <div class="modal-footer">
 	        <input type="button" value="취소" class="normal" data-dismiss="modal" />
-			<input type="button" value="검색" class="primary" id="addBtn" />
+			<input type="button" value="검색" class="primary" id="searchDirec" />
 	      </div>
 	    </div>
 	  </div>
