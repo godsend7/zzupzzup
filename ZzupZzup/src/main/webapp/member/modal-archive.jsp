@@ -148,8 +148,38 @@
 		                			}),
 		                			success : function(data) {
 		               					if (data != null) {
-		               						//main.jsp로 이동
-		               						location.href = "/";
+		               						if(data.eliminated && !data.recovered) {
+		            							alert("로그인 할 수 없습니다.");
+		            						} else if(data.regBlacklist) {
+		            							alert("블랙리스트로 등록된 계정입니다. 자세한 사항은 이메일(zzupzzup101@gmail.com)로 문의 바랍니다.");
+		            						} else if(data.recovered) {
+		            							var confirmRecovery = confirm("계정 복구를 진행하시겠습니까?")
+		            							$.ajax({
+		            								url : "/member/json/recoveryMember",
+		            								method : "POST",
+		            								contentType : 'application/json',
+		            								dataType : "json",
+		            								data : JSON.stringify({
+		            									"memberId" : memberId,
+		            									"recovered" : confirmRecovery
+		            								}),
+		            								success : function(result) {
+		            									if(confirmRecovery) {
+		            										alert("계정 복구가 완료되었습니다.");
+		            										location.href = "/";
+		            									} else {
+		            										//alert("엥 그럼 왜 로그인 함?");
+		            										alert("계정 복구가 취소되었습니다.");
+		            									}
+		            								},
+		            								error : function(error) {
+		            									alert(JSON.stringify(error));
+		            								}
+		            							})
+		            						} else {
+		            							//main.jsp로 이동
+		            							location.href = "/";
+		            						}
 		               					}
 		               				}
 		               			});
@@ -231,11 +261,13 @@
 			var password = $("#password-forDelete").val();
 			var deleteType = $("input[name=deleteType]:checked").val();
 			var deleteReason = $("textarea[name=deleteReason]").val();
+			var loginType = "${sessionScope.member.loginType}";
 
 			console.log("memberId:" + memberId);
 			console.log("password:" + password);
 			console.log("deleteType:" + deleteType);
-			console.log("deleteReason:"+deleteReason)
+			console.log("deleteReason:"+deleteReason);
+			console.log("loginType:"+loginType);
 
 			$.ajax({
 				url : "/member/json/deleteMember",
@@ -246,11 +278,16 @@
 					"memberId" : memberId,
 					"password" : password,
 					"deleteType" : deleteType,
-					"deleteReason" : deleteReason
+					"deleteReason" : deleteReason,
+					"loginType" : loginType
 				}),
 				success : function(data) {
-					if (data != null) {
+					if (data.loginType == 1) {
 						alert("탈퇴 처리가 완료되었습니다.");
+						location.href = "/";
+					} else if(data.loginType == 2) {
+						alert("되는 건가?");
+						unlinkKakao();
 						location.href = "/";
 					}
 				},
@@ -562,9 +599,14 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-		      <a id="checkPwdForDeleteModal-nav" data-toggle="modal" data-target="#checkPwdForDeleteModal">
-		      	<input type="button" class="btn btn-primary" id="deleteMember-btn" value="확인">
-		      </a>
+			<c:if test="${member.loginType == 1}">
+				<a id="checkPwdForDeleteModal-nav" data-toggle="modal" data-target="#checkPwdForDeleteModal">
+			      	<input type="button" class="btn btn-primary" id="deleteMember-btn" value="확인">
+			      </a>
+			</c:if>
+		    <c:if test="${member.loginType != 1}">
+				<input type="button" class="btn btn-primary" id="checkPwdForDelete-btn" value="확인">
+			</c:if>  
 		    </div>
 		</div>
 	</div>
