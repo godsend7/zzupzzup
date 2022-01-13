@@ -33,6 +33,8 @@ public interface RestaurantDAO {
 	
 	public List<Mark> listCallDibs(String memberId) throws Exception;
 	
+	public List<Restaurant> listMyCallDibs(Map<String, Object> map) throws Exception;
+	
 	public int checkCallDibs(Map<String, Object> map) throws Exception;
 	
 	public int cancelCallDibs(Map<String, Object> map) throws Exception;

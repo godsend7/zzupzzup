@@ -320,6 +320,49 @@ public class RestaurantController {
 		
 	}
 	
+	@RequestMapping(value="listMyCallDibs")
+	public String listMyCallDibs(@ModelAttribute("search") Search search, Model model, HttpServletRequest request, HttpSession session) throws Exception {
+		
+		System.out.println("/restaurant/listMyCallDibs : SERVICE");
+		
+		Member member = (Member)session.getAttribute("member");
+		List<Mark> listCallDibs = null;
+		
+		if(member != null && member.getMemberRole().equals("user")) {
+			listCallDibs = restaurantService.listCallDibs(member.getMemberId());
+		}
+		
+		
+		if(search.getCurrentPage() == 0){
+			search.setCurrentPage(1);
+		}
+		
+		if(request.getParameter("page") != null) {
+			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+		}
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = restaurantService.listMyCallDibs(search, member);
+		
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		List<Restaurant> list = (List<Restaurant>)map.get("list");
+		
+		for(Restaurant rt : list) {
+			System.out.println("RESTAURANT FOREACH : " + rt);
+		}
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("listCallDibs", listCallDibs);
+		model.addAttribute("search", search);
+		model.addAttribute("totalCount", map.get("totalCount"));
+		model.addAttribute("resultPage", resultPage);
+		
+		return "forward:/restaurant/listRestaurant.jsp";
+		
+	}
+	
 	@RequestMapping(value="listRequestRestaurant")
 	public String listRequestRestaurant(@ModelAttribute("search") Search search, Model model, HttpServletRequest request) throws Exception {
 		

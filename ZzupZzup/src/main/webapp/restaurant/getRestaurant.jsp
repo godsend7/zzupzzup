@@ -29,10 +29,11 @@
 			$("button.btn.btn-warning").on("click", function() {
 				if(${member.memberRole == 'owner'}) {
 					self.location = "/member/getMember?memberId=${member.memberId}"
-				} else {
+				} else if(${member.memberRole == 'admin'}) {
 					self.location = "/restaurant/listRestaurant"
+				} else {
+					self.location = "/restaurant/listMyCallDibs"
 				}
-				
 				/* history.go(-1); */
 			});
 			

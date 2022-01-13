@@ -136,7 +136,14 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	public int cancelCallDibs(Map<String, Object> map) throws Exception {
 		return sqlSession.delete("RestaurantMapper.cancelCallDibs", map);
 	}
-
+	
+	@Override
+	public List<Restaurant> listMyCallDibs(Map<String, Object> map) throws Exception {
+		
+		List<Restaurant> list = sqlSession.selectList("RestaurantMapper.listMyCallDibs", map);
+		
+		return list;
+	}
 
 	@Override
 	public List<Restaurant> listRestaurantName(Map<String, Object> map) {
