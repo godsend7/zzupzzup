@@ -145,6 +145,11 @@ public class ChatServiceImpl implements ChatService {
 		return map;
 	}
 
+	@Override
+	public int updateConnectedChatMember(ChatMember chatMember) throws Exception {
+		return chatDao.updateConnectedChatMember(chatMember);
+	}
+
 	
 
 	

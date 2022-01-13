@@ -33,6 +33,8 @@
 			<result property="readyCheck" column="ready_check" jdbcType="BOOLEAN"/>
 			<result property="chatLeaderCheck" column="chat_leader_check" jdbcType="BOOLEAN"/>
 			<result property="inOutCheck" column="in_out_check" jdbcType="BOOLEAN"/>
+			<result property="onConnected" column="on_connected" jdbcType="BOOLEAN"/>
+			<result property="forbiddenMember" column="forbidden_member" jdbcType="BOOLEAN"/>
 		</collection>
 	</resultMap>
 	
@@ -46,6 +48,8 @@
 		<result property="readyCheck" column="ready_check" jdbcType="BOOLEAN"/>
 		<result property="chatLeaderCheck" column="chat_leader_check" jdbcType="BOOLEAN"/>
 		<result property="inOutCheck" column="in_out_check" jdbcType="BOOLEAN"/>
+		<result property="onConnected" column="on_connected" jdbcType="BOOLEAN"/>
+		<result property="forbiddenMember" column="forbidden_member" jdbcType="BOOLEAN"/>
 	</resultMap>
 	
 	
@@ -165,6 +169,7 @@
 			<choose>
 				<when test="search.searchSort == 'latest'"> c.chat_no DESC LIMIT #{search.startRowNum}, #{search.pageSize}</when >
 				<when test="search.searchSort == 'oldest'"> c.chat_no ASC LIMIT #{search.startRowNum}, #{search.pageSize}</when >
+				<otherwise> c.chat_no DESC LIMIT #{search.startRowNum}, #{search.pageSize}</otherwise>
 			</choose>
 		) AS c
 	</select>
@@ -233,7 +238,7 @@
 	<!-- SQL : SELECT ALL -->
 	<select id="listChatMember" parameterType="map" resultMap="chatMemberSelectMap">
 		<!-- <bind name="searchKeywords" value="'%' + searchKeyword + '%'" /> -->
-		SELECT c.chat_member_no, c.chat_no, c.chat_member_id, c.ready_check, c.chat_leader_check, c.in_out_check, m.nickname, m.gender, m.age_range, m.profile_image
+		SELECT c.chat_member_no, c.chat_no, c.chat_member_id, c.ready_check, c.chat_leader_check, c.in_out_check, c.on_connected, c.forbidden_member, m.nickname, m.gender, m.age_range, m.profile_image
 			FROM chat_member c, member m
 			WHERE chat_no = #{chatNo} AND in_out_check = 1 AND c.chat_member_id = m.member_id
 			ORDER BY chat_member_no
@@ -297,6 +302,15 @@
 			WHERE chat_no = #{chatNo} and c.ready_check = 1 and c.chat_member_id = m.member_id
 			ORDER BY chat_member_no
 	</select>
+	
+	<!-- SQL : UPDATE -->
+	<update id="updateConnectedChatMember" parameterType="chatMember">
+		UPDATE chat_member
+		<set>
+			on_connected = #{onConnected}
+		</set>
+		WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
+	</update>
 	
 	
 </mapper> 

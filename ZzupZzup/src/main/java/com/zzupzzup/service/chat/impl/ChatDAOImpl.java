@@ -177,6 +177,19 @@ public class ChatDAOImpl implements ChatDAO {
 		
 		return list;
 	}
+	
+	@Override
+	public int updateConnectedChatMember(ChatMember chatMember) throws Exception {
+		int result = sqlSession.update("ChatMapper.updateConnectedChatMember", chatMember);
+		
+		System.out.println("updateConnectedChatMember" + result);
+		
+		if(result == 1) {
+			return 1;
+		}else {
+			return 0;
+		}
+	}
 
 
 }
