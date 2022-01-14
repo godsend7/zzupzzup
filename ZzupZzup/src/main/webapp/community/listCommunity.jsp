@@ -40,7 +40,7 @@
 	}); */
 	
 	//============= "무한스크롤"  Event  처리 =============
-	let count = 2;
+/* 	let count = 2;
 	$(window).on("scroll", function(){
 		
 		let scrTop = $(window).scrollTop();
@@ -170,7 +170,7 @@
 				}
 			});
 		}
-	});
+	}); */
 	
 	$(function() {
 		if(${member.memberRole == 'user' || member.memberRole == 'admin'}) {
