@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
+import com.zzupzzup.common.util.S3ImageUpload;
 import com.zzupzzup.service.community.CommunityService;
 import com.zzupzzup.service.domain.Community;
 import com.zzupzzup.service.domain.Mark;
@@ -53,6 +54,8 @@ public class CommunityController {
 	@Autowired
 	@Qualifier("memberServiceImpl")
 	private MemberService memberService;
+	
+	private S3ImageUpload s3ImageUpload;
 	
 	
 	///Constructor
@@ -82,14 +85,14 @@ public class CommunityController {
 		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		uploadFilePath(uploadFile, empty, community);
 		
-		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
-		String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
+//		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
+//		String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
 		
-		//s3ImageUpload = new S3ImageUpload();
-		//String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadReceiptFile.getOriginalFilename());
-		//String vacant = "community/" + fileName";
-		//s3ImageUpload.uploadFile(uploadReceiptFile, vacant);
-		//String receiptImage = uploadReceiptImg(fileName, vacant);
+		s3ImageUpload = new S3ImageUpload();
+		String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadReceiptFile.getOriginalFilename());
+		String vacant = "community/" + fileName;
+		s3ImageUpload.uploadFile(uploadReceiptFile, vacant);
+		String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
 		
 		community.setReceiptImage(receiptImage);
 		
@@ -169,12 +172,21 @@ public class CommunityController {
 		System.out.println("::: uploadReceiptFile3 ::: " + uploadReceiptFile.getOriginalFilename());
 		
 		
-		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
+//		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
+//		String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
+//			
+//		System.out.println("receiptImage : " + receiptImage);
+//			
+//		community.setReceiptImage(receiptImage);
+		
+		s3ImageUpload = new S3ImageUpload();
+		String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadReceiptFile.getOriginalFilename());
+		String vacant = "community/" + fileName;
+		s3ImageUpload.uploadFile(uploadReceiptFile, vacant);
 		String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
-			
-		System.out.println("receiptImage : " + receiptImage);
-			
+		
 		community.setReceiptImage(receiptImage);
+		
 		
 		communityService.updateCommunity(community);
 		

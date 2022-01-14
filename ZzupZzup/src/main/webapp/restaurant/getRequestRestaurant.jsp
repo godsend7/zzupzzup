@@ -390,7 +390,9 @@
 							<div class="row">
 								<div class="col-xs-4 col-md-2"><strong>사업자 등록증</strong></div>
 								<div class="col-xs-8 col-md-4">
-									<img class="img" src="/resources/images/uploadImages/owner/${restaurant.ownerImage}" width="100px" height="150px" 
+									<%-- <img class="img" src="/resources/images/uploadImages/owner/${restaurant.ownerImage}" width="100px" height="150px" 
+									style="border: 1px solid pink; border-radius: 0.5em;" /> --%>
+									<img class="img" src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/restaurant/${restaurant.ownerImage}" width="100px" height="150px" 
 									style="border: 1px solid pink; border-radius: 0.5em;" />
 									<div class="modal">
 									  <span class="imgClose">&times;</span>
@@ -405,7 +407,8 @@
 									<c:set var="i" value="0" />
 									<c:forEach var="imgs" items="${restaurant.restaurantImage}">
 										<div style="padding-top: 20px; padding-bottom: 20px; height: 140px;">
-											<img class="img" id="img" src="/resources/images/uploadImages/${imgs}" width="100px" height="100px" style="padding-left: 0;"/>
+											<%-- <img class="img" id="img" src="/resources/images/uploadImages/${imgs}" width="100px" height="100px" style="padding-left: 0;"/> --%>
+											<img class="img" id="img" src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/restaurant/${imgs}" width="100px" height="100px" style="padding-left: 0;"/>
 										</div><br>
 									</c:forEach>
 									<div class="modal">

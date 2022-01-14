@@ -371,12 +371,14 @@
 						  		<c:choose>
 						  			<c:when test="${status.index == 0}">
 						  				<div class="carousel-item active">
-						  					<img src="/resources/images/uploadImages/${image}" height="600" class="d-block w-100">
+						  					<%-- <img src="/resources/images/uploadImages/${image}" height="600" class="d-block w-100"> --%>
+						  					<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/restaurant/${image}" height="600" class="d-block w-100">
 						  				</div>
 						  			</c:when>
 						  			<c:otherwise>
 						  				<div class="carousel-item">
-						  					<img src="/resources/images/uploadImages/${image}" height="600" class="d-block w-100">
+						  					<%-- <img src="/resources/images/uploadImages/${image}" height="600" class="d-block w-100"> --%>
+						  					<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/restaurant/${image}" height="600" class="d-block w-100">
 						  				</div>
 						  			</c:otherwise>
 						  		</c:choose>
@@ -385,7 +387,8 @@
 						  </c:if>	
 						  <c:if test="${empty restaurant.restaurantImage}">
 						  	<div class="carousel-item active">
-						  		<img src="/resources/images/uploadImages/default.png" height="600" class="d-block w-100">
+						  		<!-- <img src="/resources/images/uploadImages/default.png" height="600" class="d-block w-100"> -->
+						  		<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/restaurant/default.png" height="600" class="d-block w-100">
 						  	</div>
 						  </c:if>	
 					  </div>

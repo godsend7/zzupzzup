@@ -84,6 +84,9 @@ public class ReservationController {
 		System.out.println("addReservation member::"+member);
 		System.out.println("addReservation reservation::"+reservation);
 		
+		//예약이 완료되면 채팅방 상태가 예약완료 상태가 된다.
+		chatService.updateChatState(chatNo, 4);
+		
 		model.addAttribute("reservation", reservation);
 		
 		return "forward:/reservation/addReservationView.jsp";

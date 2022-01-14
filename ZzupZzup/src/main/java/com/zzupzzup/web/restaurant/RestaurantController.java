@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
+import com.zzupzzup.common.util.S3ImageUpload;
 import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
@@ -59,6 +60,8 @@ public class RestaurantController {
 	@Autowired
 	@Qualifier("reviewServiceImpl")
 	private ReviewService reviewService;
+	
+	private S3ImageUpload s3ImageUpload;
 	
 	///Constructor
 	public RestaurantController() {
@@ -92,14 +95,14 @@ public class RestaurantController {
 		
 		System.out.println("debugging point1 : " + uploadOwnerFile);
 		
-		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/owner");
-		String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
+//		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/owner");
+//		String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
 		
-		//s3ImageUpload = new S3ImageUpload();
-		//String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadOwnerFile.getOriginalFilename());
-		//String vacant = "restaurant/" + fileName";
-		//s3ImageUpload.uploadFile(uploadOwnerFile, vacant);
-		//String ownerImage = uploadReceiptImg(fileName, vacant);
+		s3ImageUpload = new S3ImageUpload();
+		String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadOwnerFile.getOriginalFilename());
+		String vacant = "restaurant/" + fileName;
+		s3ImageUpload.uploadFile(uploadOwnerFile, vacant);
+		String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
 		
 		restaurant.setOwnerImage(ownerImage);
 		
@@ -269,12 +272,21 @@ public class RestaurantController {
 				
 		System.out.println("debugging point1 : " + uploadOwnerFile);
 		
-		if (uploadOwnerFile != null) {
-			String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/owner");
-			String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
-			restaurant.setOwnerImage(ownerImage);	
-		}
+//		if (uploadOwnerFile != null) {
+//			String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/owner");
+//			String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
+//			restaurant.setOwnerImage(ownerImage);	
+//		}
 		
+		if(uploadOwnerFile != null) {
+			s3ImageUpload = new S3ImageUpload();
+			String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadOwnerFile.getOriginalFilename());
+			String vacant = "restaurant/" + fileName;
+			s3ImageUpload.uploadFile(uploadOwnerFile, vacant);
+			String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
+			
+			restaurant.setOwnerImage(ownerImage);
+		}
 		
 		restaurantService.updateRestaurant(restaurant);
 		
