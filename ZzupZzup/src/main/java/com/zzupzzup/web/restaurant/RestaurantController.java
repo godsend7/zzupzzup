@@ -95,6 +95,12 @@ public class RestaurantController {
 		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/owner");
 		String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
 		
+		//s3ImageUpload = new S3ImageUpload();
+		//String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadOwnerFile.getOriginalFilename());
+		//String vacant = "restaurant/" + fileName";
+		//s3ImageUpload.uploadFile(uploadOwnerFile, vacant);
+		//String ownerImage = uploadReceiptImg(fileName, vacant);
+		
 		restaurant.setOwnerImage(ownerImage);
 		
 		if(restaurantService.addRestaurant(restaurant) == 1) {

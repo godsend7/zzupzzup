@@ -44,13 +44,22 @@
 				success:function(JSONData, status){
 					let dom = "";
 					
-					$.each(JSONData, function(key, value){
+					// 이미지 경로 변경
+					/* $.each(JSONData, function(key, value){
 						let timeStemp = new Date(value.regDate);
-						var newTime = timeFormatter(timeStemp);
+						let newTime = timeFormatter(timeStemp);
 						let mem_profile_img = value.chatMemberImg;
 						mem_profile_img != "defaultImage.png" ? mem_profile_img = "uploadImages/"+mem_profile_img : "";
-						const msgType = nickname.val() == value.chatMemberName ? "sent" : "received";
-						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="/resources/images/common/'+mem_profile_img+'"/><a href="/member/getMember?memberId='+value.chatMemberId+'" data-target="'+value.chatMemberId+'"><b>'+value.chatMemberName+'</b></a><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
+						const msgType = nickname == value.chatMemberName ? "sent" : "received";
+						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="/resources/images/common/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
+					}); */
+					$.each(JSONData, function(key, value){
+						let timeStemp = new Date(value.regDate);
+						let newTime = timeFormatter(timeStemp);
+						let mem_profile_img = value.chatMemberImg;
+						mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img : "member/"+mem_profile_img;
+						const msgType = nickname == value.chatMemberName ? "sent" : "received";
+						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
 					});
 					chatList.html(dom);
 					displayContainer.scrollTop(chatList.height());
