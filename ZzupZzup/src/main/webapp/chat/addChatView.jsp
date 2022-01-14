@@ -84,17 +84,19 @@
 				var searchKeyword = $("#restaurantName").val();
 				searchKeyword = escape(encodeURIComponent(searchKeyword));
 				$.ajax({
-					url : "/chat/json/listRestaurantAutocomplete/searchKeyword="
-							+ searchKeyword,
+					url:"/map/json/listRestaurantName",
 					method : "GET",
 					dataType : "json",
 					headers : {
 						"Accept" : "application/json",
-						"contentType" : "application/json; charset=utf-8"
+						"Content-Type" : "application/json"
+					},
+					data : {
+						"keyWord" : request.term
 					},
 					success : function(JSONData) {
 
-						if (JSONData.list == null || JSONData.list == undefined || JSONData.list == "" || JSONData.list.length == 0) {
+						if (JSONData == null || JSONData == undefined || JSONData == "" || JSONData.length == 0) {
 							//alert("자료가 없음");
 							$(".find-restaurant-txt").text("");
 							$(".find-restaurant-txt").text("선택할 수 있는 음식점이 없습니다.");
@@ -102,7 +104,7 @@
 							$(".find-restaurant-txt").text("");
 							//console.log(JSONData);
 							response(
-								$.map(JSONData.list, function(item) {
+								$.map(JSONData, function(item) {
 									autoResArr = {
 										"restaurantNo" : item.restaurantNo,
 										"restaurantName" : item.restaurantName,
