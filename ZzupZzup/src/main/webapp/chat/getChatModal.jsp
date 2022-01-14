@@ -11,6 +11,34 @@ $(function() {
 	$("body").on("click", "#getChatEntranceBtn", function(e) {
 		e.preventDefault();
 		let url = $(this).attr("href");
+		
+		//강퇴당한 사람 채팅방 접근 금지
+		let isForbidden = false;
+		const chatNo = $(this).attr("data-no");
+		const memberId = $(this).attr("data-id");
+		$.ajax({
+			url: '/chat/json/getChatMember/chatNo='+chatNo+'&memberId='+memberId+'&',
+			method : "GET",
+			dataType : "json",
+			headers : {
+				"Accept" : "application/json",
+				"Content-Type" : "application/json"
+			},
+			success : function(JSONData, status) {
+				console.log("======");
+				console.log(JSONData);
+				isForbidden = JSONData.forbiddenMember;
+				console.log(isForbidden);
+			},
+			error : function(request, status, error) {
+				let errorMsg = "로그인이 필요합니다!";
+				if(request.status == 200 && request.responseText.indexOf(errorMsg) != -1 ){					
+					alert("로그인이 필요합니다!");
+					location.href='/';
+				}
+			}
+		});
+		
 		$.ajax({
 			url : url,
 			method : "GET",
@@ -31,6 +59,8 @@ $(function() {
 				let chatMember = JSONData.chatMember;
 				let menuType = JSONData.chatRestaurant.menuType;
 				chatMemberList = [];
+				
+				console.log(chatMember);
 				
 				//채팅방에 유저 있는지 체크
 				chatMember.map((o,i) => {
@@ -115,16 +145,17 @@ $(function() {
 					+'<div>'+chatRegDate+'</div>'
 					+'</div>';
 					if("${member.memberRole}" == 'admin'){
-						displayValueBd += +'<div class="d-flex justify-content-between">'
+						displayValueBd += '<div class="d-flex justify-content-between">'
 						+'<div>'+showStatus+ ' <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>' +JSONData.reportCount+' 회</div>'
 						+'</div>';
 					};
 					displayValueBd += '</div>'
 					+'<div class="get-chat-user-info mb-3">'
 					+'<div class="chatProfile d-flex flex-row align-items-center">'
-					+'<img src="/resources/images/common/'+JSONData.chatLeaderId.profileImage+'">'
+					//이미지 경로 변경
+					/* +'<img src="/resources/images/common/'+JSONData.chatLeaderId.profileImage+'">' */
+					+'<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/'+JSONData.chatLeaderId.profileImage+'">'
 					+'<div class="dropdown-parent">'
-					//+'<a href="/member/getMember?memberId='+JSONData.chatLeaderId.memberId+'">'+JSONData.chatLeaderId.nickname+'</a>'
 					+'<a href="#" class="getOtherUserModal" data-toggle="modal" data-target="#getOtherUserModal" data-id="' + JSONData.chatLeaderId.memberId + '">'+JSONData.chatLeaderId.nickname+'</a>'
 					+'<input type="hidden" id="chatLeaderId" name="chatLeaderId" value="'+JSONData.chatLeaderId.memberId+'">'
 					+'</div>'
@@ -139,7 +170,7 @@ $(function() {
 					+'<div>'+JSONData.chatRestaurant.streetAddress+'</div>'
 					+'<div>'+JSONData.chatRestaurant.areaAddress+'</div>'
 					+'</div>';
-				let displayValueFt = ''
+				let displayValueFt = '';
 				if("${member.memberRole}" == "admin"){
 					displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small warning' value='대화기록보기'/>"
 				}
@@ -147,15 +178,21 @@ $(function() {
 				displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small info' value='수정하기'/>"
 				}
 				displayValueFt += "<input type='button' class='button small secondary' data-dismiss='modal' value='닫기' />";
-				if($('#listChat').length && JSONData.chatState != 5){
+				if($('#listChat').length && JSONData.chatState != 5 && isForbidden == false){
 					displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small primary' value='입장하기'>"
 				}
 				$(".get-chat-con").html(displayValueBd);
 				$("#getChatModal .modal-footer").html(displayValueFt);
-				if(chatImg == 'chatimg.jpg'){
+				//이미지 경로 변경
+				/* if(chatImg == 'chatimg.jpg'){
 					$("#getChatModal .modal-body").css("background-image", "url(/resources/images/sub/"+chatImg+")");
 				}else{
 					$("#getChatModal .modal-body").css("background-image", "url(/resources/images/uploadImages/chat/"+chatImg+")");
+				} */
+				if(chatImg == 'chatimg.jpg'){
+					$("#getChatModal .modal-body").css("background-image", "url(https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/"+chatImg+")");
+				}else{
+					$("#getChatModal .modal-body").css("background-image", "url(https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/"+chatImg+")");
 				}
 			},
 			error : function(request, status, error) {

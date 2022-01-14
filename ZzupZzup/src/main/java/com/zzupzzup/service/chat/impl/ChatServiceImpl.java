@@ -12,6 +12,7 @@ import com.zzupzzup.service.chat.ChatDAO;
 import com.zzupzzup.service.chat.ChatService;
 import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.ChatMember;
+import com.zzupzzup.service.domain.Member;
 
 @Service("chatServiceImpl")
 public class ChatServiceImpl implements ChatService {
@@ -122,7 +123,11 @@ public class ChatServiceImpl implements ChatService {
 	
 	@Override
 	public ChatMember getChatMember(int chatNo, String memberId) throws Exception {
-		return chatDao.getChatMember(chatNo, memberId);
+		System.out.println(this.getClass());
+		ChatMember chatMember = new ChatMember();
+		chatMember =  chatDao.getChatMember(chatNo, memberId);
+		
+		return chatMember;
 	}
 
 	@Override

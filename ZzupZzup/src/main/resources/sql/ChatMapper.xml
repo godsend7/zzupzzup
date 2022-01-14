@@ -113,6 +113,7 @@
 			LEFT OUTER JOIN restaurant r ON (c.restaurant_no = r.restaurant_no)
 			LEFT OUTER JOIN chat_member cm ON (c.chat_no = cm.chat_no and in_out_check = 1)
 			<where>
+				c.chat_show_status = true
 				<if test="search.searchCondition == 0 and search.searchKeyword !='' ">
 				AND UPPER(r.restaurant_name) LIKE CONCAT('%', #{search.searchKeyword}, '%')
 				</if>
@@ -254,7 +255,7 @@
 	
 	<!-- SQL : SELECT ONE -->
 	<select id="getChatMember" parameterType="map" resultMap="chatMemberSelectMap">		
-		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check, in_out_check 
+		SELECT chat_member_no, chat_no, chat_member_id, ready_check, chat_leader_check, in_out_check, on_connected, forbidden_member
 		FROM chat_member
 		WHERE chat_no = #{chatNo} AND chat_member_id = #{memberId}
 	</select>
@@ -316,6 +317,7 @@
 	<update id="updateGetOutChatMember" parameterType="chatMember">
 		UPDATE chat_member
 		<set>
+			in_out_check = #{inOutCheck},
 			forbidden_member = #{forbiddenMember}			
 		</set>
 		WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};

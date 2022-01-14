@@ -382,8 +382,8 @@
 								</div>
 								
 								<%-- <div class="col-6 col-12-xsmall">
-									<label for="restaurantTimes">음식점 영업 시간</label> 
-									<p>${reservation.restaurant.restaurantTimes}</p>
+									<label for="restaurantTimes">음식점 영업 시간dc</label> 
+									<p>${reservation.restaurant.restaurantNo.restaurantTimes}</p>
 								</div> --%>
 								
 								<div class="col-6 col-12-xsmall">

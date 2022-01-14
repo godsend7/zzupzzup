@@ -335,8 +335,13 @@
 				if(obj.loadend) {
 					obj.loadend(data);
 				}
+				//이미지 경로 수정
+				/* saveName = JSON.parse(data).saveName;
+				$fileDragView.html("<a href='javascript:void(0)' class='cvf_delete_image'><img src='/resources/images/uploadImages/chat/"+saveName+"'/></a>");
+				console.log("saveName : " + saveName);
+				$chatImage.val(saveName); */
 				saveName = JSON.parse(data).saveName;
-				$fileDragView.html("<a href='' class='cvf_delete_image'><img src='/resources/images/uploadImages/chat/"+saveName+"'/></a>");
+				$fileDragView.html("<a href='javascript:void(0)' class='cvf_delete_image'><img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/"+saveName+"'/></a>");
 				console.log("saveName : " + saveName);
 				$chatImage.val(saveName);
 				
@@ -387,7 +392,8 @@
 		}
 		
 		//사진 클릭시 첨부 이미지 삭제
-		$("body").on("click", ".file-drag-view a", function(){
+		$("body").on("click", ".file-drag-view a", function(e){
+			e.preventDefault();
 			console.log("이미지에 마우스 올렸다");
 			$chatImage.val('');
 			$(this).remove();
@@ -527,7 +533,9 @@
 									</div>
 									<div class="file-drag-view mt-4">
 										<c:if test="${chat.chatImage != 'chatimg.jpg' }">
-										<img src="/resources/images/uploadImages/chat/${chat.chatImage }"/>
+										<!-- 이미지 경로 변경 -->
+										<%-- <img src="/resources/images/uploadImages/chat/${chat.chatImage }"/> --%>
+										<a href="#"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/${chat.chatImage }"/></a>
 										</c:if>
 									</div>									
 								</div>

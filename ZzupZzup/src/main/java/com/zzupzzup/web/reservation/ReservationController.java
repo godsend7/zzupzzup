@@ -24,8 +24,10 @@ import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.service.chat.ChatService;
 import com.zzupzzup.service.domain.Chat;
+import com.zzupzzup.service.domain.ChatMember;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
+import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.Review;
 import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.reservation.ReservationService;
@@ -201,6 +203,7 @@ public class ReservationController {
 		String restaurantNo = request.getParameter("restaurantNo");
 		Member member = (Member) session.getAttribute("member");
 		
+		
 		String memberId = null;
 		
 		if (search.getCurrentPage() == 0) {
@@ -216,7 +219,23 @@ public class ReservationController {
 		if (member != null && !member.getMemberRole().equals("owner")) {
 			map = reservationService.listReservation(search, member,restaurantNo);
 			System.out.println("listReservation admin");
-
+			System.out.println(map);
+			
+			List<Reservation> list =(List<Reservation>)map.get("list");
+			
+			Reservation reservation = new Reservation();
+			Restaurant restaurant = new Restaurant();
+			Chat chat = new Chat();
+			Member memberChat = new Member();
+			
+			for(Reservation r : list) {
+				restaurant = restaurantService.getRestaurant(r.getRestaurant().getRestaurantNo());
+				memberChat = memberService.getMember(r.getMember());
+				chat = chatService.getChat(r.getChat().getChatNo());
+				chat.setChatLeaderId(memberChat);
+				r.setRestaurant(restaurant);
+				r.setChat(chat);
+			}
 			System.out.println("listReservationController:::::::::::::::::::::"+map.get("list"));
 		} 
 		
@@ -262,6 +281,21 @@ public class ReservationController {
 			System.out.println("listMyReservation");
 			System.out.println("::listMyReservation memberId"+member);
 			System.out.println("::listMyReservation restaurantNo::"+restaurantNo);
+			List<Reservation> list =(List<Reservation>)map.get("list");
+			
+			Reservation reservation = new Reservation();
+			Restaurant restaurant = new Restaurant();
+			Chat chat = new Chat();
+			Member memberChat = new Member();
+			
+			for(Reservation r : list) {
+				restaurant = restaurantService.getRestaurant(r.getRestaurant().getRestaurantNo());
+				memberChat = memberService.getMember(r.getMember());
+				chat = chatService.getChat(r.getChat().getChatNo());
+				chat.setChatLeaderId(memberChat);
+				r.setRestaurant(restaurant);
+				r.setChat(chat);
+			}	
 		}
 		
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
