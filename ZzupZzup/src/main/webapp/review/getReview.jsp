@@ -35,9 +35,10 @@
 				}
 				
 				//review = data;
-				//onsole.log(review.member.memberId);
+				console.log(data.list.reportCount);
 				
-				$("#reportCount").text(" " + data.list.reportCount + " 회");
+				$("#reportCountTT").text(" " + data.list.reportCount + " 회");
+				
 				
 				$("#reviewShowStatus").removeClass();
 				if (!data.list.reviewShowStatus) {
@@ -146,8 +147,8 @@
 			image = "<div class='carousel-item'>";
 		}
     			
-    	image += "<div class='imgBox'> <img src='/resources/images/uploadImages/review/" + item + "'> </div>"
-    	/* image += "<div class='imgBox'> <img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/" + item + "'> </div>" */
+    	/* image += "<div class='imgBox'> <img src='/resources/images/uploadImages/review/" + item + "'> </div>"*/
+    	image += "<div class='imgBox'> <img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/" + item + "'> </div>" 
     	
     	
     	$("#reviewImage").append(image);
@@ -192,9 +193,10 @@
 			<div class="modal-body">
 				<div class="col-sm-12 review-modal-top">
 					<span id="reviewRegDate"></span>
-					<c:if test="${member.memberRole == 'admin'}">
+					<c:if test="${member.memberRole eq 'admin'}">
 						<i class="" aria-hidden="true" id="reviewShowStatus"></i>
 						<i class="fa fa-exclamation-triangle" id="reportCount" aria-hidden="true">
+							<span id="reportCountTT"></span>
 						</i>
 					</c:if>
 				</div>

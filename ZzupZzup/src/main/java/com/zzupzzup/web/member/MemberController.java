@@ -25,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
+import com.zzupzzup.common.util.CommonUtil;
+import com.zzupzzup.common.util.S3ImageUpload;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.member.MemberService;
 import com.zzupzzup.service.member.impl.MemberServiceImpl;
@@ -48,6 +50,8 @@ public class MemberController {
 	@Autowired
 	@Qualifier("restaurantServiceImpl")
 	private RestaurantService restaurantService;
+	
+	private S3ImageUpload s3ImageUpload;
 
 	//*Constructor
 	public MemberController() {
@@ -89,11 +93,24 @@ public class MemberController {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : POST");
 		
-		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
-		String profileImage = uploadFile(uploadfile, temp, member.getProfileImage());
+//		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
+//		String profileImage = uploadFile(uploadfile, temp, member.getProfileImage());
+		
+		s3ImageUpload = new S3ImageUpload();
+		
+		String fileName = null; 
+		if(uploadfile.getOriginalFilename() == null || uploadfile.getOriginalFilename() == "") {
+			fileName = null;
+		} else {
+			fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadfile.getOriginalFilename());
+		}
+		
+		String vacant = "member/" + fileName;
+		s3ImageUpload.uploadFile(uploadfile, vacant);
+		//String profileImage = uploadFile(uploadfile, vacant, member.getProfileImage());
 		
 		member.setMemberRole(memberRole);
-		member.setProfileImage(profileImage);
+		member.setProfileImage(fileName);
 		member.setLoginType(loginType);
 		memberService.addMember(member);
 		
@@ -109,6 +126,11 @@ public class MemberController {
 		
 		if(member.getMemberRole().equals("owner")) {
 			//member domain과 같이 음식점 등록으로 페이지 넘기기
+			
+//			if() {
+//				
+//			}
+			
 			request.setAttribute("member", member);
 			//return "redirect:/restaurant/addRestaurant?memberId="+member.getMemberId()+"&memberName="+member.getMemberName();
 			
@@ -238,11 +260,23 @@ public class MemberController {
 		System.out.println("1111 :: " + member);
 		System.out.println("2222 :: " + uploadfile.getOriginalFilename());
 		
-		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
-		String profileImage = uploadFile(uploadfile, temp, member.getProfileImage());
+//		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
+//		String profileImage = uploadFile(uploadfile, temp, member.getProfileImage());
 		
 		
-		member.setProfileImage(profileImage);
+		s3ImageUpload = new S3ImageUpload();
+		
+		String fileName = null; 
+		if(uploadfile.getOriginalFilename() == null || uploadfile.getOriginalFilename() == "" || uploadfile.getOriginalFilename() == "defaultImage.png") {
+			fileName = "defaultImage.png";
+		} else {
+			fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadfile.getOriginalFilename());
+		}
+		
+		String vacant = "member/" + fileName;
+		s3ImageUpload.uploadFile(uploadfile, vacant);
+		
+		member.setProfileImage(fileName);
 		
 		memberService.updateMember(member);
 		
@@ -316,6 +350,7 @@ public class MemberController {
 		
 	}
 	
+	//AWS 쓰면 이거 쓸 일 없음
 	private String uploadFile(MultipartFile uploadfile, String temp, String originImg) throws Exception {
 		
 		System.out.println(":: uploadfile.getOriginalFilename() => " + uploadfile.getOriginalFilename());

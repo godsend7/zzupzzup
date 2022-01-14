@@ -479,7 +479,7 @@
 												<input type="checkbox" id="chatAge1" class="search-filter" name="searchFilter" value="1"><label for="chatAge1">10대</label>
 												<input type="checkbox" id="chatAge2" class="search-filter" name="searchFilter" value="2"><label for="chatAge2">20대</label>
 												<input type="checkbox" id="chatAge3" class="search-filter" name="searchFilter" value="3"><label for="chatAge3">30대</label>
-												<input type="checkbox" id="chatAge4 " class="search-filter" name="searchFilter" value="4"><label for="chatAge4">40대</label>
+												<input type="checkbox" id="chatAge4" class="search-filter" name="searchFilter" value="4"><label for="chatAge4">40대</label>
 												<input type="checkbox" id="chatAge5" class="search-filter" name="searchFilter" value="5"><label for="chatAge5">50대</label>
 												<input type="checkbox" id="chatAge6" class="search-filter" name="searchFilter" value="6"><label for="chatAge6">60대 이상</label>
 												<input type="checkbox" id="chatAge7" class="search-filter" name="searchFilter" value="7"><label for="chatAge7">연령대 무관</label>

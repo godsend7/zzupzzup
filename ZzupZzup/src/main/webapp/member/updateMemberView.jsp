@@ -17,9 +17,82 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
+
+	//flag
+	//*updateMember global field flag
+	var checkPwdFlag;
+	var checkSamePwdFlag;
+	var checkPhoneFlag;
+	var checkCertificatedNumFlag;
+	//인증번호 전역변수 선언
+	var globalVariable;
+	
+
+	function fncCheckUpdateForm() {
+		//전화번호가 비었을 때
+		var regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+		var phoneNum = $("#memberPhone1").val()+"-"+$("#memberPhone2").val()+"-"+$("#memberPhone3").val();
+		
+		if ($("#memberPhone1").val() != "" && $("#memberPhone2").val() == "" && $("#memberPhone3").val() == "") {
+			$("#checkPhoneNumMsg").text("전화번호를 입력해주세요.");
+			checkPhoneFlag = false;
+		} else if (!regPhone.test(phoneNum)) {
+			$("#checkPhoneNumMsg").text("전화번호 형식에 맞춰 다시 입력해주세요.");	//전화번호 형식 확인
+			checkPhoneFlag = false;
+		} else {
+			$("#checkPhoneNumMsg").text("");
+			checkPhoneFlag = true;
+		}
+		
+		//비밀번호 일치 확인
+		var pwd = $("#password").val();
+		var checkPwd = $("#checkPassword").val();
+
+		var pattern1 = /[0-9]/;
+		var pattern2 = /[a-zA-Z]/i;
+		
+		if (pwd == "" || pwd == null) {	//비밀번호가 비었을 때
+			$("#checkPwdMsg").text("비밀번호를 입력해주세요.");
+			checkPwdFlag = false;
+		} else {
+			if ( ! pattern1.test(pwd) || ! pattern2.test(pwd) || pwd.length < 8) {
+				$("#checkPwdMsg").text("비밀번호 형식에 맞춰 다시 입력해주세요.");	//비밀번호 형식 확인(알파벳 대소문자, 숫자, 특수문자)
+				checkPwdFlag = false;
+			} else {
+				$("#checkPwdMsg").text("");
+				if (pwd != checkPwd) {
+					$("#checkSamePwdMsg").text("비밀번호가 일치하지 않습니다.");
+					checkPwdFlag = false;
+					checkSamePwdFlag = false;
+				} else {
+					$("#checkSamePwdMsg").text("");
+					checkPwdFlag = true;
+					checkSamePwdFlag = true;
+				}
+			}
+		}
+		
+		//인증번호 일치 확인
+		var certificatedNum = globalVariable;
+		var inputCertificatedNum = $("#certificatedNum").val();
+		
+		if (certificatedNum != inputCertificatedNum
+				&& inputCertificatedNum.length != 6) {
+			$("#checkCertificatedNumMsg").text("인증번호가 일치하지 않습니다. 다시 입력해주세요.");
+			checkCertificatedNumFlag = false;
+		} else if(certificatedNum == inputCertificatedNum
+				&& inputCertificatedNum.length == 6) {
+			$("#checkCertificatedNumMsg").text("");
+			checkCertificatedNumFlag = true;
+		}
+	}
 	
 	$(function() {
 		console.log("updateMemberView.jsp");
+		
+		$("#updateMember-complete").keyup(function() {
+			fncCheckUpdateForm();
+		})
 		
 		$("#updateMember-submit").on("click", function() {
 			//location.href = "/member/updateMember";
@@ -31,11 +104,20 @@
 			console.log(password+", "+checkPwd+", "+phoneNum+", "+certificatedNum);
 			
 			if("${sessionScope.member.memberRole}" != "admin") {
-				if(password != null && checkPwd != null && phoneNum != null && certificatedNum != null) {
-					$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember/${member.memberRole}").submit();
+				if("${sessionScope.member.loginType}" == 1) {
+					if(checkPwdFlag && checkSamePwdFlag && checkPhoneFlag && checkCertificatedNumFlag) {
+						$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember/${member.memberRole}").submit();
+					} else {
+						alert("누락된 항목 확인 후 다시 시도해주세요.");
+					}
 				} else {
-					alert("누락된 항목 확인 후 다시 시도해주세요.");
-				}	
+					if(checkPhoneFlag && checkCertificatedNumFlag) {
+						$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember/${member.memberRole}").submit();
+					} else {
+						alert("누락된 항목 확인 후 다시 시도해주세요.");
+					}
+				}
+				
 			} else {
 				$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember/${member.memberRole}").submit();
 			}
@@ -51,7 +133,7 @@
 	$(function() {
 		//인증번호 전송
 		$("input[value='인증번호 전송']").on("click", function() {
-			var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
+			var phoneNum = $("#memberPhone1").val()+"-"+$("#memberPhone2").val()+"-"+$("#memberPhone3").val();
 			$.ajax({
 				type : "GET",
 				url : "/member/json/sendCertificatedNum",
@@ -127,10 +209,12 @@
 													<!-- profileImage 도윤님 src 참고 start -->
 													<div class="file-view mt-4">
 														<c:if test="${member.profileImage == 'defaultImage.png'}">
-															<img id="profileImage" src="/resources/images/defaultImage.png" class="rounded-circle" width="150" height="150"/>
+															<!-- <img id="profileImage" src="/resources/images/defaultImage.png" class="rounded-circle" width="150" height="150"/> -->
+															<img id="profileImage" src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/defaultImage.png" class="rounded-circle" width="150" height="150"/>
 														</c:if>
 														<c:if test="${member.profileImage != 'defaultImage.png' && member.profileImage != null}">
-															<img id="profileImage" src="/resources/images/uploadImages/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
+															<%-- <img id="profileImage" src="/resources/images/uploadImages/${member.profileImage}" class="rounded-circle" width="150" height="150"/> --%>
+															<img id="profileImage" src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/member/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
 														</c:if>
 													</div>
 													<%-- <c:if test="${sessionScope.member.memberRole != 'admin'}"> --%>
@@ -187,11 +271,15 @@
 															<input type="text" id="memberPhone1" name="memberPhone1" value="${member.memberPhone.substring(0, 3)}" maxlength="3"/>
 															<input type="text" id="memberPhone2" name="memberPhone2" value="${member.memberPhone.substring(4, 8)}" maxlength="4"/>
 															<input type="text" id="memberPhone3" name="memberPhone3" value="${member.memberPhone.substring(9)}" maxlength="4"/>
-															<input type="button" value="인증번호 전송" style="float:right"/>
+															<div class="row">
+																<span id="checkPhoneNumMsg" style="color: red; font-weight: bold; float:left"></span>
+																<input type="button" value="인증번호 전송" style="float:right"/>
+															</div>
 														</div>
 														<div class="col-md-6">
 															<label for="certificatedNum">인증번호</label>
 															<input type="text" id="certificatedNum" maxlength="6"/>
+															<span id="checkCertificatedNumMsg" style="color: red; font-weight: bold"></span>
 														</div>
 													</div>
 													<div class="col-md-6">
@@ -199,12 +287,14 @@
 															class="form-control" id="password" name="password"
 															minlength="8" maxlength="15"
 															placeholder="8-15자 이내로 입력해주세요." required>
+														<span id="checkPwdMsg" style="color: red; font-weight: bold"></span>
 													</div>
 													<div class="col-md-6">
 														<label for="checkPassword">비밀번호 확인</label> <input
-														type="password" class="form-control" id="checkPassword"
-														minlength="8" maxlength="15"
-														placeholder="비밀번호를 다시 입력해주세요." required>
+															type="password" class="form-control" id="checkPassword"
+															minlength="8" maxlength="15"
+															placeholder="비밀번호를 다시 입력해주세요." required>
+														<span id="checkSamePwdMsg" style="color: red; font-weight: bold"></span>
 													</div>
 												</div>
 											</c:if>
@@ -246,12 +336,14 @@
 															class="form-control" id="password" name="password"
 															minlength="8" maxlength="15"
 															placeholder="8-15자 이내로 입력해주세요." required>
+														<span id="checkPwdMsg" style="color: red; font-weight: bold"></span>
 													</div>
 													<div class="col-md-6">
 														<label for="checkPassword">비밀번호 확인</label> <input
-														type="password" class="form-control" id="checkPassword"
-														minlength="8" maxlength="15"
-														placeholder="비밀번호를 다시 입력해주세요." required>
+															type="password" class="form-control" id="checkPassword"
+															minlength="8" maxlength="15"
+															placeholder="비밀번호를 다시 입력해주세요." required>
+														<span id="checkSamePwdMsg" style="color: red; font-weight: bold"></span>
 													</div>
 												</c:if>
 											</div>
@@ -262,12 +354,15 @@
 													<input type="text" id="memberPhone1" name="memberPhone1" value="${member.memberPhone.substring(0, 3)}" maxlength="3"/>
 													<input type="text" id="memberPhone2" name="memberPhone2" value="${member.memberPhone.substring(4, 8)}" maxlength="4"/>
 													<input type="text" id="memberPhone3" name="memberPhone3" value="${member.memberPhone.substring(9)}" maxlength="4"/>
-													
-													<input type="button" value="인증번호 전송" style="float:right"/>
+													<div class="row">
+														<span id="checkPhoneNumMsg" style="color: red; font-weight: bold; float:left"></span>
+														<input type="button" value="인증번호 전송" style="float:right"/>
+													</div>
 												</div>
 												<div class="col-md-6">
 													<label for="certificatedNum">인증번호</label>
 													<input type="text" id="certificatedNum" maxlength="6"/>
+													<span id="checkCertificatedNumMsg" style="color: red; font-weight: bold"></span>
 												</div>
 											</div>
 											<br />
