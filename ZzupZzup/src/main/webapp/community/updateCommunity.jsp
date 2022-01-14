@@ -471,7 +471,8 @@
 										<c:forEach var="image" items="${community.postImage}" varStatus="status">
 											<c:set var="fileName" value="${fn:split(image, '_')}"/>
 											<a class='cvf_delete_image' id='img_id_${status.index}'>
-												<img src="/resources/images/uploadImages/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'>
+												<%-- <img src="/resources/images/uploadImages/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'> --%>
+												<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'>
 												<input type='hidden' name='postImage[${status.index}]' value='${image}'>
 											</a>
 										</c:forEach></div>
@@ -559,7 +560,7 @@
 								<div class="form-group">
 									<div class="col-sm-4">
 										<label for="receiptImage">영수증 이미지</label>
-										<img id="${community.receiptImage}" src="/resources/images/uploadImages/receipt/${community.receiptImage}" width="100"/>
+										<img id="${community.receiptImage}" src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/${community.receiptImage}" width="100"/>
 										<%-- <input type="hidden" name="receiptImage"  value="${community.receiptImage}"> --%>
 										<p>등록된 이미지 파일 : ${community.receiptImage}</p>
 										<input type="file" name="file" id="receiptImage" value="${community.receiptImage}">

@@ -197,7 +197,7 @@
 							  <c:if test="${empty community.postImage}">
 							  	<div class="carousel-item active">
 							  		<!-- <img src="/resources/images/uploadImages/default.jpg" height="600" class="d-block w-100"> -->
-							  		<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/default.png" height="600" class="d-block w-100">
+							  		<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/default.png" height="600" class="d-block w-100">
 							  	</div>
 							  </c:if>	
 						  </div>
@@ -247,6 +247,8 @@
 								</svg> 위치</strong></div>
 							<div class="col-md-3"><span class="badge badge-secondary">도로명주소</span> ${community.streetAddress}</div>
 							<div class="col-md-3"><span class="badge badge-secondary">지번주소</span> ${community.areaAddress}</div>
+							<input type="hidden" name="latitude" value="${community.latitude}" />
+							<input type="hidden" name="longitude" value="${community.longitude}" />
 							<c:if test="${empty community.restAddress}">
 								
 							</c:if>

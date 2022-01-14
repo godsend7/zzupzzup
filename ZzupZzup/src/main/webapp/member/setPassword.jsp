@@ -26,7 +26,7 @@
 		var checkPwd = $("#checkPwd").val();
 		
 		$("input[type=button]").on("click", function() {
-			alert("id : "+id+", pwd : "+pwd+", checkPwd : "+checkPwd);
+			//alert("id : "+id+", pwd : "+pwd+", checkPwd : "+checkPwd);
 			if(pwd != null && checkPwd != null && pwd === checkPwd) {
 				$("#set-password").attr("method", "POST").attr("action", "/member/setPassword").submit();
 			}

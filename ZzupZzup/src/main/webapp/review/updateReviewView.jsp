@@ -456,8 +456,8 @@
 											<div class="file-drag-view">
 												<c:forEach var="image" items="${review.reviewImage}">
 													<a class='cvf_delete_image' id='img_id_${status.index}'>
-														<img src="/resources/images/uploadImages/review/${image}">
-														<%-- <img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/${image}"> --%>
+														<%-- <img src="/resources/images/uploadImages/review/${image}"> --%>
+														<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/${image}">
 													</a>
 												</c:forEach>
 											</div>
@@ -496,8 +496,8 @@
 												<c:forEach var="image" items="${review.reviewImage}" varStatus="status">
 													<c:set var="fileName" value="${fn:split(image, '_')}"/>
 													<a class='cvf_delete_image' id='img_id_${status.index}'>
-														<img src="/resources/images/uploadImages/review/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'>
-														<%-- <img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'> --%>
+														<%-- <img src="/resources/images/uploadImages/review/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'> --%>
+														<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'>
 														<input type='hidden' name='reviewImage[${status.index}]' value='${image}'>
 													</a>
 												</c:forEach>
