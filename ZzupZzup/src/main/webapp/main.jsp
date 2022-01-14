@@ -89,7 +89,11 @@
 		z-index: 99;
 		position: absolute;
 		right: 50px;
-		bottom: 50px; 
+		bottom: 40px; 
+	}
+	
+	.directions a {
+		width: 150px;
 	}
 	
 	.direc-hide {
@@ -265,8 +269,8 @@
 						response(
 							$.map(data, function(item) {
                                 return {
-                                	value: item.restaurantName + "(" +item.streetAddress + ")",
-                                    label: item.restaurantName + "(" +item.streetAddress + ")",
+                                	value: item.restaurantName + " (" +item.streetAddress + ")",
+                                    label: item.restaurantName + " (" +item.streetAddress + ")",
                                     id : item
                                 }
                             })
@@ -275,25 +279,18 @@
 	      		});
 	 		},
 	 		select : function(event, ui) {
-	 			//console.log(event);
-	 			//console.log(ui);
-				
 	 			var thisInput = $(this).attr("id");
 	 			
 	 			if (thisInput == "startInput") {
-					//console.log("startInput에 저장");
 					startLocation = ui.item.id;
-					//console.log(startLocation);
 					//console.log(startLocation.restaurantName);
 				} else if (thisInput == "goalInput"){
-					//console.log("goalInput에 저장");
 					goalLocation = ui.item.id;
 					//console.log(goalLocation);
 				}
 	 			
 	 			console.log(ui.item.id);
-				//$("#hashTagAuto").val('');
-				
+	 			
 				//return false;
 	 		} ,
 	 		focus : function (event, ui) {
@@ -748,8 +745,8 @@
 							</span>
 						</div>
 						<div class="directions">
-							<a type="button" class="button secondary" id="direction" data-toggle="modal" data-target="#directionModal" data-backdrop="static">길찾기</a>
-							<a type="button" class="button secondary direc-hide" id="none-direction">길찾기 종료</a>
+							<a type="button" class="button info large" id="direction" data-toggle="modal" data-target="#directionModal" data-backdrop="static">길찾기</a>
+							<a type="button" class="button info large direc-hide" id="none-direction">길찾기 종료</a>
 						</div>
 					</div>
 					
