@@ -174,11 +174,11 @@ $(function() {
 				if("${member.memberRole}" == "admin"){
 					displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small warning' value='대화기록보기'/>"
 				}
-				if(("${member.memberRole}" == "admin" || "${member.memberId}" == JSONData.chatLeaderId.memberId) && JSONData.chatState != 5){
+				if(("${member.memberRole}" == "admin" || "${member.memberId}" == JSONData.chatLeaderId.memberId) && JSONData.chatState == 1){
 				displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small info' value='수정하기'/>"
 				}
 				displayValueFt += "<input type='button' class='button small secondary' data-dismiss='modal' value='닫기' />";
-				if($('#listChat').length && JSONData.chatState != 5 && isForbidden == false){
+				if($('#listChat').length && JSONData.chatState == 1 && isForbidden == false && "${member.memberRole}" != "admin"){
 					displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small primary' value='입장하기'>"
 				}
 				$(".get-chat-con").html(displayValueBd);

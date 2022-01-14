@@ -31,12 +31,13 @@
 		
 		//============= 페이지 로딩시 정렬 조건이 있다면 주입 =========
 		if(localStorage.getItem('sortType')){
+			//console.log(localStorage.getItem('sortType'));
 			$("input[name=searchSort]").val(localStorage.getItem('sortType'));
 		}
 		
 		//============= 페이지 로딩시 필터 조건이 있다면 표시 ========
 		if("${search.searchFilter}" != null && "${search.searchFilter}" != ""){
-			console.log("필터 조건?? ${search.searchFilter}");
+			//console.log("필터 조건?? ${search.searchFilter}");
 			$("input:checkbox[value=${search.searchFilter}]").prop("checked", true);
 			$("input:checkbox[value=${search.searchFilter}]").addClass("active");
 		}
@@ -68,7 +69,7 @@
 				//console.log($("#chatForm"));
 				//console.log($("#searchKeyword").val());
 				let queryStr = $("#chatForm").serialize();
-				//console.log(queryStr);
+				console.log(queryStr);
 				
 				$.ajax({
 					url: "/chat/json/listChat",
@@ -79,7 +80,7 @@
 						
 					},
 					success : function(JSONData, status) {
-						//console.log(JSONData);
+						console.log(JSONData);
 						
 						let dom ='';
 						$.each(JSONData, function(index, item){
@@ -87,11 +88,14 @@
 							if(item.chatLeaderId.memberId == "${member.memberId}"){
 								
 							}
+							if("${member.memberRole}" != 'admin' && item.chatShowStatus == false){
+								return false;
+							}
 							
 							dom += '<div class="col-md-6">'
 								+'<div class="card mb-4 shadow-sm chat-state'+item.chatState+'">'
 								+'<div class="card-head d-flex">'
-								+'<span class="badge badge-secondary chat-no mr-1">'+item.chatNo+'</span>';
+								+'<span class="badge badge-secondary chat-no mr-2">'+item.chatNo+'</span>';
 								if(item.chatLeaderId.memberId == "${member.memberId}"){
 									dom += '<span class="badge badge-secondary mr-1">개설자</span>';
 								}
@@ -100,6 +104,9 @@
 										dom += '<span class="badge badge-secondary mr-1">참가중</span>';
 									}
 								});
+								if(item.chatShowStatus == false){
+									dom += '<span class="badge badge-danger mr-1">미노출</span>';
+								}
 								switch(item.chatState){
 								case 1:
 									dom += '<span class="badge badge-success chat-state">모집중</span>';
@@ -111,10 +118,10 @@
 									dom += '<span class="badge badge-info chat-state">예약확정</span>';
 								break
 								case 4:
-									dom += '<span class="badge badge-danger chat-state">모임완료</span>';
+									dom += '<span class="badge badge-warning chat-state">모임완료</span>';
 								break
 								case 5:
-									dom += '<span class="badge badge-secondary chat-state">폭파된방</span>';
+									dom += '<span class="badge badge-danger chat-state">폭파된방</span>';
 								break
 								}
 								dom += '</div>'
@@ -141,17 +148,35 @@
 								+'<h5 class="card-text mb-2 text-muted">'+item.chatText+'</h5>'
 								+'<div class="d-flex justify-content-between align-items-end">'
 								+'<div>'
-								+'<p class="card-text text-right">'+item.chatRestaurant.restaurantName+'</p>'
-								+'<p class="card-text text-right">'+item.chatRestaurant.streetAddress+'</p>'
+								+'<p class="card-text text-right">'+item.chatRestaurant.restaurantName;
+								switch(item.chatRestaurant.menuType){
+									case 1:
+										dom += '<span>(한식)</span></p>';
+									break
+									case 2:
+										dom += '<span>(중식)</span></p>';
+									break
+									case 3:
+										dom += '<span>(양식)</span></p>';
+									break
+									case 4:
+										dom += '<span>(일식)</span></p>';
+									break
+									case 5:
+										dom += '<span>(카페)</span></p>';
+									break
+								}
+								dom += '<p class="card-text text-right">'+item.chatRestaurant.streetAddress+'</p>'
 								+'</div>'
 								+'<div class="btn-group">';
 								if(item.chatMember != [] && item.chatMember != null && item.chatMember.length > 0){
 									let isChatMember = false;
 									$.each(item.chatmember, function(indexxx, itemmm){
+										console.log("indexxx : " + indexxx);
 										if("${member.memberId}" == itemmm.member.memberId){
 											isChatMember = true;
 										}
-										if("${member.memberId}" == itemmm.member.memberId && item.chatState == 4 && itemmm.inOutCheck == true && itemmm.readyCheck == true ){
+										if("${member.memberId}" == itemmm.member.memberId && item.chatState == 4 && itemmm.inOutCheck == true && itemmm.readyCheck == true && indexxx >= 1){
 											dom += '<a href="/chat/json/listReadyCheckMember/chatNo='+item.chatNo+'" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a>';
 										}
 									});
@@ -456,7 +481,6 @@
 					<div class="container">
 
 						<h2>쩝쩝친구 구하기</h2>
-
 						<!-- S:Search -->
 						<form id="chatForm" name="chatForm">
 							<div class="container">
@@ -502,10 +526,14 @@
 										<input type="hidden" id="currentPage" name="currentPage" value="1" />
 									</div>
 									<div class="col-md-2 d-flex justify-content-end">
-										<a href="" class="button svg-btn" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-</svg>작성하기</a>
+										<c:if test="${member.memberRole != 'admin'}">
+											<a href="" class="button svg-btn" >
+												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+													<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+													<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+												</svg> 작성하기
+											</a>
+										</c:if>
 									</div>
 								</div>
 							</div>
@@ -523,10 +551,18 @@
 								</c:if>
 								<c:if test="${!empty list }">
 									<c:forEach var="chat" items="${list}">
+										<c:set var="showStatus" value="false"/>
+										<c:if test="${chat.chatShowStatus == false and member.memberRole eq 'admin' }">
+											<c:set var="showStatus" value="false"/>
+										</c:if>
+										<c:if test="${chat.chatShowStatus == false and member.memberRole eq 'user' }">
+											<c:set var="showStatus" value="true"/>
+										</c:if>
+										<c:if test="${not showStatus}">
 										<div class="col-md-6">
 											<div class="card mb-4 shadow-sm chat-state${chat.chatState}">
 												<div class="card-head d-flex">
-													<span class="badge badge-secondary chat-no mr-1">${chat.chatNo }</span>
+													<span class="badge badge-secondary chat-no mr-2">${chat.chatNo }</span>
 													<c:if test="${chat.chatLeaderId.memberId == member.memberId }">
 													<span class="badge badge-secondary mr-1">개설자</span>
 													</c:if>
@@ -537,6 +573,9 @@
 														<span class="badge badge-secondary mr-1">참가중</span>
 														</c:if>
 													</c:forEach>
+													<c:if test="${chat.chatShowStatus == false }">
+														<span class="badge badge-danger mr-1">미노출</span>
+													</c:if>
 													<c:choose>
 														<c:when test="${chat.chatState=='1'}">
 															<span class="badge badge-success chat-state">모집중</span>
@@ -548,11 +587,11 @@
 															<span class="badge badge-info chat-state">예약확정</span>
 														</c:when>
 														<c:when test="${chat.chatState=='4'}">
-															<span class="badge badge-danger chat-state">모임완료</span>
+															<span class="badge badge-warning chat-state">모임완료</span>
 														</c:when>
-														<c:otherwise>
-															<span class="badge badge-secondary chat-state">폭파된방</span>
-														</c:otherwise>
+														<c:when test="${chat.chatState=='5'}">
+															<span class="badge badge-danger chat-state">폭파된방</span>
+														</c:when>
 													</c:choose>
 												</div>
 												<div class="card-img">
@@ -580,17 +619,36 @@
 													<h5 class="card-text mb-2 text-muted">${chat.chatText}</h5>
 													<div class="d-flex justify-content-between align-items-end">
 														<div>
-															<p class="card-text text-right">${chat.chatRestaurant.restaurantName}</p>
+															<p class="card-text text-right">${chat.chatRestaurant.restaurantName}
+															<c:choose>
+																<c:when test="${chat.chatRestaurant.menuType==1}">
+																	<span>(한식)</span></p>
+																</c:when>
+																<c:when test="${chat.chatRestaurant.menuType==2}">
+																	<span>(중식)</span></p>
+																</c:when>
+																<c:when test="${chat.chatRestaurant.menuType==3}">
+																	<span>(양식)</span></p>
+																</c:when>
+																<c:when test="${chat.chatRestaurant.menuType==4}">
+																	<span>(일식)</span></p>
+																</c:when>
+																<c:otherwise>
+																	<span>(카페)</span></p>
+																</c:otherwise>
+															</c:choose>
 															<p class="card-text text-right">${chat.chatRestaurant.streetAddress}</p>
 														</div>
 														<div class="btn-group">
 															<c:if test="${!empty chat.chatMember}">
 																<c:set var="isChatMember" value="false" />
+																<c:set var="i" value="0" />
 																<c:forEach var="chatMember" items="${chat.chatMember}">
+																	<c:set var="i" value="${ i+1 }" />
 																	<c:if test="${member.memberId == chatMember.member.memberId}">
 																		<c:set var="isChatMember" value="true" />
 																	</c:if>
-																	<c:if test="${member.memberId == chatMember.member.memberId && chat.chatState == 4 && chatMember.inOutCheck == true && chatMember.readyCheck == true}">
+																	<c:if test="${member.memberId == chatMember.member.memberId && chat.chatState == 4 && chatMember.inOutCheck == true && chatMember.readyCheck == true && i > 1 }">
 																	<a href="/chat/json/listReadyCheckMember/chatNo=${chat.chatNo}" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a> 
 																	</c:if>
 																</c:forEach>
@@ -609,6 +667,7 @@
 												</div>
 											</div>
 										</div>
+										</c:if>
 									</c:forEach>
 								</c:if>
 							</div>
