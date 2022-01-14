@@ -197,9 +197,17 @@ public class CommunityController {
 	}
 	
 	@RequestMapping(value="listCommunity")
-	public String listCommunity(@ModelAttribute("search") Search search, Model model, HttpServletRequest request) throws Exception {
+	public String listCommunity(@ModelAttribute("search") Search search, Model model, HttpServletRequest request, HttpSession session) throws Exception {
 		
 		System.out.println("/community/listCommunity : SERVICE");
+		
+		Member member = (Member)session.getAttribute("member");
+		List<Mark> listLike = null;
+		
+		if(member != null && member.getMemberRole().equals("user")) {
+			listLike = communityService.listLike(member.getMemberId());
+		}
+		
 		
 		if(search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
@@ -210,7 +218,7 @@ public class CommunityController {
 		 * search.setCurrentPage(Integer.parseInt(request.getParameter("page"))); }
 		 */
 		
-		System.out.println(search);
+		System.out.println("CurrentPage : " + search.getCurrentPage());
 		
 		search.setPageSize(pageSize);
 		
@@ -221,8 +229,10 @@ public class CommunityController {
 		System.out.println("RESULT PAGE : " + resultPage);
 		
 		model.addAttribute("list", map.get("list"));
-		model.addAttribute("resultPage", resultPage);
+		model.addAttribute("listLike", listLike);
 		model.addAttribute("search", search);
+		model.addAttribute("totalCount", map.get("totalCount"));
+		model.addAttribute("resultPage", resultPage);
 		
 		return "forward:/community/listCommunity.jsp";	
 	}
