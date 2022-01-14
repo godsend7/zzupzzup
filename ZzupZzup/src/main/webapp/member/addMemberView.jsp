@@ -229,6 +229,9 @@
 		} */
 		
 		if(${param.loginType == '1'} && (checkNameFlag && checkIdFlag && checkPwdFlag && checkSamePwdFlag && checkPhoneFlag && checkCertificatedNumFlag)) {
+			var regRestaurant = confirm("음식점 등록을 진행하시겠습니까?");
+			
+			$("#addMember-complete").html("<input type='hidden' name='regRestaurant' value='"+regRestaurant+"'/>");
 			$("#addMember-complete").attr("method" , "POST").attr("action" , "/member/addMember/owner/${param.loginType}").submit();			
 		} else {
 			alert("누락된 항목 확인 후 다시 진행해주세요.");
@@ -270,11 +273,37 @@
 		})
 		
 		$("input[value='회원가입']").on("click", function() {
-			fncAddUser();
-		})
-		
-		$("input[value='다음']").on("click", function() {
-			fncAddOwner();
+			if("${param.memberRole}" == "user") {
+				fncAddUser();
+			} else {
+				fncAddOwner();
+				
+				/* if(${param.loginType == '1'} && (checkNameFlag && checkIdFlag && checkPwdFlag && checkSamePwdFlag && checkPhoneFlag && checkCertificatedNumFlag)) {
+					
+					var name = $("#memberName").val();
+					var id = $("#memberId").val();
+					var pwd = $("#password").val();
+					var checkPwd = $("#checkPassword").val();
+					var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
+					var regRestaurant = confirm("계정 복구를 진행하시겠습니까?");
+					
+					$.ajax({
+						type : "POST",
+						url : "/member/json/checkRegRestaurant",
+						data : {
+							"regRestaurant" : regRestaurant
+						},
+						success : function(result) {
+							$("#addMember-complete").html("<input type='hidden' name='regRestaurant' value='"+regRestaurant+"'/>");
+							$("#addMember-complete").attr("method" , "POST").attr("action" , "/member/addMember/owner/${param.loginType}").submit();
+					 	}
+					})
+				} else {
+					alert("누락된 항목 확인 후 다시 진행해주세요.");
+				} */
+				
+			}
+			
 		})
 
 		$("input[value='인증번호 전송']").on(
@@ -397,11 +426,13 @@
 									<div class="col">
 										<div class="file-view mt-4" align="center">
 											<c:if test="${member.profileImage == 'defaultImage.png' || member.profileImage == null}">
-												<img id="profileImage" src="/resources/images/defaultImage.png" class="rounded-circle" width="150" height="150"/>
+												<!-- <img id="profileImage" src="/resources/images/defaultImage.png" class="rounded-circle" width="150" height="150"/> -->
+												<img id="profileImage" src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/defaultImage.png" class="rounded-circle" width="150" height="150"/>
 												<input type="hidden" name="profileImage" value="defaultImage.png" />
 											</c:if>
 											<c:if test="${member.profileImage != 'defaultImage.png' && member.profileImage != null}">
-												<img id="profileImage" src="/resources/images/uploadImages/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
+												<%-- <img id="profileImage" src="/resources/images/uploadImages/${member.profileImage}" class="rounded-circle" width="150" height="150"/> --%>
+												<img id="profileImage" src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/member/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
 											</c:if>
 										</div>
 										<div style="margin-top:10px;margin-left:5px;" align="center">
@@ -634,10 +665,10 @@
 							<hr class="mb-4">
 							<input type="button" class="btn btn-lg btn-primary" style="float:right" value="취소"></input>
 							<c:if test="${param.memberRole == 'user'}">
-								<input type="button" id="addUser" class="btn btn-lg btn-primary" style="float:right" value="회원가입"/>
+								<input type="button" id="addMember" class="btn btn-lg btn-primary" style="float:right" value="회원가입"/>
 							</c:if>
 							<c:if test="${param.memberRole == 'owner'}">
-								<input type="button" id="addOwner" class="btn btn-lg btn-primary" style="float:right" value="다음"/>
+								<input type="button" id="addMember" class="btn btn-lg btn-primary" style="float:right" value="회원가입"/>
 							</c:if>
 						</div>
 					</div>

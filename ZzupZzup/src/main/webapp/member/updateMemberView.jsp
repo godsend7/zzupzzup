@@ -209,18 +209,20 @@
 													<!-- profileImage 도윤님 src 참고 start -->
 													<div class="file-view mt-4">
 														<c:if test="${member.profileImage == 'defaultImage.png'}">
+															<!-- <img id="profileImage" src="/resources/images/defaultImage.png" class="rounded-circle" width="150" height="150"/> -->
 															<img id="profileImage" src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/defaultImage.png" class="rounded-circle" width="150" height="150"/>
 														</c:if>
 														<c:if test="${member.profileImage != 'defaultImage.png' && member.profileImage != null}">
+															<%-- <img id="profileImage" src="/resources/images/uploadImages/${member.profileImage}" class="rounded-circle" width="150" height="150"/> --%>
 															<img id="profileImage" src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/member/${member.profileImage}" class="rounded-circle" width="150" height="150"/>
 														</c:if>
 													</div>
-													<c:if test="${sessionScope.member.memberRole != 'admin'}">
+													<%-- <c:if test="${sessionScope.member.memberRole != 'admin'}"> --%>
 														<div style="margin-top:10px;margin-left:5px;">
 															<span class="file-drag-btn">이미지 변경</span>
 															<input class="file-drag-input" type="file" id="fileInput" name="fileInput" value="${member.profileImage}">
 														</div>
-													</c:if>
+													<%-- </c:if> --%>
 													<!-- profileImage 도윤님 src 참고 end -->
 												</div>
 											</div>

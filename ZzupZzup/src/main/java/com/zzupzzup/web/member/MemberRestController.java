@@ -43,6 +43,8 @@ public class MemberRestController {
 	@Qualifier("mailServiceImpl")
 	private MailService mailService;
 	
+	private S3ImageUpload s3ImageUpload;
+	
 	//*Constructor
 	public MemberRestController() {
 		// TODO Auto-generated constructor stub
@@ -69,7 +71,7 @@ public class MemberRestController {
 				System.out.println("탈퇴회원 : "+mb.getDeleteReason());
 				System.out.println("블랙리스트 : "+mb.getBlacklistDate());
 				
-				if(mb.getDeleteDate() != null && !mb.isRecovered()) {
+				if(mb.isEliminated() && !mb.isRecovered()) {
 					
 					/* 탈퇴 후 7일 이내 재접속 시 진행되는 계정 복구에 필요한 variable */
 					String deleteDate = mb.getDeleteDate().toString();
@@ -330,13 +332,18 @@ public class MemberRestController {
 		return mb;
 	}
 	
+//	@RequestMapping(value="json/checkRegRestaurant", method=RequestMethod.POST)
+//	public boolean checkRegRestaurant(boolean regRestaurant) throws Exception {
+//		 return false;
+//	}
+	
 	//multifile upload
 	//@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
 	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		System.out.println("/member/json/addDragFile : POST");
 		
-		S3ImageUpload s3ImageUpload = new S3ImageUpload();
+		s3ImageUpload = new S3ImageUpload();
 		
 		List<MultipartFile> fileList =  multipartRequest.getFiles("uploadFile");
 	
