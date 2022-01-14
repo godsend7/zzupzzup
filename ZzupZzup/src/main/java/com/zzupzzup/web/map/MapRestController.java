@@ -49,19 +49,67 @@ public class MapRestController {
 		System.out.println(getClass());
 	}
 	
-//	@RequestMapping(value = "json/getSimpleRestaurant/{restaurantNo}")
-//	public Restaurant getSimpleRestaurant(int restaurantNo) throws Exception {
-//		
-//		System.out.println("/map/json/listRestaurant : Service");
-//		
-//		Restaurant restaurant = restaurantService.getRestaurant(restaurantNo);
-//		
-//		return restaurant;
-//	}
+	//현재 위치의 위도, 경도를 주소로 변환하기
+	@CrossOrigin
+	@RequestMapping(value = "json/thisReverseGeoCoding")
+	public String thisReverseGeoCoding(@RequestBody com.zzupzzup.service.domain.Map map) throws Exception {
+		
+		System.out.println("/map/json/thisReverseGeoCoding : Service");
+		
+		String thisLat = map.getThisLat();
+		String thisLong = map.getThisLong();
+		
+		StringBuffer result = new StringBuffer();
+		
+		try {
+			StringBuilder urlBuilder = new StringBuilder("https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc");
+			urlBuilder.append("?request=coordsToaddr");
+			urlBuilder.append("&" + URLEncoder.encode("coords", "UTF-8") + "=" + thisLong + "," + thisLat);
+			urlBuilder.append("&sourcecrs=epsg:4326");
+			urlBuilder.append("&output=json");
+			urlBuilder.append("&orders=addr,admcode,roadaddr");
+			
+			
+			System.out.println(urlBuilder);
+			
+			URL url = new URL(urlBuilder.toString());
+			
+			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("x-ncp-apigw-api-key-id", "7gzdb36t5o");
+			conn.setRequestProperty("x-ncp-apigw-api-key", "mYUAOPlY0TCwBzBjBZhMfMCX7vKouQIWJJDG9kwL");
+			
+			
+			BufferedReader rd = null;
+			if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			} else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+			
+			
+			String line = null;
+			while ((line = rd.readLine()) != null) {
+				//System.out.println("확인" + line);
+				//line = gyeonggiParseData(line, search);
+				result.append(line + "\n");
+				
+				System.out.println("출력 결과 확인 :: " + result);
+			}
+			
+			rd.close();
+			conn.disconnect();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+			
+		return result + "";
+	}
 	
-	@CrossOrigin("http://127.0.0.1:8070")
+	@CrossOrigin
 	@RequestMapping(value = "json/getDirections")
-	public String getDirections(HttpServletRequest request, @RequestHeader HttpHeaders headers) throws Exception {
+	public String getDirections(HttpServletRequest request, @RequestHeader HttpHeaders headers, @RequestBody com.zzupzzup.service.domain.Map map) throws Exception {
 
 		System.out.println("/map/json/getDirections : GET");
 		
@@ -73,48 +121,50 @@ public class MapRestController {
 //		curl "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=127.1058342,37.359708&goal=129.075986,35.179470&option=trafast"\
 		
 		System.out.println(headers);
+		
+		System.out.println(map);
 				
 		StringBuffer result = new StringBuffer();
-//		try {
-//			StringBuilder urlBuilder = new StringBuilder("https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving");
-//			urlBuilder.append("?" + URLEncoder.encode("start", "UTF-8") + "=" + request.getParameter("startLong") + "," + request.getParameter("startLat"));
-//			urlBuilder.append("&" + URLEncoder.encode("goal", "UTF-8") + "=" + request.getParameter("goalLong") + "," + request.getParameter("goalLat"));
-//			urlBuilder.append("&option=trafast");
-//			
-//			
-//			System.out.println(urlBuilder);
-//			
-//			URL url = new URL(urlBuilder.toString());
-//			
-//			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-//			conn.setRequestMethod("GET");
-//			conn.setRequestProperty("x-ncp-apigw-api-key-id", "7gzdb36t5o");
-//			conn.setRequestProperty("x-ncp-apigw-api-key", "mYUAOPlY0TCwBzBjBZhMfMCX7vKouQIWJJDG9kwL");
-//			
-//			
-//			BufferedReader rd = null;
-//			if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-//				rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-//			} else {
-//				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-//			}
-//			
-//			
-//			String line = null;
-//			while ((line = rd.readLine()) != null) {
-//				//System.out.println("확인" + line);
-//				//line = gyeonggiParseData(line, search);
-//				result.append(line + "\n");
-//				
-//				System.out.println("출력 결과 확인 :: " + result);
-//			}
-//			
-//			rd.close();
-//			conn.disconnect();
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//			e.printStackTrace();
-//		}
+		try {
+			StringBuilder urlBuilder = new StringBuilder("https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving");
+			urlBuilder.append("?" + URLEncoder.encode("start", "UTF-8") + "=" + map.getStartLong() + "," + map.getStartLat());
+			urlBuilder.append("&" + URLEncoder.encode("goal", "UTF-8") + "=" + map.getGoalLong() + "," + map.getGoalLat());
+			urlBuilder.append("&option=trafast");
+			
+			
+			System.out.println(urlBuilder);
+			
+			URL url = new URL(urlBuilder.toString());
+			
+			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("x-ncp-apigw-api-key-id", "7gzdb36t5o");
+			conn.setRequestProperty("x-ncp-apigw-api-key", "mYUAOPlY0TCwBzBjBZhMfMCX7vKouQIWJJDG9kwL");
+			
+			
+			BufferedReader rd = null;
+			if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			} else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+			
+			
+			String line = null;
+			while ((line = rd.readLine()) != null) {
+				//System.out.println("확인" + line);
+				//line = gyeonggiParseData(line, search);
+				result.append(line + "\n");
+				
+				System.out.println("출력 결과 확인 :: " + result);
+			}
+			
+			rd.close();
+			conn.disconnect();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 		
 		return result+"";
 	}

@@ -318,7 +318,8 @@
 		UPDATE chat_member
 		<set>
 			in_out_check = #{inOutCheck},
-			forbidden_member = #{forbiddenMember}			
+			forbidden_member = #{forbiddenMember},
+			ready_check = #{readyCheck}
 		</set>
 		WHERE chat_member_id = #{member.memberId} AND chat_no = #{chatNo};
 	</update>
