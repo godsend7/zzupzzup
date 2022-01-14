@@ -45,11 +45,11 @@
 				<section id="listRating">
 					<div class="container">
 					
-						<h3>평가 내역</h3>
+						<h2>평가 내역</h2>
 						
 						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 						<form id="ratingForm" name="ratingForm">
-						전체  ${resultPage.totalCount} 건수, 현재 ${resultPage.currentPage}  페이지
+						<%-- 전체  ${resultPage.totalCount} 건수, 현재 ${resultPage.currentPage}  페이지 --%>
 							<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
 						</form>
 						<!-- start:Table -->

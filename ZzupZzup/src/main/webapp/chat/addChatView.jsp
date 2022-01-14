@@ -371,8 +371,13 @@
 				if(obj.loadend) {
 					obj.loadend(data);
 				}
-				saveName = JSON.parse(data).saveName;
+				//이미지 경로 수정
+				/* saveName = JSON.parse(data).saveName;
 				$fileDragView.html("<a href='javascript:void(0)' class='cvf_delete_image'><img src='/resources/images/uploadImages/chat/"+saveName+"'/></a>");
+				console.log("saveName : " + saveName);
+				$chatImage.val(saveName); */
+				saveName = JSON.parse(data).saveName;
+				$fileDragView.html("<a href='javascript:void(0)' class='cvf_delete_image'><img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/"+saveName+"'/></a>");
 				console.log("saveName : " + saveName);
 				$chatImage.val(saveName);
 				
