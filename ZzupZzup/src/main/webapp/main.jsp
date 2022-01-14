@@ -208,7 +208,7 @@
 					if (data.status.code == 0) {
 						console.log(data.results[0].region);
 						
-						$("#startInput").val(data);
+						//$("#startInput").val(data);
 					}
 				}
 			});
