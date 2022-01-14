@@ -118,11 +118,15 @@
 								break
 								}
 								dom += '</div>'
-								+'<div class="card-img">'
+								+'<div class="card-img">';
 								//이미지 경로 변경
 								/* +'<img src="/resources/images/uploadImages/chat/'+item.chatImage+'">' */
-								+'<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/'+item.chatImage+'">'
-								+'</div>'
+								if(item.chatImage == 'chatimg.jpg'){
+									dom +='<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/'+item.chatImage+'">';
+								}else if(item.chatImage != 'chatimg.jpg'){
+									dom +='<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/'+item.chatImage+'">';
+								}
+								dom += '</div>'
 								+'<div class="card-body">';
 								if("${member.memberRole}" == 'admin'){
 									dom += '<div class="chat-rating-info">';
