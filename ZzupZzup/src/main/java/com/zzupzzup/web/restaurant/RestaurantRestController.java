@@ -141,5 +141,50 @@ public class RestaurantRestController {
 		return restaurantService.getRestaurant(restaurantNo);
 		
 	}
+	
+	//AWS S3 Image Upload
+//	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
+//	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
+//		
+//		System.out.println("/restaurant/json/addDragFile : POST");
+//		
+//		s3ImageUpload = new S3ImageUpload();
+//	
+//		List<MultipartFile> fileList =  multipartRequest.getFiles("uploadFile");
+//		System.out.println("FILE LIST TO UPLOAD : " + fileList);
+//		
+//		List<String> resImg = new ArrayList<String>();
+//	    Map<String, Object> map = new HashMap<String, Object>();
+//	    
+//	    for (MultipartFile mf : fileList) { 
+//
+//			if (!mf.getOriginalFilename().equals("")) {
+//				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
+//				System.out.println(":: 파일 사이즈 => " + mf.getSize());
+//	
+//				try {
+//					String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
+//					
+//					String s3Path = "restaurant/" + fileName;
+//					
+//					s3ImageUpload.uploadFile(mf, s3Path);
+//			
+//					System.out.println(":: 저장할 이름 => " + fileName);
+//					 
+//					resImg.add(fileName);
+//				
+//					System.out.println("::: IMAGE UPLOAD SUCCESS :::");
+//					
+//					//String test = s3ImageUpload.getFileURL(fileName);
+//					//System.out.println(test);
+//				} catch (Exception e) {
+//					System.out.println("::: IMAGE UPLOAD FAIL :::");
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//	     
+//	    return resImg;
+//	}
 
 }
