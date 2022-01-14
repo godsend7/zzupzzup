@@ -85,6 +85,12 @@ public class CommunityController {
 		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
 		String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
 		
+		//s3ImageUpload = new S3ImageUpload();
+		//String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadReceiptFile.getOriginalFilename());
+		//String vacant = "community/" + fileName";
+		//s3ImageUpload.uploadFile(uploadReceiptFile, vacant);
+		//String receiptImage = uploadReceiptImg(fileName, vacant);
+		
 		community.setReceiptImage(receiptImage);
 		
 		if(communityService.addCommunity(community) == 1) {
