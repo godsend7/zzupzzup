@@ -39,6 +39,139 @@
 		});
 	}); */
 	
+	//============= "무한스크롤"  Event  처리 =============
+	let count = 2;
+	$(window).on("scroll", function(){
+		
+		let scrTop = $(window).scrollTop();
+		let scrBtm = $(document).height() - $(window).height() - $(window).scrollTop();
+		let currentPage = $("#currentPage").val();
+		$("#currentPage").val(count);
+		//console.log("top : " + scrTop);
+		//console.log("bottom : " + scrBtm);
+		//console.log("count : " + count);
+		if(scrBtm <= 0 ){
+			//console.log("바닥이야");
+			//console.log($("#chatForm"));
+			//console.log($("#searchKeyword").val());
+			let queryStr = $("#chatForm").serialize();
+			//console.log(queryStr);
+			
+			$.ajax({
+				url: "/chat/json/listChat",
+				method: "POST",
+				dataType: "json",
+				data: queryStr,
+				beforeSend : function() {
+					
+				},
+				success : function(JSONData, status) {
+					//console.log(JSONData);
+					
+					let dom ='';
+					$.each(JSONData, function(index, item){
+						//console.log(item);
+						if(item.chatLeaderId.memberId == "${member.memberId}"){
+							
+						}
+						
+						dom += '<div class="col-md-6">'
+							+'<div class="card mb-4 shadow-sm chat-state'+item.chatState+'">'
+							+'<div class="card-head d-flex">'
+							+'<span class="badge badge-secondary chat-no mr-1">'+item.chatNo+'</span>';
+							if(item.chatLeaderId.memberId == "${member.memberId}"){
+								dom += '<span class="badge badge-secondary mr-1">개설자</span>';
+							}
+							$.each(item.chatMember, function(indexx, itemm){
+								if("${member.memberId}" == itemm.member.memberId && itemm.member.memberId != item.chatLeaderId.memberId && itemm.inOutCheck == true){
+									dom += '<span class="badge badge-secondary mr-1">참가중</span>';
+								}
+							});
+							switch(item.chatState){
+							case 1:
+								dom += '<span class="badge badge-success chat-state">모집중</span>';
+							break
+							case 2:
+								dom += '<span class="badge badge-warning chat-state">인원확정</span>';
+							break
+							case 3:
+								dom += '<span class="badge badge-info chat-state">예약확정</span>';
+							break
+							case 4:
+								dom += '<span class="badge badge-danger chat-state">모임완료</span>';
+							break
+							case 5:
+								dom += '<span class="badge badge-secondary chat-state">폭파된방</span>';
+							break
+							}
+							dom += '</div>'
+							+'<div class="card-img">'
+							+'<img src="/resources/images/uploadImages/chat/'+item.chatImage+'">'
+							+'</div>'
+							+'<div class="card-body">';
+							if("${member.memberRole}" == 'admin'){
+								dom += '<div class="chat-rating-info">';
+								if(item.chatShowStatus == false){
+									dom += '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+								}
+								dom += '<i class="fa fa-exclamation-triangle" aria-hidden="true">'
+								+item.reportCount +' 회</i>'
+								+'</div>';
+							}
+							dom += '<h4 class="card-title">'+item.chatTitle+'</h4>'
+							+'<h5 class="card-text mb-2 text-muted">'+item.chatText+'</h5>'
+							+'<div class="d-flex justify-content-between align-items-end">'
+							+'<div>'
+							+'<p class="card-text text-right">'+item.chatRestaurant.restaurantName+'</p>'
+							+'<p class="card-text text-right">'+item.chatRestaurant.streetAddress+'</p>'
+							+'</div>'
+							+'<div class="btn-group">';
+							if(item.chatMember != [] && item.chatMember != null && item.chatMember.length > 0){
+								let isChatMember = false;
+								$.each(item.chatmember, function(indexxx, itemmm){
+									if("${member.memberId}" == itemmm.member.memberId){
+										isChatMember = true;
+									}
+									if("${member.memberId}" == itemmm.member.memberId && item.chatState == 4 && itemmm.inOutCheck == true && itemmm.readyCheck == true ){
+										dom += '<a href="/chat/json/listReadyCheckMember/chatNo='+item.chatNo+'" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a>';
+									}
+								});
+								if(isChatMember == false){
+									dom	+= '<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>';
+								}else{
+									dom += '<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>';
+								}
+							}else{
+								dom	+= '<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>';
+							}
+							dom += '</div>'
+							+'</div>'
+							+'</div>'
+							+'</div>'
+							+'</div>';
+					});
+					$(".thumb-list").append(dom);
+					if(JSONData.length != 0){
+						count++;
+					}else{
+						if(!$("#listChat .alert").length){
+							alert_dom = '<div class="alert alert-danger alert-dismissible" role="alert"><strong>스크롤 중지!</strong> 리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
+							$("#listChat").append(alert_dom);
+							$("#listChat .alert").fadeIn();
+						}
+					}
+				},
+				error : function(request, status, error) {
+					let errorMsg = "로그인이 필요합니다!";
+					if(request.status == 200 && request.responseText.indexOf(errorMsg) != -1 ){					
+						alert("로그인이 필요합니다!");
+						location.href='/';
+					}
+				}
+			});
+		}
+	});
+	
 	$(function() {
 		if(${member.memberRole == 'user' || member.memberRole == 'admin'}) {
 			// 게시물 작성하기 버튼 실행

@@ -18,6 +18,32 @@
 	color: #f8f9fa !important;
 	/* box-shadow: none; */
 }
+
+.mapSearch {
+	position: absolute;
+	left : 50%;
+	margin-left: -220px;
+}
+
+.mapSearch .d-flex {
+	height: 42px;
+}
+
+.mapSearch .searchKeyword {
+	width: 250px;
+	margin-right: 10px;
+	height: 42px;
+}
+
+.mapSearch .searchCondition {
+	margin-right: 10px;
+	height: 42px;
+}
+
+.mapSearch .search-btn {
+	height: 42px;
+}
+
 </style>
 
 <!-- start: Header -->
@@ -34,10 +60,10 @@
 	</a>
 	
 	<c:if test = "${empty path}">
-		<form class="col-12 col-lg-auto mb-3 mb-lg-0" id="mapSearch">
+		<form class="col-12 col-lg-auto mb-3 mb-lg-0 mapSearch" id="mapSearch">
 			<div class="col-md-12 col-sm-12 d-flex">
-			<div>
-				<select id="searchCondition" name="searchCondition">
+			<div  class="searchCondition">
+				<select id="searchCondition" name="searchCondition" style="height: 40px;">
 					<option value="0"
 						${!empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>음식점명</option>
 					<option value="1"
@@ -45,7 +71,7 @@
 				</select>
 			</div>
 			<div>
-	    		<input type="search" id="searchKeyword" class="form-control" placeholder="검색어를 입력해주세요" aria-label="Search" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
+	    		<input type="search" id="searchKeyword" class="form-control searchKeyword" placeholder="검색어를 입력해주세요" aria-label="Search" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
 	    	</div>
 	    	<div>
 	    		<a href="javascript:searchMap();" class="button primary icon solid fa-search search-btn" id="searchButton"></a>

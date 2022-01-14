@@ -174,7 +174,9 @@
 										</span> 
 									<div class="file-drag-view mt-4">
 										<c:if test="${chat.chatImage != 'chatimg.jpg' }">
-										<img src="/resources/images/uploadImages/chat/${chat.chatImage }"/>
+										<!-- 이미지 경로 변경 -->
+										<%-- <img src="/resources/images/uploadImages/chat/${chat.chatImage }"/> --%>
+										<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/${chat.chatImage }"/>
 										</c:if>
 									</div>
 								</div>

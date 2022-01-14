@@ -16,9 +16,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,22 +49,133 @@ public class MapRestController {
 		System.out.println(getClass());
 	}
 	
+	//현재 위치의 위도, 경도를 주소로 변환하기
+	@CrossOrigin
+	@RequestMapping(value = "json/thisReverseGeoCoding")
+	public String thisReverseGeoCoding(@RequestBody com.zzupzzup.service.domain.Map map) throws Exception {
+		
+		System.out.println("/map/json/thisReverseGeoCoding : Service");
+		
+		String thisLat = map.getThisLat();
+		String thisLong = map.getThisLong();
+		
+		StringBuffer result = new StringBuffer();
+		
+		try {
+			StringBuilder urlBuilder = new StringBuilder("https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc");
+			urlBuilder.append("?request=coordsToaddr");
+			urlBuilder.append("&" + URLEncoder.encode("coords", "UTF-8") + "=" + thisLong + "," + thisLat);
+			urlBuilder.append("&sourcecrs=epsg:4326");
+			urlBuilder.append("&output=json");
+			urlBuilder.append("&orders=addr,admcode,roadaddr");
+			
+			
+			System.out.println(urlBuilder);
+			
+			URL url = new URL(urlBuilder.toString());
+			
+			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("x-ncp-apigw-api-key-id", "7gzdb36t5o");
+			conn.setRequestProperty("x-ncp-apigw-api-key", "mYUAOPlY0TCwBzBjBZhMfMCX7vKouQIWJJDG9kwL");
+			
+			
+			BufferedReader rd = null;
+			if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			} else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+			
+			
+			String line = null;
+			while ((line = rd.readLine()) != null) {
+				//System.out.println("확인" + line);
+				//line = gyeonggiParseData(line, search);
+				result.append(line + "\n");
+				
+				System.out.println("출력 결과 확인 :: " + result);
+			}
+			
+			rd.close();
+			conn.disconnect();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+			
+		return result + "";
+	}
+	
+	@CrossOrigin
+	@RequestMapping(value = "json/getDirections")
+	public String getDirections(HttpServletRequest request, @RequestHeader HttpHeaders headers, @RequestBody com.zzupzzup.service.domain.Map map) throws Exception {
+
+		System.out.println("/map/json/getDirections : GET");
+		
+		System.out.println(request.getParameter("startLat")); 
+		System.out.println(request.getParameter("startLong"));
+		System.out.println(request.getParameter("goalLat"));
+		System.out.println(request.getParameter("goalLong"));
+		
+//		curl "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=127.1058342,37.359708&goal=129.075986,35.179470&option=trafast"\
+		
+		System.out.println(headers);
+		
+		System.out.println(map);
+				
+		StringBuffer result = new StringBuffer();
+		try {
+			StringBuilder urlBuilder = new StringBuilder("https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving");
+			urlBuilder.append("?" + URLEncoder.encode("start", "UTF-8") + "=" + map.getStartLong() + "," + map.getStartLat());
+			urlBuilder.append("&" + URLEncoder.encode("goal", "UTF-8") + "=" + map.getGoalLong() + "," + map.getGoalLat());
+			urlBuilder.append("&option=trafast");
+			
+			
+			System.out.println(urlBuilder);
+			
+			URL url = new URL(urlBuilder.toString());
+			
+			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("x-ncp-apigw-api-key-id", "7gzdb36t5o");
+			conn.setRequestProperty("x-ncp-apigw-api-key", "mYUAOPlY0TCwBzBjBZhMfMCX7vKouQIWJJDG9kwL");
+			
+			
+			BufferedReader rd = null;
+			if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			} else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+			
+			
+			String line = null;
+			while ((line = rd.readLine()) != null) {
+				//System.out.println("확인" + line);
+				//line = gyeonggiParseData(line, search);
+				result.append(line + "\n");
+				
+				System.out.println("출력 결과 확인 :: " + result);
+			}
+			
+			rd.close();
+			conn.disconnect();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return result+"";
+	}
+	
+	
 	@RequestMapping(value = "json/listRestaurant")
 	public List<Restaurant> listRestaurant(@RequestBody Search search) throws Exception {
 		
 		System.out.println("/map/json/listRestaurant : Service");
 		
 		return restaurantService.listMainRestaurant(search);
-	}
-	
-	@RequestMapping(value = "json/getSimpleRestaurant/{restaurantNo}")
-	public Restaurant getSimpleRestaurant(int restaurantNo) throws Exception {
-		
-		System.out.println("/map/json/listRestaurant : Service");
-		
-		Restaurant restaurant = restaurantService.getRestaurant(restaurantNo);
-		
-		return restaurant;
 	}
 	
 	@RequestMapping("json/gyeonggidoRestAPI")
@@ -117,12 +231,62 @@ public class MapRestController {
 	  return result+"";
 	}
 	
+	@RequestMapping(value ="json/listRestaurantName", method = RequestMethod.GET)
+	public List<Restaurant> listRestaurantName(@RequestParam("keyWord") String keyword) throws Exception {
+		
+		List<Restaurant> list = new ArrayList<Restaurant>();
+		
+		Search search = new Search();
+		search.setSearchKeyword(keyword);
+		search.setSearchCondition("0");
+		
+		String gyeonggiList = gyeonggidoRestAPI(search);
+		
+		System.out.println("다시 확인 ~~~~ " + gyeonggiList);
+		
+		try {
+			JSONParser jsonParse = new JSONParser(); 
+			
+			//JSONParse에 json데이터를 넣어 파싱한 다음 JSONObject로 변환한다. 
+			JSONArray jsonArray = (JSONArray) jsonParse.parse(gyeonggiList); 
+			
+			System.out.println("파싱 후 확인 :: " + jsonArray);
+			
+			for(int i=0; i < jsonArray.size(); i++) { 
+				Restaurant restaurant = new Restaurant();
+				JSONObject personObject = (JSONObject) jsonArray.get(i); 
+				System.out.println("======== " + i + " ========");
+				System.out.println(personObject.get("RESTRT_NM"));
+				System.out.println(personObject.get("REFINE_WGS84_LAT"));
+				System.out.println(personObject.get("REFINE_WGS84_LOGT"));
+				
+				restaurant.setRestaurantName(personObject.get("RESTRT_NM").toString());
+				restaurant.setLatitude(personObject.get("REFINE_WGS84_LAT").toString());
+				restaurant.setLongitude(personObject.get("REFINE_WGS84_LOGT").toString());
+				restaurant.setStreetAddress(personObject.get("REFINE_ROADNM_ADDR").toString());
+				restaurant.setRestaurantTel(personObject.get("TASTFDPLC_TELNO").toString());
+				
+				list.add(restaurant);
+			}
+			
+			//list.addAll(jsonArray);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		Map<String, Object> map = restaurantService.listRestaurantName(search);
+		
+		list.addAll((List<Restaurant>) map.get("list"));
+		
+		return list;
+	}
+	
+	
 	//OpenAPI 데이터 파싱
 	private String gyeonggiParseData(String jsonData, Search search) {
 		
 		StringBuffer returnData = new StringBuffer();
-		ObjectMapper mapper = new ObjectMapper();
-		List<String> list = null;
 		
 		try {
 			JSONParser jsonParse = new JSONParser(); 
