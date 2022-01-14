@@ -79,13 +79,15 @@
 								
 									<!-- <a style="text-align: right;"><strong class="d-inline-block mb-2 text-primary">불량음식점</strong></a> -->
 									<c:if test="${member.profileImage == 'defaultImage.png'}">
+										<!-- <img src="/resources/images/defaultImage.png" class="rounded-circle" width="150" height="150"/> -->
 										<img
-											src="/resources/images/${member.profileImage}"
+											src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/defaultImage.png"
 											class="avatar-img rounded-circle" width="50" height="50"/>
 									</c:if>
 									<c:if test="${member.profileImage != 'defaultImage.png'}">
+										<%-- <img src="/resources/images/uploadImages/${member.profileImage}" class="rounded-circle" width="150" height="150"/> --%>
 										<img
-											src="/resources/images/uploadImages/${member.profileImage}"
+											src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/member/${member.profileImage}"
 											class="avatar-img rounded-circle" width="50" height="50"/>
 									</c:if>
 									<h2 class="mb-0">${member.nickname}&nbsp;<small style="color:gray;">${member.memberId}</small></h2>

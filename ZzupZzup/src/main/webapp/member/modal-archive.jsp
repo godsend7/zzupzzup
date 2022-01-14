@@ -153,7 +153,7 @@
 		            						} else if(data.regBlacklist) {
 		            							alert("블랙리스트로 등록된 계정입니다. 자세한 사항은 이메일(zzupzzup101@gmail.com)로 문의 바랍니다.");
 		            						} else if(data.recovered) {
-		            							var confirmRecovery = confirm("계정 복구를 진행하시겠습니까?")
+		            							var confirmRecovery = confirm("계정 복구를 진행하시겠습니까?");
 		            							$.ajax({
 		            								url : "/member/json/recoveryMember",
 		            								method : "POST",
@@ -286,8 +286,8 @@
 						alert("탈퇴 처리가 완료되었습니다.");
 						location.href = "/";
 					} else if(data.loginType == 2) {
-						alert("되는 건가?");
 						unlinkKakao();
+						alert("탈퇴 처리가 완료되었습니다.");
 						location.href = "/";
 					}
 				},
@@ -408,7 +408,8 @@
 									+"</div></div></div></div>");
 						
 						if(data.profileImage == "defaultImage.png") {
-							$("#get-other-user-profile-image").html("<img src='/resources/images/defaultImage.png'"
+							$("#get-other-user-profile-image").html//("<img src='/resources/images/defaultImage.png'"
+																	("<img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/defaultImage.png'"
 																	+"class='avatar-img rounded-circle' width='150' height='150'/>"
 																	+"<br/>"
 																	+"<span id='mannerScore' style='font-weight: bold'>"
@@ -417,7 +418,8 @@
 																  	+"<path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/>"
 																	+"</svg> "+data.mannerAllScore+"</span>");
 						} else {
-							$("#get-other-user-profile-image").html("<img src='/resources/images/uploadImages/"+data.profileImage+"'"
+							$("#get-other-user-profile-image").html//("<img src='/resources/images/uploadImages/"+data.profileImage+"'"
+																	("<img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/member/"+data.profileImage+"'"
 																	+"class='avatar-img rounded-circle' width='150' height='150'/>"
 																	+"<br/>"
 																	+"<span id='mannerScore' style='font-weight: bold'>"

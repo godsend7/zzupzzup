@@ -42,6 +42,7 @@ public class Member {
 	private boolean regBlacklist;				//블랙리스트 등록 여부 확인
 	private int accumulType;					//활동점수 적립 유형
 	private boolean recovered;					//계정 복구 가능 여부
+	private boolean regRestaurant;
 	////안 쓰는 field
 	private boolean loginCheck;					//로그인 여부 체크(인데 안 써서 지워질 예정)
 	//kakao login으로 추가된 field
@@ -371,6 +372,14 @@ public class Member {
 
 	public void setRecovered(boolean recovered) {
 		this.recovered = recovered;
+	}
+
+	public boolean isRegRestaurant() {
+		return regRestaurant;
+	}
+
+	public void setRegRestaurant(boolean regRestaurant) {
+		this.regRestaurant = regRestaurant;
 	}
 
 	@Override

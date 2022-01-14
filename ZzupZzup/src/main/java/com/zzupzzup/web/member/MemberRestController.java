@@ -2,8 +2,10 @@ package com.zzupzzup.web.member;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.zzupzzup.common.util.CommonUtil;
+import com.zzupzzup.common.util.S3ImageUpload;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.member.MailService;
 import com.zzupzzup.service.member.MemberService;
@@ -39,6 +42,8 @@ public class MemberRestController {
 	@Autowired
 	@Qualifier("mailServiceImpl")
 	private MailService mailService;
+	
+	private S3ImageUpload s3ImageUpload;
 	
 	//*Constructor
 	public MemberRestController() {
@@ -66,7 +71,7 @@ public class MemberRestController {
 				System.out.println("탈퇴회원 : "+mb.getDeleteReason());
 				System.out.println("블랙리스트 : "+mb.getBlacklistDate());
 				
-				if(mb.getDeleteDate() != null && !mb.isRecovered()) {
+				if(mb.isEliminated() && !mb.isRecovered()) {
 					
 					/* 탈퇴 후 7일 이내 재접속 시 진행되는 계정 복구에 필요한 variable */
 					String deleteDate = mb.getDeleteDate().toString();
@@ -253,6 +258,7 @@ public class MemberRestController {
 				
 				return mb;
 			}
+			
 		} else if(mb.getLoginType() == 2) {
 		
 			if(member.getMemberId().equals(mb.getMemberId())) {
@@ -324,6 +330,60 @@ public class MemberRestController {
 		//session.setAttribute("mb", mb);
 		
 		return mb;
+	}
+	
+//	@RequestMapping(value="json/checkRegRestaurant", method=RequestMethod.POST)
+//	public boolean checkRegRestaurant(boolean regRestaurant) throws Exception {
+//		 return false;
+//	}
+	
+	//multifile upload
+	//@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
+	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		System.out.println("/member/json/addDragFile : POST");
+		
+		s3ImageUpload = new S3ImageUpload();
+		
+		List<MultipartFile> fileList =  multipartRequest.getFiles("uploadFile");
+	
+		System.out.println("이미지 확인 :: " + fileList);
+		
+		List<String> profileImage = new ArrayList<String>();
+		
+	    //Map<String, Object> map = new HashMap<String, Object>();
+	    
+	    for (MultipartFile mf : fileList) {
+			//image가 존재한다면(image의 name이 공백이 아닐경우)
+			if (!mf.getOriginalFilename().equals("")) {
+				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
+				System.out.println(":: 파일 사이즈 => " + mf.getSize());
+	
+				try {
+					String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
+					
+					String s3Path = "member/"+saveName;
+					
+					s3ImageUpload.uploadFile(mf, s3Path);
+			
+					System.out.println(":: 저장할 이름 => " + saveName);
+					 
+					profileImage.add(saveName);
+				
+					System.out.println("업로드 성공");
+					
+					//String test = s3ImageUpload.getFileURL(saveName);
+					//System.out.println(test);
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println("업로드 없음");
+					e.printStackTrace();
+					//saveName = "notFile.png";
+				}
+			}
+		}
+	     
+	    return profileImage;
 	}
 
 }
