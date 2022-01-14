@@ -225,60 +225,10 @@ public class ReviewRestController {
 	
 	
 	//server Image Upload
-	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
-	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		System.out.println("/chat/json/addDragFile : POST");
-		
-		List<MultipartFile> fileList =  multipartRequest.getFiles("uploadFile");
-	
-		System.out.println("이미지 확인 :: " + fileList);
-		
-		List<String> reviewImage = new ArrayList<String>();
-		
-	    String filePath = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH+"review");
-	    
-	    System.out.println("filePath : " + filePath);
-	    
-	    Map<String, Object> map = new HashMap<String, Object>();
-	    
-	    for (MultipartFile mf : fileList) {
-			//image가 존재한다면(image의 name이 공백이 아닐경우)
-			if (!mf.getOriginalFilename().equals("")) {
-				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
-				System.out.println(":: 파일 사이즈 => " + mf.getSize());
-	
-				try {
-					String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
-					
-					File file = new File(filePath + "/" + saveName);
-					mf.transferTo(file);
-									
-					System.out.println(":: 저장할 이름 => " + saveName);
-					 
-					reviewImage.add(saveName);
-				
-					System.out.println("업로드 성공");
-				} catch (Exception e) {
-					// TODO: handle exception
-					System.out.println("업로드 없음");
-					e.printStackTrace();
-					//saveName = "notFile.png";
-				}
-			}
-		}
-	     
-	    return reviewImage;
-	}
-	
-	
-	//AWS S3 Image Upload
 //	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
 //	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
 //		
-//		System.out.println("/review/json/addDragFile : POST");
-//		
-//		s3ImageUpload = new S3ImageUpload();
+//		System.out.println("/chat/json/addDragFile : POST");
 //		
 //		List<MultipartFile> fileList =  multipartRequest.getFiles("uploadFile");
 //	
@@ -286,6 +236,10 @@ public class ReviewRestController {
 //		
 //		List<String> reviewImage = new ArrayList<String>();
 //		
+//	    String filePath = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH+"review");
+//	    
+//	    System.out.println("filePath : " + filePath);
+//	    
 //	    Map<String, Object> map = new HashMap<String, Object>();
 //	    
 //	    for (MultipartFile mf : fileList) {
@@ -297,18 +251,14 @@ public class ReviewRestController {
 //				try {
 //					String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
 //					
-//					String s3Path = "review/"+saveName;
-//					
-//					s3ImageUpload.uploadFile(mf, s3Path);
-//			
+//					File file = new File(filePath + "/" + saveName);
+//					mf.transferTo(file);
+//									
 //					System.out.println(":: 저장할 이름 => " + saveName);
 //					 
 //					reviewImage.add(saveName);
 //				
 //					System.out.println("업로드 성공");
-//					
-//					//String test = s3ImageUpload.getFileURL(saveName);
-//					//System.out.println(test);
 //				} catch (Exception e) {
 //					// TODO: handle exception
 //					System.out.println("업로드 없음");
@@ -320,4 +270,54 @@ public class ReviewRestController {
 //	     
 //	    return reviewImage;
 //	}
+	
+	
+	//AWS S3 Image Upload
+	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
+	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		System.out.println("/review/json/addDragFile : POST");
+		
+		s3ImageUpload = new S3ImageUpload();
+		
+		List<MultipartFile> fileList =  multipartRequest.getFiles("uploadFile");
+	
+		System.out.println("이미지 확인 :: " + fileList);
+		
+		List<String> reviewImage = new ArrayList<String>();
+		
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    
+	    for (MultipartFile mf : fileList) {
+			//image가 존재한다면(image의 name이 공백이 아닐경우)
+			if (!mf.getOriginalFilename().equals("")) {
+				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
+				System.out.println(":: 파일 사이즈 => " + mf.getSize());
+	
+				try {
+					String saveName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
+					
+					String s3Path = "review/"+saveName;
+					
+					s3ImageUpload.uploadFile(mf, s3Path);
+			
+					System.out.println(":: 저장할 이름 => " + saveName);
+					 
+					reviewImage.add(saveName);
+				
+					System.out.println("업로드 성공");
+					
+					//String test = s3ImageUpload.getFileURL(saveName);
+					//System.out.println(test);
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println("업로드 없음");
+					e.printStackTrace();
+					//saveName = "notFile.png";
+				}
+			}
+		}
+	     
+	    return reviewImage;
+	}
 }

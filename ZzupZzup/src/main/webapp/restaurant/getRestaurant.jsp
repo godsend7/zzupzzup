@@ -388,7 +388,7 @@
 						  <c:if test="${empty restaurant.restaurantImage}">
 						  	<div class="carousel-item active">
 						  		<!-- <img src="/resources/images/uploadImages/default.png" height="600" class="d-block w-100"> -->
-						  		<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/restaurant/default.png" height="600" class="d-block w-100">
+						  		<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/default.png" height="600" class="d-block w-100">
 						  	</div>
 						  </c:if>	
 					  </div>
