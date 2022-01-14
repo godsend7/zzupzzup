@@ -264,6 +264,7 @@ public class MapRestController {
 				restaurant.setLatitude(personObject.get("REFINE_WGS84_LAT").toString());
 				restaurant.setLongitude(personObject.get("REFINE_WGS84_LOGT").toString());
 				restaurant.setStreetAddress(personObject.get("REFINE_ROADNM_ADDR").toString());
+				restaurant.setAreaAddress(personObject.get("REFINE_LOTNO_ADDR").toString());
 				restaurant.setRestaurantTel(personObject.get("TASTFDPLC_TELNO").toString());
 				
 				list.add(restaurant);

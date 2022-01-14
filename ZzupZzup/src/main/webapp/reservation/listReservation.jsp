@@ -53,7 +53,7 @@
 								currentPage : $("#currentPage").val()
 							},
 							success : function(data) {
-		    					alert("무한스크롤 성공");
+		    					//alert("무한스크롤 성공");
 		    					console.log(data);
 		    					
 		    					//count++;
@@ -185,16 +185,16 @@
 							<jsp:include page='/review/getReview.jsp'/>
 						</ul>
 		
-					<div class="col-12 text-center thumb-more">
+					<!-- <div class="col-12 text-center thumb-more">
 						<a href="#" class="icon solid fa fa-plus-circle"></a>
-					</div> 
+					</div>  -->
 					<!-- end -->
-					
+					<%-- 
 					<jsp:include page="../common/pageNavigator.jsp"/>
 						무한스크롤 필요
 
 					</div>
-					</div>
+					</div> --%>
 				</section>
 			</div>
 		</div>
