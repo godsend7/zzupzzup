@@ -98,7 +98,7 @@
 					},
 					success : function(data){
 						$('#reservationRejectionModal').modal("hide");
-						alert("예약 취소 및 환불이 완료되었습니다. 예약/주문 취소 메세지가 가게에 전송되며 선결제시 환불이 동시에 진행됩니다. ");
+						alert("예약 취소가 완료되었습니다. 예약/주문 취소 메세지가 가게에 전송되며 선결제시 결제 취소버튼을 눌러주세요");
 						history.go(0);
 					},
 					error : function(e) {
@@ -127,7 +127,7 @@
 					},
 					success : function(data){
 						$('#cancelUseModal').modal("hide");
-						alert("예약 거절 및 환불이 완료되었습니다. 예약 거절 메세지가 해당 고객에게 전송되며 해당 고객님께서 선결제시 환불이 동시에 진행됩니다.");
+						alert("예약 거절이 완료되었습니다. 예약 거절 메세지가 해당 고객에게 전송되며 해당 고객님께서 선결제시 결제 취소 버튼을 눌러주세요.");
 						history.go(0);
 					},
 					error : function(e) {
@@ -181,7 +181,6 @@
 		    	console.log("${reservation.payMethod}");
 		    	console.log("${reservation.refundStatus}");
 		    	console.log("환불 여부~~~~~");
-		        alert("환불완료!!!!!!!!")
 		        var payMethod = $("input[name='payMethod']").val();
 		        var refundStatus = $("input[name='refundStatus']").val();
 		        jQuery.ajax({
@@ -199,7 +198,7 @@
 		            	if (JSONData == 1) {
 		            		console.log("바꾸기 성공");
 							$('#refundStatus').modal("hide");
-							alert("결제환불 성공!!!!!");
+							alert("결제 취소가 완료되었습니다.");
 							history.go(0);
 						}
 		            },
@@ -229,7 +228,7 @@
 						toNickName : "${reservation.member.nickname}"
 					},
 					success : function(data){
-						alert("메세지 성공!!!!!");
+						alert("메세지 전송이 완료되었습니다.");
 						console.log("메세지 데이터보내기 성공");
 						
 					},
@@ -311,11 +310,11 @@
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->
 									<c:choose> 
 										<c:when test="${member.memberRole == 'owner'}">
-											<c:if test="${reservation.reservationStatus != 1 || reservation.reservationStatus != 2 }">
+											<c:if test="${(reservation.reservationStatus != 1 || reservation.reservationStatus != 2) && reservation.reservationStatus == '' }">
 											<input type="button" value="방문 확정" name= "reservationStatus" class="button small primary stretched-link " id="reservationStatus-modal" data-toggle="modal"
 											data-target="#getReservationModal"/>
 											</c:if>
-											<c:if test="${(reservation.reservationStatus != 1 || reservation.reservationStatus != 2 ) && reservation.reservationStatus != 4}">	
+											<c:if test="${reservation.reservationStatus == 0}">	
 											<input type="button" value="예약 거절" name= "reservationRejection" class="button small primary stretched-link" id="reservationRejection-modal" data-toggle="modal"
 											data-target="#rejectionModal"/>
 											
@@ -326,7 +325,7 @@
 									</c:choose>
 									
 									<c:choose>
-										<c:when test="${member.memberRole == 'user' && reservation.reservationStatus != 3}">
+										<c:when test="${member.memberRole == 'user' && reservation.reservationStatus == ''}">
 										<input type="button" value="예약 취소" name= "reservationCancel" class="button small primary stretched-link" id="reservationCancel-modal" data-toggle="modal"
 										data-target="#reservationRejectionModal"/>
 										</c:when>
@@ -350,7 +349,13 @@
 								</div>
 								<div class="col-12">
 									<label for="reservationStatus">예약 및 결제 현황</label>
-									<p>${reservation.returnStatus} ${reservation.returnRefund}
+									
+									<p><c:choose>
+											<c:when test="${reservation.returnStatus!=''}">
+												${reservation.returnStatus} /
+												</c:when>
+											</c:choose>
+												${reservation.returnRefund}
 									<c:choose>
 										<c:when test="${reservation.payOption == 2}">
 										<c:if test="${(reservation.reservationStatus == 3 || reservation.reservationStatus == 4) && member.memberRole != 'admin' && reservation.refundStatus != 'true'}">

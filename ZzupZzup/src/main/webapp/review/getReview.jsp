@@ -141,10 +141,8 @@
     	var image = "";
     	
     	if (index == 0) {
-    		//console.log("active 필요");
 			image = "<div class='carousel-item active'>";
 		} else {
-			//console.log("active 필요없엉");
 			image = "<div class='carousel-item'>";
 		}
     			

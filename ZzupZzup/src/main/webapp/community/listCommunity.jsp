@@ -223,8 +223,8 @@
 							<div class="row">
 								
 								<div class="col-md-7">
-									<span class="badge badge-pill badge-secondary">Secondary</span>
-									<span class="badge badge-pill badge-secondary">Secondary</span>
+									<span class="badge badge-pill badge-secondary">정렬</span>
+									<span class="badge badge-pill badge-secondary">필터</span>
 								</div>
 								
 								<div class="col-md-5 row">
@@ -252,10 +252,12 @@
 										<div class="card mb-1 shadow-sm">
 											<a href="" class="thumb">
 												<c:if test="${community.postImage[0] == null}">
-													<img src="/resources/images/uploadImages/default.jpg" height="100%">
+													<!-- <img src="/resources/images/uploadImages/default.jpg" height="100%"> -->
+													<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/default.png" height="100%">
 												</c:if>
 												<c:if test="${community.postImage[0] != null}">
-													<img src="/resources/images/uploadImages/${community.postImage[0]}" height="100%">
+													<%-- <img src="/resources/images/uploadImages/${community.postImage[0]}" height="100%"> --%>
+													<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/${community.postImage[0]}" height="100%">
 												</c:if>
 											</a>
 											<div class="card-body">
