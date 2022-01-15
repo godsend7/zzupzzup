@@ -174,6 +174,7 @@
 							}
 
 
+
 						},
 						error:function(request,status,error){
 					       console.log("실패");
@@ -340,9 +341,9 @@
 							<jsp:include page='/review/getReview.jsp'/>
 						</ul>
 		
-					<div class="col-12 text-center thumb-more">
+					<!-- <div class="col-12 text-center thumb-more">
 						<a href="#" class="icon solid fa fa-plus-circle"></a>
-					</div> 
+					</div>  -->
 					<!-- end -->
 					</div>
 					</div>

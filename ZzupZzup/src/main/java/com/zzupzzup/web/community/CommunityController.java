@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
+import com.zzupzzup.common.util.S3ImageUpload;
 import com.zzupzzup.service.community.CommunityService;
 import com.zzupzzup.service.domain.Community;
 import com.zzupzzup.service.domain.Mark;
@@ -53,6 +54,8 @@ public class CommunityController {
 	@Autowired
 	@Qualifier("memberServiceImpl")
 	private MemberService memberService;
+	
+	private S3ImageUpload s3ImageUpload;
 	
 	
 	///Constructor
@@ -82,16 +85,16 @@ public class CommunityController {
 		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
 		uploadFilePath(uploadFile, empty, community);
 		
-		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
-		String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
+//		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
+//		String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
 		
-		//s3ImageUpload = new S3ImageUpload();
-		//String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadReceiptFile.getOriginalFilename());
-		//String vacant = "community/" + fileName";
-		//s3ImageUpload.uploadFile(uploadReceiptFile, vacant);
-		//String receiptImage = uploadReceiptImg(fileName, vacant);
+		s3ImageUpload = new S3ImageUpload();
+		String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadReceiptFile.getOriginalFilename());
+		String vacant = "receipt/" + fileName;
+		s3ImageUpload.uploadFile(uploadReceiptFile, vacant);
+		//String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
 		
-		community.setReceiptImage(receiptImage);
+		community.setReceiptImage(fileName);
 		
 		if(communityService.addCommunity(community) == 1) {
 			System.out.println("POST UPLOAD SUCCESS");
@@ -160,21 +163,30 @@ public class CommunityController {
 			HttpServletRequest request, HttpSession session) throws Exception {
 		
 		System.out.println("/community/updateCommunity : POST");
+//		
+//		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
+//		uploadFilePath(uploadFile, empty, community);
+//		
+//		System.out.println("::: uploadReceiptFile1 ::: " + uploadReceiptFile);
+//		System.out.println("::: uploadReceiptFile2 ::: " + uploadReceiptFile.getName());
+//		System.out.println("::: uploadReceiptFile3 ::: " + uploadReceiptFile.getOriginalFilename());
 		
-		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
-		uploadFilePath(uploadFile, empty, community);
 		
-		System.out.println("::: uploadReceiptFile1 ::: " + uploadReceiptFile);
-		System.out.println("::: uploadReceiptFile2 ::: " + uploadReceiptFile.getName());
-		System.out.println("::: uploadReceiptFile3 ::: " + uploadReceiptFile.getOriginalFilename());
+//		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
+//		String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
+//			
+//		System.out.println("receiptImage : " + receiptImage);
+//			
+//		community.setReceiptImage(receiptImage);
 		
+		s3ImageUpload = new S3ImageUpload();
+		String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadReceiptFile.getOriginalFilename());
+		String vacant = "community/" + fileName;
+		s3ImageUpload.uploadFile(uploadReceiptFile, vacant);
+		//String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
 		
-		String vacant = request.getServletContext().getRealPath("/resources/images/uploadImages/receipt");
-		String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
-			
-		System.out.println("receiptImage : " + receiptImage);
-			
-		community.setReceiptImage(receiptImage);
+		community.setReceiptImage(fileName);
+		uploadFilePath(uploadFile, vacant, community);
 		
 		communityService.updateCommunity(community);
 		
@@ -314,11 +326,21 @@ public class CommunityController {
 			if(!mpf.getOriginalFilename().equals("")) {
 				
 				try {
+//					String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mpf.getOriginalFilename());
+//					
+//					File file = new File(empty + "/" + fileName);
+//					
+//					mpf.transferTo(file);
+//					
+//					cnImg.add(fileName);
+//					community.setPostImage(cnImg);
+//					
+//					System.out.println("IMAGES UPLOAD SUCCESS");
+					
+					//AWS S3 Image Upload
 					String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mpf.getOriginalFilename());
 					
-					File file = new File(empty + "/" + fileName);
-					
-					mpf.transferTo(file);
+					s3ImageUpload.uploadFile(mpf, empty);
 					
 					cnImg.add(fileName);
 					community.setPostImage(cnImg);

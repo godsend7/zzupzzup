@@ -552,7 +552,7 @@
 							<div class="row gtr-uniform">
 								<!-- Break -->
 								<div class="col-md-8">
-									<label for="fileDragInput">채팅방 대표 이미지</label>
+									<label for="">채팅방 대표 이미지</label>
 									<div class="file-drag-area">
 										<span class="file-drag-btn">파일 선택</span> <span
 											class="file-drag-msg">파일을 여기로 드래그 하거나 선택하세요.</span> <input

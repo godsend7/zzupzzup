@@ -162,12 +162,15 @@ public class Chat {
 
 	@Override
 	public String toString() {
-		return "\nChat [chatNo=" + chatNo + ", chatTitle=" + chatTitle + ", chatImage=" + chatImage + ", chatText="
+		return "Chat [chatNo=" + chatNo + ", chatTitle=" + chatTitle + ", chatImage=" + chatImage + ", chatText="
 				+ chatText + ", chatRegDate=" + chatRegDate + ", chatAge=" + chatAge + ", chatGender=" + chatGender
-				+ ", chatMemberCount=" + chatMemberCount + ", chatState=" + chatState + ",\n chatLeaderId=" + chatLeaderId
-				+ ",\n chatShowStatus=" + chatShowStatus + ",\n chatRestaurant=" + chatRestaurant + ",\n chatMember="
-				+ chatMember + ",\n reportCount=" + reportCount + ", readyCount=" + readyCount + "]\n";
+				+ ", chatMemberCount=" + chatMemberCount + ", chatState=" + chatState + ", chatLeaderId=" + chatLeaderId
+				+ ", chatShowStatus=" + chatShowStatus + ", chatRestaurant=" + chatRestaurant + ", chatMember="
+				+ chatMember + ", reportCount=" + reportCount + ", readyCount=" + readyCount + "]";
 	}
+
+
+	
 
 	
 	
