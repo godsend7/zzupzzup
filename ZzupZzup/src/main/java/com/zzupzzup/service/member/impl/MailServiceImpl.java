@@ -45,8 +45,16 @@ public class MailServiceImpl implements MailService {
 		
 		//javax.mail에 필요한 local variable
 		subject = "[쩝쩝듀스101] 비밀번호 재설정 링크가 전송되었습니다.";
-		body = "안녕하세요. 쩝쩝듀스101입니다.\n"+"아래 링크로 접속하여 비밀번호를 설정하여 주세요. \n\n"
-				+ "http://localhost:8080/member/setPassword.jsp?memberId="+to;
+//		body = "안녕하세요. 쩝쩝듀스101입니다.\n"+"아래 링크로 접속하여 비밀번호를 설정하여 주세요. \n\n"
+//				+ "http://localhost:8080/member/setPassword.jsp?memberId="+to;
+		body = "<div align='center'>"
+				+ "<img src='/Users/choyoungju/git/zzupzzup/ZzupZzup/src/main/webapp/favicon.ico'><br/>"
+				+ "안녕하세요. 쩝쩝듀스101입니다.<br/>"
+				+ "아래 버튼을 클릭 하여 비밀번호를 설정해주세요.<br/><br/>"
+				+ "<a href='http:localhost:8080/member/setPassword.jsp?memberId="+to+"'>"
+				+ "<input type='button' value='비밀번호 재설정'>"
+				+ "</a>"
+				+ "</div>";
 		
 		Properties props = System.getProperties();
         props.put("mail.transport.protocol", "smtp");
