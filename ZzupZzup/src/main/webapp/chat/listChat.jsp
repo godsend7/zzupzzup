@@ -126,9 +126,15 @@
 								break
 								}
 								dom += '</div>'
-								+'<div class="card-img">'
-								+'<img src="/resources/images/uploadImages/chat/'+item.chatImage+'">'
-								+'</div>'
+								+'<div class="card-img">';
+								//이미지 경로 변경
+								/* +'<img src="/resources/images/uploadImages/chat/'+item.chatImage+'">' */
+								if(item.chatImage == 'chatimg.jpg'){
+									dom +='<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/'+item.chatImage+'">';
+								}else if(item.chatImage != 'chatimg.jpg'){
+									dom +='<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/'+item.chatImage+'">';
+								}
+								dom += '</div>'
 								+'<div class="card-body">';
 								if("${member.memberRole}" == 'admin'){
 									dom += '<div class="chat-rating-info">';
@@ -652,7 +658,14 @@
 													</c:choose>
 												</div>
 												<div class="card-img">
-													<img src="/resources/images/uploadImages/chat/${chat.chatImage}">
+													<!-- 이미지 경로 변경 -->
+													<%-- <img src="/resources/images/uploadImages/chat/${chat.chatImage}"> --%>
+													<c:if test="${chat.chatImage == 'chatimg.jpg' }">
+													<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/${chat.chatImage}">
+													</c:if>
+													<c:if test="${chat.chatImage != 'chatimg.jpg' }">
+													<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/${chat.chatImage}">
+													</c:if>
 												</div>
 												<div class="card-body">
 													<c:if test="${member.memberRole == 'admin'}">
@@ -702,14 +715,14 @@
 																	</c:if>
 																</c:forEach>
 																<c:if test="${isChatMember eq 'false' }">
-																	<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>
+																	<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" data-no="${chat.chatNo}" data-id="${member.memberId}" id="getChatEntranceBtn">참여하기</a>
 																</c:if>
 																<c:if test="${isChatMember eq 'true' && chat.chatState != 5}">
 																	<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small success get-chat-btn">입장하기</a>
 																</c:if>
 															</c:if>
 															<c:if test="${empty chat.chatMember}">
-																<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>
+																<a href="/chat/json/getChat/${chat.chatNo}" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" data-no="${chat.chatNo}" data-id="${member.memberId}" id="getChatEntranceBtn">참여하기</a>
 															</c:if>
 														</div>
 													</div>

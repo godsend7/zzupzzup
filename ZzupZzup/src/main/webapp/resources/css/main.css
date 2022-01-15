@@ -2299,7 +2299,7 @@ button,
 #main #header .logo strong { color: #f56a6a; text-shadow: 0 0 4px #fff; }
 #main #header .logo strong:before { content: 'ZZUPZZUPDUCE_101'; display: block; position: absolute; top: 11px; left: 37px; color: rgba(0,0,0,0.8); z-index: -1; }
 #main #header .logo strong { color: #f56a6a; text-shadow: 0 0 4px #fff; }
-#main #header .logo strong svg:nth-child(2) { position: absolute; color: rgba(0,0,0,0.6); top: 19px; left: 11px; z-index: -1; }
+#main #header .logo strong svg:nth-child(2) { position: absolute; color: rgba(0,0,0,0.6); top: 17px; left: 11px; z-index: -1; }
 
 #main.index > .inner > section { padding: 0px; }
 
