@@ -44,6 +44,18 @@
 		<result property="accumulDate" 			column="ACCUMULATE_DATE" 	jdbcType="INTEGER" />
 	</resultMap>
 	
+	<sql id="listUserCommon">
+		SELECT PROFILE_IMAGE, MEMBER_ROLE, MEMBER_NAME, NICKNAME, COUNT_REP.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+		FROM zzupzzup.MEMBER
+	    RIGHT JOIN (
+				SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
+				FROM zzupzzup.REPORT RIGHT JOIN zzupzzup.MEMBER
+				ON zzupzzup.REPORT.CHAT_MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+				GROUP BY zzupzzup.MEMBER.MEMBER_ID
+			) COUNT_REP
+		ON COUNT_REP.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+	</sql>
+	
 	<!-- SQL : INSERT -->
 	<insert 	id="addMember"	parameterType="member">
 		INSERT INTO
@@ -56,7 +68,7 @@
 		SELECT
 		MEMBER_ID, PASSWORD, MEMBER_NAME, NICKNAME, MEMBER_ROLE, MEMBER_PHONE, AGE_RANGE, GENDER, PROFILE_IMAGE, STATUS_MESSAGE, ACTIVITY_SCORE, MANNER_SCORE, LOGIN_TYPE, REG_DATE, DELETE_DATE, DELETE_TYPE, DELETE_DETAIL, BLACKLIST_REG_DATE
 		FROM zzupzzup.MEMBER
-		WHERE MEMBER_ID LIKE #{memberId} OR NICKNAME LIKE #{nickname} OR (MEMBER_NAME = #{memberName} AND MEMBER_PHONE = #{memberPhone});
+		WHERE MEMBER_ID LIKE #{memberId} OR NICKNAME LIKE #{nickname} OR (MEMBER_NAME = #{memberName} AND MEMBER_PHONE = #{memberPhone})
 	</select>
 	
 	<!-- <select 	id="getOwner"	parameterType="string" resultMap="memberSelectMap">
@@ -101,34 +113,20 @@
 	<!-- SQL : SELECT LIST -->
 	<select 	id="listUser"	parameterType="map" resultMap="memberSelectMap">
 		SELECT MEMBER_LIST.*
-		FROM (
-			SELECT PROFILE_IMAGE, MEMBER_ROLE, MEMBER_NAME, NICKNAME, COUNT_REP.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
-			FROM zzupzzup.MEMBER
-		    RIGHT JOIN (
-					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(CHAT_MEMBER_ID) AS COUNT_REPORT
-					FROM zzupzzup.REPORT RIGHT JOIN zzupzzup.MEMBER
-					ON zzupzzup.REPORT.CHAT_MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
-					GROUP BY zzupzzup.MEMBER.MEMBER_ID
-				) COUNT_REP
-			ON COUNT_REP.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
-		) MEMBER_LIST
+		FROM (<include refid="listUserCommon"/>) MEMBER_LIST
 		WHERE MEMBER_ROLE = 'user'
+		<if test="search.searchSort == 'eliminated'">
+			AND DELETE_DATE IS NOT NULL
+		</if>
+		<if test="search.searchSort == 'blacklist'">
+			AND BLACKLIST_REG_DATE IS NOT NULL
+		</if>
 		ORDER BY MEMBER_LIST.MEMBER_ID LIMIT #{search.startRowNum}, #{search.pageSize}
 	</select>
 	
 	<select 	id="listOwner"	parameterType="map" resultMap="memberSelectMap">
 		SELECT MEMBER_LIST.*
-		FROM (
-			SELECT MEMBER_ROLE, MEMBER_NAME, COUNT_RES.*, REG_DATE, DELETE_DATE
-			FROM zzupzzup.MEMBER
-		    RIGHT JOIN (
-					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(RESTAURANT_NAME) AS COUNT_RESTAURANT
-					FROM zzupzzup.RESTAURANT RIGHT JOIN zzupzzup.MEMBER
-					ON zzupzzup.RESTAURANT.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
-					GROUP BY zzupzzup.MEMBER.MEMBER_ID
-				) COUNT_RES
-			ON COUNT_RES.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
-		) MEMBER_LIST
+		FROM (<include refid="listUserCommon"/>) MEMBER_LIST
 		WHERE MEMBER_ROLE = 'owner'
 		ORDER BY MEMBER_LIST.MEMBER_ID LIMIT #{search.startRowNum}, #{search.pageSize}
 	</select>
@@ -200,20 +198,36 @@
 		SET MANNER_SCORE = MANNER_SCORE + #{accumulScore} WHERE MEMBER_ID = #{memberId};
 	</update>
 	
-	<!-- page count -->
-	<select id="getTotalCount" parameterType="search" resultType="int">
+	<!-- user page count -->
+	<select id="getUserTotalCount" parameterType="map" resultType="int">
 		SELECT COUNT(*)
-		FROM zzupzzup.MEMBER
-		<!-- <choose>
-			<when test="restaurantNo != null">
-		  		WHERE restaurant_no = #{restaurantNo}
-		  	</when>
-		  	<otherwise>
-		  		<if test="memberId != null">
-		  			WHERE member_id = #{memberId}
-		  		</if>
-		  	</otherwise>
-		</choose> --> 
+		FROM (SELECT MEMBER_LIST.*
+			  FROM (<include refid="listUserCommon"/>) MEMBER_LIST
+			  WHERE MEMBER_ROLE = 'user'
+			  <if test="search.searchSort == 'eliminated'">
+			  	AND DELETE_DATE IS NOT NULL
+			  </if>
+			  <if test="search.searchSort == 'blacklist'">
+			  	AND BLACKLIST_REG_DATE IS NOT NULL
+			  </if>
+		) COUNTTABLE
+	</select>
+	
+	<!-- owner page count -->
+	<select id="getOwnerTotalCount" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM (SELECT MEMBER_LIST.*
+			  FROM (<include refid="listUserCommon"/>) MEMBER_LIST
+			  WHERE MEMBER_ROLE = 'owner'
+		) COUNTTABLE
+	</select>
+	
+	<select id="getActivityScoreTotalCount" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM (SELECT MEMBER.MEMBER_ID, ACCUMULATE_TYPE, ACCUMULATE_SCORE, ACCUMULATE_DATE
+			  FROM zzupzzup.ACTIVITY_SCORE, zzupzzup.MEMBER
+			  WHERE zzupzzup.ACTIVITY_SCORE.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID AND zzupzzup.MEMBER.MEMBER_ID = #{memberId}
+		) COUNTTABLE
 	</select>
 	
 </mapper>

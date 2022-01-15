@@ -10,9 +10,9 @@ public interface MemberDAO {
 
 	public int addMember(Member member) throws Exception;
 	
-	//public void login() throws Exception;
+//	public void login() throws Exception;
 	
-	public void kakaoLogin() throws Exception;
+//	public void kakaoLogin() throws Exception;
 	
 	public void naverLogin() throws Exception;
 	
@@ -34,5 +34,9 @@ public interface MemberDAO {
 	
 	public int updateMannerScore(String memberId, int accumulScore) throws Exception;
 	
-	public int getTotalCount(Search search) throws Exception;
+	public int getUserTotalCount(Map<String, Object> map) throws Exception;
+	
+	public int getOwnerTotalCount(Map<String, Object> map) throws Exception;
+	
+	public int getActivityScoreTotalCount(Map<String, Object> map) throws Exception;
 }

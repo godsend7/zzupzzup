@@ -376,7 +376,7 @@ public class CommonUtil {
         newFileName = newFileName + "_" + originName;
         
         if (newFileName.length() > 50) {
-			newFileName = null2str(newFileName.substring(0,46));
+			newFileName = null2str(newFileName.substring(0,40));
 		}
        
         //newFileName + 확장자 출력
