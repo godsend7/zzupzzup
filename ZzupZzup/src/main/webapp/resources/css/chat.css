@@ -19,8 +19,6 @@
 
 /* listChat */
 #listChat .thumb-list .card-body h5 { height: 25px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
-#listChat .alert { display: none; position: fixed; top: 50%; left: 50%; margin-left: -175px; margin-top:-25px; }
-#listChat .alert .close { padding: 0 20px; height: 100%; box-shadow: none; }
 
 /* addChatView */
 #addChatView .row.gtr-uniform { margin-top: 0px; }
