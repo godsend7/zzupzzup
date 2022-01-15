@@ -84,19 +84,17 @@
 				var searchKeyword = $("#restaurantName").val();
 				searchKeyword = escape(encodeURIComponent(searchKeyword));
 				$.ajax({
-					url:"/map/json/listRestaurantName",
+					url : "/chat/json/listRestaurantAutocomplete/searchKeyword="
+							+ searchKeyword,
 					method : "GET",
 					dataType : "json",
 					headers : {
 						"Accept" : "application/json",
-						"Content-Type" : "application/json"
-					},
-					data : {
-						"keyWord" : request.term
+						"contentType" : "application/json; charset=utf-8"
 					},
 					success : function(JSONData) {
 
-						if (JSONData == null || JSONData == undefined || JSONData == "" || JSONData.length == 0) {
+						if (JSONData.list == null || JSONData.list == undefined || JSONData.list == "" || JSONData.list.length == 0) {
 							//alert("자료가 없음");
 							$(".find-restaurant-txt").text("");
 							$(".find-restaurant-txt").text("선택할 수 있는 음식점이 없습니다.");
@@ -104,7 +102,7 @@
 							$(".find-restaurant-txt").text("");
 							//console.log(JSONData);
 							response(
-								$.map(JSONData, function(item) {
+								$.map(JSONData.list, function(item) {
 									autoResArr = {
 										"restaurantNo" : item.restaurantNo,
 										"restaurantName" : item.restaurantName,
@@ -554,7 +552,7 @@
 							<div class="row gtr-uniform">
 								<!-- Break -->
 								<div class="col-md-8">
-									<label for="fileDragInput">채팅방 대표 이미지</label>
+									<label for="">채팅방 대표 이미지</label>
 									<div class="file-drag-area">
 										<span class="file-drag-btn">파일 선택</span> <span
 											class="file-drag-msg">파일을 여기로 드래그 하거나 선택하세요.</span> <input

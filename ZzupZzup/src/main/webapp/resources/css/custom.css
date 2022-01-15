@@ -314,6 +314,8 @@ textarea:disabled { background-color: rgba(0,0,0,0.1); }
 .card .card-img { height: 225px; overflow:hidden; }
 .card .card-img img { width: 100%; }
 .thumb-more { font-size: 25px; }
+.thumb-list-alert.alert { display: none; position: fixed; top: 50%; left: 50%; margin-left: -175px; margin-top:-25px; }
+.thumb-list-alert.alert .close { padding: 0 20px; height: 100%; box-shadow: none; }
 
 /* pagination */
 .pagination { justify-content: center; align-items: center; }

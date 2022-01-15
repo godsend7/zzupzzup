@@ -2,10 +2,10 @@
 
 .search-box { margin-bottom: 20px; }
 .search-box .jumbotron { padding: 2rem; }
-.search-box .search-btn { padding: 0 10px; line-height: 30px; height: 30px; position: absolute; top: 50%; right: 10px; margin-top: -5px; }
+.search-box .search-btn { padding: 0 15px; line-height: 40px; height: 40px; margin-left: -40px; }
 .search-box .search-btn:before { margin-right: 0; }
 
-.chatting .card-head { position: absolute; top: 0; left: 0; width: 100%; padding: 5px 10px; }
+.chatting .card-head { position: absolute; top: 0; left: 0; width: 100%; padding: 9px 10px; }
 .chatting .card-head .chat-no { }
 .chatting .card-head .chat-state { margin-left: auto; }
 .chatting .card-body { position: relative; }
@@ -19,8 +19,6 @@
 
 /* listChat */
 #listChat .thumb-list .card-body h5 { height: 25px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
-#listChat .alert { display: none; position: fixed; top: 50%; left: 50%; margin-left: -175px; margin-top:-25px; }
-#listChat .alert .close { padding: 0 20px; height: 100%; box-shadow: none; }
 
 /* addChatView */
 #addChatView .row.gtr-uniform { margin-top: 0px; }
