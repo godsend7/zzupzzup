@@ -646,7 +646,7 @@
 									</div>
 									<div class="modal-body">
 										<p>예약을 진행하시겠습니까?</p>
-										<span>모임 참여 유저 </span>
+										<span>모임에 참여된 유저 닉네임</span>
 										<ul class="chat-member-list bg-light p-2 rounded">
 										</ul>
 									</div>

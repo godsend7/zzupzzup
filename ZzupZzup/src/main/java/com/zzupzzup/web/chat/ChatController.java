@@ -99,6 +99,7 @@ public class ChatController {
 		
 		System.out.println("/chat/listChat : GET / POST");
 		System.out.println("/chat/listChat page : " + request.getParameter("page"));
+		System.out.println("/chat/listChat searchSort : " + search.getSearchSort());
 		
 		if(search.getCurrentPage() == 0 ){
 			search.setCurrentPage(1);

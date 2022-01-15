@@ -179,7 +179,7 @@ $(function() {
 				}
 				displayValueFt += "<input type='button' class='button small secondary' data-dismiss='modal' value='닫기' />";
 				if($('#listChat').length && JSONData.chatState == 1 && isForbidden == false && "${member.memberRole}" != "admin"){
-					displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small primary' value='입장하기'>"
+					displayValueFt += "<input type='button' data-target="+JSONData.chatNo+" class='button small success' value='입장하기'>"
 				}
 				$(".get-chat-con").html(displayValueBd);
 				$("#getChatModal .modal-footer").html(displayValueFt);
