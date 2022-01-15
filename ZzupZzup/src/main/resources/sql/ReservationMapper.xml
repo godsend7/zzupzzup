@@ -135,18 +135,18 @@
 		</choose>	
 	 </select>
 	 
-	 <!-- =========유저,업주하는중======== -->
+	 <!-- =========업주하는중======== -->
 	 <select id="listMyReservation"	parameterType="map"	resultMap="reservationSelectMap">
-		
-		select *
-			 from reservation re 
-			 Inner Join ( select rt.restaurant_no
-			from restaurant rt, member m
-			where rt.member_id = m.member_id And m.member_id = #{member.memberId}) as tt on (re.restaurant_no = tt.restaurant_no)
-			Inner Join (select order_count, menu_title, reservation_no from reservation_order) AS ro ON (re.reservation_no = ro.reservation_no)<!-- 원랜 없었는데 메뉴랑 수량 가져오려고 추가함 -->
-			Inner Join (Select member_id, nickname from member) as rm on (re.booker_id = rm.member_id)
-		
-			ORDER BY  re.reservation_no DESC LIMIT #{search.startRowNum}, #{search.pageSize}		
+	 
+	 	select *
+		FROM ( select reser.reservation_no, reser.reservation_number, reser.chat_no, reser.restaurant_no, reser.plan_date, reser.plan_time, reser.fixed_date, reser.pay_option, reser.reservation_status
+		FROM reservation reser Inner Join (select restaurant_no from restaurant where member_id = ' #{member.memberId}') as et on (reser.restaurant_no = et.restaurant_no)
+        ORDER BY RESERVATION_NO DESC LIMIT #{search.startRowNum}, #{search.pageSize}) as r
+        LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
+						FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)
+			            WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)
+		LEFT OUTER JOIN (select menu_title, order_count, reservation_no from reservation_order) AS ro ON (r.reservation_no = ro.reservation_no)		
+	 		
 	 </select>
 	
 	<!-- =========유저,업주======== -->
