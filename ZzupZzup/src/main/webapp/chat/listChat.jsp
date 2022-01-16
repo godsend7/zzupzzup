@@ -94,7 +94,7 @@
 							}
 							
 							dom += '<div class="col-md-6">'
-								+'<div class="card mb-4 shadow-sm chat-state'+item.chatState+'">'
+								+'<div class="card mb-4 shadow chat-state'+item.chatState+'">'
 								+'<div class="card-head d-flex">'
 								+'<span class="badge badge-secondary chat-no mr-2">'+item.chatNo+'</span>';
 								if(item.chatLeaderId.memberId == "${member.memberId}"){
@@ -179,7 +179,7 @@
 											isChatMember = true;
 										}
 										if("${member.memberId}" == itemmm.member.memberId && item.chatState == 4 && itemmm.inOutCheck == true && itemmm.readyCheck == true && item.chatMember.length >= 1){
-											dom += '<a href="/chat/json/listReadyCheckMember/chatNo='+item.chatNo+'" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a>';
+											dom += '<a href="/chat/json/listReadyCheckMember/chatNo='+item.chatNo+'" class="button small info" data-toggle="modal" data-target="#chatRatingModal">평가하기</a>';
 										}
 									});
 									if(isChatMember == false){
@@ -623,7 +623,7 @@
 										</c:if>
 										<c:if test="${not showStatus}">
 										<div class="col-md-6">
-											<div class="card mb-4 shadow-sm chat-state${chat.chatState}">
+											<div class="card mb-4 shadow chat-state${chat.chatState}">
 												<div class="card-head d-flex">
 													<span class="badge badge-secondary chat-no mr-2">${chat.chatNo }</span>
 													<c:if test="${chat.chatLeaderId.memberId == member.memberId }">
@@ -711,7 +711,7 @@
 																		<c:set var="isChatMember" value="true" />
 																	</c:if>
 																	<c:if test="${member.memberId == chatMember.member.memberId && chat.chatState == 4 && chatMember.inOutCheck == true && chatMember.readyCheck == true && chatMemCnt > 1}">
-																	<a href="/chat/json/listReadyCheckMember/chatNo=${chat.chatNo}" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a> 
+																	<a href="/chat/json/listReadyCheckMember/chatNo=${chat.chatNo}" class="button small info" data-toggle="modal" data-target="#chatRatingModal">평가하기</a> 
 																	</c:if>
 																</c:forEach>
 																<c:if test="${isChatMember eq 'false' }">

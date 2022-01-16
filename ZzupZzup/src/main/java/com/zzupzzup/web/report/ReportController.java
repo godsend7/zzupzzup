@@ -47,21 +47,40 @@ public class ReportController {
 		System.out.println(this.getClass());
 	}
 
+//	@RequestMapping(value="addReport", method=RequestMethod.POST)
+//	public String addReport(@ModelAttribute("report") Report report) throws Exception {
+//		
+//		System.out.println("report/addReport : POST");
+//		
+//		int result = reportService.addReport(report);
+//		
+//		if (report.getReportCategory() == 5 && result == 1) {
+//			System.out.println("restaurant Report insert success");
+//			//리뷰 작성 성공 시 활동점수 추가 
+//			memberService.addActivityScore(report.getMemberId(), 4, 5); //리뷰 작성 시 5
+//			memberService.calculateActivityScore(report.getMemberId());
+//		}
+//		
+//		return "redirect:/report/listReport?reportCategory="+report.getReportCategory();
+//	}
+	
 	@RequestMapping(value="addReport", method=RequestMethod.POST)
-	public String addReport(@ModelAttribute("report") Report report) throws Exception {
+	@ResponseBody
+	public int addReport(@RequestBody Report report) throws Exception {
 		
 		System.out.println("report/addReport : POST");
+		System.out.println(report);
 		
 		int result = reportService.addReport(report);
 		
 		if (report.getReportCategory() == 5 && result == 1) {
 			System.out.println("restaurant Report insert success");
-			//리뷰 작성 성공 시 활동점수 추가 
-			memberService.addActivityScore(report.getMemberId(), 4, 5); //리뷰 작성 시 5
+			//음식점 제보 성공 시 활동점수 추가 
+			memberService.addActivityScore(report.getMemberId(), 4, 5); //음식점 제보 시 4
 			memberService.calculateActivityScore(report.getMemberId());
 		}
 		
-		return "redirect:/report/listReport?reportCategory="+report.getReportCategory();
+		return result;
 	}
 	
 	@RequestMapping("listReport")
