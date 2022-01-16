@@ -25,74 +25,79 @@
 	var checkPhoneFlag;
 	var checkCertificatedNumFlag;
 	//인증번호 전역변수 선언
-	var globalVariable;
-	
-
-	function fncCheckUpdateForm() {
-		//전화번호가 비었을 때
-		var regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
-		var phoneNum = $("#memberPhone1").val()+"-"+$("#memberPhone2").val()+"-"+$("#memberPhone3").val();
-		
-		if ($("#memberPhone1").val() != "" && $("#memberPhone2").val() == "" && $("#memberPhone3").val() == "") {
-			$("#checkPhoneNumMsg").text("전화번호를 입력해주세요.");
-			checkPhoneFlag = false;
-		} else if (!regPhone.test(phoneNum)) {
-			$("#checkPhoneNumMsg").text("전화번호 형식에 맞춰 다시 입력해주세요.");	//전화번호 형식 확인
-			checkPhoneFlag = false;
-		} else {
-			$("#checkPhoneNumMsg").text("");
-			checkPhoneFlag = true;
-		}
-		
-		//비밀번호 일치 확인
-		var pwd = $("#password").val();
-		var checkPwd = $("#checkPassword").val();
-
-		var pattern1 = /[0-9]/;
-		var pattern2 = /[a-zA-Z]/i;
-		
-		if (pwd == "" || pwd == null) {	//비밀번호가 비었을 때
-			$("#checkPwdMsg").text("비밀번호를 입력해주세요.");
-			checkPwdFlag = false;
-		} else {
-			if ( ! pattern1.test(pwd) || ! pattern2.test(pwd) || pwd.length < 8) {
-				$("#checkPwdMsg").text("비밀번호 형식에 맞춰 다시 입력해주세요.");	//비밀번호 형식 확인(알파벳 대소문자, 숫자, 특수문자)
-				checkPwdFlag = false;
-			} else {
-				$("#checkPwdMsg").text("");
-				if (pwd != checkPwd) {
-					$("#checkSamePwdMsg").text("비밀번호가 일치하지 않습니다.");
-					checkPwdFlag = false;
-					checkSamePwdFlag = false;
-				} else {
-					$("#checkSamePwdMsg").text("");
-					checkPwdFlag = true;
-					checkSamePwdFlag = true;
-				}
-			}
-		}
-		
-		//인증번호 일치 확인
-		var certificatedNum = globalVariable;
-		var inputCertificatedNum = $("#certificatedNum").val();
-		
-		if (certificatedNum != inputCertificatedNum
-				&& inputCertificatedNum.length != 6) {
-			$("#checkCertificatedNumMsg").text("인증번호가 일치하지 않습니다. 다시 입력해주세요.");
-			checkCertificatedNumFlag = false;
-		} else if(certificatedNum == inputCertificatedNum
-				&& inputCertificatedNum.length == 6) {
-			$("#checkCertificatedNumMsg").text("");
-			checkCertificatedNumFlag = true;
-		}
-	}
+	var certificatedNumG;
 	
 	$(function() {
 		console.log("updateMemberView.jsp");
 		
-		$("#updateMember-complete").keyup(function() {
-			fncCheckUpdateForm();
-		})
+		//비밀번호 유효성 체크
+		$("#password").keyup(function() {
+			var pwd = $("#password").val();
+
+			var pattern1 = /[0-9]/;
+			var pattern2 = /[a-zA-Z]/i;
+			
+			if (pwd == "" || pwd == null) {	//비밀번호가 비었을 때
+				$("#checkPwdMsg").text("비밀번호를 입력해주세요.");
+				checkPwdFlag = false;
+			} else {
+				if ( ! pattern1.test(pwd) || ! pattern2.test(pwd) || pwd.length < 8) {
+					$("#checkPwdMsg").text("비밀번호 형식에 맞춰 다시 입력해주세요.");	//비밀번호 형식 확인(알파벳 대소문자, 숫자, 특수문자)
+					checkPwdFlag = false;
+				} else {
+					$("#checkPwdMsg").text("");
+					checkPwdFlag = true;
+				}
+			}
+		});
+		
+		//비밀번호 일치 여부 체크
+		$("#checkPassword").keyup(function() {
+			var pwd = $("#password").val();
+			var checkPwd = $("#checkPassword").val();
+
+			if (pwd != checkPwd) {
+				$("#checkSamePwdMsg").text("비밀번호가 일치하지 않습니다.");
+				checkSamePwdFlag = false;
+			} else {
+				$("#checkSamePwdMsg").text("");
+				checkSamePwdFlag = true;
+			}
+		});
+		
+		//전화번호 유효성 체크
+		$("#memberPhone1, #memberPhone2, #memberPhone3").keyup(function() {
+			var phoneNum = $("#memberPhone1").val()+"-"+$("#memberPhone2").val()+"-"+$("#memberPhone3").val();
+			var regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+			
+			if ($("#memberPhone1").val() != "" && $("#memberPhone2").val() == "" && $("#memberPhone3").val() == "") {
+				$("#checkPhoneNumMsg").text("전화번호를 입력해주세요.");
+				checkPhoneFlag = false;
+			} else if (!regPhone.test(phoneNum)) {
+				$("#checkPhoneNumMsg").text("전화번호 형식에 맞춰 다시 입력해주세요.");	//전화번호 형식 확인
+				checkPhoneFlag = false;
+			} else {
+				$("#checkPhoneNumMsg").text("");
+				checkPhoneFlag = true;
+			}
+		});
+		
+		//인증번호 일치 여부 체크
+		$("#certificatedNum").keyup(function() {
+			console.log(certificatedNumG);
+			var certificatedNum = certificatedNumG;
+			var inputCertificatedNum = $("#certificatedNum").val();
+			
+			if (certificatedNum != inputCertificatedNum
+					&& inputCertificatedNum.length != 6) {
+				$("#checkCertificatedNumMsg").text("인증번호가 일치하지 않습니다. 다시 입력해주세요.");
+				checkCertificatedNumFlag = false;
+			} else if(certificatedNum == inputCertificatedNum
+					&& inputCertificatedNum.length == 6) {
+				$("#checkCertificatedNumMsg").text("");
+				checkCertificatedNumFlag = true;
+			}
+		});
 		
 		$("#updateMember-submit").on("click", function() {
 			//location.href = "/member/updateMember";
@@ -106,20 +111,21 @@
 			if("${sessionScope.member.memberRole}" != "admin") {
 				if("${sessionScope.member.loginType}" == 1) {
 					if(checkPwdFlag && checkSamePwdFlag && checkPhoneFlag && checkCertificatedNumFlag) {
-						$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember/${member.memberRole}").submit();
+						$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember").submit();
 					} else {
 						alert("누락된 항목 확인 후 다시 시도해주세요.");
+						alert("pwd : "+checkPwdFlag+", "+"same pwd : "+checkSamePwdFlag+", "+"phone : "+checkPhoneFlag+", "+"certificatedNum : "+checkCertificatedNumFlag);
 					}
 				} else {
 					if(checkPhoneFlag && checkCertificatedNumFlag) {
-						$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember/${member.memberRole}").submit();
+						$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember").submit();
 					} else {
 						alert("누락된 항목 확인 후 다시 시도해주세요.");
 					}
 				}
 				
 			} else {
-				$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember/${member.memberRole}").submit();
+				$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember").submit();
 			}
 			
 		})
@@ -142,7 +148,7 @@
 				},
 				success : function(result) {
 					alert("인증번호가 발송되었습니다.");
-					globalVariable = result;
+					certificatedNumG = result;
 				}
 			})
 		});
@@ -266,6 +272,7 @@
 												<!-- 왜 선 안 그어지지? 이거 수정할 예정 -->
 												<div class="row col-md-12">
 													<div class="row col-md-12">
+														<hr class="col-md-12"/>
 														<div class="col-md-6">
 															<label for="memberPhone">전화번호</label>
 															<input type="text" id="memberPhone1" name="memberPhone1" value="${member.memberPhone.substring(0, 3)}" maxlength="3"/>
@@ -281,20 +288,23 @@
 															<input type="text" id="certificatedNum" maxlength="6"/>
 															<span id="checkCertificatedNumMsg" style="color: red; font-weight: bold"></span>
 														</div>
+														<br/>
 													</div>
-													<div class="col-md-6">
-														<label for="password">비밀번호</label> <input type="password"
-															class="form-control" id="password" name="password"
-															minlength="8" maxlength="15"
-															placeholder="8-15자 이내로 입력해주세요." required>
-														<span id="checkPwdMsg" style="color: red; font-weight: bold"></span>
-													</div>
-													<div class="col-md-6">
-														<label for="checkPassword">비밀번호 확인</label> <input
-															type="password" class="form-control" id="checkPassword"
-															minlength="8" maxlength="15"
-															placeholder="비밀번호를 다시 입력해주세요." required>
-														<span id="checkSamePwdMsg" style="color: red; font-weight: bold"></span>
+													<div class="row col-md-12">
+														<div class="col-md-6">
+															<label for="password">비밀번호</label> <input type="password"
+																class="form-control" id="password" name="password"
+																minlength="8" maxlength="15"
+																placeholder="8-15자 이내로 입력해주세요." required>
+															<span id="checkPwdMsg" style="color: red; font-weight: bold"></span>
+														</div>
+														<div class="col-md-6">
+															<label for="checkPassword">비밀번호 확인</label> <input
+																type="password" class="form-control" id="checkPassword"
+																minlength="8" maxlength="15"
+																placeholder="비밀번호를 다시 입력해주세요." required>
+															<span id="checkSamePwdMsg" style="color: red; font-weight: bold"></span>
+														</div>
 													</div>
 												</div>
 											</c:if>
@@ -574,21 +584,23 @@
 											</div>
 											<br/>
 											<div class="form-row col-md-12">
-												<div class="col-md-6">
-													<label for="blacklistDate">블랙리스트</label>
-													<c:if test="${! empty member.blacklistDate}">
-														<input type="radio" class="custom-control-input" id="checkBlacklist1" name="regBlacklist" value="true" checked> 
-														<label for="checkBlacklist1">블랙리스트 등록</label>
-														<input type="radio" class="custom-control-input" id="checkBlacklist0" name="regBlacklist" value="false"> 
-														<label for="checkBlacklist0">블랙리스트 해제</label>
-													</c:if>
-													<c:if test="${empty member.blacklistDate}">
-														<input type="radio" class="custom-control-input" id="checkBlacklist1" name="regBlacklist" value="true"> 
-														<label for="checkBlacklist1">블랙리스트 등록</label>
-														<input type="radio" class="custom-control-input" id="checkBlacklist0" name="regBlacklist" value="false" checked> 
-														<label for="checkBlacklist0">블랙리스트 해제</label>
-													</c:if>
-												</div>
+												<c:if test="${member.memberRole == 'user'}">
+													<div class="col-md-6">
+														<label for="blacklistDate">블랙리스트</label>
+														<c:if test="${! empty member.blacklistDate}">
+															<input type="radio" class="custom-control-input" id="checkBlacklist1" name="regBlacklist" value="true" checked> 
+															<label for="checkBlacklist1">블랙리스트 등록</label>
+															<input type="radio" class="custom-control-input" id="checkBlacklist0" name="regBlacklist" value="false"> 
+															<label for="checkBlacklist0">블랙리스트 해제</label>
+														</c:if>
+														<c:if test="${empty member.blacklistDate}">
+															<input type="radio" class="custom-control-input" id="checkBlacklist1" name="regBlacklist" value="true"> 
+															<label for="checkBlacklist1">블랙리스트 등록</label>
+															<input type="radio" class="custom-control-input" id="checkBlacklist0" name="regBlacklist" value="false" checked> 
+															<label for="checkBlacklist0">블랙리스트 해제</label>
+														</c:if>
+													</div>
+												</c:if>
 												<!-- <div class="checkbox mb-12">
 													<input type="checkbox" class="custom-control-input" id="checkBlacklist" value="" style="float:right;"/> 
 													<label for="checkBlacklist">블랙리스트 설정/해제하기</label>
@@ -606,10 +618,10 @@
 												</div>
 											</div>
 										</c:if>
-										<hr class="my-4" />
+										<!-- <hr class="my-4" /> -->
 										<div align="center">
-											<input type="button" id="back" class="btn btn-primary" value="이전" />
-											<input type="button" id="updateMember-submit" class="btn btn-primary" value="수정" />
+											<input type="button" id="back" class="button secondary" value="이전" />
+											<input type="button" id="updateMember-submit" class="button primary" value="수정" />
 										</div>
 									</form>
 								</div>
