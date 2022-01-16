@@ -40,11 +40,11 @@ public class MemberDAOImpl implements MemberDAO{
 //		
 //	}
 
-	@Override
-	public void kakaoLogin() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void kakaoLogin() throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public void naverLogin() throws Exception {
@@ -127,9 +127,21 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 	
 	@Override
-	public int getTotalCount(Search search) throws Exception {
+	public int getUserTotalCount(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne("MemberMapper.getTotalCount", search);
+		return sqlSession.selectOne("MemberMapper.getUserTotalCount", map);
+	}
+	
+	@Override
+	public int getOwnerTotalCount(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("MemberMapper.getOwnerTotalCount", map);
+	}
+	
+	@Override
+	public int getActivityScoreTotalCount(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("MemberMapper.getActivityScoreTotalCount", map);
 	}
 
 }

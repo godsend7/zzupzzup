@@ -73,7 +73,7 @@
 			<ul>
 				<c:if test="${ empty member}">
 					<div style="text-align : center;">
-						<img src="/favicon.ico" width="150" height="150" />
+						<img src="/favicon.ico" width="150" height="150"/><br/>
 					</div>
 					<div style="text-align : center; color: hotpink;">
 						더 많은 서비스를 이용하시려면
