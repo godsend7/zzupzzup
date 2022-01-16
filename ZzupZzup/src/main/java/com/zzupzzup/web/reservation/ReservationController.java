@@ -84,8 +84,8 @@ public class ReservationController {
 		System.out.println("addReservation member::"+member);
 		System.out.println("addReservation reservation::"+reservation);
 		
-		//예약이 완료되면 채팅방 상태가 예약완료 상태가 된다.
-		chatService.updateChatState(chatNo, 4);
+		//예약이 완료되면 채팅방 상태가 인원확정 상태가 된다.
+		chatService.updateChatState(chatNo, 3);
 		
 		model.addAttribute("reservation", reservation);
 		
@@ -153,50 +153,7 @@ public class ReservationController {
 	}
 
 //==================================================================================================	
-	
-//	@RequestMapping(value="listReservation")
-//	public String listReservation(HttpServletRequest request, @ModelAttribute Search search, Model model, HttpSession session) throws Exception {
-//		
-//		System.out.println("/reservation/listReservation");
-//		
-//		String restaurantNo = request.getParameter("restaurantNo");
-//		Member member = (Member) session.getAttribute("member");
-//		
-//		String memberId = null;
-//		
-//		
-//		if (search.getCurrentPage() == 0) {
-//			search.setCurrentPage(1);
-//		}
-//		
-//		System.out.println(search.getCurrentPage() + ":: currentPage");
-//		
-//		search.setPageSize(pageSize);
-//		
-//		Map<String, Object> map = null;
-//		
-//		if (member != null && member.getMemberRole().equals("admin")) {
-//			map = reservationService.listReservation(search, restaurantNo);
-//			System.out.println("listReservation admin");
-//		} else {
-//			map = reservationService.listMyReservation(search, member, restaurantNo);
-//			System.out.println("listMyReservation");
-//			System.out.println("::listReservation memberId"+member);
-//			System.out.println("::listReservation restaurantNo::"+restaurantNo);
-//		}
-//		
-//		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
-//		
-//		model.addAttribute("list", map.get("list"));
-//		model.addAttribute("search", search);
-//		model.addAttribute("totalCount", map.get("totalCount"));
-//		model.addAttribute("avgTotalScope", map.get("avgTotalScope"));
-//		model.addAttribute("resultPage", resultPage);
-//		
-//		return "forward:/reservation/listReservation.jsp";	
-//	}
-	
-	/////관리자일때
+	/////유저, 관리자일때
 	
 	@RequestMapping(value="listReservation")
 	public String listReservation(HttpServletRequest request, @ModelAttribute Search search, Model model, HttpSession session) throws Exception {
@@ -293,9 +250,11 @@ public class ReservationController {
 			
 			for(Reservation r : list) {
 				restaurant = restaurantService.getRestaurant(r.getRestaurant().getRestaurantNo());
+				member = memberService.getMember(member);
 				memberChat = memberService.getMember(r.getMember());
 				chat = chatService.getChat(r.getChat().getChatNo());
 				chat.setChatLeaderId(memberChat);
+				r.setMember(member);
 				r.setRestaurant(restaurant);
 				r.setChat(chat);
 			}	

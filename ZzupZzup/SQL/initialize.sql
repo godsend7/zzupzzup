@@ -4,7 +4,6 @@ DROP TABLE IF EXISTS `member`;
 DROP TABLE IF EXISTS `activity_score`;
 DROP TABLE IF EXISTS `rating`;
 DROP TABLE IF EXISTS `restaurant_time`;
-DROP TABLE IF EXISTS `notice`;
 DROP TABLE IF EXISTS `menu`;
 DROP TABLE IF EXISTS `community`;
 DROP TABLE IF EXISTS `restaurant`;
@@ -14,7 +13,6 @@ DROP TABLE IF EXISTS `chat`;
 DROP TABLE IF EXISTS `chat_member`;
 DROP TABLE IF EXISTS `reservation`;
 DROP TABLE IF EXISTS `reservation_order`;
-DROP TABLE IF EXISTS `chat_log`;
 DROP TABLE IF EXISTS `report`;
 DROP TABLE IF EXISTS `hashtag_log`;
 DROP TABLE IF EXISTS `mark`;
@@ -212,18 +210,6 @@ CREATE TABLE `reservation_order` (
     `menu_price` INT NOT NULL,
     PRIMARY KEY (`order_no`),
     FOREIGN KEY (`reservation_no`) REFERENCES `reservation`(`reservation_no`)
-);
-
-CREATE TABLE `notice` (
-    `post_no` INT NOT NULL AUTO_INCREMENT,
-    `member_id` VARCHAR(50) NOT NULL,
-    `post_title` VARCHAR(50) NOT NULL,
-    `post_text` VARCHAR(1000) NOT NULL,
-    `post_reg_date` DATETIME NOT NULL DEFAULT NOW(),
-    `post_category` INT NOT NULL,
-    `post_member_role` VARCHAR(5) NOT NULL DEFAULT 'user',
-    PRIMARY KEY (`post_no`),
-    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
 );
 
 CREATE TABLE `review` (

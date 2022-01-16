@@ -1,19 +1,8 @@
 package com.zzupzzup.service.member.impl;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Random;
 
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -191,7 +180,7 @@ public class MemberServiceImpl implements MemberService{
 		map.put("search", search);
 		map.put("member", member);
 		map.put("listUser", memberDao.listUser(map));
-		map.put("totalCount", memberDao.getTotalCount(search));
+		map.put("totalCount", memberDao.getUserTotalCount(map));
 		
 		return map;
 	}
@@ -203,7 +192,7 @@ public class MemberServiceImpl implements MemberService{
 		map.put("search", search);
 		map.put("member", member);
 		map.put("listOwner", memberDao.listOwner(map));
-		map.put("totalCount", memberDao.getTotalCount(search));
+		map.put("totalCount", memberDao.getOwnerTotalCount(map));
 		
 		return map;
 	}
@@ -229,7 +218,7 @@ public class MemberServiceImpl implements MemberService{
 		map.put("search", search);
 		map.put("memberId", memberId);
 		map.put("listMyActivityScore", memberDao.listActivityScore(map));
-		map.put("totalCount", memberDao.getTotalCount(search));
+		map.put("totalCount", memberDao.getActivityScoreTotalCount(map));
 		return map;
 	}
 

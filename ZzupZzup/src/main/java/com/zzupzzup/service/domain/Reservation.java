@@ -18,8 +18,9 @@ public class Reservation {
 	private String payMethod; //api 환불
 	private String planTime;
 	private Date planDate;
+	private String planDateString; //planDate String
 	private String fixedTime;
-	private Timestamp fixedDate;
+	private Date fixedDate;
 	private int memberCount;
 	private int reservationStatus;
 	private boolean fixedStatus;
@@ -111,6 +112,22 @@ public class Reservation {
 
 	public void setPlanDate(Date planDate) {
 		this.planDate = planDate;
+		
+		if(planDate !=null) {
+			// JSON ==> Domain Object  Binding을 위해 추가된 부분
+			this.setPlanDateString( planDate.toString().split("-")[0]
+													+"-"+ planDate.toString().split("-")[1]
+													+ "-" +planDate.toString().split("-")[2] );
+		}
+		
+	}
+	
+	public String getPlanDateString() {
+		return planDateString;
+	}
+
+	public void setPlanDateString(String planDateString) {
+		this.planDateString = planDateString;
 	}
 
 	public String getFixedTime() {
@@ -121,11 +138,11 @@ public class Reservation {
 		this.fixedTime = fixedTime;
 	}
 
-	public Timestamp getFixedDate() {
+	public Date getFixedDate() {
 		return fixedDate;
 	}
 
-	public void setFixedDate(Timestamp fixedDate) {
+	public void setFixedDate(Date fixedDate) {
 		this.fixedDate = fixedDate;
 	}
 

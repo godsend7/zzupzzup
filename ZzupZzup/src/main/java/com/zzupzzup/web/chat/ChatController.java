@@ -95,10 +95,11 @@ public class ChatController {
 	}
 	
 	@RequestMapping(value="listChat")
-	public String listChat( @ModelAttribute("search") Search search, Model model, HttpServletRequest request, HttpSession session) throws Exception {
+	public String listChat( @ModelAttribute("search") Search search, Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 		
 		System.out.println("/chat/listChat : GET / POST");
 		System.out.println("/chat/listChat page : " + request.getParameter("page"));
+		System.out.println("/chat/listChat searchSort : " + search.getSearchSort());
 		
 		if(search.getCurrentPage() == 0 ){
 			search.setCurrentPage(1);

@@ -397,7 +397,7 @@
 								<div class="col-6 col-12-xsmall">
 									<label for="orderTotal">주문 메뉴 총 가격</label>
 									<div class="orderTotal"></div>
-									<p>${reservation.totalPrice}</p>
+									<p>${reservation.totalPrice} 원</p>
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
