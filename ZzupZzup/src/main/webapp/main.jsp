@@ -175,8 +175,8 @@
 	.filter-group .speech-bubble {
 	/*   border: 1px solid gray; */
 	  border-radius: 10px;
-	  width: 200px;
-	  height: 350px;
+	  width: auto;
+	  height: auto;
 	  display: flex;
 	  flex-direction: column;
 	  position: relative;
@@ -190,6 +190,7 @@
 	
 	.filter-group .speech-bubble p {
 	  z-index: 10;
+	  text-align: left;
 	}
 	
 	.filter-group .speech-bubble::before {
@@ -239,6 +240,21 @@
 		display: none;
 	}
 	
+	/* .filter-group .speech-path {
+		overflow: auto;
+		width: 300px;
+		height: 400px;
+		background-color: white;
+		text-align: left;
+		padding: 15px;
+		margin-bottom: 25px;
+		right: 100px;
+		position: relative;
+	}
+	
+	.filter-group .speech-path  p {
+		font-size: 0.9em;
+	} */
 	
 </style>
 
@@ -270,6 +286,7 @@
 	
 	//길찾기 시 화면에 경로 표시
 	var polylinePath = new Array();
+	var pathInfo = new Array();
 	//길찾기 시작 정보
 	var startLocation = new Array();
 	//길찾기 도착 정보
@@ -368,14 +385,19 @@
 		
 		//filter function start
 		$(".filter-button").on("click", function() {
-			if($(".speech-bubble").hasClass("none") === true) { 
-				// class가 존재함 
-				$(".speech-bubble").removeClass("none");
-			} else { 
-				// class가 존재하지않음 
-				$(".speech-bubble").addClass("none");
+			if ($(".fa-map-marked-alt").hasClass("none") === true) {
+				if($(".speech-bubble").hasClass("none") === true) { 
+					// class가 존재함 
+					$(".speech-bubble").removeClass("none");
+				} else { 
+					// class가 존재하지않음 
+					$(".speech-bubble").addClass("none");
+				}
+			} else {
+				if (confirm("길찾기를 종료하시겠습니까?")) {
+					location.reload();
+				}
 			}
-
 		});
 		
 		//길찾기 종료
@@ -476,11 +498,6 @@
 	
 	//길찾기 ajax
 	function loadDirections() {
-		console.log(startLocation.latitude);
-		console.log(startLocation.longitude);
-		console.log(goalLocation.latitude);
-		console.log(goalLocation.longitude);
-		
 		$.ajax({
 			url : "/map/json/getDirections",
 			type : "POST",
@@ -492,17 +509,54 @@
 				goalLat: goalLocation.latitude,
 				goalLong: goalLocation.longitude
 			}), 
-			/* beforeSend : function (xhr) {
-				xhr.setRequestHeader("X-NCP-APIGW-API-KEY-ID" , "7gzdb36t5o");
-				xhr.setRequestHeader("X-NCP-APIGW-API-KEY", "mYUAOPlY0TCwBzBjBZhMfMCX7vKouQIWJJDG9kwL");
-			}, */
 			success : function(data, status) {
 				//alert(JSON.stringify(data.route.bbox));
 				//console.log(JSON.stringify(data.route.trafast[0].path));
-				getDirec();
+				
+				/* pathInfo.push(
+					{ instructions:"유턴", distance:258, duration:41461}
+				);
+				
+				pathInfo.push(
+					{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+				);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				getDirec(); */
 				if (data.code == 0) {
 					$.each (data.route.trafast[0].path, function(index, item){ 
 						polylinePath.push(new naver.maps.LatLng(item[1], item[0]));
+					});
+					
+					//instructions :: 경로 설명
+					//distance :: 해당 경로까지의 거리 meters (전 경로에서부터의)
+					//duration :: 해당 경로까지 걸리는 시간 milisecond(1/1000초) (전 경로에서부터의)
+					$.each (data.route.trafast[0].guide, function(index, item){
+						pathInfo.push(
+							{ instructions:item.instructions, distance:item.distance, duration:item.duration }
+						);
 					});
 					
 					getDirec();
@@ -548,13 +602,25 @@
 	        map: map
 		});
 		
-		var marker = new naver.maps.Marker({
+		var startMarker = new naver.maps.Marker({
+		    position: polylinePath[0], //마크 표시할 위치 배열의 시작 위치
+		    map: map
+		});
+		
+		var goalMarker = new naver.maps.Marker({
 		    position: polylinePath[polylinePath.length-1], //마크 표시할 위치 배열의 마지막 위치
 		    map: map
 		});
 		
 		//클릭 했을 때 띄어줄 정보 HTML
-		var infowindow = new naver.maps.InfoWindow({
+		var startInfowindow = new naver.maps.InfoWindow({
+		    content: '<div style="padding:10px; width:280px;"><b>출발지<br>'+startLocation.restaurantName +'<br>'+startLocation.streetAddress,
+		    maxWidth: 300,
+		    borderColor: "#f56a6a",
+		    borderWidth: 5
+		});
+		
+		var goalInfowindow = new naver.maps.InfoWindow({
 		    content: '<div style="padding:10px; width:280px;"><b>목적지<br>'+goalLocation.restaurantName +'<br>'+goalLocation.streetAddress,
 		    maxWidth: 300,
 		    borderColor: "#f56a6a",
@@ -562,12 +628,55 @@
 		});
 		
 		//정보창 출력
-		infowindow.open(map, marker);
+		startInfowindow.open(map, startMarker);
+		goalInfowindow.open(map, goalMarker);
 		
 		dirCheck = true;
 		iconChange();
+		
+		//경로 안내 출력
+		getPathInfo();
 	}
 	
+	//길찾기 경로 안내 출력
+	function getPathInfo() {
+		
+		$(".speech-bubble").addClass('none');
+		console.log(pathInfo);
+		
+		for (var i = 0; i < pathInfo.length; i++) {
+			const hour = String(Math.floor((pathInfo[i].duration/ (1000 * 60 *60 )) % 24 )).padStart(2, "0"); // 시
+	        const minutes = String(Math.floor((pathInfo[i].duration  / (1000 * 60 )) % 60 )).padStart(2, "0"); // 분
+	        const second = String(Math.floor((pathInfo[i].duration / 1000 ) % 60)).padStart(2, "0"); // 초
+			
+			var pInfo = "<p>" + pathInfo[i].distance + "m 앞, " + pathInfo[i].instructions + "<br>(약 ";
+			
+			if (hour != "00") {
+				pInfo += hour +"시간 ";
+			}
+			if (minutes != "00") {
+				pInfo += minutes +"분 ";
+			}
+			pInfo += second + "초 소요) </p>";
+			
+			$(".speech-path").append(pInfo);
+		}
+		$(".speech-path").css({
+			overflow:"auto",
+			width:"250px",
+			height:"400px",
+			backgroundColor:"white",
+			textAlign: "left",
+			padding: "15px",
+			marginBottom: "25px",
+			right: "100px",
+			position: "relative"
+		});
+		
+		$(".speech-path").children("p").css({
+		    fontSize: "0.9em"
+		});
+	}
 	
 	//경기도 맛집 api 화면에 표시
 	function loadGyeonggidoMap() {
@@ -609,8 +718,8 @@
 		});
 	}
 	
+	//DB에 등록된 음식점 화면에 표시
 	function loadRestaurantMap() {
-		
 		$.ajax(
 			{
 				url : "/map/json/listRestaurant",
@@ -925,6 +1034,8 @@
 								<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="reservationCheck"> 예약 가능 음식점</p>
 								<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="parkableCheck"> 주차 가능 음식점 </p>
 								<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="directionCheck" id="direction" data-toggle="modal" data-target="#directionModal" data-backdrop="static"> 길찾기 </p>
+							</div>
+							<div class="speech-path">
 							</div>
 							<div class="filter-button">
 								<i class="fas fa-list"></i>
