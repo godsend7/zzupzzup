@@ -60,7 +60,9 @@
 		showCollections();
 		
 		//==>접속시 접속 유저 정보를 노드서버로 보냄
-		socket.emit('new_user', memberInfo);
+		socket.emit('new_user', {
+			memberInfo
+		});
 		
 		//==>시스템 문구 출력되는 부분
 		socket.on('update', (data) => {
@@ -317,11 +319,12 @@
 						}
 						const chatLeaderClass = "${chat.chatLeaderId.memberId}" == item.member.memberId ? "chat-leader":"";
 						// 멤버들중 들어온 애들 루핑
-						const chatConnected = item.onConnected == true ? "connected" : ""; 
-						
+						const isConnected = item.onConnected == true ? "connected" : ""; 
+						const isReady = item.readyCheck == true ? "readyChk" : "";
+						console.log("isReady : " + isReady);
 						//이미지 경로 변경
-						/* dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+' '+chatConnected+'"><img src="/resources/images/common/'+mem_profile_img+'"><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>'; */
-						dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+' '+chatConnected+'"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
+						/* dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+' '+isConnected+'"><img src="/resources/images/common/'+mem_profile_img+'"><span class="ready_badge">&#10003;</span><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>'; */
+						dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+' '+isConnected+' '+isReady+'"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"><span class="ready_badge">&#10003;</span><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
 						
 					});
 					$userList.html(dom);
@@ -361,12 +364,17 @@
 						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="/resources/images/common/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
 					}); */
 					$.each(JSONData, function(key, value){
-						let timeStemp = new Date(value.regDate);
-						let newTime = timeFormatter(timeStemp);
-						let mem_profile_img = value.chatMemberImg;
-						mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img : "member/"+mem_profile_img;
-						const msgType = nickname == value.chatMemberName ? "sent" : "received";
-						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
+						console.log("VM"+value.msgType)
+						if(value.msgType == "system"){
+							dom += '<li class="system"><div class="chat-message">'+value.msg+'</div></li>';
+						}else{
+							let timeStemp = new Date(value.regDate);
+							let newTime = timeFormatter(timeStemp);
+							let mem_profile_img = value.chatMemberImg;
+							mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img : "member/"+mem_profile_img;
+							const msgType = nickname == value.chatMemberName ? "sent" : "received";
+							dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
+						}
 					});
 					$chatList.html(dom);
 					$displayContainer.scrollTop($chatList.height());
@@ -478,6 +486,10 @@
 					console.log("바꾸기 성공");
 					$("input[value='모임참여 체크하기']").val('모임참여 해제하기');
 					$('#chatReservationOkModal').modal('show');
+					socket.emit('ready_check_on', {
+						memberInfo
+					});
+					memList();
 				},
 				error : function(e) {
 					alert(e.responseText);
@@ -500,6 +512,10 @@
 					console.log("바꾸기 성공");
 					$("input[value='모임참여 해제하기']").val('모임참여 체크하기');
 					$('#chatReservationCancleModal').modal('show');
+					socket.emit('ready_check_off', {
+						memberInfo
+					});
+					memList();
 				},
 				error : function(e) {
 					alert(e.responseText);
@@ -782,11 +798,11 @@
 	             					<div class="input-container">
 	             						<textarea rows="2" class="chatting-input" placeholder="보낼 메세지 입력" wrap="off"></textarea>
 	             						<div class="upload-area d-inline-block position-relative mr-2">
-											<span class="upload-btn button info">이미지 보내기</span> <input
+											<span class="upload-btn button warning">이미지 보내기</span> <input
 											class="upload-input" type="file" id="fileDragInput" name="fileDragInput" >
 											<input type="hidden" id="chatUpload" name="chatUpload">
 										</div>
-	             						<input type="button" class="send-button warning" value="보내기" />
+	             						<input type="button" class="send-button info" value="메세지 보내기" />
 	             					</div>
 								</div>
 							</div>
