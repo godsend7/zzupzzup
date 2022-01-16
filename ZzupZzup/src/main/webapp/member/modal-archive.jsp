@@ -29,6 +29,71 @@
 	$(function() {
 		console.log("modal-archive.jsp");
 		
+		//enter key 눌렀을 때 login 넘기기
+		$("#memberId, #password").keyup(function(e) {
+			
+			if(e.keyCode == 13) {
+				var memberId = $("input[type=email]").val();
+				var password = $("input[type=password]").val();
+
+				console.log("memberId:" + memberId);
+				console.log("password:" + password);
+
+				$.ajax({
+					url : "/member/json/login",
+					method : "POST",
+					contentType : 'application/json',
+					dataType : "json",
+					data : JSON.stringify({
+						"memberId" : memberId,
+						"password" : password
+					}),
+					success : function(data) {
+						if (data != null) {
+							
+							if(data.eliminated && !data.recovered) {
+								alert("로그인 할 수 없습니다.");
+							} else if(data.regBlacklist) {
+								alert("블랙리스트로 등록된 계정입니다. 자세한 사항은 이메일(zzupzzup101@gmail.com)로 문의 바랍니다.");
+							} else if(data.recovered) {
+								var confirmRecovery = confirm("계정 복구를 진행하시겠습니까?")
+								$.ajax({
+									url : "/member/json/recoveryMember",
+									method : "POST",
+									contentType : 'application/json',
+									dataType : "json",
+									data : JSON.stringify({
+										"memberId" : memberId,
+										"password" : password,
+										"recovered" : confirmRecovery
+									}),
+									success : function(result) {
+										if(confirmRecovery) {
+											alert("계정 복구가 완료되었습니다.");
+											location.href = "/";
+										} else {
+											//alert("엥 그럼 왜 로그인 함?");
+											alert("계정 복구가 취소되었습니다.");
+										}
+									},
+									error : function(error) {
+										alert(JSON.stringify(error));
+									}
+								})
+							} else {
+								//main.jsp로 이동
+								location.href = "/";
+							}
+						}
+					},
+					error : function(error) {
+						alert("아이디 또는 비밀번호가 잘못 입력되었습니다. 다시 확인하여 주세요.");
+						//alert(JSON.stringify(error));
+					}
+				});
+			}
+		});
+		
 		//login type == 1
 		$("#login").on("click", function() {
 

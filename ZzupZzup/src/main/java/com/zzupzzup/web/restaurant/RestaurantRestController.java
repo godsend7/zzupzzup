@@ -3,6 +3,7 @@ package com.zzupzzup.web.restaurant;
 import java.io.File;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
+import com.zzupzzup.common.util.S3ImageUpload;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.restaurant.RestaurantService;
@@ -34,6 +36,8 @@ public class RestaurantRestController {
 	@Autowired
 	@Qualifier("restaurantServiceImpl")
 	private RestaurantService restaurantService;
+	
+	private S3ImageUpload s3ImageUpload;
 	
 	
 	///Constructor
@@ -68,47 +72,47 @@ public class RestaurantRestController {
 		
 	}
 	
-	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
-	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		System.out.println("/restaurant/json/addDragFile : POST");
-		
-		List<MultipartFile> fileList = multipartRequest.getFiles("uploadFile");
-		System.out.println("FILE LIST TO UPLOAD : " + fileList);
-		
-		List<String> resImg = new ArrayList<String>();
-		String filePath = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH);
-		System.out.println("FILE_PATH : " + filePath);
-		
-		for(MultipartFile mf : fileList) {
-			
-			if(!mf.getOriginalFilename().equals("")) {
-				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
-				System.out.println(":: 파일 사이즈 => " + mf.getSize());
-				
-				try {
-					String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
-					
-					File file = new File(filePath + "/" + fileName);
-					mf.transferTo(file);
-					
-					System.out.println(":: 저장할 이름 => " + fileName);
-					resImg.add(fileName);
-					
-					System.out.println("::: IMAGE UPLOAD SUCCESS :::");
-					
-				} catch (Exception e) {
-					System.out.println("::: IMAGE UPLOAD FAIL :::");
-					e.printStackTrace();
-				}
-				
-			}
-			
-		}
-		
-		return resImg;
-		
-	}
+//	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
+//	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
+//		
+//		System.out.println("/restaurant/json/addDragFile : POST");
+//		
+//		List<MultipartFile> fileList = multipartRequest.getFiles("uploadFile");
+//		System.out.println("FILE LIST TO UPLOAD : " + fileList);
+//		
+//		List<String> resImg = new ArrayList<String>();
+//		String filePath = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH);
+//		System.out.println("FILE_PATH : " + filePath);
+//		
+//		for(MultipartFile mf : fileList) {
+//			
+//			if(!mf.getOriginalFilename().equals("")) {
+//				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
+//				System.out.println(":: 파일 사이즈 => " + mf.getSize());
+//				
+//				try {
+//					String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
+//					
+//					File file = new File(filePath + "/" + fileName);
+//					mf.transferTo(file);
+//					
+//					System.out.println(":: 저장할 이름 => " + fileName);
+//					resImg.add(fileName);
+//					
+//					System.out.println("::: IMAGE UPLOAD SUCCESS :::");
+//					
+//				} catch (Exception e) {
+//					System.out.println("::: IMAGE UPLOAD FAIL :::");
+//					e.printStackTrace();
+//				}
+//				
+//			}
+//			
+//		}
+//		
+//		return resImg;
+//		
+//	}
 	
 	@RequestMapping(value = "json/checkCallDibs/{restaurantNo}", method = RequestMethod.GET)
 	public Restaurant checkCallDibs(@PathVariable("restaurantNo") int restaurantNo, HttpSession session) throws Exception {
@@ -143,48 +147,48 @@ public class RestaurantRestController {
 	}
 	
 	//AWS S3 Image Upload
-//	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
-//	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		
-//		System.out.println("/restaurant/json/addDragFile : POST");
-//		
-//		s3ImageUpload = new S3ImageUpload();
-//	
-//		List<MultipartFile> fileList =  multipartRequest.getFiles("uploadFile");
-//		System.out.println("FILE LIST TO UPLOAD : " + fileList);
-//		
-//		List<String> resImg = new ArrayList<String>();
-//	    Map<String, Object> map = new HashMap<String, Object>();
-//	    
-//	    for (MultipartFile mf : fileList) { 
-//
-//			if (!mf.getOriginalFilename().equals("")) {
-//				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
-//				System.out.println(":: 파일 사이즈 => " + mf.getSize());
-//	
-//				try {
-//					String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
-//					
-//					String s3Path = "restaurant/" + fileName;
-//					
-//					s3ImageUpload.uploadFile(mf, s3Path);
-//			
-//					System.out.println(":: 저장할 이름 => " + fileName);
-//					 
-//					resImg.add(fileName);
-//				
-//					System.out.println("::: IMAGE UPLOAD SUCCESS :::");
-//					
-//					//String test = s3ImageUpload.getFileURL(fileName);
-//					//System.out.println(test);
-//				} catch (Exception e) {
-//					System.out.println("::: IMAGE UPLOAD FAIL :::");
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//	     
-//	    return resImg;
-//	}
+	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
+	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		System.out.println("/restaurant/json/addDragFile : POST");
+		
+		s3ImageUpload = new S3ImageUpload();
+	
+		List<MultipartFile> fileList =  multipartRequest.getFiles("uploadFile");
+		System.out.println("FILE LIST TO UPLOAD : " + fileList);
+		
+		List<String> resImg = new ArrayList<String>();
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    
+	    for (MultipartFile mf : fileList) { 
+
+			if (!mf.getOriginalFilename().equals("")) {
+				System.out.println(":: 파일 이름 => " + mf.getOriginalFilename());
+				System.out.println(":: 파일 사이즈 => " + mf.getSize());
+	
+				try {
+					String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mf.getOriginalFilename());
+					
+					String s3Path = "restaurant/" + fileName;
+					
+					s3ImageUpload.uploadFile(mf, s3Path);
+			
+					System.out.println(":: 저장할 이름 => " + fileName);
+					 
+					resImg.add(fileName);
+				
+					System.out.println("::: IMAGE UPLOAD SUCCESS :::");
+					
+					//String test = s3ImageUpload.getFileURL(fileName);
+					//System.out.println(test);
+				} catch (Exception e) {
+					System.out.println("::: IMAGE UPLOAD FAIL :::");
+					e.printStackTrace();
+				}
+			}
+		}
+	     
+	    return resImg;
+	}
 
 }

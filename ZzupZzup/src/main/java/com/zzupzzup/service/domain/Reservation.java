@@ -18,8 +18,10 @@ public class Reservation {
 	private String payMethod; //api 환불
 	private String planTime;
 	private Date planDate;
+	private String planDateString; //planDate String
 	private String fixedTime;
 	private Timestamp fixedDate;
+	private String fixedDateString; //fixedDate String
 	private int memberCount;
 	private int reservationStatus;
 	private boolean fixedStatus;
@@ -111,22 +113,53 @@ public class Reservation {
 
 	public void setPlanDate(Date planDate) {
 		this.planDate = planDate;
+		
+		if(planDate !=null) {
+			// JSON ==> Domain Object  Binding을 위해 추가된 부분
+			this.setPlanDateString( planDate.toString().split("-")[0]
+													+"-"+ planDate.toString().split("-")[1]
+													+ "-" +planDate.toString().split("-")[2] );
+		}
+		
+	}
+	
+	public String getPlanDateString() {
+		return planDateString;
+	}
+
+	public void setPlanDateString(String planDateString) {
+		this.planDateString = planDateString;
 	}
 
 	public String getFixedTime() {
 		return fixedTime;
 	}
 
-	public void setFixedTime(String fixedTime) {
+	public void setFixedTime(String fixedTime) { 
 		this.fixedTime = fixedTime;
 	}
 
-	public Timestamp getFixedDate() {
+	public Timestamp getFixedDate() { //타임스탬프를 써야 시간까지 화면에 나온다.
 		return fixedDate;
 	}
 
 	public void setFixedDate(Timestamp fixedDate) {
 		this.fixedDate = fixedDate;
+		
+		if(fixedDate !=null) {
+			// JSON ==> Domain Object  Binding을 위해 추가된 부분
+			this.setFixedDateString( fixedDate.toString().split("-")[0]
+													+"-"+ fixedDate.toString().split("-")[1]
+													+ "-" +fixedDate.toString().split("-")[2] );
+		}
+	}
+	
+	public String getFixedDateString() {
+		return fixedDateString;
+	}
+
+	public void setFixedDateString(String fixedDateString) {
+		this.fixedDateString = fixedDateString;
 	}
 
 	public int getMemberCount() {

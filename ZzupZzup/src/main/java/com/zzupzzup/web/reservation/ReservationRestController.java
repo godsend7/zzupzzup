@@ -30,6 +30,8 @@ import com.siot.IamportRestClient.response.Payment;
 import com.zzupzzup.common.Page;
 import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
+import com.zzupzzup.service.chat.ChatService;
+import com.zzupzzup.service.domain.Chat;
 import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Reservation;
@@ -60,6 +62,10 @@ public class ReservationRestController {
 	private RestaurantService restaurantService;
 	
 	@Autowired
+	@Qualifier("chatServiceImpl")
+	private ChatService chatService;
+	
+	@Autowired
 	@Qualifier("memberServiceImpl")
 	private MemberService memberService;
 	
@@ -88,6 +94,9 @@ public class ReservationRestController {
 		
 		System.out.println("updateReservation reservation : " + reservation);
 		
+		// 방문 완료시 채팅방 상태 모임 완료 변경
+		chatService.updateChatState(reservation.getChat().getChatNo(), 4);
+		
 		return reservationService.updateReservation(reservation);
 	}
 	
@@ -99,6 +108,10 @@ public class ReservationRestController {
 		Member member = (Member) session.getAttribute("member");
 		reservation.setMember(member);
 		
+		// 예약 취소시 채팅방 상태 모임중 변경(에러로 가림)
+		//reservation = reservationService.getReservation(reservation.getReservationNo());
+		//chatService.updateChatState(reservation.getChat().getChatNo(), 1);
+		
 		return reservationService.updateReservation(reservation);
 	}	
 	
@@ -107,9 +120,6 @@ public class ReservationRestController {
 
 		System.out.println("/reservation/addReservation : POST");
 		//Business Logic
-		//reservationService.addReservation(reservation);
-		//reservation.setReservationNo(Integer.parseInt(httpServletRequest.getParameter("reservationNo")));
-		
 		System.out.println("/reservation/addReservation22222 : POST");
 		return reservationService.addReservation(reservation);
 	
@@ -188,7 +198,6 @@ public class ReservationRestController {
 			   //to가 보내는 것이라 생각.
 			   if(fromMember.getMemberRole().equals("user")) {
 				   restaurant = restaurantService.getRestaurant(Integer.parseInt(httpServletRequest.getParameter("restaurantNo")));
-				   System.out.println("restraurantNo222::"+restaurant);
 				   restaurant.getMember().getMemberId();
 				
 				   Member member = new Member();
@@ -208,8 +217,6 @@ public class ReservationRestController {
 			        System.out.println("업주가 예약 취소 진행");
 			   }
 			   
-			   System.out.println("toMember 확인 :: " + toMember);
-			   System.out.println("fromMember 확인 :: " + fromMember);
 			   System.out.println("reservation 확인 :: " + reservation.getReservationNumber());
 			  
 		       reservationService.sendMessage(reservation, toMember,fromMember, reservationNumber);
@@ -217,19 +224,23 @@ public class ReservationRestController {
 		   /////////////////////////////////무한 스크롤////////////////////////////////////////
 		   
 		   @RequestMapping("json/listReservation")
-			public Map<String, Object> listReservation(HttpServletRequest request, @RequestParam  Map<String, Object> map, HttpSession session) throws Exception {
+			public Map<String, Object> listReservation(@ModelAttribute("search") Search search, HttpServletRequest request, @RequestParam  Map<String, Object> map, HttpSession session) throws Exception {
 				
 				System.out.println("review/json/listReservation : Service");
 				
 				String restaurantNo = request.getParameter("restaurantNo");
-				System.out.println("json/listReservation :: " + restaurantNo);
 				Member member = (Member) session.getAttribute("member");
 				
-				System.out.println(restaurantNo);
-				System.out.println(member);
-				
-				Search search = new Search();
 				search.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
+				///
+				if(search.getCurrentPage() == 0 ){
+					search.setCurrentPage(1);
+				}
+				
+				if(search.getSearchSort() == null || search.getSearchSort() == "") {
+					search.setSearchSort("latest");
+				}
+				///
 				search.setPageSize(pageSize);
 				
 				System.out.println(search.getCurrentPage() + ":: currentPage");
@@ -238,10 +249,21 @@ public class ReservationRestController {
 				
 				Map<String, Object> resultMap = reservationService.listReservation(search, member, restaurantNo);
 				
-				List<Reservation> reservation = (List<Reservation>) resultMap.get("list");
+				List<Reservation> list = (List<Reservation>) resultMap.get("list");
 				
-				for (Reservation r : reservation ) {
-					System.out.println(r);
+				Restaurant restaurant = new Restaurant();
+				Chat chat = new Chat();
+				Member memberChat = new Member();
+				
+				for (Reservation r : list ) {
+					restaurant = restaurantService.getRestaurant(r.getRestaurant().getRestaurantNo());
+					memberChat = memberService.getMember(r.getMember());
+					member = memberService.getMember(member);//member 못불러와서 추가
+					chat = chatService.getChat(r.getChat().getChatNo());
+					chat.setChatLeaderId(memberChat);
+					r.setMember(member);
+					r.setRestaurant(restaurant);
+					r.setChat(chat);//무한스크롤에 업주Id 안나와서 추가
 				}
 				
 				Page resultPage = new Page(search.getCurrentPage(), ((Integer)resultMap.get("totalCount")).intValue(), pageUnit, pageSize);

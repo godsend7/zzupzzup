@@ -90,8 +90,8 @@ public class RestaurantController {
 			
 		System.out.println("/restaurant/addRestaurant : POST");
 		
-		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
-		uploadFilePath(uploadFile, empty, restaurant);
+//		String empty = request.getServletContext().getRealPath("/resources/images/uploadImages");
+//		uploadFilePath(uploadFile, empty, restaurant);
 		
 		System.out.println("debugging point1 : " + uploadOwnerFile);
 		
@@ -102,9 +102,11 @@ public class RestaurantController {
 		String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadOwnerFile.getOriginalFilename());
 		String vacant = "restaurant/" + fileName;
 		s3ImageUpload.uploadFile(uploadOwnerFile, vacant);
-		String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
+		//String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
 		
-		restaurant.setOwnerImage(ownerImage);
+		restaurant.setOwnerImage(fileName);
+		
+		uploadFilePath(uploadFile, vacant, restaurant);
 		
 		if(restaurantService.addRestaurant(restaurant) == 1) {
 			System.out.println("INSERT RESTAURANT SUCCESS");
@@ -267,8 +269,8 @@ public class RestaurantController {
 		
 		System.out.println("/restaurant/updateRestaurant : POST");
 		
-		String empty = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH);
-		uploadFilePath(uploadFile, empty, restaurant);
+		//String empty = request.getServletContext().getRealPath(CommonUtil.IMAGE_PATH);
+		//uploadFilePath(uploadFile, empty, restaurant);
 				
 		System.out.println("debugging point1 : " + uploadOwnerFile);
 		
@@ -278,15 +280,17 @@ public class RestaurantController {
 //			restaurant.setOwnerImage(ownerImage);	
 //		}
 		
-		if(uploadOwnerFile != null) {
+		//if(uploadOwnerFile != null) {
 			s3ImageUpload = new S3ImageUpload();
 			String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadOwnerFile.getOriginalFilename());
 			String vacant = "restaurant/" + fileName;
 			s3ImageUpload.uploadFile(uploadOwnerFile, vacant);
-			String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
+			//String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
 			
-			restaurant.setOwnerImage(ownerImage);
-		}
+			restaurant.setOwnerImage(fileName);
+		//}
+		
+		uploadFilePath(uploadFile, vacant, restaurant);
 		
 		restaurantService.updateRestaurant(restaurant);
 		
@@ -448,9 +452,11 @@ public class RestaurantController {
 				try {
 					String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", mpf.getOriginalFilename());
 					
-					File file = new File(empty + "/" + fileName);
+					//File file = new File(empty + "/" + fileName);
 					
-					mpf.transferTo(file);
+					//mpf.transferTo(file);
+					
+					s3ImageUpload.uploadFile(mpf, empty);
 					
 					resImg.add(fileName);
 					restaurant.setRestaurantImage(resImg);

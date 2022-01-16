@@ -88,7 +88,7 @@ public class MemberController {
 	
 	@RequestMapping(value="addMember/{memberRole}/{loginType}", method=RequestMethod.POST)
 	public String addMember(@PathVariable String memberRole, @PathVariable int loginType,
-				@ModelAttribute("member") Member member, HttpServletRequest request,
+				@ModelAttribute("member") Member member, HttpSession session,
 				@RequestParam(value="fileInput", required = false) MultipartFile uploadfile) throws Exception {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : POST");
@@ -100,7 +100,7 @@ public class MemberController {
 		
 		String fileName = null; 
 		if(uploadfile.getOriginalFilename() == null || uploadfile.getOriginalFilename() == "") {
-			fileName = null;
+			fileName = "defaultImage.png";
 		} else {
 			fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadfile.getOriginalFilename());
 		}
@@ -127,14 +127,14 @@ public class MemberController {
 		if(member.getMemberRole().equals("owner")) {
 			//member domain과 같이 음식점 등록으로 페이지 넘기기
 			
-//			if() {
-//				
-//			}
+			if(member.isRegRestaurant()) {
+				session.setAttribute("member", member);
+				//return "redirect:/restaurant/addRestaurant?memberId="+member.getMemberId()+"&memberName="+member.getMemberName();
+				return "forward:/restaurant/addRestaurantView.jsp";
+			} else {
+				return "redirect:/";
+			}
 			
-			request.setAttribute("member", member);
-			//return "redirect:/restaurant/addRestaurant?memberId="+member.getMemberId()+"&memberName="+member.getMemberName();
-			
-			return "forward:/restaurant/addRestaurantView.jsp";
 		} else {
 			return "redirect:/";
 		}
@@ -268,7 +268,11 @@ public class MemberController {
 		
 		String fileName = null; 
 		if(uploadfile.getOriginalFilename() == null || uploadfile.getOriginalFilename() == "" || uploadfile.getOriginalFilename() == "defaultImage.png") {
-			fileName = "defaultImage.png";
+			if(member.getProfileImage() == null) {
+				fileName = "defaultImage.png";
+			} else {
+				fileName = member.getProfileImage();
+			}
 		} else {
 			fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadfile.getOriginalFilename());
 		}

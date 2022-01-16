@@ -26,13 +26,43 @@
 	
 	$(function() {
 		console.log("listUser.jsp");
+		console.log($("div a span")[0].id);
+		console.log($("div a span")[1].id);
 		
 		 // 상세조회 버튼 실행
+		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+		$( "#getMember" ).on("click" , function() {
+			self.location = "/member/getMember?memberId=${member.memberId}";
+		});
 		
-			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-			$( "#getMember" ).on("click" , function() {
-				self.location = "/member/getMember?memberId=${member.memberId}";
-			});
+		$("#all-btn").on("click", function() {
+			$("#searchSort").val("");
+			fncPageNavigation(1);
+		})
+		
+		$("#eliminated-btn").on("click", function() {
+			/* if($("div a span")[0].id == "unchecked-eliminated-btn") { */
+				/* $("#eliminated-btn").html("<span class='badge' style='color:#721c24;' id='checked-eliminated-btn' data-sort='eliminated'>탈퇴회원</span>"); */
+				$("#searchSort").val("eliminated");
+				fncPageNavigation(1);
+			/* } else if($("div a span")[0].id == "checked-eliminated-btn") {
+				$("#eliminated-btn").html("<span class='badge badge-danger' id='unchecked-eliminated-btn'>탈퇴회원</span>");
+				$("#searchSort").val("");
+				fncPageNavigation(1);
+			} */
+		})
+		
+		$("#blacklist-btn").on("click", function() {
+			/* if($("div a span")[1].id == "unchecked-blacklist-btn") {
+				$("#blacklist-btn").html("<span class='badge' style='color:#343a40;' id='checked-blacklist-btn' data-sort='blacklist'>블랙리스트</span>"); */
+				$("#searchSort").val("blacklist");
+				fncPageNavigation(1);
+			/* } else if($("div a span")[1].id == "checked-blacklist-btn") {
+				$("#blacklist-btn").html("<span class='badge badge-dark' id='unchecked-blacklist-btn' data-sort='blacklist'>블랙리스트</span>");
+				$("#searchSort").val("");
+				fncPageNavigation(1);
+			} */
+		})
 	
 	});
 </script>
@@ -55,9 +85,15 @@
 					
 						<!-- 관우님 src start -->
 						<h2>유저 목록</h2><hr>
+						<div class="form-row col-md-12" align="right">
+							<div style="text-align: right;"><a href="#" id="all-btn"><span class="badge badge-danger" id="check-all-btn" style="color:#fff;background-color:#f56a6a;">전체</span></a></div>&nbsp;
+							<div style="text-align: right;"><a href="#" id="eliminated-btn"><span class="badge badge-danger" id="check-eliminated-btn">탈퇴회원</span></a></div>&nbsp;
+							<div style="text-align: right;"><a href="#" id="blacklist-btn"><span class="badge badge-dark" id="check-blacklist-btn">블랙리스트</span></a></div>
+						</div>
 						<form id="listUser" name="listUser">
 							<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 							<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
+							<input type="hidden" id="searchSort" name="searchSort" value="${search.searchSort}"/>
 						</form>
 						
 						<c:set var="i" value="0" />

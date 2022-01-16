@@ -34,11 +34,13 @@
 		const gender = $("#gender").val();
 		const age = $("#ageRange").val();
 		const profileImage = $("#profileImage").val();
-		const chatList = $(".chatting-list");
-		const chatInput = $(".chatting-input");
-		const sendButton = $(".send-button");
-		const displayContainer = $(".display-container");
-		const userList = $(".user-list");
+		const $chatList = $(".chatting-list");
+		const $chatInput = $(".chatting-input");
+		const $sendButton = $(".send-button");
+		const $chatUpload = $("#chatUpload");
+		const $uploadButton = $(".upload-button");
+		const $displayContainer = $(".display-container");
+		const $userList = $(".user-list");
 		
 		//==>접속한 유저의 정보
 		const memberInfo = {
@@ -51,21 +53,16 @@
 			profileImage : profileImage
 		}
 		
-		//==>접속한 유저들 담을 배열 선언
-		let onUser =[];
-
-		//let MY_USER_ID = "";
-		
 		//==>페이지 로딩시 접속된 애들 가져오기
 		memList();
 
 		//==>페이지 로딩시 채팅 내역 가져오기
 		showCollections();
 		
-		//접속시 접속 유저 정보를 노드서버로 보냄
+		//==>접속시 접속 유저 정보를 노드서버로 보냄
 		socket.emit('new_user', memberInfo);
 		
-		//시스템 문구 출력되는 부분
+		//==>시스템 문구 출력되는 부분
 		socket.on('update', (data) => {
 			console.log("====update====");
 			console.log(data);
@@ -78,21 +75,22 @@
 					updateConnected(data.chatNo,data.memberId, false);
 				}
 			}
-			displayContainer.scrollTop(chatList.height());
+			$displayContainer.scrollTop($chatList.height());
 			
-			//나갔다 들어올 때 멤버 확인 리스트 출력
+			//==>나갔다 들어올 때 멤버 확인 리스트 출력
 			setTimeout(function() { 
 				memList(data.memberId);
 			}, 500);
-			
 		});
 		
+		//==>유저가 채팅방을 나갔을 때
 		socket.on('disconnect', (data) => {
 			console.log(data);
 			updateConnected(data.memberId, false);
 			memList(data.memberId);
-		});;
+		});
 		
+		//==>서버에서 온 메세지 받기
 		socket.on("send_msg", (data) => {
 			const { message, memberInfo, regDate } = data;
 			const item = new makeClientPost(message, memberInfo, regDate);
@@ -103,21 +101,42 @@
 					memList(data.memberInfo.memberId);
 				}, 500);
 			}
-			//console.log("con scroll" + chatList.height());
-			displayContainer.scrollTop(chatList.height());
+			//console.log("con scroll" + $chatList.height());
+			$displayContainer.scrollTop($chatList.height());
 		});
 		
-		chatInput.on("keypress", (e) => {
+		//==>서버에서 온 이미지 받기
+		socket.on("send_img", (data) => {
+			const { message, memberInfo, regDate } = data;
+			const item = new makeClientPost(message, memberInfo, regDate);
+			if(data.memberInfo.chatNo == chatNo){
+				item.makeLi();
+				updateConnected(data.memberInfo.chatNo,data.memberInfo.memberId, true);
+				setTimeout(function() { 
+					memList(data.memberInfo.memberId);
+				}, 500);
+			}
+			//console.log("con scroll" + $chatList.height());
+			$displayContainer.scrollTop($chatList.height());
+		});
+		
+		//==>엔터쳤을때도 메세지 보내기
+		$chatInput.on("keypress", (e) => {
 			if(e.keyCode === 13){
-				messageSend()
+				if($chatInput.val() != '' && $chatInput.val().lenght != 0 && $chatInput.val() != null){
+					messageSend();
+				}
 			}
 		});
 		
-		sendButton.on("click", function(){
-			messageSend();
+		//==>메세지 보내기 버튼 클릭시
+		$sendButton.on("click", function(){
+			if($chatInput.val() != '' && $chatInput.val().lenght != 0 && $chatInput.val() != null){
+				messageSend();
+			}
 		});
 		
-		// 채팅방 폭파
+		//==>채팅방 폭파
 		socket.on("bomb_msg", (data) => {
 			console.log("폭파왔다.");
 			console.log(data);
@@ -126,8 +145,7 @@
 			}
 		});
 		
-		
-		// 참여자 강퇴
+		//==>참여자 강퇴
 		socket.on("get_out_msg", (data) => {
 			console.log("강퇴 왔다.");
 			console.log(data);
@@ -147,11 +165,6 @@
 			}
 		});
 		
-		$("#getOutBtn").on("click", function(){
-			const getOutId = $("input[name=getOutId]").val();
-			getOutMember(getOutId);
-		});
-		
 		// 채팅방 폭파
 		function bombChat(){
 			console.log("폭파시킨다");	
@@ -169,16 +182,28 @@
 		
 		// 메세지 보내기
 		function messageSend(){
-			
 			socket.emit("send_msg", {
 				type: "send",
 				msgType: "client",
-				message: chatInput.val(),
+				message: $chatInput.val(),
 				regDate: new Date(),
 				memberInfo
 			});
 			//보낸후 적힌 메세지 지우기
-			chatInput.val("");
+			$chatInput.val("");
+		}
+		
+		// 이미지 보내기
+		function uploadSend(){
+			socket.emit("send_img", {
+				type: "send",
+				msgType: "client",
+				message: '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/chat/'+$chatUpload.val()+'"/>',
+				regDate: new Date(),
+				memberInfo
+			});
+			//보낸후 파일 저장된 지우기
+			$chatUpload.val("");
 		}
 		
 		// 시스템 메세지 출력
@@ -187,7 +212,7 @@
 				//console.log(name, message);
 				const $li = $("<li class='system'></li>");
 				const dom = "<div class='chat-message'>"+message+"</div>";
-				$li.html(dom).appendTo(chatList);
+				$li.html(dom).appendTo($chatList);
 			}
 		}
 		
@@ -201,7 +226,7 @@
 				const $li = $("<li></li>");
 				$li.addClass(nickname == memberInfo.nickname ? "sent" : "received");
 				const dom = '<div class="chatProfile"><img src="/resources/images/common/'+mem_profile_img+'"/><b>'+memberInfo.nickname+'</b><small>'+regDate+'</small></div><div class="chat-message">'+message+'</div>';
-				$li.html(dom).appendTo(chatList);
+				$li.html(dom).appendTo($chatList);
 			}
 		} */
 		function makeClientPost(message, memberInfo, regDate){
@@ -212,7 +237,7 @@
 				const $li = $("<li></li>");
 				$li.addClass(nickname == memberInfo.nickname ? "sent" : "received");
 				const dom = '<div class="chatProfile"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"/><b>'+memberInfo.nickname+'</b><small>'+regDate+'</small></div><div class="chat-message">'+message+'</div>';
-				$li.html(dom).appendTo(chatList);
+				$li.html(dom).appendTo($chatList);
 			}
 		}
 		
@@ -236,7 +261,6 @@
 				}
 			});
 		}
-		
 		
 		// 참가자 접속 아닌사람 connected 해제
 		function updateConnected(chatNo,memberId,onConnected){
@@ -300,8 +324,9 @@
 						dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+' '+chatConnected+'"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
 						
 					});
-					userList.html(dom);
+					$userList.html(dom);
 					$(".member-count").html(memberCount);
+					$displayContainer.scrollTop($chatList.height());
 				},
 				error : function(request, status, error) {
 					alert("code:" + request.status + "\n" + "message:"
@@ -343,8 +368,8 @@
 						const msgType = nickname == value.chatMemberName ? "sent" : "received";
 						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
 					});
-					chatList.html(dom);
-					displayContainer.scrollTop(chatList.height());
+					$chatList.html(dom);
+					$displayContainer.scrollTop($chatList.height());
 				},
 				error:function(e){
 					console.log("err : " + e);
@@ -352,7 +377,7 @@
 			});
 		}
 		
-		//채팅방 시간 포멧 함수
+		// 채팅방 시간 포멧 함수
 		function timeFormatter(dateTime){
 			var date = new Date(dateTime);
 			if (date.getHours()>=12){
@@ -497,12 +522,7 @@
 			location.href="/chat/listChat";
 		});
 		
-		//============= "강퇴하기" Event 처리 ============
-		$("#getOutNow").on("click", function(e){
-			e.preventDefault();
-			console.log("참여자 강퇴 버튼");
-		});	
-		
+		//============= "강퇴하기" Event 처리 ============		
 		$("body").on("click", "#getOutNow", function(){
 			const getOutId = $(this).attr("data-id");
 			console.log(getOutId);
@@ -510,9 +530,192 @@
 			//getOutMember(getOutId);
 		});
 		
+		//============= "강퇴하기 예 버튼" Event 처리 ============
 		$("#getOutBtn").on("click", function(){
-		
+			const getOutId = $("input[name=getOutId]").val();
+			getOutMember(getOutId);
 		});
+		
+		
+		//============= "이미지 업로드" Event 처리 ============
+		//==>drag 파일 업로드
+		let $fileDragArea = $(".upload-area");
+		let $fileDragBtn = $(".upload-btn");
+		let $fileDragInput = $(".upload-input");
+		
+		//==>박스 안에 Drag 들어왔을 때
+		$fileDragArea.on("dragenter", function(e){
+			console.log("dragenter");
+			$fileDragArea.addClass('is-active');
+		});
+		
+		//==>박스 안에 Drag 하고 있을 때
+		$fileDragArea.on("dragover", function(e){
+			console.log("dragover");
+			
+			// 드래그 한 것이 파일인지 아닌지 체크
+			let valid = e.originalEvent.dataTransfer.types.indexOf('Files')>= 0;
+			console.log(valid);
+			
+			if(!valid){
+				$fileDragArea.addClass('is-warning');
+			}else{
+				$fileDragArea.addClass('is-active');
+			}
+		});
+		
+		//==>박스 밖으로 Drag 나갈 때
+		$fileDragArea.on("dragleave", function(e){
+			console.log("dragleave");
+			$fileDragArea.removeClass('is-active');
+		});
+		
+		//==>박스 안에서 Drag를 Drop 했을 때
+		$fileDragArea.on("drop", function(e){
+			console.log("drop");
+			$fileDragArea.removeClass('is-active');
+		});
+
+		//==>change inner text
+		$fileDragInput.on('change', function(e) {
+			var fileName = $(this).val().split('\\').pop();
+			
+			const data = e.target;
+			console.dir(data);
+			
+			//유효성 체크
+			if(!isValid(data)){
+				return;
+			}
+			
+			const formData = new FormData();
+			formData.append('uploadFile', data.files[0]);
+			
+			const saveName = "";
+			
+			ajax({
+				url: '/chat/json/addDragFile',
+				method: 'POST',
+				data: formData,
+				progress: () => {
+				},
+				loadend: () => {
+				}
+			});
+		});
+
+		// 유효성 검사
+		function isValid(data){
+			
+			//파일인지 유효성 검사
+			if(data.type.indexOf('file') < 0){
+				alert("파일이 아닙니다.");
+				return false;
+			}
+			
+			//이미지인지 유효성 검사
+			if(data.files[0].type.indexOf('image') < 0){
+				alert('이미지 파일만 업로드 가능합니다.');
+				return false;
+			}
+			
+			//파일의 개수는 1개씩만 가능하도록 유효성 검사
+			if(data.files.length > 1){
+				alert('파일은 하나씩 전송이 가능합니다.');
+				return false;
+			}
+			
+			//파일의 사이즈는 10MB 미만
+			if(data.files[0].size >= 1024 * 1024 * 10){
+				alert('10MB 이상인 파일은 업로드할 수 없습니다.');
+				return false;
+			}
+			
+			return true;
+		}
+		
+		// 참고 ajax 커스텀 모듈
+		function ajax(obj){
+			
+			const xhr = new XMLHttpRequest();
+			
+			var method = obj.method || 'GET';
+			var url = obj.url || '';
+			var data = obj.data || null;
+			
+			/* 성공/에러 */
+			xhr.addEventListener('load', function() {
+				
+				const data = xhr.responseText;
+				
+				if(obj.load)
+					obj.load(data);
+			});
+			
+			/* 성공 */
+			xhr.addEventListener('loadend', function() {
+				
+				const data = xhr.responseText;
+				
+				if(obj.loadend) {
+					obj.loadend(data);
+				}
+				//이미지 경로 수정
+				/* saveName = JSON.parse(data).saveName;
+				$fileDragView.html("<a href='javascript:void(0)' class='cvf_delete_image'><img src='/resources/images/uploadImages/chat/"+saveName+"'/></a>");
+				console.log("saveName : " + saveName);
+				$chatUpload.val(saveName); */
+				saveName = JSON.parse(data).saveName;
+				
+				console.log("saveName : " + saveName);
+				$chatUpload.val(saveName);
+				uploadSend();
+			});
+			
+			/* 실패 */
+			xhr.addEventListener('error', function() {
+				
+				console.log('Ajax 중 에러 발생 : ' + xhr.status + ' / ' + xhr.statusText);
+				
+				if(obj.error){
+					obj.error(xhr, xhr.status, xhr.statusText);
+				}
+			});
+			
+			/* 중단 */
+			xhr.addEventListener('abort', function() {
+				
+				if(obj.abort){
+					obj.abort(xhr);
+				}
+			});
+			
+			/* 진행 */
+			xhr.upload.addEventListener('progress', function() {
+				
+				if(obj.progress){
+					obj.progress(xhr);
+				}
+			});
+			
+			/* 요청 시작 */
+			xhr.addEventListener('loadstart', function() {
+				
+				if(obj.loadstart)
+					obj.loadstart(xhr);
+			});
+			
+			if(obj.async === false)
+				xhr.open(method, url, obj.async);
+			else
+				xhr.open(method, url, true);
+			
+			if(obj.contentType)
+				xhr.setRequestHeader('Content-Type', obj.contentType);	
+				
+			xhr.send(data);	
+		}
+		
 		
 	});
 </script>
@@ -549,7 +752,6 @@
 									<div class="chat-header-util flex-fill">
 										<span>${chat.chatRegDate}</span>
 										<span><a href="" id="chatReportBtn" class="svg-btn" title="채팅방 신고" data-toggle="modal" data-target="#chatReportModal" ><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg></a></span>
-										<span class="badge badge-success chat-state">
 											<c:choose>
 													<c:when test="${chat.chatState=='1'}">
 														<span class="badge badge-success chat-state">모집중</span>
@@ -561,13 +763,12 @@
 														<span class="badge badge-info chat-state">예약확정</span>
 													</c:when>
 													<c:when test="${chat.chatState=='4'}">
-														<span class="badge badge-danger chat-state">모임완료</span>
+														<span class="badge badge-warning chat-state">모임완료</span>
 													</c:when>
-													<c:otherwise>
-														<span class="badge badge-secondary chat-state">폭파된방</span>
-													</c:otherwise>
-												</c:choose>
-										</span>
+													<c:when test="${chat.chatState=='5'}">
+														<span class="badge badge-danger chat-state">폭파된방</span>
+													</c:when>
+											</c:choose>
 									</div>
 								</div>
 								<div class="chat-body">
@@ -580,6 +781,11 @@
 								<div class="chat-footer">	
 	             					<div class="input-container">
 	             						<textarea rows="2" class="chatting-input" placeholder="보낼 메세지 입력" wrap="off"></textarea>
+	             						<div class="upload-area d-inline-block position-relative mr-2">
+											<span class="upload-btn button info">이미지 보내기</span> <input
+											class="upload-input" type="file" id="fileDragInput" name="fileDragInput" >
+											<input type="hidden" id="chatUpload" name="chatUpload">
+										</div>
 	             						<input type="button" class="send-button warning" value="보내기" />
 	             					</div>
 								</div>
@@ -648,7 +854,7 @@
 									</div>
 									<div class="modal-body">
 										<p>예약을 진행하시겠습니까?</p>
-										<span>모임 참여 유저 </span>
+										<span>모임에 참여된 유저 닉네임</span>
 										<ul class="chat-member-list bg-light p-2 rounded">
 										</ul>
 									</div>
