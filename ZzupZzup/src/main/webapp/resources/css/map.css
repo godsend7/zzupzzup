@@ -1,0 +1,152 @@
+@charset "UTF-8";
+
+.restaurantCheck {
+	display: none;
+}
+
+.filterBox {
+	z-index: 99;
+	position: fixed;
+	cursor: grab;
+	width: 20%;
+	height: 17%;
+	right: 20px;
+	top: 250px;
+	padding: 1.0em;
+}
+
+.filterBox:active {
+	cursor: grabbing;
+}
+
+.filterBox p {
+	font-size: 1.0em;
+}
+
+.thisLocation {
+	z-index: 99;
+	position: absolute;
+	top: 90%; left: 50%;
+	width:220px; height: 35px;
+	margin-left: -110px;
+	text-align: center;
+}
+
+.thisLocation:hover span {
+	background-color: #d16767;
+	cursor: pointer;
+}
+
+.thisLocation span {
+	font-size: 1.0em;
+	border-radius: 20em;
+	line-height: 33px;
+	padding-left: 13px;
+	padding-right: 13px;
+}
+
+.toggle-off {
+	left:48%;
+}
+
+/* 필터 적용 버튼 css */
+.filter-group {
+	z-index: 99;
+	position: absolute;
+	right: 20px;
+	bottom: 40px; 
+	text-align: right;
+	width: 200px;
+}
+
+.filter-group .filter-button {
+	background-color: #ffc824;
+	border-color: #000000;
+	border-radius: 15em;
+	width: 60px;
+	height: 60px;
+	text-align: center;
+	display: inline-block;
+}
+
+.filter-group .filter-button:hover {
+	cursor: pointer;
+	background-color: #e5b422;
+}
+
+.filter-group .filter-button .none {
+	display: none;
+}
+
+.filter-group .filter-button i {
+	font-size: 35px;
+	margin-top: 12px;
+}
+
+.filter-group .speech-bubble {
+/*   border: 1px solid gray; */
+	border-radius: 10px;
+	width: auto;
+	height: auto;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	justify-content: center;
+	align-items: flex-start;
+	overflow-wrap: break-word;
+	box-shadow: 0px 9px 76px -10px rgba(0,0,0,0.51);
+	margin-bottom: 25px;
+	padding: 15px;
+}
+
+.filter-group .speech-bubble p {
+	z-index: 10;
+	text-align: left;
+}
+
+.filter-group .speech-bubble::before {
+ /*  background-color: #fff;
+  display: block;
+  position: absolute;
+  bottom: -6px;
+  //left: 50px; 
+  width: 20px;
+  height: 20px;
+  content: '';
+  //border-right: 1px solid gray; 
+  //border-bottom: 1px solid gray; 
+  transform: rotate(28deg) skewY(35deg);*/
+  
+  	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 65%;
+	width: 0;
+	height: 0;
+	border: 20px solid transparent;
+	border-top-color: #ffffff;
+	border-bottom: 0;
+	border-right: 0;
+	margin-left: -10px;
+	margin-bottom: -20px;
+}
+
+.filter-group .speech-bubble::after {
+	background-color: #fff;
+	display: block;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	top: 0;
+	right: 0;
+	margin: auto;
+	border-radius: inherit;
+	width: inherit;
+	height: inherit;
+	content: '';
+	z-index: 1;
+}
+
+.filter-group .speech-bubble.none{
+	display: none;
+}
