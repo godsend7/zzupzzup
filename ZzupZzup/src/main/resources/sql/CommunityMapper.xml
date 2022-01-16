@@ -138,10 +138,49 @@
 		SELECT *
 		FROM (SELECT *
 			  FROM COMMUNITY AS cn
-			  ORDER BY cn.POST_NO LIMIT #{startRowNum}, #{pageSize}) AS cn
+			  <where>
+			  	cn.POST_SHOW_STATUS = true
+				<!-- SEARCH : NICKNAME -->
+				<if test="searchKeyword != null">
+					<if test="searchCondition == 0 and searchKeyword !=''">
+						AND UPPER(cn.NICKNAME) LIKE CONCAT('%', #{searchKeyword}, '%')
+					</if>
+					<!-- SEARCH : POSTTITLE -->
+					<if test="searchCondition == 1 and searchKeyword !=''">
+						AND UPPER(cn.POST_TITLE) LIKE CONCAT('%', #{searchKeyword}, '%')
+					</if>
+					<!-- FILTER : OFFICIAL RESTAURANT -->
+					<if test="searchFilter == 1">
+						AND cn.OFFICIAL_DATE IS NOT NULL
+					</if>
+					<!-- FILTER : RECEIPT IMAGE -->
+					<if test="searchFilter == 2">
+						AND cn.RECEIPT_IMAGE IS NOT NULL
+					</if>
+				</if>
+			  </where>
+			  ORDER BY
+			  <choose>
+			  	<when test="searchSort == 'latest'">
+			  		cn.POST_NO DESC LIMIT #{startRowNum}, #{pageSize}
+			  	</when>
+			  	<when test="searchSort == 'oldest'">
+			  		cn.POST_NO ASC LIMIT #{startRowNum}, #{pageSize}
+			  	</when>
+			 <!--  	<when test="searchSort == 'mostLike'">
+			  		
+			  	</when>
+			  	<when test="searchSort == 'worst'">
+			  		
+			  	</when> -->
+			  	<otherwise>
+			  		cn.POST_NO DESC LIMIT #{startRowNum}, #{pageSize}
+			  	</otherwise>
+			  </choose>
+			  ) AS cnt
 		LEFT OUTER JOIN (SELECT IMAGE, POST_NO
 						 FROM IMAGE) AS img
-						 ON (cn.POST_NO = img.POST_NO)
+						 ON (cnt.POST_NO = img.POST_NO)
 	</select>
 	
 	
