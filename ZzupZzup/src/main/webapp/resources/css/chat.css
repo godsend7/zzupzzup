@@ -67,8 +67,10 @@
 .chat-body ul.chatting-list li .chat-message { width: 75%; border-radius: 10px; padding: 15px; background-color: #eee; margin-top: 7px; background-color: #dee9ff; }
 .chat-body ul.chatting-list li.sent .chat-message { background-color: #fff9de; }
 .chat-body ul.chatting-list li.system .chat-message { width: 50%; margin-top: 17px; background-color: #e5e5e5; text-align: center; }
+.chat-body ul.chatting-list li .chat-message img { max-width: 200px; }
 .chatProfile > * { margin-right: 10px; }
 .chatProfile img { width: 35px; height: 35px; border-radius: 50%; overflow: hidden; }
+
 
 .chat-body .user-list li { position: relative; margin-bottom: 10px; padding-left: 0px; }
 .chat-body .user-list li.chat-leader:before { content:'방장 표시'; position: absolute; top: -15px; left: 1px; background: url(../images/sub/chat_leader_ico.png) no-repeat center center; width: 32px; height: 32px; font-size: 0; line-height: 0;  }
@@ -88,7 +90,8 @@
 #getChatEntrance .chat-member-list li:after { content: ","; }
 #getChatEntrance .chat-member-list li:last-child:after { content: ""; }
 
-
+#getChatEntrance .upload-area .upload-btn { cursor: pointer; }
+#getChatEntrance .upload-area .upload-input { position: absolute; left: 0; top: 0; height: 100%; width: 100%; cursor: pointer; opacity: 0; }
 
 
 
