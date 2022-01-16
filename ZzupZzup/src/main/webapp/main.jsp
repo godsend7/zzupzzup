@@ -571,8 +571,9 @@
 				}				
 			},
 			error : function(request, status, error) {
-				alert(request);
-				alert(error);
+				//alert(request);
+				//alert(error);
+				alert("잘못된 요청입니다. 다시 시도해주세요.");
 			}
 		});
 	}
@@ -669,7 +670,7 @@
 			textAlign: "left",
 			padding: "15px",
 			marginBottom: "25px",
-			right: "100px",
+			right: "50px",
 			position: "relative"
 		});
 		

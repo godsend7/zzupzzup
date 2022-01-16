@@ -37,31 +37,31 @@
 		toReport = reportArray[1];
 		
 		if (reportArray[0] == 1) {
-			console.log("채팅방 신고");
+			//console.log("채팅방 신고");
 			$(".h5").text("채팅방 신고");
 			$(".reportType1").text("허위 광고성 채팅방입니다.");
 			$(".reportType2").text("부적절한 언행을 사용하였습니다.");
 			$(".reportType3").parent("div").attr("class","report-hidden");
 		} else if (reportArray[0] == 2) {
-			console.log("채팅방 참여자 신고");
+			//console.log("채팅방 참여자 신고");
 			$(".h5").text("채팅방 참여자 신고");
 			$(".reportType1").text("돈을 지불하지 않았습니다.");
 			$(".reportType2").text("부적절한 언행을 사용하였습니다.");
 			$(".reportType3").text("약속에 불참하였습니다.");
 		} else if (reportArray[0] == 3) {
-			console.log("리뷰 신고");
+			//console.log("리뷰 신고");
 			$(".h5").text("리뷰 신고");
 			$(".reportType1").text("허위 광고성 리뷰입니다.");
 			$(".reportType2").text("부적절한 언어를 사용하였습니다.");
 			$(".reportType3").text("해당 음식점과 일치하지 않는 내용입니다.");
 		} else if (reportArray[0] == 4) {
-			console.log("게시물 신고");
+			//console.log("게시물 신고");
 			$(".h5").text("게시물 신고");
 			$(".reportType1").text("허위 광고성 게시물입니다.");
 			$(".reportType2").text("부적절한 언어를 사용하였습니다.");
 			$(".reportType3").text("해당 음식점에 일치하지 않는 영수증이 아닙니다.");
 		} else if (reportArray[0] == 5) {
-			console.log("음식점 제보");
+			//console.log("음식점 제보");
 			$(".h5").text("음식점 제보");
 			$(".reportType1").text("일치하지 않는 정보를 제공하고 있습니다.");
 			$(".reportType2").text("영업시간이 다릅니다.");
@@ -74,9 +74,39 @@
 	
 	$(function() {
 		$("#addReport").on("click", function() {
-			console.log(toReport);
-			$("input[name='toReport']").val(toReport);
-			$("#report").attr("method", "POST").attr("action", "/report/addReport").submit();
+			if (${empty member.memberId}) {
+				alert("로그인이 필요한 서비스입니다.");
+				$("#reportModal").modal("hide");
+				return;
+			}
+			if (confirm("신고/제보 하시겠습니까?")) {
+				$("input[name='toReport']").val(toReport);
+				
+				$.ajax({
+					url : "/report/addReport",
+					type : "POST",
+					dataType : "json",
+					contentType: 'application/json',
+					data : JSON.stringify ({
+						memberId: "${member.memberId}",
+						reportCategory: $("input[name='reportCategory']").val(),
+						toReport: $("input[name='toReport']").val(),
+						reportType: $("input[name='reportType']:checked").val(),
+						reportDetail: $("#reportDetail").val()
+					}), 
+					success : function(data, status) {
+						if (data == 1) {
+							alert("신고/제보가 접수되었습니다.");
+							$("#reportModal").modal("hide");
+						}
+					},
+					error : function(request, status, error) {
+						//alert(request);
+						//alert(error);
+						alert("잘못된 요청입니다. 다시 시도해주세요.");
+					}
+				});
+			}
 		});
 	});
 </script>
@@ -97,7 +127,6 @@
 			<div class="modal-body">
 				<form class="form-signin report-form" id="report">
 				
-					<input type="hidden" name="memberId" value="${member.memberId}"/>
 					<input type="hidden" name="reportCategory" value=""/>
 					<input type="hidden" name="toReport" value=""/>
 					
