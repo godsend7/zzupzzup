@@ -20,7 +20,8 @@ public class Reservation {
 	private Date planDate;
 	private String planDateString; //planDate String
 	private String fixedTime;
-	private Date fixedDate;
+	private Timestamp fixedDate;
+	private String fixedDateString; //fixedDate String
 	private int memberCount;
 	private int reservationStatus;
 	private boolean fixedStatus;
@@ -134,16 +135,31 @@ public class Reservation {
 		return fixedTime;
 	}
 
-	public void setFixedTime(String fixedTime) {
+	public void setFixedTime(String fixedTime) { 
 		this.fixedTime = fixedTime;
 	}
 
-	public Date getFixedDate() {
+	public Timestamp getFixedDate() { //타임스탬프를 써야 시간까지 화면에 나온다.
 		return fixedDate;
 	}
 
-	public void setFixedDate(Date fixedDate) {
+	public void setFixedDate(Timestamp fixedDate) {
 		this.fixedDate = fixedDate;
+		
+		if(fixedDate !=null) {
+			// JSON ==> Domain Object  Binding을 위해 추가된 부분
+			this.setFixedDateString( fixedDate.toString().split("-")[0]
+													+"-"+ fixedDate.toString().split("-")[1]
+													+ "-" +fixedDate.toString().split("-")[2] );
+		}
+	}
+	
+	public String getFixedDateString() {
+		return fixedDateString;
+	}
+
+	public void setFixedDateString(String fixedDateString) {
+		this.fixedDateString = fixedDateString;
 	}
 
 	public int getMemberCount() {

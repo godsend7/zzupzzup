@@ -1,5 +1,6 @@
 package com.zzupzzup.web.reservation;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -159,10 +160,14 @@ public class ReservationController {
 	public String listReservation(HttpServletRequest request, @ModelAttribute Search search, Model model, HttpSession session) throws Exception {
 		
 		System.out.println("/reservation/listReservation");
+		System.out.println(search);
+		System.out.println("reservationNo:::====="+request.getParameter("restaurantNo"));
+		System.out.println("Member:::====="+(Member) session.getAttribute("member"));
 		
 		String restaurantNo = request.getParameter("restaurantNo");
 		Member member = (Member) session.getAttribute("member");
 		
+		//search.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
 		
 		String memberId = null;
 		
@@ -170,11 +175,17 @@ public class ReservationController {
 			search.setCurrentPage(1);
 		}
 		
+		if(search.getSearchSort() == null || search.getSearchSort() == "") {
+			search.setSearchSort("latest");
+		}
+		
 		System.out.println(search.getCurrentPage() + ":: currentPage");
 		
 		search.setPageSize(pageSize);
 		
-		Map<String, Object> map = null;
+		Map<String, Object> map = new HashMap<String, Object>();
+		System.out.println("======================="+search);
+		map.put("search", search);
 		
 		if (member != null && !member.getMemberRole().equals("owner")) {
 			map = reservationService.listReservation(search, member,restaurantNo);
@@ -227,6 +238,11 @@ public class ReservationController {
 		
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
+		}
+		
+
+		if(search.getSearchSort() == null || search.getSearchSort() == "") {
+			search.setSearchSort("latest");
 		}
 		
 		System.out.println(search.getCurrentPage() + ":: currentPage");
