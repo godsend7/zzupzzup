@@ -13,17 +13,24 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.zzupzzup.common.Page;
+import com.zzupzzup.common.Search;
 import com.zzupzzup.common.util.CommonUtil;
 import com.zzupzzup.common.util.S3ImageUpload;
 import com.zzupzzup.service.community.CommunityService;
 import com.zzupzzup.service.domain.Community;
+import com.zzupzzup.service.domain.Mark;
 import com.zzupzzup.service.domain.Member;
 
 @RestController
@@ -123,7 +130,57 @@ public class CommunityRestController {
 		
 	}
 	
-	//AWS S3 Image Upload
+	
+	@RequestMapping(value="json/listCommunity")
+	public Map<String, Object> listCommunity(@RequestBody Search search, HttpServletRequest request, HttpSession session) throws Exception {
+		
+		System.out.println("/community/json/listCommunity : SERVICE");
+		System.out.println("/community/json/listCommunity PAGE : " + request.getParameter("page"));
+		
+		Member member = (Member)session.getAttribute("member");
+		List<Mark> listLike = null;
+		
+		if(member != null && member.getMemberRole().equals("user")) {
+			listLike = communityService.listLike(member.getMemberId());
+		}
+		
+		
+		if(search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+		
+//		if(request.getParameter("page") != null) {
+//			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+//		}
+		
+		System.out.println("CurrentPage : " + search.getCurrentPage());
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = communityService.listCommunity(search);
+		
+		List<Community> list = (List<Community>) map.get("list");
+		
+		for(Community cm : list) {
+			System.out.println("COMMNUNITY LIST : " + cm);
+		}
+		
+		//pageUnit, pageSize
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println("RESULT PAGE : " + resultPage);
+		
+		map.put("list", map.get("list"));
+		map.put("listLike", listLike);
+		map.put("search", search);
+		map.put("totalCount", map.get("totalCount"));
+		map.put("resultPage", resultPage);
+		
+		return map;
+		
+	}
+	
+	
+	// AWS S3 Image Upload
 	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)
 	public List<String> addDragFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		

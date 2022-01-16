@@ -31,6 +31,9 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
+
+	var searchSort = null;
+
 	// 상세조회 버튼 실행
 	/* $(function() {
 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
@@ -39,153 +42,196 @@
 		});
 	}); */
 	
-	//============= "무한스크롤"  Event  처리 =============
-/* 	let count = 2;
-	$(window).on("scroll", function(){
+	function fncPageNavigation(currentPage) {
+		$("#currentPage").val(currentPage);
+		console.log($("#currentPage").val());
+		$("#communityList").attr("method", "POST").attr("action", "/community/listCommunity").submit();
+	}
+	
+	// 무한 스크롤
+	$(function() {
 		
-		let scrTop = $(window).scrollTop();
-		let scrBtm = $(document).height() - $(window).height() - $(window).scrollTop();
-		let currentPage = $("#currentPage").val();
-		$("#currentPage").val(count);
-		//console.log("top : " + scrTop);
-		//console.log("bottom : " + scrBtm);
-		//console.log("count : " + count);
-		if(scrBtm <= 0 ){
-			//console.log("바닥이야");
-			//console.log($("#chatForm"));
-			//console.log($("#searchKeyword").val());
-			let queryStr = $("#chatForm").serialize();
-			//console.log(queryStr);
-			
-			$.ajax({
-				url: "/chat/json/listChat",
-				method: "POST",
-				dataType: "json",
-				data: queryStr,
-				beforeSend : function() {
-					
-				},
-				success : function(JSONData, status) {
-					//console.log(JSONData);
-					
-					let dom ='';
-					$.each(JSONData, function(index, item){
-						//console.log(item);
-						if(item.chatLeaderId.memberId == "${member.memberId}"){
-							
-						}
+		var count = 2;
+		
+		if(${!empty list}) {
+			console.log(searchSort);
+			window.onscroll = function() {
+				if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+					//console.log('checkpoint');
+					if(${!empty member}) {
+						$("#currentPage").val(count);
 						
-						dom += '<div class="col-md-6">'
-							+'<div class="card mb-4 shadow-sm chat-state'+item.chatState+'">'
-							+'<div class="card-head d-flex">'
-							+'<span class="badge badge-secondary chat-no mr-1">'+item.chatNo+'</span>';
-							if(item.chatLeaderId.memberId == "${member.memberId}"){
-								dom += '<span class="badge badge-secondary mr-1">개설자</span>';
-							}
-							$.each(item.chatMember, function(indexx, itemm){
-								if("${member.memberId}" == itemm.member.memberId && itemm.member.memberId != item.chatLeaderId.memberId && itemm.inOutCheck == true){
-									dom += '<span class="badge badge-secondary mr-1">참가중</span>';
-								}
-							});
-							switch(item.chatState){
-							case 1:
-								dom += '<span class="badge badge-success chat-state">모집중</span>';
-							break
-							case 2:
-								dom += '<span class="badge badge-warning chat-state">인원확정</span>';
-							break
-							case 3:
-								dom += '<span class="badge badge-info chat-state">예약확정</span>';
-							break
-							case 4:
-								dom += '<span class="badge badge-danger chat-state">모임완료</span>';
-							break
-							case 5:
-								dom += '<span class="badge badge-secondary chat-state">폭파된방</span>';
-							break
-							}
-							dom += '</div>'
-							+'<div class="card-img">'
-							+'<img src="/resources/images/uploadImages/chat/'+item.chatImage+'">'
-							+'</div>'
-							+'<div class="card-body">';
-							if("${member.memberRole}" == 'admin'){
-								dom += '<div class="chat-rating-info">';
-								if(item.chatShowStatus == false){
-									dom += '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
-								}
-								dom += '<i class="fa fa-exclamation-triangle" aria-hidden="true">'
-								+item.reportCount +' 회</i>'
-								+'</div>';
-							}
-							dom += '<h4 class="card-title">'+item.chatTitle+'</h4>'
-							+'<h5 class="card-text mb-2 text-muted">'+item.chatText+'</h5>'
-							+'<div class="d-flex justify-content-between align-items-end">'
-							+'<div>'
-							+'<p class="card-text text-right">'+item.chatRestaurant.restaurantName+'</p>'
-							+'<p class="card-text text-right">'+item.chatRestaurant.streetAddress+'</p>'
-							+'</div>'
-							+'<div class="btn-group">';
-							if(item.chatMember != [] && item.chatMember != null && item.chatMember.length > 0){
-								let isChatMember = false;
-								$.each(item.chatmember, function(indexxx, itemmm){
-									if("${member.memberId}" == itemmm.member.memberId){
-										isChatMember = true;
+						$.ajax({
+							
+							url : "/community/json/listCommunity",
+							type : "POST",
+							dataType : "json",
+							contentType : "application/json",
+							data : JSON.stringify({
+								currentPage : $("#currentPage").val(),
+								searchSort : $("input[name='searchSort']").val(),
+								searchFilter : $("input[name='searchFilter']:checked").val(),
+								no : "${param.postNo}"
+							}),
+							success : function(data) {
+								
+								var append_nod = "";
+								$.each(data.list, function(index, item) {
+									
+									console.log(data.list);
+						
+									
+									console.log("2222: "+item.member.memberId)
+									
+									
+									
+									append_nod += '<div class="col-md-4">';
+									append_nod += '<div class="card mb-1 shadow-sm">';
+									append_nod += '<a href="" class="thumb">';
+									
+									if(${community.postImage[0] == null}) {
+										append_nod += '<img src="/resources/images/uploadImages/default.png" height="100%">';
+										//append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/default.png" height="100%">';
 									}
-									if("${member.memberId}" == itemmm.member.memberId && item.chatState == 4 && itemmm.inOutCheck == true && itemmm.readyCheck == true ){
-										dom += '<a href="/chat/json/listReadyCheckMember/chatNo='+item.chatNo+'" class="button small primary" data-toggle="modal" data-target="#chatRatingModal">평가하기</a>';
+									
+									if(${community.postImage[0] != null}) {
+										append_nod += '<img src="/resources/images/uploadImages/' + item.postImage[0] + '" height="100%">';
+										//append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/${community.postImage[0]}" height="100%">':
 									}
+									
+									append_nod += '</a> <div class="card-body">';
+									
+									if(${member.memberRole == 'admin'}) {
+										append_nod += '<strong class="d-inline-block mb-2 text-primary">신고누적수: ' + item.postReportCount + '</strong> &nbsp;';
+									}
+									
+									if(item.receiptImage != null) {
+										append_nod += '<span class="badge badge-success" style="text-align: right;">영수증 첨부된 게시물</span>';
+									}
+									
+									if(item.receiptImage == null) {
+										append_nod += '<span class="badge badge-danger" style="text-align: right;">영수증 미첨부된 게시물</span>';
+									}
+									
+									if(item.officialDate != null) {
+										append_nod += '<span class="badge badge-warning" style="text-align: right;">정식맛집</span>';
+									}
+									
+									append_nod += '<h3 class="card-title">' + item.postTitle + '</h3>';
+									append_nod += '<p><strong>작성자:</strong> ' + item.member.nickname + '</p>';
+									append_nod += '<p class="card-text restaurant-menu-text">' + item.postText + '</p>';
+									append_nod += '<div class="d-flex justify-content-between align-items-center">';
+									append_nod += '<a href="/community/getCommunity?postNo=' + item.postNo + '" class="button small primary stretched-link">더 보기</a>';
+									append_nod += '<small class="text-muted">' + item.postRegDate + '</small>';
+									append_nod += '</div></div></div>';
+									
+									append_nod += '<button type="button" class="btn btn-outline-danger btn-sm btn-block">';
+									append_nod += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">';
+									append_nod += '<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />';
+									append_nod += '</svg> ' + item.likeCount + '';		
+									append_nod += '</button><br> <br>';			
+									append_nod += '</div>';
+									
 								});
-								if(isChatMember == false){
-									dom	+= '<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>';
-								}else{
-									dom += '<a href="/chat/getChatEntrance?chatNo=${chat.chatNo}" class="button small primary get-chat-btn">입장하기</a>';
-								}
-							}else{
-								dom	+= '<a href="/chat/json/getChat/'+item.chatNo+'" class="button small primary get-chat-btn" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">참여하기</a>';
+								
+								$(".thumb-list").append(append_nod);
+								count++;
+							},
+							
+							error:function(request,status,error) {
+								console.log("append Fail");
 							}
-							dom += '</div>'
-							+'</div>'
-							+'</div>'
-							+'</div>'
-							+'</div>';
-					});
-					$(".thumb-list").append(dom);
-					if(JSONData.length != 0){
-						count++;
-					}else{
-						if(!$("#listChat .alert").length){
-							alert_dom = '<div class="alert alert-danger alert-dismissible" role="alert"><strong>스크롤 중지!</strong> 리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
-							$("#listChat").append(alert_dom);
-							$("#listChat .alert").fadeIn();
-						}
-					}
-				},
-				error : function(request, status, error) {
-					let errorMsg = "로그인이 필요합니다!";
-					if(request.status == 200 && request.responseText.indexOf(errorMsg) != -1 ){					
-						alert("로그인이 필요합니다!");
-						location.href='/';
+							
+						});
+						
 					}
 				}
-			});
+			}
 		}
-	}); */
+		
+		
+		// 페이지 로딩시 정렬 조건이 있다면 주입
+		if(localStorage.getItem('sortType')){
+			$("input[name=searchSort]").val(localStorage.getItem('sortType'));
+		}
+		
+		// 페이지 로딩시 필터 조건이 있다면 표시
+		if("${search.searchFilter}" != null && "${search.searchFilter}" != ""){
+			console.log("필터 조건?? ${search.searchFilter}");
+			$("input:checkbox[value=${search.searchFilter}]").prop("checked", true);
+			$("input:checkbox[value=${search.searchFilter}]").addClass("active");
+		}
+		
+		// SEARCH OPERATE
+		/* $(".search-btn").on("click", function() {
+			fncPageNavigation(1);
+		}); */
+		/* $("#searchByEnter").keyup(function(e) {
+			if(e.keyCode == 13) {
+				console.log('eeeeeeeeee');
+				fncPageNavigation(1);
+				//self.location = "/community/listCommunity?searchCondition=${search.searchCondition}&searchKeyword=${search.searchKeyword}";
+			}
+		}); */
+		
+		document.getElementById("searchByEnter").addEventListener("keydown", function(evant) {
+			//console.log("keydown");
+			if (evant.keyCode === 13) {
+				evant.preventDefault();
+				//document.getElementById("searchButton").click();
+				fncPageNavigation(1);
+			}
+		});
+		
+		// SORT
+		$(".search-sort").on("click", function(e){
+			e.preventDefault();
+			let sortType = $(this).attr("data-sort");
+			console.log(sortType);
+			
+			let localStorage = window.localStorage;
+			localStorage.setItem('sortType', sortType);
+			
+			$("input[name=searchSort]").val(localStorage.getItem('sortType'));
+			
+			console.log(localStorage.getItem('sortType'));
+			
+			fncPageNavigation(1);
+		});
+		
+		// Filter
+		$("input:checkbox[name='searchFilter']").on("click", function(e){
+			//console.log("클릭함");
+			let isActive = $(this).hasClass("active");
+			if(isActive){
+				$("input:checkbox[name='searchFilter']").prop("checked", false);
+				$("input:checkbox[name='searchFilter']").removeClass("active");
+			}else{
+				$("input:checkbox[name='searchFilter']").prop("checked", false);
+				$("input:checkbox[name='searchFilter']").removeClass("active");
+				$(this).prop("checked", true);
+				$(this).addClass("active");
+				fncPageNavigation(1);
+			}
+		});
+		
+	});
 	
 	$(function() {
+		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 		if(${member.memberRole == 'user' || member.memberRole == 'admin'}) {
 			// 게시물 작성하기 버튼 실행
-			
-				//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-				$("#write").on("click", function() {
-					self.location = "/community/addCommunity";
-				});
+			$("#write").on("click", function() {
+				self.location = "/community/addCommunity";
+			});	
 			
 		} else {
-			alert("죄송합니다. 업주는 이용할 수 없는 서비스입니다."),
+			alert("유저만 이용할 수 있는 서비스입니다."),
 			self.location = "../main.jsp";
 		}
+		
 	});
+	
 </script>
 </head>
 
@@ -210,38 +256,56 @@
 							</div>
 							<div class="col" style="padding-right: 22px;">
 								<!-- <button type="button" class="btn btn-link btn-sm float-right" id="write">write</button> -->
-								<a href="#" id="write" class="button svg-btn btn-sm float-right" style="padding-right: 10px; padding-left: 10px;">
+								<c:if test="${member.memberRole == 'user'}">
+									<a href="/community/addCommunity" id="write" class="button svg-btn btn-sm float-right" style="padding-right: 10px; padding-left: 10px;">
 									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
   									<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
   									<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-								</svg>작성하기</a>
+									</svg>작성하기</a>
+								</c:if>
 							</div>
 						</div>
 						<hr>
 						<div class="container">
-						
+						<form id="communityList">
 							<div class="row">
-								
+							
 								<div class="col-md-7">
-									<span class="badge badge-pill badge-secondary">정렬</span>
-									<span class="badge badge-pill badge-secondary">필터</span>
+									<a href="#" class="badge badge-light search-sort" data-sort="latest">최신등록순</a>
+									<a href="#" class="badge badge-light search-sort" data-sort="oldest">오래된등록순</a>&nbsp;&nbsp;
+									<input type="hidden" name="searchSort" value="">
+									
+									<a href="#" class="badge badge-dark dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">
+									<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+  									<path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+									</svg>&nbsp;필터&nbsp;</a>
+									<div class="dropmenu-list" aria-labelledby="dropmenuList">
+										<input type="checkbox" id="official" class="search-filter" name="searchFilter" value="1"><label for="official">정식맛집</label>
+										<input type="checkbox" id="receipt" class="search-filter" name="searchFilter" value="2"><label for="receipt">영수증첨부</label>
+									</div>
+									
 								</div>
 								
 								<div class="col-md-5 row">
 									<select class="searchCondition my-2 my-md-0" name="searchCondition" style="width: 124px; padding-left: 10px;">
 									  <!-- <option selected>Open this select menu</option> -->
-									  <option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""}>
-									  작성자명</option>
-									  <option value="1" ${!empty search.searchCondition && search.searchCondition == 1 ? "selected" : ""}>
-									  게시물제목</option>
+									  <option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""}> 작성자명</option>
+									  <option value="1" ${!empty search.searchCondition && search.searchCondition == 1 ? "selected" : ""}> 게시물제목</option>
 									</select>
 									
-									<form class="form-inline my-2 my-md-0" style="padding-left: 5px;">
-								      <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-								    </form>
+									<!-- <form class="form-inline my-2 my-md-0" style="padding-left: 5px;"> -->
+								      <input class="form-control" type="text" id="searchByEnter" placeholder="검색" aria-label="Search" style="width: 234px;" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
+								   <!--  </form> -->
+								    
+							    	 <input type="hidden" id="currentPage" name="currentPage" value="1"/>
 							    </div>
-							</div><br><br>
+						  
+							</div>
+							</form>   
+							<br><br>
 							
+							
+							<!-- <form id="communityList"> -->
 							
 							<div class="row thumb-list">
 
@@ -292,16 +356,19 @@
 									</div>
 								</c:forEach>
 							</div>
+							
+							<!-- </form> -->
+							
 						</div>
 					</div>
-					<br> <br>
+					<br>
 
 					<!-- <h3 style="text-align:center;">▽ 스크롤하여 더 많은 리스트 보기</h3> -->
-					<div class="d-flex justify-content-center">
+					<!-- <div class="d-flex justify-content-center">
 						<div class="spinner-border" role="status">
 							<span class="sr-only">Loading...</span>
 						</div>
-					</div>
+					</div> -->
 
 				</section>
 			</div>

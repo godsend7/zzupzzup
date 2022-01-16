@@ -63,7 +63,7 @@
 		padding-right: 13px;
 	}
 	
-	.btn-outline-primary {
+/* 	.btn-outline-primary {
 		color: #f56a6a;
 		border-color: #f56a6a;
 	}
@@ -85,23 +85,177 @@
 		background-color: f56a6a;
 	}
 	
-	.directions {
+	.toggle-on:hover{
+		background-color: #ffffff;
+	}
+	
+	.toggle-on:mouseup{
+		background-color: #ffffff;
+	} */
+	
+	/* input[type=checkbox]{
+		height: 0;
+		width: 0;
+		visibility: hidden;
+	}
+	
+	label {
+		cursor: pointer;
+		text-indent: -9999px;
+		width: 200px;
+		height: 100px;
+		background: grey;
+		display: block;
+		border-radius: 100px;
+		position: relative;
+	}
+	
+	label:before {
+		display: none;
+		visibility: hidden;
+	}
+	
+	label:after {
+		content: '';
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		width: 90px;
+		height: 90px;
+		background: #fff;
+		border-radius: 90px;
+		transition: 0.3s;
+	}
+	
+	input:checked + label {
+		background: #bada55;
+	}
+	
+	input:checked + label:after {
+		left: calc(100% - 5px);
+		transform: translateX(-100%);
+	}
+	
+	label:active:after {
+		width: 130px;
+	} */
+	.toggle-off {
+		left:48%;
+	}
+	
+	/* 필터 적용 버튼 css */
+	.filter-group {
 		z-index: 99;
 		position: absolute;
-		right: 50px;
+		right: 20px;
 		bottom: 40px; 
+		text-align: right;
+		width: 200px;
 	}
 	
-	.directions a {
-		width: 150px;
+	.filter-group .filter-button {
+		background-color: #ffc824;
+		border-color: #000000;
+		border-radius: 15em;
+		width: 60px;
+		height: 60px;
+		text-align: center;
+		display: inline-block;
 	}
 	
-	.direc-hide {
+	.filter-group .filter-button .none {
 		display: none;
 	}
-	/* .mainMap {
+	
+	.filter-group .filter-button i {
+		font-size: 35px;
+		margin-top: 12px;
+	}
+	
+	.filter-group .speech-bubble {
+	/*   border: 1px solid gray; */
+	  border-radius: 10px;
+	  width: auto;
+	  height: auto;
+	  display: flex;
+	  flex-direction: column;
+	  position: relative;
+	  justify-content: center;
+	  align-items: flex-start;
+	  overflow-wrap: break-word;
+	  box-shadow: 0px 9px 76px -10px rgba(0,0,0,0.51);
+	  margin-bottom: 25px;
+	  padding: 15px;
+	}
+	
+	.filter-group .speech-bubble p {
+	  z-index: 10;
+	  text-align: left;
+	}
+	
+	.filter-group .speech-bubble::before {
+	 /*  background-color: #fff;
+	  display: block;
+	  position: absolute;
+	  bottom: -6px;
+	  //left: 50px; 
+	  width: 20px;
+	  height: 20px;
+	  content: '';
+	  //border-right: 1px solid gray; 
+	  //border-bottom: 1px solid gray; 
+	  transform: rotate(28deg) skewY(35deg);*/
+	  
+	  	content: '';
+		position: absolute;
+		bottom: 0;
+		left: 65%;
+		width: 0;
+		height: 0;
+		border: 20px solid transparent;
+		border-top-color: #ffffff;
+		border-bottom: 0;
+		border-right: 0;
+		margin-left: -10px;
+		margin-bottom: -20px;
+	}
+
+	.filter-group .speech-bubble::after {
+	  background-color: #fff;
+	  display: block;
+	  position: absolute;
+	  bottom: 0;
+	  left: 0;
+	  top: 0;
+	  right: 0;
+	  margin: auto;
+	  border-radius: inherit;
+	  width: inherit;
+	  height: inherit;
+	  content: '';
+	  z-index: 1;
+	}
+	
+	.filter-group .speech-bubble.none{
+		display: none;
+	}
+	
+	/* .filter-group .speech-path {
+		overflow: auto;
+		width: 300px;
+		height: 400px;
+		background-color: white;
+		text-align: left;
+		padding: 15px;
+		margin-bottom: 25px;
+		right: 100px;
 		position: relative;
+	}
+	
+	.filter-group .speech-path  p {
+		font-size: 0.9em;
 	} */
+	
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -128,31 +282,57 @@
 	//map search condition
 	var reCheck = false;
 	var parkCheck = false;
+	var dirCheck = false;
 	
 	//길찾기 시 화면에 경로 표시
 	var polylinePath = new Array();
+	var pathInfo = new Array();
 	//길찾기 시작 정보
 	var startLocation = new Array();
 	//길찾기 도착 정보
 	var goalLocation = new Array();
 	
 	
+	//filter icon 변경 envet
+	function iconChange() {
+		$(".filter-button").children("i").removeClass("none");
+		$(".filter-button").children("i").addClass("none");
+		
+		if (dirCheck) {
+			$(".fa-map-marked-alt").removeClass("none");
+		} else if (reCheck && parkCheck) {
+			$(".fa-tasks").removeClass("none");
+		} else if (reCheck) {
+			$(".fa-calendar-check").removeClass("none");
+		} else if (parkCheck) {
+			$(".fa-car").removeClass("none");
+		} else if (!(reCheck && parkCheck)) {
+			$(".fa-list").removeClass("none");
+		}
+	}
+	
+	
 	$(function() {
+		
 		loadRestaurantMap();
 		loadGyeonggidoMap();
 		
-		$( ".filterBox" ).draggable();
+		//$( ".filterBox" ).draggable();
 		
+		/////////////// switch toggle check 여부 start ///////////////
 		$(".reservationCheck").on("change",function() {
 			$("#searchKeyword").val('');
 			if($(this).prop("checked") == true){
 				reCheck = true;
+				
 				loadRestaurantMap();
 			} else {
 				reCheck = false;
+				
 				loadRestaurantMap();
 				loadGyeonggidoMap();
 			}
+			iconChange();
 		});
 		
 		$(".parkableCheck").on("change",function() {
@@ -165,9 +345,24 @@
 				loadRestaurantMap();
 				loadGyeonggidoMap();
 			}
+			iconChange();
 		});
 		
+		$(".directionCheck").on("change",function() {
+			$("#searchKeyword").val('');
+			if($(this).prop("checked") == true){
+				
+				$('#directionModal').modal({
+				    backdrop: 'static',
+				    keyboard: false,
+				    show: true
+				});
+			}
+			iconChange();
+		});
+		/////////////// switch toggle check 여부 end ///////////////
 		
+		//검색 시 enter event
 		document.getElementById("mapSearch").addEventListener("keydown", function(evant) {
 			//console.log("keydown");
 			if (evant.keyCode === 13) {
@@ -176,19 +371,41 @@
 			}
 		});
 		
+		//현재 위치로 이동 event
 		$(".thisLocation").on("click", function() {
-			
 			thisLocation();
 			map.setCenter(new naver.maps.LatLng(nowLatitude, nowLongitude));
 			map.setZoom(15);
 		});
 		
+		//길찾기 modal 검색 event
 		$("#searchDirec").on("click", function() {
 			loadDirections();
-			
 		});
 		
+		//filter function start
+		$(".filter-button").on("click", function() {
+			if ($(".fa-map-marked-alt").hasClass("none") === true) {
+				if($(".speech-bubble").hasClass("none") === true) { 
+					// class가 존재함 
+					$(".speech-bubble").removeClass("none");
+				} else { 
+					// class가 존재하지않음 
+					$(".speech-bubble").addClass("none");
+				}
+			} else {
+				if (confirm("길찾기를 종료하시겠습니까?")) {
+					location.reload();
+				}
+			}
+		});
 		
+		//길찾기 종료
+		$("#none-direction").on("click", function() {
+			location.reload();
+		});
+		
+		//////////////////////// modal show or hide event start //////////////////////////
 		//길찾기 modal 실행될 때 현재위치 가져오기
 		$("#directionModal").on("shown.bs.modal", function() { 
 			$(".direction-control").autocomplete("option", "appendTo", "#directionModal");
@@ -214,36 +431,14 @@
 			});
 		});
 		
-		$("#none-direction").on("click", function() {
-			location.reload();
-		});
-
-		/* $(".direction-control").on("focus" , function() {
-			console.log($(this).attr("id"));
-			$(this).addClass("inputCheck");
-			console.log($(this).attr("class"));
+		//길찾기 modal 종료 시 switch toggle off
+		$("#directionModal").on("hide.bs.modal", function() { 
+			console.log("modal 닫힘");
+			$(".directionCheck").prop("checked", false);
+			$(".directionCheck").parent("div").attr("class", "toggle btn btn-xs btn-light off");
 		});
 		
-		$(".direction-control").on("focusout" , function() {
-			console.log($(this).attr("id"));
-			$(this).removeClass("inputCheck");
-			console.log($(this).attr("class"));
-		}); */
-		
-		/*  $("#startInput").on("focus" , function() {
-			//console.log($(this).attr("id"));
-			$("#goalInput").removeClass("inputCheck");
-			$(this).addClass("inputCheck");
-			//console.log($(this).attr("class"));
-		});
-		
-		$("#goalInput").on("focus" , function() {
-			//console.log($(this).attr("id"));
-			$("#startInput").removeClass("inputCheck");
-			$(this).addClass("inputCheck");
-			//console.log($(this).attr("class"));
-		}); */
-		
+		////////////////////////modal show or hide event end //////////////////////////
 		
 		
 		//restaurant Direction autoComplete
@@ -303,11 +498,6 @@
 	
 	//길찾기 ajax
 	function loadDirections() {
-		console.log(startLocation.latitude);
-		console.log(startLocation.longitude);
-		console.log(goalLocation.latitude);
-		console.log(goalLocation.longitude);
-		
 		$.ajax({
 			url : "/map/json/getDirections",
 			type : "POST",
@@ -319,16 +509,54 @@
 				goalLat: goalLocation.latitude,
 				goalLong: goalLocation.longitude
 			}), 
-			/* beforeSend : function (xhr) {
-				xhr.setRequestHeader("X-NCP-APIGW-API-KEY-ID" , "7gzdb36t5o");
-				xhr.setRequestHeader("X-NCP-APIGW-API-KEY", "mYUAOPlY0TCwBzBjBZhMfMCX7vKouQIWJJDG9kwL");
-			}, */
 			success : function(data, status) {
 				//alert(JSON.stringify(data.route.bbox));
 				//console.log(JSON.stringify(data.route.trafast[0].path));
+				
+				/* pathInfo.push(
+					{ instructions:"유턴", distance:258, duration:41461}
+				);
+				
+				pathInfo.push(
+					{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+				);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				pathInfo.push(
+						{ instructions:"황산교차로에서 '서울' 방면으로 좌회전", distance:656, duration:108054}
+					);
+				getDirec(); */
 				if (data.code == 0) {
 					$.each (data.route.trafast[0].path, function(index, item){ 
 						polylinePath.push(new naver.maps.LatLng(item[1], item[0]));
+					});
+					
+					//instructions :: 경로 설명
+					//distance :: 해당 경로까지의 거리 meters (전 경로에서부터의)
+					//duration :: 해당 경로까지 걸리는 시간 milisecond(1/1000초) (전 경로에서부터의)
+					$.each (data.route.trafast[0].guide, function(index, item){
+						pathInfo.push(
+							{ instructions:item.instructions, distance:item.distance, duration:item.duration }
+						);
 					});
 					
 					getDirec();
@@ -343,8 +571,9 @@
 				}				
 			},
 			error : function(request, status, error) {
-				alert(request);
-				alert(error);
+				//alert(request);
+				//alert(error);
+				alert("잘못된 요청입니다. 다시 시도해주세요.");
 			}
 		});
 	}
@@ -374,22 +603,81 @@
 	        map: map
 		});
 		
-		var marker = new naver.maps.Marker({
+		var startMarker = new naver.maps.Marker({
+		    position: polylinePath[0], //마크 표시할 위치 배열의 시작 위치
+		    map: map
+		});
+		
+		var goalMarker = new naver.maps.Marker({
 		    position: polylinePath[polylinePath.length-1], //마크 표시할 위치 배열의 마지막 위치
 		    map: map
 		});
 		
 		//클릭 했을 때 띄어줄 정보 HTML
-		var infowindow = new naver.maps.InfoWindow({
+		var startInfowindow = new naver.maps.InfoWindow({
+		    content: '<div style="padding:10px; width:280px;"><b>출발지<br>'+startLocation.restaurantName +'<br>'+startLocation.streetAddress,
+		    maxWidth: 300,
+		    borderColor: "#f56a6a",
+		    borderWidth: 5
+		});
+		
+		var goalInfowindow = new naver.maps.InfoWindow({
 		    content: '<div style="padding:10px; width:280px;"><b>목적지<br>'+goalLocation.restaurantName +'<br>'+goalLocation.streetAddress,
 		    maxWidth: 300,
 		    borderColor: "#f56a6a",
 		    borderWidth: 5
 		});
 		
-		infowindow.open(map, marker);
+		//정보창 출력
+		startInfowindow.open(map, startMarker);
+		goalInfowindow.open(map, goalMarker);
+		
+		dirCheck = true;
+		iconChange();
+		
+		//경로 안내 출력
+		getPathInfo();
 	}
 	
+	//길찾기 경로 안내 출력
+	function getPathInfo() {
+		
+		$(".speech-bubble").addClass('none');
+		console.log(pathInfo);
+		
+		for (var i = 0; i < pathInfo.length; i++) {
+			const hour = String(Math.floor((pathInfo[i].duration/ (1000 * 60 *60 )) % 24 )).padStart(2, "0"); // 시
+	        const minutes = String(Math.floor((pathInfo[i].duration  / (1000 * 60 )) % 60 )).padStart(2, "0"); // 분
+	        const second = String(Math.floor((pathInfo[i].duration / 1000 ) % 60)).padStart(2, "0"); // 초
+			
+			var pInfo = "<p>" + pathInfo[i].distance + "m 앞, " + pathInfo[i].instructions + "<br>(약 ";
+			
+			if (hour != "00") {
+				pInfo += hour +"시간 ";
+			}
+			if (minutes != "00") {
+				pInfo += minutes +"분 ";
+			}
+			pInfo += second + "초 소요) </p>";
+			
+			$(".speech-path").append(pInfo);
+		}
+		$(".speech-path").css({
+			overflow:"auto",
+			width:"250px",
+			height:"400px",
+			backgroundColor:"white",
+			textAlign: "left",
+			padding: "15px",
+			marginBottom: "25px",
+			right: "50px",
+			position: "relative"
+		});
+		
+		$(".speech-path").children("p").css({
+		    fontSize: "0.9em"
+		});
+	}
 	
 	//경기도 맛집 api 화면에 표시
 	function loadGyeonggidoMap() {
@@ -431,8 +719,8 @@
 		});
 	}
 	
+	//DB에 등록된 음식점 화면에 표시
 	function loadRestaurantMap() {
-		
 		$.ajax(
 			{
 				url : "/map/json/listRestaurant",
@@ -727,26 +1015,40 @@
 				<section id="map">
 					<div class="content mainMap" id="content" style="width: 100%; height:100vh;">
 					
-						<div class="filterBox ui-widget-content">
-							<!-- <nav class="top_nav" style="background: #f56a6a;">
+						<!-- <div class="filterBox ui-widget-content">
+							<nav class="top_nav" style="background: #f56a6a;">
 								<div style="height: 20px;"></div>
-							</nav> -->
-							<!-- <p><input type="checkbox" checked data-toggle="toggle" data-size="xs"> 예약 가능 여부 </p> -->
+							</nav>
+							<p><input type="checkbox" checked data-toggle="toggle" data-size="xs"> 예약 가능 여부 </p>
 							<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="reservationCheck"> 예약 가능한 가게만 보기 </p>
 							<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="parkableCheck"> 주차 가능한 가게만 보기 </p>
-						</div>
+						</div> -->
 					
 						<div class="thisLocation">
-							<span class="badge badge-primary">현 위치로 이동 &nbsp&nbsp&nbsp&nbsp<svg 
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="margin-bottom: 3px;" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-  								<path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
-  								<path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
-								</svg>
+							<span class="badge badge-primary">현 위치로 이동 &nbsp;&nbsp;&nbsp;<i class="fas fa-location-arrow"></i>
 							</span>
 						</div>
-						<div class="directions">
-							<a type="button" class="button info large" id="direction" data-toggle="modal" data-target="#directionModal" data-backdrop="static">길찾기</a>
-							<a type="button" class="button info large direc-hide" id="none-direction">길찾기 종료</a>
+						
+						<div class="filter-group">
+							<div class="speech-bubble">
+								<!-- <span>contents</span> -->
+								<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="reservationCheck"> 예약 가능 음식점</p>
+								<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="parkableCheck"> 주차 가능 음식점 </p>
+								<p><input type="checkbox" data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" class="directionCheck" id="direction" data-toggle="modal" data-target="#directionModal" data-backdrop="static"> 길찾기 </p>
+							</div>
+							<div class="speech-path">
+							</div>
+							<div class="filter-button">
+								<i class="fas fa-list"></i>
+								<i class="fas fa-map-marked-alt none"></i>
+								<i class="fas fa-calendar-check none"></i>
+								<i class="fas fa-car none"></i>
+								<i class="fas fa-filter none"></i>
+								<i class="fas fa-tasks none"></i>
+							</div>
+							<!-- <a type="button" class="button info large" id="direction" data-toggle="modal" data-target="#directionModal" data-backdrop="static">길찾기</a>
+							<a type="button" class="button info large direc-hide" id="none-direction">길찾기 종료</a> -->
+							<!-- <img alt="길찾기" src="/resources/images/main/pngegg.png" class="directions-filter none"/> -->
 						</div>
 					</div>
 					
@@ -791,4 +1093,3 @@
 	</div>
 </body>
 </html>
-	

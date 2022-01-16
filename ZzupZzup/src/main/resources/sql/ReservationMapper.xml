@@ -79,8 +79,6 @@
 
 	</insert>
 	
-	
-	
 	<!-- SQL : SELECT ONE -->
 	<!-- ===========상세 목록 조회====== -->
 	<select id="getReservation"	parameterType="int"	resultMap="reservationSelectMap">
@@ -94,21 +92,6 @@
 			WHERE r.reservation_no = #{reservationNo}
 	 </select>
 	 
-	 
-	 
-	 <!-- =========관리자======== -->
-	
-	<!-- <select id="listReservation"	parameterType="map"	resultMap="reservationSelectMap">
-		
-		SELECT r.reservation_no, r.RESERVATION_NUMBER, r.CHAT_NO, r.RESTAURANT_NO, r.PLAN_DATE, r.PLAN_TIME, r.FIXED_DATE, r.PAY_OPTION, r.RESERVATION_STATUS, ch.nickname, ch.CHAT_MEMBER_ID
-			FROM RESERVATION AS r
-			LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
-							 FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)
-			                 WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)
-			LEFT OUTER JOIN reservation_order AS ro ON (r.reservation_no = ro.reservation_no)
-			ORDER BY RESERVATION_NO LIMIT #{search.startRowNum}, #{search.pageSize}		
-	 </select> -->
-	
 	<select id="listReviewCheck" parameterType="map" resultType="string">
 		select review_no
         from review 
@@ -116,32 +99,110 @@
 	</select>
 	
 	
-	  <!-- =========관리자, 유저 하는중======== -->
+	  <!-- =========관리자, 유저======== -->
 	
 	<select id="listReservation"	parameterType="map"	resultMap="reservationSelectMap">
 		
 		select *
-		FROM ( select reservation_no, reservation_number, chat_no, restaurant_no, plan_date, plan_time, fixed_date, pay_option, reservation_status
-		FROM reservation
-        ORDER BY RESERVATION_NO DESC LIMIT #{search.startRowNum}, #{search.pageSize}) as r
-        LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
-						FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)
-			            WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)
-		LEFT OUTER JOIN (select menu_title, order_count, reservation_no from reservation_order) AS ro ON (r.reservation_no = ro.reservation_no)
-		<choose>
-			<when test='member.memberRole == "user"'>
-			WHERE ch.chat_member_id = #{member.memberId}
-			</when>
-		</choose>	
+      FROM ( select r.reservation_no, r.reservation_number, r.chat_no, r.restaurant_no, r.plan_date, r.plan_time, r.fixed_date, r.pay_option, r.reservation_status
+      FROM reservation r LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
+											FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME 
+																						FROM member 
+																						) as m on (cm.CHAT_MEMBER_ID = m.member_id)
+											WHERE c.chat_no = cm.chat_no 
+											) AS ch ON (r.chat_no = ch.chat_no) 
+				
+				<!-- ///////////////////////// -->							
+				<where>
+				<choose>
+					<when test='member.memberRole == "user"'>								  
+						ch.chat_member_id = #{member.memberId}
+					</when>
+				</choose>
+				<if test="search.searchCondition == 1 and search.searchKeyword !='' ">
+				AND UPPER(r.reservation_number) LIKE CONCAT('%', #{search.searchKeyword}, '%')
+				</if>
+				<!-- 방문결제 -->
+				<if test="search.searchFilter == 1">
+				AND r.pay_option = 1
+				</if>
+				<!--선결제 -->
+				<if test="search.searchFilter == 2">
+				AND r.pay_option = 2
+				</if>
+				<!-- 방문완료 -->
+				<if test="search.searchFilter == 3">
+				AND r.reservation_status = 1
+				</if>
+				<!--미방문 -->
+				<if test="search.searchFilter == 4">
+				AND r.reservation_status = 2
+				</if>
+				<!--예약취소 -->
+				<if test="search.searchFilter == 5">
+				AND r.reservation_status = 3
+				</if>
+				<!-- 예약거절 -->
+				<if test="search.searchFilter == 6">
+				AND r.reservation_status = 4
+				</if>
+			</where>
+			GROUP BY r.RESERVATION_NO					
+				<!-- ///////////////////////// -->						                        
+      ORDER BY <choose>
+				<when test="search.searchSort == 'latest'"> r.RESERVATION_NO DESC LIMIT #{search.startRowNum}, #{search.pageSize}</when >
+				<when test="search.searchSort == 'oldest'"> r.RESERVATION_NO ASC LIMIT #{search.startRowNum}, #{search.pageSize}</when >
+				<otherwise> r.RESERVATION_NO DESC LIMIT #{search.startRowNum}, #{search.pageSize} </otherwise>
+			</choose>) as rrr
+      LEFT OUTER JOIN (select menu_title, order_count, reservation_no from reservation_order) AS ro ON (rrr.reservation_no = ro.reservation_no)
 	 </select>
 	 
-	 <!-- =========업주하는중======== -->
-	 <select id="listMyReservation"	parameterType="map"	resultMap="reservationSelectMap">
+	 <!-- =========업주======== -->
+	<select id="listMyReservation"	parameterType="map"	resultMap="reservationSelectMap">
 	 
 	 	select *
 		FROM ( select reser.reservation_no, reser.reservation_number, reser.chat_no, reser.restaurant_no, reser.plan_date, reser.plan_time, reser.fixed_date, reser.pay_option, reser.reservation_status
-		FROM reservation reser Inner Join (select restaurant_no from restaurant where member_id = ' #{member.memberId}') as et on (reser.restaurant_no = et.restaurant_no)
-        ORDER BY RESERVATION_NO DESC LIMIT #{search.startRowNum}, #{search.pageSize}) as r
+		FROM reservation reser Inner Join (select restaurant_no from restaurant where member_id = #{member.memberId}) as et on (reser.restaurant_no = et.restaurant_no)
+        
+        <!-- ///////////////////////// -->							
+				<where>
+				<if test="search.searchCondition == 1 and search.searchKeyword !='' ">
+				AND UPPER(reser.reservation_number) LIKE CONCAT('%', #{search.searchKeyword}, '%')
+				</if>
+				<!-- 방문결제 -->
+				<if test="search.searchFilter == 1">
+				AND reser.pay_option = 1
+				</if>
+				<!--선결제 -->
+				<if test="search.searchFilter == 2">
+				AND reser.pay_option = 2
+				</if>
+				<!-- 방문완료 -->
+				<if test="search.searchFilter == 3">
+				AND reser.reservation_status = 1
+				</if>
+				<!--미방문 -->
+				<if test="search.searchFilter == 4">
+				AND reser.reservation_status = 2
+				</if>
+				<!--예약취소 -->
+				<if test="search.searchFilter == 5">
+				AND reser.reservation_status = 3
+				</if>
+				<!-- 예약거절 -->
+				<if test="search.searchFilter == 6">
+				AND reser.reservation_status = 4
+				</if>
+			</where>
+			GROUP BY reser.RESERVATION_NO					
+				<!-- ///////////////////////// -->		
+        
+        ORDER BY <choose>
+				<when test="search.searchSort == 'latest'"> RESERVATION_NO DESC LIMIT #{search.startRowNum}, #{search.pageSize}</when >
+				<when test="search.searchSort == 'oldest'"> RESERVATION_NO ASC LIMIT #{search.startRowNum}, #{search.pageSize}</when >
+				<otherwise> RESERVATION_NO DESC LIMIT #{search.startRowNum}, #{search.pageSize}</otherwise>
+			</choose>
+		) as r
         LEFT OUTER JOIN (SELECT c.chat_no, cm.chat_member_id, m.nickname
 						FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME FROM member ) as m on (cm.CHAT_MEMBER_ID = m.member_id)
 			            WHERE c.chat_no = cm.chat_no) AS ch ON (r.chat_no = ch.chat_no)

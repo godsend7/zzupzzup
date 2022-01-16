@@ -270,8 +270,8 @@
 					<div class="container">
 
 						<!-- start:Form -->
-						<h3>예약하기</h3>
-					
+						<h2 class="pl-0 mb-0">예약하기</h2>
+						<div class="col-12" style="padding:0px"><hr></div>
 						<form id="addReservation">
 								<input type="hidden" id="payMethod" name="payMethod" value="${reservation.payMethod}">
 								<input type="hidden" id="chat.chatNo" name="chat.chatNo" value="${reservation.chat.chatNo}">
@@ -302,10 +302,13 @@
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
-									<label for="restaurantAdress">음식점 소재지 주소</label> 
-									<p>${reservation.restaurant.streetAddress}</p>
-									<p>${reservation.restaurant.areaAddress}</p>
-									<p>${reservation.restaurant.restAddress}</p>
+									<label for="restaurantAdress">음식점 소재지 주소</label>
+									<p><span class="badge badge-info">도로명 주소</span>&nbsp;
+									 ${reservation.restaurant.streetAddress}</p>
+									<p><span class="badge badge-warning">지번 주소</span>&nbsp;&nbsp;&nbsp;&nbsp;
+									 ${reservation.restaurant.areaAddress}</p>
+									<p><span class="badge badge-success">상세 주소</span>&nbsp;&nbsp;&nbsp;&nbsp;
+									 ${reservation.restaurant.restAddress}</p>
 									<input id="streetAddress" type="hidden" name="streetAddress" value="${reservation.restaurant.streetAddress}">
 									<input id="areaAddress" type="hidden" name="areaAddress" value="${reservation.restaurant.areaAddress}">
 									<input id="restAddress" type="hidden" name="restAddress" value="${reservation.restaurant.restAddress}">
@@ -381,17 +384,19 @@
 					      			<input type="time" id="planTime" name="planTime">
 								</div>
 								
-								<%-- <div class="col-6 col-12-xsmall">
-									<label for="restaurantTimes">음식점 영업 시간dc</label> 
-									<p>${reservation.restaurant.restaurantNo.restaurantTimes}</p>
-								</div> --%>
+								<div class="col-6 col-12-xsmall">
+									<label for="restaurantTimes">음식점 영업 시간</label> 
+									<p>${reservation.restaurant.restaurantTimes}</p>
+								</div> 
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="demo-memberCount"></label> 
 									<p></p>
 								</div>
 								<!-- Break -->
-								<h3>결제하기</h3>
+								
+								<h2 class="pl-4 mb-0">결제하기</h2>
+								<div class="col-12 pl-4 mb-0" style="padding:0px" ><hr></div>
 								
 								<!-- Break -->
 								<div class="col-12">
