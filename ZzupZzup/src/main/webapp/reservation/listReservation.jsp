@@ -14,11 +14,31 @@
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
 .orderBox { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+
+.nicknameBox { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+
+.reservationStatusBox { height:24.2px }
+.fixedDateBox { height:24.2px }
+
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
-	  	
+
+	function fncPageNavigation(currentPage) {
+		
+		  console.log("커런트 페이지 : "+currentPage);
+		  $("#currentPage").val(currentPage);
+		  if("${member.memberRole}" == "owner"){
+		  	$("#reservationForm").attr("method", "POST").attr("action", "/reservation/listMyReservation").submit();
+		  	}else{
+			  	$("#reservationForm").attr("method", "POST").attr("action", "/reservation/listReservation").submit();
+				  
+			}
+		  //var link = window.location.href;
+		  //console.log(link);
+		    
+	}
 		
 	  	//////////이전페이지////////////////
 	$(function() {
@@ -28,20 +48,37 @@
 		console.log(${reservation.restaurant});
 		console.log("restaurantdfsfdsNa~~");
 		
-		function fncPageNavigation(currentPage) {
-			
-			  console.log(currentPage);
-			  $("#currentPage").val(currentPage);
-			  
-			  var link = window.location.href;
-			    console.log(link);
-			    
+		//============= "검색"  Event  처리 =============
+		$(".search-btn").on("click", function() {
+			fncPageNavigation(1);
+		});
+		
+		//============= 페이지 로딩시 필터 조건이 있다면 표시 ========
+		if("${search.searchFilter}" != null && "${search.searchFilter}" != ""){
+			//console.log("필터 조건?? ${search.searchFilter}");
+			$("input:checkbox[value=${search.searchFilter}]").prop("checked", true);
+			$("input:checkbox[value=${search.searchFilter}]").addClass("active");
 		}
-	
+		
+		//필터 클릭
+		$("input:checkbox[name='searchFilter']").on("click", function(e){
+			//console.log("클릭함");
+			let isActive = $(this).hasClass("active");
+			if(isActive){
+				$("input:checkbox[name='searchFilter']").prop("checked", false);
+				$("input:checkbox[name='searchFilter']").removeClass("active");
+			}else{
+				$("input:checkbox[name='searchFilter']").prop("checked", false);
+				$("input:checkbox[name='searchFilter']").removeClass("active");
+				$(this).prop("checked", true);
+				$(this).addClass("active");
+				fncPageNavigation(1);
+			}
+		});
+		//필터 클릭
 		/* ---------무한스크롤--------	 */
 		let count = 2;
 		$(window).on("scroll", function(){
-			
 			let scrTop = $(window).scrollTop();
 			let scrBtm = $(document).height() - $(window).height() - $(window).scrollTop();
 			let currentPage = $("#currentPage").val();
@@ -49,12 +86,13 @@
 			//console.log("top : " + scrTop);
 			//console.log("bottom : " + scrBtm);
 			//console.log("count : " + count);
-			if(scrBtm <= 0 ){
-				console.log("바닥이야");
-				//console.log($("#chatForm"));
-				//console.log($("#searchKeyword").val());
+			if(scrBtm <= 1 ){
+				console.log($("#reservationForm"));
+				console.log($("#searchKeyword").val());
 				let queryStr = $("#reservationForm").serialize();
 				console.log(queryStr);
+				/////////////////////////////
+				
 				
 				//////////////////////////////////
 	    		$.ajax({
@@ -63,9 +101,6 @@
 	    				dataType : "json",
 	    				data: queryStr,
 						success : function(data) {
-	    					alert("무한스크롤 성공");
-	    					console.log(data);
-	    				
 		    				let dom ='';
 							$.each(data.list, function(index, item){
 								console.log(item);
@@ -73,14 +108,12 @@
 									+'<div class="card mb-4 shadow-sm">'
 									+'<a href="" class="thumb">'
 									+'<img src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"></a>'
-								////////////////여기서부터 내가/////////////////
 									+'<div class="card-body">'
-									+'<h3 class="card-title">'+item.restaurant.restaurantName+'</h3>'
-									+'<h4 class="text-primary card-title">예약번호<a href="/reservation/getReservation?reservationNo='+item.reservationNo+'">'+item.reservationNumber+'</a></h4>'
+									+'<h2 class="card-title">'+item.restaurant.restaurantName+'</h2>'
+									+'<h3 class="text-primary card-title">예약번호 <a href="/reservation/getReservation?reservationNo='+item.reservationNo+'">'+item.reservationNumber+'</a></h3>'
 									+'<div class="col-md-8 nickname">'
 									+'<label for="nickname"> 예약자 NickName</label>'
-									/////////////foreach문 어케하지????////////////
-									+'<p>';
+									+'<p class="nicknameBox">';
 									
 									var total = item.chat.chatMember.length;
 									$.each(item.chat.chatMember, function(status, itemm){
@@ -91,13 +124,11 @@
 											dom += " ";
 										}
 									});
-									
 									dom += '</p>'
 									+'</div>'
 									+'<div class="col-md-8 orderName">'
 									+'<label for="orderName">주문 메뉴 명, 수량</label>' 
 					              	+'<p class="orderBox">';
-					              	////////////////////////////
 					              	var total2 = item.order.length;
 					              	console.log(total2);
 					              	$.each(item.order, function(status, itemm){
@@ -106,11 +137,8 @@
 											dom += " / ";
 										}
 									});
-					              	
 									dom +='</p>'
 									+'</div>'
-									/////////////////////////
-									
 									+'<div class="col-md-8 planDate">'
 									+'<label for="demo-name">방문 확정 전</label>'
 									+'<p>'
@@ -120,33 +148,27 @@
 									+'<div class="container">'
 									+'<div class="row">'
 									+'<div class="col-md-8 fixedDate">'
-									+'<label for="demo-name">방문 확정 후(승인)</label>';
-									////////////////choose////////////////////
+									+'<label for="demo-name">방문 확정 후(승인)</label>'
+									+'<p class="fixedDateBox">';
 									if(item.reservationStatus == 1 || item.reservationStatus == 2){
-											dom +='<p>'+item.fixedDate+'</p>';
+											dom += item.fixedDateString
 									}
-									
+									dom +='</p>';
 									dom += '</div> <div class="col-6 col-md-4">';
-									
-									console.log(item.member);
-									console.log("item.member!!!!!");
 									if(item.member.memberRole == 'user' && item.reviewNo != null && item.reservationStatus==1){
 										dom +='<a href="#reviewModal" class="button small primary reviewModal" data-toggle="modal" data-id="'+item.reviewNo+'">리뷰 보기</a>';
 									} else if(item.member.memberRole == 'user' && item.reviewNo == null && item.reservationStatus==1){
 											dom +='<a href="/review/addReview?reservationNo='+item.reservationNo+'" class="button small primary stretched-link rivewWrite" name = "rivewWrite" id ="rivewWrite">리뷰 쓰기</a>';
 									}
-									
-									////////////////choose////////////////////  
 									dom +='</div>'
 									 +'</div>' 
 									 +'</div>'
 									+'<div class="col-6 col-12-xsmall">'
 									+'<label for="demo-name">예약/결제 현황</label>' 
-									+'<p>'
+									+'<p class="reservationStatusBox">'
 									+item.returnStatus
 									+'</p>'
 									+'</div>';
-					////////////////choose////////////////////  	
 									if(${member.memberRole == 'admin'}){
 										dom +='<div class="col-md-12 ownerId">'
 											+'<label for="ownerId">업주 아이디</label> '
@@ -155,25 +177,22 @@
 											+'</p>'
 											+'</div>';
 								}
-				////////////////choose////////////////////  
 									dom +='</div>'
 									+'</div>'
 									+'</div>';
 									
 							});
-							console.log(dom);
 							$(".thumb-list").append(dom);
-							if(data.length != 0){
+							if(data.list.length != 0){
 								count++;
 							}else{
+								console.log("더 이상 없지?");
 								if(!$("#listReservation .alert").length){
-									alert_dom = '<div class="alert alert-danger alert-dismissible" role="alert"><strong>스크롤 중지!</strong> 리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
+									alert_dom = '<div class="alert alert-danger alert-dismissible thumb-list-alert" role="alert"><strong>스크롤 중지!</strong> 리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
 									$("#listReservation").append(alert_dom);
 									$("#listReservation .alert").fadeIn();
 								}
 							}
-
-
 
 						},
 						error:function(request,status,error){
@@ -181,10 +200,24 @@
 					    }
 
 	    		}); 
-				/////////////////////////////////////////////////////
 			}
 		});
 		/* ---------무한스크롤--------	 */
+		//////////////////정렬 클릭//////////////////////
+		$(".search-sort").on("click", function(e){
+			e.preventDefault();
+			let sortType = $(this).attr("data-sort");
+			console.log(sortType);
+			
+			//let localStorage = window.localStorage;
+			//localStorage.setItem('sortType', sortType);
+			
+			//$("input[name=searchSort]").val(localStorage.getItem('sortType'));
+			$("input[name=searchSort]").val(sortType);
+			//console.log(localStorage.getItem('sortType'));
+			fncPageNavigation(1);
+		});
+	//////////////////정렬 클릭//////////////////////
 	});	  	
 					
 </script>
@@ -224,37 +257,26 @@
 											<a href="" class="button normal icon solid fa-filter dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">필터</a>
 											
 											<div class="dropmenu-list" aria-labelledby="dropmenuList">
-												<input type="checkbox" id="filterMy" class="search-filter" name="searchFilter" value="11"><label for="filterMy">내가 참여중인 채팅방</label>
-												<input type="checkbox" id="chatAge1" class="search-filter" name="searchFilter" value="1"><label for="chatAge1">10대</label>
-												<input type="checkbox" id="chatAge2" class="search-filter" name="searchFilter" value="2"><label for="chatAge2">20대</label>
-												<input type="checkbox" id="chatAge3" class="search-filter" name="searchFilter" value="3"><label for="chatAge3">30대</label>
-												<input type="checkbox" id="chatAge4 " class="search-filter" name="searchFilter" value="4"><label for="chatAge4">40대</label>
-												<input type="checkbox" id="chatAge5" class="search-filter" name="searchFilter" value="5"><label for="chatAge5">50대</label>
-												<input type="checkbox" id="chatAge6" class="search-filter" name="searchFilter" value="6"><label for="chatAge6">60대 이상</label>
-												<input type="checkbox" id="chatAge7" class="search-filter" name="searchFilter" value="7"><label for="chatAge7">연령대 무관</label>
-												<input type="checkbox" id="male" class="search-filter" name="searchFilter" value="8"><label for="male">남자</label>
-												<input type="checkbox" id="female" class="search-filter" name="searchFilter" value="9"><label for="female">여자</label>
-												<input type="checkbox" id="malefemale" class="search-filter" name="searchFilter" value="10"><label for="malefemale">성별 무관</label>
+												<input type="checkbox" id="payMent1" class="search-filter" name="searchFilter" value="1"><label for="payMent1">결제완료(방문 결제)</label>
+												<input type="checkbox" id="payMent2" class="search-filter" name="searchFilter" value="2"><label for="payMent2">결제완료(선 결제)</label>
+												<hr class="dropdown-divider">
+												<input type="checkbox" id="visit1" class="search-filter" name="searchFilter" value="3"><label for="visit1">방문완료</label>
+												<input type="checkbox" id="visit2" class="search-filter" name="searchFilter" value="4"><label for="visit2">미방문</label>
+												<hr class="dropdown-divider">
+												<input type="checkbox" id="canCel1" class="search-filter" name="searchFilter" value="5"><label for="canCel1">예약 취소</label>
+												<input type="checkbox" id="canCel2" class="search-filter" name="searchFilter" value="6"><label for="canCel2">예약 거절</label>
 											</div>
 										</div>
 									</div>
 									<div class="col-md-6 col-sm-12 d-flex">
 										<select id="searchCondition" name="searchCondition">
-											<option value="0"
-												${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>음식점명</option>
 											<option value="1"
-												${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>음식점주소</option>
+												${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>예약 번호</option>	
 										</select> <input type="text" id="searchKeyword" name="searchKeyword" placeholder="검색어" autocomplete="off" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
 										<a href="#" class="button primary icon solid fa-search search-btn"></a>
 
 										<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 										<input type="hidden" id="currentPage" name="currentPage" value="1" />
-									</div>
-									<div class="col-md-2 d-flex justify-content-end">
-										<a href="" class="button svg-btn" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-</svg>작성하기</a>
 									</div>
 								</div>
 							</div>
@@ -271,12 +293,12 @@
 									src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"></a>
 				
 								<div class="card-body">
-									<h3 class="card-title">${reservation.restaurant.restaurantName}</h3>
-									<h4 class="text-primary card-title">예약번호<a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h4>
+									<h2 class="card-title">${reservation.restaurant.restaurantName}</h2>
+									<h3 class="text-primary card-title">예약번호 <a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h3>
 								
 										<div class="col-md-8 nickname">
 										<label for="nickname"> 예약자 NickName</label> 
-									<p><c:forEach var="chatMember" items="${reservation.chat.chatMember}" varStatus="status">
+									<p class="nicknameBox"><c:forEach var="chatMember" items="${reservation.chat.chatMember}" varStatus="status">
 											<c:out value = "${chatMember.member.nickname} ${status.last ? '' : '/'}"/>
 										</c:forEach></p>
 										</div>
@@ -297,11 +319,13 @@
 										<div class="row">
 									    <div class="col-md-8 fixedDate">
 									    <label for="demo-name">방문 확정 후(승인)</label> 
+									    <p class="fixedDateBox">
 									    <c:choose>
 											<c:when test="${reservation.reservationStatus == 1 || reservation.reservationStatus == 2}">
-												<p>${reservation.fixedDate}</p> 
+												${reservation.fixedDate}
 											</c:when>
 										</c:choose>
+										</p> 
 										</div>
 									    <div class="col-6 col-md-4">
 									    <c:choose>
@@ -321,7 +345,7 @@
 									
 										<div class="col-6 col-12-xsmall">
 										<label for="demo-name">예약/결제 현황</label> 
-										<p>${reservation.returnStatus}</p>
+										<p class="reservationStatusBox">${reservation.returnStatus}</p>
 										</div>
 										
 									<c:choose>

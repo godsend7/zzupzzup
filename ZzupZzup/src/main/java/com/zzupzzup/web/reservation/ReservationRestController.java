@@ -120,9 +120,6 @@ public class ReservationRestController {
 
 		System.out.println("/reservation/addReservation : POST");
 		//Business Logic
-		//reservationService.addReservation(reservation);
-		//reservation.setReservationNo(Integer.parseInt(httpServletRequest.getParameter("reservationNo")));
-		
 		System.out.println("/reservation/addReservation22222 : POST");
 		return reservationService.addReservation(reservation);
 	
@@ -201,7 +198,6 @@ public class ReservationRestController {
 			   //to가 보내는 것이라 생각.
 			   if(fromMember.getMemberRole().equals("user")) {
 				   restaurant = restaurantService.getRestaurant(Integer.parseInt(httpServletRequest.getParameter("restaurantNo")));
-				   System.out.println("restraurantNo222::"+restaurant);
 				   restaurant.getMember().getMemberId();
 				
 				   Member member = new Member();
@@ -221,8 +217,6 @@ public class ReservationRestController {
 			        System.out.println("업주가 예약 취소 진행");
 			   }
 			   
-			   System.out.println("toMember 확인 :: " + toMember);
-			   System.out.println("fromMember 확인 :: " + fromMember);
 			   System.out.println("reservation 확인 :: " + reservation.getReservationNumber());
 			  
 		       reservationService.sendMessage(reservation, toMember,fromMember, reservationNumber);
@@ -230,19 +224,23 @@ public class ReservationRestController {
 		   /////////////////////////////////무한 스크롤////////////////////////////////////////
 		   
 		   @RequestMapping("json/listReservation")
-			public Map<String, Object> listReservation(HttpServletRequest request, @RequestParam  Map<String, Object> map, HttpSession session) throws Exception {
+			public Map<String, Object> listReservation(@ModelAttribute("search") Search search, HttpServletRequest request, @RequestParam  Map<String, Object> map, HttpSession session) throws Exception {
 				
 				System.out.println("review/json/listReservation : Service");
 				
 				String restaurantNo = request.getParameter("restaurantNo");
-				System.out.println("json/listReservation :: " + restaurantNo);
 				Member member = (Member) session.getAttribute("member");
 				
-				System.out.println(restaurantNo);
-				System.out.println(member);
-				
-				Search search = new Search();
 				search.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
+				///
+				if(search.getCurrentPage() == 0 ){
+					search.setCurrentPage(1);
+				}
+				
+				if(search.getSearchSort() == null || search.getSearchSort() == "") {
+					search.setSearchSort("latest");
+				}
+				///
 				search.setPageSize(pageSize);
 				
 				System.out.println(search.getCurrentPage() + ":: currentPage");
