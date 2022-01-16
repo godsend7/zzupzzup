@@ -2296,12 +2296,12 @@ button,
 #main #header { padding-top:20px; justify-content: space-between; align-items: center; }
 #main.index #header { position: absolute; top: 0; left: 0; width: 100%; padding-right:70px; padding-left: 120px; border-bottom: none; z-index: 1; }
 	
-#main #header .logo { position: relative; padding: 5px; font-size: 1.5em; flex:inherit; transition: all 0.5s; }
+#main #header .logo { position: absolute; padding: 5px; font-size: 1.5em; flex:inherit; transition: all 0.5s; }
 #main #header .logo strong { color: #f56a6a; text-shadow: 0 0 4px #fff; }
 #main #header .logo strong:before { content: 'ZZUPZZUPDUCE_101'; display: block; position: absolute; top: 7px; left: 34px; color: rgba(0,0,0,0.6); z-index: -1; }
 #main #header .logo strong { color: #f56a6a; text-shadow: 0 0 4px #fff; }
 #main #header .logo strong svg:nth-child(2) { position: absolute; color: rgba(0,0,0,0.5); top: 18px; left: 6px; z-index: -1; }
-#main #header .logo:hover { padding:3px; text-decoration: none; }
+#main #header .logo:hover { padding:0px; text-decoration: none; }
 
 #main.index > .inner > section { padding: 0px; }
 
@@ -2321,6 +2321,17 @@ button,
 
 #sidebar > .inner > .alt { display: none }
 
+#sidebar > .inner > .major { margin-bottom: 40px; border-bottom: none; padding-bottom: 0; }
+#sidebar h2 { border-bottom: none; }
+#sidebar #sidebarLogo { padding: 0; margin: 0; }
+#sidebar #sidebarLogo img { width: 80px; height: 80px; transition: all 0.5s; animation: sidebarlogo 5s 1s infinite cubic-bezier(0.22, 0.61, 0.36, 1) alternate; }
+#sidebar .profile-box { padding: 20px; border-radius: 10px; background: #fff;}
+#sidebar .profile-box #sidebarProfileImg { line-height: 0; }
+#sidebar .profile-box .sidebar-username { line-height: 1; word-break: break-all; }
+
+#menu ul a:hover { text-decoration: none; }
+#menu > ul > li { border-top: none;}
+
 @media screen and (max-width: 1680px) {
    	#main.index #header { padding-left: 100px; }
 }
@@ -2328,4 +2339,13 @@ button,
 	#main.index #header { padding-top: 0px; padding-bottom: 0px; padding-right: 20px; padding-left: 80px; }
    	#sidebar .toggle { background-color: transparent; }
    	#header .icons { position: relative; }
+}
+
+@keyframes sidebarlogo {
+	from {
+		transform: rotateY(0deg);
+	}
+	to{
+		transform: rotateY(360deg);
+	}
 }
