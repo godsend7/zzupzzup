@@ -269,16 +269,20 @@ public class MemberController {
 		String fileName = null; 
 		if(uploadfile.getOriginalFilename() == null || uploadfile.getOriginalFilename() == "" || uploadfile.getOriginalFilename() == "defaultImage.png") {
 			if(member.getProfileImage() == null) {
+				//System.out.println("default");
 				fileName = "defaultImage.png";
 			} else {
+				//System.out.println("바뀐 이미지");
 				fileName = member.getProfileImage();
 			}
 		} else {
+			//System.out.println("새로 update 한 이미지");
 			fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadfile.getOriginalFilename());
+			
+			//새로 이미지 변경을 한 경우에만 AWS에 업로드 되게 하기
+			String vacant = "member/" + fileName;
+			s3ImageUpload.uploadFile(uploadfile, vacant);
 		}
-		
-		String vacant = "member/" + fileName;
-		s3ImageUpload.uploadFile(uploadfile, vacant);
 		
 		member.setProfileImage(fileName);
 		
