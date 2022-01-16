@@ -370,9 +370,6 @@ VALUES(CONCAT(DATE_FORMAT(NOW(), "%Y%m%e%H%i%S"),'_',FLOOR(RAND()*1000000000)),'
 -- reservation_order
 INSERT INTO reservation_order(reservation_no, menu_title, order_count, menu_price)
 VALUES('1', '짜장면', '3', '3500');
--- notice
-INSERT INTO notice(member_id, post_title, post_text,post_category, post_member_role) VALUES 
-('hihi@a.com','배고픈데 cu','cu에서 닭가슴살 투플러스원!!!', '1', 'user');
 -- hashtag
 INSERT INTO hashtag(hashtag) VALUES ("#인스타 맛집");
 INSERT INTO hashtag(hashtag) VALUES ("#여성이 많이 찾는 맛집");

@@ -94,7 +94,7 @@
 						<!-- start:Form -->
 						<h3>쩝쩝친구 채팅방 수정 완료</h3>
 
-						<form id="addChatView">
+						<form id="updateForm">
 							<input type="hidden" name="chatRestaurant.restaurantNo" id="restaurantNo" value="${chat.chatRestaurant.restaurantNo }">
 							<input type="hidden" name="chatLeaderId.memberId" id="chatLeaderId" value="hihi@a.com">
 							<div class="row gtr-uniform">
@@ -130,10 +130,6 @@
 								<!-- Break -->
 								<div class="col-12">
 									<label for="chatGender">참여가능 성별</label>
-								</div>
-							</div>
-							<div class="row gtr-uniform">
-								<div class="col-md-12">
 									<c:choose>
 										<c:when test="${chat.chatGender=='1' }">
 										<p>남자</p>
@@ -153,9 +149,7 @@
 								<!-- Break -->
 								<div class="col-12">
 									<label for="chatAge">참여가능 연령대</label>
-								</div>
-								<div class="col-md-12 chat-age-range">
-									
+									<p class="chat-age-range"></p>
 								</div>
 							</div>
 							<div class="row gtr-uniform">
@@ -199,12 +193,12 @@
 								</div>
 							</div>
 							</c:if>
-							<div class="row gtr-uniform">
+							<div class="row gtr-uniform mt-5">
 								<!-- Break -->
 								<div class="col-12">
 									<ul class="actions justify-content-center">
+										<li><input type="button" value="채팅방 목록" class="secondary" /></li>
 										<li><input type="button" value="채팅방 수정" class="primary" /></li>
-										<li><input type="button" value="채팅방 목록" class="" /></li>
 									</ul>
 								</div>
 							</div>

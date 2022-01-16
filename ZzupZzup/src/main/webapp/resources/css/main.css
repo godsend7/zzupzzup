@@ -1,6 +1,7 @@
 @import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,400italic,600italic|Roboto+Slab:400,700");
 @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bakbak+One&display=swap');
 /*
 	Editorial by HTML5 UP
 	html5up.net | @ajlkn
@@ -2096,7 +2097,7 @@ button,
   #header .logo {
     border-bottom: 0;
     color: inherit;
-    font-family: "Roboto Slab","Gowun Dodum", serif;
+    font-family: 'Bakbak One', serif;
     font-size: 1.125em; }
   #header .icons {
     text-align: right; }
@@ -2295,11 +2296,12 @@ button,
 #main #header { padding-top:20px; justify-content: space-between; align-items: center; }
 #main.index #header { position: absolute; top: 0; left: 0; width: 100%; padding-right:70px; padding-left: 120px; border-bottom: none; z-index: 1; }
 	
-#main #header .logo { position: relative; padding: 10px; font-size: 1.2em; flex:inherit; }
+#main #header .logo { position: relative; padding: 5px; font-size: 1.5em; flex:inherit; transition: all 0.5s; }
 #main #header .logo strong { color: #f56a6a; text-shadow: 0 0 4px #fff; }
-#main #header .logo strong:before { content: 'ZZUPZZUPDUCE_101'; display: block; position: absolute; top: 11px; left: 37px; color: rgba(0,0,0,0.8); z-index: -1; }
+#main #header .logo strong:before { content: 'ZZUPZZUPDUCE_101'; display: block; position: absolute; top: 7px; left: 34px; color: rgba(0,0,0,0.6); z-index: -1; }
 #main #header .logo strong { color: #f56a6a; text-shadow: 0 0 4px #fff; }
-#main #header .logo strong svg:nth-child(2) { position: absolute; color: rgba(0,0,0,0.6); top: 17px; left: 11px; z-index: -1; }
+#main #header .logo strong svg:nth-child(2) { position: absolute; color: rgba(0,0,0,0.5); top: 18px; left: 6px; z-index: -1; }
+#main #header .logo:hover { padding:3px; text-decoration: none; }
 
 #main.index > .inner > section { padding: 0px; }
 
