@@ -109,11 +109,16 @@
 											FROM chat c, chat_member cm right OUTER JOIN (SELECT member_id, NICKNAME 
 																						FROM member 
 																						) as m on (cm.CHAT_MEMBER_ID = m.member_id)
-											WHERE c.chat_no = cm.chat_no and cm.chat_member_id = #{member.memberId}
-											) AS ch ON (r.chat_no = ch.chat_no)   
+											WHERE c.chat_no = cm.chat_no 
+											) AS ch ON (r.chat_no = ch.chat_no) 
 				
 				<!-- ///////////////////////// -->							
 				<where>
+				<choose>
+					<when test='member.memberRole == "user"'>								  
+						ch.chat_member_id = #{member.memberId}
+					</when>
+				</choose>
 				<if test="search.searchCondition == 1 and search.searchKeyword !='' ">
 				AND UPPER(r.reservation_number) LIKE CONCAT('%', #{search.searchKeyword}, '%')
 				</if>
