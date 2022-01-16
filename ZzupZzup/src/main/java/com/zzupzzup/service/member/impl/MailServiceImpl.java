@@ -48,7 +48,7 @@ public class MailServiceImpl implements MailService {
 //		body = "안녕하세요. 쩝쩝듀스101입니다.\n"+"아래 링크로 접속하여 비밀번호를 설정하여 주세요. \n\n"
 //				+ "http://localhost:8080/member/setPassword.jsp?memberId="+to;
 		body = "<div align='center'>"
-				+ "<img src='/Users/choyoungju/git/zzupzzup/ZzupZzup/src/main/webapp/favicon.ico'><br/>"
+				+ "<img src='/favicon.ico'><br/>"
 				+ "안녕하세요. 쩝쩝듀스101입니다.<br/>"
 				+ "아래 버튼을 클릭 하여 비밀번호를 설정해주세요.<br/><br/>"
 				+ "<a href='http:localhost:8080/member/setPassword.jsp?memberId="+to+"'>"
