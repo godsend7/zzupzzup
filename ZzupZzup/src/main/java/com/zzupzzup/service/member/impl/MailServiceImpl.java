@@ -27,7 +27,8 @@ public class MailServiceImpl implements MailService {
 	private final String from = "zzupzzup101@gmail.com";			//발신자 이메일
 	private final String fromName = "쩝쩝듀스101";						//발신자 이름
 	private final String smtpUserName = "zzupzzup101@gmail.com";	//발신자 이메일(서비스 로그인 할 때 쓰는 것 같음)
-	private final String smtpPwd = "dlfnbqhwlcysodtj";				//발신자 이메일의 비밀번호(앱 비밀번호 이용)
+	//private final String smtpPwd = "dlfnbqhwlcysodtj";				//발신자 이메일의 비밀번호(앱 비밀번호 이용)
+	private final String smtpPwd = "resztnfcuvgpsxuq";				//발신자 이메일의 비밀번호(앱 비밀번호 이용)
 	private final String host = "smtp.gmail.com";					//이메일 보내는 서비스
 	private final String port = "587";								//메일 고유 포트 번호(구글은 587)
 	private String subject;											//메일 제목
@@ -116,8 +117,9 @@ public class MailServiceImpl implements MailService {
         try {
             System.out.println("전송 중입니다 . . .");
             
+
             //System.out.println("link :: '" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/member/setPassword.jsp?memberId="+to+"'");
-            
+
             transport.connect(host, smtpUserName, smtpPwd);
             transport.sendMessage(msg, msg.getAllRecipients());
             System.out.println("전송이 완료되었습니다.");

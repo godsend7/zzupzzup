@@ -13,12 +13,17 @@
 
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
+#listReservation .thumb-list .card .card-body label { margin-bottom: 0px; }
+#listReservation .thumb-list .card .card-body p { color: #999; }
 .orderBox { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 
 .nicknameBox { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 
+.restaurantNameBox { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+
 .reservationStatusBox { height:24.2px }
 .fixedDateBox { height:24.2px }
+.reviewBtn { height:36.39px }
 
 </style>
 
@@ -42,7 +47,7 @@
 		
 	  	//////////이전페이지////////////////
 	$(function() {
-			
+		
 		console.log(${reservation});
 		console.log("${reservation.order}");
 		console.log(${reservation.restaurant});
@@ -102,68 +107,64 @@
 	    				data: queryStr,
 						success : function(data) {
 		    				let dom ='';
+		    				/////->숫자 자르기 근데 안먹음
+		    				let fixed = "${reservation.fixedDate}";
+		    				let fixedDateSlice = fixed.slice(0,-5);
+		    				$(".fixedDateBox").find("p").text(fixedDateSlice);
+		    				/////->숫자 자르기 근데 안먹음
 							$.each(data.list, function(index, item){
 								console.log(item);
 								dom += '<div class="col-md-4">'
-									+'<div class="card mb-4 shadow-sm">'
+									+'<div class="card mb-4 shadow">'
 									+'<a href="" class="thumb">'
 									+'<img src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"></a>'
 									+'<div class="card-body">'
-									+'<h2 class="card-title">'+item.restaurant.restaurantName+'</h2>'
-									+'<h3 class="text-primary card-title">예약번호 <a href="/reservation/getReservation?reservationNo='+item.reservationNo+'">'+item.reservationNumber+'</a></h3>'
-									+'<div class="col-md-8 nickname">'
+									+'<h3 class="card-title">'+item.restaurant.restaurantName+'</h3>'
+									+'<h4 class="text-primary card-title">예약번호 <a href="/reservation/getReservation?reservationNo='+item.reservationNo+'">'+item.reservationNumber+'</a></h4>'
+									+'<div class="col-md-12 nickname">'
 									+'<label for="nickname"> 예약자 NickName</label>'
 									+'<p class="nicknameBox">';
 									
 									var total = item.chat.chatMember.length;
-									$.each(item.chat.chatMember, function(status, itemm){
+									$.each(item.chat.chatMember, function(indexx, itemm){
 										dom += itemm.member.nickname;
-										if (index !== total-1) {
+										if (indexx !== total-1) {
 											dom += " / ";
-										}else if (index === total-1) {
-											dom += " ";
+										}else if (indexx ===total){
+											dom += "  ";
 										}
 									});
 									dom += '</p>'
 									+'</div>'
-									+'<div class="col-md-8 orderName">'
+									+'<div class="col-md-12 orderName">'
 									+'<label for="orderName">주문 메뉴 명, 수량</label>' 
 					              	+'<p class="orderBox">';
 					              	var total2 = item.order.length;
-					              	console.log(total2);
-					              	$.each(item.order, function(status, itemm){
-										dom += itemm.menuTitle+' - '+itemm.orderCount;
-										if (index !== total-1) {
+					              	$.each(item.order, function(indexxx, itemmm){
+										dom += itemmm.menuTitle+' - '+itemmm.orderCount;
+										if (indexxx !== total2-1) {
 											dom += " / ";
+										}else if (indexxx ===total2){
+											dom += " ";
 										}
 									});
 									dom +='</p>'
 									+'</div>'
-									+'<div class="col-md-8 planDate">'
+									+'<div class="col-md-12 planDate">'
 									+'<label for="demo-name">방문 확정 전</label>'
 									+'<p>'
 									+item.planDateString+' '+item.planTime
 									+'</p>'
 									+'</div>'
-									+'<div class="container">'
-									+'<div class="row">'
-									+'<div class="col-md-8 fixedDate">'
+									+'<div class="col-md-12 fixedDate">'
 									+'<label for="demo-name">방문 확정 후(승인)</label>'
 									+'<p class="fixedDateBox">';
 									if(item.reservationStatus == 1 || item.reservationStatus == 2){
 											dom += item.fixedDateString
 									}
-									dom +='</p>';
-									dom += '</div> <div class="col-6 col-md-4">';
-									if(item.member.memberRole == 'user' && item.reviewNo != null && item.reservationStatus==1){
-										dom +='<a href="#reviewModal" class="button small primary reviewModal" data-toggle="modal" data-id="'+item.reviewNo+'">리뷰 보기</a>';
-									} else if(item.member.memberRole == 'user' && item.reviewNo == null && item.reservationStatus==1){
-											dom +='<a href="/review/addReview?reservationNo='+item.reservationNo+'" class="button small primary stretched-link rivewWrite" name = "rivewWrite" id ="rivewWrite">리뷰 쓰기</a>';
-									}
-									dom +='</div>'
-									 +'</div>' 
-									 +'</div>'
-									+'<div class="col-6 col-12-xsmall">'
+									dom +='</p>' 
+									+'</div>'
+									+'<div class="col-md-12">'
 									+'<label for="demo-name">예약/결제 현황</label>' 
 									+'<p class="reservationStatusBox">'
 									+item.returnStatus
@@ -176,11 +177,17 @@
 											+item.restaurant.member.memberId
 											+'</p>'
 											+'</div>';
-								}
+									}
+									dom +='<div class="col-md-12 reviewBtn">';
+									if(item.member.memberRole == 'user' && item.reviewNo != null && item.reservationStatus==1){
+										dom +='<a href="#reviewModal" class="button small fit primary reviewModal" data-toggle="modal" data-id="'+item.reviewNo+'">리뷰 보기</a>';
+									} else if(item.member.memberRole == 'user' && item.reviewNo == null && item.reservationStatus==1){
+										dom +='<a href="/review/addReview?reservationNo='+item.reservationNo+'" class="button small fit primary stretched-link rivewWrite" name = "rivewWrite" id ="rivewWrite">리뷰 쓰기</a>';
+									}
 									dom +='</div>'
 									+'</div>'
+									+'</div>'
 									+'</div>';
-									
 							});
 							$(".thumb-list").append(dom);
 							if(data.list.length != 0){
@@ -188,7 +195,7 @@
 							}else{
 								console.log("더 이상 없지?");
 								if(!$("#listReservation .alert").length){
-									alert_dom = '<div class="alert alert-danger alert-dismissible thumb-list-alert" role="alert"><strong>스크롤 중지!</strong> 리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
+									alert_dom = '<div class="alert alert-danger alert-dismissible thumb-list-alert" role="alert">리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
 									$("#listReservation").append(alert_dom);
 									$("#listReservation .alert").fadeIn();
 								}
@@ -285,91 +292,88 @@
 							
 					<div class="row thumb-list">
 						<c:set var="i" value="0" />
-				 		 	<c:forEach var="reservation" items= "${list}">
-				 		 		<c:set var="i" value="${i+2}" />
-						<div class="col-md-4">
-							<div class="card mb-4 shadow-sm">
-								<a href="" class="thumb"><img
-									src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"></a>
-				
-								<div class="card-body">
-									<h2 class="card-title">${reservation.restaurant.restaurantName}</h2>
-									<h3 class="text-primary card-title">예약번호 <a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h3>
-								
-										<div class="col-md-8 nickname">
-										<label for="nickname"> 예약자 NickName</label> 
-									<p class="nicknameBox"><c:forEach var="chatMember" items="${reservation.chat.chatMember}" varStatus="status">
-											<c:out value = "${chatMember.member.nickname} ${status.last ? '' : '/'}"/>
-										</c:forEach></p>
+			 		 	<c:forEach var="reservation" items= "${list}">
+			 		 		<c:set var="i" value="${i+2}" />
+							<div class="col-md-4">
+								<div class="card mb-4 shadow">
+									<a href="" class="thumb"><img
+										src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"></a>
+					
+									<div class="card-body">
+										<h3 class="card-title restaurantNameBox">${reservation.restaurant.restaurantName}</h3>
+										<h4 class="text-primary card-title">예약번호 <a href="/reservation/getReservation?reservationNo=${reservation.reservationNo}">${reservation.reservationNumber}</a></h4>
+										<div class="col-md-12 nickname">
+											<label for="nickname"> 예약자 NickName</label> 
+											<p class="nicknameBox">
+												<c:forEach var="chatMember" items="${reservation.chat.chatMember}" varStatus="status">
+													<c:out value = "${chatMember.member.nickname} ${status.last ? '' : '/'}"/>
+												</c:forEach>
+											</p>
 										</div>
 										
-										<div class="col-md-8 orderName">
-										<label for="orderName">주문 메뉴 명, 수량</label> 
-					              	<p class="orderBox">	<c:forEach var="order" items="${reservation.order}" varStatus="status">
-					                		<c:out value = "${order.menuTitle} - ${order.orderCount} ${status.last ? '' : '/'}"/>
-										</c:forEach> </p>
-										</div>
-									
-										<div class="col-md-8 planDate">
-										<label for="demo-name">방문 확정 전</label> 
-										<p>${reservation.planDate}  ${reservation.planTime}</p>
+										<div class="col-md-12 orderName">
+											<label for="orderName">주문 메뉴 명, 수량</label>
+											<p class="orderBox">
+												<c:forEach var="order" items="${reservation.order}" varStatus="status">
+						                			<c:out value = "${order.menuTitle} - ${order.orderCount} ${status.last ? '' : '/'}"/>
+						                		</c:forEach>
+						                	</p>
 										</div>
 										
-										<div class="container">
-										<div class="row">
-									    <div class="col-md-8 fixedDate">
-									    <label for="demo-name">방문 확정 후(승인)</label> 
-									    <p class="fixedDateBox">
-									    <c:choose>
-											<c:when test="${reservation.reservationStatus == 1 || reservation.reservationStatus == 2}">
-												${reservation.fixedDate}
+										<div class="col-md-12 planDate">
+											<label for="demo-name">방문 확정 전</label> 
+											<p>${reservation.planDate}  ${reservation.planTime}</p>
+										</div>
+										
+										<div class="col-md-12 fixedDate">
+										    <label for="demo-name">방문 확정 후(승인)</label> 
+										    <p class="fixedDateBox">
+										    	<c:choose>
+													<c:when test="${reservation.reservationStatus == 1 || reservation.reservationStatus == 2}">
+														${reservation.fixedDate}
+													</c:when>
+												</c:choose>
+											</p> 
+										</div>
+										
+										<div class="col-md-12">
+											<label for="demo-name">예약/결제 현황</label> 
+											<p class="reservationStatusBox">${reservation.returnStatus}</p>
+										</div>
+											
+										<c:choose>
+											<c:when test="${member.memberRole == 'admin'}">	
+												<div class="col-md-12 ownerId">
+													<label for="ownerId">업주 아이디</label> 
+													<p>${reservation.restaurant.member.memberId}</p>
+												</div>
 											</c:when>
-										</c:choose>
-										</p> 
-										</div>
-									    <div class="col-6 col-md-4">
-									    <c:choose>
-									    	<c:when test="${member.memberRole == 'user' && reservation.reviewNo != null && reservation.reservationStatus==1}">
-									    		<a href="#reviewModal" class="button small primary reviewModal" data-toggle="modal" data-id="${reservation.reviewNo}">리뷰 보기</a>
-									    	</c:when>
-									    	
-									    	<c:when test="${member.memberRole == 'user' && reservation.reviewNo == null && reservation.reservationStatus==1}">
-									    		<a href="/review/addReview?reservationNo=${reservation.reservationNo}" class="button small primary stretched-link rivewWrite" name = "rivewWrite" id ="rivewWrite">리뷰 쓰기</a>
-									    	</c:when>
-									    </c:choose>
-									    
-									    
-									    </div>
-									  	</div> 
-									  	</div>
-									
-										<div class="col-6 col-12-xsmall">
-										<label for="demo-name">예약/결제 현황</label> 
-										<p class="reservationStatusBox">${reservation.returnStatus}</p>
-										</div>
+										</c:choose>	
 										
-									<c:choose>
-										<c:when test="${member.memberRole == 'admin'}">	
-										<div class="col-md-12 ownerId">
-										<label for="ownerId">업주 아이디</label> 
-										<p>${reservation.restaurant.member.memberId}</p>
-										</div>
-									</c:when>
-								</c:choose>		
+										<div class="col-md-12 reviewBtn">
+										    <c:choose>
+										    	<c:when test="${member.memberRole == 'user' && reservation.reviewNo != null && reservation.reservationStatus==1}">
+										    		<a href="#reviewModal" class="button small fit primary reviewModal" data-toggle="modal" data-id="${reservation.reviewNo}">리뷰 보기</a>
+										    	</c:when>
+										    	
+										    	<c:when test="${member.memberRole == 'user' && reservation.reviewNo == null && reservation.reservationStatus==1}">
+										    		<a href="/review/addReview?reservationNo=${reservation.reservationNo}" class="button small fit primary stretched-link rivewWrite" name = "rivewWrite" id ="rivewWrite">리뷰 쓰기</a>
+										    	</c:when>
+											</c:choose>
+										</div>	
+									</div>
 								</div>
 							</div>
-							
-						</div>
 						</c:forEach>
 						<ul class='icons'> 
 							<jsp:include page='/review/getReview.jsp'/>
 						</ul>
-		
+	
 					<!-- <div class="col-12 text-center thumb-more">
-						<a href="#" class="icon solid fa fa-plus-circle"></a>
-					</div>  -->
-					<!-- end -->
-					</div>
+							<a href="#" class="icon solid fa fa-plus-circle"></a>
+						</div>  -->
+						<!-- end -->
+						</div>
 					</div>
 				</section>
 			</div>

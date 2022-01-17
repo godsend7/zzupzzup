@@ -32,7 +32,8 @@
 				} else if(${member.memberRole == 'admin'}) {
 					self.location = "/restaurant/listRestaurant"
 				} else {
-					self.location = "/restaurant/listMyCallDibs"
+					//self.location = "/restaurant/listMyCallDibs"
+					history.go(-1);
 				}
 				/* history.go(-1); */
 			});

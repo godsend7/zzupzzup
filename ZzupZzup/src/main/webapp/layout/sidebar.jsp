@@ -130,7 +130,7 @@
 									<c:if test="${sessionScope.member.memberRole == 'user'}">
 										<li><a href="/member/listMyActivityScore?memberId=${member.memberId}">내 활동 점수 적립 내역</a></li>
 										<li><a href="/review/listReview">내가 작성한 리뷰 내역</a></li>
-										<!-- <li><a href="/community/listMyPost">내가 작성한 게시판 내역</a></li> -->
+										<li><a href="/community/listMyPost?memberId=${member.memberId}">내가 작성한 게시물</a></li>
 										<li><a href="/reservation/listReservation">나의 예약 및 결제 내역</a></li>
 										<li><a href="/review/listMyLikeReview">내가 좋아요 누른 리뷰 내역</a></li>
 										<li><a href="/community/listMyLikePost">내가 좋아요 누른 게시물 내역</a></li>

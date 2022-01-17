@@ -25,7 +25,7 @@ public class Reservation {
 	private int memberCount;
 	private int reservationStatus;
 	private boolean fixedStatus;
-	private Date reservationDate;
+	private Timestamp reservationDate;
 	private int reservationCancelReason;
 	private String reservationCancelDetail;
 	private boolean refundStatus;
@@ -186,11 +186,11 @@ public class Reservation {
 		this.fixedStatus = fixedStatus;
 	}
 
-	public Date getReservationDate() {
+	public Timestamp getReservationDate() {
 		return reservationDate;
 	}
 
-	public void setReservationDate(Date reservationDate) {
+	public void setReservationDate(Timestamp reservationDate) {
 		this.reservationDate = reservationDate;
 	}
 

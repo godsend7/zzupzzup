@@ -628,7 +628,7 @@
  						arrayLayout.push(
 							{restaurantNo:item.restaurantNo, restaurantName:item.restaurantName, menuType:item.returnMenuType, mainMenu:item.restaurantMenus.menuTitle, 
 							latitude:item.latitude, longitude:item.longitude, streetADDR:item.streetAddress, areaADDR:item.areaAddress, restaurantTel:item.restaurantTel, 
-					 		parkable:item.parkable, reservationStatus:item.reservationStatus, judgeStatus:item.judgeStatus}
+					 		parkable:item.parkable, reservationStatus:item.reservationStatus, judgeStatus:item.judgeStatus, requestDate:item.requestDate, postNo:item.postNo}
  						); 
  					});
  					
@@ -690,20 +690,27 @@
 		
 		//filter 조건에 따른 map 표시
 		for (var i=0; i<arrayLayout.length; i++) {
-			if(reCheck && parkCheck) {
-				if ((arrayLayout[i].reservationStatus && arrayLayout[i].judgeStatus == 2) && arrayLayout[i].parkable) {
+			
+			
+			if ((!(arrayLayout[i].judgeStatus == 1 || arrayLayout[i].judgeStatus == 3) || typeof arrayLayout[i].judgeStatus == "undefined")
+					&& (arrayLayout[i].requestDate == null || typeof arrayLayout[i].requestDate == "undefined")) {
+				
+				console.log(arrayLayout[i]);
+				if(reCheck && parkCheck) {
+					if ((arrayLayout[i].reservationStatus && arrayLayout[i].judgeStatus == 2) && arrayLayout[i].parkable) {
+						selectMap(i);
+					}
+				} else if (reCheck) {
+					if (arrayLayout[i].reservationStatus && arrayLayout[i].judgeStatus == 2) {
+						selectMap(i);
+					}
+				} else if (parkCheck) {
+					if (arrayLayout[i].parkable) {
+						selectMap(i);
+					}
+				} else {
 					selectMap(i);
 				}
-			} else if (reCheck) {
-				if (arrayLayout[i].reservationStatus && arrayLayout[i].judgeStatus == 2) {
-					selectMap(i);
-				}
-			} else if (parkCheck) {
-				if (arrayLayout[i].parkable) {
-					selectMap(i);
-				}
-			} else {
-				selectMap(i);
 			}
 		}
 		

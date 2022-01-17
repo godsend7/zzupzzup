@@ -58,7 +58,7 @@ public class MongoRestController {
 			//모든 디비 limit() 번까지 불르기
 			collection = database.getCollection("chats");
 			BasicDBObject query = new BasicDBObject("chatNo", chatNo);
-			FindIterable<Document> fit = collection.find(query).sort(new BasicDBObject("regDate",1)).limit(100);
+			FindIterable<Document> fit = collection.find(query).sort(new BasicDBObject("regDate",1));
 			fit.into(docs);
 			for(Document dok : docs) {
 				System.out.println("채팅방 ID가 " + chatNo + "인 채팅 메세지 : " + dok);

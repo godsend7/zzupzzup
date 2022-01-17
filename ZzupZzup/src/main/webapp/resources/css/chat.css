@@ -72,7 +72,7 @@
 .chat-body ul.chatting-list li.sent .chatProfile { flex-direction: row-reverse; }
 .chat-body ul.chatting-list li .chat-message { width: 70%; border-radius: 10px; padding: 15px; background-color: #eee; margin-top: 7px; background-color: #bad1ff; }
 .chat-body ul.chatting-list li.sent .chat-message { background-color: #ffe3a5; }
-.chat-body ul.chatting-list li.system .chat-message { width: 50%; margin-top: 17px; background-color: #e0e0e0; text-align: center; }
+.chat-body ul.chatting-list li.system .chat-message { width: 50%; margin-top: 17px; background-color: #e0e0e0; text-align: center; font-size: 0.8em; padding: 10px; }
 .chat-body ul.chatting-list li .chat-message img { max-width: 200px; }
 .chatProfile > * { margin-right: 10px; }
 .chatProfile img { width: 35px; height: 35px; border-radius: 50%; overflow: hidden; }
