@@ -148,7 +148,8 @@
 		}
     			
     	/* image += "<div class='imgBox'> <img src='/resources/images/uploadImages/review/" + item + "'> </div>"*/
-    	image += "<div class='imgBox'> <img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/" + item + "'> </div>" 
+    	//image += "<div class='imgBox'> <img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/" + item + "'> </div>" 
+    	image += "<img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/" + item + "'>" 
     	
     	
     	$("#reviewImage").append(image);
@@ -172,7 +173,8 @@
 		}); */
 		
 		$('#reviewModal').on('hidden.bs.modal', function () {
-			location.reload();
+			console.log("reviewModal 종료");
+			//location.reload();
     	});
     });
 </script>
@@ -215,14 +217,24 @@
 						 <div class="carousel-inner" id="reviewImage">
 							<!-- 이미지 보여지는 곳 -->
 						</div> 
-						<a class="carousel-control-prev" data-target="#carouselExampleIndicators" data-slide="prev">
+						<button class="carousel-control-prev btn-outline-link" type="button" id="car_prev" data-target="#carouselExampleIndicators" data-slide="prev"
+					  		style="border: none; outline: none; box-shadow: none; height: 600px; background-color:transparent;">
+					    	<span class="carousel-control-prev-icon" aria-hidden="true" style="width: 50px; height: 50px;"></span>
+					    	<span class="sr-only">Previous</span>
+					  	</button>
+					  	<button class="carousel-control-next btn-outline-link" type="button" id="car_next" data-target="#carouselExampleIndicators" data-slide="next"
+					  		style="border: none; outline: none; box-shadow: none; height: 600px; background-color:transparent;">
+					    	<span class="carousel-control-next-icon" aria-hidden="true" style="width: 50px; height: 50px;"></span>
+					    	<span class="sr-only">Next</span>
+					  	</button>
+						<!-- <a class="carousel-control-prev" data-target="#carouselExampleIndicators" data-slide="prev">
 							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
 							<span class="sr-only">Previous</span>
 						</a> 
 						<a class="carousel-control-next" data-target="#carouselExampleIndicators" data-slide="next">
 							<span class="carousel-control-next-icon" aria-hidden="true"></span>
 							<span class="sr-only">Next</span>
-						</a>
+						</a> -->
 					</div>
 				</div>
 				

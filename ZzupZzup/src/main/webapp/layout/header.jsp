@@ -49,7 +49,7 @@
 <!-- start: Header -->
 <header id="header">
 	<!-- 현재 나의 PATH 가져오기 -->
-	<%-- <c:set var="path" value="${pageContext.request.requestURI}" />  --%>
+	<c:set var="URI" value="${pageContext.request.requestURI}" />
 	<c:set var="path" value='${requestScope["javax.servlet.forward.request_uri"]}' />
 	
 	<a href="/" class="logo">
@@ -62,7 +62,8 @@
 		</svg> ZZUPZZUPDUCE_101</strong>
 	</a>
 	
-	<c:if test = "${empty path}">
+	<%-- <c:if test = "${empty path}"> --%>
+	<c:if test = "${empty path && (URI eq '/' || fn:contains(URI, 'main'))}">
 		<form class="col-12 col-lg-auto mb-3 mb-lg-0 mapSearch" id="mapSearch">
 			<div class="col-md-12 col-sm-12 d-flex">
 			<div  class="searchCondition">

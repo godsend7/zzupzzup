@@ -183,22 +183,24 @@
 												<div class="report-info-bottom">
 													<c:choose>
 														<c:when test="${param.reportCategory == 1}">
-															<a href="#">
+															<c:if test="${member.memberRole eq 'admin'}">
+																<a href="/chat/getChatRecord?chatNo=${report.reportChat.chatNo}">상세보기</a>
+															</c:if>
 														</c:when>
 														<c:when test="${param.reportCategory == 2}">
-															<a href="/member/getMember?memberId=${report.reportChatMember.memberId}">
+															<a href="/member/getMember?memberId=${report.reportChatMember.memberId}">상세보기</a>
 														</c:when>
 														<c:when test="${param.reportCategory == 3}">
-															<a href="#reviewModal" class="reviewModal" data-toggle="modal" data-id="${report.reportReview.reviewNo}">
+															<a href="#reviewModal" class="reviewModal" data-toggle="modal" data-id="${report.reportReview.reviewNo}">상세보기</a>
 														</c:when>
 														<c:when test="${param.reportCategory == 4}">
-															<a href="/community/getCommunity?postNo=${report.reportPost.postNo}">
+															<a href="/community/getCommunity?postNo=${report.reportPost.postNo}">상세보기</a>
 														</c:when>
 														<c:when test="${param.reportCategory == 5}">
-															<a href="/restaurant/getRestaurant?restaurantNo=${report.reportRestaurant.restaurantNo}">
+															<a href="/restaurant/getRestaurant?restaurantNo=${report.reportRestaurant.restaurantNo}">상세보기</a>
 														</c:when>
 													</c:choose>
-													상세보기</a>
+													
 													<div class="report-info-bottom-right">
 														<c:if test="${member.memberRole eq 'admin'}">
 															<span><strong>제보자 아이디 : </strong>${report.memberId}</span>
