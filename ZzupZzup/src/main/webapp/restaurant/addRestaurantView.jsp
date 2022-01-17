@@ -119,8 +119,8 @@
 			$("#restaurantName").autocomplete({
 				source : function(request, response) {
 					console.log($("#restaurantName").val());
-					var searchKeyword = $("#restaurantName").val();
-					searchKeyword = escape(encodeURIComponent(searchKeyword));
+					//var searchKeyword = $("#restaurantName").val();
+					//searchKeyword = escape(encodeURIComponent(searchKeyword));
 					
 					$.ajax({
 						//url : "/restaurant/json/addRestaurant/searchKeyword=" + searchKeyword,
@@ -131,9 +131,27 @@
 							"Accept" : "application/json",
 							"contentType" : "application/json; charset=utf-8"
 						},
-						success : function(JSONData) {
+						data : {
+							"keyWord" : request.term
+						},
+						success : function(data) {
 							
-							if(JSONData.list == null || JSONData.list == undefined || 
+							console.log(data);
+							
+							//label : 화면에 보여지는 텍스트 
+							//value : 실제 text태그에 들어갈 값
+							response(
+								$.map(data, function(item) {
+	                                return {
+	                                	value: item.restaurantName + " (" +item.streetAddress + ")",
+	                                    label: item.restaurantName + " (" +item.streetAddress + ")",
+	                                    id : item
+	                                }
+	                            })
+							);//response 
+							
+							
+							/* if(JSONData.list == null || JSONData.list == undefined || 
 									JSONData.list == "" || JSONData.list.length == 0) {
 								$(".fromAutocomplete").text("");
 								$(".fromAutocomplete").text("해당하는 음식점이 없습니다.");
@@ -158,7 +176,7 @@
 											
 										})
 								);
-							}
+							} */
 							
 						},
 						
@@ -168,6 +186,28 @@
 						
 					});
 				},
+				
+				select : function(event, ui) {
+		 			var thisInput = $(this).attr("id");
+		 			
+		 			if (thisInput == "startInput") {
+						startLocation = ui.item.id;
+						//console.log(startLocation.restaurantName);
+					} else if (thisInput == "goalInput"){
+						goalLocation = ui.item.id;
+						//console.log(goalLocation);
+					}
+		 			
+		 			console.log(ui.item.id);
+		 			
+					//return false;
+		 		} ,
+		 		
+		 		focus : function (event, ui) {
+		 			
+		 			return false;
+		 			//event.preventDefault();
+		 		},
 				
 				minLength : 1
 				
