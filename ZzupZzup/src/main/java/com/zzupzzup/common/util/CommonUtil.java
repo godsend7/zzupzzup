@@ -183,6 +183,74 @@ public class CommonUtil {
 		
 	}
 	
+public static String returnDay(int restaurantDay) {
+		
+		String typeName = "";
+		
+		if(restaurantDay == 1) {
+			typeName = "월요일";
+			
+			return typeName;
+			
+		} else if(restaurantDay == 2) {
+			typeName = "화요일";
+			
+			return typeName;
+			
+		} else if(restaurantDay == 3) {
+			typeName = "수요일";
+			
+			return typeName;
+			
+		} else if(restaurantDay == 4) {
+			typeName = "목요일";
+			
+			return typeName;
+		
+		} else if(restaurantDay == 5) {
+			typeName = "금요일";
+			
+			return typeName;
+		
+		} else if(restaurantDay == 6) {
+			typeName = "토요일";
+			
+			return typeName;
+		
+		} else if(restaurantDay == 7) {
+			typeName = "일요일";
+			
+			return typeName;
+		
+		} else {
+			
+			return null;
+		}
+		
+	}
+
+	public static String returnDayOff(boolean restaurantDayOff) {
+	
+	String typeName = "";
+	
+	if(restaurantDayOff == false) {
+		typeName = "";
+		
+		return typeName;
+		
+	} else if(restaurantDayOff == true) {
+		typeName = "휴무일입니다";
+		
+		return typeName;
+		
+	} else {
+		
+		return null;
+	}
+	
+}
+	
+	
 	public static String reservationStatus(int reservationStatus) {
 		
 		String typeName = "";

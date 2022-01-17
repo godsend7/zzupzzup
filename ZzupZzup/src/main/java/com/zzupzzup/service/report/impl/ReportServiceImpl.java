@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.zzupzzup.common.Search;
+import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Report;
 import com.zzupzzup.service.report.ReportDAO;
 import com.zzupzzup.service.report.ReportService;
@@ -37,12 +38,12 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	@Override
-	public Map<String, Object> listReport(Search search, int category, String memberId) throws Exception {
+	public Map<String, Object> listReport(Search search, int category, Member member) throws Exception {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
 		map.put("category", category);
-		map.put("memberId", memberId);		
+		map.put("member", member);		
 		
 		map.put("list", reportDao.listReport(map));
 		map.put("totalCount", reportDao.getTotalCount(category));

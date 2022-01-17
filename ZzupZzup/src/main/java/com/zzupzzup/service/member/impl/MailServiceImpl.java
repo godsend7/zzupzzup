@@ -10,6 +10,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.catalina.connector.Connector;
 import org.springframework.stereotype.Service;
 
 import com.zzupzzup.service.member.MailService;

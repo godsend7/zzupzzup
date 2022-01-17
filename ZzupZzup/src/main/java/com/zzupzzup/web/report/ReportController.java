@@ -91,10 +91,10 @@ public class ReportController {
 		
 		Member member = (Member) session.getAttribute("member");
 		
-		String memberId = null;
-		if (member != null && member.getMemberRole().equals("user")) {
-			memberId = member.getMemberId();
-		}
+//		String memberId = null;
+//		if (member != null && member.getMemberRole().equals("admin")) {
+//			memberId = member.getMemberId();
+//		}
 		
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
@@ -105,10 +105,14 @@ public class ReportController {
 			category = Integer.parseInt(reportCategory);
 		}
 		
+		if (member != null && member.getMemberRole().equals("owner")) {
+			category = 5;
+		}
+		
 		System.out.println(search.getCurrentPage() + ":: currentPage");
 		search.setPageSize(pageSize);
 		
-		Map<String, Object> map = reportService.listReport(search, category, memberId);
+		Map<String, Object> map = reportService.listReport(search, category, member);
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
 		model.addAttribute("list", map.get("list"));
