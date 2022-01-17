@@ -299,8 +299,6 @@
 		//findAccount
 		$("#findAccount-btn").on("click", function() {
 
-			alert("메일 전송 중입니다.");
-			
 			var memberName = $("#memberName").val();
 			var memberId = $("#memberId-find").val();
 			var memberPhone = $("#memberPhone1").val()+"-"+$("#memberPhone2").val()+"-"+$("#memberPhone3").val();
@@ -308,7 +306,9 @@
 			console.log("memberName:" + memberName);
 			console.log("memberId:" + memberId);
 			console.log("memberPhone:" + memberPhone);
-
+			
+			$("#find-check").html("<h4>잠시만 기다려주세요.</h4>");
+			
 			if(memberName != "" && (memberId != "" || ($("#memberPhone1").val() != "" && $("#memberPhone2").val() != "" && $("#memberPhone3").val() != ""))) {
 				//alert("들어왔니?");
 				$.ajax({
@@ -507,10 +507,10 @@
 									+"<div class='row align-items-right'>"
 									+"<div class='col-md-7'>"
 									+"<h4 class='mb-1'>"
-									+"<div class=''><span class='badge badge-pill badge-dark' style='background-color: #f56a6a;'>"+data.memberRank+"</span>&nbsp;"
+									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;'>"+data.memberRank+"</span>&nbsp;"
 									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;'>"+data.ageRange+"</span>&nbsp;"
-									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;' id='get-other-user-gender'></div>"
-									+"</span>&nbsp;&nbsp;"+data.nickname+"</h4>"
+									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;' id='get-other-user-gender'>"
+									+"</span><br>"+data.nickname+"</h4>"
 									+"</div></div>"
 									+"<div class='row mb-4'>"
 									+"<div class='col-md-7'>"
