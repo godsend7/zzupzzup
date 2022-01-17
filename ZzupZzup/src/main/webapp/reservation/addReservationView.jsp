@@ -394,12 +394,12 @@
 											<div style="flex-grow: 1;">
 					                		<span>${time.returnDay}</span><br>
 					                		<c:choose>
-												<c:when test="${time.restaurantDayOff != true}">
-							                		<span>OpenTime -   ${time.restaurantOpen}</span><br>
-							                		<span>CloseTime - ${time.restaurantClose}</span><br>
-							                		<span>LastOrder - ${time.restaurantLastOrder}</span><br>
+												<c:when test="${time.restaurantDayOff != true && time.returnDay != null}">
+							                		<span class="badge badge-primary">OpenTime -   ${time.restaurantOpen}</span><br>
+							                		<span class="badge badge-primary">CloseTime - ${time.restaurantClose}</span><br>
+							                		<span class="badge badge-warning">LastOrder - ${time.restaurantLastOrder}</span><br>
 							                	<c:if test="${time.restaurantBreak != ''}">
-						                			<span>BreakTime - ${time.restaurantBreak}</span><br>
+						                			<span class="badge badge-success">BreakTime - ${time.restaurantBreak}</span><br>
 						                		</c:if>
 						                		</c:when>
 					                		</c:choose>
@@ -407,11 +407,6 @@
 					                		
 					                		</div>
 										</c:forEach>
-								</div>
-								
-								<div class="col-6 col-12-xsmall">
-									<label for="demo-memberCount"></label> 
-									<p></p>
 								</div>
 								<!-- Break -->
 								
