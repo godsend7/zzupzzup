@@ -193,10 +193,31 @@
 		SELECT *
 		FROM (SELECT *
 			  FROM RESTAURANT AS rt
-			  ORDER BY rt.RESTAURANT_NO LIMIT #{startRowNum}, #{pageSize}) AS rt
+			  <where>
+			  	RESTAURANT_REG_DATE IS NOT NULL
+			  	<if test="searchKeyword != null">
+			  		<!-- SEARCH : RESTAURANT NAME -->
+			  		<if test="searchCondition == 0 and searchKeyword != ''">
+			  			AND UPPER(rt.RESTAURANT_NAME) LIKE CONCAT('%', #{searchKeyword}, '%')
+			  		</if>
+			  		<!-- SEARCH : RESTAURANT NAME -->
+			  		<if test="searchCondition == 1 and searchKeyword != ''">
+			  			AND UPPER(rt.OWNER_NAME) LIKE CONCAT('%', #{searchKeyword}, '%')
+			  		</if>
+			  		<!-- FILTER : PERMISSION -->
+			  		<if test="searchFilter == 1">
+			  			AND rt.JUDGE_STATUS = 2
+			  		</if>
+			  		<!-- FILTER : REJECTION -->
+			  		<if test="searchFilter == 2">
+			  			AND rt.JUDGE_STATUS = 3
+			  		</if>
+			  	</if>
+			  </where>
+			  ORDER BY rt.RESTAURANT_NO LIMIT #{startRowNum}, #{pageSize}) AS rst
 		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
 						 FROM IMAGE) AS img
-						 ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
+						 ON (rst.RESTAURANT_NO = img.RESTAURANT_NO)
 	</select>
 	
 	
@@ -310,7 +331,28 @@
 	<!-- SQL : SELECT -->
 	<select id="getTotalCount" parameterType="search" resultType="int">
 		SELECT COUNT(*)
-		FROM RESTAURANT
+		FROM RESTAURANT AS rt
+			<where>
+			  	RESTAURANT_REG_DATE IS NOT NULL
+			  	<if test="searchKeyword != null">
+			  		<!-- SEARCH : RESTAURANT NAME -->
+			  		<if test="searchCondition == 0 and searchKeyword != ''">
+			  			AND UPPER(rt.RESTAURANT_NAME) LIKE CONCAT('%', #{searchKeyword}, '%')
+			  		</if>
+			  		<!-- SEARCH : RESTAURANT NAME -->
+			  		<if test="searchCondition == 1 and searchKeyword != ''">
+			  			AND UPPER(rt.OWNER_NAME) LIKE CONCAT('%', #{searchKeyword}, '%')
+			  		</if>
+			  		<!-- FILTER : PERMISSION -->
+			  		<if test="searchFilter == 1">
+			  			AND rt.JUDGE_STATUS = 2
+			  		</if>
+			  		<!-- FILTER : REJECTION -->
+			  		<if test="searchFilter == 2">
+			  			AND rt.JUDGE_STATUS = 3
+			  		</if>
+			  	</if>
+			  </where>
 	</select>
 	
 	

@@ -71,7 +71,7 @@
 				//console.log($("#chatForm"));
 				//console.log($("#searchKeyword").val());
 				let queryStr = $("#chatForm").serialize();
-				//console.log(queryStr);
+				console.log(queryStr);
 				
 				$.ajax({
 					url: "/chat/json/listChat",
