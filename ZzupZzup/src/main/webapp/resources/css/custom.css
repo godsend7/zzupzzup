@@ -335,6 +335,14 @@ input[type="checkbox"] + label:before, input[type="radio"] + label:before { bord
 .file-drag-view a:hover:before { content: "삭제"; display: block; position: absolute; top: -20px; right: -20px; width: 50px; height: 50px; border-radius: 50%; background-color: rgba(0,0,0,0.4); text-align: center; cursor: pointer; line-height: 50px; color: #fff; }
 .file-drag-view img { width: 100%; max-width: 200px; cursor: pointer; height: 150px; margin-right: 5px; }
 
+/* background color */
+.bg-primary { background-color: #f56a6a !important;}
+.bg-secondary { background-color: #E0E0E0 !important;}
+.bg-success { background-color: #26A69A !important;}
+.bg-danger { background-color: #BA68C8 !important;}
+.bg-warning { background-color: #FFCA28 !important;}
+.bg-info { background-color: #5C6BC0 !important;}
+/* bg-light { background-color: #E0E0E0 !important;} */
 
 /* dropmenu */
 .dropmenu { position: relative; }
