@@ -55,40 +55,6 @@ CREATE TABLE `activity_score` (
     FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
 );
 
-CREATE TABLE `restaurant` (
-    `restaurant_no` INT NOT NULL AUTO_INCREMENT,
-    `member_id` VARCHAR(50),
-    `owner_name` VARCHAR(10),
-    `owner_image` VARCHAR(50),
-    `restaurant_name` VARCHAR(50) NOT NULL,
-    `restaurant_text` VARCHAR(100),
-    `reservation_status` BOOLEAN DEFAULT 1,
-    `parkable` BOOLEAN,
-    `request_date` DATETIME DEFAULT NOW(),
-    `judge_status` INT DEFAULT 1,
-    `judge_date` DATETIME,
-    `restaurant_reg_date` DATETIME,
-    `restaurant_tel` VARCHAR(15) NOT NULL,
-    `street_address` VARCHAR(50) NOT NULL,
-    `area_address` VARCHAR(50) NOT NULL,
-    `rest_address` VARCHAR(20),
-    `latitude` VARCHAR(50),
-    `longitude` VARCHAR(50),
-    `menu_type` INT NOT NULL,
-    PRIMARY KEY (`restaurant_no`),
-    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
-);
-
-CREATE TABLE `menu` (
-    `menu_no` INT NOT NULL AUTO_INCREMENT,
-    `restaurant_no` INT NOT NULL,
-    `menu_title` VARCHAR(20) NOT NULL,
-    `menu_price` INT NOT NULL,
-    `main_menu_status` BOOLEAN NOT NULL DEFAULT 0,
-    PRIMARY KEY (`menu_no`),
-    FOREIGN KEY (`restaurant_no`) REFERENCES `restaurant`(`restaurant_no`)
-);
-
 CREATE TABLE `community` (
     `post_no` INT NOT NULL AUTO_INCREMENT,
     `member_id` VARCHAR(50) NOT NULL,
@@ -111,6 +77,42 @@ CREATE TABLE `community` (
     `official_date` DATETIME,
     PRIMARY KEY (`post_no`),
     FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
+);
+
+CREATE TABLE `restaurant` (
+    `restaurant_no` INT NOT NULL AUTO_INCREMENT,
+    `post_no` INT,
+    `member_id` VARCHAR(50),
+    `owner_name` VARCHAR(10),
+    `owner_image` VARCHAR(50),
+    `restaurant_name` VARCHAR(50) NOT NULL,
+    `restaurant_text` VARCHAR(100),
+    `reservation_status` BOOLEAN DEFAULT 1,
+    `parkable` BOOLEAN,
+    `request_date` DATETIME,
+    `judge_status` INT,
+    `judge_date` DATETIME,
+    `restaurant_reg_date` DATETIME,
+    `restaurant_tel` VARCHAR(15) NOT NULL,
+    `street_address` VARCHAR(50) NOT NULL,
+    `area_address` VARCHAR(50) NOT NULL,
+    `rest_address` VARCHAR(20),
+    `latitude` VARCHAR(50),
+    `longitude` VARCHAR(50),
+    `menu_type` INT NOT NULL,
+    PRIMARY KEY (`restaurant_no`),
+    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`),
+    FOREIGN KEY (`post_no`) REFERENCES `community`(`post_no`)
+);
+
+CREATE TABLE `menu` (
+    `menu_no` INT NOT NULL AUTO_INCREMENT,
+    `restaurant_no` INT NOT NULL,
+    `menu_title` VARCHAR(20) NOT NULL,
+    `menu_price` INT NOT NULL,
+    `main_menu_status` BOOLEAN NOT NULL DEFAULT 0,
+    PRIMARY KEY (`menu_no`),
+    FOREIGN KEY (`restaurant_no`) REFERENCES `restaurant`(`restaurant_no`)
 );
 
 CREATE TABLE `restaurant_time` (

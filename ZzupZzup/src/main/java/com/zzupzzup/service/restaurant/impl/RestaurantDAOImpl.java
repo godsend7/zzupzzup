@@ -81,6 +81,11 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 
 		return list;
 	}
+	
+	@Override
+	public List<Restaurant> listRequestRestaurant(Search search) throws Exception {
+		return sqlSession.selectList("RestaurantMapper.listRequestRestaurant", search);
+	}
 
 	@Override
 	public int updateRestaurant(Restaurant restaurant) throws Exception {
@@ -112,6 +117,11 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	@Override
 	public int getTotalCount(Search search) throws Exception {
 		return sqlSession.selectOne("RestaurantMapper.getTotalCount", search);		
+	}
+	
+	@Override
+	public int getRequestTotalCount(Search search) throws Exception {
+		return sqlSession.selectOne("RestaurantMapper.getRequestTotalCount", search);	
 	}
 	
 	@Override

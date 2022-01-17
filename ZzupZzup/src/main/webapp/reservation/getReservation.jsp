@@ -14,6 +14,8 @@
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
 
+#getReservationView #getReservation label { margin-bottom: 0px; }
+#getReservationView #getReservation  p { color: #999; }
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -24,9 +26,13 @@
 		//console.log(${reservation.reservationCancelReason});
 		//concole.log("restaurantNo::"+${reservation.restaurant.restaurantNo});	
 		///날짜 초 자르는 부분 ///
-		//var fixed = "${reservation.fixedDate}";
-		//var fixedDateSlice = fixed.slice(0,-5);
-		//$(".fixedDate").find("p").text(fixedDateSlice);
+		var fixed = "${reservation.fixedDate}";
+		var fixedDateSlice = fixed.slice(0,-5);
+		$(".fixedDate").find("p").text(fixedDateSlice);
+		
+		var reservationDate = "${reservation.reservationDate}";
+		var reservationDateSlice = reservationDate.slice(0,-5);
+		$(".reservationDate").find("p").text(reservationDateSlice);
 		
 		//////////이전페이지////////////////
 	   	 $(".reset").on("click" , function() {
@@ -257,7 +263,8 @@
 					<div class="container">
 
 						<!-- start:Form -->
-						<h3>예약 정보</h3>
+						<h2 class="pl-0 mb-0">예약 정보</h2>
+						<div class="col-12" style="padding:0px"><hr></div>
 					
 						<form id="getReservation">
 						
@@ -285,13 +292,14 @@
 								</div>
 								
 								<div class="col-6 col-12-xsmall">
-									<label for="restaurantAdress">음식점 소재지 주소</label> 
-									<p>${reservation.restaurant.streetAddress}</p>
-									<p>${reservation.restaurant.areaAddress}</p>
-									<p>${reservation.restaurant.restAddress}</p>
-									
+									<label for="restaurantAdress">음식점 소재지 주소</label>
+									<p><span class="badge badge-info">도로명 주소</span>&nbsp;
+									 ${reservation.restaurant.streetAddress}</p>
+									<p><span class="badge badge-warning">지번 주소</span>&nbsp;&nbsp;&nbsp;&nbsp;
+									 ${reservation.restaurant.areaAddress}</p>
+									<p><span class="badge badge-success">상세 주소</span>&nbsp;&nbsp;&nbsp;&nbsp;
+									 ${reservation.restaurant.restAddress}</p>
 								</div>
-								
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantType">음식 종류</label> 
 									<p>${reservation.restaurant.returnMenuType}</p>
@@ -304,7 +312,7 @@
 									
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantType">방문 확정 전</label>
-									<span>${reservation.planDate} ${reservation.planTime}</span>
+									<p><span>${reservation.planDate} ${reservation.planTime}</span>
 									<!-- Button trigger modal -->
 								
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->
@@ -323,20 +331,20 @@
 											</c:if>
 											</c:when>
 									</c:choose>
-									
 									<c:choose>
 										<c:when test="${member.memberRole == 'user' && reservation.reservationStatus == ''}">
-										<input type="button" value="예약 취소" name= "reservationCancel" class="button small primary stretched-link" id="reservationCancel-modal" data-toggle="modal"
-										data-target="#reservationRejectionModal"/>
+											<c:if test="${reservation.chat.chatLeaderId.memberId == member.memberId }">
+											<input type="button" value="예약 취소" name= "reservationCancel" class="button small primary stretched-link" id="reservationCancel-modal" data-toggle="modal"
+											data-target="#reservationRejectionModal"/>
+											</c:if>
 										</c:when>
-									</c:choose>	
-									
+									</c:choose>
+									</p>	
 									
 									
 								</div>
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->	
 									<!-- Button trigger modal --> 
-								
 								
 								<div class="col-6 col-12-xsmall fixedDate">
 								<label for="fixedDate">방문 확정 후</label> 
@@ -349,7 +357,6 @@
 								</div>
 								<div class="col-12">
 									<label for="reservationStatus">예약 및 결제 현황</label>
-									
 									<p><c:choose>
 											<c:when test="${reservation.returnStatus!=''}">
 												${reservation.returnStatus} /
@@ -357,8 +364,8 @@
 											</c:choose>
 												${reservation.returnRefund}
 									<c:choose>
-										<c:when test="${reservation.payOption == 2}">
-										<c:if test="${(reservation.reservationStatus == 3 || reservation.reservationStatus == 4) && member.memberRole != 'admin' && reservation.refundStatus != 'true'}">
+										<c:when test="${(reservation.reservationStatus == 3 || reservation.reservationStatus == 4) && member.memberRole != 'admin' && reservation.refundStatus != 'true' && reservation.payOption == 2}">
+										<c:if test="${reservation.chat.chatLeaderId.memberId == member.memberId }">
 										<input type="button" value="결제 취소" name= "refundStatus" class="button small primary stretched-link refundStatus-modal" id="refundStatus-modal" data-toggle="modal"
 										data-target="#refundStatusModal"/>
 										</c:if>
@@ -375,10 +382,11 @@
 								
 							
 								<!-- Break -->
-								<h3>결제정보</h3>
-								
+								<h2 class="pl-4 mb-0 col-12">결제 정보</h2>
+								<div class="col-12 pl-4 mb-0" style="padding:0px" ><hr></div>
+							
 								<!-- Break -->
-								<div class="col-12">
+								<div class="col-12 reservationDate">
 									<label for="restaurantType">예약 및 결제 일시</label> 
 									<p>${reservation.reservationDate}</p>
 								</div>
@@ -408,7 +416,7 @@
 								
 								<!-- Break -->
 								
-								<div class="col-12">
+								<div class="col-12 d-flex justify-content-center">
 									<ul class="actions">
 										<li><input type="reset" value="이전 페이지" class="normal reset" /></li>
 									</ul>

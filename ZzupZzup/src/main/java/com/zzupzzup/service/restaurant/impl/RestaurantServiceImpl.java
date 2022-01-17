@@ -79,6 +79,18 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 	
 	@Override
+	public Map<String, Object> listRequestRestaurant(Search search) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		
+		map.put("list", restaurantDAO.listRequestRestaurant(search));
+		map.put("totalCount", restaurantDAO.getRequestTotalCount(search));
+		
+		return map;
+	}
+	
+	@Override
 	public int updateRestaurant(Restaurant restaurant) throws Exception {
 		return restaurantDAO.updateRestaurant(restaurant);
 	}

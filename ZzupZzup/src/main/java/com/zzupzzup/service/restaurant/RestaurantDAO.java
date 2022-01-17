@@ -23,6 +23,8 @@ public interface RestaurantDAO {
 	
 	public List<Restaurant> listMyRestaurant(Map<String, Object> map) throws Exception;
 	
+	public List<Restaurant> listRequestRestaurant(Search search) throws Exception;
+	
 	public int updateRestaurant(Restaurant restaurant) throws Exception;
 	
 	public int judgeRestaurant(Restaurant restaurant) throws Exception;
@@ -30,6 +32,8 @@ public interface RestaurantDAO {
 	public int deleteRestaurant(int restaurantNo) throws Exception;
 	
 	public int getTotalCount(Search search) throws Exception;
+	
+	public int getRequestTotalCount(Search search) throws Exception;
 	
 	public List<Mark> listCallDibs(String memberId) throws Exception;
 	

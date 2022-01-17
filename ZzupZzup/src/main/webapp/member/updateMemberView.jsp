@@ -194,7 +194,7 @@
 					<div class="container">
 						<div class="row justify-content-center">
 							<div class="col-12 col-lg-10 col-xl-8 mx-auto">
-								<h2 class="h3 mb-4 page-title">내 정보 수정</h2>
+								<h2 class="h3 mb-4 page-title">내 정보 수정</h2><hr>
 								<div class="my-4">
 									<form id="updateMember-complete" enctype="multipart/form-data">
 									<input type="hidden" name="memberName" value="${member.memberName}"/>

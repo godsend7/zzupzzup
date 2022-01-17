@@ -18,6 +18,8 @@ public interface CommunityService {
 	
 	public Map<String, Object> listCommunity(Search search) throws Exception;
 	
+	public Map<String, Object> listMyPost(Search search, String memberId) throws Exception;
+	
 	public int deleteCommunity(int postNo) throws Exception;
 	
 	public int addLike(String memberId, int postNo) throws Exception;
