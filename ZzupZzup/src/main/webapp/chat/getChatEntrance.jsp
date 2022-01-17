@@ -235,7 +235,7 @@
 			this.makeLi = () => {
 				console.log(message, memberInfo, regDate);
 				let mem_profile_img = memberInfo.profileImage;
-				mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img : "member/"+mem_profile_img;
+				mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img : mem_profile_img = "member/"+mem_profile_img;
 				const $li = $("<li></li>");
 				$li.addClass(nickname == memberInfo.nickname ? "sent" : "received");
 				const dom = '<div class="chatProfile"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"/><b>'+memberInfo.nickname+'</b><small>'+regDate+'</small></div><div class="chat-message">'+message+'</div>';
