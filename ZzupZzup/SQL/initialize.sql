@@ -57,6 +57,7 @@ CREATE TABLE `activity_score` (
 
 CREATE TABLE `restaurant` (
     `restaurant_no` INT NOT NULL AUTO_INCREMENT,
+    `post_no` INT,
     `member_id` VARCHAR(50),
     `owner_name` VARCHAR(10),
     `owner_image` VARCHAR(50),
@@ -64,8 +65,8 @@ CREATE TABLE `restaurant` (
     `restaurant_text` VARCHAR(100),
     `reservation_status` BOOLEAN DEFAULT 1,
     `parkable` BOOLEAN,
-    `request_date` DATETIME DEFAULT NOW(),
-    `judge_status` INT DEFAULT 1,
+    `request_date` DATETIME,
+    `judge_status` INT,
     `judge_date` DATETIME,
     `restaurant_reg_date` DATETIME,
     `restaurant_tel` VARCHAR(15) NOT NULL,
@@ -76,7 +77,8 @@ CREATE TABLE `restaurant` (
     `longitude` VARCHAR(50),
     `menu_type` INT NOT NULL,
     PRIMARY KEY (`restaurant_no`),
-    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
+    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`),
+    FOREIGN KEY (`post_no`) REFERENCES `community`(`post_no`)
 );
 
 CREATE TABLE `menu` (

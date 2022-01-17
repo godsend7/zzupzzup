@@ -657,10 +657,10 @@
 						
 					</div>
 					
-					</div>
 					<hr>
-
 					<jsp:include page="/review/restaurantReview.jsp"></jsp:include>
+					</div>
+
 
 				</section>
 			</div>

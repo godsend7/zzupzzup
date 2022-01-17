@@ -92,17 +92,17 @@
 									
 									
 									append_nod += '<div class="col-md-4">';
-									append_nod += '<div class="card mb-1 shadow-sm">';
+									append_nod += '<div class="card mb-1 shadow">';
 									append_nod += '<a href="" class="thumb">';
 									
 									if(${community.postImage[0] == null}) {
-										append_nod += '<img src="/resources/images/uploadImages/default.png" height="100%">';
-										//append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/default.png" height="100%">';
+										//append_nod += '<img src="/resources/images/uploadImages/default.png" height="100%">';
+										append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/default.png" height="100%">';
 									}
 									
 									if(${community.postImage[0] != null}) {
-										append_nod += '<img src="/resources/images/uploadImages/' + item.postImage[0] + '" height="100%">';
-										//append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/${community.postImage[0]}" height="100%">':
+										//append_nod += '<img src="/resources/images/uploadImages/' + item.postImage[0] + '" height="100%">';
+										append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/${community.postImage[0]}" height="100%">';
 									}
 									
 									append_nod += '</a> <div class="card-body">';
@@ -309,7 +309,7 @@
 									
 								</div>
 								
-								<div class="col-md-5 row">
+								<div class="col-md-5 row" style="padding-left: 100px;">
 									<select class="searchCondition my-2 my-md-0" id="searchCondition" name="searchCondition" style="width: 124px; padding-left: 10px;">
 									  <!-- <option selected>Open this select menu</option> -->
 									  <option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""}> 작성자명</option>
@@ -336,11 +336,11 @@
 								<c:forEach var="community" items="${list}">
 
 									<div class="col-md-4">
-										<div class="card mb-1 shadow-sm">
+										<div class="card mb-1 shadow">
 											<a href="" class="thumb">
 												<c:if test="${community.postImage[0] == null}">
 													<!-- <img src="/resources/images/uploadImages/default.jpg" height="100%"> -->
-													<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/default.png" height="100%">
+													<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/default.png" height="100%">
 												</c:if>
 												<c:if test="${community.postImage[0] != null}">
 													<%-- <img src="/resources/images/uploadImages/${community.postImage[0]}" height="100%"> --%>
@@ -373,7 +373,7 @@
 										<button type="button" class="btn btn-outline-danger btn-sm btn-block">
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
 		  										<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
-											</svg> ${community.likeCount}
+											</svg> <span class="likeCount">${community.likeCount}</span>
 										</button><br> <br>
 
 									</div>
