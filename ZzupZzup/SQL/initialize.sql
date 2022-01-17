@@ -55,6 +55,30 @@ CREATE TABLE `activity_score` (
     FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
 );
 
+CREATE TABLE `community` (
+    `post_no` INT NOT NULL AUTO_INCREMENT,
+    `member_id` VARCHAR(50) NOT NULL,
+    `nickname` VARCHAR(10),
+    `post_title` VARCHAR(100) NOT NULL,
+    `post_text` VARCHAR(1000) NOT NULL,
+    `post_reg_date` DATETIME NOT NULL DEFAULT NOW(),
+    `post_show_status` BOOLEAN NOT NULL DEFAULT 1,
+    `restaurant_name` VARCHAR(50) NOT NULL,
+    `restaurant_tel` VARCHAR(15) NOT NULL,
+    `street_address` VARCHAR(50) NOT NULL,
+    `area_address` VARCHAR(50) NOT NULL,
+    `rest_address` VARCHAR(20),
+    `latitude` VARCHAR(50),
+    `longitude` VARCHAR(50),
+    `menu_type` INT NOT NULL,
+    `main_menu_title` VARCHAR(20) NOT NULL,
+    `main_menu_price` INT NOT NULL,
+    `receipt_image` VARCHAR(50),
+    `official_date` DATETIME,
+    PRIMARY KEY (`post_no`),
+    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
+);
+
 CREATE TABLE `restaurant` (
     `restaurant_no` INT NOT NULL AUTO_INCREMENT,
     `post_no` INT,
@@ -89,30 +113,6 @@ CREATE TABLE `menu` (
     `main_menu_status` BOOLEAN NOT NULL DEFAULT 0,
     PRIMARY KEY (`menu_no`),
     FOREIGN KEY (`restaurant_no`) REFERENCES `restaurant`(`restaurant_no`)
-);
-
-CREATE TABLE `community` (
-    `post_no` INT NOT NULL AUTO_INCREMENT,
-    `member_id` VARCHAR(50) NOT NULL,
-    `nickname` VARCHAR(10),
-    `post_title` VARCHAR(100) NOT NULL,
-    `post_text` VARCHAR(1000) NOT NULL,
-    `post_reg_date` DATETIME NOT NULL DEFAULT NOW(),
-    `post_show_status` BOOLEAN NOT NULL DEFAULT 1,
-    `restaurant_name` VARCHAR(50) NOT NULL,
-    `restaurant_tel` VARCHAR(15) NOT NULL,
-    `street_address` VARCHAR(50) NOT NULL,
-    `area_address` VARCHAR(50) NOT NULL,
-    `rest_address` VARCHAR(20),
-    `latitude` VARCHAR(50),
-    `longitude` VARCHAR(50),
-    `menu_type` INT NOT NULL,
-    `main_menu_title` VARCHAR(20) NOT NULL,
-    `main_menu_price` INT NOT NULL,
-    `receipt_image` VARCHAR(50),
-    `official_date` DATETIME,
-    PRIMARY KEY (`post_no`),
-    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
 );
 
 CREATE TABLE `restaurant_time` (
