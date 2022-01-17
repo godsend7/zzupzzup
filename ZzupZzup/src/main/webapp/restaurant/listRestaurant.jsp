@@ -24,7 +24,7 @@
 		function fncPageNavigation(currentPage) {
 			console.log(currentPage);
 			$("#currentPage").val(currentPage);
-			$("#restaurant").attr("action","/restaurant/listRestaurant").attr("method", "POST").submit();
+			$("#restaurantList").attr("action","/restaurant/listRestaurant").attr("method", "POST").submit();
 		}
 		
 		// 상세조회 버튼 실행
@@ -33,6 +33,40 @@
 			$( "#restinfo" ).on("click" , function() {
 				self.location = "/restaurant/getRestaurant?restaurantNo=${restaurant.restaurantNo}";
 			});
+			
+			// 페이지 로딩시 필터 조건이 있다면 표시
+			if("${search.searchFilter}" != null && "${search.searchFilter}" != ""){
+				console.log("필터 조건?? ${search.searchFilter}");
+				$("input:checkbox[value=${search.searchFilter}]").prop("checked", true);
+				$("input:checkbox[value=${search.searchFilter}]").addClass("active");
+			}
+			
+			// SEARCH OPERATE
+			document.getElementById("searchByEnter").addEventListener("keydown", function(evant) {
+				//console.log("keydown");
+				if (evant.keyCode === 13) {
+					evant.preventDefault();
+					//document.getElementById("searchButton").click();
+					fncPageNavigation(1);
+				}
+			});
+			
+			// Filter
+			$("input:checkbox[name='searchFilter']").on("click", function(e){
+				//console.log("클릭함");
+				let isActive = $(this).hasClass("active");
+				if(isActive){
+					$("input:checkbox[name='searchFilter']").prop("checked", false);
+					$("input:checkbox[name='searchFilter']").removeClass("active");
+				}else{
+					$("input:checkbox[name='searchFilter']").prop("checked", false);
+					$("input:checkbox[name='searchFilter']").removeClass("active");
+					$(this).prop("checked", true);
+					$(this).addClass("active");
+					fncPageNavigation(1);
+				}
+			});
+			
 		});
 	}
 	
@@ -51,13 +85,37 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="">
+				<section id="listRestaurant">
 					<div class="container">
 					
 					<h2>등록된 음식점 목록</h2><hr>
-					<form id="restaurant">
-					<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
-						<input type="hidden" id="currentPage" name="currentPage" value=""/>
+					<form id="restaurantList">
+					
+						<div class="row">
+							<div class="col-md-7">
+								<a href="#" class="badge badge-dark dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">
+								<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+								<path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+								</svg>&nbsp;필터&nbsp;</a>
+								<div class="dropmenu-list" aria-labelledby="dropmenuList">
+									<input type="checkbox" id="permission" class="search-filter" name="searchFilter" value="1"><label for="permission">요청승인</label>
+									<input type="checkbox" id="rejection" class="search-filter" name="searchFilter" value="2"><label for="rejection">요청거절</label>
+								</div>
+							</div>
+							
+							<div class="col-md-5 row">
+								<select class="searchCondition my-2 my-md-0" id="searchCondition" name="searchCondition" style="width: 124px; padding-left: 10px;">
+								  <!-- <option selected>Open this select menu</option> -->
+								  <option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""}> 음식점명</option>
+								  <option value="1" ${!empty search.searchCondition && search.searchCondition == 1 ? "selected" : ""}> 대표자명</option>
+								</select>
+								
+							      <input class="form-control" type="text" id="searchByEnter" name="searchKeyword" placeholder="검색" aria-label="Search" style="width: 234px;" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
+							    
+						    	 <input type="hidden" id="currentPage" name="currentPage" value="1"/>
+						    </div>
+							
+						</div>
 					</form>
 					
 					<c:set var="i" value="0" />

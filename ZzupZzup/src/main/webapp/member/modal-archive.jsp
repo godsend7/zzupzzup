@@ -29,6 +29,36 @@
 	$(function() {
 		console.log("modal-archive.jsp");
 		
+		/* //유저 탭 선택 시
+		$("#login-user-tab").on("click", function() {
+			$("#loginUser a").attr("class", "nav-link active");
+			$("#loginOwner a").attr("class", "nav-link");
+			$("#login-view").html("<div class='form-row col-md-12'><div class='col-md-9'>"
+					+"<input type='email' id='memberId' name='memberId' class='form-control' placeholder='example@zzupzzup.com' required autofocus>"
+					+"<input type='password' id='password' name='password' class='form-control' placeholder='비밀번호를 입력해주세요.' required>"
+					+"</div><br/><div class='col-md-3' align='center'>"
+					+"<input type='button' id='login' value='login' class='button primary' style='height:100px;vertical-align:middle;'/>"
+					+"</div></div><hr><div align='center' style='margin-top:5px;'>"
+					+"<h5 style='color:#bfbfbf;'>SNS 계정으로 로그인/회원가입</h5>"
+					+"<a id='kakaoLogin' href='#'><img src='/resources/images/common/kakao_login_medium_wide.png' width='280' alt='카카오 로그인 버튼' /></a></div><br/><br/>"
+					+"<div align='right'><a id='findAccountModal-nav' data-toggle='modal' data-target='#findAccountModal'>아이디/비밀번호 찾기 ></a></div>"
+					+"<div align='right'>회원이 아니신가요?&nbsp;<a href='/member/addMember/user/1'>가입하기</a> ></div>");
+		});
+		
+		//업주 탭 선택 시
+		$("#login-owner-tab").on("click", function() {
+			$("#loginUser a").attr("class", "nav-link");
+			$("#loginOwner a").attr("class", "nav-link active");
+			$("#login-view").html("<div class='form-row col-md-12'><div class='col-md-9'>"
+					+"<input type='email' id='memberId' name='memberId' class='form-control' placeholder='example@zzupzzup.com' required autofocus>"
+					+"<input type='password' id='password' name='password' class='form-control' placeholder='비밀번호를 입력해주세요.' required>"
+					+"</div><br/><div class='col-md-3' align='center'>"
+					+"<input type='button' id='login' value='login' class='button primary' style='height:100px;vertical-align:middle;'/>"
+					+"</div></div><hr>"
+					+"<div align='right'><a id='findAccountModal-nav' data-toggle='modal' data-target='#findAccountModal'>아이디/비밀번호 찾기 ></a></div>"
+					+"<div align='right'>회원이 아니신가요?&nbsp;<a href='/member/addMember/owner/1'>가입하기</a> ></div>");
+		}); */
+		
 		//enter key 눌렀을 때 login 넘기기
 		$("#password").keyup(function(e) {
 			
@@ -559,6 +589,14 @@
 				</button>
 			</div>
 			<div class="modal-body">
+				<!-- <ul class="nav nav-tabs loginMember-top-tabs">
+				  	<li class="nav-item" id="loginUser">
+				    	<a class="nav-link active" id="login-user-tab" href="#">유저</a>
+				  	</li>
+				  	<li class="nav-item" id="loginOwner">
+				    	<a class="nav-link" id="login-owner-tab" href="#">업주</a>
+				  	</li>
+				</ul> -->
 				<form class="form-signin" id="login-view">
 					<!-- <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
 					<!-- <h6 class="h6 mb-6 font-weight-normal" style="margin-bottom: 20px;">로그인 후 이용하여 주십시오.</h6> -->
@@ -571,7 +609,7 @@
 						</div>
 						<br/>
 						<div class="col-md-3" align="center">
-							<a id="login"><input type="button" value="login" style="height:100px;vertical-align:middle;"/></a>
+							<input type="button" id="login" value="login" class="button primary" style="height:100px;vertical-align:middle;"/>
 						</div>
 					</div>
 					<hr>
@@ -592,8 +630,8 @@
 					</div>
 					<div align="right">
 						회원이 아니신가요?&nbsp;
-						<a href="/member/addMember/user/1">유저</a>&nbsp;/
-						<a href="/member/addMember/owner/1">업주</a>
+						<a href="/member/addMember?memberRole=user&loginType=1">유저</a>&nbsp;/
+						<a href="/member/addMember?memberRole=owner&loginType=1">업주</a>
 						 >
 					</div>
 					<!-- <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p> -->
@@ -641,7 +679,7 @@
 				<div id="find-check" align="center"></div>
 			</div>
 			<div class="modal-footer">
-		      <input type="button" class="btn btn-primary" id="findAccount-btn" value="확인">
+		      <input type="button" class="button primary" id="findAccount-btn" value="확인">
 		    </div>
 		</div>
 	</div>
@@ -679,7 +717,7 @@
 				</form>
 			</div>
 			<div class="modal-footer" id="delete-member-footer">
-				<input type="button" class="btn btn-primary" id="inputDeleteReason-btn" value="확인">
+				<input type="button" class="button primary" id="inputDeleteReason-btn" value="확인">
 		    </div>
 		</div>
 	</div>

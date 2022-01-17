@@ -58,7 +58,7 @@
 						<div class="row table-list mb-2">
 							<div class="col-md-12">
 								<div
-									class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+									class="card shadow no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 									<div class="col p-4 d-flex flex-column position-static">
 										<h3 class=""><a href="#" class="getOtherUserModal" data-toggle="modal" data-target="#getOtherUserModal" data-id="${rating.ratingToId.memberId}">${rating.ratingToId.nickname}</a> <c:if test="${member.memberRole == 'admin'}"><small>(${rating.ratingToId.memberRank} / 매너점수 : ${rating.ratingToId.mannerAllScore}점)</small></c:if></h3>
 										<p class="card-text mb-auto"><a href="/chat/json/getChat/${rating.chatNo}" data-toggle="modal" data-target="#getChatModal" id="getChatEntranceBtn">채팅방 정보</a><br/>평가 내용: <c:choose><c:when test="${rating.ratingType==1}">별로에요(-1점)</c:when><c:when test="${rating.ratingType==2}">좋아요(1점)</c:when><c:when test="${rating.ratingType==3}">최고에요(3점)</c:when></c:choose></p>
