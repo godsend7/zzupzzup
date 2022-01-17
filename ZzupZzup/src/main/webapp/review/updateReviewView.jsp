@@ -175,13 +175,14 @@
 						//중복된 해시태그 제외 출력 (차집합)
 						let difference = array.filter(x => !hashArry.includes(x));
 						
-						console.log(difference);
+						//console.log(difference);
 						
 						response(
 							$.map(difference, function(item) {
                                 return {
+                                	value: item.hashTag,
                                     label: item.hashTag,
-                                    value: item.hashTagNo
+                                    id: item.hashTagNo
                                 }
                             })
 						);//response 
@@ -191,10 +192,10 @@
 	 		select : function(event, ui) {
 	 			$("#hashTagBox").append("<span class='badge badge-pill badge-secondary hashTag' id='hashtag" 
 	 									+ hashTagCount + "'>" + ui.item.label + " x <input type='hidden' name='hashTag[" 
-	 										+ hashTagCount + "].hashTagNo' value='" + ui.item.value + "'></span>");
+	 										+ hashTagCount + "].hashTagNo' value='" + ui.item.id + "'></span>");
 				hashTagCount++;
 				
-				hashtag_list.push(ui.item.value);
+				hashtag_list.push(ui.item.id);
 				
 				$("#hashTagAuto").val('');
 				
