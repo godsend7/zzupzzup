@@ -10,6 +10,7 @@ public class Restaurant {
 	
 	///Field
 	private Member member;
+	private int postNo;
 	private int restaurantNo;
 	private String restaurantName;
 	private String restaurantTel;
@@ -285,20 +286,28 @@ public class Restaurant {
 		this.restaurantTimes = restaurantTimes;
 	}
 
+	public int getPostNo() {
+		return postNo;
+	}
+
+
+	public void setPostNo(int postNo) {
+		this.postNo = postNo;
+	}
+
 
 	@Override
 	public String toString() {
-		return "Restaurant [member=" + member + ", restaurantNo=" + restaurantNo + ", restaurantName=" + restaurantName
-				+ ", restaurantTel=" + restaurantTel + ", restaurantTel1=" + restaurantTel1 + ", restaurantTel2="
-				+ restaurantTel2 + ", restaurantTel3=" + restaurantTel3 + ", restaurantImage=" + restaurantImage
-				+ ", menuType=" + menuType + ", mainMenuStatus=" + mainMenuStatus + ", ownerName=" + ownerName
-				+ ", ownerImage=" + ownerImage + ", restaurantText=" + restaurantText + ", reservationStatus="
-				+ reservationStatus + ", parkable=" + parkable + ", requestDate=" + requestDate + ", responseDate="
-				+ responseDate + ", streetAddress=" + streetAddress + ", areaAddress=" + areaAddress + ", restAddress="
-				+ restAddress + ", latitude=" + latitude + ", longitude=" + longitude + ", judgeStatus=" + judgeStatus
-				+ ", judgeDate=" + judgeDate + ", restaurantRegDate=" + restaurantRegDate + ", restaurantMenus="
-				+ restaurantMenus + ", restaurantTimes=" + restaurantTimes + "]";
+		return "Restaurant [member=" + member + ", postNo=" + postNo + ", restaurantNo=" + restaurantNo
+				+ ", restaurantName=" + restaurantName + ", restaurantTel=" + restaurantTel + ", restaurantTel1="
+				+ restaurantTel1 + ", restaurantTel2=" + restaurantTel2 + ", restaurantTel3=" + restaurantTel3
+				+ ", restaurantImage=" + restaurantImage + ", menuType=" + menuType + ", mainMenuStatus="
+				+ mainMenuStatus + ", ownerName=" + ownerName + ", ownerImage=" + ownerImage + ", restaurantText="
+				+ restaurantText + ", reservationStatus=" + reservationStatus + ", parkable=" + parkable
+				+ ", requestDate=" + requestDate + ", responseDate=" + responseDate + ", streetAddress=" + streetAddress
+				+ ", areaAddress=" + areaAddress + ", restAddress=" + restAddress + ", latitude=" + latitude
+				+ ", longitude=" + longitude + ", judgeStatus=" + judgeStatus + ", judgeDate=" + judgeDate
+				+ ", restaurantRegDate=" + restaurantRegDate + ", restaurantMenus=" + restaurantMenus
+				+ ", restaurantTimes=" + restaurantTimes + "]";
 	}
-	
-	
 }

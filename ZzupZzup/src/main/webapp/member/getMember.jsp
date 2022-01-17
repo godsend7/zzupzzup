@@ -26,7 +26,7 @@
 		})
 		
 		$("#back").on("click", function() {
-			history.go(-1);
+			self.location = "/";
 		})
 		
 		$("#list").on("click", function() {
@@ -57,7 +57,7 @@
 					<div class="container">
 						<div class="row justify-content-center">
 							<div class="col-12 col-lg-10 col-xl-8 mx-auto">
-								<h2 class="h3 mb-4 page-title">내 정보 조회</h2>
+								<h2 class="h3 mb-4 page-title">내 정보 조회</h2><hr>
 								<div class="my-4">
 									<form id="getMember">
 										<div class="row mt-5 align-items-center">
