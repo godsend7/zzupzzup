@@ -71,7 +71,7 @@
 				//console.log($("#chatForm"));
 				//console.log($("#searchKeyword").val());
 				let queryStr = $("#chatForm").serialize();
-				//console.log(queryStr);
+				console.log(queryStr);
 				
 				$.ajax({
 					url: "/chat/json/listChat",
@@ -232,7 +232,6 @@
 				},
 				success : function(JSONData, status) {
 					console.log("평가하기 가져온 데이터 :"+ JSONData);
-					console.log()
 					let dom ='<form id="addRating"><input type="hidden" name="ratingFromId" value="${member.memberId}"/><input type="hidden" name="chatNo" value="'+JSONData.list[0].chatNo+'"/>';
 					let i = 0;
 					$.each(JSONData.list, function(index, item){
@@ -270,60 +269,7 @@
 			
 			let ratingFlag = false;
 			
-			//$('#ratingGoModal').modal('show');
-			
-			let url = "/rating/json/addRating";
-			let ratingArr = [];
-			let ratingDataObj = {};
-			
-			for( let i=0; i<$("#addRating dl").length; i++ ){
-				let ratingToId = $("#addRating dl").eq(i).find("input[name=ratingToId]").val();
-				let ratingType = $("input[name='ratingType["+i+"]']:checked").val();
-				
-				ratingDataObj.chatNo = $("input[name=chatNo]").val();
-				ratingDataObj.ratingFromId = $("input[name=ratingFromId]").val();
-				ratingDataObj.ratingToId = ratingToId;
-				ratingDataObj.ratingType = ratingType;
-				
-				ratingArr.push(ratingDataObj);
-				
-				ratingDataObj = {};
-			}
-			
-			//console.log(ratingArr);
-			let jsonData = JSON.stringify(ratingArr);
-			//console.log({ratingArrObj : jsonData});
-			
-			$.ajax({
-				url : url,
-				type : "POST",
-				traditional: true,
-				data: JSON.stringify ({
-					ratingArrObj : jsonData
-				}),
-				contentType: "application/json",
-				dataType : "JSON",
-				success : function(JSONData, status) {
-					console.log("success");
-					//$("#ratingGoModal").modal('hide');
-					$("#chatRatingModal").modal('hide');
-					$("#chatRatingModal").find(".modal-body").html("");
-					$("#ratingEndModal").modal('show');
-					//$("a.button:contains(평가하기)").remove();
-				},
-				error : function(request, status, error) {
-					/* alert("code:" + request.status + "\n" + "message:"
-							+ request.responseText + "\n" + "error:"
-							+ error); */
-					
-					let errorMsg = "Duplicate entry";
-					if(request.status == 500 && request.responseText.indexOf(errorMsg) != -1 ){					
-						alert("이미 평가를 하셨습니다");
-						$('#ratingGoModal').modal('hide');
-						$('#chatRatingModal').modal('hide');
-					}
-				}
-			});
+			$('#ratingGoModal').modal('show');
 			
 		});
 		
@@ -370,13 +316,13 @@
 					$("a.button:contains(평가하기)").remove();
 				},
 				error : function(request, status, error) {
-					alert("code:" + request.status + "\n" + "message:"
+					/* alert("code:" + request.status + "\n" + "message:"
 							+ request.responseText + "\n" + "error:"
-							+ error);
+							+ error); */
 					
 					let errorMsg = "Duplicate entry";
 					if(request.status == 500 && request.responseText.indexOf(errorMsg) != -1 ){					
-						alert("이미 평가를 하셨습니다");
+						alert("이미 평가가 완료되었습니다.");
 						$('#ratingGoModal').modal('hide');
 						$('#chatRatingModal').modal('hide');
 					}

@@ -140,8 +140,8 @@
 			  FROM COMMUNITY AS cn
 			  <where>
 			  	cn.POST_SHOW_STATUS = true
-				<!-- SEARCH : NICKNAME -->
 				<if test="searchKeyword != null">
+					<!-- SEARCH : NICKNAME -->
 					<if test="searchCondition == 0 and searchKeyword !=''">
 						AND UPPER(cn.NICKNAME) LIKE CONCAT('%', #{searchKeyword}, '%')
 					</if>
@@ -269,8 +269,29 @@
 	
 	<!-- SQL : SELECT -->
 	<select id="getTotalCount" parameterType="search" resultType="int">
-		SELECT COUNT(*)
-		FROM COMMUNITY
+		SELECT COUNT(*)		
+		FROM COMMUNITY AS cn
+			<where>
+			  	cn.POST_SHOW_STATUS = true
+				<!-- SEARCH : NICKNAME -->
+				<if test="searchKeyword != null">
+					<if test="searchCondition == 0 and searchKeyword !=''">
+						AND UPPER(cn.NICKNAME) LIKE CONCAT('%', #{searchKeyword}, '%')
+					</if>
+					<!-- SEARCH : POSTTITLE -->
+					<if test="searchCondition == 1 and searchKeyword !=''">
+						AND UPPER(cn.POST_TITLE) LIKE CONCAT('%', #{searchKeyword}, '%')
+					</if>
+					<!-- FILTER : OFFICIAL RESTAURANT -->
+					<if test="searchFilter == 1">
+						AND cn.OFFICIAL_DATE IS NOT NULL
+					</if>
+					<!-- FILTER : RECEIPT IMAGE -->
+					<if test="searchFilter == 2">
+						AND cn.RECEIPT_IMAGE IS NOT NULL
+					</if>
+				</if>
+			  </where>
 	</select>
 	
 	

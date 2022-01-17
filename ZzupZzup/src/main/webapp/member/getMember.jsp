@@ -154,7 +154,9 @@
 										</div>
 										<c:if test="${sessionScope.member.memberRole != 'admin'}">
 											<a href="#" style="float:right;color:#bfbfbf" id="deleteMemberModal-nav" data-toggle="modal" data-target="#deleteMemberModal">회원탈퇴</a>
+										</c:if>
 											<br/>
+										<c:if test="${sessionScope.member.memberRole != 'owner'}">	
 											<hr class="my-4" />
 										</c:if>
 										<c:if test="${sessionScope.member.memberRole == 'user'}">
@@ -239,6 +241,7 @@
 											</div>
 										</c:if>
 										<c:if test="${member.memberRole == 'owner'}">
+											<hr>
 											<div class="form-row">
 												<div class="col-6">
 													<h4 align="left"><strong>등록된 음식점 목록</strong></h4>
@@ -303,12 +306,15 @@
 										<hr class="my-4" />
 										<div align="center">
 											<c:if test="${sessionScope.member.memberRole != 'admin'}">
-												<input type="button" id="back" class="btn btn-primary" value="이전" />
+												<input type="button" id="back" class="button secondary" value="이전" />
+												<input type="button" id="updateMember" class="button primary" value="수정" />
 											</c:if>
 											<c:if test="${sessionScope.member.memberRole == 'admin'}">
-												<input type="button" id="list" class="btn btn-primary" value="목록" />
+												<input type="button" id="list" class="button primary" value="목록" />
 											</c:if>
-											<input type="button" id="updateMember" class="btn btn-primary" value="수정" />
+											<c:if test="${sessionScope.member.memberRole == 'admin' and member.memberRole != 'owner'}">
+												<input type="button" id="updateMember" class="button primary" value="수정" />
+											</c:if>
 										</div>
 									</form>
 								</div>

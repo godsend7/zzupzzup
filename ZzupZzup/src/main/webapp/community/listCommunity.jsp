@@ -32,7 +32,7 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
 
-	var searchSort = null;
+	var searchSort = '';
 
 	// 상세조회 버튼 실행
 	/* $(function() {
@@ -54,12 +54,17 @@
 		var count = 2;
 		
 		if(${!empty list}) {
-			console.log(searchSort);
+			//console.log(searchSort);
 			window.onscroll = function() {
+				$("#currentPage").val(count);
 				if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 					//console.log('checkpoint');
 					if(${!empty member}) {
-						$("#currentPage").val(count);
+						
+						let queryStr = $("#communityList").serialize();
+						console.log("쿼리 스트링" + queryStr);
+						
+						console.log($("#searchCondition").val());
 						
 						$.ajax({
 							
@@ -71,7 +76,8 @@
 								currentPage : $("#currentPage").val(),
 								searchSort : $("input[name='searchSort']").val(),
 								searchFilter : $("input[name='searchFilter']:checked").val(),
-								no : "${param.postNo}"
+								searchKeyword : $("input[name='searchKeyword']").val(),
+								searchCondition : $("#searchCondition").val()
 							}),
 							success : function(data) {
 								
@@ -134,8 +140,31 @@
 									
 								});
 								
+								/* $(".thumb-list").append(append_nod);
+								count++; */
 								$(".thumb-list").append(append_nod);
-								count++;
+								console.log("fdisodjfs : " + data.list.length);
+								if(data.list != 0){
+									count++;
+								}else{
+									if(!$("#listCommunity .alert").length){
+										alert_dom = '<div class="alert alert-danger alert-dismissible thumb-list-alert" role="alert"><strong>스크롤 중지!</strong> 리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
+										$("#listCommunity").append(alert_dom);
+										$("#listCommunity .alert").fadeIn();
+									}
+								}
+								/* count++;
+								console.log("fdisodjfs : " + data.list.length);
+								if(data.list.length == 0){
+									console.log("끝끝");
+									if(!$("#listCommunity .alert").length){
+										alert_dom = '<div class="alert alert-danger alert-dismissible thumb-list-alert" role="alert"><strong>스크롤 중지!</strong> 리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
+										$("#listCommunity").append(alert_dom);
+										$("#listCommunity .alert").fadeIn();
+									}
+								} */
+								
+								
 							},
 							
 							error:function(request,status,error) {
@@ -150,10 +179,7 @@
 		}
 		
 		
-		// 페이지 로딩시 정렬 조건이 있다면 주입
-		if(localStorage.getItem('sortType')){
-			$("input[name=searchSort]").val(localStorage.getItem('sortType'));
-		}
+		
 		
 		// 페이지 로딩시 필터 조건이 있다면 표시
 		if("${search.searchFilter}" != null && "${search.searchFilter}" != ""){
@@ -189,10 +215,7 @@
 			let sortType = $(this).attr("data-sort");
 			console.log(sortType);
 			
-			let localStorage = window.localStorage;
-			localStorage.setItem('sortType', sortType);
-			
-			$("input[name=searchSort]").val(localStorage.getItem('sortType'));
+			$("input[name=searchSort]").val(sortType);
 			
 			console.log(localStorage.getItem('sortType'));
 			
@@ -247,7 +270,7 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="">
+				<section id="listCommunity">
 					<div class="container">
 
 						<div class="row">
@@ -273,7 +296,7 @@
 								<div class="col-md-7">
 									<a href="#" class="badge badge-light search-sort" data-sort="latest">최신등록순</a>
 									<a href="#" class="badge badge-light search-sort" data-sort="oldest">오래된등록순</a>&nbsp;&nbsp;
-									<input type="hidden" name="searchSort" value="">
+									<input type="hidden" name="searchSort" value="${search.searchSort}">
 									
 									<a href="#" class="badge badge-dark dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">
 									<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
@@ -287,14 +310,14 @@
 								</div>
 								
 								<div class="col-md-5 row">
-									<select class="searchCondition my-2 my-md-0" name="searchCondition" style="width: 124px; padding-left: 10px;">
+									<select class="searchCondition my-2 my-md-0" id="searchCondition" name="searchCondition" style="width: 124px; padding-left: 10px;">
 									  <!-- <option selected>Open this select menu</option> -->
 									  <option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""}> 작성자명</option>
 									  <option value="1" ${!empty search.searchCondition && search.searchCondition == 1 ? "selected" : ""}> 게시물제목</option>
 									</select>
 									
 									<!-- <form class="form-inline my-2 my-md-0" style="padding-left: 5px;"> -->
-								      <input class="form-control" type="text" id="searchByEnter" placeholder="검색" aria-label="Search" style="width: 234px;" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
+								      <input class="form-control" type="text" id="searchByEnter" name="searchKeyword" placeholder="검색" aria-label="Search" style="width: 234px;" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
 								   <!--  </form> -->
 								    
 							    	 <input type="hidden" id="currentPage" name="currentPage" value="1"/>

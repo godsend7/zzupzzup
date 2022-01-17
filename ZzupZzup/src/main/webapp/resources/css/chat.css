@@ -47,7 +47,7 @@
 .chat-header .chat-header-util .svg-btn.chat-info-button svg { transition: all 0.5s; }
 .chat-header .chat-header-util .svg-btn.chat-info-button:hover svg { color: #f56a6a; }
 .chat-user .dropmenu { display: inline-block; }
-.chat-user .chat-user .chat-header .dropmenu-list { min-width: auto; top: 43px; left: 50%; margin-left: -55px; }
+.chat-user .chat-header .dropmenu-list { min-width: auto; top: 43px; left: 50%; margin-left: -55px; }
 
 
 .chat-body { padding: 20px; flex: 12; }
@@ -81,6 +81,8 @@
 .chat-body .user-list li { position: relative; margin-bottom: 10px; padding-left: 0px; }
 .chat-body .user-list li.chat-leader:before { content:'방장 표시'; position: absolute; top: -15px; left: 1px; background: url(../images/sub/chat_leader_ico.png) no-repeat center center; width: 32px; height: 32px; font-size: 0; line-height: 0;  }
 .chat-body .user-list li.connected:after { content: '접속자 표시'; position: absolute; top:0; left: 0; width: 10px; height: 10px; border-radius: 50%; background-color: #ff4b4b; border: 2px solid #fff; font-size: 0; line-height: 0; }
+.chat-body .user-list li .ready_badge { display: none; }
+.chat-body .user-list li.readyChk .ready_badge { display:block; position: absolute; top: 17px; left: 24px; width: 15px; height: 15px; background: #5c6bc0; color: #fff; border-radius: 50%; font-size: 8px; text-align: center; border: 1px solid #fff; line-height: 15px; }
 
 .chat-footer { text-align: right; }
 .input-container { padding: 15px; }

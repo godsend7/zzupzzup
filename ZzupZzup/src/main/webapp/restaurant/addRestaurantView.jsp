@@ -123,7 +123,8 @@
 					searchKeyword = escape(encodeURIComponent(searchKeyword));
 					
 					$.ajax({
-						url : "/restaurant/json/addRestaurant/searchKeyword=" + searchKeyword, 
+						//url : "/restaurant/json/addRestaurant/searchKeyword=" + searchKeyword,
+						url : "/map/json/listRestaurantName", 
 						method : "GET", 
 						dataType : "json", 
 						headers : {
