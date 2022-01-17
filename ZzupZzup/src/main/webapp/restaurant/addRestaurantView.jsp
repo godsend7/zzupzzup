@@ -143,13 +143,12 @@
 							response(
 								$.map(data, function(item) {
 	                                return {
-	                                	value: item.restaurantName + " (" +item.streetAddress + ")",
-	                                    label: item.restaurantName + " (" +item.streetAddress + ")",
+	                                	value: item.restaurantName,
+	                                    label: item.restaurantName,
 	                                    id : item
 	                                }
 	                            })
 							);//response 
-							
 							
 							/* if(JSONData.list == null || JSONData.list == undefined || 
 									JSONData.list == "" || JSONData.list.length == 0) {
@@ -186,25 +185,8 @@
 						
 					});
 				},
-				
-				select : function(event, ui) {
-		 			var thisInput = $(this).attr("id");
-		 			
-		 			if (thisInput == "startInput") {
-						startLocation = ui.item.id;
-						//console.log(startLocation.restaurantName);
-					} else if (thisInput == "goalInput"){
-						goalLocation = ui.item.id;
-						//console.log(goalLocation);
-					}
-		 			
-		 			console.log(ui.item.id);
-		 			
-					//return false;
-		 		} ,
-		 		
 		 		focus : function (event, ui) {
-		 			
+		 			console.log(ui.item.id);
 		 			return false;
 		 			//event.preventDefault();
 		 		},
@@ -536,8 +518,11 @@
 					
 				 	alert("등록 요청이 완료되었습니다.\n관리자의 심사 후 승인 시 정식으로 등록됩니다.");
 					
-					$("#addRestaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").attr("enctype", "multipart/form-data").attr("accept-charset","UTF-8").submit();
 				 	
+					$("#addRestaurant").attr("method" , "POST").attr("action" , "/restaurant/addRestaurant").attr("enctype", "multipart/form-data").attr("accept-charset","UTF-8").submit();
+					//$("#addRestaurant").attr("method" , "POST").attr("action" , "/restaurant/updateRestaurant?restaurantNo=${restaurant.restaurantNo}").attr("enctype", "multipart/form-data").attr("accept-charset","UTF-8").submit();
+				 	
+					
 			    },
 			    
 			    error:function(e){
@@ -572,6 +557,7 @@
 	
 	<input type="hidden" name="member.memberId" value="${member.memberId}">
 	<input type="hidden" name="member.memberName" value="${member.memberName}">
+	<input type="hidden" name="restaurantNo" value="${restaurant.restaurantNo}">
 	
 	<div class="form-group">
 		<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>

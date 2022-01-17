@@ -74,7 +74,14 @@ public class CommunityDAOImpl implements CommunityDAO {
 	
 	@Override
 	public List<Community> listCommunity(Search search) throws Exception {
-		return sqlSession.selectList("CommunityMapper.listCommunity", search);
+		List<Community> list = sqlSession.selectList("CommunityMapper.listCommunity", search);
+		
+		for (int i = 0; i < list.size(); i++) {
+			list.get(i).setLikeCount(getLikeCount(list.get(i).getPostNo()));
+		}
+		
+		return list;
+		//return sqlSession.selectList("CommunityMapper.listCommunity", search);
 	}
 
 
