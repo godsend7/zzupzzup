@@ -29,8 +29,38 @@
 	$(function() {
 		console.log("modal-archive.jsp");
 		
+		/* //유저 탭 선택 시
+		$("#login-user-tab").on("click", function() {
+			$("#loginUser a").attr("class", "nav-link active");
+			$("#loginOwner a").attr("class", "nav-link");
+			$("#login-view").html("<div class='form-row col-md-12'><div class='col-md-9'>"
+					+"<input type='email' id='memberId' name='memberId' class='form-control' placeholder='example@zzupzzup.com' required autofocus>"
+					+"<input type='password' id='password' name='password' class='form-control' placeholder='비밀번호를 입력해주세요.' required>"
+					+"</div><br/><div class='col-md-3' align='center'>"
+					+"<input type='button' id='login' value='login' class='button primary' style='height:100px;vertical-align:middle;'/>"
+					+"</div></div><hr><div align='center' style='margin-top:5px;'>"
+					+"<h5 style='color:#bfbfbf;'>SNS 계정으로 로그인/회원가입</h5>"
+					+"<a id='kakaoLogin' href='#'><img src='/resources/images/common/kakao_login_medium_wide.png' width='280' alt='카카오 로그인 버튼' /></a></div><br/><br/>"
+					+"<div align='right'><a id='findAccountModal-nav' data-toggle='modal' data-target='#findAccountModal'>아이디/비밀번호 찾기 ></a></div>"
+					+"<div align='right'>회원이 아니신가요?&nbsp;<a href='/member/addMember/user/1'>가입하기</a> ></div>");
+		});
+		
+		//업주 탭 선택 시
+		$("#login-owner-tab").on("click", function() {
+			$("#loginUser a").attr("class", "nav-link");
+			$("#loginOwner a").attr("class", "nav-link active");
+			$("#login-view").html("<div class='form-row col-md-12'><div class='col-md-9'>"
+					+"<input type='email' id='memberId' name='memberId' class='form-control' placeholder='example@zzupzzup.com' required autofocus>"
+					+"<input type='password' id='password' name='password' class='form-control' placeholder='비밀번호를 입력해주세요.' required>"
+					+"</div><br/><div class='col-md-3' align='center'>"
+					+"<input type='button' id='login' value='login' class='button primary' style='height:100px;vertical-align:middle;'/>"
+					+"</div></div><hr>"
+					+"<div align='right'><a id='findAccountModal-nav' data-toggle='modal' data-target='#findAccountModal'>아이디/비밀번호 찾기 ></a></div>"
+					+"<div align='right'>회원이 아니신가요?&nbsp;<a href='/member/addMember/owner/1'>가입하기</a> ></div>");
+		}); */
+		
 		//enter key 눌렀을 때 login 넘기기
-		$("#memberId, #password").keyup(function(e) {
+		$("#password").keyup(function(e) {
 			
 			if(e.keyCode == 13) {
 				var memberId = $("input[type=email]").val();
@@ -320,46 +350,52 @@
 		});
 		
 		//deleteMember
-		$("#checkPwdForDelete-btn").on("click", function() {
+		$("#inputDeleteReason-btn").on("click", function() {
+			
+			$("#input-pwd").html("<br/><h5 style='color:red;'>본인 확인을 위해 비밀번호를 입력해주세요.</h5>"
+								+"<input type='password' id='password-forDelete' name='password' maxlength='15' class='col-md-8'/>");
+			$("#delete-member-footer").html("<input type='button' class='btn btn-primary' id='checkPwdForDelete-btn' value='확인'>");
 
-			var memberId = "${sessionScope.member.memberId}";
-			var password = $("#password-forDelete").val();
-			var deleteType = $("input[name=deleteType]:checked").val();
-			var deleteReason = $("textarea[name=deleteReason]").val();
-			var loginType = "${sessionScope.member.loginType}";
+			$("#checkPwdForDelete-btn").on("click", function() {
+				var memberId = "${sessionScope.member.memberId}";
+				var password = $("#password-forDelete").val();
+				var deleteType = $("input[name=deleteType]:checked").val();
+				var deleteReason = $("textarea[name=deleteReason]").val();
+				var loginType = "${sessionScope.member.loginType}";
 
-			console.log("memberId:" + memberId);
-			console.log("password:" + password);
-			console.log("deleteType:" + deleteType);
-			console.log("deleteReason:"+deleteReason);
-			console.log("loginType:"+loginType);
-
-			$.ajax({
-				url : "/member/json/deleteMember",
-				method : "POST",
-				contentType : 'application/json',
-				dataType : "json",
-				data : JSON.stringify({
-					"memberId" : memberId,
-					"password" : password,
-					"deleteType" : deleteType,
-					"deleteReason" : deleteReason,
-					"loginType" : loginType
-				}),
-				success : function(data) {
-					if (data.loginType == 1) {
-						alert("탈퇴 처리가 완료되었습니다.");
-						location.href = "/";
-					} else if(data.loginType == 2) {
-						unlinkKakao();
-						alert("탈퇴 처리가 완료되었습니다.");
-						location.href = "/";
+				console.log("memberId:" + memberId);
+				console.log("password:" + password);
+				console.log("deleteType:" + deleteType);
+				console.log("deleteReason:"+deleteReason);
+				console.log("loginType:"+loginType);
+				
+				$.ajax({
+					url : "/member/json/deleteMember",
+					method : "POST",
+					contentType : 'application/json',
+					dataType : "json",
+					data : JSON.stringify({
+						"memberId" : memberId,
+						"password" : password,
+						"deleteType" : deleteType,
+						"deleteReason" : deleteReason,
+						"loginType" : loginType
+					}),
+					success : function(data) {
+						if(data.loginType == 1) {
+							alert("탈퇴 처리가 완료되었습니다.");
+							location.href = "/";
+						} else if(data.loginType == 2) {
+							unlinkKakao();
+							alert("탈퇴 처리가 완료되었습니다.");
+							location.href = "/";
+						}
+					},
+					error : function(request, status, error) {
+						//alert("에러 왜 뜨는데");
+						alert("request : "+request.status+"\n message : "+request.responseText+"\n error : "+error);
 					}
-				},
-				error : function(request, status, error) {
-					//alert("에러 왜 뜨는데");
-					alert("request : "+request.status+"\n message : "+request.responseText+"\n error : "+error);
-				}
+				});
 			});
 		});
 		
@@ -384,12 +420,12 @@
 			$("#findId a").attr("class", "nav-link active");
 			$("#findPwd a").attr("class", "nav-link");
 			$("#find-form").html("<div class='col-md-11 form-row' style='margin-left: 20px;margin-top: 10px;'>"
-									+"<label for='memberName' class='col-md-2'>이름</label>"
+									+"<label for='memberName' class='col-md-3'>이름</label>"
 									+"<input type='text' id='memberName' name='memberName' class='col-md-9' Placeholder='이름을 입력해주세요.'/>"
 								  +"</div>"
 								  +"<div class='col-md-11 form-row' style='margin-left: 20px;margin-top: 10px;'>"
-									+"<label for='memberPhone' class='col-md-2'>전화번호</label>"
-									+"<input type='text' id='memberPhone1' name='memberPhone1' class='col-md-3' maxlength='3'/>&nbsp;&#45;&nbsp;"
+									+"<label for='memberPhone' class='col-md-3'>전화번호</label>"
+									+"<input type='text' id='memberPhone1' name='memberPhone1' class='col-md-2' maxlength='3'/>&nbsp;&#45;&nbsp;"
 									+"<input type='text' id='memberPhone2' name='memberPhone2' class='col-md-3' maxlength='4'/>&nbsp;&#45;&nbsp;"
 									+"<input type='text' id='memberPhone3' name='memberPhone3' class='col-md-3' maxlength='4'/>"
 								  +"</div>");
@@ -553,19 +589,32 @@
 				</button>
 			</div>
 			<div class="modal-body">
+				<!-- <ul class="nav nav-tabs loginMember-top-tabs">
+				  	<li class="nav-item" id="loginUser">
+				    	<a class="nav-link active" id="login-user-tab" href="#">유저</a>
+				  	</li>
+				  	<li class="nav-item" id="loginOwner">
+				    	<a class="nav-link" id="login-owner-tab" href="#">업주</a>
+				  	</li>
+				</ul> -->
 				<form class="form-signin" id="login-view">
 					<!-- <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
-					<h6 class="h6 mb-6 font-weight-normal" style="margin-bottom: 20px;">로그인 후 이용하여 주십시오.</h6>
-					<label for="memberId" class="sr-only">Email address</label> <input
-						type="email" id="memberId" name="memberId" class="form-control"
-						placeholder="example@zzupzzup.com" required autofocus> <label
-						for="password" class="sr-only">Password</label> <input
-						type="password" id="password" name="password" class="form-control"
-						placeholder="비밀번호를 입력해주세요." required>
-					<br/>
-					<a class="button" id="login">login</a>
+					<!-- <h6 class="h6 mb-6 font-weight-normal" style="margin-bottom: 20px;">로그인 후 이용하여 주십시오.</h6> -->
+					<div class="form-row col-md-12">
+						<div class="col-md-9">
+							<!-- <label for="memberId" class="sr-only">아이디</label> -->
+							<input type="email" id="memberId" name="memberId" class="form-control" placeholder="example@zzupzzup.com" required autofocus>
+							<!-- <label for="password" class="sr-only">비밀번호</label> -->
+							<input type="password" id="password" name="password" class="form-control" placeholder="비밀번호를 입력해주세요." required>
+						</div>
+						<br/>
+						<div class="col-md-3" align="center">
+							<input type="button" id="login" value="login" class="button primary" style="height:100px;vertical-align:middle;"/>
+						</div>
+					</div>
 					<hr>
 					<div align="center" style="margin-top:5px;">
+						<h5 style="color:#bfbfbf;">SNS 계정으로 로그인/회원가입</h5>
 						<a id="kakaoLogin" href="#">
 						  <img
 						    src="/resources/images/common/kakao_login_medium_wide.png"
@@ -577,12 +626,13 @@
 						class="btn btn-lg btn-primary btn-block" id="naverLogin"
 						type="button" value="네이버 로그인 (구현 예정)" /> --><br/><br/>
 					<div align="right">
-						회원이 아니신가요? > 
-						<a href="/member/addMember/user/1">유저</a>&nbsp;/
-						<a href="/member/addMember/owner/1">업주</a>
+						<a id="findAccountModal-nav" data-toggle="modal" data-target="#findAccountModal">아이디/비밀번호 찾기 ></a>
 					</div>
 					<div align="right">
-						<a id="findAccountModal-nav" data-toggle="modal" data-target="#findAccountModal">아이디/비밀번호 찾기 ></a>
+						회원이 아니신가요?&nbsp;
+						<a href="/member/addMember?memberRole=user&loginType=1">유저</a>&nbsp;/
+						<a href="/member/addMember?memberRole=owner&loginType=1">업주</a>
+						 >
 					</div>
 					<!-- <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p> -->
 				</form>
@@ -629,7 +679,7 @@
 				<div id="find-check" align="center"></div>
 			</div>
 			<div class="modal-footer">
-		      <input type="button" class="btn btn-primary" id="findAccount-btn" value="확인">
+		      <input type="button" class="button primary" id="findAccount-btn" value="확인">
 		    </div>
 		</div>
 	</div>
@@ -652,7 +702,7 @@
 					<h5>탈퇴 사유</h5>
 					<div class="form-row col-md-12">
 						<input type="radio" class="custom-control-input" id="deleteType1" name="deleteType" value="1" checked> 
-						<label for="deleteType1" class="">더 이상 이 서비스를 이용하고 싶지 않아서</label>
+						<label for="deleteType1">더 이상 이 서비스를 이용하고 싶지 않아서</label>
 						<input type="radio" class="custom-control-input" id="deleteType2" name="deleteType" value="2"> 
 						<label for="deleteType2">기존의 타 사이트를 이용하고 있어서</label>
 						<input type="radio" class="custom-control-input" id="deleteType3" name="deleteType" value="3"> 
@@ -663,24 +713,18 @@
 					<div id="checked-etc" class="col-md-12"></div>
 					<br/>
 					<h5 align="center"><strong style='color:red;'>탈퇴 후 7일 이내에 접속 시 계정이 복구되며, 탈퇴한 계정은 다시 이용할 수 없습니다.</strong></h5>
+					<div id="input-pwd" class="col-md-12" align="center"></div>
 				</form>
 			</div>
-			<div class="modal-footer">
-			<c:if test="${member.loginType == 1}">
-				<a id="checkPwdForDeleteModal-nav" data-toggle="modal" data-target="#checkPwdForDeleteModal">
-			      	<input type="button" class="btn btn-primary" id="deleteMember-btn" value="확인">
-			      </a>
-			</c:if>
-		    <c:if test="${member.loginType != 1}">
-				<input type="button" class="btn btn-primary" id="checkPwdForDelete-btn" value="확인">
-			</c:if>  
+			<div class="modal-footer" id="delete-member-footer">
+				<input type="button" class="button primary" id="inputDeleteReason-btn" value="확인">
 		    </div>
 		</div>
 	</div>
 </div>
 
 <!-- 회원탈퇴 전 비밀번호 확인 modal -->
-<div class="modal fade" id="checkPwdForDeleteModal" tabindex="-1" role="dialog"
+<!-- <div class="modal fade" id="checkPwdForDeleteModal" tabindex="-1" role="dialog"
 	aria-labelledby="checkPwdForDeleteModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -705,7 +749,7 @@
 		    </div>
 		</div>
 	</div>
-</div>
+</div> -->
 
 <!-- 상대 프로필 modal -->
 <div class="modal fade" id="getOtherUserModal" tabindex="-1" role="dialog"

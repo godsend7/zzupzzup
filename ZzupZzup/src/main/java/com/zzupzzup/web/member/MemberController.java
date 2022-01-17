@@ -71,8 +71,8 @@ public class MemberController {
 		
 	}
 	
-	@RequestMapping(value="addMember/{memberRole}/{loginType}", method=RequestMethod.GET)
-	public String addMember(@PathVariable String memberRole, @PathVariable String loginType, Member member, HttpSession session) throws Exception {
+	@RequestMapping(value="addMember", method=RequestMethod.GET)
+	public String addMember(@RequestParam String memberRole, @RequestParam String loginType, Member member, HttpSession session) throws Exception {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : GET");
 		
@@ -81,13 +81,13 @@ public class MemberController {
 			session.setAttribute("snsMember", member);
 		}
 		
-		return "forward:/member/addMemberView.jsp?memberRole="+memberRole+"&loginType="+loginType;
+		return "redirect:/member/addMemberView.jsp?memberRole="+memberRole+"&loginType="+loginType;
 //		return "redirect:/member/addMember/"+memberRole+"/"+loginType;
 		
 	}
 	
-	@RequestMapping(value="addMember/{memberRole}/{loginType}", method=RequestMethod.POST)
-	public String addMember(@PathVariable String memberRole, @PathVariable int loginType,
+	@RequestMapping(value="addMember", method=RequestMethod.POST)
+	public String addMember(@RequestParam String memberRole, @RequestParam int loginType,
 				@ModelAttribute("member") Member member, HttpSession session,
 				@RequestParam(value="fileInput", required = false) MultipartFile uploadfile) throws Exception {
 		
@@ -251,8 +251,8 @@ public class MemberController {
 		return "forward:/member/updateMemberView.jsp";
 	}
 	
-	@RequestMapping(value="updateMember/{memberRole}", method=RequestMethod.POST)
-	public String updateMember(@PathVariable String memberRole, @ModelAttribute("member") Member member, HttpServletRequest request, HttpSession session,
+	@RequestMapping(value="updateMember", method=RequestMethod.POST)
+	public String updateMember(@RequestParam String memberRole, @ModelAttribute("member") Member member, HttpServletRequest request, HttpSession session,
 			@RequestParam(value="fileInput", required = false) MultipartFile uploadfile) throws Exception {
 		
 		System.out.println("/member/updateMember : POST");
@@ -269,16 +269,20 @@ public class MemberController {
 		String fileName = null; 
 		if(uploadfile.getOriginalFilename() == null || uploadfile.getOriginalFilename() == "" || uploadfile.getOriginalFilename() == "defaultImage.png") {
 			if(member.getProfileImage() == null) {
+				//System.out.println("default");
 				fileName = "defaultImage.png";
 			} else {
+				//System.out.println("바뀐 이미지");
 				fileName = member.getProfileImage();
 			}
 		} else {
+			//System.out.println("새로 update 한 이미지");
 			fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadfile.getOriginalFilename());
+			
+			//새로 이미지 변경을 한 경우에만 AWS에 업로드 되게 하기
+			String vacant = "member/" + fileName;
+			s3ImageUpload.uploadFile(uploadfile, vacant);
 		}
-		
-		String vacant = "member/" + fileName;
-		s3ImageUpload.uploadFile(uploadfile, vacant);
 		
 		member.setProfileImage(fileName);
 		
