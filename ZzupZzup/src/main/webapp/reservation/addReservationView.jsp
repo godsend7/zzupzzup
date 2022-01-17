@@ -385,18 +385,26 @@
 								</div>
 								
 								<div class="col-md-12">
-									<label for="restaurantTimes">음식점 영업 시간</label>
+									<label for="restaurantTimes">음식점 영업 시간</label><br>
+									<div>*해당 음식점 영업시간에 맞게 예약해주세요*</div><br>
 								</div>
 								
 								<div class="col-md-12 d-flex">	 
 									<c:forEach var="time" items="${reservation.restaurant.restaurantTimes}">
-											<div>
-					                		<span>${time.restaurantDay}</span><br>
-					                		<span>OpenTime -   ${time.restaurantOpen}</span>
-					                		<span>CloseTime - ${time.restaurantClose}</span>
-					                		<span>BreakTime - ${time.restaurantBreak}</span>
-					                		<span>LastOrder - ${time.restaurantLastOrder}</span>
-					                		<span>휴무일 - ${time.restaurantDayOff}</span>
+											<div style="flex-grow: 1;">
+					                		<span>${time.returnDay}</span><br>
+					                		<c:choose>
+												<c:when test="${time.restaurantDayOff != true}">
+							                		<span>OpenTime -   ${time.restaurantOpen}</span><br>
+							                		<span>CloseTime - ${time.restaurantClose}</span><br>
+							                		<span>LastOrder - ${time.restaurantLastOrder}</span><br>
+							                	<c:if test="${time.restaurantBreak != ''}">
+						                			<span>BreakTime - ${time.restaurantBreak}</span><br>
+						                		</c:if>
+						                		</c:when>
+					                		</c:choose>
+					                		<span>${time.returnDayOff}</span>
+					                		
 					                		</div>
 										</c:forEach>
 								</div>
@@ -407,7 +415,7 @@
 								</div>
 								<!-- Break -->
 								
-								<h2 class="pl-4 mb-0">결제하기</h2>
+								<h2 class="pl-4 mb-0 col-12">결제하기</h2>
 								<div class="col-12 pl-4 mb-0" style="padding:0px" ><hr></div>
 								
 								<!-- Break -->
