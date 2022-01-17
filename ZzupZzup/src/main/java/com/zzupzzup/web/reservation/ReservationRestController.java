@@ -94,8 +94,16 @@ public class ReservationRestController {
 		
 		System.out.println("updateReservation reservation : " + reservation);
 		
-		// 방문 완료시 채팅방 상태 모임 완료 변경
-		chatService.updateChatState(reservation.getChat().getChatNo(), 4);
+		  /////////////////////////////////////////////////////////////////////
+	      // 예약상태 변경시 채팅방 상태 변경
+	      if(reservationStatus == 1) {
+	         chatService.updateChatState(reservation.getChat().getChatNo(), 4);
+	      }else if(reservationStatus == 2 || reservationStatus == 3 || reservationStatus == 4) {
+	         chatService.updateChatState(reservation.getChat().getChatNo(), 1);
+	      }
+	      ////////////////////////////////////////////////////////////////////
+	      
+
 		
 		return reservationService.updateReservation(reservation);
 	}
@@ -108,9 +116,12 @@ public class ReservationRestController {
 		Member member = (Member) session.getAttribute("member");
 		reservation.setMember(member);
 		
-		// 예약 취소시 채팅방 상태 모임중 변경(에러로 가림)
-		//reservation = reservationService.getReservation(reservation.getReservationNo());
-		//chatService.updateChatState(reservation.getChat().getChatNo(), 1);
+		 //////////////////////////////////////////////////////////////////
+	      // 예약 취소시 채팅방 상태 모임중 변경
+	      Reservation reservationn = reservationService.getReservation(reservation.getReservationNo());
+	      chatService.updateChatState(reservationn.getChat().getChatNo(), 1);
+	      /////////////////////////////////////////////////////////////////
+
 		
 		return reservationService.updateReservation(reservation);
 	}	
