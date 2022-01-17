@@ -152,8 +152,9 @@
 						response(
 							$.map(difference, function(item) {
                                 return {
-                                	value: item.hashTagNo,
-                                    label: item.hashTag
+                                	value: item.hashTag,
+                                    label: item.hashTag,
+                                    id: item.hashTagNo
                                 }
                             })
 						);//response 
@@ -163,14 +164,17 @@
 	 		select : function(event, ui) {
 	 			$("#hashTagBox").append("<span class='badge badge-pill badge-secondary hashTag' id='hashtag" 
 	 									+ hashTagCount + "'>" + ui.item.label + " x <input type='hidden' name='hashTag[" 
-	 										+ hashTagCount + "].hashTagNo' value='" + ui.item.value + "'></span>");
+	 										+ hashTagCount + "].hashTagNo' value='" + ui.item.id + "'></span>");
 				hashTagCount++;
 				
-				hashtag_list.push(ui.item.value);
+				hashtag_list.push(ui.item.id);
 				
 				$("#hashTagAuto").val('');
 				
-				return false;
+				//return false;
+	 		},
+	 		focus : function(event, ui) {
+	 			return false;
 	 		}
 		});
 	});

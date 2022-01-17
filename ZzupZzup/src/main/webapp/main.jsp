@@ -193,11 +193,6 @@
 			}
 		});
 		
-		//길찾기 종료
-		$("#none-direction").on("click", function() {
-			location.reload();
-		});
-		
 		//////////////////////// modal show or hide event start //////////////////////////
 		//길찾기 modal 실행될 때 현재위치 가져오기
 		$("#directionModal").on("shown.bs.modal", function() { 
@@ -226,7 +221,7 @@
 		
 		//길찾기 modal 종료 시 switch toggle off
 		$("#directionModal").on("hide.bs.modal", function() { 
-			console.log("modal 닫힘");
+			//console.log("modal 닫힘");
 			$(".directionCheck").prop("checked", false);
 			$(".directionCheck").parent("div").attr("class", "toggle btn btn-xs btn-light off");
 		});
@@ -250,7 +245,7 @@
 					},
 					success : function(data, status) {
 						
-						console.log(data);
+						//console.log(data);
 						
 						//label : 화면에 보여지는 텍스트 
 						//value : 실제 text태그에 들어갈 값
@@ -310,7 +305,8 @@
 			success : function(data, status) {
 				//alert(JSON.stringify(data.route.bbox));
 				//console.log(JSON.stringify(data.route.trafast[0].path));
-				getDirec();
+				//getDirec();
+				
 				if (data.code == 0) {
 					$.each (data.route.trafast[0].path, function(index, item){ 
 						polylinePath.push(new naver.maps.LatLng(item[1], item[0]));
@@ -414,7 +410,7 @@
 	}
 	
 	function viewCustomOverlay(locationArray) {
-		console.log(locationArray);
+		//console.log(locationArray);
 		
 		// 4. 사용자 정의 오버레이
 		var CustomOverlay = function(options) {
