@@ -299,6 +299,8 @@
 		//findAccount
 		$("#findAccount-btn").on("click", function() {
 
+			alert("메일 전송 중입니다.");
+			
 			var memberName = $("#memberName").val();
 			var memberId = $("#memberId-find").val();
 			var memberPhone = $("#memberPhone1").val()+"-"+$("#memberPhone2").val()+"-"+$("#memberPhone3").val();
@@ -325,7 +327,7 @@
 							if(memberId != null) {	//비밀번호 찾기
 								//alert("이거 안 타나?");
 								if(data.loginType == 1) {
-									$("#find-check").html("<h4>입력하신 회원님의 메일 주소로 비밀번호 재설정 링크를 발송하였습니다.</h4>");
+									$("#find-check").html("<h4>입력하신 회원님의 메일 주소로<br/>비밀번호 재설정 링크 발송을 완료하였습니다.</h4>");
 								} else {
 									$("#find-check").html("<h4>SNS 계정으로 가입한 회원은 비밀번호를 재설정할 수 없습니다.</h4>");
 								}

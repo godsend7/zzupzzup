@@ -10,6 +10,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.catalina.connector.Connector;
 import org.springframework.stereotype.Service;
 
 import com.zzupzzup.service.member.MailService;
@@ -44,6 +45,14 @@ public class MailServiceImpl implements MailService {
 //	    	certificatedNum += random.nextInt(10);
 //	    }
 		
+		/*
+		//scheme http로만 받게 하기 - 안 되네
+		if(request.getScheme() != "http") {
+			System.out.println("scheme :: "+request.getScheme());
+			Connector connector = new Connector();
+			connector.setScheme("http");
+		}
+		*/
 		//javax.mail에 필요한 local variable
 		subject = "[쩝쩝듀스101] 비밀번호 재설정 링크가 전송되었습니다.";
 //		body = "안녕하세요. 쩝쩝듀스101입니다.\n"+"아래 링크로 접속하여 비밀번호를 설정하여 주세요. \n\n"
@@ -62,6 +71,8 @@ public class MailServiceImpl implements MailService {
         props.put("mail.smtp.port", port); 
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.required", "true");
+        props.put("mail.smtp.ssl.trust", host);
         Session session = Session.getDefaultInstance(props);
         MimeMessage msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress(from, fromName));
