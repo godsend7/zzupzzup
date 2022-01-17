@@ -4,6 +4,7 @@ encoding//src/main/resources=UTF-8
 encoding//src/main/webapp/layout/sidebar.jsp=UTF-8
 encoding//src/main/webapp/main.jsp=UTF-8
 encoding//src/main/webapp/member/modal-archive.jsp=UTF-8
+encoding//src/main/webapp/member/reset-pwd-mail.jsp=UTF-8
 encoding//src/main/webapp/review/updateReviewView.jsp=UTF-8
 encoding//src/test/java=UTF-8
 encoding/<project>=UTF-8

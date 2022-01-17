@@ -1,16 +1,21 @@
 package com.zzupzzup.service.member.impl;
 
+import java.io.File;
 import java.util.Properties;
-import java.util.Random;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.catalina.connector.Connector;
 import org.springframework.stereotype.Service;
 
 import com.zzupzzup.service.member.MailService;
@@ -45,26 +50,26 @@ public class MailServiceImpl implements MailService {
 //	    	certificatedNum += random.nextInt(10);
 //	    }
 		
-		/*
-		//scheme http로만 받게 하기 - 안 되네
-		if(request.getScheme() != "http") {
-			System.out.println("scheme :: "+request.getScheme());
-			Connector connector = new Connector();
-			connector.setScheme("http");
-		}
-		*/
 		//javax.mail에 필요한 local variable
 		subject = "[쩝쩝듀스101] 비밀번호 재설정 링크가 전송되었습니다.";
 //		body = "안녕하세요. 쩝쩝듀스101입니다.\n"+"아래 링크로 접속하여 비밀번호를 설정하여 주세요. \n\n"
 //				+ "http://localhost:8080/member/setPassword.jsp?memberId="+to;
-		body = "<div align='center'>"
-				+ "<img src='/favicon.ico'><br/>"
-				+ "안녕하세요. 쩝쩝듀스101입니다.<br/>"
-				+ "아래 버튼을 클릭 하여 비밀번호를 설정해주세요.<br/><br/>"
-				+ "<a href='http:localhost:8080/member/setPassword.jsp?memberId="+to+"'>"
-				+ "<input type='button' value='비밀번호 재설정'>"
-				+ "</a>"
-				+ "</div>";
+//		body = "<div align='center'>"
+//				+ "<img src='/favicon.ico'><br/>"
+//				+ "안녕하세요. 쩝쩝듀스101입니다.<br/>"
+//				+ "아래 버튼을 클릭 하여 비밀번호를 설정해주세요.<br/><br/>"
+//				+ "<a href='" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/member/setPassword.jsp?memberId="+to+"'>"
+//				+ "<input type='button' class='button primary' value='비밀번호 재설정'>"
+//				+ "</a>"
+//				+ "</div>";
+		body = "<!DOCTYPE HTML><html><head><jsp:include page='/layout/toolbar.jsp'/></head>"
+				+ "<body class='is-preload'><div id='wrapper'><div id='main'><div class='inner'>"
+				+ "<section id='reset-pwd-body'><div class='container'>"
+				+ "<div align='center'>"
+				+ "<img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/favicon.ico'><br/>안녕하세요. 쩝쩝듀스101입니다.<br/>아래 버튼을 클릭 하여 비밀번호를 설정해주세요.<br/><br/>"
+				+ "<a href='" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/member/setPassword.jsp?memberId="+to+"'><input type='button' class='button primary' value='비밀번호 재설정'>"
+				+ "</a></div>"
+				+ "</div></section></div></div></div></body></html>";
 		
 		Properties props = System.getProperties();
         props.put("mail.transport.protocol", "smtp");
@@ -78,13 +83,40 @@ public class MailServiceImpl implements MailService {
         msg.setFrom(new InternetAddress(from, fromName));
         msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
         msg.setSubject(subject);
-        msg.setContent(body, "text/html;charset=euc-kr");
+        msg.setContent(body, "text/html;charset=UTF-8");
+        /*
+        //메일에 이미지 삽입
+        MimeMultipart multipart = new MimeMultipart("related");
+        //* first part  (the html)
+        BodyPart msgBodyPart = new MimeBodyPart();
+        String htmlText = "<!DOCTYPE HTML><html><head><jsp:include page='/layout/toolbar.jsp'/></head>"
+				+ "<body class='is-preload'><div id='wrapper'><div id='main'><div class='inner'>"
+				+ "<section id='reset-pwd-body'><div class='container'>"
+				+ "<div align='center'>"
+				+ "<img src='cid:imagePath'><br/>안녕하세요. 쩝쩝듀스101입니다.<br/>아래 버튼을 클릭 하여 비밀번호를 설정해주세요.<br/><br/>"
+				+ "<a href='" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/member/setPassword.jsp?memberId="+to+"'><input type='button' class='button primary' value='비밀번호 재설정'>"
+				+ "</a></div>"
+				+ "</div></section></div></div></div></body></html>";
+        msgBodyPart.setContent(htmlText, "text/html; charset=UTF-8");
+        //* add it
+        multipart.addBodyPart(msgBodyPart);
+        //* second part (the image)
+        msgBodyPart = new MimeBodyPart();
+        String imagePath = "https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/favicon.ico";
         
+        DataSource fds = new FileDataSource(imagePath);
+        msgBodyPart.setDataHandler(new DataHandler(fds));
+        msgBodyPart.setHeader("Content-ID","<imagePath>");
+        //* add it
+        multipart.addBodyPart(msgBodyPart);
+        //* put everything together
+        msg.setContent(multipart);
+        */
         Transport transport = session.getTransport();
         try {
             System.out.println("전송 중입니다 . . .");
             
-            System.out.println("link :: '" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/member/setPassword.jsp?memberId="+to+"'");
+            //System.out.println("link :: '" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/member/setPassword.jsp?memberId="+to+"'");
             
             transport.connect(host, smtpUserName, smtpPwd);
             transport.sendMessage(msg, msg.getAllRecipients());
