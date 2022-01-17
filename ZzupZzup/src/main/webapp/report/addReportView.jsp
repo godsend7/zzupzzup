@@ -36,12 +36,15 @@
 		reportCategory = reportArray[0];
 		toReport = reportArray[1];
 		
+		$(".reportType3").parent("div").removeClass("report-hidden");
+		$("#reportDetail").val('');
+		
 		if (reportArray[0] == 1) {
 			//console.log("채팅방 신고");
 			$(".h5").text("채팅방 신고");
 			$(".reportType1").text("허위 광고성 채팅방입니다.");
 			$(".reportType2").text("부적절한 언행을 사용하였습니다.");
-			$(".reportType3").parent("div").attr("class","report-hidden");
+			$(".reportType3").parent("div").addClass("report-hidden");
 		} else if (reportArray[0] == 2) {
 			//console.log("채팅방 참여자 신고");
 			$(".h5").text("채팅방 참여자 신고");

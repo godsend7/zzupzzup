@@ -71,8 +71,8 @@ public class MemberController {
 		
 	}
 	
-	@RequestMapping(value="addMember", method=RequestMethod.GET)
-	public String addMember(@RequestParam String memberRole, @RequestParam String loginType, Member member, HttpSession session) throws Exception {
+	@RequestMapping(value="addMember/{memberRole}/{loginType}", method=RequestMethod.GET)
+	public String addMember(@PathVariable String memberRole, @PathVariable String loginType, Member member, HttpSession session) throws Exception {
 		
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : GET");
 		
@@ -81,18 +81,18 @@ public class MemberController {
 			session.setAttribute("snsMember", member);
 		}
 		
-		return "redirect:/member/addMemberView.jsp?memberRole="+memberRole+"&loginType="+loginType;
+		return "forward:/member/addMemberView.jsp?memberRole="+memberRole+"&loginType="+loginType;
 //		return "redirect:/member/addMember/"+memberRole+"/"+loginType;
 		
 	}
 	
-	@RequestMapping(value="addMember", method=RequestMethod.POST)
-	public String addMember(@RequestParam String memberRole, @RequestParam int loginType,
-				@ModelAttribute("member") Member member, HttpSession session,
-				@RequestParam(value="fileInput", required = false) MultipartFile uploadfile) throws Exception {
-		
+	@RequestMapping(value="addMember/{memberRole}/{loginType}", method=RequestMethod.POST)
+	public String addMember(@PathVariable String memberRole, @PathVariable int loginType,
+			@ModelAttribute("member") Member member, HttpSession session,
+			@RequestParam(value="fileInput", required = false) MultipartFile uploadfile) throws Exception {
+	
 		System.out.println("/member/addMember/"+memberRole+"/"+loginType+" : POST");
-		
+	
 //		String temp = request.getServletContext().getRealPath("/resources/images/uploadImages");
 //		String profileImage = uploadFile(uploadfile, temp, member.getProfileImage());
 		
@@ -251,8 +251,8 @@ public class MemberController {
 		return "forward:/member/updateMemberView.jsp";
 	}
 	
-	@RequestMapping(value="updateMember", method=RequestMethod.POST)
-	public String updateMember(@RequestParam String memberRole, @ModelAttribute("member") Member member, HttpServletRequest request, HttpSession session,
+	@RequestMapping(value="updateMember/{memberRole}", method=RequestMethod.POST)
+	public String updateMember(@PathVariable String memberRole, @ModelAttribute("member") Member member, HttpServletRequest request, HttpSession session,
 			@RequestParam(value="fileInput", required = false) MultipartFile uploadfile) throws Exception {
 		
 		System.out.println("/member/updateMember : POST");

@@ -229,6 +229,7 @@
 		              									+"<input type='hidden' name='gender' value='"+gender+"'>"
 		              									+"<input type='hidden' name='age' value='"+age+"'>"
 		                  								+"</form>");
+		                          $("#kakaoLogin").attr("href", "/member/addMember/user/2");
 		                          $("#kakao-login-value").attr("method","GET").attr("action","/member/addMember/user/2").submit();
 		                          
 		                      } else { //DB에 아이디가 존재할 경우 => 로그인
@@ -298,6 +299,8 @@
 		//findAccount
 		$("#findAccount-btn").on("click", function() {
 
+			alert("메일 전송 중입니다.");
+			
 			var memberName = $("#memberName").val();
 			var memberId = $("#memberId-find").val();
 			var memberPhone = $("#memberPhone1").val()+"-"+$("#memberPhone2").val()+"-"+$("#memberPhone3").val();
@@ -324,23 +327,29 @@
 							if(memberId != null) {	//비밀번호 찾기
 								//alert("이거 안 타나?");
 								if(data.loginType == 1) {
-									$("#find-check").html("<h4>입력하신 회원님의 메일 주소로 비밀번호 재설정 링크를 발송하였습니다.</h4>");
+									$("#find-check").html("<h4>입력하신 회원님의 메일 주소로<br/>비밀번호 재설정 링크 발송을 완료하였습니다.</h4>");
 								} else {
 									$("#find-check").html("<h4>SNS 계정으로 가입한 회원은 비밀번호를 재설정할 수 없습니다.</h4>");
 								}
 							} else if($("#memberPhone1").val() != null && $("#memberPhone2").val() != null && $("#memberPhone3").val() != null) {		//아이디 찾기
 								//alert("너도 안 타니?");
-								$("#find-check").html("<h4>요청하신 회원님의 ID는 " 
-														+"<strong>["+data.memberId+"]("+data.loginType+")</strong>"
-														+"입니다.</h4>");
+								if(data.loginType == 1) {
+									$("#find-check").html("<h4>요청하신 회원님의 ID는 " 
+															+"<strong>["+data.memberId+"](일반)</strong>"
+															+"입니다.</h4>");
+								} else if(data.loginType == 2) {
+									$("#find-check").html("<h4>요청하신 회원님의 ID는 " 
+															+"<strong>["+data.memberId+"](카카오)</strong>"
+															+"입니다.</h4>");
+				}
 							}
 						} else {
 							alert("해당하는 정보가 없습니다.");
 						}
 					},
 					error: function(request, status, error) {
-						alert("에러만 잘 나고 ...");
-						alert("request : "+request.status+"\n message : "+request.responseText+"\n error : "+error);
+						//alert("에러만 잘 나고 ...");
+						//alert("request : "+request.status+"\n message : "+request.responseText+"\n error : "+error);
 					}
 				});	
 			} else {
@@ -498,9 +507,9 @@
 									+"<div class='row align-items-right'>"
 									+"<div class='col-md-7'>"
 									+"<h4 class='mb-1'>"
-									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;'>"+data.memberRank+"</span>&nbsp;"
+									+"<div class=''><span class='badge badge-pill badge-dark' style='background-color: #f56a6a;'>"+data.memberRank+"</span>&nbsp;"
 									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;'>"+data.ageRange+"</span>&nbsp;"
-									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;' id='get-other-user-gender'>"
+									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;' id='get-other-user-gender'></div>"
 									+"</span>&nbsp;&nbsp;"+data.nickname+"</h4>"
 									+"</div></div>"
 									+"<div class='row mb-4'>"
@@ -630,8 +639,8 @@
 					</div>
 					<div align="right">
 						회원이 아니신가요?&nbsp;
-						<a href="/member/addMember?memberRole=user&loginType=1">유저</a>&nbsp;/
-						<a href="/member/addMember?memberRole=owner&loginType=1">업주</a>
+						<a href="/member/addMember/user/1">유저</a>&nbsp;/
+						<a href="/member/addMember/owner/1">업주</a>
 						 >
 					</div>
 					<!-- <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p> -->
@@ -753,11 +762,11 @@
 
 <!-- 상대 프로필 modal -->
 <div class="modal fade" id="getOtherUserModal" tabindex="-1" role="dialog"
-	aria-labelledby="checkPwdForDeleteModalLabel" aria-hidden="true">
+	aria-labelledby="getOtherUserModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h2 class="modal-title" id="checkPwdForDeleteModalLabel">프로필</h2>
+				<h2 class="modal-title" id="getOtherUserModalLabel">프로필</h2>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
