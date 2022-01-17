@@ -313,7 +313,7 @@
 					$("#chatRatingModal").modal('hide');
 					$("#chatRatingModal").find(".modal-body").html("");
 					$("#ratingEndModal").modal('show');
-					$("a.button:contains(평가하기)").remove();
+					//$("a.button:contains(평가하기)").remove();
 				},
 				error : function(request, status, error) {
 					/* alert("code:" + request.status + "\n" + "message:"

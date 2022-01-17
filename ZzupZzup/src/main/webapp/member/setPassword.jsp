@@ -25,12 +25,9 @@
 	$(function() {
 		console.log("setPassword.jsp");
 		
-		var id = "${param.memberId}";
-		var pwd = $("#pwd").val();
-		var checkPwd = $("#checkPwd").val();
-		
 		//비밀번호 유효성 체크
 		$("#pwd").keyup(function() {
+			var pwd = $("#pwd").val();
 			var pattern1 = /[0-9]/;
 			var pattern2 = /[a-zA-Z]/i;
 			
@@ -39,11 +36,9 @@
 				checkPwdFlag = false;
 			} else {
 				if ( ! pattern1.test(pwd) || ! pattern2.test(pwd) || pwd.length < 8) {
-					console.log("형식 이거 안 타나?");
 					$("#checkPwdMsg").text("비밀번호 형식에 맞춰 다시 입력해주세요.");	//비밀번호 형식 확인(알파벳 대소문자, 숫자, 특수문자)
 					checkPwdFlag = false;
 				} else {
-					console.log("너도 안 되니?");
 					$("#checkPwdMsg").text("");
 					checkPwdFlag = true;
 				}
@@ -52,6 +47,9 @@
 		
 		//비밀번호 일치 여부 체크
 		$("#checkPwd").keyup(function() {
+			var pwd = $("#pwd").val();
+			var checkPwd = $("#checkPwd").val();
+			
 			if (pwd != checkPwd) {
 				$("#checkSamePwdMsg").text("비밀번호가 일치하지 않습니다.");
 				checkSamePwdFlag = false;
@@ -92,20 +90,27 @@
 							<input type="hidden" name="memberId" value="${param.memberId}"/>
 							<h2>비밀번호 재설정</h2><hr/>
 							<br/><br/><br/>
-							<div class="col-md-12 form-row" align="center">
+							<div class="col-md-12 form-row">
 								<label for="password" class="col-md-2">새로운 비밀번호</label>
 								<input type="password" id="pwd" name="password" class="col-md-5" maxlength="15"/>
-								<span id="checkPwdMsg" class="col-md-12" style="color: red; font-weight: bold"></span>
+								<div class="col-md-5" align="center">
+									<span style="color:#bfbfbf; font-weight: bold; vertical-align:middle;">&nbsp;비밀번호는 영문 대소문자와 숫자의 조합으로 구성해주세요.</span>
+								</div>
+								<div class="col-md-12">
+									<span id="checkPwdMsg" style="color: red; font-weight: bold; float:right;"></span>
+								</div>
 							</div>
 							<br/><br/>
-							<div class="col-md-12 form-row" align="center">
+							<div class="col-md-12 form-row">
 								<label for="checkPwd" class="col-md-2">비밀번호 확인</label>
 								<input type="password" id="checkPwd" class="col-md-5" maxlength="15"/>
-								<span id="checkSamePwdMsg" class="col-md-12" style="color: red; font-weight: bold"></span>
+								<div class="col-md-12">
+									<span id="checkSamePwdMsg" style="color: red; font-weight: bold; float:right;"></span>
+								</div>
 							</div>
 							<br/><br/>
 							<div class="col-md-12" align="center">
-								<input type="button" class="button primary" value="비밀번호 변경" style="float:right;">
+								<input type="button" class="button primary" value="비밀번호 변경">
 							</div>
 						</form>
 						
