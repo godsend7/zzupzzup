@@ -177,7 +177,7 @@ public class MemberRestController {
 	}
 	
 	@RequestMapping(value="json/findAccount", method=RequestMethod.POST)
-	public Member findAccount(@RequestBody Member member) throws Exception {
+	public Member findAccount(@RequestBody Member member, HttpServletRequest request) throws Exception {
 		
 		System.out.println("/member/json/findAccount : POST");
 		System.out.println("memberName : "+member.getMemberName()+", memberId : "+member.getMemberId()+", memberPhone : "+member.getMemberPhone());
@@ -195,7 +195,7 @@ public class MemberRestController {
 			if(mb != null) {
 				//System.out.println("야호!!!!");
 				if(mb.getLoginType() == 1) {
-					mailService.sendToEmail(mb.getMemberId());
+					mailService.sendToEmail(mb.getMemberId(), request);
 				}
 				return mb;
 			}

@@ -349,7 +349,7 @@ public class MemberServiceTest {
 	
 	//@Test
 	public void testSendEmail() throws Exception {
-		mailService.sendToEmail("y409813@gmail.com");
+		mailService.sendToEmail("y409813@gmail.com", null);
 	}	
 
 	//@Test

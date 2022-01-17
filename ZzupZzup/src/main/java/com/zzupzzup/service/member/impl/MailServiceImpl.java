@@ -8,6 +8,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class MailServiceImpl implements MailService {
 	
 	//*Method
 	@Override
-	public void sendToEmail(String to) throws Exception {	//수신자 이메일을 parameter로 받음
+	public void sendToEmail(String to, HttpServletRequest request) throws Exception {	//수신자 이메일을 parameter로 받음
 		// TODO Auto-generated method stub
 
 //		//이메일에 전송될 인증번호 생성 파트
@@ -51,7 +52,7 @@ public class MailServiceImpl implements MailService {
 				+ "<img src='/favicon.ico'><br/>"
 				+ "안녕하세요. 쩝쩝듀스101입니다.<br/>"
 				+ "아래 버튼을 클릭 하여 비밀번호를 설정해주세요.<br/><br/>"
-				+ "<a href='http:localhost:8080/member/setPassword.jsp?memberId="+to+"'>"
+				+ "<a href='" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/member/setPassword.jsp?memberId="+to+"'>"
 				+ "<input type='button' value='비밀번호 재설정'>"
 				+ "</a>"
 				+ "</div>";
