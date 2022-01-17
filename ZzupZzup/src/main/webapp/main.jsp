@@ -806,7 +806,7 @@
 		}
 		
 		if (arrayLayout[i].mainMenu != null) {
-			mainMenu = arrayLayout[i].mainMenu;
+			mainMenu = "<br>" + arrayLayout[i].mainMenu;
 		}
 		
 		if (arrayLayout[i].reservationStatus != null) {
@@ -819,15 +819,15 @@
 		
 		var contentString = "";
 		
-		contentString = '<div style="padding:10px; width:250px;"><b>' + arrayLayout[i].restaurantName + menuType +
-						'<br>'+ mainMenu +
+		contentString = '<div style="padding:10px; width:220px;"><div><b>' + arrayLayout[i].restaurantName + menuType + '</b> </div>' +
+						'<div style="font-size:0.9em;">'+ mainMenu +
 						'<br>'+ arrayLayout[i].streetADDR +
 						/* '<br>'+ arrayLayout[i].areaADDR + */
 						'<br>'+ arrayLayout[i].restaurantTel;
 						
 						 
 		if (arrayLayout[i].judgeStatus == 2) {
-			contentString += '<br><div>'+ reservationStatus + '<a href="/restaurant/getRestaurant?restaurantNo=' + arrayLayout[i].restaurantNo + '" class="button primary small" style="float:right; margin-right:20px;">상세보기</a> </div></div>';
+			contentString += '<br><div>'+ reservationStatus + '<a href="/restaurant/getRestaurant?restaurantNo=' + arrayLayout[i].restaurantNo + '" class="button primary small" style="float:right; margin-right:20px;">상세보기</a> </div></div></div>';
 		}	
 						 
 		//클릭 했을 때 띄어줄 정보 HTML
@@ -835,7 +835,7 @@
 		    content: contentString,
 		    maxWidth: 300,
 		    borderColor: "#f56a6a",
-		    borderWidth: 5
+		    borderWidth: 3
 		});
 	
 		markers.push(marker); //생성한 마커를 배열에 담기
