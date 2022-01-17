@@ -113,6 +113,8 @@ public class RestaurantController {
 //			restaurantService.updateRestaurant(restaurant);
 //		}
 		 
+		System.out.println(restaurant);
+		
 
 		if (restaurantService.addRestaurant(restaurant) == 1) {
 			System.out.println("INSERT RESTAURANT SUCCESS");
@@ -404,16 +406,11 @@ public class RestaurantController {
 			search.setCurrentPage(1);
 		}
 
-		if (request.getParameter("page") != null) {
-			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
-		}
-
 		search.setPageSize(pageSize);
 
-		Map<String, Object> map = restaurantService.listRestaurant(search);
+		Map<String, Object> map = restaurantService.listRequestRestaurant(search);
 
-		Page resultPage = new Page(search.getCurrentPage(), ((Integer) map.get("totalCount")).intValue(), pageUnit,
-				pageSize);
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer) map.get("totalCount")).intValue(), pageUnit, pageSize);
 
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("search", search);

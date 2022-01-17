@@ -325,9 +325,9 @@
 		WHERE POST_NO = #{postNo};
 		
 		INSERT
-		INTO RESTAURANT(RESTAURANT_NAME, RESTAURANT_TEL, RESERVATION_STATUS,
+		INTO RESTAURANT(POST_NO, RESTAURANT_NAME, RESTAURANT_TEL, RESERVATION_STATUS,
 		STREET_ADDRESS, AREA_ADDRESS, REST_ADDRESS, LATITUDE, LONGITUDE, MENU_TYPE)
-		VALUES (#{restaurantName}, #{restaurantTel}, false, #{streetAddress}, #{areaAddress}, 
+		VALUES (#{postNo}, #{restaurantName}, #{restaurantTel}, false, #{streetAddress}, #{areaAddress}, 
 		#{restAddress}, #{latitude}, #{longitude}, #{menuType});
 	</update>
 	

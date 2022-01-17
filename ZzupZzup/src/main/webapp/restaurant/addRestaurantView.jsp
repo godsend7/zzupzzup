@@ -186,7 +186,11 @@
 					});
 				},
 		 		focus : function (event, ui) {
-		 			console.log(ui.item.id);
+		 			//console.log(ui.item.id);
+		 			//console.log(ui.item.id.postNo);
+		 			
+		 			$("input[name='postNo']").val(ui.item.id.postNo);		 			
+		 			
 		 			return false;
 		 			//event.preventDefault();
 		 		},
@@ -557,7 +561,8 @@
 	
 	<input type="hidden" name="member.memberId" value="${member.memberId}">
 	<input type="hidden" name="member.memberName" value="${member.memberName}">
-	<input type="hidden" name="restaurantNo" value="${restaurant.restaurantNo}">
+	<%-- <input type="hidden" name="restaurantNo" value="${restaurant.restaurantNo}"> --%>
+	<input type="hidden" name="postNo" value="">
 	
 	<div class="form-group">
 		<label for="restaurantName" class="col-sm-offset-1 col-sm-3 control-label">음식점명</label>

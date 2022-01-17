@@ -9,6 +9,7 @@
 	<resultMap id="restaurantSelectMap" type="restaurant">
 		<result property="member.memberId" 		column="MEMBER_ID" 				jdbcType="VARCHAR" />
 		<result property="member.memberName"	column="OWNER_NAME" 			jdbcType="VARCHAR" />
+		<result property="postNo"				column="POST_NO"				jdbcType="NUMERIC" />
 		<result property="restaurantNo"			column="RESTAURANT_NO"			jdbcType="NUMERIC" />
 		<result property="ownerImage" 			column="OWNER_IMAGE" 			jdbcType="VARCHAR" />
 		<result property="restaurantName" 		column="RESTAURANT_NAME" 		jdbcType="VARCHAR" />
@@ -66,9 +67,18 @@
 	<insert 	id="addRestaurant"		parameterType="restaurant" useGeneratedKeys="true" keyProperty="restaurantNo" >
 		INSERT
 		INTO RESTAURANT(MEMBER_ID, OWNER_NAME, OWNER_IMAGE, RESTAURANT_TEXT, RESTAURANT_NAME,
-		RESTAURANT_TEL, STREET_ADDRESS, AREA_ADDRESS, REST_ADDRESS, LATITUDE, LONGITUDE, MENU_TYPE, PARKABLE)
+		RESTAURANT_TEL, STREET_ADDRESS, AREA_ADDRESS, REST_ADDRESS, LATITUDE, LONGITUDE, MENU_TYPE, PARKABLE, JUDGE_STATUS, REQUEST_DATE
+		<if test="postNo != 0">
+			,POST_NO
+		</if>
+		
+		)
 		VALUES ( #{member.memberId}, #{member.memberName}, #{ownerImage}, #{restaurantText}, #{restaurantName},
-		#{restaurantTel}, #{streetAddress}, #{areaAddress}, #{restAddress}, #{latitude}, #{longitude}, #{menuType}, #{parkable})	
+		#{restaurantTel}, #{streetAddress}, #{areaAddress}, #{restAddress}, #{latitude}, #{longitude}, #{menuType}, #{parkable}, 1, now()
+		<if test="postNo != 0">
+			,#{postNo}
+		</if>
+		)	
 	</insert>
 	
 	<insert 	id="addRestaurantMenu"	parameterType="restaurant" >
@@ -184,7 +194,11 @@
 				JUDGE_DATE = NOW()
 			</if>
 		</set>
-		WHERE RESTAURANT_NO = #{restaurantNo}
+		WHERE RESTAURANT_NO = #{restaurantNo};
+		
+		<if test="judgeStatus == 2">
+			DELETE FROM RESTAURANT WHERE post_no = #{postNo} AND request_date IS NULL;
+		</if>
 	</update>
 	
 	
@@ -231,6 +245,17 @@
 			  	WHERE rt.MEMBER_ID LIKE #{id}
 			  </if>
 			  ORDER BY rt.RESTAURANT_NO LIMIT #{search.startRowNum}, #{search.pageSize}) AS rt
+		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
+						  FROM IMAGE) AS img
+						  ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
+	</select>
+	
+	<select id="listRequestRestaurant" parameterType="search" resultMap="restaurantSelectMap">		  
+		SELECT *
+		FROM (SELECT * 
+				FROM RESTAURANT
+				WHERE judge_status = 1 and request_date IS NOT NULL
+				ORDER BY restaurant_no LIMIT #{startRowNum}, #{pageSize}) AS rt
 		LEFT OUTER JOIN (SELECT IMAGE, RESTAURANT_NO
 						  FROM IMAGE) AS img
 						  ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
@@ -355,6 +380,11 @@
 			  </where>
 	</select>
 	
+	<select id="getRequestTotalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM RESTAURANT 
+		WHERE judge_status = 1 and request_date IS NOT NULL
+	</select>
 	
 	<!-- SQL : SELECT LIST -->
 	<select id="listRestaurantName" parameterType="search" resultMap="restaurantSelectMap">
