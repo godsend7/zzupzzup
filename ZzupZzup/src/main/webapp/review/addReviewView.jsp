@@ -171,10 +171,7 @@
 				
 				$("#hashTagAuto").val('');
 				
-				//return false;
-	 		},
-	 		focus : function(event, ui) {
-	 			return false;
+				return false;
 	 		}
 		});
 	});

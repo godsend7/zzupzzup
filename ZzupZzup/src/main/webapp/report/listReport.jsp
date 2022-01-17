@@ -155,9 +155,9 @@
 																<c:if test="${member.memberRole eq 'user'}">
 																	<span class="badge badge-success">확인 완료</span>
 																</c:if>
-																<c:if test="${member.memberRole eq 'owner'}">
+																<%-- <c:if test="${member.memberRole eq 'owner'}">
 																	<span class="badge badge-danger">읽음</span>
-																</c:if>
+																</c:if> --%>
 																<c:if test="${member.memberRole eq 'admin'}">
 																	<span class="badge badge-danger">처리 완료</span>
 																</c:if>
@@ -171,11 +171,22 @@
 													</c:choose>
 												</div>
 												<input type="hidden" name="toReport" value="${report.toReport}">
+												<%-- <c:choose>
+													<c:when test="${report.reportCategory == 2}">
+														<h3 class="mb-0">
+															<span class="badge badge-pill badge-primary">${report.reportChatMember.memberRank}</span>&nbsp; ${report.reportChatMember.nickname}
+														</h3>
+													</c:when>
+													<c:otherwise>
+														<h3 class="mb-0"><span>${report.toReportTitle}</span></h3>
+													</c:otherwise>
+												</c:choose> --%>
 												<h3 class="mb-0"><span>${report.toReportTitle}</span></h3>
 												
 												<br>
 												
 												<p class="card-text mb-auto"><strong>${report.returnReportType}</strong></p>
+												<br>
 												<p class="card-text mb-auto">${report.reportDetail}</p>
 												
 												<br>
@@ -188,7 +199,12 @@
 															</c:if>
 														</c:when>
 														<c:when test="${param.reportCategory == 2}">
-															<a href="/member/getMember?memberId=${report.reportChatMember.memberId}">상세보기</a>
+															<c:if test="${member.memberRole eq 'admin'}">
+																<a href="/member/getMember?memberId=${report.reportChatMember.memberId}">상세보기</a>
+															</c:if>
+															<c:if test="${member.memberRole eq 'user'}">
+																<a href="#getOtherUserModal" class="getOtherUserModal" data-toggle="modal" data-target="#getOtherUserModal" data-id="${report.reportChatMember.memberId}">상세보기</a>
+															</c:if>
 														</c:when>
 														<c:when test="${param.reportCategory == 3}">
 															<a href="#reviewModal" class="reviewModal" data-toggle="modal" data-id="${report.reportReview.reviewNo}">상세보기</a>
