@@ -88,6 +88,17 @@
 .input-container { padding: 15px; }
 .input-container textarea { background-color: transparent; border: none; overflow-x: hidden; overflow-y: auto; white-space: pre-wrap; }
 .input-container textarea:focus { border: none; box-shadow: none; }
+.input-container textarea::-webkit-scrollbar {
+	width: 6px;
+}
+.input-container textarea::-webkit-scrollbar-thumb {
+	height: 20%;
+	background-color: #bbb;
+	border-radius: 10px;
+}
+.input-container textarea::-webkit-scrollbar-track {
+	background-color: #d9d9d9;
+}
 .input-container .send-button { margin-top: 10px; }
 
 .chat-user { flex-grow: 1; }

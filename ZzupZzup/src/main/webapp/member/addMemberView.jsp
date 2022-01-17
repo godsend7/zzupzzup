@@ -201,57 +201,57 @@
 		})
 		
 		$("input[value='회원가입']").on("click", function() {
-			if("${param.memberRole}" == "user") {
-				if("${param.loginType}" == "1" && (checkNameFlag && checkIdFlag && checkPwdFlag && checkSamePwdFlag && checkPhoneFlag && checkNicknameFlag && checkCertificatedNumFlag)) {	//일반 회원가입
-					$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
-				} else if("${param.loginType}" != "1" && (checkNameFlag && checkIdFlag && checkPhoneFlag && checkNicknameFlag && checkCertificatedNumFlag)) {	//SNS(카카오) 회원가입
-					$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
-				} else {
-					alert("누락된 항목 확인 후 다시 진행해주세요.");
-					//alert("name : "+checkNameFlag+", "+"id : "+checkIdFlag+", "+"pwd : "+checkPwdFlag+", "+"same pwd : "+checkSamePwdFlag+", "+"phone : "+checkPhoneFlag+", "+"nickname : "+checkNicknameFlag+", "+"certificatedNum : "+checkCertificatedNumFlag);
-				}
-			} else {
-				if("${param.loginType}" == "1" && (checkNameFlag && checkIdFlag && checkPwdFlag && checkSamePwdFlag && checkPhoneFlag && checkCertificatedNumFlag)) {
-					var regRestaurant = confirm("음식점 등록을 진행하시겠습니까?");
-					
-					if(regRestaurant) {
-						$("#addMember-hidden").html("<input type='hidden' name='regRestaurant' value='"+regRestaurant+"'/>");
-						$("#addMember-complete").attr("method" , "POST").attr("action" , "/member/addMember/owner/${param.loginType}").submit();
+			var checkAddMember = confirm("회원가입을 진행하시겠습니까?");
+			
+			if(checkAddMember) {
+				if("${param.memberRole}" == "user") {
+					if("${param.loginType}" == "1" && (checkNameFlag && checkIdFlag && checkPwdFlag && checkSamePwdFlag && checkPhoneFlag && checkNicknameFlag && checkCertificatedNumFlag)) {	//일반 회원가입
+						$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
+					} else if("${param.loginType}" != "1" && (checkNameFlag && checkIdFlag && checkPhoneFlag && checkNicknameFlag && checkCertificatedNumFlag)) {	//SNS(카카오) 회원가입
+						$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
 					} else {
-						$("#addMember-hidden").html("<input type='hidden' name='regRestaurant' value='"+regRestaurant+"'/>");
-						alert("로그인 후 음식점을 등록해주세요.");
-						$("#addMember-complete").attr("method" , "POST").attr("action" , "/member/addMember/owner/${param.loginType}").submit();
+						alert("누락된 항목 확인 후 다시 진행해주세요.");
+						//alert("name : "+checkNameFlag+", "+"id : "+checkIdFlag+", "+"pwd : "+checkPwdFlag+", "+"same pwd : "+checkSamePwdFlag+", "+"phone : "+checkPhoneFlag+", "+"nickname : "+checkNicknameFlag+", "+"certificatedNum : "+checkCertificatedNumFlag);
 					}
 				} else {
-					alert("누락된 항목 확인 후 다시 진행해주세요.");
+					if("${param.loginType}" == "1" && (checkNameFlag && checkIdFlag && checkPwdFlag && checkSamePwdFlag && checkPhoneFlag && checkCertificatedNumFlag)) {
+						var regRestaurant = confirm("음식점 등록을 진행하시겠습니까?");
+						
+						if(regRestaurant) {
+							$("#addMember-hidden").html("<input type='hidden' name='regRestaurant' value='"+regRestaurant+"'/>");
+							$("#addMember-complete").attr("method" , "POST").attr("action" , "/member/addMember/owner/${param.loginType}").submit();
+						} else {
+							$("#addMember-hidden").html("<input type='hidden' name='regRestaurant' value='"+regRestaurant+"'/>");
+							alert("로그인 후 음식점을 등록해주세요.");
+							$("#addMember-complete").attr("method" , "POST").attr("action" , "/member/addMember/owner/${param.loginType}").submit();
+						}
+					} else {
+						alert("누락된 항목 확인 후 다시 진행해주세요.");
+					}
 				}
 			}
-			
 		})
 
-		$("input[value='인증번호 전송']").on(
-				"click",
-				function() {
-
-					var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
-					
-					if(checkPhoneFlag) {
-						$.ajax({
-							type : "GET",
-							url : "/member/json/sendCertificatedNum",
-							data : {
-								"phoneNum" : phoneNum
-							},
-							success : function(result) {
-								alert("인증번호가 발송되었습니다.");
-								certificatedNumG = result;
-							}
-						});
-					} else {
-						alert("전화번호를 입력해주세요.");
+		$("input[value='인증번호 전송']").on("click", function() {
+			var phoneNum = $("#memberPhone1").val()+$("#memberPhone2").val()+$("#memberPhone3").val();
+			alert("인증번호를 발송합니다.");
+			if(checkPhoneFlag) {
+				$.ajax({
+					type : "GET",
+					url : "/member/json/sendCertificatedNum",
+					data : {
+						"phoneNum" : phoneNum
+					},
+					success : function(result) {
+						alert("인증번호 발송이 완료되었습니다.");
+						certificatedNumG = result;
 					}
-
 				});
+			} else {
+				alert("전화번호를 입력해주세요.");
+			}
+
+		});
 
 		$("input[value='이전']").on("click", function() {
 			location.href = "/";
@@ -304,8 +304,8 @@
 										<div class="col">
 											<c:if test="${param.loginType == '1'}">
 												<label for="password">비밀번호</label> <input type="password" class="form-control" id="password" name="password"
-														minlength="8" maxlength="15" placeholder="8-15자 이내로 입력해주세요."><span
-														id="checkPwdMsg" style="color: red; font-weight: bold"></span>
+														minlength="8" maxlength="15" placeholder="비밀번호는 8-15자 이내의 영문 대소문자와 숫자의 조합으로 구성해주세요.">
+												<span id="checkPwdMsg" style="color: red; font-weight: bold"></span>
 												<br/>
 													<!-- <h5>알파벳 대소문자, 숫자, 특수문자(~, !, @, #, $, %, ^, &, *, \, /)를
 														조합하여 비밀번호를 구성하세요.</h5> -->

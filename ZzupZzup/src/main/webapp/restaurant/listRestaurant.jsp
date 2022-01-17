@@ -92,7 +92,7 @@
 					<form id="restaurantList">
 					
 						<div class="row">
-							<div class="col-md-7">
+							<div class="col-md-7" style="padding-left: 40px;">
 								<a href="#" class="badge badge-dark dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">
 								<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
 								<path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
@@ -103,7 +103,7 @@
 								</div>
 							</div>
 							
-							<div class="col-md-5 row">
+							<div class="col-md-5 row" style="padding-left: 110px;">
 								<select class="searchCondition my-2 my-md-0" id="searchCondition" name="searchCondition" style="width: 124px; padding-left: 10px;">
 								  <!-- <option selected>Open this select menu</option> -->
 								  <option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""}> 음식점명</option>
@@ -123,7 +123,7 @@
 					<c:if test="${!empty restaurant.restaurantRegDate || !empty restaurant.judgeDate}">
 						
 					<div class="col-md-12">
-						<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+						<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow h-md-250 position-relative">
 							<div class="col p-4 d-flex flex-column position-static">
 							
 								<c:if test="${!empty restaurant.restaurantRegDate}">

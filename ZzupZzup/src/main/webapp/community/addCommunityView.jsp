@@ -62,8 +62,8 @@
 		             		var result = results[0];
 			            	//console.log(result.y);
 			            	//console.log(result.x);
-			            	$("input[name='latitude']").val(result.x);
-			            	$("input[name='longitude']").val(result.y);
+			            	$("input[name='latitude']").val(result.y);
+			            	$("input[name='longitude']").val(result.x);
 						}	
 		            });
 	                

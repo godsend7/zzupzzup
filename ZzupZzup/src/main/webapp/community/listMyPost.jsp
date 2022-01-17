@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>나만의 작고 소중한 맛집</title>
+<title>내가 작성한 게시물</title>
 
 <jsp:include page="/layout/toolbar.jsp" />
 
@@ -45,7 +45,7 @@
 	function fncPageNavigation(currentPage) {
 		$("#currentPage").val(currentPage);
 		console.log($("#currentPage").val());
-		$("#communityList").attr("method", "POST").attr("action", "/community/listCommunity").submit();
+		$("#communityList").attr("method", "POST").attr("action", "/community/listMyPost").submit();
 	}
 	
 	// 무한 스크롤
@@ -97,7 +97,7 @@
 									
 									if(${community.postImage[0] == null}) {
 										//append_nod += '<img src="/resources/images/uploadImages/default.png" height="100%">';
-										append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/default.png" height="100%">';
+										append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/default.png" height="100%">';
 									}
 									
 									if(${community.postImage[0] != null}) {
@@ -270,14 +270,14 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="listCommunity">
+				<section id="listMyPost">listCommunity
 					<div class="container">
 
 						<div class="row">
 							<div class="col">
-								<h2>나만의 작고 소중한 맛집 리스트</h2>
+								<h2>내가 작성한 게시물</h2>
 							</div>
-							<div class="col" style="padding-right: 22px;">
+							<%-- <div class="col" style="padding-right: 22px;">
 								<!-- <button type="button" class="btn btn-link btn-sm float-right" id="write">write</button> -->
 								<c:if test="${member.memberRole == 'user'}">
 									<a href="/community/addCommunity" id="write" class="button svg-btn btn-sm float-right" style="padding-right: 10px; padding-left: 10px;">
@@ -286,7 +286,7 @@
   									<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
 									</svg>작성하기</a>
 								</c:if>
-							</div>
+							</div> --%>
 						</div>
 						<hr>
 						<div class="container">
@@ -309,7 +309,7 @@
 									
 								</div>
 								
-								<div class="col-md-5 row" style="padding-left: 100px;">
+								<%-- <div class="col-md-5 row" style="padding-left: 100px;">
 									<select class="searchCondition my-2 my-md-0" id="searchCondition" name="searchCondition" style="width: 124px; padding-left: 10px;">
 									  <!-- <option selected>Open this select menu</option> -->
 									  <option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""}> 작성자명</option>
@@ -321,7 +321,7 @@
 								   <!--  </form> -->
 								    
 							    	 <input type="hidden" id="currentPage" name="currentPage" value="1"/>
-							    </div>
+							    </div> --%>
 						  
 							</div>
 							</form>   

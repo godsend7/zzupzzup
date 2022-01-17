@@ -125,16 +125,33 @@
 		//==>엔터쳤을때도 메세지 보내기
 		$chatInput.on("keypress", (e) => {
 			if(e.keyCode === 13){
-				if($chatInput.val() != '' && $chatInput.val().lenght != 0 && $chatInput.val() != null){
+				// textarea 공백 들어가는 부분 제거 정규식
+				/* console.log("====");
+				console.log($chatInput.val().replace(/(^\s*)|(\s*$)/gi, "").length);
+				$chatInput.val().replace(/(^\s*)|(\s*$)/gi, "");
+				$chatInput.focus(); */
+				if($chatInput.val() != '' && $chatInput.val().lenght != 0 && $chatInput.val() != null && $chatInput.val().replace(/(^\s*)|(\s*$)/gi, "").length != 0){
 					messageSend();
+				}else{
+					$chatInput.val('');
+					$chatInput.focus();
 				}
 			}
 		});
 		
 		//==>메세지 보내기 버튼 클릭시
 		$sendButton.on("click", function(){
-			if($chatInput.val() != '' && $chatInput.val().lenght != 0 && $chatInput.val() != null){
+			// textarea 공백 들어가는 부분 제거 정규식			
+			/* console.log("====");
+			console.log($chatInput.val().replace(/(^\s*)|(\s*$)/gi, "").length);
+			$chatInput.val().replace(/(^\s*)|(\s*$)/gi, "");
+			$chatInput.val('');
+			$chatInput.focus(); */
+			if($chatInput.val() != '' && $chatInput.val().lenght != 0 && $chatInput.val() != null && $chatInput.val().replace(/(^\s*)|(\s*$)/gi, "").length != 0){
 				messageSend();
+			}else{
+				$chatInput.val('');
+				$chatInput.focus();
 			}
 		});
 		
@@ -312,7 +329,6 @@
 						/* mem_profile_img != "defaultImage.png" ? mem_profile_img = "uploadImages/"+mem_profile_img : ""; */
 						mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img :  mem_profile_img = "member/"+mem_profile_img;
 						
-						console.log("fdfdfd : " + mem_profile_img);
 						// 성별 한글 변환
 						if(mem_gender == "male"){
 							mem_gender = "남자";
@@ -323,7 +339,6 @@
 						// 멤버들중 들어온 애들 루핑
 						const isConnected = item.onConnected == true ? "connected" : ""; 
 						const isReady = item.readyCheck == true ? "readyChk" : "";
-						console.log("isReady : " + isReady);
 						//이미지 경로 변경
 						/* dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+' '+isConnected+'"><img src="/resources/images/common/'+mem_profile_img+'"><span class="ready_badge">&#10003;</span><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>'; */
 						dom += '<li class="chatProfile d-flex flex-row align-items-center '+chatLeaderClass+' '+isConnected+' '+isReady+'"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"><span class="ready_badge">&#10003;</span><div class="dropmenu"><a href="" class="member_dropdown dropmenu-btn" data-target="'+item.member.memberId+'" data-toggle="dropmenu">'+item.member.nickname+'</a></div><span class="badge badge-info gender">'+mem_gender+'</span><span class="badge badge-warning age">'+item.member.ageRange+'</span></li>';
@@ -366,7 +381,6 @@
 						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="/resources/images/common/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
 					}); */
 					$.each(JSONData, function(key, value){
-						console.log("VM"+value.msgType)
 						if(value.msgType == "system"){
 							dom += '<li class="system"><div class="chat-message">'+value.msg+'</div></li>';
 						}else{
@@ -870,10 +884,10 @@
 								          <span aria-hidden="true">&times;</span>
 								        </button>
 									</div>
-									<div class="modal-body">
-										<p>예약을 진행하시겠습니까?</p>
-										<span>모임에 참여된 유저 닉네임</span>
-										<ul class="chat-member-list bg-light p-2 rounded">
+									<div class="modal-body text-center">
+										<p class="mb-3">예약을 진행하시겠습니까?</p>
+										<p class="mb-2">모임에 참여된 유저 닉네임</p>
+										<ul class="chat-member-list bg-secondary p-2 mb-2 rounded">
 										</ul>
 									</div>
 									<div class="modal-footer">

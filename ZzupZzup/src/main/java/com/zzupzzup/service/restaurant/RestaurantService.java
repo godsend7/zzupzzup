@@ -24,6 +24,8 @@ public interface RestaurantService {
 	
 	public Map<String, Object> listMyRestaurant(Search search, String memberId) throws Exception;
 	
+	public Map<String, Object> listRequestRestaurant(Search search) throws Exception;
+	
 	public int updateRestaurant(Restaurant restaurant) throws Exception;
 	
 	public int judgeRestaurant(Restaurant restaurant) throws Exception;

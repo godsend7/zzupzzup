@@ -163,6 +163,7 @@
 						       <h3 class=" text-danger">심사 대기중인 음식점 정보입니다.</h3>
 						    </div><hr>
 						    
+						    <input type="hidden" name="postNo" value="${restaurant.postNo}" />
 						    <input type="hidden" name="restaurantNo" value="${restaurant.restaurantNo}" />
 						    <input type="hidden" name="judgeStatus" value="${restaurant.judgeStatus}" />
 						    

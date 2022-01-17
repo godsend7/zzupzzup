@@ -117,7 +117,7 @@ textarea {
 	text-align: center;
 } */
 
-.carousel-item {
+/* .carousel-item {
 	background: #dee2e6;
 }
 
@@ -139,7 +139,7 @@ textarea {
 .carousel-item .imgBox img{
 	width: 100%;
 	vertical-align: middle;
-}
+} */
 
 .review-modal-top {
 	text-align: right;
@@ -192,3 +192,4 @@ textarea {
 .getOtherUserModal {
 	cursor: pointer;
 }
+

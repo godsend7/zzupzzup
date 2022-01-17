@@ -74,7 +74,26 @@ public class CommunityDAOImpl implements CommunityDAO {
 	
 	@Override
 	public List<Community> listCommunity(Search search) throws Exception {
-		return sqlSession.selectList("CommunityMapper.listCommunity", search);
+		List<Community> list = sqlSession.selectList("CommunityMapper.listCommunity", search);
+		
+		for (int i = 0; i < list.size(); i++) {
+			list.get(i).setLikeCount(getLikeCount(list.get(i).getPostNo()));
+		}
+		
+		return list;
+		//return sqlSession.selectList("CommunityMapper.listCommunity", search);
+	}
+	
+	
+	@Override
+	public List<Community> listMyPost(Search search) throws Exception {
+		List<Community> list = sqlSession.selectList("CommunityMapper.listMyPost", search);
+		
+		for (int i = 0; i < list.size(); i++) {
+			list.get(i).setLikeCount(getLikeCount(list.get(i).getPostNo()));
+		}
+		
+		return list;
 	}
 
 
@@ -165,5 +184,6 @@ public class CommunityDAOImpl implements CommunityDAO {
 	public int getLikeTotalCount(String memberId) throws Exception {
 		return sqlSession.selectOne("CommunityMapper.getLikeTotalCount", memberId);
 	}
+
 	
 }
