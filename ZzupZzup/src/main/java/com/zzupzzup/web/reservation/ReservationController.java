@@ -85,9 +85,6 @@ public class ReservationController {
 		System.out.println("addReservation member::"+member);
 		System.out.println("addReservation reservation::"+reservation);
 		
-		//예약이 완료되면 채팅방 상태가 인원확정 상태가 된다.
-		chatService.updateChatState(chatNo, 3);
-		
 		model.addAttribute("reservation", reservation);
 		
 		return "forward:/reservation/addReservationView.jsp";
@@ -102,6 +99,12 @@ public class ReservationController {
 		//reservationService.addReservation(reservation);
 		System.out.println("/reservation/addReservation22222 : POST");
 		//return "redirect:/reservation/listReservation";
+		
+		//////////////////////////////////////////////
+		//예약이 완료되면 채팅방 상태가 인원확정 상태가 된다.
+		chatService.updateChatState(reservation.getChat().getChatNo(), 3);
+		//////////////////////////////////////////////
+		
 		return reservationService.addReservation(reservation);
 	}
 	//컨트롤러로 하면 안되고 레스트 타야됨 add 안할거면 controller는 성공하기도 전에 리턴해버림

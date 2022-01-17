@@ -1,5 +1,7 @@
 package com.zzupzzup.service.domain;
 
+import com.zzupzzup.common.util.CommonUtil;
+
 public class RestaurantTime {
 	
 	///Field
@@ -108,6 +110,14 @@ public class RestaurantTime {
 
 	public void setRestaurantDayOff(boolean restaurantDayOff) {
 		this.restaurantDayOff = restaurantDayOff;
+	}
+	
+	public String getReturnDay() {
+		return CommonUtil.returnDay(restaurantDay);
+	}
+	
+	public String getReturnDayOff() {
+		return CommonUtil.returnDayOff(restaurantDayOff);
 	}
 	
 	

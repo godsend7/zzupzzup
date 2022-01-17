@@ -84,11 +84,15 @@
 	 	</if>
 	 	<if test="category == 5">
 	 		(SELECT restaurant_no, restaurant_name 
-	 		 FROM RESTAURANT) AS rt ON(rt.restaurant_no = r.restaurant_no)
+	 		 FROM RESTAURANT
+	 		 <if test='member.memberRole == "owner"'>
+	 		 	WHERE member_id = #{member.memberId}
+	 		 </if>
+	 		 ) AS rt ON(rt.restaurant_no = r.restaurant_no)
 	 	</if>
  		WHERE report_category = #{category} 
-	 	<if test="memberId != null">
-	 		AND r.member_id = #{memberId}
+	 	<if test='member.memberRole == "user"'>
+	 		AND r.member_id = #{member.memberId}
 	 	</if>
 	 	ORDER BY
 	 	<choose>
