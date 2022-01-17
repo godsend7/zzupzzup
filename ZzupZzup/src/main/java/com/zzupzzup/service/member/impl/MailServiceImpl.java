@@ -73,6 +73,8 @@ public class MailServiceImpl implements MailService {
         try {
             System.out.println("전송 중입니다 . . .");
             
+            System.out.println("link :: '" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/member/setPassword.jsp?memberId="+to+"'");
+            
             transport.connect(host, smtpUserName, smtpPwd);
             transport.sendMessage(msg, msg.getAllRecipients());
             System.out.println("전송이 완료되었습니다.");

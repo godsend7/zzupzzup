@@ -114,7 +114,7 @@
 						$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember").submit();
 					} else {
 						alert("누락된 항목 확인 후 다시 시도해주세요.");
-						alert("pwd : "+checkPwdFlag+", "+"same pwd : "+checkSamePwdFlag+", "+"phone : "+checkPhoneFlag+", "+"certificatedNum : "+checkCertificatedNumFlag);
+						//alert("pwd : "+checkPwdFlag+", "+"same pwd : "+checkSamePwdFlag+", "+"phone : "+checkPhoneFlag+", "+"certificatedNum : "+checkCertificatedNumFlag);
 					}
 				} else {
 					if(checkPhoneFlag && checkCertificatedNumFlag) {
