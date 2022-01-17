@@ -384,10 +384,22 @@
 					      			<input type="time" id="planTime" name="planTime">
 								</div>
 								
-								<div class="col-6 col-12-xsmall">
-									<label for="restaurantTimes">음식점 영업 시간</label> 
-									<p>${reservation.restaurant.restaurantTimes}</p>
-								</div> 
+								<div class="col-md-12">
+									<label for="restaurantTimes">음식점 영업 시간</label>
+								</div>
+								
+								<div class="col-md-12 d-flex">	 
+									<c:forEach var="time" items="${reservation.restaurant.restaurantTimes}">
+											<div>
+					                		<span>${time.restaurantDay}</span><br>
+					                		<span>OpenTime -   ${time.restaurantOpen}</span>
+					                		<span>CloseTime - ${time.restaurantClose}</span>
+					                		<span>BreakTime - ${time.restaurantBreak}</span>
+					                		<span>LastOrder - ${time.restaurantLastOrder}</span>
+					                		<span>휴무일 - ${time.restaurantDayOff}</span>
+					                		</div>
+										</c:forEach>
+								</div>
 								
 								<div class="col-6 col-12-xsmall">
 									<label for="demo-memberCount"></label> 

@@ -151,10 +151,12 @@ $(function() {
 					};
 					displayValueBd += '</div>'
 					+'<div class="get-chat-user-info mb-3">'
-					+'<div class="chatProfile d-flex flex-row align-items-center">'
+					+'<div class="chatProfile d-flex flex-row align-items-center">';
 					//이미지 경로 변경
 					/* +'<img src="/resources/images/common/'+JSONData.chatLeaderId.profileImage+'">' */
-					+'<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/'+JSONData.chatLeaderId.profileImage+'">'
+					let mem_profile_img = JSONData.chatLeaderId.profileImage;
+					mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img : mem_profile_img = "member/"+mem_profile_img;
+					displayValueBd += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'">'
 					+'<div class="dropdown-parent">'
 					+'<a href="#" class="getOtherUserModal" data-toggle="modal" data-target="#getOtherUserModal" data-id="' + JSONData.chatLeaderId.memberId + '">'+JSONData.chatLeaderId.nickname+'</a>'
 					+'<input type="hidden" id="chatLeaderId" name="chatLeaderId" value="'+JSONData.chatLeaderId.memberId+'">'

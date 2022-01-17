@@ -89,16 +89,14 @@ public class CommonUtil {
 	
 	public static String returnMemberRank(int activityScore) {
 		
-		if (activityScore <= 100) {
-			return MEMEBER_RANK_1;	
-		} else if (activityScore > 100 && activityScore < 250) {
+		if (activityScore > 100 && activityScore < 250) {
 			return MEMEBER_RANK_2;	
 		} else if (activityScore >= 250 && activityScore < 500) {
 			return MEMEBER_RANK_3;	
 		} else if (activityScore >= 500) {
 			return MEMEBER_RANK_4;	
 		} else {
-			return null;
+			return MEMEBER_RANK_1;
 		}
 		
 	}

@@ -554,9 +554,9 @@
 							<div class="row thumb-list">
 
 								<c:if test="${empty list }">
-									<div class="col-md-12 text-center">
+									<h3 class="col-md-12 text-center mt-5">
 										찾으시는 채팅방이 없습니다.
-									</div>
+									</h3>
 								</c:if>
 								<c:if test="${!empty list }">
 									<c:forEach var="chat" items="${list}">

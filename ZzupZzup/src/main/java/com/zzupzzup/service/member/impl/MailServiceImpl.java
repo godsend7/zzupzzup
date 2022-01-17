@@ -52,7 +52,7 @@ public class MailServiceImpl implements MailService {
 				+ "<img src='/favicon.ico'><br/>"
 				+ "안녕하세요. 쩝쩝듀스101입니다.<br/>"
 				+ "아래 버튼을 클릭 하여 비밀번호를 설정해주세요.<br/><br/>"
-				+ "<a href='" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/member/setPassword.jsp?memberId="+to+"'>"
+				+ "<a href='http:localhost:8080/member/setPassword.jsp?memberId="+to+"'>"
 				+ "<input type='button' value='비밀번호 재설정'>"
 				+ "</a>"
 				+ "</div>";
@@ -72,6 +72,8 @@ public class MailServiceImpl implements MailService {
         Transport transport = session.getTransport();
         try {
             System.out.println("전송 중입니다 . . .");
+            
+            System.out.println("link :: '" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/member/setPassword.jsp?memberId="+to+"'");
             
             transport.connect(host, smtpUserName, smtpPwd);
             transport.sendMessage(msg, msg.getAllRecipients());
