@@ -94,7 +94,12 @@ public class CommunityController {
 		s3ImageUpload.uploadFile(uploadReceiptFile, vacant);
 		//String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
 		
-		community.setReceiptImage(fileName);
+		//System.out.println("::::: uploadReceiptFile ::::: " + uploadReceiptFile);
+		//System.out.println("::::: uploadReceiptFile2 ::::: " + uploadReceiptFile.getOriginalFilename());
+		
+		if(uploadReceiptFile.getOriginalFilename() != "") {
+			community.setReceiptImage(fileName);
+		}
 		
 		if(communityService.addCommunity(community) == 1) {
 			System.out.println("POST UPLOAD SUCCESS");
@@ -253,6 +258,47 @@ public class CommunityController {
 		model.addAttribute("resultPage", resultPage);
 		
 		return "forward:/community/listCommunity.jsp";	
+	}
+	
+	@RequestMapping(value="listMyPost")
+	public String listMyPost(@ModelAttribute("search") Search search, @RequestParam("memberId") String memberId, Model model, HttpServletRequest request, HttpSession session) throws Exception {
+		
+		System.out.println("/community/listMyPost : SERVICE");
+		
+		Member member = (Member)session.getAttribute("member");
+		List<Mark> listLike = null;
+		
+		if(member != null && member.getMemberRole().equals("user")) {
+			listLike = communityService.listLike(member.getMemberId());
+		}
+		
+		
+		if(search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+		
+		/*
+		 * if(request.getParameter("page") != null) {
+		 * search.setCurrentPage(Integer.parseInt(request.getParameter("page"))); }
+		 */
+		
+		System.out.println("CurrentPage : " + search.getCurrentPage());
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = communityService.listMyPost(search, memberId);
+		
+		//pageUnit, pageSize
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println("RESULT PAGE : " + resultPage);
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("listLike", listLike);
+		model.addAttribute("search", search);
+		model.addAttribute("totalCount", map.get("totalCount"));
+		model.addAttribute("resultPage", resultPage);
+		
+		return "forward:/community/listMyPost.jsp";
 	}
 	
 	@RequestMapping(value="listMyLikePost")
