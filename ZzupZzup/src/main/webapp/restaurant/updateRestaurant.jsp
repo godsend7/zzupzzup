@@ -412,7 +412,7 @@
 			 		//console.log(item);
 			 	});
 				
-			 	alert("음식점 등록 정보가 수정되었습니다.");
+			 	//alert("음식점 등록 정보가 수정되었습니다.");
 				
 				$("#updateRestaurant").attr("method" , "POST").attr("action" , "/restaurant/updateRestaurant?restaurantNo=${restaurant.restaurantNo}").attr("enctype", "multipart/form-data").attr("accept-charset","UTF-8").submit();
 			 	
@@ -518,7 +518,8 @@
 						<div class="form-group">
 							<div class="col-sm-4">
 								<label for="ownerImage">사업자 등록증 이미지</label>
-								<img id="${restaurant.ownerImage}" src="/resources/images/uploadImages/owner/${restaurant.ownerImage}" width="100"/>
+								<%-- <img id="${restaurant.ownerImage}" src="/resources/images/uploadImages/owner/${restaurant.ownerImage}" width="100"/> --%>
+								<img id="${restaurant.ownerImage}" src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/restaurant/${restaurant.ownerImage}" width="100"/>
 								<p>등록된 이미지 파일 : ${restaurant.ownerImage}</p>
 								<input type="file" name="file" id="ownerImage" value="${restaurant.ownerImage}">
 							</div>
@@ -899,7 +900,8 @@
 								<c:forEach var="image" items="${restaurant.restaurantImage}" varStatus="status">
 									<c:set var="fileName" value="${fn:split(image, '_')}"/>
 									<a class='cvf_delete_image' id='img_id_${status.index}'>
-										<img src="/resources/images/uploadImages/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'>
+										<%-- <img src="/resources/images/uploadImages/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'> --%>
+										<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/restaurant/${image}" data-file='${fileName[1]}' class='selProductFile' title='click to remove'>
 										<input type='hidden' name='restaurantImage[${status.index}]' value='${image}'>
 									</a>
 								</c:forEach></div>
@@ -911,10 +913,12 @@
 							<textarea id="restaurantText" name="restaurantText" placeholder="음식점 소개글" rows="3" style="resize: none; height: 10em;">${restaurant.restaurantText}</textarea>
 						</div><br><br>
 						
-						<div class="col-md-12"><strong>예약 및 결제 서비스</strong> &nbsp;&nbsp;
-							<input type="checkbox" name="reservationStatus" id="reservationStatus" checked data-toggle="toggle" data-size="sm" data-onstyle="success" value="true" 
-							${!empty restaurant.reservationStatus && restaurant.reservationStatus ? "checked" : ""}>	
-						</div><br><hr>
+						<c:if test="${restaurant.judgeStatus == '2'}">
+							<div class="col-md-12"><strong>예약 및 결제 서비스</strong> &nbsp;&nbsp;
+								<input type="checkbox" name="reservationStatus" id="reservationStatus" checked data-toggle="toggle" data-size="sm" data-onstyle="success" value="true" 
+								${!empty restaurant.reservationStatus && restaurant.reservationStatus ? "checked" : ""}>	
+							</div><br><hr>
+						</c:if>	
 							
 						</form>
 						
