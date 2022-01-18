@@ -69,10 +69,10 @@
 			<div id="sidebarLogo" class="d-block text-center"><img src="/favicon.ico"/></div>
 			<h2 class="text-center pr-0 pb-0 mb-0"><strong class="text-primary">Welcome to ZZUPZZUPDUCE_101</strong></h2>
 		</header>
-		<c:if test="${ empty member}">
+		<c:if test="${ empty member || (! empty member && member.nickname == null)}">
 			<div class="profile-box shadow-sm"><p class="text-center">더 많은 서비스를 이용하시려면<br/>로그인 해주세요</p></div>
 		</c:if>
-		<c:if test="${ ! empty member}">
+		<c:if test="${ ! empty member && member.nickname != null}">
 			<!-- profile image start -->
 			<div class="profile-box shadow-sm d-flex justify-content-center">
 				<div id="sidebarProfileImg" class="d-flex mr-4">

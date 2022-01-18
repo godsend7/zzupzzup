@@ -63,11 +63,13 @@ public class MailServiceImpl implements MailService {
 //				+ "<input type='button' class='button primary' value='비밀번호 재설정'>"
 //				+ "</a>"
 //				+ "</div>";
-		body = "<!DOCTYPE HTML><html><head><jsp:include page='/layout/toolbar.jsp'/></head>"
+		body = "<!DOCTYPE HTML><html><head>"
+//				+"<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap\" rel=\"stylesheet\">"
+				+ "<style> .button.primary { background-color: #f56a6a; box-shadow: none; color: #ffffff; box-radius: 20px; width: 150px; height: 40px; text-align:center; font-size: 15px;}</style></head>"
 				+ "<body class='is-preload'><div id='wrapper'><div id='main'><div class='inner'>"
 				+ "<section id='reset-pwd-body'><div class='container'>"
 				+ "<div align='center'>"
-				+ "<img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/favicon.ico'><br/>안녕하세요. 쩝쩝듀스101입니다.<br/>아래 버튼을 클릭 하여 비밀번호를 설정해주세요.<br/><br/>"
+				+ "<img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/favicon.ico'><br/><h4>안녕하세요. 쩝쩝듀스101입니다.<br/>아래 버튼을 클릭 하여 비밀번호를 설정해주세요.</h4>"
 				+ "<a href='" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/member/setPassword.jsp?memberId="+to+"'><input type='button' class='button primary' value='비밀번호 재설정'>"
 				+ "</a></div>"
 				+ "</div></section></div></div></div></body></html>";
