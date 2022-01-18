@@ -125,7 +125,7 @@
 				}
 				
 			} else {
-				$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember").submit();
+				$("#updateMember-complete").attr("method","POST").attr("action","/member/updateMember/${sessionScope.member.loginType}").submit();
 			}
 			
 		})
@@ -617,8 +617,8 @@
 													</c:if>
 												</div>
 											</div>
+											<hr class="my-4" />
 										</c:if>
-										<!-- <hr class="my-4" /> -->
 										<div align="center">
 											<input type="button" id="back" class="button secondary" value="이전" />
 											<input type="button" id="updateMember-submit" class="button primary" value="수정" />
