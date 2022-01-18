@@ -197,7 +197,7 @@
 										</c:if>
 										
 										<c:if test="${sessionScope.member.memberRole == 'admin'}">											
-											<hr class="my-4"/>
+											<!-- <hr class="my-4"/> -->
 											<div class="form-row col-md-12">
 												<div class="col-md-6">
 													<label for="regDate">가입일</label> <span id="regDate"
