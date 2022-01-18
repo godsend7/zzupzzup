@@ -208,7 +208,7 @@
 		FROM (SELECT *
 			  FROM RESTAURANT AS rt
 			  <where>
-			  	RESTAURANT_REG_DATE IS NOT NULL
+			  	<!-- RESTAURANT_REG_DATE IS NOT NULL -->
 			  	<if test="searchKeyword != null">
 			  		<!-- SEARCH : RESTAURANT NAME -->
 			  		<if test="searchCondition == 0 and searchKeyword != ''">
