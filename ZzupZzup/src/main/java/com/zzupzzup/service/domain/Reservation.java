@@ -273,6 +273,10 @@ public class Reservation {
 	public String getReturnReservationCancelReason() {
 		return CommonUtil.reservationCancelReason(reservationCancelReason);
 	}
+	
+	public String getReturnFixedDate() {
+		return CommonUtil.returnFixedDate(fixedDateString);
+	}
 
 	public String getReviewNo() {
 		return reviewNo;

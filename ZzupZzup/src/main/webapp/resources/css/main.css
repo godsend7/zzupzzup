@@ -2309,6 +2309,7 @@ button,
 #sidebar > .inner { height: 100vh; overflow-y: auto; }
 #sidebar > .inner::-webkit-scrollbar {
 	width: 8px;
+	display: none;
 }
 #sidebar > .inner::-webkit-scrollbar-thumb {
 	height: 20%;

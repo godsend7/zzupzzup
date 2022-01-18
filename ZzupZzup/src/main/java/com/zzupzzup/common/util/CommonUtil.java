@@ -248,7 +248,25 @@ public static String returnDay(int restaurantDay) {
 		return null;
 	}
 	
-}
+}	
+	
+	public static String returnFixedDate(String fixedDateString) {
+		
+		
+		String returnFixedDate = "";
+		
+		if(fixedDateString != null) {
+			System.out.println("CommonUtil FixedDate::"+fixedDateString);
+			
+			returnFixedDate = fixedDateString.substring(0, 16);
+			System.out.println("CommonUtil returnFixedDate::"+returnFixedDate);
+			return returnFixedDate;
+		}
+		else {
+			
+			return "";
+		}
+	}
 	
 	
 	public static String reservationStatus(int reservationStatus) {
