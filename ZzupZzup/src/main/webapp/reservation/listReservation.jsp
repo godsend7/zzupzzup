@@ -47,6 +47,10 @@
 		
 	  	//////////이전페이지////////////////
 	$(function() {
+
+		var fixed = "${reservation.fixedDate}";
+		var fixedDateSlice = fixed.slice(0,-5);
+		//$(".fixedDate").find("p").text(fixedDateSlice);
 		
 		console.log(${reservation});
 		console.log("${reservation.order}");
@@ -107,11 +111,6 @@
 	    				data: queryStr,
 						success : function(data) {
 		    				let dom ='';
-		    				/////->숫자 자르기 근데 안먹음
-		    				let fixed = "${reservation.fixedDate}";
-		    				let fixedDateSlice = fixed.slice(0,-5);
-		    				$(".fixedDateBox").find("p").text(fixedDateSlice);
-		    				/////->숫자 자르기 근데 안먹음
 							$.each(data.list, function(index, item){
 								console.log(item);
 								dom += '<div class="col-md-4">'
@@ -160,7 +159,7 @@
 									+'<label for="demo-name">방문 확정 후(승인)</label>'
 									+'<p class="fixedDateBox">';
 									if(item.reservationStatus == 1 || item.reservationStatus == 2){
-											dom += item.fixedDateString
+											dom += item.returnFixedDate
 									}
 									dom +='</p>' 
 									+'</div>'
@@ -193,7 +192,6 @@
 							if(data.list.length != 0){
 								count++;
 							}else{
-								console.log("더 이상 없지?");
 								if(!$("#listReservation .alert").length){
 									alert_dom = '<div class="alert alert-danger alert-dismissible thumb-list-alert" role="alert">리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
 									$("#listReservation").append(alert_dom);
@@ -330,7 +328,7 @@
 										    <p class="fixedDateBox">
 										    	<c:choose>
 													<c:when test="${reservation.reservationStatus == 1 || reservation.reservationStatus == 2}">
-														${reservation.fixedDate}
+														${reservation.returnFixedDate}
 													</c:when>
 												</c:choose>
 											</p> 
@@ -368,10 +366,6 @@
 						<ul class='icons'> 
 							<jsp:include page='/review/getReview.jsp'/>
 						</ul>
-	
-					<!-- <div class="col-12 text-center thumb-more">
-							<a href="#" class="icon solid fa fa-plus-circle"></a>
-						</div>  -->
 						<!-- end -->
 						</div>
 					</div>
