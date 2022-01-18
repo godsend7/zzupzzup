@@ -213,16 +213,20 @@
 				  <path d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z"/>
 				</svg> 광고</h3>
 			</header>
-			<ul class="contact" style="display:none">
-				<li class="icon solid fa-envelope"><a href="#">ebeaver@hanmail.net</a></li>
-				<li class="icon solid fa-phone">010-4444-4444</li>
-				<li class="icon solid fa-home">서울시 종로구 종로 69 서울YMCA</li>
-			</ul>
-			<!-- <div id="divClock" class="clock"></div> -->
-			<a href="https://www.mcdonalds.co.kr/kor/promotion/detail.do?page=1&seq=347&utm_medium=Corp_site&utm_source=Main_cardblock&utm_campaign=1227_Prosperity" target="_black">
-				<img alt="mcdonald" src="../resources/images/common/ad1.JPG" width="100%">
-			</a>
-			<!-- <img id = "adImgs" width="100%" border="0"> -->
+			
+			<div id="zzupzzupCarousel" class="carousel slide" data-ride="carousel">
+				<div class="carousel-inner">
+					<div class="carousel-item active">
+						<a href="https://pji.co.kr/" target="_blank"><img src="../resources/images/common/ad2.JPG" class="d-block w-100" alt="파파존스 할인"></a>
+					</div>
+					<div class="carousel-item">
+						<a href="https://momstouch.co.kr/" target="_blank"><img src="../resources/images/common/ad1.JPG" class="d-block w-100" alt="싸이버거 할인"></a>
+					</div>
+					<div class="carousel-item">
+						<a href="https://www.goobne.co.kr/" target="_blank"><img src="../resources/images/common/ad3.JPG" class="d-block w-100" alt="BHC 할인"></a>
+					</div>
+				</div>
+			</div>
 		</section>
 
 		<!-- Footer -->
