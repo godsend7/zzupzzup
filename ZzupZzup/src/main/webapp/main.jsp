@@ -19,7 +19,9 @@
 <link rel="stylesheet" href="/resources/css/map.css"/>
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
-
+.iw_inner_p ^ {
+	border-radius: 1em;
+}
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -96,6 +98,7 @@
 	}
 	
 	window.onload = function() {
+		console.log("오");
 		//현재 위치 받아오기
 		thisLocation();
 		
@@ -625,18 +628,55 @@
  					 console.log("restaurantMap");
  					$.each(data, function(index, item){ 
  						//console.log(item.location);
- 						arrayLayout.push(
-							{restaurantNo:item.restaurantNo, restaurantName:item.restaurantName, menuType:item.returnMenuType, mainMenu:item.restaurantMenus.menuTitle, 
-							latitude:item.latitude, longitude:item.longitude, streetADDR:item.streetAddress, areaADDR:item.areaAddress, restaurantTel:item.restaurantTel, 
-					 		parkable:item.parkable, reservationStatus:item.reservationStatus, judgeStatus:item.judgeStatus, requestDate:item.requestDate, postNo:item.postNo}
- 						); 
+ 						
+ 						if (item.postNo == 0 && item.judgeStatus != 2) {
+							console.log("openAPI를 통해 등록된 심사중인 음식점");
+						} else {
+							arrayLayout.push(
+								{restaurantNo:item.restaurantNo, restaurantName:item.restaurantName, menuType:item.returnMenuType, mainMenu:item.restaurantMenus.menuTitle, 
+								latitude:item.latitude, longitude:item.longitude, streetADDR:item.streetAddress, areaADDR:item.areaAddress, restaurantTel:item.restaurantTel, 
+						 		parkable:item.parkable, reservationStatus:item.reservationStatus, judgeStatus:item.judgeStatus, requestDate:item.requestDate, postNo:item.postNo}
+	 						); 
+						}
  					});
+ 					
+ 					/////////////// postNo가 동일하면 중복 제거 작업 //////////////
+					var checkArray = new Array();
+					
+					let postNoCheck = false;
+					for(let i = 0; i < arrayLayout.length; i++) {
+					  const check = arrayLayout[i].postNo;
+					  
+					  for(let j = i+1; j < arrayLayout.length; j++) {
+					  	if(check === arrayLayout[j].postNo) {
+					  		if (arrayLayout[j].judgeStatus != 2 && arrayLayout[j].requestDate != null) {
+								//console.log("동일한 애 아직심사중 " + arrayLayout[j].restaurantNo);
+								//console.log(arrayLayout[j]);
+								checkArray.push(arrayLayout[j]);
+								postNoCheck = true;
+						      	break;
+							}
+					    }
+					  }
+					  
+					  if(postNoCheck)  {
+					    break;
+					  }
+					}
+ 					//중복된 음식점 제외 출력 (차집합)
+ 					arrayLayout = arrayLayout.filter(x => !checkArray.includes(x));
+ 					//console.log("하단 최종");
+ 					//console.log(arrayLayout);
+ 					
+ 					////////////////////////////////////////////////////////
  					
  					viewMap();
 			
  				},
 	 			error:function(request,status,error){
 			       console.log("실패");
+			       alert("정보를 불러올 수 없습니다. 다시 시도해주세요.");
+			       location.reload();
 			    }
 			}
 		)
@@ -692,10 +732,10 @@
 		for (var i=0; i<arrayLayout.length; i++) {
 			
 			
-			if ((!(arrayLayout[i].judgeStatus == 1 || arrayLayout[i].judgeStatus == 3) || typeof arrayLayout[i].judgeStatus == "undefined")
-					&& (arrayLayout[i].requestDate == null || typeof arrayLayout[i].requestDate == "undefined")) {
+			/* if ((!(arrayLayout[i].judgeStatus == 1 || arrayLayout[i].judgeStatus == 3) || typeof arrayLayout[i].judgeStatus == "undefined")
+					&& (arrayLayout[i].requestDate == null || typeof arrayLayout[i].requestDate == "undefined")) { */
 				
-				console.log(arrayLayout[i]);
+				//console.log(arrayLayout[i]);
 				if(reCheck && parkCheck) {
 					if ((arrayLayout[i].reservationStatus && arrayLayout[i].judgeStatus == 2) && arrayLayout[i].parkable) {
 						selectMap(i);
@@ -711,7 +751,7 @@
 				} else {
 					selectMap(i);
 				}
-			}
+			//}
 		}
 		
 		function getClickHandler(seq) {
@@ -724,6 +764,8 @@
 					infowindow.close();
 				} else {
 					infowindow.open(map, marker);
+					$(".iw_inner").parent("div").attr("class", "iw_inner_p");
+					$(".iw_inner_p").parent("div").css("border-radius","1em");
 				}
 			}
 		}
@@ -806,7 +848,7 @@
 		}
 		
 		if (arrayLayout[i].mainMenu != null) {
-			mainMenu = "<br>" + arrayLayout[i].mainMenu;
+			mainMenu = "<br> 대표메뉴 : " + arrayLayout[i].mainMenu;
 		}
 		
 		if (arrayLayout[i].reservationStatus != null) {
@@ -819,8 +861,8 @@
 		
 		var contentString = "";
 		
-		contentString = '<div style="padding:10px; width:220px;"><div><b>' + arrayLayout[i].restaurantName + menuType + '</b> </div>' +
-						'<div style="font-size:0.9em;">'+ mainMenu +
+		contentString = '<div class="iw_inner" style="padding:10px; width:250px;"><div style="width:230px;"><b>' + arrayLayout[i].restaurantName + menuType + '</b> </div>' +
+						'<div style="font-size:0.9em; width:230px;">'+ mainMenu +
 						'<br>'+ arrayLayout[i].streetADDR +
 						/* '<br>'+ arrayLayout[i].areaADDR + */
 						'<br>'+ arrayLayout[i].restaurantTel;
@@ -837,9 +879,11 @@
 		    borderColor: "#f56a6a",
 		    borderWidth: 3
 		});
-	
+		
 		markers.push(marker); //생성한 마커를 배열에 담기
 		infowindows.push(infowindow); //생성한 정보창을 배열에 담기
+		
+		
 	}
 	
 	//위치에 따른 마커 hide, show
