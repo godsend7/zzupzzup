@@ -133,8 +133,8 @@
 										<li><a href="/review/listMyLikeReview">내가 좋아요 누른 리뷰 내역</a></li>
 										<li><a href="/community/listMyLikePost">내가 좋아요 누른 게시물 내역</a></li>
 										<li><a href="/restaurant/listMyCallDibs">내가 찜한 음식점 내역</a></li>
-										<li><a href="/rating/listMyRating">나의 평가 내역</a></li>
 										<li><a href="/report/listReport?reportCategory=1">나의 신고/제보 접수 내역</a></li>
+										<li><a href="/rating/listMyRating">나의 평가 내역</a></li>
 									</c:if>
 								</ul>
 							</li>

@@ -61,7 +61,7 @@
 								<div class="my-4">
 									<form id="getMember">
 										<div class="row mt-5 align-items-center">
-											<div class="col-md-3 mb-5">
+											<div class="col-md-3">
 												<div class="col-md" align="center">
 													<c:if test="${member.profileImage == 'defaultImage.png'}">
 														<!-- <img src="/resources/images/defaultImage.png" class="rounded-circle" width="150" height="150"/> -->
@@ -135,7 +135,7 @@
 												</div>
 											</c:if>
 											<c:if test="${sessionScope.member.memberRole == 'admin'}">
-												<div class="form-row col-md-9" style="margin-bottom:40px">
+												<div class="form-row col-md-9">
 													<div class="col-md-2">
 														<label>이름</label>
 													</div>
@@ -198,7 +198,7 @@
 										
 										<c:if test="${sessionScope.member.memberRole == 'admin'}">											
 											<!-- <hr class="my-4"/> -->
-											<div class="form-row col-md-12">
+											<div class="form-row col-md-12 mt-5">
 												<div class="col-md-6">
 													<label for="regDate">가입일</label> <span id="regDate"
 														style="font-weight: bold">${member.regDate}</span>
@@ -262,7 +262,7 @@
 													<c:if test="${restaurant.member.memberId == member.memberId}">
 													<hr class="my-4" />
 													<div class="col-md-12">
-														<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+														<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow card h-md-250 position-relative">
 															<div class="col p-4 d-flex flex-column position-static">
 															
 																<c:if test="${restaurant.judgeStatus == 2}">
@@ -302,15 +302,14 @@
 													</c:if>
 													</c:forEach>
 												</div>
-											</c:if>										
-										<hr class="my-4" />
-										<div align="center">
+											</c:if>
+										<div align="center" class="mt-5">
 											<c:if test="${sessionScope.member.memberRole != 'admin'}">
-												<input type="button" id="back" class="button secondary" value="이전" />
+												<input type="button" id="back" class="button secondary mr-3" value="이전" />
 												<input type="button" id="updateMember" class="button primary" value="수정" />
 											</c:if>
 											<c:if test="${sessionScope.member.memberRole == 'admin'}">
-												<input type="button" id="list" class="button primary" value="목록" />
+												<input type="button" id="list" class="button secondary mr-3" value="목록" />
 											</c:if>
 											<c:if test="${sessionScope.member.memberRole == 'admin' and member.memberRole != 'owner'}">
 												<input type="button" id="updateMember" class="button primary" value="수정" />

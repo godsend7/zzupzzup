@@ -19,14 +19,9 @@
 	overflow: hidden;
 	height: 25px;
 	padding-right: 10px;
+	white-space: nowrap;
 }
 
-.restaurant-menu-text:after {
-	content: '...';
-	position: absolute;
-	top: 0;
-	right: 0;
-}
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -211,6 +206,11 @@
 			}
 		});
 		
+		/* 도윤 추가 검색버튼 클릭시 */
+		$(".search-btn").on("click", function() {
+			fncPageNavigation(1);
+		});
+		
 		// SORT
 		$(".search-sort").on("click", function(e){
 			e.preventDefault();
@@ -274,69 +274,71 @@
 
 				<section id="listCommunity">
 					<div class="container">
-
-						<div class="row">
-							<div class="col">
-								<h2>나만의 작고 소중한 맛집 리스트</h2>
-							</div>
-							<div class="col" style="padding-right: 22px;">
-								<!-- <button type="button" class="btn btn-link btn-sm float-right" id="write">write</button> -->
-								<c:if test="${member.memberRole == 'user'}">
-									<a href="/community/addCommunity" id="write" class="button svg-btn btn-sm float-right" style="padding-right: 10px; padding-left: 10px;">
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-  									<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-  									<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-									</svg>작성하기</a>
-								</c:if>
-							</div>
-						</div>
-						<hr>
-						<div class="container">
+					
+						<h2>나만의 작고 소중한 맛집 리스트</h2>
+						
 						<form id="communityList">
-							<div class="row">
-							
-								<div class="col-md-7">
-									<a href="#" class="badge badge-light search-sort" data-sort="latest">최신등록순</a>
-									<a href="#" class="badge badge-light search-sort" data-sort="oldest">오래된등록순</a>&nbsp;&nbsp;
-									<input type="hidden" name="searchSort" value="${search.searchSort}">
-									
-									<a href="#" class="badge badge-dark dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">
-									<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
-  									<path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
-									</svg>&nbsp;필터&nbsp;</a>
-									<div class="dropmenu-list" aria-labelledby="dropmenuList">
-										<input type="checkbox" id="official" class="search-filter" name="searchFilter" value="1"><label for="official">정식맛집</label>
-										<input type="checkbox" id="receipt" class="search-filter" name="searchFilter" value="2"><label for="receipt">영수증첨부</label>
-									</div>
-									
-								</div>
+							<div class="container">
+								<div class="row search-box gtr-uniform">
 								
-								<div class="col-md-5 row" style="padding-left: 100px;">
-									<select class="searchCondition my-2 my-md-0" id="searchCondition" name="searchCondition" style="width: 124px; padding-left: 10px;">
+									<div class="col-md-4 d-flex">
+										<div class="dropmenu float-left mr-2">
+											<a href="" class="button normal icon solid fa-sort dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">정렬</a>
+											<div class="dropmenu-list" aria-labelledby="dropmenuList">
+												<a class="dropmenu-item search-sort" href="#" data-sort="latest">최신순</a>
+												<a class="dropmenu-item search-sort" href="#" data-sort="oldest">오래된 순</a>
+												<input type="hidden" name="searchSort" value="${search.searchSort}">
+											</div>
+										</div>
+										
+										
+										<div class="dropmenu float-left">
+											<a href="" class="button normal icon solid fa-filter dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">필터</a>
+											
+											<div class="dropmenu-list" aria-labelledby="dropmenuList">
+												<input type="checkbox" id="official" class="search-filter" name="searchFilter" value="1"><label for="official">정식맛집</label>
+											<input type="checkbox" id="receipt" class="search-filter" name="searchFilter" value="2"><label for="receipt">영수증첨부</label>
+											</div>
+										</div>
+									</div>
+										
+									<div class="col-md-5 d-flex align-items-center">
+										
+										<select class="searchCondition my-2 my-md-0 mr-2" id="searchCondition" name="searchCondition">
 									  <!-- <option selected>Open this select menu</option> -->
 									  <option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""}> 작성자명</option>
 									  <option value="1" ${!empty search.searchCondition && search.searchCondition == 1 ? "selected" : ""}> 게시물제목</option>
 									</select>
 									
-									<!-- <form class="form-inline my-2 my-md-0" style="padding-left: 5px;"> -->
-								      <input class="form-control" type="text" id="searchByEnter" name="searchKeyword" placeholder="검색" aria-label="Search" style="width: 234px;" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
-								   <!--  </form> -->
-								    
-							    	 <input type="hidden" id="currentPage" name="currentPage" value="1"/>
-							    </div>
-						  
+										<input type="text" id="searchByEnter" name="searchKeyword" placeholder="검색어" class="pr-5" autocomplete="off" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
+										<a href="#" class="button primary icon solid fa-search search-btn"></a>
+	
+										<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
+										<input type="hidden" id="currentPage" name="currentPage" value="1" />
+									</div>
+										
+									<div class="col-md-3 d-flex justify-content-end align-items-center">
+										<c:if test="${member.memberRole == 'user'}">
+											<a href="/community/addCommunity" id="write" class="button svg-btn btn-sm float-right">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+		  									<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+		  									<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+											</svg>작성하기</a>
+										</c:if>
+									</div>
+									
+								</div>
 							</div>
-							</form>   
-							<br><br>
+						</form>
+						<!-- </form> -->	
 							
-							
-							<!-- <form id="communityList"> -->
-							
+						<!-- <form id="communityList"> -->
+						<div class="container">
 							<div class="row thumb-list">
-
+	
 								<c:set var="i" value="0" />
 								<c:forEach var="community" items="${list}">
-
+	
 									<div class="col-md-4">
 										<div class="card mb-1 shadow">
 											<a href="" class="thumb">
@@ -371,20 +373,18 @@
 												</div>
 											</div>
 										</div>
-
+	
 										<button type="button" class="btn btn-outline-danger btn-sm btn-block">
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
 		  										<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
 											</svg> <span class="likeCount">${community.likeCount}</span>
 										</button><br> <br>
-
+	
 									</div>
 								</c:forEach>
 							</div>
-							
-							<!-- </form> -->
-							
 						</div>
+							
 					</div>
 					<br>
 

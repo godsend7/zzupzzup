@@ -2055,10 +2055,9 @@ button,
           width: 100%; }
       #sidebar .toggle {
         text-indent: 6em;
-        width: 6em; }
+        width: 4em; }
         #sidebar .toggle:before {
-          font-size: 1.5rem;
-          margin-left: -0.4375em; }
+          font-size: 1.5rem; }
       body.is-preload #sidebar {
         display: none; } }
   @media screen and (max-width: 736px) {

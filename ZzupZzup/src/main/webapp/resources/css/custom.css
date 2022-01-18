@@ -361,7 +361,15 @@ input[type="checkbox"] + label:before, input[type="radio"] + label:before { bord
 /* sidebar */
 #sidebar { box-shadow: 0 0 6px 2px rgba(0,0,0,0.2); }
 
+/* searchbox */
+.search-box { margin-bottom: 20px; }
+.search-box .jumbotron { padding: 2rem; }
+.search-box .search-btn { padding: 0 15px; line-height: 48px; height: 48px; margin-left: -40px; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.search-box .search-btn:before { margin-right: 0; }
 
-/* member */
-#getMember .form-row span { color: #999; }
+
+
+@media screen and (max-width: 1680px) {
+	.search-box .search-btn{ line-height:40px; height: 40px; }
+}
 
