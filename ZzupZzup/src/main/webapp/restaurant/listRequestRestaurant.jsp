@@ -21,8 +21,7 @@
 	
 	function fncPageNavigation(currentPage) {
 		$("#currentPage").val(currentPage);
-		
-		$("#restaurant").attr("action","/restaurant/listRequestRestaurant").attr("method", "POST").submit();
+		$("#listRequestRestaurant").attr("action","/restaurant/listRequestRestaurant").attr("method", "POST").submit();
 	}
 	
 </script>
@@ -45,9 +44,9 @@
 					<div class="container">
 					
 					<h2>심사 대기중인 음식점 목록</h2><hr>
-					<form id="restaurant">
+					<form id="listRequestRestaurant">
 					<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
-						<input type="hidden" id="currentPage" name="currentPage" value=""/>
+						<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
 					</form>
 					
 					<c:set var="i" value="0" />

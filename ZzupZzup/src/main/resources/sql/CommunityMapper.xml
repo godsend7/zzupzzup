@@ -185,7 +185,56 @@
 	
 	
 	<!-- SQL : SELECT LIST -->
-	<select id="listMyPost" parameterType="map" resultMap="communitySelectMap">
+	<select id="listMyPost" parameterType="search" resultMap="communitySelectMap">
+		SELECT *
+		FROM (SELECT *
+			  FROM COMMUNITY AS cn
+			  <where>
+			  	cn.MEMBER_ID = #{memberId} AND cn.POST_SHOW_STATUS = true
+				<if test="searchKeyword != null">
+					<!-- SEARCH : NICKNAME -->
+					<if test="searchCondition == 0 and searchKeyword !=''">
+						AND UPPER(cn.NICKNAME) LIKE CONCAT('%', #{searchKeyword}, '%')
+					</if>
+					<!-- SEARCH : POSTTITLE -->
+					<if test="searchCondition == 1 and searchKeyword !=''">
+						AND UPPER(cn.POST_TITLE) LIKE CONCAT('%', #{searchKeyword}, '%')
+					</if>
+					<!-- FILTER : OFFICIAL RESTAURANT -->
+					<if test="searchFilter == 1">
+						AND cn.OFFICIAL_DATE IS NOT NULL
+					</if>
+					<!-- FILTER : RECEIPT IMAGE -->
+					<if test="searchFilter == 2">
+						AND cn.RECEIPT_IMAGE IS NOT NULL
+					</if>
+				</if>
+			  </where>
+			  ORDER BY
+			  <choose>
+			  	<when test="searchSort == 'latest'">
+			  		cn.POST_NO DESC LIMIT #{startRowNum}, #{pageSize}
+			  	</when>
+			  	<when test="searchSort == 'oldest'">
+			  		cn.POST_NO ASC LIMIT #{startRowNum}, #{pageSize}
+			  	</when>
+			 <!--  	<when test="searchSort == 'mostLike'">
+			  		
+			  	</when>
+			  	<when test="searchSort == 'worst'">
+			  		
+			  	</when> -->
+			  	<otherwise>
+			  		cn.POST_NO DESC LIMIT #{startRowNum}, #{pageSize}
+			  	</otherwise>
+			  </choose>
+			  ) AS cnt
+		LEFT OUTER JOIN (SELECT IMAGE, POST_NO
+						 FROM IMAGE) AS img
+						 ON (cnt.POST_NO = img.POST_NO)
+	</select>
+	
+	<!-- <select id="listMyPost" parameterType="map" resultMap="communitySelectMap">
 		SELECT *
 		FROM COMMUNITY cn
 		INNER JOIN (SELECT POST_NO 
@@ -196,7 +245,7 @@
 		LEFT OUTER JOIN (SELECT IMAGE, POST_NO
 						 FROM IMAGE) AS img
 						 ON (cn.POST_NO = img.POST_NO)
-	</select>
+	</select> -->
 	
 	
 	<!-- SQL : DELETE -->
