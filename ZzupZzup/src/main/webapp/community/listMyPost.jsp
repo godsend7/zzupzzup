@@ -94,12 +94,12 @@
 									append_nod += '<div class="card mb-1 shadow">';
 									append_nod += '<a href="" class="thumb">';
 									
-									if(${community.postImage[0] == null}) {
+									if(item.postImage[0] == null) {
 										//append_nod += '<img src="/resources/images/uploadImages/default.png" height="100%">';
 										append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/default.png" height="100%">';
 									}
 									
-									if(${community.postImage[0] != null}) {
+									if(item.postImage[0] != null) {
 										//append_nod += '<img src="/resources/images/uploadImages/' + item.postImage[0] + '" height="100%">';
 										append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/${community.postImage[0]}" height="100%">';
 									}
@@ -148,6 +148,8 @@
 										alert_dom = '<div class="alert alert-danger alert-dismissible thumb-list-alert" role="alert"><strong>리스트가 더 이상 존재하지 않습니다.</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
 										$("#listMyPost").append(alert_dom);
 										$("#listMyPost .alert").fadeIn();
+										
+										setTimeout(() => $("#listMyPost .alert").alert('close'), 1500);
 									}
 								}
 							},
