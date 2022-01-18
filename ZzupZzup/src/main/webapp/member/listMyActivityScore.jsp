@@ -46,7 +46,7 @@
 				<section id="list-my-activity-score">
 					<div class="container">
 
-						<h2>내 활동점수 적립 내역</h2><hr>
+						<h2>내 활동점수 적립 내역</h2>
 						<form id="listMyActivityScore">
 						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 							<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
@@ -60,7 +60,7 @@
 						<%-- <c:if test="${!empty restaurant.restaurantRegDate || !empty restaurant.judgeDate}"> --%>
 							
 						<div class="col-md-12">
-							<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+							<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow h-md-250 position-relative">
 								<div class="col p-4 d-flex flex-column position-static">
 									<div class="col-md-12">
 										<%-- <h2 class="mb-0">${member.memberId}&nbsp;<small style="color:gray;">${member.accumulAllScore}</small></h2><hr> --%>

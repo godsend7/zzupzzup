@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,400italic,600italic|Roboto+Slab:400,700");
 @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
@@ -2293,10 +2295,11 @@ button,
 /* modify */
 #main { position: relative; }
 #main.index > .inner { padding: 0; }
-#main #header { padding-top:20px; justify-content: space-between; align-items: center; }
-#main.index #header { position: absolute; top: 0; left: 0; width: 100%; padding-right:70px; padding-left: 120px; border-bottom: none; z-index: 1; }
+#main #header { padding-top:20px; justify-content: space-between; align-items: center; background-color: rgba(255,255,255,0.75); padding-top: 25px; padding-bottom: 25px; }
+#main.index #header { position: absolute; top: 0; left: 0; width: 100%; padding-right:50px; padding-left: 420px; z-index: 1; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important; }
 	
 #main #header .logo { position: absolute; padding: 5px; font-size: 1.5em; flex:inherit; transition: all 0.5s; }
+#main.index #header .logo { left: 120px; }
 #main #header .logo strong { color: #f56a6a; text-shadow: 0 0 4px #fff; }
 #main #header .logo strong:before { content: 'ZZUPZZUPDUCE_101'; display: block; position: absolute; top: 7px; left: 34px; color: rgba(0,0,0,0.6); z-index: -1; }
 #main #header .logo strong { color: #f56a6a; text-shadow: 0 0 4px #fff; }
@@ -2305,7 +2308,8 @@ button,
 
 #main.index > .inner > section { padding: 0px; }
 
-#sidebar .toggle { background-color: rgba(255,255,255,0.6); z-index: 1; }
+#sidebar .toggle { background-color: #f56a6a; z-index: 1; }
+#sidebar .toggle:before { color: #fff; }
 #sidebar > .inner { height: 100vh; overflow-y: auto; }
 #sidebar > .inner::-webkit-scrollbar {
 	width: 8px;
@@ -2323,7 +2327,7 @@ button,
 #sidebar > .inner > .alt { display: none }
 
 #sidebar > .inner > .major { margin-bottom: 40px; border-bottom: none; padding-bottom: 0; }
-#sidebar h2 { border-bottom: none; }
+#sidebar h2 { border-bottom: none; font-family: 'Bakbak One', serif; }
 #sidebar #sidebarLogo { padding: 0; margin: 0; }
 #sidebar #sidebarLogo img { width: 80px; height: 80px; transition: all 0.5s; animation: sidebarlogo 5s 1s infinite cubic-bezier(0.22, 0.61, 0.36, 1) alternate; }
 #sidebar .profile-box { padding: 20px; border-radius: 10px; background: #fff;}
@@ -2334,10 +2338,13 @@ button,
 #menu > ul > li { border-top: none;}
 
 @media screen and (max-width: 1680px) {
-   	#main.index #header { padding-left: 100px; }
+   	#main.index #header { padding-left: 70px; }
+   	#main #header { padding-top: 16px; padding-bottom: 16px; }
+   	#main.index #header .logo { left: 80px; }
+   	#main #header .logo strong svg:nth-child(2) { top: 14px; }
 }
 @media screen and (max-width: 736px) {
-	#main.index #header { padding-top: 0px; padding-bottom: 0px; padding-right: 20px; padding-left: 80px; }
+	#main #header { padding-top: 0px; padding-bottom: 0px; padding-right: 20px; padding-left: 80px; }
    	#sidebar .toggle { background-color: transparent; }
    	#header .icons { position: relative; }
 }

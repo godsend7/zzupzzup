@@ -362,4 +362,6 @@ input[type="checkbox"] + label:before, input[type="radio"] + label:before { bord
 #sidebar { box-shadow: 0 0 6px 2px rgba(0,0,0,0.2); }
 
 
+/* member */
+#getMember .form-row span { color: #999; }
 

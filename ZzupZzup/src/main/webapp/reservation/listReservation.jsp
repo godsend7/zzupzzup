@@ -247,6 +247,7 @@
 					<!-- S:Search -->
 						<form id="reservationForm" name="reservationForm">
 							<div class="container">
+								<h2>나의 예약 및 결제 내역</h2>
 								<div class="row search-box gtr-uniform">
 									<div class="col-md-4 col-sm-12">
 										

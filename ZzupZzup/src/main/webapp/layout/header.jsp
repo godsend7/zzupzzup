@@ -5,49 +5,47 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%> 
 <!-- CSS -->
 <style>
-.button.login {
-	/* appearance: none; */
-	background-color: #f56a6a;
-	color: #f8f9fa !important;
-	/* box-shadow: none; */
-}
-
-.button.logout {
-	/* appearance: none; */
-	background-color: #f56a6a;
-	color: #f8f9fa !important;
-	/* box-shadow: none; */
-}
-
 .mapSearch {
 	position: absolute;
 	left : 50%;
 	margin-left: -220px;
 }
 
-.mapSearch .d-flex {
-	height: 42px;
-}
-
 .mapSearch .searchKeyword {
 	width: 250px;
 	margin-right: 10px;
 	height: 42px;
+	padding-right: 50px;
 }
 
-.mapSearch .searchCondition {
-	margin-right: 10px;
+.mapSearch #searchCondition {
+	width: 145px;
 	height: 42px;
 }
 
 .mapSearch .search-btn {
 	height: 42px;
+	line-height: 42px;
+	position: absolute;
+	top: 0;
+	right: -30px;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	padding: 0 30px;
+}
+
+.mapSearch .search-btn:before {
+	margin-right: 0px;
+}
+
+@media screen and (max-width: 1680px) {
+   	.mapSearch .searchKeyword { width: 200px; }
 }
 
 </style>
 
 <!-- start: Header -->
-<header id="header">
+<header id="header" >
 	<!-- 현재 나의 PATH 가져오기 -->
 	<c:set var="URI" value="${pageContext.request.requestURI}" />
 	<c:set var="path" value='${requestScope["javax.servlet.forward.request_uri"]}' />
@@ -66,34 +64,32 @@
 	<c:if test = "${empty path && (URI eq '/' || fn:contains(URI, 'main'))}">
 		<form class="col-12 col-lg-auto mb-3 mb-lg-0 mapSearch" id="mapSearch">
 			<div class="col-md-12 col-sm-12 d-flex">
-			<div  class="searchCondition">
-				<select id="searchCondition" name="searchCondition" style="height: 40px;">
-					<option value="0"
-						${!empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>음식점명</option>
-					<option value="1"
-						${!empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>음식점주소</option>
-				</select>
-			</div>
-			<div>
-	    		<input type="search" id="searchKeyword" class="form-control searchKeyword" placeholder="검색어를 입력해주세요" aria-label="Search" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
-	    	</div>
-	    	<div>
-	    		<a href="javascript:searchMap();" class="button primary icon solid fa-search search-btn" id="searchButton"></a>
-	    	</div>
+				<div class="searchCondition mr-2">
+					<select id="searchCondition" name="searchCondition">
+						<option value="0"
+							${!empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>음식점명</option>
+						<option value="1"
+							${!empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>음식점주소</option>
+					</select>
+				</div>
+				<div class="position-relative">
+		    		<input type="search" id="searchKeyword" class="form-control searchKeyword" placeholder="검색어를 입력해주세요" aria-label="Search" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
+		    		<a href="javascript:searchMap();" class="button primary icon solid fa-search search-btn" id="searchButton"></a>
+		    	</div>
 	    	</div>
 	    </form>
 	</c:if>
 	<ul class="icons">
 		<c:if test="${ empty member || fn:contains(URI, 'addMember')}">
 			<!-- Button trigger modal -->
-			<button type="button" class="button login" data-toggle="modal" data-target="#loginModal" style="padding-left: 15px; padding-right: 15px;">
+			<button type="button" class="button primary login" data-toggle="modal" data-target="#loginModal" style="padding-left: 15px; padding-right: 15px;">
 				<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-door-closed-fill" viewBox="0 0 16 16">
   					<path d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
 				</svg> LOGIN
 			</button>
 		</c:if>
 		<c:if test="${ ! empty member && ! fn:contains(URI, 'addMember')}">
-			<button type="button" class="button logout" id="logout" style="padding-left: 15px; padding-right: 15px;">
+			<button type="button" class="button primary logout" id="logout" style="padding-left: 15px; padding-right: 15px;">
 				<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-door-open-fill" viewBox="0 0 16 16">
   					<path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15H1.5zM11 2h.5a.5.5 0 0 1 .5.5V15h-1V2zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z"/>
 				</svg> LOGOUT
