@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -134,6 +135,9 @@ public class CommunityRestController {
 	@RequestMapping(value="json/listCommunity")
 	public Map<String, Object> listCommunity(@RequestBody Search search, HttpServletRequest request, HttpSession session) throws Exception {
 		
+		
+		
+		
 		System.out.println("/community/json/listCommunity : SERVICE");
 		System.out.println("/community/json/listCommunity PAGE : " + request.getParameter("page"));
 		
@@ -158,6 +162,71 @@ public class CommunityRestController {
 		search.setPageSize(pageSize);
 		
 		Map<String, Object> map = communityService.listCommunity(search);
+		
+		List<Community> list = (List<Community>) map.get("list");
+		
+		for(Community cm : list) {
+			System.out.println("COMMNUNITY LIST : " + cm);
+		}
+		
+		//pageUnit, pageSize
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println("RESULT PAGE : " + resultPage);
+		
+		map.put("list", map.get("list"));
+		map.put("listLike", listLike);
+		map.put("search", search);
+		map.put("totalCount", map.get("totalCount"));
+		map.put("resultPage", resultPage);
+		
+		return map;
+		
+	}
+	
+	
+	@RequestMapping(value="json/listMyPost")
+	public Map<String, Object> listMyPost(@RequestBody Search search, Model model, HttpServletRequest request, HttpSession session) throws Exception {
+		
+		//System.out.println(request.getParameter("memnerId"));
+		
+		System.out.println("/community/json/listCommunity : SERVICE");
+		System.out.println("/community/json/listCommunity PAGE : " + request.getParameter("page"));
+		
+		System.out.println("search : "  + search);
+		
+		if (search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+
+		if (request.getParameter("page") != null) {
+			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+		}
+		
+		if(search.getSearchSort() == null || search.getSearchSort() == "") {
+			search.setSearchSort("latest");
+		}
+		
+		Member member = (Member)session.getAttribute("member");
+		
+		System.out.println(member);
+		
+		List<Mark> listLike = null;
+		
+		if(member != null && member.getMemberRole().equals("user")) {
+			listLike = communityService.listLike(member.getMemberId());
+		}
+		
+		
+//		if(request.getParameter("page") != null) {
+//			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+//		}
+		
+		System.out.println("CurrentPage : " + search.getCurrentPage());
+		
+		search.setPageSize(pageSize);
+		
+		//Map<String, Object> map = communityService.listMyPost(search, memberId);
+		Map<String, Object> map = communityService.listMyPost(search, member.getMemberId());
 		
 		List<Community> list = (List<Community>) map.get("list");
 		

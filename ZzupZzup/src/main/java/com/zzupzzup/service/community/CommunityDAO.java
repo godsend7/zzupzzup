@@ -15,7 +15,7 @@ public interface CommunityDAO {
 	
 	public List<Community> listCommunity(Search search) throws Exception;
 	
-	public List<Community> listMyPost(Search search) throws Exception;
+	public List<Community> listMyPost(Map<String, Object> map) throws Exception;
 	
 	public int updateCommunity(Community community) throws Exception;
 	

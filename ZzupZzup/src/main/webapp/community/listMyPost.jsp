@@ -64,40 +64,39 @@
 						let queryStr = $("#communityList").serialize();
 						console.log("쿼리 스트링" + queryStr);
 						
-						console.log($("#searchCondition").val());
-						
+						//console.log($("#searchCondition").val());
 						$.ajax({
-							
-							url : "/community/json/listCommunity",
+							url : "/community/json/listMyPost",
 							type : "POST",
 							dataType : "json",
-							contentType : "application/json",
-							data : JSON.stringify({
+							contentType : 'application/json',
+							/* data : JSON.stringify({
+								queryStr : queryStr
+							}), */
+							data: JSON.stringify({
 								currentPage : $("#currentPage").val(),
 								searchSort : $("input[name='searchSort']").val(),
 								searchFilter : $("input[name='searchFilter']:checked").val(),
 								searchKeyword : $("input[name='searchKeyword']").val(),
-								searchCondition : $("#searchCondition").val()
+								searchCondition : $("input[name='searchCondition']").val()
 							}),
 							success : function(data) {
+								console.log(data);
 								
 								var append_nod = "";
 								$.each(data.list, function(index, item) {
 									
 									console.log(data.list);
 						
-									
-									console.log("2222: "+item.member.memberId)
-									
-									
-									
+									console.log("test checkpoint : " + item.member.memberId)
+												
 									append_nod += '<div class="col-md-4">';
 									append_nod += '<div class="card mb-1 shadow">';
 									append_nod += '<a href="" class="thumb">';
 									
 									if(${community.postImage[0] == null}) {
 										//append_nod += '<img src="/resources/images/uploadImages/default.png" height="100%">';
-										append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/default.png" height="100%">';
+										append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/common/default.png" height="100%">';
 									}
 									
 									if(${community.postImage[0] != null}) {
@@ -140,31 +139,17 @@
 									
 								});
 								
-								/* $(".thumb-list").append(append_nod);
-								count++; */
 								$(".thumb-list").append(append_nod);
 								console.log("fdisodjfs : " + data.list.length);
-								if(data.list != 0){
+								if(data.list.length != 0){
 									count++;
 								}else{
-									if(!$("#listCommunity .alert").length){
+									if(!$("#listMyPost .alert").length){
 										alert_dom = '<div class="alert alert-danger alert-dismissible thumb-list-alert" role="alert"><strong>리스트가 더 이상 존재하지 않습니다.</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
-										$("#listCommunity").append(alert_dom);
-										$("#listCommunity .alert").fadeIn();
+										$("#listMyPost").append(alert_dom);
+										$("#listMyPost .alert").fadeIn();
 									}
 								}
-								/* count++;
-								console.log("fdisodjfs : " + data.list.length);
-								if(data.list.length == 0){
-									console.log("끝끝");
-									if(!$("#listCommunity .alert").length){
-										alert_dom = '<div class="alert alert-danger alert-dismissible thumb-list-alert" role="alert"><strong>스크롤 중지!</strong> 리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
-										$("#listCommunity").append(alert_dom);
-										$("#listCommunity .alert").fadeIn();
-									}
-								} */
-								
-								
 							},
 							
 							error:function(request,status,error) {
@@ -200,14 +185,14 @@
 			}
 		}); */
 		
-		document.getElementById("searchByEnter").addEventListener("keydown", function(evant) {
+		/* document.getElementById("searchByEnter").addEventListener("keydown", function(evant) {
 			//console.log("keydown");
 			if (evant.keyCode === 13) {
 				evant.preventDefault();
 				//document.getElementById("searchButton").click();
 				fncPageNavigation(1);
 			}
-		});
+		}); */
 		
 		// SORT
 		$(".search-sort").on("click", function(e){
@@ -262,7 +247,7 @@
 
 	<!-- S:Wrapper -->
 	<div id="wrapper">
-
+		
 		<!-- S:Main -->
 		<div id="main">
 			<div class="inner">
@@ -270,7 +255,7 @@
 				<!-- Header -->
 				<jsp:include page="/layout/header.jsp" />
 
-				<section id="listMyPost">listCommunity
+				<section id="listMyPost">
 					<div class="container">
 
 						<div class="row">
@@ -309,7 +294,7 @@
 									
 								</div>
 								
-								<%-- <div class="col-md-5 row" style="padding-left: 100px;">
+								<div class="col-md-5 row" style="padding-left: 100px;">
 									<select class="searchCondition my-2 my-md-0" id="searchCondition" name="searchCondition" style="width: 124px; padding-left: 10px;">
 									  <!-- <option selected>Open this select menu</option> -->
 									  <option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""}> 작성자명</option>
@@ -321,13 +306,12 @@
 								   <!--  </form> -->
 								    
 							    	 <input type="hidden" id="currentPage" name="currentPage" value="1"/>
-							    </div> --%>
+							    </div>
 						  
 							</div>
 							</form>   
 							<br><br>
-							
-							
+				
 							<!-- <form id="communityList"> -->
 							
 							<div class="row thumb-list">

@@ -26,8 +26,8 @@
 		const memberId = $("#memberId");
 		const nickname = $("#nickname");
 		const profileImage = $("#profileImage");
-		const chatList = $(".chatting-list");
-		const displayContainer = $(".display-container");
+		const $chatList = $(".chatting-list");
+		const $displayContainer = $(".display-container");
 		
 		showCollections();
 		
@@ -54,15 +54,19 @@
 						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="/resources/images/common/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
 					}); */
 					$.each(JSONData, function(key, value){
-						let timeStemp = new Date(value.regDate);
-						let newTime = timeFormatter(timeStemp);
-						let mem_profile_img = value.chatMemberImg;
-						mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img : "member/"+mem_profile_img;
-						const msgType = nickname == value.chatMemberName ? "sent" : "received";
-						dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
+						if(value.msgType == "system"){
+							dom += '<li class="system"><div class="chat-message">'+value.msg+'</div></li>';
+						}else{
+							let timeStemp = new Date(value.regDate);
+							let newTime = timeFormatter(timeStemp);
+							let mem_profile_img = value.chatMemberImg;
+							mem_profile_img == "defaultImage.png" ? mem_profile_img = "common/"+mem_profile_img : mem_profile_img = "member/"+mem_profile_img;
+							const msgType = nickname == value.chatMemberName ? "sent" : "received";
+							dom += '<li class="'+msgType+'"><div class="chatProfile"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/'+mem_profile_img+'"/><b>'+value.chatMemberName+'</b><small>'+newTime+'</small></div><div class="chat-message">'+value.msg+'</div></li>';
+						}
 					});
-					chatList.html(dom);
-					displayContainer.scrollTop(chatList.height());
+					$chatList.html(dom);
+					$displayContainer.scrollTop($chatList.height());
 					
 					console.log("success");
 				},
