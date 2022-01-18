@@ -358,7 +358,7 @@
 		SELECT COUNT(*)
 		FROM RESTAURANT AS rt
 			<where>
-			  	RESTAURANT_REG_DATE IS NOT NULL
+			  	<!-- RESTAURANT_REG_DATE IS NOT NULL -->
 			  	<if test="searchKeyword != null">
 			  		<!-- SEARCH : RESTAURANT NAME -->
 			  		<if test="searchCondition == 0 and searchKeyword != ''">
@@ -383,7 +383,7 @@
 	<select id="getRequestTotalCount" parameterType="search" resultType="int">
 		SELECT COUNT(*)
 		FROM RESTAURANT 
-		WHERE judge_status = 1 and request_date IS NOT NULL
+		WHERE JUDGE_STATUS = 1 and REQUEST_DATE IS NOT NULL
 	</select>
 	
 	<!-- SQL : SELECT LIST -->
