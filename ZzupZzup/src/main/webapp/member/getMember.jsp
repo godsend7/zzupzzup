@@ -57,7 +57,7 @@
 					<div class="container">
 						<div class="row justify-content-center">
 							<div class="col-md-12 mx-auto">
-								<h2 class="">내 정보 조회</h2><hr>
+								<h2 class="">내 정보 조회</h2>
 								<div class="my-4">
 									<form id="getMember">
 										<div class="row mt-5 align-items-center">
