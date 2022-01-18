@@ -33,7 +33,8 @@
 		$(".reservationDate").find("p").text(reservationDateSlice);
 		//////////이전페이지////////////////
 	   	 $(".reset").on("click" , function() {
-	    	self.location = "/reservation/listReservation"
+	    	//self.location = "/reservation/listReservation"
+	   		history.back();
 		}); 
 		//////////모달 이동////////////////
 		  $(".confirm").on("click" , function() {
@@ -53,7 +54,6 @@
 					},
 					success : function(data){
 						console.log(data+"data 나오는 부분 미완료");
-						//$("input[value='3']").val('미방문');
 						$('#getReservationModal').modal("hide");
 						history.go(0);
 					},
@@ -164,7 +164,7 @@
 			} 
 	   		$("#cancelConfirm").on("click", function() {
 				fncCancelConfirm();
-				//fncMesseage();
+				fncMesseage();
 				history.go(0);
 			});
 			
@@ -176,7 +176,7 @@
 		        var payMethod = $("input[name='payMethod']").val();
 		        var refundStatus = $("input[name='refundStatus']").val();
 		        jQuery.ajax({
-		            url: "/reservation/json/payRefund/${reservation.reservationNo}/${reservation.payMethod}/${reservation.refundStatus}/", // 예: http://www.myservice.com/payments/cancel
+		            url: "/reservation/json/payRefund/${reservation.reservationNo}/${reservation.payMethod}/${reservation.refundStatus}/", 
 		            type: "GET",
 		            dataType: "json",
 		            headers: {
