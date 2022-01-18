@@ -64,13 +64,16 @@ public class CommunityServiceImpl implements CommunityService {
 	
 	@Override
 	public Map<String, Object> listMyPost(Search search, String memberId) throws Exception {
-		List<Community> list = communityDAO.listMyPost(search);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("memberId", memberId);
+		
+		List<Community> list = communityDAO.listMyPost(map);
 		int totalCount = communityDAO.getTotalCount(search);
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		
 		map.put("list", list);
 		map.put("totalCount", new Integer(totalCount));
-		map.put("memberId", memberId);
 		
 		return map;
 	}
