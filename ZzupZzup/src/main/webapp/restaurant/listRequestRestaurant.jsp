@@ -51,7 +51,7 @@
 					
 					<c:set var="i" value="0" />
 					<c:forEach var="restaurant" items="${list}">
-					<c:if test="${!empty restaurant.requestDate && empty restaurant.judgeDate && empty restaurant.restaurantRegDate}">
+					<c:if test="${!empty restaurant.requestDate && restaurant.judgeStatus == 1 && empty restaurant.restaurantRegDate}">
 					
 					<div class="col-md-12">
 						<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">

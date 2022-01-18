@@ -42,10 +42,10 @@ import com.zzupzzup.service.review.ReviewService;
 @RequestMapping("/restaurant/*")
 public class RestaurantController {
 
-	@Value("#{commonProperties['pageUnit']}")
+	@Value("#{commonProperties['pageUnit']?: 3}")
 	int pageUnit;
 
-	@Value("#{commonProperties['pageSize']}")
+	@Value("#{commonProperties['pageSize']?: 2}")
 	int pageSize;
 
 	/// Field

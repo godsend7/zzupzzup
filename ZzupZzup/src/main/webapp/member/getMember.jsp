@@ -265,7 +265,7 @@
 														<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 															<div class="col p-4 d-flex flex-column position-static">
 															
-																<c:if test="${!empty restaurant.restaurantRegDate}">
+																<c:if test="${restaurant.judgeStatus == 2}">
 																	<div style="text-align: right;"><span class="badge badge-success">요청 승인된 음식점</span></div>
 																	<c:if test="${restaurant.reservationStatus}">
 																		<div style="text-align: right;"><span class="badge badge-info">예약 및 결제 가능</span></div>
@@ -274,7 +274,7 @@
 																<c:if test="${restaurant.judgeStatus == 1}">
 																	<div style="text-align: right;"><span class="badge badge-warning">심사 대기중</span></div>
 																</c:if>
-																<c:if test="${!empty restaurant.judgeDate}">
+																<c:if test="${restaurant.judgeStatus == 3}">
 																	<div style="text-align: right;"><span class="badge badge-danger">요청 거절된 음식점</span></div>
 																</c:if>
 															
@@ -283,13 +283,13 @@
 																<h2 class="mb-0"><a href="#">${restaurant.restaurantName}</a>&nbsp;<small style="color:gray;">${restaurant.returnMenuType}</small></h2>
 																<hr>
 																<div class="mb-1 text-muted"><strong>주소</strong> | ${restaurant.streetAddress}</div>
-																<c:if test="${!empty restaurant.restaurantRegDate}">
+																<c:if test="${restaurant.judgeStatus == 2}">
 																	<a href="/restaurant/getRestaurant?restaurantNo=${restaurant.restaurantNo}" style="text-align: right;" class="stretched-link" id="restinfo">상세보기</a>
 																</c:if>
 																<c:if test="${restaurant.judgeStatus == 1}">
 																	<a href="/restaurant/getRequestRestaurant?restaurantNo=${restaurant.restaurantNo}" style="text-align: right;" class="stretched-link" id="restinfo">상세보기</a>
 																</c:if>
-																<c:if test="${!empty restaurant.judgeDate}">
+																<c:if test="${restaurant.judgeStatus == 3}">
 																	<p style="text-align: right;">자세한 내용은 고객센터(
 																	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-headset" viewBox="0 0 16 16">
 																	<path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
