@@ -163,15 +163,10 @@ public class ReservationController {
 	public String listReservation(HttpServletRequest request, @ModelAttribute Search search, Model model, HttpSession session) throws Exception {
 		
 		System.out.println("/reservation/listReservation");
-		System.out.println(search);
-		System.out.println("reservationNo:::====="+request.getParameter("restaurantNo"));
-		System.out.println("Member:::====="+(Member) session.getAttribute("member"));
 		
 		String restaurantNo = request.getParameter("restaurantNo");
 		Member member = (Member) session.getAttribute("member");
-		
-		//search.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
-		
+	
 		String memberId = null;
 		
 		if (search.getCurrentPage() == 0) {
@@ -187,13 +182,10 @@ public class ReservationController {
 		search.setPageSize(pageSize);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		System.out.println("======================="+search);
 		map.put("search", search);
 		
 		if (member != null && !member.getMemberRole().equals("owner")) {
 			map = reservationService.listReservation(search, member,restaurantNo);
-			System.out.println("listReservation admin");
-			System.out.println(map);
 			
 			List<Reservation> list =(List<Reservation>)map.get("list");
 			
@@ -256,10 +248,6 @@ public class ReservationController {
 		
 		if (member != null && member.getMemberRole().equals("owner")) {
 			map = reservationService.listMyReservation(search, member, restaurantNo);
-			System.out.println("listMyReservationController::"+map);
-			System.out.println("listMyReservation");
-			System.out.println("::listMyReservation memberId"+member);
-			System.out.println("::listMyReservation restaurantNo::"+restaurantNo);
 			List<Reservation> list =(List<Reservation>)map.get("list");
 			
 			Reservation reservation = new Reservation();

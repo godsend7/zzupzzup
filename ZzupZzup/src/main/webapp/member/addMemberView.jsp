@@ -201,13 +201,16 @@
 		})
 		
 		$("input[value='회원가입']").on("click", function() {
+			//이미 값이 불러와진 경우(SNS 로그인 때) 필요한 variable
+			var memberId = $("#memberId").val();
+			
 			var checkAddMember = confirm("회원가입을 진행하시겠습니까?");
 			
 			if(checkAddMember) {
 				if("${param.memberRole}" == "user") {
 					if("${param.loginType}" == "1" && (checkNameFlag && checkIdFlag && checkPwdFlag && checkSamePwdFlag && checkPhoneFlag && checkNicknameFlag && checkCertificatedNumFlag)) {	//일반 회원가입
 						$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
-					} else if("${param.loginType}" != "1" && (checkNameFlag && checkIdFlag && checkPhoneFlag && checkNicknameFlag && checkCertificatedNumFlag)) {	//SNS(카카오) 회원가입
+					} else if("${param.loginType}" != "1" && (checkNameFlag && (checkIdFlag || memberId != "") && checkPhoneFlag && checkNicknameFlag && checkCertificatedNumFlag)) {	//SNS(카카오) 회원가입
 						$("#addMember-complete").attr("method","POST").attr("action","/member/addMember/user/${param.loginType}").submit();
 					} else {
 						alert("누락된 항목 확인 후 다시 진행해주세요.");

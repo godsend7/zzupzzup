@@ -23,8 +23,6 @@
 	$(function() {
 
 		console.log("getReservationView.jsp");
-		//console.log(${reservation.reservationCancelReason});
-		//concole.log("restaurantNo::"+${reservation.restaurant.restaurantNo});	
 		///날짜 초 자르는 부분 ///
 		var fixed = "${reservation.fixedDate}";
 		var fixedDateSlice = fixed.slice(0,-5);
@@ -33,7 +31,6 @@
 		var reservationDate = "${reservation.reservationDate}";
 		var reservationDateSlice = reservationDate.slice(0,-5);
 		$(".reservationDate").find("p").text(reservationDateSlice);
-		
 		//////////이전페이지////////////////
 	   	 $(".reset").on("click" , function() {
 	    	self.location = "/reservation/listReservation"
@@ -87,13 +84,10 @@
 					}
 				}); 
 			});
-					
 	   	////////////////////////유저가 예약 취소버튼 누를시//////////////////////////
 	   	function fncUserConfirm() {
 	   		
 				console.log("#reservationRejectionModal");
-				console.log("${reservation.reservationNo}");
-				console.log("${reservation.reservationStatus}");
 				 $.ajax({
 					url : "/reservation/json/updateReservation/${reservation.reservationNo}/3",
 					method : "GET",
@@ -115,7 +109,7 @@
 	///////메세지와 확인버튼을 같이//////////
 			$("#userConfirm").on("click", function() {
 				fncUserConfirm();
-				//fncMesseage();
+				fncMesseage(); //메세지 coolsms 부르는 function
 				history.go(0);
 			});
 	   	/////////////////////////업주의 예약 거절/////////////////////////////////////////
@@ -141,13 +135,9 @@
 					}
 				}); 
 			});
-	   	
 	   	//업주 예약거절 파트/////////////////////////////////////////////////////////////////////
 	   		function fncCancelConfirm() {	
 				console.log("#cancelConfirm");
-				 console.log("${reservation.reservationNo}");
-				console.log("${reservation.reservationCancelDetail}");
-				
 				var cancelReason = $("input[name='reservationCancelReason']:checked").val();
 				$.ajax({
 					url : "/reservation/json/reservationCancel",
@@ -172,7 +162,6 @@
 					} 
 				}); 
 			} 
-	   	
 	   		$("#cancelConfirm").on("click", function() {
 				fncCancelConfirm();
 				//fncMesseage();
@@ -184,9 +173,6 @@
 		    $(".refundStatusYes").on("click", function() {
 		    	
 		    	console.log("#payRefundModal");	
-		    	console.log("${reservation.payMethod}");
-		    	console.log("${reservation.refundStatus}");
-		    	console.log("환불 여부~~~~~");
 		        var payMethod = $("input[name='payMethod']").val();
 		        var refundStatus = $("input[name='refundStatus']").val();
 		        jQuery.ajax({
@@ -198,11 +184,9 @@
 		                "Content-Type": "application/json"
 		            },
 		            success: function (JSONData, status) {
-		
 		            	console.log(JSONData);
 		            	
 		            	if (JSONData == 1) {
-		            		console.log("바꾸기 성공");
 							$('#refundStatus').modal("hide");
 							alert("결제 취소가 완료되었습니다.");
 							history.go(0);
@@ -235,7 +219,6 @@
 					},
 					success : function(data){
 						alert("메세지 전송이 완료되었습니다.");
-						console.log("메세지 데이터보내기 성공");
 						
 					},
 					error : function(e) {
@@ -272,7 +255,6 @@
 								<div class="col-6 col-12-xsmall">
 									<label for="reservationNumber">예약 번호</label> 
 									<p>${reservation.reservationNumber}</p>
-									
 								</div>
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantName">음식점 명</label> 
@@ -285,7 +267,6 @@
 										</c:forEach>
 									</p>
 								</div>
-								
 								<div class="col-6 col-12-xsmall">
 									<label for="restaurantTel">음식점 전화번호</label> 
 									<p>${reservation.restaurant.restaurantTel}</p>
@@ -314,7 +295,6 @@
 									<label for="restaurantType">방문 확정 전</label>
 									<p><span>${reservation.planDate} ${reservation.planTime}</span>
 									<!-- Button trigger modal -->
-								
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->
 									<c:choose> 
 										<c:when test="${member.memberRole == 'owner'}">
@@ -340,8 +320,6 @@
 										</c:when>
 									</c:choose>
 									</p>	
-									
-									
 								</div>
 								<!-- ========모달에서 유저일경우 업주일경우 다르게 보여야됨============== -->	
 									<!-- Button trigger modal --> 
@@ -378,9 +356,6 @@
 									<label for="reservationStatus">예약 거절 사유</label>
 									<p>${reservation.returnReservationCancelReason} ${reservation.reservationCancelDetail}</p>
 								</div>
-								
-								
-							
 								<!-- Break -->
 								<h2 class="pl-4 mb-0 col-12">결제 정보</h2>
 								<div class="col-12 pl-4 mb-0" style="padding:0px" ><hr></div>

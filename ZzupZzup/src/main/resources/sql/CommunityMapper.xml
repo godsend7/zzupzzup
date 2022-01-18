@@ -185,38 +185,38 @@
 	
 	
 	<!-- SQL : SELECT LIST -->
-	<select id="listMyPost" parameterType="search" resultMap="communitySelectMap">
+	<select id="listMyPost" parameterType="map" resultMap="communitySelectMap">
 		SELECT *
 		FROM (SELECT *
 			  FROM COMMUNITY AS cn
 			  <where>
 			  	cn.MEMBER_ID = #{memberId} AND cn.POST_SHOW_STATUS = true
-				<if test="searchKeyword != null">
+				<if test="search.searchKeyword != null">
 					<!-- SEARCH : NICKNAME -->
-					<if test="searchCondition == 0 and searchKeyword !=''">
-						AND UPPER(cn.NICKNAME) LIKE CONCAT('%', #{searchKeyword}, '%')
+					<if test="search.searchCondition == 0 and search.searchKeyword !=''">
+						AND UPPER(cn.NICKNAME) LIKE CONCAT('%', #{search.searchKeyword}, '%')
 					</if>
 					<!-- SEARCH : POSTTITLE -->
-					<if test="searchCondition == 1 and searchKeyword !=''">
-						AND UPPER(cn.POST_TITLE) LIKE CONCAT('%', #{searchKeyword}, '%')
+					<if test="search.searchCondition == 1 and search.searchKeyword !=''">
+						AND UPPER(cn.POST_TITLE) LIKE CONCAT('%', #{search.searchKeyword}, '%')
 					</if>
 					<!-- FILTER : OFFICIAL RESTAURANT -->
-					<if test="searchFilter == 1">
+					<if test="search.searchFilter == 1">
 						AND cn.OFFICIAL_DATE IS NOT NULL
 					</if>
 					<!-- FILTER : RECEIPT IMAGE -->
-					<if test="searchFilter == 2">
+					<if test="search.searchFilter == 2">
 						AND cn.RECEIPT_IMAGE IS NOT NULL
 					</if>
 				</if>
 			  </where>
 			  ORDER BY
 			  <choose>
-			  	<when test="searchSort == 'latest'">
-			  		cn.POST_NO DESC LIMIT #{startRowNum}, #{pageSize}
+			  	<when test="search.searchSort == 'latest'">
+			  		cn.POST_NO DESC LIMIT #{search.startRowNum}, #{search.pageSize}
 			  	</when>
-			  	<when test="searchSort == 'oldest'">
-			  		cn.POST_NO ASC LIMIT #{startRowNum}, #{pageSize}
+			  	<when test="search.searchSort == 'oldest'">
+			  		cn.POST_NO ASC LIMIT #{search.startRowNum}, #{search.pageSize}
 			  	</when>
 			 <!--  	<when test="searchSort == 'mostLike'">
 			  		
@@ -225,7 +225,7 @@
 			  		
 			  	</when> -->
 			  	<otherwise>
-			  		cn.POST_NO DESC LIMIT #{startRowNum}, #{pageSize}
+			  		cn.POST_NO DESC LIMIT #{search.startRowNum}, #{search.pageSize}
 			  	</otherwise>
 			  </choose>
 			  ) AS cnt

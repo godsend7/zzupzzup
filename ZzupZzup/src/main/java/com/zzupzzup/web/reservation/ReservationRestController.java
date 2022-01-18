@@ -131,7 +131,6 @@ public class ReservationRestController {
 
 		System.out.println("/reservation/addReservation : POST");
 		//Business Logic
-		System.out.println("/reservation/addReservation22222 : POST");
 		return reservationService.addReservation(reservation);
 	
 	}

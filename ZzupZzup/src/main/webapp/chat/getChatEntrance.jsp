@@ -66,10 +66,10 @@
 		
 		//==>시스템 문구 출력되는 부분
 		socket.on('update', (data) => {
-			console.log("====update====");
-			console.log(data);
 			const item = new makeSysemPost(data.message);
 			if(data.chatNo == chatNo){
+				console.log("====update====");
+				console.log(data);
 				item.makeLi();
 				if(data.type == "connect"){
 					updateConnected(data.chatNo,data.memberId, true);
