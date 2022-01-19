@@ -186,9 +186,9 @@
 					});
 				},
 		 		focus : function (event, ui) {
-		 			//console.log(ui.item.id);
+		 			console.log(ui.item.id);
 		 			//console.log(ui.item.id.postNo);
-		 			
+		 			console.log(ui.item.id.postNo);
 		 			$("input[name='postNo']").val(ui.item.id.postNo);		 			
 		 			
 		 			return false;
@@ -235,12 +235,18 @@
 			var menuPrice = $("input[name='restaurantMenus[0].menuPrice']").val();
 			var ownerImage = $("input[id='ownerImage']").val();
 			/* var restaurantImage = $("input[name='restaurantImage[0].restaurantImage']").val(); */
+			var postNo = $("input[name='postNo']").val();
 			
 			console.log(restaurantName);
-			
+			console.log(postNo)
 		
 			if(restaurantName == null || restaurantName.length<1){
 				alert("음식점명을 입력해주세요");
+				return;
+			}
+			
+			if(postNo == null || postNo.length<1) {
+				alert("해당 음식점은 존재하지 않습니다.");
 				return;
 			}
 			
