@@ -183,15 +183,36 @@ public class CommunityController {
 //		System.out.println("receiptImage : " + receiptImage);
 //			
 //		community.setReceiptImage(receiptImage);
+		System.out.println("====");
+		System.out.println(community);
+		System.out.println(community.getReceiptImage());
 		
-		s3ImageUpload = new S3ImageUpload();
-		String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadReceiptFile.getOriginalFilename());
-		String vacant = "community/" + fileName;
-		s3ImageUpload.uploadFile(uploadReceiptFile, vacant);
-		//String receiptImage = uploadReceiptImg(uploadReceiptFile, vacant);
+		String filenamee = uploadReceiptFile.getOriginalFilename();
 		
-		community.setReceiptImage(fileName);
-		uploadFilePath(uploadFile, vacant, community);
+		System.out.println(filenamee);
+		
+		
+		if(filenamee == null || filenamee.isEmpty()) {
+			System.out.println("이거 이미지 값 넘어오는거 없다");
+			
+			Community communityy = new Community();
+			communityy = communityService.getCommunity(community.getPostNo());
+			
+			if(communityy.getReceiptImage() != (filenamee)) {
+				System.out.println("기존 이미지 있어");
+				community.setReceiptImage(communityy.getReceiptImage());
+			}else {
+				System.out.println("기존 이미지 없어");
+			}
+		}else {
+			s3ImageUpload = new S3ImageUpload();
+			String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadReceiptFile.getOriginalFilename());
+			String vacant = "receipt/" + fileName;
+			s3ImageUpload.uploadFile(uploadReceiptFile, vacant);
+			
+			community.setReceiptImage(fileName);
+			uploadFilePath(uploadFile, vacant, community);
+		}
 		
 		communityService.updateCommunity(community);
 		
@@ -264,6 +285,8 @@ public class CommunityController {
 	public String listMyPost(@ModelAttribute("search") Search search, @RequestParam("memberId") String memberId, Model model, HttpServletRequest request, HttpSession session) throws Exception {
 		
 		System.out.println("/community/listMyPost : SERVICE");
+		System.out.println(memberId);
+		
 		
 		Member member = (Member)session.getAttribute("member");
 		List<Mark> listLike = null;

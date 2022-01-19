@@ -119,6 +119,7 @@
 		var menuTitle = $("input[name='restaurantMenus[0].menuTitle']").val();
 		var menuPrice = $("input[name='restaurantMenus[0].menuPrice']").val();
 		var ownerImage = $("input[id='ownerImage']").val();
+		var restaurantImage = $('input[name="fileDragInput"]')[0].files;
 		/* var restaurantImage = $("input[name='restaurantImage[0].restaurantImage']").val(); */
 		
 		console.log(restaurantName);
@@ -161,6 +162,11 @@
 		
 		if(menuPrice == null || menuPrice.length<1){
 			alert("메뉴가격은 최소 한가지 입력해 주셔야 합니다.");
+			return;
+		}
+		
+		if(restaurantImage == null || restaurantImage.length<1){
+			alert("음식점 이미지는 필수로 첨부해주셔야 합니다.");
 			return;
 		}
 		

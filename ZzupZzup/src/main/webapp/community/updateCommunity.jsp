@@ -115,9 +115,10 @@
 		var menuType = $("select[name='menuType']").val();
 		var mainMenuTitle = $("input[name='mainMenuTitle']").val();
 		var mainMenuPrice = $("input[name='mainMenuPrice']").val();
+		var fileDragInput = $("input[name='fileDragInput']").val();
 		
 		console.log(restaurantName);
-		
+		console.log(fileDragInput);
 		
 		if(postTitle == null || postTitle.length<1){
 			alert("게시물 제목을 입력해주세요");
@@ -166,6 +167,11 @@
 		
 		if(mainMenuPrice == null || mainMenuPrice.length<1){
 			alert("대표메뉴가격을 입력해주세요");
+			return;
+		}
+		
+		if(fileDragInput.length >= 50){
+			alert("이미지 파일명이 너무 깁니다");
 			return;
 		}
 		
@@ -455,7 +461,7 @@
 									<label for="postText" class="col-sm-offset-1 col-sm-3 control-label">게시물 소개글</label>
 									<div class="col-sm-12">
 										<!-- <label for="textarea">게시물 소개글</label> -->
-										<textarea id="postText" name="postText" rows="3" style="resize: none; height: 50em;">${community.postText}</textarea>
+										<textarea id="postText" name="postText" rows="3" style="resize: none; height: 20em;">${community.postText}</textarea>
 										<!-- <input type="text" class="form-control" id="postText" name="postText" placeholder="게시물 소개글"> -->
 									</div>
 								</div><br>
@@ -560,10 +566,18 @@
 								<div class="form-group">
 									<div class="col-sm-4">
 										<label for="receiptImage">영수증 이미지</label>
-										<img id="${community.receiptImage}" src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/${community.receiptImage}" width="100"/>
+										<c:if test="${empty community.receiptImage}">
+											<input type="file" name="file" id="receiptImage" value="">
+										</c:if>
+									    <c:if test="${not empty community.receiptImage}">
+									    	<img id="${community.receiptImage}" src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/receipt/${community.receiptImage}" width="100"/>
+									    	<p>등록된 이미지 파일 : ${community.receiptImage}</p>
+											<input type="file" name="file" id="receiptImage" value="">
+									    
+									    </c:if>
+										
 										<%-- <input type="hidden" name="receiptImage"  value="${community.receiptImage}"> --%>
-										<p>등록된 이미지 파일 : ${community.receiptImage}</p>
-										<input type="file" name="file" id="receiptImage" value="${community.receiptImage}">
+										
 									</div>
 								</div><br>
 								
