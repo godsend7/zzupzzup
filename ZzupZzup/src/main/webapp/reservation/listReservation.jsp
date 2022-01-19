@@ -197,7 +197,7 @@
 									$("#listReservation").append(alert_dom);
 									$("#listReservation .alert").fadeIn();
 									
-									setTimeout(() => $("#listChat .alert").alert('close'), 1500);
+									setTimeout(() => $("#listReservation .alert").alert('close'), 1500);
 								}
 							}
 

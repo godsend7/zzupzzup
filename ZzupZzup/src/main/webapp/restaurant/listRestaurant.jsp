@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%> 
 
 <!DOCTYPE HTML>
 
@@ -79,6 +80,7 @@
 </head>
 
 <body class="is-preload">
+	<c:set var="path" value="${requestScope['javax.servlet.forward.servlet_path']}" /> 
 
 	<!-- S:Wrapper -->
 	<div id="wrapper">
@@ -92,8 +94,14 @@
 
 				<section id="listRestaurant">
 					<div class="container">
+
+					<c:if test="${fn:contains(path, 'listRestaurant')}">
+						<h2>등록된 음식점 목록</h2>
+					</c:if>
+					<c:if test="${fn:contains(path, 'listMyCallDibs')}">
+						<h2>내가 찜한 음식점 목록</h2>
+					</c:if>
 					
-					<h2>등록된 음식점 목록</h2>
 					<form id="restaurantList">
 						<div class="container">
 							<div class="row search-box gtr-uniform">
