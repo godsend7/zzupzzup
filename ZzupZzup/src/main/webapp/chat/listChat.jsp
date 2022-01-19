@@ -204,6 +204,8 @@
 								alert_dom = '<div class="alert alert-danger alert-dismissible thumb-list-alert" role="alert">리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
 								$("#listChat").append(alert_dom);
 								$("#listChat .alert").fadeIn();
+								
+								setTimeout(() => $("#listChat .alert").alert('close'), 1500);
 							}
 						}
 					},

@@ -164,7 +164,7 @@
 						<div class="row table-list mb-2">
 				 		 	<c:forEach var="review" items= "${list}">
 		 		 				<div class="col-md-12">
-									<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+									<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow card h-md-250 position-relative">
 										<div class="col p-4 d-flex flex-column position-static divBox">
 											<c:if test="${member.memberRole == 'admin'}">
 												<div class="review-report-info">

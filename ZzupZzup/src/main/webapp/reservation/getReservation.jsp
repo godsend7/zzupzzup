@@ -246,8 +246,8 @@
 					<div class="container">
 
 						<!-- start:Form -->
-						<h2 class="pl-0 mb-0">예약 정보</h2>
-						<div class="col-12" style="padding:0px"><hr></div>
+						<h2 class="pl-0">예약 정보</h2>
+						<div class="col-12" style="padding:0px"></div>
 					
 						<form id="getReservation">
 						
@@ -355,10 +355,12 @@
 								<div class="col-12">
 									<label for="reservationStatus">예약 거절 사유</label>
 									<p>${reservation.returnReservationCancelReason} ${reservation.reservationCancelDetail}</p>
+									<hr/>
 								</div>
+								
 								<!-- Break -->
 								<h2 class="pl-4 mb-0 col-12">결제 정보</h2>
-								<div class="col-12 pl-4 mb-0" style="padding:0px" ><hr></div>
+								<div class="col-12 pl-4 mb-0" style="padding:0px" ></div>
 							
 								<!-- Break -->
 								<div class="col-12 reservationDate">
@@ -393,7 +395,7 @@
 								
 								<div class="col-12 d-flex justify-content-center">
 									<ul class="actions">
-										<li><input type="reset" value="이전 페이지" class="normal reset" /></li>
+										<li><input type="reset" value="이전 페이지" class="button secondary reset" /></li>
 									</ul>
 								</div>
 							</div>

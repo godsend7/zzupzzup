@@ -193,8 +193,8 @@
 				<section id="updateMember">
 					<div class="container">
 						<div class="row justify-content-center">
-							<div class="col-12 col-lg-10 col-xl-8 mx-auto">
-								<h2 class="h3 mb-4 page-title">내 정보 수정</h2><hr>
+							<div class="col-md-12 mx-auto">
+								<h2>내 정보 수정</h2>
 								<div class="my-4">
 									<form id="updateMember-complete" enctype="multipart/form-data">
 									<input type="hidden" name="memberName" value="${member.memberName}"/>
@@ -209,8 +209,8 @@
 										<input type="hidden" name="gender" value="${member.gender}">
 										<input type="hidden" name="statusMessage" value="${member.statusMessage}">
 									</c:if>
-										<div class="row mt-5 align-items-center">
-											<div class="col-md-3 mb-5" id="edit-profileImage">
+										<div class="row mt-5 mb-5 align-items-center">
+											<div class="col-md-3" id="edit-profileImage">
 												<div class="col-md" align="center">
 													<!-- profileImage 도윤님 src 참고 start -->
 													<div class="file-view mt-4">
@@ -572,7 +572,7 @@
 											</div>
 										</c:if>
 										<c:if test="${sessionScope.member.memberRole == 'admin'}">
-											<div class="form-row col-md-12">
+											<div class="form-row col-md-12 mt-5">
 												<div class="col-md-6">
 													<label for="regDate">가입일</label> <span id="regDate"
 														style="font-weight: bold">${member.regDate}</span>
@@ -617,10 +617,9 @@
 													</c:if>
 												</div>
 											</div>
-											<hr class="my-4" />
 										</c:if>
-										<div align="center">
-											<input type="button" id="back" class="button secondary" value="이전" />
+										<div align="center" class="mt-5">
+											<input type="button" id="back" class="button secondary mr-3" value="이전" />
 											<input type="button" id="updateMember-submit" class="button primary" value="수정" />
 										</div>
 									</form>

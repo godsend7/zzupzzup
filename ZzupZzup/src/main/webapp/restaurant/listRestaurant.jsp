@@ -52,6 +52,11 @@
 				}
 			});
 			
+			/* 도윤 추가 검색버튼 클릭시 */
+			$(".search-btn").on("click", function() {
+				fncPageNavigation(1);
+			});
+			
 			// Filter
 			$("input:checkbox[name='searchFilter']").on("click", function(e){
 				//console.log("클릭함");
@@ -88,7 +93,7 @@
 
 				<section id="listRestaurant">
 					<div class="container">
-					
+
 					<c:if test="${fn:contains(path, 'listRestaurant')}">
 						<h2>등록된 음식점 목록</h2><hr>
 					</c:if>
@@ -96,33 +101,37 @@
 						<h2>내가 찜한 음식점 목록</h2><hr>
 					</c:if>
 					
-					
 					<form id="restaurantList">
-					
-						<div class="row">
-							<div class="col-md-7" style="padding-left: 40px;">
-								<a href="#" class="badge badge-dark dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">
-								<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
-								<path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
-								</svg>&nbsp;필터&nbsp;</a>
-								<div class="dropmenu-list" aria-labelledby="dropmenuList">
-									<input type="checkbox" id="permission" class="search-filter" name="searchFilter" value="1"><label for="permission">요청승인</label>
-									<input type="checkbox" id="rejection" class="search-filter" name="searchFilter" value="2"><label for="rejection">요청거절</label>
+						<div class="container">
+							<div class="row search-box gtr-uniform">
+								<div class="col-md-4 d-flex">
+									<div class="dropmenu float-left">
+										<a href="" class="button normal icon solid fa-filter dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">필터</a>
+										
+										<div class="dropmenu-list" aria-labelledby="dropmenuList">
+											<input type="checkbox" id="permission" class="search-filter" name="searchFilter" value="1"><label for="permission">요청승인</label>
+											<input type="checkbox" id="rejection" class="search-filter" name="searchFilter" value="2"><label for="rejection">요청거절</label>
+										</div>
+									</div>
 								</div>
-							</div>
 							
-							<div class="col-md-5 row" style="padding-left: 110px;">
-								<select class="searchCondition my-2 my-md-0" id="searchCondition" name="searchCondition" style="width: 124px; padding-left: 10px;">
-								  <!-- <option selected>Open this select menu</option> -->
-								  <option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""}> 음식점명</option>
-								  <option value="1" ${!empty search.searchCondition && search.searchCondition == 1 ? "selected" : ""}> 대표자명</option>
-								</select>
+								<div class="col-md-5 d-flex align-items-center">
+									<select class="searchCondition my-2 my-md-0 mr-2" id="searchCondition" name="searchCondition">
+									 <!-- <option selected>Open this select menu</option> -->
+									  <option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""}> 음식점명</option>
+									  <option value="1" ${!empty search.searchCondition && search.searchCondition == 1 ? "selected" : ""}> 대표자명</option>
+									</select>
+									
+									<input class="form-control" type="text" id="searchByEnter" name="searchKeyword" placeholder="검색" class="pr-5" aria-label="Search" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
+									<a href="#" class="button primary icon solid fa-search search-btn"></a>
+								    
+							    	 <input type="hidden" id="currentPage" name="currentPage" value="1"/>
+								</div>
 								
-							      <input class="form-control" type="text" id="searchByEnter" name="searchKeyword" placeholder="검색" aria-label="Search" style="width: 234px;" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
-							    
-						    	 <input type="hidden" id="currentPage" name="currentPage" value="1"/>
-						    </div>
-							
+								<div class="col-md-3 d-flex justify-content-end align-items-center">
+								</div>
+								
+							</div>
 						</div>
 					</form>
 					
@@ -131,7 +140,7 @@
 					<c:if test="${!empty restaurant.restaurantRegDate || !empty restaurant.judgeDate}">
 						
 					<div class="col-md-12">
-						<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow h-md-250 position-relative">
+						<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow card h-md-250 position-relative">
 							<div class="col p-4 d-flex flex-column position-static">
 							
 								<c:if test="${!empty restaurant.restaurantRegDate}">

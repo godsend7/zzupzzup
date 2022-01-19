@@ -43,7 +43,7 @@
 					
 					<div class="container">
 					
-					<h2>심사 대기중인 음식점 목록</h2><hr>
+					<h2>심사 대기중인 음식점 목록</h2>
 					<form id="listRequestRestaurant">
 					<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 						<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
@@ -54,7 +54,7 @@
 					<c:if test="${!empty restaurant.requestDate && restaurant.judgeStatus == 1 && empty restaurant.restaurantRegDate}">
 					
 					<div class="col-md-12">
-						<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+						<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow card h-md-250 position-relative">
 						
 							<div class="col p-4 d-flex flex-column position-static">
 								<c:if test="${restaurant.judgeStatus == 1}">

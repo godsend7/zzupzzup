@@ -84,11 +84,17 @@
 					<div class="container">
 					
 						<!-- 관우님 src start -->
-						<h2>유저 목록</h2><hr>
+						<h2>유저 목록</h2>
 						<div class="form-row col-md-12" align="right">
-							<div style="text-align: right;"><a href="#" id="all-btn"><span class="badge badge-danger" id="check-all-btn" style="color:#fff;background-color:#f56a6a;">전체</span></a></div>&nbsp;
-							<div style="text-align: right;"><a href="#" id="eliminated-btn"><span class="badge badge-danger" id="check-eliminated-btn">탈퇴회원</span></a></div>&nbsp;
-							<div style="text-align: right;"><a href="#" id="blacklist-btn"><span class="badge badge-dark" id="check-blacklist-btn">블랙리스트</span></a></div>
+							<div class="dropmenu float-left">
+								<a href="" class="button normal icon solid fa-filter dropmenu-btn" id="dropdownMenuLink" data-toggle="dropmenu">필터</a>
+								
+								<div class="dropmenu-list" aria-labelledby="dropmenuList">
+									<a href="#" id="all-btn"><span class="badge badge-danger" id="check-all-btn" style="color:#fff;background-color:#f56a6a;">전체</span></a>
+									<a href="#" id="eliminated-btn"><span class="badge badge-danger" id="check-eliminated-btn">탈퇴회원</span></a>
+									<a href="#" id="blacklist-btn"><span class="badge badge-dark" id="check-blacklist-btn">블랙리스트</span></a>
+								</div>
+							</div>
 						</div>
 						<form id="listUser" name="listUser">
 							<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
@@ -102,7 +108,7 @@
 						<%-- <c:if test="${!empty restaurant.restaurantRegDate || !empty restaurant.judgeDate}"> --%>
 							
 						<div class="col-md-12">
-							<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+							<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow card h-md-250 position-relative">
 								<div class="col p-4 d-flex flex-column position-static">
 								
 									<c:if test="${!empty member.deleteDate}">

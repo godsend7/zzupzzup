@@ -52,7 +52,7 @@
 					<div class="container">
 					
 						<!-- 관우님 src 참고 start -->
-						<h2>업주 목록</h2><hr>
+						<h2>업주 목록</h2>
 						<form id="listOwner">
 						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 							<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
@@ -64,7 +64,7 @@
 						<%-- <c:if test="${!empty restaurant.restaurantRegDate || !empty restaurant.judgeDate}"> --%>
 							
 						<div class="col-md-12">
-							<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+							<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow card h-md-250 position-relative">
 								<div class="col p-4 d-flex flex-column position-static">
 								
 									<c:if test="${!empty member.deleteDate}">

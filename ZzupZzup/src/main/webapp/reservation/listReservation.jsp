@@ -196,6 +196,8 @@
 									alert_dom = '<div class="alert alert-danger alert-dismissible thumb-list-alert" role="alert">리스트가 더 존재하지 않습니다.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>	</div>';							
 									$("#listReservation").append(alert_dom);
 									$("#listReservation .alert").fadeIn();
+									
+									setTimeout(() => $("#listChat .alert").alert('close'), 1500);
 								}
 							}
 
@@ -247,6 +249,7 @@
 					<!-- S:Search -->
 						<form id="reservationForm" name="reservationForm">
 							<div class="container">
+								<h2>나의 예약 및 결제 내역</h2>
 								<div class="row search-box gtr-uniform">
 									<div class="col-md-4 col-sm-12">
 										
