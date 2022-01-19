@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%> 
 
 <!DOCTYPE HTML>
 
@@ -88,7 +89,14 @@
 				<section id="listRestaurant">
 					<div class="container">
 					
-					<h2>등록된 음식점 목록</h2><hr>
+					<c:if test="${fn:contains(path, 'listRestaurant')}">
+						<h2>등록된 음식점 목록</h2><hr>
+					</c:if>
+					<c:if test="${fn:contains(path, 'listMyCallDibs')}">
+						<h2>내가 찜한 음식점 목록</h2><hr>
+					</c:if>
+					
+					
 					<form id="restaurantList">
 					
 						<div class="row">
