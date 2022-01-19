@@ -167,7 +167,7 @@ $(function() {
 					+'<div>'+JSONData.chatLeaderId.statusMessage+'</div>'
 					+'</div>'
 					+'<div clas="get-chat-restaurant-info">'
-					+'<div>'+JSONData.chatRestaurant.restaurantName+' ('+menuType+')</div>'
+					+'<div><a href="/restaurant/getRestaurant?restaurantNo='+JSONData.chatRestaurant.restaurantNo+'" target="_blank">'+JSONData.chatRestaurant.restaurantName+'</a> ('+menuType+')</div>'
 					+'<div>'+JSONData.chatRestaurant.restaurantTel+'</div>'
 					+'<div>'+JSONData.chatRestaurant.streetAddress+'</div>'
 					+'<div>'+JSONData.chatRestaurant.areaAddress+'</div>'

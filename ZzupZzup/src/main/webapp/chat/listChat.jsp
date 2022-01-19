@@ -66,7 +66,7 @@
 			//console.log("top : " + scrTop);
 			//console.log("bottom : " + scrBtm);
 			//console.log("count : " + count);
-			if(scrBtm <= 0 ){
+			if(scrBtm <= 1 ){
 				//console.log("바닥이야");
 				//console.log($("#chatForm"));
 				//console.log($("#searchKeyword").val());

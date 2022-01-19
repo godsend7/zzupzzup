@@ -500,7 +500,7 @@
 				<section id="">
 					<div class="container">
 						
-						<h2>음식점 등록하기</h2>
+						<h2>음식점 수정하기</h2>
 	
 						<form class="form-horizontal" id="updateRestaurant">
 						
