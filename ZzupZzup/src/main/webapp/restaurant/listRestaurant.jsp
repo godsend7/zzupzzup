@@ -80,6 +80,7 @@
 </head>
 
 <body class="is-preload">
+	<c:set var="path" value="${requestScope['javax.servlet.forward.servlet_path']}" /> 
 
 	<!-- S:Wrapper -->
 	<div id="wrapper">
@@ -95,10 +96,10 @@
 					<div class="container">
 
 					<c:if test="${fn:contains(path, 'listRestaurant')}">
-						<h2>등록된 음식점 목록</h2><hr>
+						<h2>등록된 음식점 목록</h2>
 					</c:if>
 					<c:if test="${fn:contains(path, 'listMyCallDibs')}">
-						<h2>내가 찜한 음식점 목록</h2><hr>
+						<h2>내가 찜한 음식점 목록</h2>
 					</c:if>
 					
 					<form id="restaurantList">
