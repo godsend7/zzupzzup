@@ -113,11 +113,16 @@
 		    				let dom ='';
 							$.each(data.list, function(index, item){
 								console.log(item);
+								console.log(item.restaurant.restaurantImage[0]);
 								dom += '<div class="col-md-4">'
 									+'<div class="card mb-4 shadow">'
-									+'<a href="" class="thumb">'
-									+'<img src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"></a>'
-									+'<div class="card-body">'
+									+'<a href="" class="thumb">';
+									if(item.restaurant.restaurantImage[0] != null || item.restaurant.restaurantImage[0] != ''){
+										dom +='<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/restaurant/'+item.restaurant.restaurantImage[0]+'">';
+									}else{
+										dom +='<img src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"></a>';
+									}
+									dom +='<div class="card-body">'
 									+'<h3 class="card-title">'+item.restaurant.restaurantName+'</h3>'
 									+'<h4 class="text-primary card-title">예약번호 <a href="/reservation/getReservation?reservationNo='+item.reservationNo+'">'+item.reservationNumber+'</a></h4>'
 									+'<div class="col-md-12 nickname">'
@@ -297,8 +302,17 @@
 			 		 		<c:set var="i" value="${i+2}" />
 							<div class="col-md-4">
 								<div class="card mb-4 shadow">
-									<a href="" class="thumb"><img
-										src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg"></a>
+									<a href="" class="thumb">
+										<c:choose>
+											<c:when test="${empty reservation.restaurant.restaurantImage[0] or reservation.restaurant.restaurantImage[0] == '' }">
+											<img src="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg">
+											
+											</c:when>
+											<c:otherwise>
+											<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/restaurant/${reservation.restaurant.restaurantImage[0]}">
+											</c:otherwise>
+										</c:choose>
+									</a>
 					
 									<div class="card-body">
 										<h3 class="card-title restaurantNameBox">${reservation.restaurant.restaurantName}</h3>
