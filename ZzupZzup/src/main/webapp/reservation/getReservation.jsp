@@ -32,9 +32,16 @@
 		var reservationDateSlice = reservationDate.slice(0,-5);
 		$(".reservationDate").find("p").text(reservationDateSlice);
 		//////////이전페이지////////////////
+		var memberRole = "${member.memberRole}";
 	   	 $(".reset").on("click" , function() {
-	    	//self.location = "/reservation/listReservation"
-	   		history.back();
+	    	if(memberRole == 'owner'){
+	   		 	self.location = "/reservation/listMyReservation"
+	    	}else {
+	    		self.location = "/reservation/listReservation"
+	    	}
+	   		
+	   		
+	   		
 		}); 
 		//////////모달 이동////////////////
 		  $(".confirm").on("click" , function() {
@@ -464,7 +471,7 @@
 											<input type="radio" id="reservationCancelReason4" name="reservationCancelReason" class="reservationCancelReason" value="4"> 
 												<label for="reservationCancelReason4">기타 내용 작성</label>
 												 <textarea name="reservationCancelDetail" id="reservationCancelDetail"
-													placeholder="100자 이내로 작성해주세요" rows="6"></textarea> 
+													placeholder="20자 이내로 작성해주세요" rows="6" maxlength="24"></textarea> 
 											</div>
 											<!-- Break -->
 											<input type= "hidden" name ="reservationStatus" value ="4"/>

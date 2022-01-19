@@ -36,7 +36,7 @@ public class SendMessage {
 			//params.put("from", "010-8256-2987");
 		    
 			if(toMember.getMemberRole().equals("user")) {
-				map.put("text", "가게 사정인"+reservation.getReservationCancelDetail()+reservation.getReservationCancelReason()+
+				map.put("text", reservation.getReservationCancelDetail()+reservation.getReservationCancelReason()+
 						"이유로 고객님의 예약을 거절하셨습니다.");
 				System.out.println("usertextMessage::");
 			}
