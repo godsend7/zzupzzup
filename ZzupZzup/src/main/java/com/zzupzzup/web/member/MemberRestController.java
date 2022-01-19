@@ -305,11 +305,9 @@ public class MemberRestController {
 			if(currentDateYear == deleteDateYear && currentDateMonth == deleteDateMonth && (currentDateDay - deleteDateDay <= 7 || currentDateDay - deleteDateDay >= -7)) {
 				System.out.println(currentDateDay - deleteDateDay);
 				
-				mb.setDeleteReason(null);
-				//mb.setDeleteDate(null);
-				memberService.updateMember(mb);
 				mb.setEliminated(false);
 				mb.setRecovered(true);
+				memberService.updateMember(mb);
 				
 				session.setAttribute("member", mb);
 				System.out.println(mb.getMemberId()+" 님 로그인");
