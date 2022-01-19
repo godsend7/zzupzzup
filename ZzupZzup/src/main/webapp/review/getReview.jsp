@@ -14,20 +14,20 @@
     margin: 40px auto;
 }
 
-.thumbs {
+.getReviewImg .thumbs {
     margin-top: 10px;
     display: flex;
     justify-content: center;
 }
 
-.thumbs li,
-.thumbs li a {
+.getReviewImg .thumbs li,
+.getReviewImg .thumbs li a {
     width: 65px;
     height: 55px;
     margin: 2px;
 }
 
-.thumbs a {
+.getReviewImg .thumbs a {
     /*display: block;*/
     position: relative;
     color: #515151;
@@ -35,13 +35,13 @@
     
 }
 
-.thumbs li a img {
+.getReviewImg .thumbs li a img {
     width: 65px;
     height: 45px;
   	opacity: 0.7;
 }
 
-.thumbs li a:hover span {
+.getReviewImg .thumbs li a:hover span {
     position: absolute;
     z-index: 101;
     bottom: -30px;
@@ -56,20 +56,20 @@
 }
 
 
-.slide {
+.getReviewImg .slide {
     overflow: hidden; 
 }
 
-.slide,
-.slide li,
-.slide img {
+.getReviewImg .slide,
+.getReviewImg .slide li,
+.getReviewImg .slide img {
     width: 100%;
     height: 250px;
     position: relative;
   background-size: cover;
 }
 
-.slide li {
+.getReviewImg .slide li {
     position: absolute;
     z-index: 50;
 }
@@ -80,7 +80,7 @@
     100% {left: 0;}
 }
 
-.slide li:target {
+.getReviewImg .slide li:target {
     z-index: 100;
     -webkit-animation: slider 1s 1;
 }
@@ -91,7 +91,7 @@
     100% {z-index: 75;}
 }
 
-.slide li:not(:target) {
+.getReviewImg .slide li:not(:target) {
     -webkit-animation: noTarget 1s 1;
 }
 
@@ -165,8 +165,8 @@
 					$("#hashtagBox").append("<span class='badge badge-pill badge-secondary'>" + item.hashTag + "</span>")
 				});
 				
-				$(".slide").empty();
-		    	$(".thumbs").empty();
+				$(".getReviewSlide").empty();
+		    	$(".getReviewThumbs").empty();
 				if (data.list.reviewImage.length != 0) {
 					$.each(data.list.reviewImage, function(index, item) {
 						//console.log(item);
@@ -250,8 +250,8 @@
     	sliderImage += "<img src='https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/" + item + "' alt='' /></li>" ;
     	thumbsImage = '<li><a href="#slide-'+ (index+1) +'"><img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/review/' + item + '" /></a></li>';
     	
-    	$(".slide").append(sliderImage);
-    	$(".thumbs").append(thumbsImage);
+    	$(".getReviewImg").find(".getReviewSlide").append(sliderImage);
+    	$(".getReviewImg").find(".getReviewThumbs").append(thumbsImage);
     
     }
     	
@@ -338,9 +338,9 @@
 				</div> -->
 				
 				
-		        <div id="container">
+		        <div id="container" class="getReviewImg">
 		        
-		            <ul class="slide">
+		            <ul class="slide getReviewSlide">
 		                <!-- <li class="first" id="slide-1"><img src="https://placeimg.com/640/480/arch" alt="" /></li>
 		                <li id="slide-2"><img src="https://placeimg.com/640/480/nature" alt="" /></li>
 		                <li id="slide-3"><img src="https://placeimg.com/640/480/people" alt="" /></li>
@@ -348,7 +348,7 @@
 		                
 		            </ul>
 		
-		            <ul class="thumbs">
+		            <ul class="thumbs getReviewThumbs">
 		                <!-- <li><a href="#slide-1"><img src="https://placeimg.com/640/480/arch" /></a></li>
 		                <li><a href="#slide-2"><img src="https://placeimg.com/640/480/nature" /></a></li>
 		                <li><a href="#slide-3"><img src="https://placeimg.com/640/480/people" /></a></li>

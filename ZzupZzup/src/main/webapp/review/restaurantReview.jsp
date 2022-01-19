@@ -265,10 +265,10 @@
 		</c:otherwise>
 	</c:choose>
 </div>
+</c:if>
 <ul class='icons'> 
 	<jsp:include page='/review/getReview.jsp'/>
 </ul> 
 
-</c:if>
 
 
