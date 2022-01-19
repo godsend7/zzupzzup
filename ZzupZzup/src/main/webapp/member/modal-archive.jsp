@@ -499,21 +499,21 @@
 				}),
 				success : function(data) {
 					if (data != null) {
-						$("#get-other-user-modal-body").html("<div class='row mt-5 align-items-center'>"
-									+"<div class='col-md-4 mb-5'>"
+						$("#get-other-user-modal-body").html("<div class='d-flex mt-3 align-items-center'>"
+									+"<div class='col-md-5'>"
 									+"<div align='center' id='get-other-user-profile-image'>"
 									+"</div></div>"
-									+"<div class='col-md-8'>"
-									+"<div class='row align-items-right'>"
 									+"<div class='col-md-7'>"
+									+"<div class=''>"
+									+"<div class='col-md-12'>"
 									+"<h4 class='mb-1'>"
 									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;'>"+data.memberRank+"</span>&nbsp;"
 									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;'>"+data.ageRange+"</span>&nbsp;"
 									+"<span class='badge badge-pill badge-dark' style='background-color: #f56a6a;' id='get-other-user-gender'>"
 									+"</span><br>"+data.nickname+"</h4>"
 									+"</div></div>"
-									+"<div class='row mb-4'>"
-									+"<div class='col-md-7'>"
+									+"<div class='mb-4'>"
+									+"<div class='col-md-12'>"
 									+"<p class='text-muted'>"+data.statusMessage+"</p>"
 									+"</div></div></div></div>");
 						
