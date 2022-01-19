@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%> 
 
 <!DOCTYPE HTML>
 
@@ -19,13 +20,13 @@
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
 
+	function fncPageNavigation(currentPage) {
+		console.log(currentPage);
+		$("#currentPage").val(currentPage);
+		$("#restaurantList").attr("action","/restaurant/listRestaurant").attr("method", "POST").submit();
+	}
+
 	window.onload = function(){
-		
-		function fncPageNavigation(currentPage) {
-			console.log(currentPage);
-			$("#currentPage").val(currentPage);
-			$("#restaurantList").attr("action","/restaurant/listRestaurant").attr("method", "POST").submit();
-		}
 		
 		// 상세조회 버튼 실행
 		$(function() {
@@ -79,6 +80,7 @@
 </head>
 
 <body class="is-preload">
+	<c:set var="path" value="${requestScope['javax.servlet.forward.servlet_path']}" /> 
 
 	<!-- S:Wrapper -->
 	<div id="wrapper">
@@ -92,8 +94,14 @@
 
 				<section id="listRestaurant">
 					<div class="container">
+
+					<c:if test="${fn:contains(path, 'listRestaurant')}">
+						<h2>등록된 음식점 목록</h2>
+					</c:if>
+					<c:if test="${fn:contains(path, 'listMyCallDibs')}">
+						<h2>내가 찜한 음식점 목록</h2>
+					</c:if>
 					
-					<h2>등록된 음식점 목록</h2>
 					<form id="restaurantList">
 						<div class="container">
 							<div class="row search-box gtr-uniform">
@@ -118,7 +126,8 @@
 									<input class="form-control" type="text" id="searchByEnter" name="searchKeyword" placeholder="검색" class="pr-5" aria-label="Search" value="${! empty search.searchKeyword ? search.searchKeyword : '' }">
 									<a href="#" class="button primary icon solid fa-search search-btn"></a>
 								    
-							    	 <input type="hidden" id="currentPage" name="currentPage" value="1"/>
+								    <input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
+							    	<!-- <input type="hidden" id="currentPage" name="currentPage" value="1"/> -->
 								</div>
 								
 								<div class="col-md-3 d-flex justify-content-end align-items-center">
@@ -130,7 +139,7 @@
 					
 					<c:set var="i" value="0" />
 					<c:forEach var="restaurant" items="${list}">
-					<c:if test="${!empty restaurant.restaurantRegDate || !empty restaurant.judgeDate}">
+					<%-- <c:if test="${!empty restaurant.restaurantRegDate || !empty restaurant.judgeDate}"> --%>
 						
 					<div class="col-md-12">
 						<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow card h-md-250 position-relative">
@@ -166,7 +175,7 @@
 						</div>
 					</div>
 					
-					</c:if>
+					<%-- </c:if> --%>
 					</c:forEach>
 
 					</div><br><br><br>

@@ -116,8 +116,10 @@
 			var menuType = $("select[name='menuType']").val();
 			var mainMenuTitle = $("input[name='mainMenuTitle']").val();
 			var mainMenuPrice = $("input[name='mainMenuPrice']").val();
+			var fileDragInput = $("input[name='fileDragInput']").val();
 			
 			console.log(restaurantName);
+			console.log(fileDragInput);
 			
 			
 			if(postTitle == null || postTitle.length<1){
@@ -167,6 +169,11 @@
 			
 			if(mainMenuPrice == null || mainMenuPrice.length<1){
 				alert("대표메뉴가격을 입력해주세요");
+				return;
+			}
+			
+			if(fileDragInput.length >= 50){
+				alert("이미지 파일명이 너무 깁니다");
 				return;
 			}
 			
@@ -418,7 +425,7 @@
 						<div class="file-drag-area">
 							<span class="file-drag-btn">파일 선택</span>
 							<span class="file-drag-msg">파일을 여기로 드래그 하거나 선택하세요.</span> 
-							<input class="file-drag-input" type="file" id="fileDragInput" name="fileDragInput" multiple="multiple">	
+							<input class="file-drag-input" type="file" id="fileDragInput" name="fileDragInput" multiple="multiple" maxLeng>	
 						</div>
 						<div class="file-drag-view mt-4"></div>
 						<div class="imageUploadBox"></div>

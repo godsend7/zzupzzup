@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%> 
 
 <!DOCTYPE HTML>
 
@@ -261,6 +262,7 @@
 </head>
 
 <body class="is-preload">
+	<c:set var="path" value="${requestScope['javax.servlet.forward.servlet_path']}" /> 
 
 	<!-- S:Wrapper -->
 	<div id="wrapper">
@@ -275,7 +277,12 @@
 				<section id="listCommunity">
 					<div class="container">
 					
-						<h2>나만의 작고 소중한 맛집 리스트</h2>
+						<c:if test="${fn:contains(path, 'listCommunity')}">
+							<h2>나만의 작고 소중한 맛집 리스트</h2>
+						</c:if>
+						<c:if test="${fn:contains(path, 'listMyLikePost')}">
+							<h2>내가 좋아요한 게시물 리스트</h2>
+						</c:if>
 						
 						<form id="communityList">
 							<div class="container">

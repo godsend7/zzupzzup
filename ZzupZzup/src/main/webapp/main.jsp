@@ -566,6 +566,18 @@
 		});
 	}
 	
+	//주소 비교를 위한 변경 function()
+	function addrChange(arrayAddr) {
+		var addr = "";
+		for (var i = 0; i < arrayAddr.length; i++) {
+   	  		if (i != 0) {
+   	  			addr += arrayAddr[i];
+			}
+	 	}
+		
+		return addr;
+	}
+	
 	//경기도 맛집 api 화면에 표시
 	function loadGyeonggidoMap() {
 		$.ajax({
@@ -586,15 +598,52 @@
 				//var obj = JSON.parse(data);
 				//console.log(data.PlaceThatDoATasteyFoodSt[1].row);
 				//console.log(JSON.parse(data));
-				console.log("gyeonggidoMap");
-				$.each(data, function(index, item){ 
-					//console.log(item.RESTRT_NM);
+				//console.log("gyeonggidoMap");
+				$.each(data, function(index, item){
 					arrayLayout.push(
 						{restaurantName:item.RESTRT_NM, mainMenu:item.REPRSNT_FOOD_NM, latitude:item.REFINE_WGS84_LAT, longitude:item.REFINE_WGS84_LOGT,
 						 streetADDR:item.REFINE_ROADNM_ADDR, areaADDR:item.REFINE_LOTNO_ADDR, restaurantTel:item.TASTFDPLC_TELNO}
-						/* item */
 					)
 				});
+				
+				/////////////// openApi 음식점 정보가 restaurant DB에 존재한다면 중복 제거 작업 //////////////
+	            var checkArray = new Array();
+	            
+	            let apiCheck = false;
+	            for(let i = 0; i < arrayLayout.length; i++) {
+	            	const checkName = arrayLayout[i].restaurantName;
+	              	var checkAddr = arrayLayout[i].streetADDR.split(" ");
+	              	
+	              	const addr1 = addrChange(checkAddr);
+	              
+	              	for(let j = i+1; j < arrayLayout.length; j++) {
+	                	// console.log(arrayLayout[j]);
+	                	var arrayStreet = arrayLayout[j].streetADDR.split(" ");
+	                	
+	                	const addr2 = addrChange(arrayStreet);
+		           	  	
+		                if(checkName === arrayLayout[j].restaurantName && addr1 === addr2) {
+		                    if (typeof arrayLayout[j].restaurantNo == "undefined") {
+			                    console.log("동일한 애 openApi " + arrayLayout[j]);
+			                    //console.log(arrayLayout[j]);
+			                    checkArray.push(arrayLayout[j]);
+			                    apiCheck = true;
+			                    break;
+		                  	}
+		                }
+		            }
+	              
+		            if(apiCheck)  {
+						break;
+		            }
+	            }
+	            
+	            //중복된 음식점 제외 출력 (차집합)
+	            arrayLayout = arrayLayout.filter(x => !checkArray.includes(x));
+	            //console.log("하단 최종");
+	            //console.log(arrayLayout);
+	               
+	            ///////////////////////////////////////////////////////////////////////////////
 			
 				viewMap();
 	
@@ -674,9 +723,8 @@
 			
  				},
 	 			error:function(request,status,error){
-			       console.log("실패");
+			       //console.log("실패");
 			       alert("정보를 불러올 수 없습니다. 다시 시도해주세요.");
-			       location.reload();
 			    }
 			}
 		)
@@ -869,7 +917,7 @@
 						
 						 
 		if (arrayLayout[i].judgeStatus == 2) {
-			contentString += '<br><div>'+ reservationStatus + '<a href="/restaurant/getRestaurant?restaurantNo=' + arrayLayout[i].restaurantNo + '" class="button primary small" style="float:right; margin-right:20px;">상세보기</a> </div></div></div>';
+			contentString += '<br><div>'+ reservationStatus + '<a href="/restaurant/getRestaurant?restaurantNo=' + arrayLayout[i].restaurantNo + '" class="button primary small" style="float:right;">상세보기</a> </div></div></div>';
 		}	
 						 
 		//클릭 했을 때 띄어줄 정보 HTML

@@ -145,7 +145,7 @@ public class ReservationController {
 //==================================================================================================	
 	//질문
 	@RequestMapping( value="updateReservation", method=RequestMethod.GET )
-	public String updateUser( @RequestParam("reservationNo") int  reservationNo , Model model ) throws Exception{
+	public String updateReservation( @RequestParam("reservationNo") int  reservationNo , Model model ) throws Exception{
 
 		System.out.println("/reservation/updateReseration : GET");
 		//Business Logic
