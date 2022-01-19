@@ -408,6 +408,7 @@
 						 ON (rt.RESTAURANT_NO = img.RESTAURANT_NO)
 		WHERE RESTAURANT_NAME LIKE CONCAT('%',#{search.searchKeyword},'%')
 		AND RESERVATION_STATUS = 1
+		AND JUDGE_STATUS = 2
    </select>
 	
 
