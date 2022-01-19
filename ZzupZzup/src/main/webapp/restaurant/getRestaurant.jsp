@@ -671,12 +671,12 @@
 		
 		<!-- Sidebar -->
 		<jsp:include page="/layout/sidebar.jsp" />
-		
+		<%-- 
 		<!-- Report -->
 		<ul class='icons'> 
 			<jsp:include page='/report/addReportView.jsp'/>
 		</ul>
-		
+		 --%>
 	</div>
 	<!-- E:Wrapper -->
 </body>
