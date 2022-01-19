@@ -397,7 +397,9 @@
 												<c:when test="${time.restaurantDayOff != true && time.returnDay != null}">
 							                		<span class="badge badge-primary">OpenTime -   ${time.restaurantOpen}</span><br>
 							                		<span class="badge badge-primary">CloseTime - ${time.restaurantClose}</span><br>
+							                	<c:if test="${time.restaurantLastOrder != ''}">	
 							                		<span class="badge badge-warning">LastOrder - ${time.restaurantLastOrder}</span><br>
+							                	</c:if>	
 							                	<c:if test="${time.restaurantBreak != ''}">
 						                			<span class="badge badge-success">BreakTime - ${time.restaurantBreak}</span><br>
 						                		</c:if>
