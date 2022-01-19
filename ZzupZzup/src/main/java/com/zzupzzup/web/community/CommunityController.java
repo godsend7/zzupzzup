@@ -285,6 +285,8 @@ public class CommunityController {
 	public String listMyPost(@ModelAttribute("search") Search search, @RequestParam("memberId") String memberId, Model model, HttpServletRequest request, HttpSession session) throws Exception {
 		
 		System.out.println("/community/listMyPost : SERVICE");
+		System.out.println(memberId);
+		
 		
 		Member member = (Member)session.getAttribute("member");
 		List<Mark> listLike = null;
