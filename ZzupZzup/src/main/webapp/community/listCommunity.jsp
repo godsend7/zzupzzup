@@ -262,6 +262,7 @@
 </head>
 
 <body class="is-preload">
+	<c:set var="path" value="${requestScope['javax.servlet.forward.servlet_path']}" /> 
 
 	<!-- S:Wrapper -->
 	<div id="wrapper">
