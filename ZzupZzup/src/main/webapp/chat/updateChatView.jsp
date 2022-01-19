@@ -72,7 +72,7 @@
 		}
 
 		//==> Form Submit 처리
-		$("input[value='채팅방 수정']").on("click", function() {
+		$("input[value='수정']").on("click", function() {
 			fncUpdateChat();
 		});
 		
@@ -565,7 +565,7 @@
 								<div class="col-12">
 									<ul class="actions justify-content-center">
 										<li><input type="reset" value="취소" class="secondary" /></li>
-										<li><input type="submit" value="채팅방 수정" class="primary" /></li>
+										<li><input type="submit" value="수정" class="primary" /></li>
 									</ul>
 								</div>
 							</div>

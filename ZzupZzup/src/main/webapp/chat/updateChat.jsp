@@ -22,11 +22,11 @@
 		console.log("updateChat.jsp");
 		
 		//==> Button 이동 처리
-		$("input[value='채팅방 목록']").on("click", function() {
+		$("input[value='목록']").on("click", function() {
 			window.open("/chat/listChat", "_self");
 		});
 		
-		$("input[value='채팅방 수정']").on("click", function() {
+		$("input[value='수정']").on("click", function() {
 			location.href="/chat/updateChat?chatNo="+${chat.chatNo};
 		});
 		
@@ -197,8 +197,8 @@
 								<!-- Break -->
 								<div class="col-12">
 									<ul class="actions justify-content-center">
-										<li><input type="button" value="채팅방 목록" class="secondary" /></li>
-										<li><input type="button" value="채팅방 수정" class="primary" /></li>
+										<li><input type="button" value="목록" class="secondary" /></li>
+										<li><input type="button" value="수정" class="primary" /></li>
 									</ul>
 								</div>
 							</div>
