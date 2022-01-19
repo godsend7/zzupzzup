@@ -109,7 +109,7 @@
 	///////메세지와 확인버튼을 같이//////////
 			$("#userConfirm").on("click", function() {
 				fncUserConfirm();
-				fncMesseage(); //메세지 coolsms 부르는 function
+				//fncMesseage(); //메세지 coolsms 부르는 function
 				history.go(0);
 			});
 	   	/////////////////////////업주의 예약 거절/////////////////////////////////////////
@@ -164,7 +164,7 @@
 			} 
 	   		$("#cancelConfirm").on("click", function() {
 				fncCancelConfirm();
-				fncMesseage();
+				//fncMesseage();
 				history.go(0);
 			});
 			
@@ -342,8 +342,8 @@
 											</c:choose>
 												${reservation.returnRefund}
 									<c:choose>
-										<c:when test="${(reservation.reservationStatus == 3 || reservation.reservationStatus == 4) && member.memberRole != 'admin' && reservation.refundStatus != 'true' && reservation.payOption == 2}">
-										<c:if test="${reservation.chat.chatLeaderId.memberId == member.memberId }">
+										<c:when test="${(reservation.reservationStatus == 3 || reservation.reservationStatus == 4) && reservation.refundStatus != 'true' && reservation.payOption == 2}">
+										<c:if test="${reservation.chat.chatLeaderId.memberId == member.memberId || member.memberRole == 'owner'  }">
 										<input type="button" value="결제 취소" name= "refundStatus" class="button small primary stretched-link refundStatus-modal" id="refundStatus-modal" data-toggle="modal"
 										data-target="#refundStatusModal"/>
 										</c:if>
