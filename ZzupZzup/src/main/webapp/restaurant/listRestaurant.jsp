@@ -144,9 +144,10 @@
 					<div class="col-md-12">
 						<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow card h-md-250 position-relative">
 							<div class="col p-4 d-flex flex-column position-static">
-							
 								<c:if test="${!empty restaurant.restaurantRegDate}">
+									<c:if test="${member.memberRole != 'user'}">
 									<div style="text-align: right;"><span class="badge badge-success">요청 승인된 음식점</span></div>
+									</c:if>
 									<c:if test="${restaurant.reservationStatus}">
 										<div style="text-align: right;"><span class="badge badge-info">예약 및 결제 가능</span></div>
 									</c:if>

@@ -49,6 +49,7 @@
 						<h2>내 활동점수 적립 내역</h2>
 						<form id="listMyActivityScore">
 						<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
+							<input type="hidden" id="memberId" name="memberId" value="${member.memberId}"/>
 							<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
 						</form>
 						<h4 class="mb-0" style="float:left;">활동점수&nbsp;<small style="color:gray;">${getMember.accumulAllScore}</small></h4>

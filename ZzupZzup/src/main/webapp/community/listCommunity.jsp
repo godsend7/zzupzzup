@@ -30,6 +30,7 @@
 	color: #f56a6a;
 	border-radius: 5px;
 }
+.rating-info { position: absolute; top: 5px; right: 10px;font-size: 12px;}
 
 </style>
 
@@ -119,19 +120,19 @@
 									append_nod += '</a> <div class="card-body">';
 									
 									if(${member.memberRole == 'admin'}) {
-										append_nod += '<strong class="d-inline-block mb-2 text-primary">신고누적수: ' + item.postReportCount + '</strong> &nbsp;';
+										append_nod += '<div class="rating-info"><i class="fa fa-exclamation-triangle" aria-hidden="true">' + item.postReportCount + '회</i></div>';
 									}
 									
 									if(item.receiptImage != null) {
-										append_nod += '<span class="badge badge-success" style="text-align: right;">영수증 첨부된 게시물</span>';
+										append_nod += '<span class="badge badge-success" style="text-align: right;">영수증 첨부된 게시물</span> ';
 									}
 									
 									if(item.receiptImage == null) {
-										append_nod += '<span class="badge badge-danger" style="text-align: right;">영수증 미첨부된 게시물</span>';
+										append_nod += '<span class="badge badge-danger" style="text-align: right;">영수증 미첨부된 게시물</span> ';
 									}
 									
 									if(item.officialDate != null) {
-										append_nod += '<span class="badge badge-warning" style="text-align: right;">정식맛집</span>';
+										append_nod += '<span class="badge badge-warning" style="text-align: right;">정식맛집</span> ';
 									}
 									
 									append_nod += '<h3 class="card-title">' + item.postTitle + '</h3>';
@@ -373,9 +374,10 @@
 													<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/${community.postImage[0]}" height="100%">
 												</c:if>
 											</a>
-											<div class="card-body">
+											<div class="card-body position-relative">
 												<c:if test="${member.memberRole == 'admin'}">
-													<strong class="d-inline-block mb-2 text-primary">신고누적수: ${community.postReportCount}</strong> &nbsp;
+												<div class="rating-info"><i class="fa fa-exclamation-triangle" aria-hidden="true">
+															${community.postReportCount} 회</i></div>
 												</c:if>
 												<c:if test="${!empty community.receiptImage}">
 													<span class="badge badge-success" style="text-align: right;">영수증 첨부된 게시물</span>

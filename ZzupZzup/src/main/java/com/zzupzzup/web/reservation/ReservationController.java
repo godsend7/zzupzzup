@@ -101,7 +101,7 @@ public class ReservationController {
 		//return "redirect:/reservation/listReservation";
 		
 		//////////////////////////////////////////////
-		//예약이 완료되면 채팅방 상태가 인원확정 상태가 된다.
+		//예약이 완료되면 채팅방 상태가 예약확정 상태가 된다.
 		chatService.updateChatState(reservation.getChat().getChatNo(), 3);
 		//////////////////////////////////////////////
 		
