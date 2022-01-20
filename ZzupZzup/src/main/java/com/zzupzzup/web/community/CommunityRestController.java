@@ -248,6 +248,61 @@ public class CommunityRestController {
 		
 	}
 	
+	@RequestMapping(value="json/listMyLikePost")
+	public Map<String, Object> listMyLikePost(@RequestBody Search search, Model model, HttpServletRequest request, HttpSession session) throws Exception {
+		
+		System.out.println("/community/json/listMyLikePost : SERVICE");
+		
+		if (search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+
+		if (request.getParameter("page") != null) {
+			search.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+		}
+		
+		if(search.getSearchSort() == null || search.getSearchSort() == "") {
+			search.setSearchSort("latest");
+		}
+		
+		Member member = (Member)session.getAttribute("member");
+		List<Mark> listLike = null;
+		
+		if(member != null && member.getMemberRole().equals("user")) {
+			listLike = communityService.listLike(member.getMemberId());
+		}
+		
+		
+		/*
+		 * if(request.getParameter("page") != null) {
+		 * search.setCurrentPage(Integer.parseInt(request.getParameter("page"))); }
+		 */
+		
+		System.out.println("LIST_MY_LIKE_POST :: CurrentPage :: " + search.getCurrentPage());
+		
+		search.setPageSize(pageSize);
+		
+		Map<String, Object> map = communityService.listMyLikePost(search, member);
+		
+		//pageUnit, pageSize
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println("RESULT PAGE : " + resultPage);
+		
+		List<Community> list = (List<Community>)map.get("list");
+		
+		for(Community cm : list) {
+			System.out.println("LIST_MY_LIKE_POST :: CommunityList :: " + cm);
+		}
+		
+		map.put("list", map.get("list"));
+		map.put("listLike", listLike);
+		map.put("search", search);
+		map.put("totalCount",  map.get("totalCount"));
+		map.put("resultPage", resultPage);
+		
+		return map;
+	}
+	
 	
 	// AWS S3 Image Upload
 	@RequestMapping(value="json/addDragFile", method=RequestMethod.POST)

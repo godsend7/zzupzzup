@@ -309,7 +309,7 @@
 			  			  WHERE MEMBER_ID = #{member.memberId}) AS mk
 			  			  ON (mk.POST_NO = cn.POST_NO)
 			  WHERE cn.POST_SHOW_STATUS = 1			  
-			  ORDER BY cn.POST_NO LIMIT 0, 8) AS cnt
+			  ORDER BY cn.POST_NO LIMIT #{search.startRowNum}, #{search.pageSize}) AS cnt
 		LEFT OUTER JOIN (SELECT IMAGE, POST_NO
 						 FROM IMAGE) AS img
 						 ON (cnt.POST_NO = img.POST_NO);
