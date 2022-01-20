@@ -26,10 +26,9 @@ public class CommonUtil {
 	
 	private static final String ACCUMUL_CONTENTS_1 = "추천인 닉네임 적립";
 	private static final String ACCUMUL_CONTENTS_2 = "리뷰 작성";
-	private static final String ACCUMUL_CONTENTS_3 = "커뮤니티 맛집 승격";
+	private static final String ACCUMUL_CONTENTS_3 = "상대방 평가 완료";
 	private static final String ACCUMUL_CONTENTS_4 = "음식점 정보 신고";
-	private static final String ACCUMUL_CONTENTS_5 = "쩝쩝친구 매칭 후 방문완료";
-	private static final String ACCUMUL_CONTENTS_6 = "상대방 평가 완료";
+	private static final String ACCUMUL_CONTENTS_5 = "커뮤니티 맛집 승격";
 	
 	private static final String DELETE_TYPE_1 = "더 이상 이 서비스를 이용하고 싶지 않아서";
 	private static final String DELETE_TYPE_2 = "기존의 타 사이트를 이용하고 있어서";
@@ -136,9 +135,6 @@ public class CommonUtil {
 			break;
 		case 5 :
 			accumulContents = ACCUMUL_CONTENTS_5;
-			break;
-		case 6 :
-			accumulContents = ACCUMUL_CONTENTS_6;
 			break;
 		default :
 			break;

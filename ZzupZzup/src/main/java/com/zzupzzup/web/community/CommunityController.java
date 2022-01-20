@@ -233,7 +233,12 @@ public class CommunityController {
 		
 		community = communityService.getCommunity(postNo);
 		
-		communityService.officialCommunity(community);
+		if(communityService.officialCommunity(community) == 1) {
+			System.out.println("official insert success");
+			//리뷰 작성 성공 시 활동점수 추가 
+			memberService.addActivityScore(community.getMember().getMemberId(), 5, 20); //맛집 승격 시 5
+			memberService.calculateActivityScore(community.getMember().getMemberId());
+		}
 		
 		System.out.println("PROMOTION COMPLETE");
 		
