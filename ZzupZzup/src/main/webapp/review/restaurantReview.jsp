@@ -156,7 +156,7 @@
 								</span>&nbsp; ${review.member.nickname}
 							</h3>
 							
-							<p class="card-text mb-auto">${review.reviewDetail}</p>
+							<p class="card-text mb-auto reviewDetail">${review.reviewDetail}</p>
 							<div class="mb-1 text-muted">
 								<c:forEach var="hashtag" items="${review.hashTag}">
 									<span class='badge badge-pill badge-secondary'>${hashtag.hashTag}</span>
@@ -179,6 +179,9 @@
 					</div>
 				</div>
 			</c:forEach>
+			<ul class='icons'> 
+				<jsp:include page='/review/getReview.jsp'/>
+			</ul> 
 		</c:when>
 		<c:otherwise>
 			<div class="col-md-12">
@@ -240,7 +243,7 @@
 							</span>&nbsp; ${list[0].member.nickname}
 						</h3>
 						
-						<p class="card-text mb-auto">${list[0].reviewDetail}</p>
+						<p class="card-text mb-auto reviewDetail">${list[0].reviewDetail}</p>
 						<div class="mb-1 text-muted">
 							<c:forEach var="hashtag" items="${list[0].hashTag}">
 								<span class='badge badge-pill badge-secondary'>${hashtag.hashTag}</span>
@@ -266,9 +269,7 @@
 	</c:choose>
 </div>
 </c:if>
-<ul class='icons'> 
-	<jsp:include page='/review/getReview.jsp'/>
-</ul> 
+
 
 
 
