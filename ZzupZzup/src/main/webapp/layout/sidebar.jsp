@@ -64,7 +64,7 @@
 		</section>
 		
 		<header class="major">
-			<div id="sidebarLogo" class="d-block text-center"><img src="/favicon.ico"/></div>
+			<div id="sidebarLogo" class="d-block text-center"><a href="/" class="logo"><img src="/favicon.ico"/></a></div>
 			<h2 class="text-center pr-0 pb-0 mb-0"><strong class="text-primary">Welcome to ZZUPZZUPDUCE_101</strong></h2>
 		</header>
 		<c:if test="${ empty member || (! empty member && sessionScope.member.memberName == null)}">
