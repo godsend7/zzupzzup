@@ -20,7 +20,6 @@
 	overflow: hidden;
 	height: 25px;
 	padding-right: 10px;
-	white-space: nowrap;
 }
 .list-like-mark {
 	height: 50px;
@@ -117,7 +116,7 @@
 										append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/'+ item.postImage[0] +'" height="100%">';
 									}
 									
-									append_nod += '</a> <div class="card-body">';
+									append_nod += '</a> <div class="card-body position-relative">';
 									
 									if(${member.memberRole == 'admin'}) {
 										append_nod += '<div class="rating-info"><i class="fa fa-exclamation-triangle" aria-hidden="true">' + item.postReportCount + '회</i></div>';
