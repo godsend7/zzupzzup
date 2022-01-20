@@ -120,7 +120,7 @@
 				history.go(0);
 			});
 	   	/////////////////////////업주의 예약 거절/////////////////////////////////////////
-	   		$(".cancelUseModal").on("click", function() {
+	   	/* 	$(".cancelUseModal").on("click", function() {
 				console.log("#cancelUseModal");
 				console.log("${reservation.reservationNo}");
 				console.log("${reservation.reservationStatus}");
@@ -133,6 +133,7 @@
 						"contentType" : "application/json; charset=utf-8"
 					},
 					success : function(data){
+						console.log("예약거절 되나??");
 						$('#cancelUseModal').modal("hide");
 						alert("예약 거절이 완료되었습니다. 예약 거절 메세지가 해당 고객에게 전송되며 해당 고객님께서 선결제시 결제 취소 버튼을 눌러주세요.");
 						history.go(0);
@@ -141,7 +142,7 @@
 						alert(e.responseText);
 					}
 				}); 
-			});
+			}); */
 	   	//업주 예약거절 파트/////////////////////////////////////////////////////////////////////
 	   		function fncCancelConfirm() {	
 				console.log("#cancelConfirm");
@@ -161,6 +162,7 @@
 					success : function(data){
 						console.log("바꾸기 성공");
 						$('#cancelUseModal').modal("hide");
+						alert("예약 거절이 완료되었습니다. 예약 거절 메세지가 해당 고객에게 전송되며 해당 고객님께서 선결제시 결제 취소 버튼을 눌러주세요.");
 						history.go(0);
 						
 					},
