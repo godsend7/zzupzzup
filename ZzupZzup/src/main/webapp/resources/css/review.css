@@ -60,6 +60,12 @@
 	.star-small { width: 18px; height: 16px;}
 }
 
+
+.reviewDetail {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
 textarea {
 	resize: none;
 }

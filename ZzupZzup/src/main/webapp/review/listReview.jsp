@@ -250,7 +250,7 @@
 											
 											<br>
 											
-											<p class="card-text mb-auto">${review.reviewDetail}</p>
+											<p class="card-text mb-auto reviewDetail">${review.reviewDetail}</p>
 											<div class="mb-1 text-muted">
 												<c:forEach var="hashtag" items="${review.hashTag}">
 													<span class='badge badge-pill badge-secondary'>${hashtag.hashTag}</span>

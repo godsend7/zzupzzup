@@ -167,13 +167,21 @@
 				
 				$(".getReviewSlide").empty();
 		    	$(".getReviewThumbs").empty();
+		    	//$(".none-reviewImg").empty();		
+		    	
+		    	console.log(data.list.reviewImage);
+		    	
 				if (data.list.reviewImage.length != 0) {
+					$(".getReviewImg").css("display", "block");
+					$(".none-reviewImg").css("display", "none");
+					
 					$.each(data.list.reviewImage, function(index, item) {
 						//console.log(item);
 						imageOutPut(item, index);
 					});
 				} else {
-					$("#container").text("등록된 이미지 없습니다.");
+					$(".getReviewImg").css("display", "none");
+					$(".none-reviewImg").css("display", "block");
 				}
 				
 				//좋아요
@@ -310,54 +318,16 @@
 				<br/>
 				
 				<label for="reviewImage">리뷰 이미지</label>
-				<!-- <div class="bd-example">
-					<div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-ride="carousel">
-						
-						 <div class="carousel-inner" id="reviewImage">
-							이미지 보여지는 곳
-						</div> 
-						<button class="carousel-control-prev btn-outline-link" type="button" id="car_prev" data-target="#carouselExampleIndicators" data-slide="prev"
-					  		style="border: none; outline: none; box-shadow: none; height: 200px; background-color:transparent;">
-					    	<span class="carousel-control-prev-icon" aria-hidden="true" style="width: 50px; height: 50px;"></span>
-					    	<span class="sr-only">Previous</span>
-					  	</button>
-					  	<button class="carousel-control-next btn-outline-link" type="button" id="car_next" data-target="#carouselExampleIndicators" data-slide="next"
-					  		style="border: none; outline: none; box-shadow: none; height: 200px; background-color:transparent;">
-					    	<span class="carousel-control-next-icon" aria-hidden="true" style="width: 50px; height: 50px;"></span>
-					    	<span class="sr-only">Next</span>
-					  	</button>
-						<a class="carousel-control-prev" data-target="#carouselExampleIndicators" data-slide="prev">
-							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							<span class="sr-only">Previous</span>
-						</a> 
-						<a class="carousel-control-next" data-target="#carouselExampleIndicators" data-slide="next">
-							<span class="carousel-control-next-icon" aria-hidden="true"></span>
-							<span class="sr-only">Next</span>
-						</a>
-					</div>
-				</div> -->
-				
 				
 		        <div id="container" class="getReviewImg">
-		        
-		            <ul class="slide getReviewSlide">
-		                <!-- <li class="first" id="slide-1"><img src="https://placeimg.com/640/480/arch" alt="" /></li>
-		                <li id="slide-2"><img src="https://placeimg.com/640/480/nature" alt="" /></li>
-		                <li id="slide-3"><img src="https://placeimg.com/640/480/people" alt="" /></li>
-		                <li id="slide-4"><img src="https://placeimg.com/640/480/tech" alt="" /></li> -->
-		                
-		            </ul>
+		            <ul class="slide getReviewSlide"></ul>
 		
-		            <ul class="thumbs getReviewThumbs">
-		                <!-- <li><a href="#slide-1"><img src="https://placeimg.com/640/480/arch" /></a></li>
-		                <li><a href="#slide-2"><img src="https://placeimg.com/640/480/nature" /></a></li>
-		                <li><a href="#slide-3"><img src="https://placeimg.com/640/480/people" /></a></li>
-		                <li><a href="#slide-4"><img src="https://placeimg.com/640/480/tech" /></a></li> -->
-		                
-		            </ul>
-		      </div>
+		            <ul class="thumbs getReviewThumbs"></ul>
+		      	</div>
 
-
+				<div class="none-reviewImg" style="display: none; text-align:center;"> 
+					등록된 이미지가 없습니다. 
+				</div>
 				
 				<br/>
 				

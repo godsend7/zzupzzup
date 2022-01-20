@@ -260,7 +260,7 @@
 				    						append_nod += item.member.memberRank + '</span>';
 				    						append_nod += '  ' + item.member.nickname;
 				    						append_nod += '</h3>';
-				    						append_nod += '<p class="card-text mb-auto">' + item.reviewDetail + '</p>';
+				    						append_nod += '<p class="card-text mb-auto reviewDetail">' + item.reviewDetail + '</p>';
 				    						append_nod += '<div class="mb-1 text-muted">';
 				    						
 				    						console.log(item.hashTag);

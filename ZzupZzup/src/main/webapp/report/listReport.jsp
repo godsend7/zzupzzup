@@ -13,7 +13,25 @@
 <link rel="stylesheet" href="/resources/css/report.css" />
 <!--  ///////////////////////// CSS ////////////////////////// -->
 <style>
+.tooltip-link::before{
+    content: attr(data-tooltip); /*툴팁 표시 내용은 버튼의 "data-tooltip" 속성값으로 */
+    position: absolute;
+    background-color: rgba(0,0,0,0.5);
+    color: #fff;
+    padding: 10px 7px;
+    border-radius: 10px;
+    max-width: 300px;
+    width: 50%; /* 버튼 너비 250% 크기만큼 툴팁 크기 설정 */
+    left: 65%; /* 버튼 왼쪽에서 부터 버튼 너비 25% 이동한 위치에 툴팁 왼쪽이 오게 */
+    bottom: 60%; /* 버튼 밑에서 부터 버튼 높이 120% 높이에 툴팁 밑부분이 오게 */
+    opacity: 0; /* 기본 상태는 안보이게 */
+    transition: all 0.5s linear; /* 나타났다 사라지는 애니메이션 */
+    z-index: 99;
+}
 
+.tooltip-link:hover::before {
+    opacity: 1;
+}
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -142,9 +160,17 @@
 							<input type="hidden" id="currentPage" name="currentPage" value=""/>
 						</form>
 						
+						
 							<div class="row table-list mb-2">
 					 		 	<c:forEach var="report" items= "${list}">
-			 		 				<div class="col-md-12">
+					 		 		<c:choose>
+					 		 			<c:when test="${member.memberRole eq 'admin'}">
+					 		 				<div class="col-md-12 tooltip-link" data-tooltip="마우스 오른쪽 버튼을 클릭 시 확인 처리">
+					 		 			</c:when>
+					 		 			<c:otherwise>
+					 		 				<div class="col-md-12">
+					 		 			</c:otherwise>
+					 		 		</c:choose>
 										<div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow card h-md-250 position-relative">
 											<div class="col p-4 d-flex flex-column position-static divBox">
 												<input type="hidden" name="reportNo" value="${report.reportNo}">
