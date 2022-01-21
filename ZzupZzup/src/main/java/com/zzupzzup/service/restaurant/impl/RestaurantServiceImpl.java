@@ -14,6 +14,7 @@ import com.zzupzzup.service.domain.Member;
 import com.zzupzzup.service.domain.Restaurant;
 import com.zzupzzup.service.domain.RestaurantMenu;
 import com.zzupzzup.service.domain.RestaurantTime;
+import com.zzupzzup.service.member.MemberDAO;
 import com.zzupzzup.service.restaurant.RestaurantDAO;
 import com.zzupzzup.service.restaurant.RestaurantService;
 
@@ -24,6 +25,10 @@ public class RestaurantServiceImpl implements RestaurantService {
 	@Autowired
 	@Qualifier("restaurantDaoImpl")
 	private RestaurantDAO restaurantDAO;
+	
+	@Autowired
+	@Qualifier("memberDaoImpl")
+	private MemberDAO memberDAO;
 	
 	/*
 	 * public void setRestaurantDAO(RestaurantDAO restaurantDAO) {
@@ -73,7 +78,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 		map.put("memberId", memberId);
 		
 		map.put("list", restaurantDAO.listMyRestaurant(map));
-		map.put("totalCount", restaurantDAO.getTotalCount(search));
+		map.put("totalCount", restaurantDAO.getMyRestaurantTotalCount(map));
 		
 		return map;
 	}

@@ -19,7 +19,7 @@
 <script type="text/javascript">
 	
 	function fncPageNavigation(currentPage) {
-		console.log(currentPage);
+		//alert(currentPage);
 		$("#currentPage").val(currentPage);
 		$("#listOwner").attr("method", "POST").attr("action","/member/listOwner").submit();
 	}

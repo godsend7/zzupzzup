@@ -98,8 +98,8 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int sendCertificatedNum(String certificatedNum, String phoneNum) throws Exception {
 		// TODO Auto-generated method stub
-		String api_key = "NCSW3I0BU5B18BUD";
-        String api_secret = "N0PWJKYZWLLV6TZKQYYF57HL0XZ9NKLQ";
+		String api_key = "NCSKZ2DUEFRGABYH";
+        String api_secret = "WE802R3R9WV0CRYQFBZRYQWDDW9T6JOH";
         Message coolsms = new Message(api_key, api_secret);
 
         // 4 params(to, from, type, text) are mandatory. must be filled

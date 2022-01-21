@@ -126,7 +126,17 @@
 	
 	<select 	id="listOwner"	parameterType="map" resultMap="memberSelectMap">
 		SELECT MEMBER_LIST.*
-		FROM (<include refid="listUserCommon"/>) MEMBER_LIST
+		FROM (
+			SELECT MEMBER_ROLE, MEMBER_NAME, COUNT_RES.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+			FROM zzupzzup.MEMBER
+			RIGHT JOIN (
+					SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(RESTAURANT_NAME) AS COUNT_RESTAURANT
+					FROM zzupzzup.RESTAURANT RIGHT JOIN zzupzzup.MEMBER
+					ON zzupzzup.RESTAURANT.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+					GROUP BY zzupzzup.MEMBER.MEMBER_ID
+				) COUNT_RES
+			ON COUNT_RES.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+			) MEMBER_LIST
 		WHERE MEMBER_ROLE = 'owner'
 		ORDER BY MEMBER_LIST.MEMBER_ID LIMIT #{search.startRowNum}, #{search.pageSize}
 	</select>
@@ -217,14 +227,25 @@
 	<select id="getOwnerTotalCount" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM (SELECT MEMBER_LIST.*
-			  FROM (<include refid="listUserCommon"/>) MEMBER_LIST
+			  FROM (
+					SELECT MEMBER_ROLE, MEMBER_NAME, COUNT_RES.*, REG_DATE, DELETE_DATE, BLACKLIST_REG_DATE
+					FROM zzupzzup.MEMBER
+					RIGHT JOIN (
+							SELECT zzupzzup.MEMBER.MEMBER_ID, COUNT(RESTAURANT_NAME) AS COUNT_RESTAURANT
+							FROM zzupzzup.RESTAURANT RIGHT JOIN zzupzzup.MEMBER
+							ON zzupzzup.RESTAURANT.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+							GROUP BY zzupzzup.MEMBER.MEMBER_ID
+						) COUNT_RES
+					ON COUNT_RES.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID
+					) MEMBER_LIST
 			  WHERE MEMBER_ROLE = 'owner'
 		) COUNTTABLE
 	</select>
 	
 	<select id="getActivityScoreTotalCount" parameterType="map" resultType="int">
 		SELECT COUNT(*)
-		FROM (SELECT MEMBER.MEMBER_ID, ACCUMULATE_TYPE, ACCUMULATE_SCORE, ACCUMULATE_DATE
+		FROM (
+			  SELECT MEMBER.MEMBER_ID, ACCUMULATE_TYPE, ACCUMULATE_SCORE, ACCUMULATE_DATE
 			  FROM zzupzzup.ACTIVITY_SCORE, zzupzzup.MEMBER
 			  WHERE zzupzzup.ACTIVITY_SCORE.MEMBER_ID = zzupzzup.MEMBER.MEMBER_ID AND zzupzzup.MEMBER.MEMBER_ID = #{memberId}
 		) COUNTTABLE

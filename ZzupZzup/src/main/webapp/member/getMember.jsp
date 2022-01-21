@@ -20,7 +20,7 @@
 
 	//검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용
 	function fncPageNavigation(currentPage) {
-		console.log(currentPage);
+		//alert(currentPage);
 		$("#currentPage").val(currentPage);
 	   	$("#restaurantForm").attr("method", "GET").attr("action", "/member/getMember").submit();
 	   	//self.location = "/member/getMember?memberId=${member.memberId}";
@@ -98,7 +98,7 @@
 															  <path fill-rule="evenodd"
 																	d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
 																	/>
-															</svg> ${member.mannerScore}
+															</svg> ${member.mannerAllScore}
 														</span>
 													</c:if>
 												</div>
