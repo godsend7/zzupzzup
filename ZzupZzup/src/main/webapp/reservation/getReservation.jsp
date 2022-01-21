@@ -116,7 +116,7 @@
 	///////메세지와 확인버튼을 같이//////////
 			$("#userConfirm").on("click", function() {
 				fncUserConfirm();
-				//fncMesseage(); //메세지 coolsms 부르는 function
+				fncMesseage(); //메세지 coolsms 부르는 function
 				history.go(0);
 			});
 	   	/////////////////////////업주의 예약 거절/////////////////////////////////////////
@@ -173,7 +173,7 @@
 			} 
 	   		$("#cancelConfirm").on("click", function() {
 				fncCancelConfirm();
-				//fncMesseage();
+				fncMesseage();
 				history.go(0);
 			});
 			

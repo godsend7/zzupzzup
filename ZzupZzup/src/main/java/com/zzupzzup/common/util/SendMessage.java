@@ -21,8 +21,8 @@ public class SendMessage {
 		 	//업주 경우 받는 업주 핸드폰번호 : 해당유저가 예약번호/닉네임 님이 예약을 취소하셨습니다.
 		 	//유저 경우 받는 유저 핸드폰번호 : 업주가 (가게사유 reservationCanceltype+reservationCancelReason)으로 고객님의 예약을 거절하셨습니다.
 		    
-		 	String api_key = "NCSNKY0LCPXFSTX8";
-		    String api_secret = "JRFMP2VNN1JPWKAQS7XQSILZ1NI6TKAR";
+		 	String api_key = "NCSKZ2DUEFRGABYH";
+		    String api_secret = "WE802R3R9WV0CRYQFBZRYQWDDW9T6JOH";
 		    Message coolsms = new Message(api_key, api_secret);
 		    Member member = new Member();
 		
