@@ -236,10 +236,12 @@
 			var ownerImage = $("input[id='ownerImage']").val();
 			var restaurantImage = $('input[name="fileDragInput"]')[0].files;
 			var postNo = $("input[name='postNo']").val();
+			var fileDragInput = $("input[name='fileDragInput']").val();
 			
 			console.log(restaurantName);
 			console.log(postNo);
 			console.log(restaurantImage);
+			console.log(fileDragInput);
 		
 			if(restaurantName == null || restaurantName.length<1){
 				alert("음식점명을 입력해주세요");
@@ -293,6 +295,11 @@
 			
 			if(restaurantImage == null || restaurantImage.length<1){
 				alert("음식점 이미지는 필수로 첨부해주셔야 합니다.");
+				return;
+			}
+			
+			if(fileDragInput.length >= 40){
+				alert("이미지 파일명이 너무 깁니다");
 				return;
 			}
 			

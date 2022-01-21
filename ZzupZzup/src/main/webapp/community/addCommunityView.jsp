@@ -172,7 +172,7 @@
 				return;
 			}
 			
-			if(fileDragInput.length >= 50){
+			if(fileDragInput.length >= 40){
 				alert("이미지 파일명이 너무 깁니다");
 				return;
 			}
