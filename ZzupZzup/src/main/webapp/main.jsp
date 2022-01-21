@@ -212,13 +212,32 @@
 				}),
 				success : function(data, status) {
 					
-					console.log(data.status.code);
+					
 					if (data.status.code == 0) {
-						console.log(data.results[0].region);
+						//console.log(data.results[0].region);
+						var thisAddr = "";
+						$.each (data.results[0].region, function(index, item){ 
+							//console.log(index);
+							if (index != "area0") {
+								//console.log(item.name);
+								thisAddr += item.name + " ";
+							}
+						});
 						
-						//$("#startInput").val(data);
+						$("#startInput").attr("placeholder", "현재위치 : " + thisAddr);
+						startLocation.push({"title":"현재위치"});
+						startLocation.push({"latitude":nowLatitude, "longitude":nowLongitude});
+						
+						console.log(startLocation);
+						
+					} else {
+						$("#startInput").attr("placeholder",'');
 					}
-				}
+				},
+				error : function(error) {
+					console.log(error);
+					$("#startInput").val('');
+				} 
 			});
 		});
 		
@@ -268,6 +287,7 @@
 	 			var thisInput = $(this).attr("id");
 	 			
 	 			if (thisInput == "startInput") {
+	 				startLocation = new Array();
 	 				startLocation.push({"title":"출발지"});
 	 				startLocation.push(ui.item.id);
 					//startLocation = ui.item.id;
@@ -366,41 +386,7 @@
 	        clickable: true,
 	        map: map
 		});
-		/* 
-		var startMarker = new naver.maps.Marker({
-		    position: polylinePath[0], //마크 표시할 위치 배열의 시작 위치
-		    map: map,
-		    icon: {
-	   			url:"/resources/images/main/map_marker.png"
-	   		}
-		});
-		
-		var goalMarker = new naver.maps.Marker({
-		    position: polylinePath[polylinePath.length-1], //마크 표시할 위치 배열의 마지막 위치
-		    map: map,
-		    icon: {
-	   			url:"/resources/images/main/map_marker.png"
-	   		}
-		});
-		
-		//클릭 했을 때 띄어줄 정보 HTML
-		var startInfowindow = new naver.maps.InfoWindow({
-		    content: '<div style="padding:10px; width:280px;"><b>출발지<br>'+startLocation.restaurantName +'<br>'+startLocation.streetAddress,
-		    maxWidth: 300,
-		    borderColor: "#f56a6a",
-		    borderWidth: 5
-		});
-		
-		var goalInfowindow = new naver.maps.InfoWindow({
-		    content: '<div style="padding:10px; width:280px;"><b>목적지<br>'+goalLocation.restaurantName +'<br>'+goalLocation.streetAddress,
-		    maxWidth: 300,
-		    borderColor: "#f56a6a",
-		    borderWidth: 5
-		});
-		
-		//정보창 출력
-		startInfowindow.open(map, startMarker);
-		goalInfowindow.open(map, goalMarker); */
+	
 		
 		viewCustomOverlay(startLocation);
 		viewCustomOverlay(goalLocation);
@@ -500,20 +486,34 @@
 		};
 
 		CustomOverlay.prototype._prepareDOM = function() {
-		    var markerContent = [
-		        '<div style="position:absolute;">',
-		            '<div class="infowindow" style="position:absolute;width:240px;height:110px;top:-140px;left:-110px;background-color:white;z-index:1;border:1px solid black;margin:0;padding:10px; border-radius:1em;">',
-		                '<div style="font-size:13px; color:#f56a6a;">['+ locationArray[0].title +']</div>',
-		                '<div style="font-size:13px;"><b>'+locationArray[1].restaurantName+'</b> <br>'+locationArray[1].streetAddress+'<br>'+locationArray[1].restaurantTel+'</div>',
-		                '<div style="margin: 0px; padding: 0px; width: 0px; height: 0px; position: absolute; border-width: 24px 10px 0px; border-style: solid; border-color: rgb(51, 51, 51) transparent; border-image: initial; pointer-events: none; box-sizing: content-box !important; transform-origin: right bottom 0px; transform: skewX(0deg); bottom: -25px; left: 110px;"></div>',
-		                '<div style="margin: 0px; padding: 0px; width: 0px; height: 0px; position: absolute; border-width: 24px 10px 0px; border-style: solid; border-color: rgb(255, 255, 255) transparent; border-image: initial; pointer-events: none; box-sizing: content-box !important; transform-origin: right bottom 0px; transform: skewX(0deg); bottom: -22px; left: 110px;"></div>',
-		            '</div>',
-		            '<div class="pin_s" style="cursor: pointer; width: 22px; height: 30px;">',
-	                '<img class="info" src="/resources/images/main/map_marker.png" alt="" style="margin: 0px; padding: 0px; border: 0px solid transparent; display: block; max-width: none; max-height: none; -webkit-user-select: none; position: absolute; width: 22px; height: 30px; left: 0px; top: 0px;">',
-	            	'</div>',
-	       		'</div>'
-		    ].join('');
-	
+			if (locationArray[0].title == "현재위치") {
+				var markerContent = [
+			        '<div style="position:absolute;">',
+			            '<div class="infowindow" style="position:absolute;width:120px;height:45px;top:-75px;left:-50px;background-color:white;z-index:1;border:1px solid black;margin:0;padding:10px; border-radius:1em;">',
+			                '<div style="font-size:15px; text-align:center;">'+ locationArray[0].title +'</div>',
+			                '<div style="margin: 0px; padding: 0px; width: 0px; height: 0px; position: absolute; border-width: 24px 10px 0px; border-style: solid; border-color: rgb(51, 51, 51) transparent; border-image: initial; pointer-events: none; box-sizing: content-box !important; transform-origin: right bottom 0px; transform: skewX(0deg); bottom: -25px; left: 50px;"></div>',
+			                '<div style="margin: 0px; padding: 0px; width: 0px; height: 0px; position: absolute; border-width: 24px 10px 0px; border-style: solid; border-color: rgb(255, 255, 255) transparent; border-image: initial; pointer-events: none; box-sizing: content-box !important; transform-origin: right bottom 0px; transform: skewX(0deg); bottom: -22px; left: 50px;"></div>',
+			            '</div>',
+			            '<div class="pin_s" style="cursor: pointer; width: 22px; height: 30px;">',
+		                '<img class="info" src="/resources/images/main/map_marker.png" alt="" style="margin: 0px; padding: 0px; border: 0px solid transparent; display: block; max-width: none; max-height: none; -webkit-user-select: none; position: absolute; width: 22px; height: 30px; left: 0px; top: 0px;">',
+		            	'</div>',
+		       		'</div>'
+			    ].join('');
+			} else {
+			    var markerContent = [
+			        '<div style="position:absolute;">',
+			            '<div class="infowindow" style="position:absolute;width:240px;height:110px;top:-140px;left:-110px;background-color:white;z-index:1;border:1px solid black;margin:0;padding:10px; border-radius:1em;">',
+			                '<div style="font-size:13px; color:#f56a6a;">['+ locationArray[0].title +']</div>',
+			                '<div style="font-size:13px;"><b>'+locationArray[1].restaurantName+'</b> <br>'+locationArray[1].streetAddress+'<br>'+locationArray[1].restaurantTel+'</div>',
+			                '<div style="margin: 0px; padding: 0px; width: 0px; height: 0px; position: absolute; border-width: 24px 10px 0px; border-style: solid; border-color: rgb(51, 51, 51) transparent; border-image: initial; pointer-events: none; box-sizing: content-box !important; transform-origin: right bottom 0px; transform: skewX(0deg); bottom: -25px; left: 110px;"></div>',
+			                '<div style="margin: 0px; padding: 0px; width: 0px; height: 0px; position: absolute; border-width: 24px 10px 0px; border-style: solid; border-color: rgb(255, 255, 255) transparent; border-image: initial; pointer-events: none; box-sizing: content-box !important; transform-origin: right bottom 0px; transform: skewX(0deg); bottom: -22px; left: 110px;"></div>',
+			            '</div>',
+			            '<div class="pin_s" style="cursor: pointer; width: 22px; height: 30px;">',
+		                '<img class="info" src="/resources/images/main/map_marker.png" alt="" style="margin: 0px; padding: 0px; border: 0px solid transparent; display: block; max-width: none; max-height: none; -webkit-user-select: none; position: absolute; width: 22px; height: 30px; left: 0px; top: 0px;">',
+		            	'</div>',
+		       		'</div>'
+			    ].join('');
+			}
 		    this._element = $(markerContent);
 		    this._iw = this._element.find('.infowindow');
 		    this._mk = this._element.find("img"); 
