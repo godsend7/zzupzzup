@@ -381,7 +381,7 @@
 			// 현재 참여중이 아닌 유저 필터링
 			if(!flag){
 				//모집중이나 인원확정 아닌 채팅방은 들어갈 수 없다.
-				if(chatState != "모집중" && chatState != "인원확정"){
+				if(chatState != "모집중"){
 					$('#chatStateModal').modal('show');
 					return;
 				}
