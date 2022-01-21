@@ -120,10 +120,12 @@
 		var menuPrice = $("input[name='restaurantMenus[0].menuPrice']").val();
 		var ownerImage = $("input[id='ownerImage']").val();
 		var restaurantImage = $('input[name="fileDragInput"]')[0].files;
-		/* var restaurantImage = $("input[name='restaurantImage[0].restaurantImage']").val(); */
+		if($("input[name='restaurantImage[0]']")){
+			var restaurantImage2 = $("input[name='restaurantImage[0]']").val();			
+			console.log(restaurantImage2);
+		}
 		
 		console.log(restaurantName);
-		
 	
 		if(restaurantName == null || restaurantName.length<1){
 			alert("음식점명을 입력해주세요");
@@ -166,8 +168,10 @@
 		}
 		
 		if(restaurantImage == null || restaurantImage.length<1){
-			alert("음식점 이미지는 필수로 첨부해주셔야 합니다.");
-			return;
+			if(restaurantImage2 == null || restaurantImage2.length < 1){
+				alert("음식점 이미지는 필수로 첨부해주셔야 합니다.");
+				return;				
+			}
 		}
 		
 		/* if(ownerImage == null || ownerImage.length<1){

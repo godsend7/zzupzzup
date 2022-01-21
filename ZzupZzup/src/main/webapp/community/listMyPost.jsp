@@ -19,9 +19,7 @@
 	overflow: hidden;
 	height: 25px;
 	padding-right: 10px;
-	white-space: nowrap;
 }
-
 </style>
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
@@ -96,7 +94,7 @@
 									
 									if(item.postImage[0] != null) {
 										//append_nod += '<img src="/resources/images/uploadImages/' + item.postImage[0] + '" height="100%">';
-										append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/${community.postImage[0]}" height="100%">';
+										append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/'+item.postImage[0]+'" height="100%">';
 									}
 									
 									append_nod += '</a> <div class="card-body">';

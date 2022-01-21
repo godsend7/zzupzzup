@@ -142,7 +142,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="getMember", method=RequestMethod.GET)
-	public String getMember(@RequestParam("memberId") String memberId, HttpServletRequest request) throws Exception {
+	public String getMember(@RequestParam("memberId") String memberId, @ModelAttribute("search") Search search, HttpServletRequest request) throws Exception {
 		
 		System.out.println("/member/getMember : GET");
 		
@@ -153,7 +153,7 @@ public class MemberController {
 		request.setAttribute("member", member);
 		
 		//owner의 경우 등록된 음식점 수 노출
-		Search search = new Search();
+		//search = new Search();
 		
 		if(search.getCurrentPage() == 0){
 			search.setCurrentPage(1);
@@ -166,9 +166,12 @@ public class MemberController {
 		search.setPageSize(pageSize);
 		
 		Map<String, Object> myRestaurant = restaurantService.listMyRestaurant(search, member.getMemberId());
-		//Page resultPage = new Page(search.getCurrentPage(), ((Integer)myRestaurant.get("totalCount")).intValue(), pageUnit, pageSize);
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)myRestaurant.get("totalCount")).intValue(), pageUnit, pageSize);
 		
 		request.setAttribute("myRestaurant", myRestaurant.get("list"));
+		request.setAttribute("search", search);
+		request.setAttribute("totalCount", myRestaurant.get("totalCount"));
+		request.setAttribute("resultPage", resultPage);
 		
 		
 		return "forward:/member/getMember.jsp";

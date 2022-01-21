@@ -113,7 +113,7 @@
 									dom += '<span class="badge badge-success chat-state">모집중</span>';
 								break
 								case 2:
-									dom += '<span class="badge badge-warning chat-state">인원확정</span>';
+									dom += '<span class="badge badge-primary chat-state">인원확정</span>';
 								break
 								case 3:
 									dom += '<span class="badge badge-info chat-state">예약확정</span>';
@@ -380,8 +380,8 @@
 			
 			// 현재 참여중이 아닌 유저 필터링
 			if(!flag){
-				//모집중이 아닌 채팅방은 들어갈 수 없다.
-				if(chatState != "모집중"){
+				//모집중이나 인원확정 아닌 채팅방은 들어갈 수 없다.
+				if(chatState != "모집중" && chatState != "인원확정"){
 					$('#chatStateModal').modal('show');
 					return;
 				}
@@ -592,7 +592,7 @@
 															<span class="badge badge-success chat-state">모집중</span>
 														</c:when>
 														<c:when test="${chat.chatState=='2'}">
-															<span class="badge badge-warning chat-state">인원확정</span>
+															<span class="badge badge-primary chat-state">인원확정</span>
 														</c:when>
 														<c:when test="${chat.chatState=='3'}">
 															<span class="badge badge-info chat-state">예약확정</span>

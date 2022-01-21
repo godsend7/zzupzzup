@@ -20,10 +20,21 @@
 	overflow: hidden;
 	height: 25px;
 	padding-right: 10px;
-	white-space: nowrap;
 }
+.list-like-mark {
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	border: 3px solid #f56a6a;
+	color: #f56a6a;
+	border-radius: 5px;
+}
+.rating-info { position: absolute; top: 5px; right: 10px;font-size: 12px;}
 
 </style>
+
+<!-- 현재 나의 PATH 가져오기 -->
+<c:set var="path" value="${requestScope['javax.servlet.forward.servlet_path']}" /> 
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
@@ -63,8 +74,12 @@
 						console.log($("#searchCondition").val());
 						
 						$.ajax({
-							
+							<c:if test = "${fn:contains(path, 'listCommunity')}">
 							url : "/community/json/listCommunity",
+							</c:if>
+							<c:if test = "${fn:contains(path, 'listMyLikePost')}">
+							url : "/community/json/listMyLikePost",
+							</c:if>
 							type : "POST",
 							dataType : "json",
 							contentType : "application/json",
@@ -101,22 +116,22 @@
 										append_nod += '<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/'+ item.postImage[0] +'" height="100%">';
 									}
 									
-									append_nod += '</a> <div class="card-body">';
+									append_nod += '</a> <div class="card-body position-relative">';
 									
 									if(${member.memberRole == 'admin'}) {
-										append_nod += '<strong class="d-inline-block mb-2 text-primary">신고누적수: ' + item.postReportCount + '</strong> &nbsp;';
+										append_nod += '<div class="rating-info"><i class="fa fa-exclamation-triangle" aria-hidden="true">' + item.postReportCount + '회</i></div>';
 									}
 									
 									if(item.receiptImage != null) {
-										append_nod += '<span class="badge badge-success" style="text-align: right;">영수증 첨부된 게시물</span>';
+										append_nod += '<span class="badge badge-success" style="text-align: right;">영수증 첨부된 게시물</span> ';
 									}
 									
 									if(item.receiptImage == null) {
-										append_nod += '<span class="badge badge-danger" style="text-align: right;">영수증 미첨부된 게시물</span>';
+										append_nod += '<span class="badge badge-danger" style="text-align: right;">영수증 미첨부된 게시물</span> ';
 									}
 									
 									if(item.officialDate != null) {
-										append_nod += '<span class="badge badge-warning" style="text-align: right;">정식맛집</span>';
+										append_nod += '<span class="badge badge-warning" style="text-align: right;">정식맛집</span> ';
 									}
 									
 									append_nod += '<h3 class="card-title">' + item.postTitle + '</h3>';
@@ -127,11 +142,11 @@
 									append_nod += '<small class="text-muted">' + item.postRegDate + '</small>';
 									append_nod += '</div></div></div>';
 									
-									append_nod += '<button type="button" class="btn btn-outline-danger btn-sm btn-block">';
+									append_nod += '<div class="list-like-mark">';
 									append_nod += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">';
 									append_nod += '<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />';
 									append_nod += '</svg> ' + item.likeCount + '';		
-									append_nod += '</button><br> <br>';			
+									append_nod += '</div><br> <br>';			
 									append_nod += '</div>';
 									
 								});
@@ -358,9 +373,10 @@
 													<img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/${community.postImage[0]}" height="100%">
 												</c:if>
 											</a>
-											<div class="card-body">
+											<div class="card-body position-relative">
 												<c:if test="${member.memberRole == 'admin'}">
-													<strong class="d-inline-block mb-2 text-primary">신고누적수: ${community.postReportCount}</strong> &nbsp;
+												<div class="rating-info"><i class="fa fa-exclamation-triangle" aria-hidden="true">
+															${community.postReportCount} 회</i></div>
 												</c:if>
 												<c:if test="${!empty community.receiptImage}">
 													<span class="badge badge-success" style="text-align: right;">영수증 첨부된 게시물</span>
@@ -381,11 +397,12 @@
 											</div>
 										</div>
 	
-										<button type="button" class="btn btn-outline-danger btn-sm btn-block">
+										<div class="list-like-mark">
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
 		  										<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
 											</svg> <span class="likeCount">${community.likeCount}</span>
-										</button><br> <br>
+										</div>
+										<br> <br>
 	
 									</div>
 								</c:forEach>

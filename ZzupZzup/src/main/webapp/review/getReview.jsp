@@ -196,7 +196,7 @@
 				$(".footerBox").empty();
 				$(".footer2").empty();
 				if (${member.memberRole eq "user"} && ("${member.memberId}" == data.list.member.memberId)) {
-					var footer = "<div class='footer2'><input type='button' class='normal' id='reviewDelete' value='삭제'></input> "
+					var footer = "<div class='footer2'><input type='button' class='secondary' id='reviewDelete' value='삭제'></input> "
 								+ "<input type='button' class='primary' id='reviewUpdate' value='수정'></input></div>";
 					
 					$(".review-modal-footer").append(footer);

@@ -17,6 +17,14 @@
 
 <!--  ///////////////////////// JavaScript ////////////////////////// -->
 <script type="text/javascript">
+
+	//검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용
+	function fncPageNavigation(currentPage) {
+		console.log(currentPage);
+		$("#currentPage").val(currentPage);
+	   	$("#restaurantForm").attr("method", "GET").attr("action", "/member/getMember").submit();
+	   	//self.location = "/member/getMember?memberId=${member.memberId}";
+	}
 	
 	$(function() {
 		console.log("getMember.jsp");
@@ -59,6 +67,10 @@
 							<div class="col-md-12 mx-auto">
 								<h2 class="">내 정보 조회</h2>
 								<div class="my-4">
+									<form id="restaurantForm" name="restaurantForm">
+													<input type="hidden" id="memberId" name="memberId" value="${member.memberId}"/>
+													<input type="hidden" id="currentPage" name="currentPage" value="${search.currentPage}"/>
+												</form>
 									<form id="getMember">
 										<div class="row mt-5 align-items-center">
 											<div class="col-md-3">
@@ -256,7 +268,7 @@
 													</c:if>
 												</div>
 												<!-- 등록된 음식점 수 띄우기 -->
-												
+												<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
 													<c:set var="i" value="0" />
 													<c:forEach var="restaurant" items="${myRestaurant}">
 													<c:if test="${restaurant.member.memberId == member.memberId}">
@@ -301,6 +313,10 @@
 													</div>
 													</c:if>
 													</c:forEach>
+													
+													<!-- PageNavigation Start... -->
+													<div class="w-100"><jsp:include page="../common/pageNavigator.jsp"/></div>
+													<!-- PageNavigation End... -->
 												</div>
 											</c:if>
 										<div align="center" class="mt-5">

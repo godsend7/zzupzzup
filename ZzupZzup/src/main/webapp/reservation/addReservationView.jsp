@@ -428,10 +428,10 @@
 									<label for="huPayment">방문 결제</label>
 								</div>
 								
-								<div class="col-12">
-									<ul class="actions">
+								<div class="col-12 mt-5">
+									<ul class="actions d-flex justify-content-center">
+										<li><input type="reset" value="이전 페이지" class="button secondary reset" /></li>
 										<li><input type="button" value="결제하기" class="primary payment1 payment-btn"/></li>
-										<li><input type="reset" value="이전 페이지" class="normal reset" /></li>
 									</ul>
 								</div>
 							</div>

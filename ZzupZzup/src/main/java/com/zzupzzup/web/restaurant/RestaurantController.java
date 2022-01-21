@@ -287,18 +287,47 @@ public class RestaurantController {
 //			String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
 //			restaurant.setOwnerImage(ownerImage);	
 //		}
+		
+		System.out.println("====");
+		System.out.println(restaurant);
+		System.out.println(restaurant.getOwnerImage());
+		
+		String filenamee = uploadOwnerFile.getOriginalFilename();
+		
+		System.out.println(filenamee);
+		
+		if(filenamee == null || filenamee.isEmpty()) {
+			Restaurant restaurantt = new Restaurant();
+			restaurantt = restaurantService.getRestaurant(restaurant.getRestaurantNo());
+			
+			if(restaurantt.getOwnerImage() != (filenamee)) {
+				System.out.println("기존 이미지 있어");
+				restaurant.setOwnerImage(restaurantt.getOwnerImage());
+			}else {
+				System.out.println("기존 이미지 없어");
+			}
+		}else {
+			s3ImageUpload = new S3ImageUpload();
+			String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadOwnerFile.getOriginalFilename());
+			String vacant = "restaurant/" + fileName;
+			s3ImageUpload.uploadFile(uploadOwnerFile, vacant);
+			
+			restaurant.setOwnerImage(fileName);
+			
+			uploadFilePath(uploadFile, vacant, restaurant);
+		}
 
 		// if(uploadOwnerFile != null) {
-		s3ImageUpload = new S3ImageUpload();
-		String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadOwnerFile.getOriginalFilename());
-		String vacant = "restaurant/" + fileName;
-		s3ImageUpload.uploadFile(uploadOwnerFile, vacant);
+//		s3ImageUpload = new S3ImageUpload();
+//		String fileName = CommonUtil.getTimeStamp("yyyyMMddHHmmssSSS", uploadOwnerFile.getOriginalFilename());
+//		String vacant = "restaurant/" + fileName;
+//		s3ImageUpload.uploadFile(uploadOwnerFile, vacant);
 		// String ownerImage = uploadOwnerImg(uploadOwnerFile, vacant);
 
-		restaurant.setOwnerImage(fileName);
+		//restaurant.setOwnerImage(fileName);
 		// }
 
-		uploadFilePath(uploadFile, vacant, restaurant);
+		//uploadFilePath(uploadFile, vacant, restaurant);
 
 		restaurantService.updateRestaurant(restaurant);
 

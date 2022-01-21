@@ -179,9 +179,7 @@
 					</div>
 				</div>
 			</c:forEach>
-			<ul class='icons'> 
-				<jsp:include page='/review/getReview.jsp'/>
-			</ul> 
+			
 		</c:when>
 		<c:otherwise>
 			<div class="col-md-12">
@@ -269,6 +267,9 @@
 	</c:choose>
 </div>
 </c:if>
+<ul class='icons'> 
+	<jsp:include page='/review/getReview.jsp'/>
+</ul> 
 
 
 

@@ -106,6 +106,16 @@
 		
 		// 신고하기 Modal
 		$(".reportModal").on("click", function() {
+			if (${empty member}) {
+				alert("로그인이 필요한 서비스입니다.");
+				
+				$("#reportModal").on("show.bs.modal", function(e) {
+					e.preventDefault();
+				});
+				
+				return;
+			}
+			
 			$("#reportModal").modal("show");
 		});
 	});
