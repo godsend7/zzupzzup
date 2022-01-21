@@ -227,11 +227,14 @@
 						toNickName : "${reservation.member.nickname}"
 					},
 					success : function(data){
-						alert("메세지 전송이 완료되었습니다.");
 						
+						if (data) {
+							alert("메세지 전송이 완료되었습니다.");
+						}
 					},
 					error : function(e) {
-						alert(e.responseText);
+						console.log("sendMessage json return");
+						//alert(e.responseText);
 					} 
 				}); 
 			} 
