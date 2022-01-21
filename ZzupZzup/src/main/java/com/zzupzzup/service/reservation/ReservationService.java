@@ -26,6 +26,6 @@ public interface ReservationService {
 	public int updateReservation(Reservation reservation) throws Exception ;
 	
 	
-	public void sendMessage(Reservation reservation, Member toMember, Member fromMember, String reservationNumber) throws Exception ;
+	public boolean sendMessage(Reservation reservation, Member toMember, Member fromMember, String reservationNumber) throws Exception ;
 
 }

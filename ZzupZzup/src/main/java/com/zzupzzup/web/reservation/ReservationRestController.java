@@ -186,7 +186,7 @@ public class ReservationRestController {
 		//==================================================================================================
 		
 		   @RequestMapping(value="json/sendPhoneMessage", method=RequestMethod.POST)
-		   public void sendMessage(HttpServletRequest httpServletRequest, HttpSession session) throws Exception{
+		   public boolean sendMessage(HttpServletRequest httpServletRequest, HttpSession session) throws Exception{
 		      
 			   System.out.println("/reservation/sendPhoneMessage : POST");
 			   Member fromMember = (Member) session.getAttribute("member");//보내는 사람
@@ -229,7 +229,7 @@ public class ReservationRestController {
 			   
 			   System.out.println("reservation 확인 :: " + reservation.getReservationNumber());
 			  
-		       reservationService.sendMessage(reservation, toMember,fromMember, reservationNumber);
+		      return reservationService.sendMessage(reservation, toMember,fromMember, reservationNumber);
 		   }
 		   /////////////////////////////////무한 스크롤////////////////////////////////////////
 		   
