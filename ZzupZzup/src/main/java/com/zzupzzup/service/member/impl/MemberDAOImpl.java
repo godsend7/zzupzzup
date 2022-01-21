@@ -139,6 +139,12 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 	
 	@Override
+	public int getMyRestaurantTotalCount(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("MemberMapper.getMyRestaurantTotalCount", map);
+	}
+	
+	@Override
 	public int getActivityScoreTotalCount(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("MemberMapper.getActivityScoreTotalCount", map);

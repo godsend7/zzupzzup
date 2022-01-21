@@ -435,4 +435,23 @@
 		</where>
 	</select>
 	
+	<!-- owner my restaurant count -->
+	<select id="getMyRestaurantTotalCount" parameterType="map" resultType="int">
+		
+			  SELECT COUNT(*)
+			  FROM (
+			  		SELECT *
+					FROM RESTAURANT AS rt
+					  <if test="memberId != null">
+					  	<bind name="id" value="'%'+memberId+'%'"/>
+					  	WHERE rt.MEMBER_ID LIKE #{id}
+					  </if>
+					) AS rt
+			  LEFT OUTER JOIN (
+			  					SELECT IMAGE, RESTAURANT_NO
+							  	FROM IMAGE
+							  ) AS img
+			  ON rt.RESTAURANT_NO = img.RESTAURANT_NO
+	</select>
+	
 </mapper>

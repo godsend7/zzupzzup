@@ -50,4 +50,6 @@ public interface RestaurantDAO {
 	// MAIN MAP
 	public List<Restaurant> listMainRestaurant(Search search) throws Exception;
 	
+	public int getMyRestaurantTotalCount(Map<String, Object> map) throws Exception;
+	
 }

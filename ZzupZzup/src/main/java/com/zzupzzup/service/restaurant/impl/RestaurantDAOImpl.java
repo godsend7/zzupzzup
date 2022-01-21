@@ -177,5 +177,9 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 		return sqlSession.selectList("RestaurantMapper.listMainRestaurant", search);
 	}
 
+	@Override
+	public int getMyRestaurantTotalCount(Map<String, Object> map) throws Exception {
+		return sqlSession.selectOne("RestaurantMapper.getMyRestaurantTotalCount", map);		
+	}
 	
 }

@@ -38,5 +38,7 @@ public interface MemberDAO {
 	
 	public int getOwnerTotalCount(Map<String, Object> map) throws Exception;
 	
+	public int getMyRestaurantTotalCount(Map<String, Object> map) throws Exception;
+	
 	public int getActivityScoreTotalCount(Map<String, Object> map) throws Exception;
 }
