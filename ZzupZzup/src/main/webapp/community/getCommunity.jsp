@@ -147,7 +147,7 @@
 						      </div>
 						      <div class="modal-body">
 						       <%--  <img src="/resources/images/uploadImages/receipt/${community.receiptImage}" width="100%" /> --%>
-						        <img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/community/${community.receiptImage}" width="100%" />
+						        <img src="https://zzupzzup.s3.ap-northeast-2.amazonaws.com/receipt/${community.receiptImage}" width="100%" />
 						      </div>
 						      <div class="modal-footer">
 						        <button type="button" class="btn btn-link btn-sm" data-dismiss="modal">&nbsp;확&nbsp;인&nbsp;</button>

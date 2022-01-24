@@ -199,6 +199,8 @@
 		//////////////////////// modal show or hide event start //////////////////////////
 		//길찾기 modal 실행될 때 현재위치 가져오기
 		$("#directionModal").on("shown.bs.modal", function() { 
+			thisLocation();
+			
 			$(".direction-control").autocomplete("option", "appendTo", "#directionModal");
 			
 			$.ajax ({
@@ -753,8 +755,8 @@
 				mapZoom = 15;
 			}
 			
-			nowLatitude = arrayLayout[arrayLayout.length-1].latitude;
-			nowLongitude = arrayLayout[arrayLayout.length-1].longitude;
+			nowLatitude = arrayLayout[0].latitude;
+			nowLongitude = arrayLayout[0].longitude;
 		}
 	    
 	    map.setCenter(new naver.maps.LatLng(nowLatitude, nowLongitude));

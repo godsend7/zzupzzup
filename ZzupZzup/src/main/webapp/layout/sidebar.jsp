@@ -217,13 +217,13 @@
 			<div id="zzupzzupCarousel" class="carousel slide" data-ride="carousel">
 				<div class="carousel-inner">
 					<div class="carousel-item active">
-						<a href="https://pji.co.kr/" target="_blank"><img src="../resources/images/common/ad2.JPG" class="d-block w-100" alt="파파존스 할인"></a>
+						<a href="https://pji.co.kr/" target="_blank"><img src="/resources/images/common/ad2.JPG" class="d-block w-100" alt="파파존스 할인"></a>
 					</div>
 					<div class="carousel-item">
-						<a href="https://momstouch.co.kr/" target="_blank"><img src="../resources/images/common/ad1.JPG" class="d-block w-100" alt="싸이버거 할인"></a>
+						<a href="https://momstouch.co.kr/" target="_blank"><img src="/resources/images/common/ad1.JPG" class="d-block w-100" alt="싸이버거 할인"></a>
 					</div>
 					<div class="carousel-item">
-						<a href="https://www.goobne.co.kr/" target="_blank"><img src="../resources/images/common/ad3.JPG" class="d-block w-100" alt="BHC 할인"></a>
+						<a href="https://www.goobne.co.kr/" target="_blank"><img src="/resources/images/common/ad3.JPG" class="d-block w-100" alt="BHC 할인"></a>
 					</div>
 				</div>
 			</div>

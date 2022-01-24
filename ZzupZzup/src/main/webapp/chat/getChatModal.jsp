@@ -97,9 +97,9 @@ $(function() {
 				}else if(chatState == 3){
 					chatState = "<span class='badge badge-info chat-state'>예약확정</span>";
 				}else if(chatState == 4){
-					chatState = "<span class='badge badge-danger chat-state'>모임완료</span>";
+					chatState = "<span class='badge badge-warning chat-state'>모임완료</span>";
 				}else if(chatState == 5){
-					chatState = "<span class='badge badge-secondary chat-state'>폭파된방</span>";
+					chatState = "<span class='badge badge-danger chat-state'>폭파된방</span>";
 				}
 				
 				if(menuType == 1){
